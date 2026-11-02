@@ -1,0 +1,2762 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DUNGEON/Dungeon.cpp",
+  "functions": [
+    {
+      "name": "AllocAct",
+      "address": "006194a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006194a0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AllocAct",
+        "AllocServerMemory",
+        "memset",
+        "DRLG_AllocDrlgActMisc",
+        "DRLGENV_AllocEnvironment",
+        "InitCache"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "D2DrlgStrc",
+        "D2PoolManagerStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "fAutoMap",
+        "fTownAutoMap",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetMemPoolFromAct",
+      "address": "00619550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619550"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetMemPoolFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_SetWarpTileSelect",
+      "address": "00619560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619560"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_SetWarpTileSelect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGWARP_SetAllWarpTilesSelectValue"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TakeStairsInternal",
+      "address": "006195a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006195a0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TakeStairsInternal",
+        "DRLGWARP_GetWarpDestinationRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc *",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DUNGEON_GetLvlWarpTxtForWarpUnit",
+      "address": "00619620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619620"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DUNGEON_GetLvlWarpTxtForWarpUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetLvlWarpTxtForWarpUnit"
+      ],
+      "usedTypes": [
+        "D2LvlWarpTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetFloorTilesFromRoom",
+      "address": "00619660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619660"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetFloorTilesFromRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetWallTilesFromRoom",
+      "address": "006196a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006196a0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetWallTilesFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetRoofTilesFromRoom",
+      "address": "006196e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006196e0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetRoofTilesFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetTileDataFromAct",
+      "address": "00619720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619720"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetTileDataFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgTileDataStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetRoomCoordinates",
+      "address": "00619730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619730"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetRoomCoordinates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetAdjacentRoomsList",
+      "address": "00619790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619790"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetAdjacentRoomsList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc * *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_AllocRoomStrc",
+      "address": "006197d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006197d0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_AllocRoomStrc",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_UpdateRoomsNearAndCount",
+      "address": "00619800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619800"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_UpdateRoomsNearAndCount",
+        "GetRoomsNearCount",
+        "AllocServerMemory",
+        "GetRealRoomsNearCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocRoom",
+      "address": "00619890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619890"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AllocRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory",
+        "memset",
+        "InitSeed_Param_666",
+        "SetRoom",
+        "DRLGROOM_UpdateRoomsNearAndCount",
+        "AllocRoomCollisionGrid"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgRoomTilesStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DoRoomsTouchOrOverlap",
+      "address": "00619970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619970"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DoRoomsTouchOrOverlap",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AreTileCoordinatesInsideRoom",
+      "address": "006199f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006199f0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AreTileCoordinatesInsideRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetRoomShape",
+      "address": "00619a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619a50"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetRoomShape",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindRoomByTileCoordinates",
+      "address": "00619b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619b10"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "FindRoomByTileCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetAdjacentRoomByCoordinates",
+      "address": "00619b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619b60"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetAdjacentRoomByCoordinates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AreTileCoordinatesInsideRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CallRoomCallback",
+      "address": "00619bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619bd0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "CallRoomCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "ROOMCALLBACKFN",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetMinimapRect",
+      "address": "00619c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619c40"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetMinimapRect",
+        "SizeMiniMapToScreen",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSubtileRect",
+      "address": "00619d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619d00"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetSubtileRect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "RECT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRGB_IntensityFromRoom",
+      "address": "00619d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619d70"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetRGB_IntensityFromRoom",
+        "GetRGB_IntensityFromRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "FindRoomBySubtileCoordinates",
+      "address": "00619da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619da0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "FindRoomBySubtileCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AreSubtileCoordinatesInsideRoom",
+      "address": "00619df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619df0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AreSubtileCoordinatesInsideRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindActSpawnLocation",
+      "address": "00619e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619e50"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "FindActSpawnLocation",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGSPAWN_FindSpawnLocationInLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetFirstUnitInRoom",
+      "address": "00619ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619ea0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetFirstUnitInRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SortUnitListByTargetY"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_IncreaseAlliedCount",
+      "address": "00619ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619ee0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_IncreaseAlliedCount"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "GetAlliedCountFromRoom",
+      "address": "00619f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619f00"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetAlliedCountFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_DecreaseAlliedCount",
+      "address": "00619f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619f20"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_DecreaseAlliedCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetUnitListFromRoom",
+      "address": "00619f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619f60"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetUnitListFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetUnitUpdateListFromRoom",
+      "address": "00619f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619f90"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetUnitUpdateListFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPresetUnitsFromRoom",
+      "address": "00619fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619fd0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetPresetUnitsFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetPresetUnits"
+      ],
+      "usedTypes": [
+        "D2PresetUnitStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetCollisionGridFromRoom",
+      "address": "0061a010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a010"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_SetCollisionGridInRoom",
+      "address": "0061a040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a040"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_SetCollisionGridInRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddRoomData",
+      "address": "0061a070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a070"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AddRoomData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AddRoomDataPrepare"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveRoomData",
+      "address": "0061a0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a0c0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "RemoveRoomData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOMEX_RemoveRoomDataPrepare"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_SwapRoomDataForRoomEx",
+      "address": "0061a110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a110"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_SwapRoomDataForRoomEx",
+        "DRLGROOMEX_SwapActiveRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetRoomFromActAndCoord",
+      "address": "0061a140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a140"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_GetRoomByCoords",
+        "DRLGROOM_GetRoomFromActAndCoord",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetRoomFromAct",
+      "address": "0061a180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a180"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetRoomFromAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetLevelIdFromRoom",
+      "address": "0061a1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a1b0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetLevelId"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "GetWarpDestinationLevel",
+      "address": "0061a1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a1d0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGWARP_GetWarpDestinationLevel",
+        "GetWarpDestinationLevel"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "GetLevelIdFromPopulatedRoom",
+      "address": "0061a1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a1f0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetLevelIdFromPopulatedRoom",
+        "GetLevelIdFromPopulatedRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "HasWaypoint",
+      "address": "0061a210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a210"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "HasWaypoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPickedLevelPrestFilePathFromRoom",
+      "address": "0061a250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a250"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetPickedLevelPrestFilePathFromRoom",
+        "GetPickedLevelPrestFilePathFromRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "AllocDrlgDelete",
+      "address": "0061a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a270"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AllocDrlgDelete",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgDeleteStrc",
+        "D2RoomStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_FreeDrlgDelete",
+      "address": "0061a2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a2c0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_FreeDrlgDelete",
+        "FreeServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgDeleteStrc",
+        "D2PoolManagerStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetDrlgDeleteFromRoom",
+      "address": "0061a330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a330"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetDrlgDeleteFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgDeleteStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetActMiscSubA0FromAct",
+      "address": "0061a360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a360"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetActMiscSubA0FromAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOMEX_GetCurrentSubA0"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetActMiscSubA0FromRoom",
+      "address": "0061a3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a3a0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetActMiscSubA0FromRoom",
+        "DRLGROOMEX_GetSubA0ForRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_TestRoomCanUntile",
+      "address": "0061a3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a3f0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_TestRoomCanUntile",
+        "RoomEx_method_0",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Is0x44Above2",
+      "address": "0061a440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a440"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "Is0x44Above2",
+        "Get0x44FromRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_AreAllNearRoomsActive",
+      "address": "0061a460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a460"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_AreAllNearRoomsActive",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetRoomsNearCount"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_IsUnitInactiveProcessed",
+      "address": "0061a4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a4d0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_IsUnitInactiveProcessed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_SetUnitInactiveProcessed",
+      "address": "0061a510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a510"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_SetUnitInactiveProcessed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_ValidateClientList",
+      "address": "0061a550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a550"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_ValidateClientList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc *",
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_SortClientList",
+      "address": "0061a5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a5a0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_SortClientList",
+        "DRLGROOM_ValidateClientList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ClientStrc *",
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_AddClientToRoom",
+      "address": "0061a660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a660"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_AddClientToRoom",
+        "DRLGROOM_ValidateClientList",
+        "ReAllocServerMemory",
+        "DRLGROOM_SortClientList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ClientStrc *",
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_RemoveClientFromRoom",
+      "address": "0061a700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a700"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_RemoveClientFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_RemoveClientFromRoom_HaltTail",
+        "DRLGROOM_ValidateClientList",
+        "DRLGROOM_SortClientList"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ClientStrc *",
+        "D2RoomStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_RemoveClientFromRoom_HaltTail",
+      "address": "0061a710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a710"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_RemoveClientFromRoom_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetIdleTicks",
+      "address": "0061a790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a790"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetIdleTicks",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_HasUniqueClient",
+      "address": "0061a7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a7e0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_HasUniqueClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc *",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "FreeRoom",
+      "address": "0061a840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a840"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "FreeRoom",
+        "DRLGROOM_ClearUnitRoomLink",
+        "FreeRoomCollisionGrid",
+        "DRLGROOM_FreeDrlgDelete",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "DUNGEON_ClearRoomTiles",
+      "address": "0061a8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a8e0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DUNGEON_ClearRoomTiles",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_RemoveRoomFromAct",
+      "address": "0061a910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a910"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_RemoveRoomFromAct",
+        "FreeDrlgRoomEx",
+        "FreeRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_SwapActiveRoomExBetweenLevels",
+      "address": "0061a9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061a9f0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_SwapActiveRoomExBetweenLevels",
+        "ChangeActiveRoomBetweenLevels"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "FreeDungeons",
+      "address": "0061aa20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aa20"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "FreeDungeons",
+        "DRLG_FreeInactiveLevelData"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_CheckLOSDraw",
+      "address": "0061aa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aa40"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "CheckLOSDraw",
+        "DRLGROOM_CheckLOSDraw"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetEnvironmentFromAct",
+      "address": "0061aa60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aa60"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGENV_GetEnvironmentFromAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetDrlgFromAct",
+      "address": "0061aa90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aa90"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetDrlgFromAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetInitSeedFromAct",
+      "address": "0061aac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aac0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetInitSeedFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRoomExFromRoom",
+      "address": "0061aae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aae0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetRoomExFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "IsTownLevelId",
+      "address": "0061aaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aaf0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "IsTownLevelId",
+        "LEVEL_CheckIfLevelIsTown"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_IsRoomInTown",
+      "address": "0061ab00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ab00"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_IsRoomInTown",
+        "GetLevelId",
+        "LEVEL_CheckIfLevelIsTown"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "Return0",
+      "address": "0061ab30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ab30"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "Return0",
+        "DRLG_ReturnZero",
+        "GetLevelId"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_IsUpdateLocked",
+      "address": "0061ab60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ab60"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_IsUpdateLocked"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "GetTownLevelIdFromActNo",
+      "address": "0061ab70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ab70"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetTownLevelIdFromActNo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "eD2LevelId",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_HasOutdoorBorder",
+      "address": "0061abb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061abb0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_HasOutdoorBorder",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOMEX_IsPresetWithOutdoorBorder"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetNumberOfPopulatedRoomsInLevel",
+      "address": "0061abf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061abf0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetNumberOfPopulatedRoomsInLevel",
+        "ACTMISC_CountLevelRooms"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetWarpCoordinatesFromRoom",
+      "address": "0061ac10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ac10"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetWarpCoordinatesFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGWARP_GetWarpCoordinatesFromRoomEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelWarpCoordinatesStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateWarpRoomSelect",
+      "address": "0061ac50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ac50"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "UpdateWarpRoomSelect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGWARP_UpdateWarpRoomExSelect"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateWarpRoomDeselect",
+      "address": "0061ac90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ac90"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "UpdateWarpRoomDeselect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGWARP_UpdateWarpRoomExDeselect"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdatePops",
+      "address": "0061acd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061acd0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "UpdatePops",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetTombStoneTileCoords",
+      "address": "0061ad10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ad10"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetTombStoneTileCoords"
+      ],
+      "usedTypes": [
+        "D2CoordStrc *",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetCoordListFromSubtilePos",
+      "address": "0061ad30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ad30"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetCoordListFromSubtilePos",
+        "DRLGLOGIC_GetCoordListFromSubtilePos"
+      ],
+      "usedTypes": [
+        "D2RoomCoordListStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetCoordList",
+      "address": "0061ad50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ad50"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetCoordList"
+      ],
+      "usedTypes": [
+        "D2RoomCoordListStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "GetPortalLevelArrayFromPortalFlags",
+      "address": "0061ad70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ad70"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetPortalLevelArrayFromPortalFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "eD2LevelId",
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetPortalFlagFromLevelId",
+      "address": "0061ae30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ae30"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetPortalFlagFromLevelId",
+        "GetPortalLevelArrayFromPortalFlags"
+      ],
+      "usedTypes": [
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetTownLevelIdFromAct",
+      "address": "0061ae80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ae80"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetTownLevelIdFromAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetHoradricStaffTombLevelId",
+      "address": "0061aeb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aeb0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetHoradricStaffTombLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "ToggleHasPortalFlagRoom",
+      "address": "0061aed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aed0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "ToggleHasPortalFlagRoom",
+        "ToggleHasPortalFlag"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "AnimateTiles",
+      "address": "0061aef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061aef0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AnimateTiles"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "InitRoomTileAnimation",
+      "address": "0061af10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061af10"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "InitRoomTileAnimation",
+        "DRLGANIM_PropagateAnimationData"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "SetActCallbackFunc",
+      "address": "0061af60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061af60"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "SetActCallbackFunc",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "ACTCALLBACKFN",
+        "D2DrlgActStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SaveKilledUnitGUID",
+      "address": "0061afa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061afa0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "SaveKilledUnitGUID"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeAct",
+      "address": "0061afd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061afd0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "FreeAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGACT_FreeDrlgActMisc",
+        "FreeRoom",
+        "DRLGENV_FreeEnvironment",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnUnit",
+      "address": "0061b060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b060"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "SpawnUnit",
+        "DRLGSPAWN_FindSpawnLocationInLevel",
+        "CoordsRoomToWorld",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2RoomStrc",
+        "POINT",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetGridIndex",
+      "address": "0061b130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b130"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetGridIndex",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLG_ROOMEX_GetGridIndex"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_InitRoomExData",
+      "address": "0061b190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b190"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_InitRoomExData",
+        "DRLGROOMEX_InitNearRoomsAndVisTiles",
+        "InitGridCells",
+        "InitializorForDrlgType",
+        "RollSeed"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_MoveToActivationList",
+      "address": "0061b210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b210"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_MoveToActivationList"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_SetPriority0",
+      "address": "0061b290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b290"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_MoveToActivationList",
+        "DRLGROOMEX_SetPriority0"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_SetPriority1",
+      "address": "0061b2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b2a0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_MoveToActivationList",
+        "DRLGROOMEX_SetPriority1"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_SetPriority3",
+      "address": "0061b2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b2b0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_MoveToActivationList",
+        "DRLGROOMEX_SetPriority3"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DUNGEON_ActivationHandler0_SetRoomExPriority0",
+      "address": "0061b2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b2c0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_MoveToActivationList",
+        "DUNGEON_ActivationHandler0_SetRoomExPriority0"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_ActivateRoomEx",
+      "address": "0061b2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b2d0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_ActivateRoomEx",
+        "DRLGROOMEX_InitRoomExData",
+        "DRLGACTMISC_CheckFlag0x1",
+        "DRLGROOMEX_MoveToActivationList"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_InitTileDataAndPresets",
+      "address": "0061b320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b320"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_InitTileDataAndPresets",
+        "DRLGROOMEX_InitTileData",
+        "DRLGPRESET_CreateMonsterPresets",
+        "DRLGROOMEX_MoveToActivationList"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "InitNearRooms",
+      "address": "0061b390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b390"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "InitNearRooms",
+        "DRLGROOMEX_InitNearRoomsAndVisTiles"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "AddRoomDataActual",
+      "address": "0061b490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b490"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AddRoomDataActual",
+        "InitNearRooms"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_RecalcPriority",
+      "address": "0061b4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b4f0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_RecalcPriority",
+        "DRLGROOMEX_MoveToActivationList"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_RecalcPriority_Case4",
+      "address": "0061b530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b530"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_RecalcPriority_Case4",
+        "DRLGROOMEX_RecalcPriority"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_RecalcPriority_Case5",
+      "address": "0061b540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b540"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_RecalcPriority_Case5",
+        "DRLGROOMEX_RecalcPriority"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_RecalcPriority_Case6",
+      "address": "0061b550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b550"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_RecalcPriority_Case6",
+        "DRLGROOMEX_RecalcPriority"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "ClearRoomExIfFlag0x01",
+      "address": "0061b560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b560"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "ClearRoomExIfFlag0x01",
+        "DRLGROOMEX_RecalcPriority",
+        "DRLGACTMISC_CheckFlag0x1",
+        "FreeRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_PropagateDecRefCount",
+      "address": "0061b5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b5b0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_PropagateDecRefCount"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "AddRoomDataPrepare",
+      "address": "0061b640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b640"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "AddRoomDataPrepare",
+        "GetLevelAndAlloc",
+        "GetRoomOfCoords",
+        "AddRoomDataActual"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_RemoveRoomDataPrepare",
+      "address": "0061b690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b690"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_RemoveRoomDataPrepare",
+        "GetLevelAndAlloc",
+        "GetRoomOfCoords",
+        "DRLGROOMEX_PropagateDecRefCount"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_SwapActiveRoomEx",
+      "address": "0061b6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b6f0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_SwapActiveRoomEx",
+        "AddRoomDataActual",
+        "DRLGROOMEX_PropagateDecRefCount"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "InitRoomEx",
+      "address": "0061b730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b730"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "InitRoomEx",
+        "DRLGROOMEX_InitTileData",
+        "DRLGPRESET_CreateMonsterPresets",
+        "DRLGROOMEX_InitNearRoomsAndVisTiles",
+        "InitGridCells",
+        "InitializorForDrlgType",
+        "RollSeed"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_GetRoomByCoords",
+      "address": "0061b7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b7b0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_GetRoomByCoords",
+        "GetRoomOfCoords",
+        "InitRoomEx"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGACTMISC_InitializeSubA0",
+      "address": "0061b7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b7e0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGACTMISC_InitializeSubA0"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_GetCurrentSubA0",
+      "address": "0061b840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b840"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_GetCurrentSubA0"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_GetSubA0ForRoom",
+      "address": "0061b870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b870"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_GetSubA0ForRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetActMiscCacheInfo",
+      "address": "0061b8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b8f0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_GetActMiscCacheInfo"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_UpdateClientRoomExActivation",
+      "address": "0061b920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061b920"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_UpdateClientRoomExActivation",
+        "DRLGACTMISC_CheckFlag0x1",
+        "DRLGROOMEX_InitRoomExData"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LEVEL_IsNotTownAndNotArreatSummit",
+      "address": "0061ba10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ba10"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "LEVEL_CheckIfLevelIsTown",
+        "LEVEL_IsNotTownAndNotArreatSummit"
+      ],
+      "usedTypes": [
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "RoomEx_method_0",
+      "address": "0061ba30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ba30"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "RoomEx_method_0",
+        "GetDrlgFromRoomEx",
+        "DRLGACTMISC_CheckFlag0x1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "LEVEL_CheckIfLevelIsTown"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ToggleHasPortalFlag",
+      "address": "0061bac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bac0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "ToggleHasPortalFlag"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "Get0x44FromRoomEx",
+      "address": "0061bae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bae0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "Get0x44FromRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_DemoteAndActivate",
+      "address": "0061baf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061baf0"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_DemoteAndActivate",
+        "DRLGROOMEX_MoveToActivationList",
+        "DRLGROOMEX_ActivateRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_DemoteIfReady",
+      "address": "0061bb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bb10"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOMEX_DemoteIfReady",
+        "DRLGROOMEX_MoveToActivationList",
+        "DRLGROOMEX_ActivateRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOM_SetArreatSummitColors",
+      "address": "0061bb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bb60"
+        }
+      ],
+      "namespace": "D2Common::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "DRLGROOM_SetArreatSummitColors"
+      ],
+      "usedTypes": [
+        "D2DrlgEnvironmentStrc",
+        "eD2LevelId"
+      ]
+    }
+  ]
+}

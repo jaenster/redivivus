@@ -1,0 +1,494 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Sound/Src/D2SoundFast.cpp",
+  "functions": [
+    {
+      "name": "SOUND_IsAmbientStreaming",
+      "address": "00514840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514840"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_IsAmbientStreaming",
+        "SOUNDSMP_IsStreaming"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_ResetAmbientSoundFlags",
+      "address": "00514860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514860"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_ResetAmbientSoundFlags",
+        "SOUND_GetLanguageCode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetMusicEnabled",
+      "address": "005148f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005148f0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_SetMusicEnabled",
+        "SOUND_ResetAmbientSoundFlags"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetMusicEnabled",
+      "address": "00514920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514920"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_GetMusicEnabled"
+      ]
+    },
+    {
+      "name": "SOUND_StopMusic",
+      "address": "00514930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514930"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_StopMusic",
+        "SOUNDSMP_IsStreaming",
+        "SOUNDSMP_Stop"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_FadeOutMusic",
+      "address": "00514960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514960"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_FadeOutMusic",
+        "SOUNDSMP_IsStreaming",
+        "SOUNDSMP_StartFade"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_PlayNextAmbientSound",
+      "address": "00514990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514990"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_PlayNextAmbientSound",
+        "SOUNDSMP_GetEffectiveVolume",
+        "SOUNDSMP_IsStreaming",
+        "SOUND_GetAmbientSoundEntry",
+        "SOUND_ResetAmbientSoundFlags",
+        "rand",
+        "SOUND_GetLanguageCode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUNDSMP_Reset",
+        "SOUNDSMP_SetVolume",
+        "SOUNDSMP_OpenAndStreamFile"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_LoadRegistrySettings",
+      "address": "00514b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514b60"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_LoadRegistrySettings",
+        "SRegLoadValue"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetSoundMixer",
+      "address": "00514c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514c90"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_GetSoundMixer"
+      ]
+    },
+    {
+      "name": "SOUND_SetSoundMixer",
+      "address": "00514ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514ca0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_SetSoundMixer",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetMasterVolume",
+      "address": "00514cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514cc0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_GetMasterVolume"
+      ]
+    },
+    {
+      "name": "SOUND_SetMasterVolume",
+      "address": "00514cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514cd0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_SetMasterVolume",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetMusicVolume",
+      "address": "00514cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514cf0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_GetMusicVolume"
+      ]
+    },
+    {
+      "name": "SOUND_SetMusicVolume",
+      "address": "00514d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514d00"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_SetMusicVolume",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetPositionalBias",
+      "address": "00514d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514d20"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_GetPositionalBias"
+      ]
+    },
+    {
+      "name": "SOUND_SetPositionalBias",
+      "address": "00514d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514d30"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_SetPositionalBias",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetNpcSpeech",
+      "address": "00514d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514d50"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_GetNpcSpeech"
+      ]
+    },
+    {
+      "name": "SOUND_SetNpcSpeech",
+      "address": "00514d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514d60"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_SetNpcSpeech",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetOptionsMusic",
+      "address": "00514d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514d80"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_GetOptionsMusic"
+      ]
+    },
+    {
+      "name": "SOUND_SetOptionsMusic",
+      "address": "00514d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514d90"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_SetOptionsMusic",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_InitSoundEffectBuffers",
+      "address": "00514db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514db0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_InitSoundEffectBuffers",
+        "SOUND_GetSpeakerConfigFlag",
+        "SOUNDSMP_SetGlobalVolume",
+        "CallSounds"
+      ],
+      "usedTypes": [
+        "IDirectSound"
+      ]
+    },
+    {
+      "name": "SOUND_LoadWavFile",
+      "address": "00514e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514e10"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_LoadWavFile",
+        "D2FILE_AllocAndLoadD2File",
+        "SOUNDSMP_ParseWavHeader",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "WAVEFORMATEX",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_PlaySoundEffect",
+      "address": "00514ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514ec0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_PlaySoundEffect",
+        "SOUNDSMP_IsPlaying",
+        "SOUNDSMP_Reset",
+        "SOUNDSMP_LoadWavDataIntoBuffer",
+        "SOUNDSMP_SetVolume",
+        "SOUNDSMP_Play"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SOUND_IsAnySoundEffectPlaying",
+      "address": "00514fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514fb0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_IsAnySoundEffectPlaying",
+        "SOUNDSMP_IsPlaying"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_FadeOutAllSoundEffects",
+      "address": "00515020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515020"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_FadeOutAllSoundEffects",
+        "SOUNDSMP_IsPlaying",
+        "SOUNDSMP_StartFade"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_IsSoundEffectsInitialized",
+      "address": "00515060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515060"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_IsSoundEffectsInitialized"
+      ]
+    },
+    {
+      "name": "SOUND_FreeSoundEffectBuffers",
+      "address": "00515070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515070"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_FreeSoundEffectBuffers",
+        "SOUNDSMP_Stop",
+        "SOUNDSMP_Destroy",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc *"
+      ]
+    }
+  ]
+}

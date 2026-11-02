@@ -1242,27 +1242,27 @@ void __fastcall Q33_CheckPlayerHasScrollOfResistance(::SGAMEDATA * pGame, D2Unit
 
 // Q33_CheckPartyHasScrollOfResistance (PrisonOfIce): returns 1 if this player holds the "ice " scroll, else scans the
 // whole party via Q33_CheckPlayerHasScrollOfResistance and returns whether anyone holds it (field_0xE2).
-static uint32_t Q33_CheckPartyHasScrollOfResistance(int32_t nParam, D2UnitStrc * pUnit) {
-    D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(*(::SGAMEDATA**)(nParam + 4), pUnit, 0x20656369);
+static uint32_t Q33_CheckPartyHasScrollOfResistance(int32_t pQuestData, D2UnitStrc * pUnit) {
+    D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(*(::SGAMEDATA**)(pQuestData + 4), pUnit, 0x20656369);
     if (pScrollItem) {
       return 1;
     }
 
-    int32_t pnQuestSpecificData = *(int32_t*)(nParam + 0x18);
+    int32_t pnQuestSpecificData = *(int32_t*)(pQuestData + 0x18);
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
     if (nPartyId == 0xffff) {
       return 0;
     }
 
     *(uint8_t*)(pnQuestSpecificData + 0xe2) = 0;
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(*(::SGAMEDATA**)(nParam + 4), nPartyId, (::fpExecuteOnUnitFunction)Q33_CheckPlayerHasScrollOfResistance, 0);
+    UNIT::Party::ExecuteFunctionForEveryPartyMember(*(::SGAMEDATA**)(pQuestData + 4), nPartyId, (::fpExecuteOnUnitFunction)Q33_CheckPlayerHasScrollOfResistance, 0);
     return (uint32_t)(*(char*)(pnQuestSpecificData + 0xe2) != '\0');
 }
 
 // A5Q3 (Prison of Ice) fpStatusFilter callback. Writes a quest-log display sub-state byte into *nUnknown based on the player's per-difficulty bit-buffer. If Completed: returns true with *nUnknown=0. If RewardAwaits/JustCompleted: maps Step0x08/Step0x09 flags to values 5/6/0xd. Otherwise: checks party for Scroll of Resistance (4), CannotComplete (0xc), or falls back to nStateFlagPrev. Always returns true.
-bool __fastcall Q33_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown) {
+bool __fastcall Q33_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     bool bQuestStateResult;
-    *nUnknown = '\0';
+    *pbyStatusCode = '\0';
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_PrisonOfIce, QUESTSTATE_Completed);
     if (bQuestState) {
       return true;
@@ -1279,20 +1279,20 @@ bool __fastcall Q33_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
         bPartyHasScroll = Q33_CheckPartyHasScrollOfResistance((int32_t)pQuestData, pUnit);
         if (bPartyHasScroll) {
-          *nUnknown = '\x04';
+          *pbyStatusCode = '\x04';
           return true;
         }
 
         bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_PrisonOfIce, QUESTSTATE_CannotCompleteQuestInGame);
         if (bQuestState) {
-          *nUnknown = '\f';
+          *pbyStatusCode = '\f';
           return true;
         }
         if (pQuestData->nStateFlag >= 5) {
           return true;
         }
 
-        *nUnknown = pQuestData->nStateFlagPrev;
+        *pbyStatusCode = pQuestData->nStateFlagPrev;
         return true;
       }
     }
@@ -1301,18 +1301,18 @@ bool __fastcall Q33_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (bQuestState) {
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, pQuestData->nQuestIdReal, QUESTSTATE_Step0x09);
       if (!bQuestState) {
-        *nUnknown = '\x06';
+        *pbyStatusCode = '\x06';
         return true;
       }
     }
 
     bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, pQuestData->nQuestIdReal, QUESTSTATE_Step0x08);
     if (!bQuestState) {
-      *nUnknown = '\x05';
+      *pbyStatusCode = '\x05';
       return true;
     }
 
-    *nUnknown = '\r';
+    *pbyStatusCode = '\r';
     return true;
 }
 

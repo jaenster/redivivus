@@ -24,6 +24,7 @@
 #include "Fog/Src/LogManager.h"
 #include "Storm/Source/SSystem.h"
 #include "_unnamespaced.h"
+#include "D2Hell/D2Hell.h"
 #include "Bnclient/BnDownload.h"
 #include "Bnclient/BnSend.h"
 #include "Bnclient/Bnet.h"
@@ -38,6 +39,8 @@
 #include "D2Client/UI/Trade.h"
 #include "D2Client/UI/npcmenu.h"
 #include "D2Client/UI/ui.h"
+#include "D2Client/UI/ShowItems.h"
+#include "D2Client/UNIT/Monster.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Game/GAME/Server.h"
 #include "D2Game/GAME/Task.h"
@@ -118,9 +121,9 @@ extern "C" __attribute__((constructor(200))) void D2RunCppStaticInitializers() {
     D2Trace("staticinit[25] 006caa70");
     D2Client::UI::ui::StaticInit_6caa70();
     D2Trace("staticinit[26] 006caa90");
-    StaticInit_6caa90();
+    D2Client::UI::ui::StaticInit_6caa90();
     D2Trace("staticinit[27] 006caaa0");
-    StaticInit_6caaa0();
+    D2Client::UI::ui::StaticInit_6caaa0();
     D2Trace("staticinit[28] 006caab0");
     StaticInit_6caab0();
     D2Trace("staticinit[29] 006caad0");
@@ -144,15 +147,15 @@ extern "C" __attribute__((constructor(200))) void D2RunCppStaticInitializers() {
     D2Trace("staticinit[38] 006cace0");
     D2Client::UI::ui::StaticInit_6cace0();
     D2Trace("staticinit[39] 006cad00");
-    StaticInit_6cad00();
+    D2Client::UNIT::Monster::StaticInit_6cad00();
     D2Trace("staticinit[40] 006cad10");
     D2Client::UI::npcmenu::StaticInit_6cad10();
     D2Trace("staticinit[41] 006cad80");
     D2Client::UI::Trade::StaticInit_6cad80();
     D2Trace("staticinit[42] 006cadb0");
-    StaticInit_6cadb0();
+    D2Client::UI::ShowItems::StaticInit_6cadb0();
     D2Trace("staticinit[43] 006cade0");
-    StaticInit_6cade0();
+    D2Client::UI::ShowItems::StaticInit_6cade0();
     D2Trace("staticinit[44] 006cadf0");
     D2gfx::D2GFX::StaticInit_6cadf0();
     D2Trace("staticinit[45] 006cae00");
@@ -169,7 +172,7 @@ extern "C" __attribute__((constructor(200))) void D2RunCppStaticInitializers() {
     // Renamed in Ghidra once the 12-byte list head at 0072fa14 was identified as the
     // fault-handler list (server v892). This file is hand-written, so the new name has
     // to be carried across by hand.
-    StaticInit_gFaultHandlerList();
+    D2Hell::StaticInit_gFaultHandlerList();
     D2Trace("staticinit[51] 006cae80");
     Bnclient::Bnet::StaticInit_6cae80();
     D2Trace("staticinit[52] 006caea0");

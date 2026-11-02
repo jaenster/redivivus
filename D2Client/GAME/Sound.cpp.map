@@ -1,0 +1,499 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Sound.cpp",
+  "functions": [
+    {
+      "name": "SOUND_ParseStreamWavHeader",
+      "address": "004df630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df630"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_ParseStreamWavHeader",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUNDSMP_ParseWavHeader"
+      ],
+      "usedTypes": [
+        "D2SoundsTxt",
+        "WAVEFORMATEX",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetEaxEnvironment",
+      "address": "004df6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df6c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_SetEaxEnvironment",
+        "GetSoundEnvironLine",
+        "SOUND_GetSoundMixer",
+        "SOUND_GetSound3DFlag",
+        "SOUND_ApplyEAXEnvironment"
+      ],
+      "usedTypes": [
+        "D2SoundEaxEnvironStrc",
+        "D2SoundEnvironTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_MatchesSoundId",
+      "address": "004df770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df770"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_MatchesSoundId"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_DetachUnit",
+      "address": "004df790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df790"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_DetachUnit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_StopAndDetach",
+      "address": "004df7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df7b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_StopAndDetach",
+        "SOUNDSMP_GetStreamProgress",
+        "SOUNDSMP_Stop"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CleanUpGame",
+      "address": "004df800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df800"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "CleanUpGame",
+        "SOUND_GetSpeakerConfigFlag",
+        "SOUNDSMP_SetGlobalVolume",
+        "SOUNDSMP_GetStreamProgress",
+        "SOUNDSMP_Stop"
+      ],
+      "usedTypes": [
+        "IDirectSound",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_IsInitialized",
+      "address": "004df870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df870"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_IsInitialized"
+      ]
+    },
+    {
+      "name": "SOUND_IsInitializedDup",
+      "address": "004df880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df880"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_IsInitializedDup"
+      ]
+    },
+    {
+      "name": "SOUND_UpdateNonLoopingStreams",
+      "address": "004df890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df890"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_UpdateNonLoopingStreams",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDSMP_IsPlaying",
+        "SOUNDSMP_IsStreaming",
+        "SOUND_StopAndDetach"
+      ],
+      "usedTypes": [
+        "D2SoundsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetStreamProgress",
+      "address": "004df900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df900"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_GetStreamProgress",
+        "SOUNDSMP_GetStreamProgress"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_Is3DMixerActive",
+      "address": "004df980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df980"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_Is3DMixerActive",
+        "SOUND_GetSoundMixer"
+      ]
+    },
+    {
+      "name": "SOUND_IsEaxMixerActive",
+      "address": "004df9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df9b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_IsEaxMixerActive",
+        "SOUND_GetSoundMixer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_FindPlayingByIdSafe",
+      "address": "004df9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df9d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_FindPlayingByIdSafe",
+        "SOUNDSMP_IsPlaying"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetPlaybackStatus",
+      "address": "004dfa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dfa40"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_GetPlaybackStatus",
+        "SOUNDSMP_GetStatus"
+      ],
+      "usedTypes": [
+        "int *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_ShutdownAudio",
+      "address": "004dfa60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dfa60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_ShutdownAudio",
+        "CleanUpGame",
+        "SOUNDSMP_Destroy"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc"
+      ]
+    },
+    {
+      "name": "SOUND_InitStreamChannels",
+      "address": "004dfaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dfaa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_InitStreamChannels",
+        "SOUND_GetSpeakerConfigFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CallSounds",
+        "SOUND_SetEaxEnvironment",
+        "SOUND_ShutdownAudio"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "IDirectSound",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_FindAvailableChannel",
+      "address": "004dfb50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dfb50"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_FindAvailableChannel",
+        "SOUNDSMP_IsPlaying",
+        "SOUND_IsChannelAvailable",
+        "SOUNDSMP_GetStreamProgress",
+        "SOUNDSMP_Stop"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc",
+        "D2SoundChannelStrc",
+        "D2SoundChannelStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_UpdateChannelParams",
+      "address": "004dfc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dfc20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_UpdateChannelParams",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDHDR_GetFalloffMin",
+        "SOUNDHDR_GetFalloffMax",
+        "SOUND_GetMusicVolume",
+        "SOUND_GetMasterVolume",
+        "SOUND_GetSoundMixer",
+        "SOUND_GetPositionalBias",
+        "CalculateHypotenuse",
+        "SOUNDSMP_CalculateVolumeAndPan",
+        "SOUNDSMP_SetPan",
+        "SOUNDSMP_Set3DPosition",
+        "SOUNDSMP_SetEaxObstruction",
+        "SOUNDSMP_SetVolume"
+      ],
+      "usedTypes": [
+        "D2SoundsTxt",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetSoundMixer",
+      "address": "004e0000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e0000"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_SetSoundMixer",
+        "SOUND_GetDirectSoundInitializedFlag",
+        "SOUND_GetSound3DFlag",
+        "SOUND_ShutdownAudio",
+        "SOUND_InitStreamChannels",
+        "SOUND_GetSoundMixer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetBackgroundSoundsActive",
+      "address": "004e0050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e0050"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_SetBackgroundSoundsActive",
+        "SOUND_GetSoundMixer",
+        "SOUND_GetDirectSoundInitializedFlag",
+        "SOUND_GetSound3DFlag",
+        "SOUND_ShutdownAudio",
+        "SOUND_InitStreamChannels",
+        "SOUND_SetSoundMixer"
+      ]
+    },
+    {
+      "name": "SOUND_PlaySoundWithPanning",
+      "address": "004e01b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e01b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_PlaySoundWithPanning",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDHDR_RandomizeSoundFromGroup",
+        "SOUND_FindPlayingByIdSafe",
+        "SOUNDHDR_LoadSoundFile",
+        "SOUND_GetSoundMixer",
+        "SOUND_FindAvailableChannel",
+        "SOUNDSMP_Reset",
+        "SOUNDSMP_SetFrequency",
+        "SOUNDSMP_SetMinDistance",
+        "SOUNDSMP_LoadWavDataIntoBuffer",
+        "SOUNDSMP_SetEaxRoomLevel",
+        "SOUND_UpdateChannelParams",
+        "SOUNDSMP_Play",
+        "SOUNDHDR_BuildSoundPath",
+        "SOUNDSMP_OpenAndStreamFile"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc",
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetNpcGreetingSounds",
+      "address": "004e0370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e0370"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_GetNpcGreetingSounds"
+      ],
+      "usedTypes": [
+        "D2NpcGreetingSoundsStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SelectNpcGreetingSound",
+      "address": "004e0590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e0590"
+        }
+      ],
+      "namespace": "D2Client::GAME::Sound",
+      "calledFunctions": [
+        "SOUND_SelectNpcGreetingSound",
+        "SOUND_GetNpcGreetingSounds",
+        "RollRandomNumerUpToArgument",
+        "DRLGENV_GetCycleIndexFromAct",
+        "SOUNDHDR_RandomizeSoundFromGroup",
+        "gnRecordingIndex"
+      ],
+      "usedTypes": [
+        "D2NpcGreetingSoundsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

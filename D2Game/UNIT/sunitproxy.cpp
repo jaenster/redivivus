@@ -146,20 +146,20 @@ void __fastcall SUNITPROXY_AddItemToNpcProxy(D2UnitStrc * pNpcUnit, ::SGAMEDATA 
 }
 
 // @sourcefile .\UNIT\sunitproxy.cpp
-static void SUNITPROXY_InitNpcTradeItems(int32_t nNpcTableIdx, ::SGAMEDATA * pGame, void * * pParam) {
+static void SUNITPROXY_InitNpcTradeItems(int32_t nNpcTableIdx, ::SGAMEDATA * pGame, void * * pTradeList) {
     void* nNpcTradeIdx;
     if (nNpcTableIdx >= 0x11) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa4);
       exit(-1);
     }
 
-    pParam[1] = (void*)gaNpcItemTables[nNpcTableIdx].nTradeCount;
+    pTradeList[1] = (void*)gaNpcItemTables[nNpcTableIdx].nTradeCount;
     nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc, ".\\UNIT\\sunitproxy.cpp", 0xa8);
-    *pParam = nNpcTradeIdx;
+    *pTradeList = nNpcTradeIdx;
     memcpy(nNpcTradeIdx, gaNpcItemTables[nNpcTableIdx].pTradeItems, gaNpcItemTables[nNpcTableIdx].nTradeCount * 0xc);
-    pParam[3] = (void*)gaNpcItemTables[nNpcTableIdx].nQuestCount;
+    pTradeList[3] = (void*)gaNpcItemTables[nNpcTableIdx].nQuestCount;
     nNpcTradeIdx = D2_ALLOC_POOL_AT(pGame->pMemoryPool, gaNpcItemTables[nNpcTableIdx].nQuestCount * 4, ".\\UNIT\\sunitproxy.cpp", 0xab);
-    pParam[2] = nNpcTradeIdx;
+    pTradeList[2] = nNpcTradeIdx;
     memcpy(nNpcTradeIdx, gaNpcItemTables[nNpcTableIdx].pQuestItems, gaNpcItemTables[nNpcTableIdx].nQuestCount * 4);
 }
 
@@ -522,9 +522,9 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
             pNpcControl->nNpcCount2++;
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->pProxyQueue = 0;
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.bStoreFilled = 0;
-            ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x01 = 0;
+            ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.bHirelingsInitialized = 0;
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.dwLastTradeTick = 0;
-            ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x03 = 0;
+            ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.bHasStore = 0;
             pNpcInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(pGame->pMemoryPool, nullptr);
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->pInventory = pNpcInventory;
             nControlTableIdx = 0;
@@ -554,11 +554,11 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
               if (bFoundInControlTable) {
                 ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.nAct = gaNpcControlInitTable[nControlTableIdx].nData;
                 byNpcControlFlags = gaNpcControlInitTable[nControlTableIdx].nFlags;
-                ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x03 = byNpcControlFlags;
+                ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.bHasStore = byNpcControlFlags;
                 ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x04 = 0;
                 ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x05 = 0;
                 ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x06 = gaNpcControlInitTable[nControlTableIdx].nName;
-                ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.unk0x07 = 0;
+                ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->sTrade.bRefillStorePending = 0;
                 if (byNpcControlFlags == 1) {
                   iVar1 = ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->nMonStatsId;
                   if (iVar1 <= 0x195) {
@@ -797,7 +797,7 @@ void __fastcall SUNITPROXY_QueueTradeAction(D2UnitStrc * pNpcUnit, ::SGAMEDATA *
     }
 
     D2GameNpcStrc* pNpc = GetGameNpcbyClassId(pGame, nNpcClassId, &nNpcIndex);
-    if (!(pNpc && &pNpc->sTrade && pNpc->sTrade.unk0x03 == 1 && pNpc->sTrade.bStoreFilled == 1 && pNpc->bTrading == 1)) {
+    if (!(pNpc && &pNpc->sTrade && pNpc->sTrade.bHasStore == 1 && pNpc->sTrade.bStoreFilled == 1 && pNpc->bTrading == 1)) {
       return;
     }
 
@@ -1147,8 +1147,8 @@ void __fastcall SUNITPROXY_ResetNpcProxy(::SGAMEDATA * pGame, D2GameNpcStrc * pN
 // One-time initialisation of the trade and quest item tables for a specific NPC vendor (by nNpcIndex). Guards against re-entry via gbaNpcItemTableBuilt. Scans the Items.txt table twice: first pass counts trade vs quest items for the NPC; allocates gpaNpcTradeItemTable (12 bytes/entry) and gpaNpcQuestItemTable (4 bytes/entry); second pass fills both tables with item class IDs, flags, and level data from the txt rows. Quest items (non-zero npcquest column) go to the quest table; all others to the trade table.
 // @sourcefile .\UNIT\sunitproxy.cpp
 void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
-    D2ItemsTxt* pDVar2;
     char* pItemRow;
+    int nRowsLeft;
     D2ItemsTableStrc* pItemTblSize = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
     if (gbaNpcItemTableBuilt[nNpcIndex]) {
       return;
@@ -1159,11 +1159,10 @@ void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
     int nTradeCountTmp = 0;
     int nQuestCount = 0;
     if (pItemTblSize->nSize > 0) {
-      int iVar1;
       pItemRow = &pItemTblSize->pItems->bAkaraMagicMax + nNpcIndex;
-      iVar1 = pItemTblSize->nSize;
+      nRowsLeft = pItemTblSize->nSize;
       do {
-        nTradeCountTmp = iVar1;
+        nTradeCountTmp = nRowsLeft;
         if (pItemRow[-0x46 - nNpcIndex] != '\0' && (pItemRow[-0x22] != '\0' || *pItemRow != '\0')) {
           if (pItemRow[0x2b - nNpcIndex] == '\0') {
             nTradeCount++;
@@ -1173,9 +1172,9 @@ void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
         }
 
         pItemRow += 0x1a8;
-        iVar1 = nTradeCountTmp - 1;
+        nRowsLeft = nTradeCountTmp - 1;
         nTradeCountTmp = nTradeCount;
-      } while (iVar1);
+      } while (nRowsLeft);
     }
 
     void* pAllocBuf = D2_ALLOC_POOL_AT(nullptr, nTradeCountTmp * 0xc, ".\\UNIT\\sunitproxy.cpp", 0x523);
@@ -1195,9 +1194,10 @@ void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
     nTradeCount = 0;
     nQuestCount = 0;
     do {
-      pDVar2 = pItemTblSize->pItems;
-      if ((&pDVar2->bSpawnable)[nTradeCount] != '\0' && ((&pDVar2->bAkaraMax)[nNpcIndex + nTradeCount] != '\0' || (&pDVar2->bAkaraMagicMax)[nNpcIndex + nTradeCount] != '\0')) {
-        if ((&pDVar2->bPermStoreItem)[nTradeCount] == '\0') {
+      D2ItemsTxt* pDVar1;
+      pDVar1 = pItemTblSize->pItems;
+      if ((&pDVar1->bSpawnable)[nTradeCount] != '\0' && ((&pDVar1->bAkaraMax)[nNpcIndex + nTradeCount] != '\0' || (&pDVar1->bAkaraMagicMax)[nNpcIndex + nTradeCount] != '\0')) {
+        if ((&pDVar1->bPermStoreItem)[nTradeCount] == '\0') {
           *(char*)(nQuestCount + (int)gaNpcItemTables[nNpcIndex].pTradeItems) = (&pItemTblSize->pItems->bAkaraMin)[nNpcIndex + nTradeCount];
           *(char*)((int)gaNpcItemTables[nNpcIndex].pTradeItems + nQuestCount + 1) = (&pItemTblSize->pItems->bAkaraMax)[nTradeCount + nNpcIndex];
           *(char*)((int)gaNpcItemTables[nNpcIndex].pTradeItems + nQuestCount + 2) = (&pItemTblSize->pItems->bAkaraMagicMin)[nTradeCount + nNpcIndex];
@@ -1206,7 +1206,7 @@ void __stdcall SUNITPROXY_BuildNpcItemTables(int32_t nNpcIndex) {
           *(uint32_t*)((int)gaNpcItemTables[nNpcIndex].pTradeItems + nQuestCount + 4) = *(uint32_t*)(pItemTblSize->pItems->szSetInvFile + nTradeCount + 0x20);
           nQuestCount += 0xc;
         } else {
-          *(uint32_t*)(nTradeCountTmp + (int)gaNpcItemTables[nNpcIndex].pQuestItems) = *(uint32_t*)(pDVar2->szSetInvFile + nTradeCount + 0x20);
+          *(uint32_t*)(nTradeCountTmp + (int)gaNpcItemTables[nNpcIndex].pQuestItems) = *(uint32_t*)(pDVar1->szSetInvFile + nTradeCount + 0x20);
           nTradeCountTmp += 4;
         }
       }
@@ -1390,7 +1390,7 @@ void __stdcall SUNITPROXY_UpdateNpcProxiesForAct(::SGAMEDATA * pGame, char nAct,
       return;
     }
 
-    uint8_t* pNpcEntry = &pNpcArray->pNpc[0].sTrade.unk0x07;
+    uint8_t* pNpcEntry = &pNpcArray->pNpc[0].sTrade.bRefillStorePending;
     do {
       if (pNpcEntry != (uint8_t*)0x7 && pNpcEntry[-5] == nAct && pNpcEntry[-4] == 1 && *(int*)(pNpcEntry - 0xb) == 1 && ((D2NpcTradeStateStrc*)(pNpcEntry - 7))->bStoreFilled == 1) {
         if (bResult) {

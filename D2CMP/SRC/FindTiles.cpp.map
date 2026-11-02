@@ -1,0 +1,170 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/FindTiles.cpp",
+  "functions": [
+    {
+      "name": "FINDTILE_ComputeHash",
+      "address": "0060cd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060cd70"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FindTiles",
+      "calledFunctions": [
+        "FINDTILE_ComputeHash",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FINDTILE_AllocHashTable",
+      "address": "0060cdb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060cdb0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FindTiles",
+      "calledFunctions": [
+        "FINDTILE_AllocHashTable",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHashStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FINDTILE_FreeHashTable",
+      "address": "0060ce00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ce00"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FindTiles",
+      "calledFunctions": [
+        "FINDTILE_FreeHashTable",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHashNodeStrc",
+        "D2TileLibraryHashRefStrc",
+        "D2TileLibraryHashStrc"
+      ]
+    },
+    {
+      "name": "FINDTILE_AddTileToChain",
+      "address": "0060cea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060cea0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FindTiles",
+      "calledFunctions": [
+        "FINDTILE_AddTileToChain",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "D2TileLibraryHashNodeStrc",
+        "D2TileLibraryHashRefStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FINDTILE_AllocHashEntry",
+      "address": "0060cf00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060cf00"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FindTiles",
+      "calledFunctions": [
+        "FINDTILE_AllocHashEntry",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "D2TileLibraryHashNodeStrc",
+        "D2TileLibraryHashNodeStrc *",
+        "D2TileLibraryHashRefStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FINDTILE_Register",
+      "address": "0060cfa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060cfa0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FindTiles",
+      "calledFunctions": [
+        "FINDTILE_Register",
+        "FINDTILE_ComputeHash",
+        "FINDTILE_AddTileToChain",
+        "FINDTILE_AllocHashEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "D2TileLibraryHashNodeStrc",
+        "D2TileLibraryHashNodeStrc *",
+        "D2TileLibraryHashStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FINDTILE_Lookup",
+      "address": "0060d040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d040"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FindTiles",
+      "calledFunctions": [
+        "FINDTILE_Lookup",
+        "FINDTILE_ComputeHash",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

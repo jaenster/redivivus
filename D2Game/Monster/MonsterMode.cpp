@@ -99,12 +99,12 @@ D2MonsterPathParamStrc * __fastcall GetAiParamFromUnit(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
-void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pnParam1, int * pnParam2, char * szText, int32_t pMonData) {
+void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char * szText, int32_t pMonData) {
     if (*(int*)(pMonData + 0x18)) {
-      *pnParam1 = *(int*)(pMonData + 0x18);
+      *pX = *(int*)(pMonData + 0x18);
     }
     if (*(int*)(pMonData + 0x1c)) {
-      *pnParam2 = *(int*)(pMonData + 0x1c);
+      *pY = *(int*)(pMonData + 0x1c);
     }
     if (*(char*)(pMonData + 0x20) != '\0') {
       *szText = *(char*)(pMonData + 0x20);
@@ -491,17 +491,17 @@ void __fastcall DropItemForVictim_Unused(::SGAMEDATA * pGame, D2ObjectOperateFnA
     }
 }
 
-void SetAiState(D2UnitStrc * pUnit, uint32_t nParam) {
+void SetAiState(D2UnitStrc * pUnit, uint32_t nNewAiState) {
     int nAiState = GetAiState(pUnit);
     if (nAiState >= 0x10) {
       D2Game::Monster::SetAiState(pUnit, nAiState - 0x10);
       return;
     }
-    if (nAiState == 0xd && nParam == 3) {
-      nParam = 0xd;
+    if (nAiState == 0xd && nNewAiState == 3) {
+      nNewAiState = 0xd;
     }
 
-    D2Game::Monster::SetAiState(pUnit, nParam);
+    D2Game::Monster::SetAiState(pUnit, nNewAiState);
 }
 
 // Periodic server HP-regen/poison-tick event handler for a unit (reschedules itself each game frame). Computes net HP regen (subtracting the server-side hpregen component when a progressive state applies); unless STATE_preventheal blocks healing, applies the delta to UNITSTAT_hitpoints clamped to TxtMaxHp. Town rooms skip damage so you don't die in town. When the HP% changes by more than the threshold it broadcasts packet 0xAB and updates last_sent_hp_pct. If HP reaches zero (and not already dying), it locates the poison/state attacker via GetStatsByState/owner-GUID lookup and either sets STATE_death_delay (if uninterruptable) or calls SERVER_KillMonster and dispatches death (event 10) and kill-credit (event 9) events.
@@ -871,23 +871,27 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     eD2UnitType eOwnerUnitType = pOwner->eUnitType;
+    long xValue;
     if (eOwnerUnitType == UNIT_OBJECT || (int)eOwnerUnitType > 3 && (int)eOwnerUnitType <= 5) {
-      ptSpawn.x = pOwner->pPath.pStaticPath->nPosX;
+      xValue = pOwner->pPath.pStaticPath->nPosX;
     } else if (pOwner->pPath.pDynamicPath) {
-      ptSpawn.x = D2Common::PATH::DynamicPath::GetXPos(pOwner->pPath.pDynamicPath);
+      xValue = D2Common::PATH::DynamicPath::GetXPos(pOwner->pPath.pDynamicPath);
     } else {
-      ptSpawn.x = 0;
+      xValue = 0;
     }
 
+    ptSpawn.x = xValue;
     eD2UnitType eOwnerUnitType2 = pOwner->eUnitType;
+    long yValue;
     if (eOwnerUnitType2 == UNIT_OBJECT || (int)eOwnerUnitType2 > 3 && (int)eOwnerUnitType2 <= 5) {
-      ptSpawn.y = pOwner->pPath.pStaticPath->nPosY;
+      yValue = pOwner->pPath.pStaticPath->nPosY;
     } else if (pOwner->pPath.pDynamicPath) {
-      ptSpawn.y = D2Common::PATH::DynamicPath::GetYPos(pOwner->pPath.pDynamicPath);
+      yValue = D2Common::PATH::DynamicPath::GetYPos(pOwner->pPath.pDynamicPath);
     } else {
-      ptSpawn.y = 0;
+      yValue = 0;
     }
 
+    ptSpawn.y = yValue;
     BOOL bAllowNeighboorRooms = 0;
     int32_t nOwnerAlignment = 0x3c01;
     int32_t nOwnerSizeX = D2Common::Units::GetUnitSizeX(pOwner);
@@ -1194,16 +1198,17 @@ BOOL __fastcall MONMODE_StartOtherAttack(::SGAMEDATA * pGame, D2MonsterKillStrc 
 }
 
 BOOL __fastcall DropHandlerGeneric(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    int32_t iVar1;
+    int32_t nPathPoints;
+    int32_t nBaseId;
     D2UnitStrc* pUnit = pMonsterKill->pVictim;
     uint32_t bHasAnimSequence = MONSTER_HasAnimModeSequence(pUnit, pMonsterKill->nUnitMode);
     if (bHasAnimSequence) {
       D2DynamicPathStrc* pDynamicPath;
       pDynamicPath = pUnit->pPath.pDynamicPath;
-      iVar1 = D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
-      if (!iVar1) {
-        iVar1 = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-        if (iVar1 >= 0 && iVar1 < sgptDataTable->nTxtMonStatsSize && iVar1 == 0x6e) {
+      nPathPoints = D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
+      if (!nPathPoints) {
+        nBaseId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
+        if (nBaseId >= 0 && nBaseId < sgptDataTable->nTxtMonStatsSize && nBaseId == 0x6e) {
           D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
           UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, pMonsterKill->nUnitMode);
           return 1;
@@ -1355,12 +1360,12 @@ BOOL __fastcall MONMODE_CompleteSkillSequence(::SGAMEDATA * pGame, D2MonsterKill
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
     }
 
-    int32_t iVar1 = SKILLS::SkillsServer::SKILLS_OnModeComplete(pGame, pUnit);
-    return iVar1;
+    int32_t bResult = SKILLS::SkillsServer::SKILLS_OnModeComplete(pGame, pUnit);
+    return bResult;
 }
 
 // Looks up the death/drop event-dispatch callback record for a monster. Given a UNIT_MONSTER and an event index nParam (0..0xF), returns a pointer into the global DropHandlerArray. Returns NULL for non-monsters, out-of-range class ids, or nParam>0xF. Most monsters map directly (DropHandlerArray + nParam), but special bosses override specific events by class id: Diablo / DiabloClone / UberDiablo and Baal variants (Throne/Uber) redirect their death/drop events to dedicated handler slots (e.g. +7, +0x10, +0x11), TrappedSoul to +0x12/+0x13, and Warrior/Master act-boss minions event 0xB to +0x14. Used by the monster event dispatcher to pick the correct on-death behavior.
-D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32_t nParam) {
+D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32_t nAnimMode) {
     // Static local variables (originally global data)
     static D2AiDispatchCallbacksStrc DropHandlerArray[21] = {
     {
@@ -1498,11 +1503,11 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
 
     eD2MonsterClassId nMonClassId;
     nMonClassId = pUnit->nClassId;
-    if ((int)nMonClassId < 0 || (int)nMonClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nMonClassId) || nParam > 0xf) {
+    if ((int)nMonClassId < 0 || (int)nMonClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nMonClassId) || nAnimMode > 0xf) {
       return nullptr;
     }
     if (sgptDataTable->pTxtMonStats[nMonClassId].SplGetModeChart == '\0') {
-      return DropHandlerArray + nParam;
+      return DropHandlerArray + nAnimMode;
     }
     if ((int)nMonClassId > 0x21f) {
       switch (nMonClassId) {
@@ -1513,14 +1518,14 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
         case MonsterUnitUberBaal:
           goto baal_family;
         default:
-          return DropHandlerArray + nParam;
+          return DropHandlerArray + nAnimMode;
         case MonsterUnitUberDiablo:
           diablo_family:
-          if (nParam == 0xb) {
+          if (nAnimMode == 0xb) {
             return DropHandlerArray + 0x10;
           }
-        if (nParam != 10) {
-          return DropHandlerArray + nParam;
+        if (nAnimMode != 10) {
+          return DropHandlerArray + nAnimMode;
         }
 
         return DropHandlerArray + 0x11;
@@ -1533,10 +1538,10 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
         case MonsterUnitDiabloClone:
           goto diablo_family;
         case MonsterUnitTrappedSoul1:
-          if (nParam == 4 || nParam == 5) {
+          if (nAnimMode == 4 || nAnimMode == 5) {
             return DropHandlerArray + 0x12;
           }
-        if (nParam == 9 || nParam == 8) {
+        if (nAnimMode == 9 || nAnimMode == 8) {
           return DropHandlerArray + 0x13;
         }
 
@@ -1544,18 +1549,18 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
         case MonsterUnitWarrior:
 
         case MonsterUnitMaster:
-          if (nParam == 0xb) {
+          if (nAnimMode == 0xb) {
             return DropHandlerArray + 0x14;
           }
       }
     } else {
       baal_family:
-      if (nParam == 10) {
+      if (nAnimMode == 10) {
         return DropHandlerArray + 7;
       }
     }
 
-    return DropHandlerArray + nParam;
+    return DropHandlerArray + nAnimMode;
 }
 
 static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, eD2MonsterAnimMode eAnimMode, D2UnitStrc * pUnit) {
@@ -1597,7 +1602,7 @@ void __fastcall ExecuteDropHandlerFn3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
 }
 
 // Server-side monster mode/lifecycle transition driver. Given a D2MonsterKillStrc (victim, attacker/target, requested nUnitMode), validates the victim is a monster, halts on a stuck uninterruptable state, then for non-GetHit modes sets the dynamic-path target/SP and recomputes combat stats & UMod-on-spawn. Looks up the per-mode AI drop/death handler (GetDropHandler) and invokes its pFn1; on a 0 result clears the current skill and schedules execution (PlanExecutionOfMonster). Flags MONMODEISCHANGING, re-inits the anim frame, applies velocity%, dispatches UMod-on-death, then re-resolves the handler for the unit's actual anim mode to (re)arm or clear anim timer events. Returns pFn1's result, or 0 (falling through to MONSTER_InitiateDefaultDeath) when no actual-mode handler exists. __stdcall(pGame,pMonsterKill,nParam).
-int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill, int32_t nParam) {
+int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill, int32_t bResetSkillOnSameMode) {
     BOOL _bIsModeZeroDeath;
     bool bIsModeZeroDeath;
     BOOL BVar1;
@@ -1677,7 +1682,7 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
 
       Monsters::MONSTER_DispatchUModOnDeath(pGame, pUnit);
       eActualAnimMode = pUnit->eAnimMode.eMonsterMode;
-      if (nParam && eTargetMode == eActualAnimMode) {
+      if (bResetSkillOnSameMode && eTargetMode == eActualAnimMode) {
         D2Common::Units::SetCurrentSkill(pUnit, nullptr);
       }
 

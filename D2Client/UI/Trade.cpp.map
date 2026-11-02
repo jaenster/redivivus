@@ -1,0 +1,246 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Trade.cpp",
+  "functions": [
+    {
+      "name": "ConfirmExchange",
+      "address": "004b8a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8a30"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "ConfirmExchange",
+        "SOUND_PlaySound",
+        "FreeDialogStrc",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
+      ]
+    },
+    {
+      "name": "TRADE_GetPlayerGoldAmount",
+      "address": "004b8a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8a80"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "TRADE_GetPlayerGoldAmount",
+        "SOUND_PlaySound",
+        "FreeDialogStrc",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "DrawAgreeToTrade",
+      "address": "004b8ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8ad0"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "DrawAgreeToTrade",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "DIALOG_SetSelectedLine"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TRADE_GetPartnerGoldAmount",
+      "address": "004b8ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8ba0"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "TRADE_GetPartnerGoldAmount",
+        "SOUND_PlaySound",
+        "FreeDialogStrc",
+        "GetTickCount",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
+      ]
+    },
+    {
+      "name": "TRADE_HandleTradeCancel",
+      "address": "004b8bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8bf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "TRADE_HandleTradeCancel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "DIALOG_SetSelectedLine"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TRADE_CloseTrade",
+      "address": "004b8cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8cb0"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "TRADE_CloseTrade",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST",
+      "address": "004b8cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8cf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST",
+        "GetUIFlag",
+        "SetUIFlag",
+        "INV_ClearItemDescPending",
+        "TRADE_HandleTradeCancel",
+        "INV_InitTradeMode",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetHandItem",
+        "GetDialogCounter",
+        "DrawAgreeToTrade",
+        "TRADE_CloseTrade",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT",
+        "INV_PlayTradeStatusSound",
+        "UI_CloseTradeWindow",
+        "UI_GetFlag",
+        "FreeDialogStrc",
+        "UNITSND_PlayPlayerSound",
+        "UNITS_FindClientSideUnit",
+        "INV_SetItemDescPending",
+        "CloseStash2",
+        "CloseStash",
+        "OpenCube"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "TRADE_HandleTradeGoldUpdate",
+      "address": "004b9010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9010"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "TRADE_HandleTradeGoldUpdate",
+        "STRING_CopyCharToWCharWithSetMaxSize"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRADE_GetTradeWindowPtr",
+      "address": "004b9060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9060"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "TRADE_GetTradeWindowPtr"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "AcceptTrade",
+      "address": "004b9070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9070"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "AcceptTrade",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
+      ]
+    },
+    {
+      "name": "CancelTrade",
+      "address": "004b90b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b90b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "CancelTrade",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
+      ]
+    },
+    {
+      "name": "StaticInit_6cad80",
+      "address": "006cad80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cad80"
+        }
+      ],
+      "namespace": "D2Client::UI::Trade",
+      "calledFunctions": [
+        "StaticInit_6cad80"
+      ]
+    }
+  ]
+}

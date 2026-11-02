@@ -626,14 +626,14 @@ void __stdcall AUTOMAP_AddCellByCoords(int16_t nCellNo, int16_t nPixelX, int16_t
     AUTOMAP_InsertCellIntoTree(pAutomapCellLocal, pAutomapCell1);
 }
 
-static void __stdcall AUTOMAP_AddCellForUnit(int32_t nParam, D2AutomapCellStrc * * pAutomapCell, D2UnitStrc * pUnit) {
+static void __stdcall AUTOMAP_AddCellForUnit(int32_t nCellNo, D2AutomapCellStrc * * pAutomapCell, D2UnitStrc * pUnit) {
     D2AutomapCellStrc* pAutomapCell1 = AUTOMAP_AllocCell();
     int32_t nTargetX = D2Common::Units::GetTargetX(pUnit);
     int32_t nTargetY = D2Common::Units::GetTargetY(pUnit);
     if (nTargetX / 10 + 0x8001U <= 0xffff) {
       if (nTargetY / 10 + 0x7ffdU <= 0xffff) {
-        if (nParam + 0x8000U <= 0xffff) {
-          pAutomapCell1->nCellNo = (short int)nParam;
+        if (nCellNo + 0x8000U <= 0xffff) {
+          pAutomapCell1->nCellNo = (short int)nCellNo;
           pAutomapCell1->xPixel = (short int)(nTargetX / 10) + 1;
           pAutomapCell1->yPixel = (short int)(nTargetY / 10) - 3;
           AUTOMAP_InsertCellIntoTree(pAutomapCell1, pAutomapCell);
@@ -695,7 +695,7 @@ HANDLE __stdcall AUTOMAP_GetMapFileHandle() {
     uint32_t nCurrentSlot;
     nCurrentSlot = sSeedHeader.nSlotCursor;
     if (dwBytesRead == 0x18 && sSeedHeader.nHeaderMagic == 0xc) {
-      uint32_t uVar1;
+      uint32_t nNextSlotCursor;
       nNextSlot = 0;
       do {
         if (sSeedHeader.anSeedSlots[nNextSlot] == D2GameGame0x546->nInitSeed) {
@@ -709,9 +709,9 @@ HANDLE __stdcall AUTOMAP_GetMapFileHandle() {
         goto open_slot_file;
       }
 
-      uVar1 = (int)(sSeedHeader.nSlotCursor + 1) % 4;
+      nNextSlotCursor = (int)(sSeedHeader.nSlotCursor + 1) % 4;
       sSeedHeader.anSeedSlots[sSeedHeader.nSlotCursor] = D2GameGame0x546->nInitSeed;
-      sSeedHeader.nSlotCursor = uVar1;
+      sSeedHeader.nSlotCursor = nNextSlotCursor;
       sprintf(szFileName, "%s%s.ma%d", szSavePath, D2Game::Save::szSaveCharacterName, nCurrentSlot);
       Fog::Source::SFile::thunk_DeleteFileA(szFileName);
     } else {
@@ -1600,7 +1600,7 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
     int32_t eFade;
     D2UnitStrc* pPlayer;
     int nHalfWidth;
-    int nParam1;
+    int nPosX;
     int nScreenX;
     int nBorderOffsetX;
     int nScreenY;
@@ -1630,7 +1630,7 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
           }
       }
 
-      nParam1 = pCell->xPixel * 10 / nAutoMapZoomDivisor - nAutoMapScrollX;
+      nPosX = pCell->xPixel * 10 / nAutoMapZoomDivisor - nAutoMapScrollX;
       nScreenY = pCell->yPixel * 10 / nAutoMapZoomDivisor - nAutoMapScrollY;
       if (nScreenY >= apDC6Layers->nClipTop) {
         AUTOMAP_DrawCellTree(pCell->pLess, apDC6Layers);
@@ -1638,7 +1638,7 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
           if (nScreenY > apDC6Layers->nClipBottom) {
             return;
           }
-          if (nParam1 >= apDC6Layers->nClipLeft && nParam1 <= apDC6Layers->nClipRight) {
+          if (nPosX >= apDC6Layers->nClipLeft && nPosX <= apDC6Layers->nClipRight) {
             nDrawMode = 5;
             memset(&sGfxData, 0, 0x48);
             sGfxData.nFrameNumber = (int)pCell->nCellNo;
@@ -1649,7 +1649,7 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
               case 1:
                 {
                   if (apDC6Layers->pDC6 == pAutoMapDC6[0] && !MiniMapType) {
-                    nScreenX = apDC6Layers->nOffsetX + nParam1;
+                    nScreenX = apDC6Layers->nOffsetX + nPosX;
                     nScreenY2 = apDC6Layers->nOffsetY + nScreenY;
                     nHalfHeight = WindowSizeY / 2;
                     nHalfWidth = WindowSizeX / 2;
@@ -1725,7 +1725,7 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
               sClipRect.nY1 = sClipRect.nY0 + 0xe1;
             }
 
-            /* Draws all non units (so walls and stuff) */ D2gfx::D2GFX::D2GFX_DrawSprite6(&sGfxData, nParam1, nScreenY, &sClipRect, nDrawMode);
+            /* Draws all non units (so walls and stuff) */ D2gfx::D2GFX::D2GFX_DrawSprite6(&sGfxData, nPosX, nScreenY, &sClipRect, nDrawMode);
           }
         }
       }

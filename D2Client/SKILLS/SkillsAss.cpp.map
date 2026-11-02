@@ -1,0 +1,363 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/SKILLS/SkillsAss.cpp",
+  "functions": [
+    {
+      "name": "Skills_CltStFunc_CheckTargetLivingAndOutOfTown",
+      "address": "004f2010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2010"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckTargetLivingAndOutOfTown",
+        "GetConfirmedTargetUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "CanInteractWith"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ass_Melee_TargetValidate",
+      "address": "004f2060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2060"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ass_Melee_TargetValidate",
+        "GetConfirmedTargetUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "CanInteractWith"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_SetParam1FromCalc",
+      "address": "004f20c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f20c0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltStFunc_SetParam1FromCalc",
+        "GetConfirmedTargetUnit",
+        "GetCurrentSkill",
+        "SKILL_SetParam1",
+        "D2GetSkillCalc"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ass_Blade_DecrementCharge",
+      "address": "004f2160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2160"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ass_Blade_DecrementCharge",
+        "GetCurrentSkill",
+        "GetConfirmedTargetUnit",
+        "SKILL_GetParam1",
+        "SKILL_SetParam1",
+        "SKILLS_ApplyDamageReduction"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSASS_GetCltMissileByAuraLevel",
+      "address": "004f21b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f21b0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSASS_GetPrgCalcByAuraLevel",
+      "address": "004f2260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2260"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "SKILLSASS_GetPrgCalcByAuraLevel",
+        "D2GetSkillCalc",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom",
+      "address": "004f2340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2340"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "SKILLSASS_GetPrgCalcByAuraLevel",
+        "D2GetSkillCalc",
+        "SKILL_SpawnRandomMissilesInArea"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckAuraStateInactive",
+      "address": "004f23e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f23e0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckAuraStateInactive",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSASS_CltSetChargeUpState",
+      "address": "004f2450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2450"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "SKILLSASS_CltSetChargeUpState",
+        "UNIT_GetUnitState",
+        "GFX_AddOverlayToUnit",
+        "SOUND_PlaySound",
+        "GetStatsByState",
+        "AllocStatList",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_SetParam1",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_SetExpireFunction",
+        "SetState",
+        "SetSequenceFrame",
+        "STATSEX_SetStatListTimeout"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_SetChargeUpState",
+      "address": "004f2590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2590"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltStFunc_SetChargeUpState",
+        "SKILLSASS_CltSetChargeUpState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge",
+      "address": "004f25a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f25a0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "SKILLS_GetSkillByEnum",
+        "SKILLSASS_GetPrgCalcByAuraLevel",
+        "GetCooordinates",
+        "SKILL_GetParam1",
+        "memset",
+        "MakeMissile",
+        "SetPosVectorShifted",
+        "SKILL_SetParam1",
+        "UNIT_GetUnitState",
+        "SetSequenceFrame"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_AllocStatListByParam3",
+      "address": "004f26d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f26d0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltStFunc_AllocStatListByParam3",
+        "SKILLS_CltAllocStatListForSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ass_AuraLevel_CastAttackTarget",
+      "address": "004f2720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2720"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ass_AuraLevel_CastAttackTarget",
+        "GetConfirmedTargetUnit",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "CastAttackWithDistanceCheck"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ass_AuraLevel_StreamMissile",
+      "address": "004f2790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f2790"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAss",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ass_AuraLevel_StreamMissile",
+        "GetCooordinates",
+        "D2GetSkillCalc",
+        "memset",
+        "MakeMissile",
+        "SetStreamMissile",
+        "SetStreamRange"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    }
+  ]
+}

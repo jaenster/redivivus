@@ -1,0 +1,98 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/D2GFX.cpp",
+  "functions": [
+    {
+      "name": "D2GFX_DrawGroundTileBasic",
+      "address": "004f7580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7580"
+        }
+      ],
+      "namespace": "D2Client::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawGroundTileBasic"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawGroundTileWithPerspective",
+      "address": "004f7850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7850"
+        }
+      ],
+      "namespace": "D2Client::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawGroundTileWithPerspective"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t[32]"
+      ]
+    },
+    {
+      "name": "D2GFX_FillYBufferFast",
+      "address": "004f7da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7da0"
+        }
+      ],
+      "namespace": "D2Client::D2GFX",
+      "calledFunctions": [
+        "D2GFX_FillYBufferFast"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_ClearYBuffer",
+      "address": "004f7e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7e70"
+        }
+      ],
+      "namespace": "D2Client::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ClearYBuffer"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INIT_SetWndProcBGlobalPointer",
+      "address": "004f8fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8fc0"
+        }
+      ],
+      "namespace": "D2Client::D2GFX",
+      "calledFunctions": [
+        "INIT_SetWndProcBGlobalPointer"
+      ],
+      "usedTypes": [
+        "WndProcB"
+      ]
+    }
+  ]
+}

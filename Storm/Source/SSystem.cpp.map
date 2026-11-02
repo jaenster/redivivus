@@ -1,0 +1,664 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SSystem.cpp",
+  "functions": [
+    {
+      "name": "SSYSTEM_Shutdown",
+      "address": "0041beb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041beb0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_Shutdown",
+        "SSYSTEM_SetShutdownFlag",
+        "SLogFlushAll"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_Initialize",
+      "address": "0041bee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041bee0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_Initialize",
+        "SMemInitialize",
+        "SLogInitialize",
+        "SSTR_InitConversionTables"
+      ]
+    },
+    {
+      "name": "StormGetInstance",
+      "address": "0041bef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041bef0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "StormGetInstance"
+      ]
+    },
+    {
+      "name": "SSYSTEM_GetSystemOption",
+      "address": "0041bf00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041bf00"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_GetSystemOption",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_SetSystemOption",
+      "address": "0041bfc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041bfc0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_SetSystemOption",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_InitializeAndReturn",
+      "address": "0041c0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c0c0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_InitializeAndReturn",
+        "SSYSTEM_Initialize"
+      ]
+    },
+    {
+      "name": "ILT_strpbrk",
+      "address": "0041c0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c0d0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "ILT_strpbrk",
+        "strpbrk"
+      ]
+    },
+    {
+      "name": "__break",
+      "address": "0041c160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c160"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "__break"
+      ]
+    },
+    {
+      "name": "SSYSTEM_SetShutdownFlag",
+      "address": "0041c360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c360"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_SetShutdownFlag"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListOffsetToPointer",
+      "address": "0041c3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c3a0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_ListOffsetToPointer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetPointer",
+      "address": "0041c560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c560"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_ListGetPointer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListUnlinkAndInsert",
+      "address": "0041c580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c580"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_ListUnlinkAndInsert"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetNext",
+      "address": "0041c630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c630"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_ListGetNext"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListUnlink",
+      "address": "0041c690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c690"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_ListUnlink"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetData",
+      "address": "0041c700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c700"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_ListGetData"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TSList_HANDLER_UnlinkAll",
+      "address": "0041c770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c770"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSList_HANDLER_UnlinkAll"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TSList_HANDLER_Destructor",
+      "address": "0041c7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c7b0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSList_HANDLER_Destructor",
+        "TSList_HANDLER_UnlinkAll"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListAllocNode",
+      "address": "0041c840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c840"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_ListAllocNode",
+        "SMemAlloc",
+        "SSYSTEM_ListUnlinkAndInsert"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListFreeNode",
+      "address": "0041c8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c8a0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SSYSTEM_ListFreeNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TSList_HANDLER_Clear",
+      "address": "0041c9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c9c0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSList_HANDLER_Clear",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Constructor",
+      "address": "00421b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421b50"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Constructor"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetNodePointer",
+      "address": "005174c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005174c0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_GetNodePointer"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TSLink_TMESSAGESOURCE_Unlink",
+      "address": "005174e2",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005174e2"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSLink_TMESSAGESOURCE_Unlink",
+        "LINKEDLIST_GetNodePointer"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetOffset",
+      "address": "0051752f",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051752f"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_GetOffset"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkedListStrc"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_SetNodeValue",
+      "address": "00517546",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517546"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_SetNodeValue"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_InsertNode",
+      "address": "0051755c",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051755c"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_InsertNode",
+        "LINKEDLIST_GetOffset",
+        "TSLink_TMESSAGESOURCE_Unlink",
+        "LINKEDLIST_GetNodePointer"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetNodeAt",
+      "address": "005175cb",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005175cb"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_GetNodeAt",
+        "LINKEDLIST_GetOffset"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_RemoveNode",
+      "address": "005175f1",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005175f1"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_RemoveNode",
+        "LINKEDLIST_GetOffset",
+        "TSLink_TMESSAGESOURCE_Unlink"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetNodeLinkAtOffset",
+      "address": "00517607",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517607"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_GetOffset",
+        "LINKEDLIST_GetNodeLinkAtOffset"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TSList_TMESSAGESOURCE_UnlinkAll",
+      "address": "0051763c",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051763c"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSList_TMESSAGESOURCE_UnlinkAll",
+        "LINKEDLIST_RemoveNode"
+      ]
+    },
+    {
+      "name": "TSList_TMESSAGESOURCE_Destructor",
+      "address": "00517658",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517658"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSList_TMESSAGESOURCE_Destructor",
+        "TSList_TMESSAGESOURCE_UnlinkAll",
+        "TSLink_TMESSAGESOURCE_Unlink"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_AllocAndInsertNode",
+      "address": "00517669",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517669"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_AllocAndInsertNode",
+        "SMemAlloc",
+        "LINKEDLIST_InsertNode"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_DetachNode",
+      "address": "005176b4",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005176b4"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_DetachNode",
+        "TSLink_TMESSAGESOURCE_Unlink",
+        "MISC_OperatorDeleteShim"
+      ],
+      "usedTypes": [
+        "FILE",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TSList_TMESSAGESOURCE_Destructor_5176d3",
+      "address": "005176d3",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005176d3"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSList_TMESSAGESOURCE_Destructor_5176d3",
+        "TSList_TMESSAGESOURCE_UnlinkAll",
+        "TSLink_TMESSAGESOURCE_Unlink"
+      ]
+    },
+    {
+      "name": "TSList_TMESSAGESOURCE_Clear",
+      "address": "005176f8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005176f8"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "TSList_TMESSAGESOURCE_Clear",
+        "LINKEDLIST_DetachNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "FILE"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_FindNode",
+      "address": "0051772a",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051772a"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "LINKEDLIST_FindNode",
+        "LINKEDLIST_GetNodeAt",
+        "LINKEDLIST_DetachNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetCurrentThreadId",
+      "address": "006ca6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca6f0"
+        }
+      ],
+      "namespace": "Storm::Source::SSystem",
+      "calledFunctions": [
+        "SetCurrentThreadId",
+        "GetCurrentThreadId"
+      ]
+    }
+  ]
+}

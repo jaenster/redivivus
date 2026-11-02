@@ -28,6 +28,6 @@ short * __fastcall FOG_GetDataArrayEntry(struct D2DataArrayStrc * pDataArray, in
 short * __fastcall FOG_GetDataArrayEntryOrHalt(struct D2DataArrayStrc * pDataArray, int nHandle);
 void __fastcall FOG_CloseDataArray(struct D2DataArrayStrc * pDataArray);
 void __fastcall FOG_ArrayFreeAtIndex(struct D2DataArrayStrc * pDataArray, int nHandle);
-void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * pdwParam, int nParam, int nMaxValue);
+void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * pdwParam, int nCount, int nMaxValue);
 
 } // namespace Fog::Src::DataArrays

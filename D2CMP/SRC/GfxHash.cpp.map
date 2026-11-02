@@ -1,0 +1,164 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/GfxHash.cpp",
+  "functions": [
+    {
+      "name": "GFXHASH_UnlinkCacheEntry",
+      "address": "0060a9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a9d0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_UnlinkCacheEntry",
+        "CELCMP_GetPixelDataFreeCallback",
+        "ASYNCDATA_GetResult",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory",
+        "ASYNCDATA_Free"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "D2CelCacheBlockStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "pfnCelPixelDataFree",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFXHASH_InitHashTable",
+      "address": "0060aaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060aaf0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_InitHashTable",
+        "memset"
+      ]
+    },
+    {
+      "name": "GFX_UnlinkCacheEntry",
+      "address": "0060ab10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ab10"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFX_UnlinkCacheEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFXHASH_UnlinkCacheEntry"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFXHASH_CalcDirectionIndex",
+      "address": "0060ab80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ab80"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_CalcDirectionIndex",
+        "CELCMP_GetDirectionFrameTableIndex"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFXHASH_CalcHashKey",
+      "address": "0060ac60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ac60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_CalcHashKey",
+        "GFXHASH_CalcDirectionIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SStrHash"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFXHASH_FindEntryByGfxData",
+      "address": "0060ace0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ace0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_FindEntryByGfxData",
+        "GFXHASH_CalcHashKey"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_AllocCacheEntry",
+      "address": "0060adc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060adc0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFX_AllocCacheEntry",
+        "AllocServerMemory",
+        "GFXHASH_CalcHashKey"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "D2PoolManagerStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    }
+  ]
+}

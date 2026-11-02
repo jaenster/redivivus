@@ -22,6 +22,7 @@ struct EHRegistrationNode;
 struct SGAMEDATA;
 typedef int _EXCEPTION_DISPOSITION;
 typedef uint32_t eD2ArenaFlags;
+typedef uint32_t eD2PlayerClassIDDWORD;
 typedef uint32_t eD2States;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 struct _CONTEXT;
@@ -143,20 +144,20 @@ uint8_t __stdcall INV_GetItemDescDirtyFlag();
 void __fastcall MONUNIQUE_Clt_ClearMonsterOverride(struct D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply);
 void __fastcall MONUNIQUE_DispatchDeathEffect(struct D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion);
 void __fastcall MONUNIQUE_Clt_SpawnPainWormDeathExplosion(struct D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion);
-void __fastcall MONSTER_FreeMonsterPath(int * pThis);
+void __fastcall MONSTER_FreeMonsterPath(int * pUnit);
 int __stdcall NPCMENU_ConfirmTransactionReturn();
 int __stdcall NPCMENU_GetCurrentMenuId();
-void __fastcall TRADE_HandleTradeComplete(int32_t nValue, char cParam);
+void __fastcall TRADE_HandleTradeComplete(int32_t nValue, char bIsGoldAmount);
 int __stdcall D2CLIENT_GetTradeAcceptedFlags();
 int __stdcall D2CLIENT_GetTradePlayerGoldAmount();
-void __fastcall TRADE_SendGoldToPartner(uint32_t nParam);
+void __fastcall TRADE_SendGoldToPartner(uint32_t nGoldAmount);
 int __stdcall TRADE_IsTradeThrottled();
 void __stdcall SHOP_CleanupAssets();
 void __fastcall NET_D2GS_CLIENT_Handle0x50_QuestSpecial(struct D2GSPacketSrv0x50 * pPacket);
 // Handles GS→client packet 0x5E (quest availability update): copies 37 bytes (9 dwords + 1 byte) from packet payload into aQuestAvailabilityPacket global buffer, then sets bReceivedQuestAvailabilityPacket=1.
 void __fastcall NET_D2GS_CLIENT_Incoming0x5E_QUESTPICKS(char * pBytes);
 uint32_t __stdcall GetQuestAvailabilityByIndex(int32_t nUnused, int32_t nQuestIndex);
-void __fastcall thunk_ExitGamePlayCutScene(int32_t nParam);
+void __fastcall thunk_ExitGamePlayCutScene(int32_t pPacket);
 // Handles GS→client packet 0x89: forwards byte pBytes[1] (subcommand/type) to Storm::Source::ClientEngine::HandleIncoming0x89 for game-state update processing.
 void __fastcall NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER(char * pBytes);
 int32_t __fastcall SEED_RollRange(struct D2SeedStrc * pSeed, int32_t nMin, int32_t nMax);
@@ -183,8 +184,8 @@ uint32_t __stdcall DRAW_ShouldDrawEdges(int32_t nParam);
 // TRUE when left <= nX < right and top <= nY < bottom; halts (dFloor.cpp line 118, ptRect) on a NULL rect.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY);
-int32_t __fastcall UI_GetDialogLineCount(int16_t nParam);
-int32_t __thiscall WARDEN_DecryptBuffer(int * pnParam, int32_t param_1);
+int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId);
+int32_t __thiscall WARDEN_DecryptBuffer(int * ppModule, int32_t nOrdinal);
 // Decrypt Warden anti-cheat module data using RSA/crypto operations
 uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSize, uint32_t * * ppOutput, uint32_t nOutputSize);
 // RC4 key schedule: fills pRc4State's 256-byte S-box with 0..255, zeroes the i/j bytes at +0x100/+0x101, then swaps S[i] with S[j], j += S[i] + pKey[i % nKeyLength].

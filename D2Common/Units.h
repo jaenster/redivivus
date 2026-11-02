@@ -99,7 +99,7 @@ void __stdcall StoreOwnerInfo(struct D2UnitStrc * pUnit, eD2UnitType eUnitType, 
 void __stdcall StoreOwner(struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner);
 void __stdcall StoreLastAttacker(struct D2UnitStrc * pUnit, struct D2UnitStrc * pKiller);
 int __stdcall GetDirectionToCoords(struct D2UnitStrc * pUnit, int32_t nNewX, int32_t nNewY);
-void __stdcall SetOverlay(struct D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nParam);
+void __stdcall SetOverlay(struct D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nLayer);
 int32_t __stdcall GetBeltType(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetCurrentLifePercentage(struct D2UnitStrc * pUnit);
 BOOL __stdcall IsSoftMonster(struct D2UnitStrc * pUnit);

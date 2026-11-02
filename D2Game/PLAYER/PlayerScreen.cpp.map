@@ -1,0 +1,531 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/PLAYER/PlayerScreen.cpp",
+  "functions": [
+    {
+      "name": "SendPlayerEvent",
+      "address": "005a5690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5690"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "SendPlayerEvent",
+        "NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2Packet0x5aEventStructure",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SendPlayerInfo",
+      "address": "005a5750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5750"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "SendPlayerInfo",
+        "PLAYERLIST_AddPlayerEntry",
+        "PLAYERLIST_GetFlagsMasked",
+        "SendRelationshipStatus",
+        "NET_D2GS_SERVER_Send_0x75_UPDATEROSTER"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_SetCorpseLootPermission",
+      "address": "005a57b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a57b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_SetCorpseLootPermission",
+        "SUNIT_GetClient",
+        "CLIENT_TestFileFlags",
+        "SendPlayerInfo",
+        "SendPlayerEvent"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_UpdateMuteRelation",
+      "address": "005a5840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5840"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_UpdateMuteRelation",
+        "PLAYERLIST_AddPlayerEntry",
+        "PLAYERLIST_GetFlagsMasked",
+        "SendRelationshipStatus",
+        "NET_D2GS_SERVER_Send_0x75_UPDATEROSTER"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_UpdateSquelchRelation",
+      "address": "005a58a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a58a0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_UpdateSquelchRelation",
+        "PLAYERLIST_AddPlayerEntry",
+        "PLAYERLIST_GetFlagsMasked",
+        "SendRelationshipStatus",
+        "NET_D2GS_SERVER_Send_0x75_UPDATEROSTER"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RefreshPlayerStatus",
+      "address": "005a5900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5900"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "RefreshPlayerStatus",
+        "GetPartyId",
+        "PLAYERLIST_IsPartied",
+        "SetPlayerRelationship"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "AssignPlayerToParty",
+      "address": "005a5970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5970"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "AssignPlayerToParty",
+        "GetPartyId",
+        "PLAYERLIST_AddPlayerEntry",
+        "RefreshPlayerStatus",
+        "SUNIT_GetClient",
+        "SendPlayerEvent",
+        "Send0x8bRelationshipStatus",
+        "NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_AcceptPartyInvite",
+      "address": "005a5a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5a30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_AcceptPartyInvite",
+        "GetPartyId",
+        "PLAYERLIST_AddPlayerEntry",
+        "PLAYERLIST_IsPartied",
+        "Send0x8bRelationshipStatus",
+        "AllocPartyControlSub0x4",
+        "PARTY_AddUnitToParty",
+        "PARTY_RefreshPlayerListRelationships",
+        "SUNIT_GetClient",
+        "SendPlayerEvent",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_CancelPartyInvite",
+      "address": "005a5b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5b30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_CancelPartyInvite",
+        "PLAYERLIST_AddPlayerEntry",
+        "PLAYERLIST_IsPartied",
+        "GetPartyId",
+        "SetPlayerRelationship",
+        "SUNIT_GetClient",
+        "SendPlayerEvent",
+        "Send0x8bRelationshipStatus"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_SendPartyInvite",
+      "address": "005a5be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5be0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_SendPartyInvite",
+        "PLAYERLIST_AddPlayerEntry",
+        "PLAYERLIST_IsPartied",
+        "SetPlayerRelationship",
+        "SUNIT_GetClient",
+        "SendPlayerEvent",
+        "Send0x8bRelationshipStatus"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PARTY_SendPlayerLeftEvent",
+      "address": "005a5c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5c70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTY_SendPlayerLeftEvent",
+        "SUNIT_GetClient",
+        "SendPlayerEvent"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SendPlayerPartyInfo",
+      "address": "005a5cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5cb0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "SendPlayerPartyInfo",
+        "SetPlayerRelationship",
+        "NET_D2GS_SERVER_Send_0x75_UPDATEROSTER",
+        "GetPartyId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_LeaveParty",
+      "address": "005a5d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5d20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_LeaveParty",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember",
+        "PARTY_RemoveUnitFromParty"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_SetHostileForPlayer",
+      "address": "005a5d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5d50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_SetHostileForPlayer",
+        "SERVER_GetUnitStat",
+        "PARTYSCREEN_SetHostileRelation",
+        "SUNIT_GetClient",
+        "SendPlayerEvent"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_SetHostileWithParty",
+      "address": "005a5dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5dc0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_SetHostileWithParty",
+        "GetPartyId",
+        "PARTYSCREEN_SetHostileRelation",
+        "SUNIT_GetClient",
+        "SendPlayerEvent",
+        "SERVER_GetUnitStat",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_ToggleHostile",
+      "address": "005a5e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5e50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_ToggleHostile",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SERVER_GetUnitStat",
+        "PLAYERLIST_AddPlayerEntry",
+        "PLAYERLIST_GetFlagsMasked",
+        "STATSEX_GetCurrentStat",
+        "PARTYSCREEN_ClearHostileRelation",
+        "SUNIT_GetClient",
+        "SendPlayerEvent",
+        "GetHostileDelay",
+        "GetTickCount",
+        "PLAYERLIST_SetHostileDelay",
+        "PARTYSCREEN_SetHostileWithParty",
+        "PLAYER_DestroyPortalPair",
+        "GetPartyId",
+        "PARTYSCREEN_LeaveParty",
+        "SetupUpdateEvent_AttachEventSound",
+        "SendEventMsg",
+        "PARTY_SendRelationshipForPlayer"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SendAllPlayersPartyInfo",
+      "address": "005a5ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5ff0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "SendAllPlayersPartyInfo",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PlayerScreen_DispatchAction",
+      "address": "005a6000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a6000"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PlayerScreen_DispatchAction",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_ClearHostileRelation",
+      "address": "005a6080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a6080"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_ClearHostileRelation",
+        "PLAYERLIST_AddPlayerEntry",
+        "SendRelationshipStatus",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTYSCREEN_SetHostileRelation",
+      "address": "005a60e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a60e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PARTYSCREEN_SetHostileRelation",
+        "PLAYERLIST_AddPlayerEntry",
+        "SendRelationshipStatus",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYERSCREEN_CheckUnitsCanSeeEachOther",
+      "address": "005a6130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a6130"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerScreen",
+      "calledFunctions": [
+        "PLAYERSCREEN_CheckUnitsCanSeeEachOther",
+        "PLAYERLIST_GetFlagsMasked",
+        "IsAllyOf"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    }
+  ]
+}

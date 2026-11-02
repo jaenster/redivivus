@@ -1,0 +1,2882 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Game/Game.cpp",
+  "functions": [
+    {
+      "name": "GAMEDATA_TimerInitWithTickCount",
+      "address": "0044bdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bdf0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_TimerInitWithTickCount",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_SetByteInUshort",
+      "address": "0044be30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_SetByteInUshort"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetRunKeyDown",
+      "address": "0044be60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "SetRunKeyDown"
+      ]
+    },
+    {
+      "name": "SetGlobalAlwaysRun",
+      "address": "0044be80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be80"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "SetGlobalAlwaysRun"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetGlobalAlwaysRun",
+      "address": "0044be90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be90"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetGlobalAlwaysRun"
+      ]
+    },
+    {
+      "name": "GAMEDATA_SetClickModifier",
+      "address": "0044bea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bea0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_SetClickModifier"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetMouseClickFlags",
+      "address": "0044bec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bec0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetMouseClickFlags"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAME_SetMouseButtonEventPending",
+      "address": "0044bef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bef0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_SetMouseButtonEventPending"
+      ]
+    },
+    {
+      "name": "GAME_GetPrimaryClickState",
+      "address": "0044bf00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bf00"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_GetPrimaryClickState"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAME_GetMouseButtonEventState",
+      "address": "0044bf10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bf10"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_GetMouseButtonEventState"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetQueuedPrimaryClick",
+      "address": "0044bf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bf30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetQueuedPrimaryClick"
+      ]
+    },
+    {
+      "name": "UnderMouse_PrimaryClick",
+      "address": "0044bf40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bf40"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClickMap",
+        "UnderMouse_PrimaryClick",
+        "SetCanBeSelectedToFalse",
+        "GetPlayerUnit_UI",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GAME_HasQueuedPrimaryClick",
+      "address": "0044bfe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bfe0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_HasQueuedPrimaryClick"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ProcessQueuedPrimaryClick",
+      "address": "0044c000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c000"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClickMap",
+        "GetMouseClickFlags",
+        "ProcessQueuedPrimaryClick",
+        "GetPlayerUnit_UI",
+        "GetMouseY",
+        "GetMouseX"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ProcessPrimaryClickImmediate",
+      "address": "0044c060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c060"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClickMap",
+        "ProcessPrimaryClickImmediate",
+        "SetCanBeSelectedToFalse",
+        "GetPlayerUnit_UI",
+        "GetMouseY",
+        "GetMouseX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "INPUT_HandlePrimaryClickUp",
+      "address": "0044c0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c0f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandlePrimaryClickUp",
+        "ProcessPrimaryClickImmediate"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_HandleRightClick",
+      "address": "0044c180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c180"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetMouseClickFlags",
+        "INPUT_HandleRightClick",
+        "SetCanBeSelectedToFalse",
+        "DRAW_GetTypeOfBorder",
+        "GetPlayerUnit_UI",
+        "ClickMap",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ProcessQueuedSecondaryClick",
+      "address": "0044c2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c2c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClickMap",
+        "ProcessQueuedSecondaryClick",
+        "GetPlayerUnit_UI",
+        "GetMouseY",
+        "GetMouseX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "INPUT_HandleSecondaryClick",
+      "address": "0044c370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c370"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandleSecondaryClick",
+        "SetCanBeSelectedToFalse",
+        "GetPlayerUnit_UI",
+        "ClickMap",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INPUT_HandleMouseWheel",
+      "address": "0044c400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c400"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandleMouseWheel",
+        "CMD_InvokeCallbackByParam",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_HandleScrollDown",
+      "address": "0044c470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c470"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandleScrollDown",
+        "CMD_InvokeCallback_0x1144",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_HandleScrollUp",
+      "address": "0044c4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c4a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandleScrollUp",
+        "CMDTBL_InvokeMouseLeftButtonHandler",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_HandlePageUpDown",
+      "address": "0044c4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c4d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandlePageUpDown",
+        "CMD_InvokeCallback_0x1152",
+        "CMD_InvokeCallback_0x1148",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_HandleScrollToEnd",
+      "address": "0044c520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c520"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandleScrollToEnd",
+        "CMDTBL_InvokeMouseRightButtonHandler",
+        "CMDTBL_InvokeMouseMiddleButtonHandler",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_HandleSysCommand",
+      "address": "0044c570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c570"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandleSysCommand",
+        "IsFullscreen",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_HandlePassthrough",
+      "address": "0044c5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c5c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandlePassthrough",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "HandleMouseButtonEvent",
+      "address": "0044c5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c5e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "HandleMouseButtonEvent",
+        "SetUIFlag",
+        "ClearSelectedUnit",
+        "D2WINPALETTE_SetPaletteIndex",
+        "CMD_IsCommandBound",
+        "CMD_GetKeyForCommand",
+        "ProcessPrimaryClickImmediate",
+        "SetCanBeSelectedToFalse"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_CheckAutomapCenterOnLoad",
+      "address": "0044c6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c6b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_CheckAutomapCenterOnLoad",
+        "UI_CloseActivePanels",
+        "AUTOMAP_CenterOnPlayer"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_HandleAllNonVariableSizePackets",
+      "address": "0044c6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c6e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_HandleAllNonVariableSizePackets",
+        "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
+        "NET_D2GS_CLIENT_PacketHandle_from0xAF",
+        "NET_D2GS_CLIENT_ExtractPacketSize_to0xAE",
+        "NET_D2GS_CLIENT_PacketHandle_to0xAF"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GameLoop",
+      "address": "0044c750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c750"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GameLoop",
+        "DRLGROOM_GetRoomFromAct",
+        "DRLGROOM_SpawnRandomMonsters",
+        "CreateUnitsForMissiles",
+        "DenOfEvilLight"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "ClientSideGameLoop",
+      "address": "0044c790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c790"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "FreeDungeons",
+        "ClientSideGameLoop",
+        "GetTickCount",
+        "GameLoop",
+        "CLIENT_UpdateUnitGfxState",
+        "GetCurrentRoom",
+        "AnimateTiles",
+        "ClientLight_UpdateLightTimers",
+        "GFXProcessGameGfxLists",
+        "DRLGENV_UpdatePeriodOfDay",
+        "UpdateObjectAutoLightOnPeriodChange",
+        "GetDrlgFromAct",
+        "DRLGROOMEX_UpdateClientRoomExActivation",
+        "AUTOMAP_Update"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "GAMEDATA_InitializeEclipseEnvironment",
+      "address": "0044c820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c820"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_InitializeEclipseEnvironment",
+        "GetCurrentRoom",
+        "DRLGENV_InitializeEnvironment"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ExitFunction",
+      "address": "0044c850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c850"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ExitFunction",
+        "D2GFX_DestroyWindow",
+        "D2GFX_Release"
+      ]
+    },
+    {
+      "name": "D2CLIENT_SetExitVar2",
+      "address": "0044c860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c860"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "D2CLIENT_SetExitVar2"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetExitFlag2",
+      "address": "0044c870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c870"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetExitFlag2"
+      ]
+    },
+    {
+      "name": "GAME_FreeClientSideStructures",
+      "address": "0044c890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c890"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_FreeClientSideStructures",
+        "WEATHER_FreeDC6Graphics",
+        "FreeGamePalShift",
+        "FreeAllUnits",
+        "FreeAct",
+        "SPRITECACHE_CancelPendingLoads",
+        "SPRITECACHE_Unlock",
+        "GFX_ShutdownSpriteCacheAndCofSystem",
+        "FreeGameView",
+        "FreeDraw",
+        "ENV_FreeClientSide_NoOp",
+        "LIGHTMAP_FreeAll",
+        "Free",
+        "FreeMemoryPool",
+        "memset",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "GAMEDATA_SetDrawFunction",
+      "address": "0044c930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c930"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_SetDrawFunction"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetCurrentLevelBlankScreen",
+      "address": "0044c950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c950"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetCurrentLevelBlankScreen",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "InGameDraw",
+      "address": "0044c990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044c990"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "InGameDraw",
+        "CleanupAfterLoadingAct",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "GetPlayerUnit_UI",
+        "VIEW_GetViewRect",
+        "GetTargetX",
+        "GetTargetY",
+        "SHAKE_AdjustCenterByShake",
+        "SetCenterXY",
+        "GAMEVIEW_PrepareScene",
+        "WeatherEffects",
+        "DRLGENV_GetLightColorFromAct",
+        "D2GFX_SetGlobalLight",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_BeginScene",
+        "DRAW_SetOrReloadPalleteMain",
+        "DRAW_UpdateMouseWorldOffsets",
+        "DRAW_GetTypeOfBorder",
+        "ViewDraw2",
+        "DRAW_UI",
+        "RENDERER_DrawOutOfGameScene",
+        "nullSub_CharonGameDraw",
+        "DrawCursor",
+        "DRAW_UI_FPSStats",
+        "D2GFX_ClearScreen",
+        "D2GFX_EndScene"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DrawLoadingMessage",
+      "address": "0044cb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044cb60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "DrawLoadingMessage",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_BeginScene",
+        "D2GFX_ClearScreen",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "DRAW_text0",
+        "D2WINFONT_WordWrapString",
+        "D2WINFONT_GetCurrentFontHeight",
+        "DRAW_text",
+        "D2WINFONT_FreeWordWrapList",
+        "RENDERER_DrawOutOfGameScene",
+        "D2GFX_EndScene"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ComputeFrameSkipLevel",
+      "address": "0044cca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044cca0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ComputeFrameSkipLevel"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UpdateFrameStats",
+      "address": "0044cce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044cce0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "UpdateFrameStats"
+      ]
+    },
+    {
+      "name": "GAMEDATA_SendPeriodicPing",
+      "address": "0044cd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044cd70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_SendPeriodicPing",
+        "GetTickCount",
+        "NET_D2GS_CLIENT_Send_0x6D_PING"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING",
+      "address": "0044cdb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044cdb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "GAME_SetSkillDelayEndFrame",
+      "address": "0044ce40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ce40"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_SetSkillDelayEndFrame"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAME_GetSkillDelayEndFrame",
+      "address": "0044ce50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ce50"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_GetSkillDelayEndFrame"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetPing",
+      "address": "0044ce60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ce60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetPing"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAME_GetAveragePing",
+      "address": "0044ce70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ce70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_GetAveragePing"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UpdateMouseModifierKeyState",
+      "address": "0044ce90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ce90"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "UpdateMouseModifierKeyState",
+        "CMD_IsCommandBound",
+        "CMD_GetKeyForCommand"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "pfModes_Save",
+      "address": "0044d080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d080"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "pfModes_Save",
+        "ClientAppModeQueue"
+      ],
+      "usedTypes": [
+        "eD2ClientAppMode"
+      ]
+    },
+    {
+      "name": "BetaScreen_NextPage",
+      "address": "0044d0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d0a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "BetaScreen_NextPage",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "BetaScreen_NextPageIfVisible",
+      "address": "0044d0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d0d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "BetaScreen_NextPageIfVisible",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "DrawBetaScreen",
+      "address": "0044d100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d100"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "DrawBetaScreen",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_BeginScene",
+        "IMAGE_LoadDC6Ex",
+        "GetTickCount",
+        "D2WINPAL_LoadActPalette",
+        "memset",
+        "D2GFX_DrawImage",
+        "D2GFX_EndScene",
+        "DC6_FreeAndDelete",
+        "D2CLIENT_SetExitVar1"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6",
+        "DC6 *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_IsMouseInRect",
+      "address": "0044d320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d320"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_IsMouseInRect",
+        "GetMouseX",
+        "GetMouseY"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Congratz_SetOkClicked",
+      "address": "0044d360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d360"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "Congratz_SetOkClicked",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetCenteredTextX",
+      "address": "0044d390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d390"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetCenteredTextX",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "DRAW_text0"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_DrawLoadingScreenText",
+      "address": "0044d3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d3e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_DrawLoadingScreenText",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "DRAW_text0",
+        "DRAW_text",
+        "GAMEDATA_GetCenteredTextX"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetExitCutscenePlayed",
+      "address": "0044d510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d510"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "SetExitCutscenePlayed"
+      ]
+    },
+    {
+      "name": "D2CLIENT_SetExitVar3ToTrue",
+      "address": "0044d520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d520"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "D2CLIENT_SetExitVar3ToTrue"
+      ]
+    },
+    {
+      "name": "SetPendingExitCutsceneId",
+      "address": "0044d530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d530"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "SetPendingExitCutsceneId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetGameVersionInfo",
+      "address": "0044d540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d540"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetGameVersionInfo"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc"
+      ]
+    },
+    {
+      "name": "pfModes_ExitGame",
+      "address": "0044d550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d550"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "pfModes_ExitGame",
+        "VIEW_FreeLookupTables",
+        "UI_FreeCursor",
+        "FreeGameRecord",
+        "ClearBothRosterLists",
+        "FreeRosterPet",
+        "MESSAGE_UndoLastEventRegistrations"
+      ],
+      "usedTypes": [
+        "eD2ClientAppMode"
+      ]
+    },
+    {
+      "name": "ClientInit_NoSaveFlag",
+      "address": "0044d580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d580"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_NoSaveFlag",
+        "GAME_SetNoSaveFlag"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_StartingAct",
+      "address": "0044d5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d5a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_StartingAct",
+        "SetupStartingAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_JoinTcpIpServer",
+      "address": "0044d5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d5f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_JoinTcpIpServer",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_JoinBNetServer",
+      "address": "0044d650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d650"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_JoinBNetServer",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_JoinMcpServer",
+      "address": "0044d680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d680"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_JoinMcpServer",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_PlayerClass",
+      "address": "0044d6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d6b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_PlayerClass"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop04",
+      "address": "0044d730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d730"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop04"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop05",
+      "address": "0044d740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d740"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop05"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop03",
+      "address": "0044d750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d750"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop03"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Fullscreen",
+      "address": "0044d760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d760"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Fullscreen",
+        "SetCurrentEngineToOne"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_AspectRatio",
+      "address": "0044d770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d770"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_AspectRatio",
+        "D2GFX_DisableFixAspect"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Renderer_3DFX",
+      "address": "0044d780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d780"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Renderer_3DFX",
+        "RENDERER_Set3DFX"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Renderer_OpenGL",
+      "address": "0044d790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d790"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Renderer_OpenGL",
+        "RENDERER_SetOpenGL"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Renderer_D3D",
+      "address": "0044d7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d7a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Renderer_D3D",
+        "RENDERER_SetMode6"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Renderer_Rave",
+      "address": "0044d7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d7b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Renderer_Rave",
+        "RENDERER_SetMode7"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop01",
+      "address": "0044d7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d7c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop01"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Gamma",
+      "address": "0044d7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d7d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Gamma",
+        "SetupGamma"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Vsync",
+      "address": "0044d7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d7e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Vsync",
+        "D2GFX_EnableVSync"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop06",
+      "address": "0044d7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d7f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop06"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop12",
+      "address": "0044d800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d800"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop12"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop02",
+      "address": "0044d810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d810"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop02"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop07",
+      "address": "0044d820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d820"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop07"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop08",
+      "address": "0044d830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d830"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop08"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Log",
+      "address": "0044d840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d840"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Log",
+        "LOGGING_EnableLogFile"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_CustomSeed",
+      "address": "0044d860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d860"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_CustomSeed",
+        "GAME_SetForcedGameSeed"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop09",
+      "address": "0044d880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d880"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop09"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_CharName",
+      "address": "0044d890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d890"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_CharName",
+        "strncpy"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Realm",
+      "address": "0044d900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d900"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Realm",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_ArenaFlags",
+      "address": "0044d920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d920"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_ArenaFlags",
+        "CLIENT_ToggleDefaultActiveFlag"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop10",
+      "address": "0044d930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d930"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop10"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop11",
+      "address": "0044d940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d940"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop11"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop15",
+      "address": "0044d950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d950"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop15"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_PlayerClassId",
+      "address": "0044d960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d960"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_PlayerClassId",
+        "ROSTER_SetArenaKillCountGlobal"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "GLOBAL_SetGameVersionInfo",
+      "address": "0044d970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d970"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GLOBAL_SetGameVersionInfo"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop13",
+      "address": "0044d980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d980"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop13"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop14",
+      "address": "0044d990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d990"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop14"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_NoCompression",
+      "address": "0044d9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d9a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_NoCompression",
+        "SetCompressedDataGlobalAndSaveItToRegistry"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_UseTxt",
+      "address": "0044d9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d9c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_UseTxt",
+        "sgtDataTableSetupIfUseTxt"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "ClientInit_Noop16",
+      "address": "0044d9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d9e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClientInit_Noop16"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "LoadDataForGame",
+      "address": "0044d9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044d9f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "LoadDataForGame"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetExitFlag3",
+      "address": "0044da30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044da30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetExitFlag3"
+      ]
+    },
+    {
+      "name": "UI_ResetInputState",
+      "address": "0044da40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044da40"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "UI_ResetInputState",
+        "ClearSelectedUnit"
+      ]
+    },
+    {
+      "name": "GAMEDATA_ClearQueuedClicks",
+      "address": "0044da70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044da70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_ClearQueuedClicks"
+      ]
+    },
+    {
+      "name": "GetEntryIndex",
+      "address": "0044da90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044da90"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetEntryIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetGlobalTickCount",
+      "address": "0044daa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044daa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetGlobalTickCount"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAME_GetSyncTickCount",
+      "address": "0044dac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dac0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_GetSyncTickCount"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAME_SetSyncTickCount",
+      "address": "0044dad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dad0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_SetSyncTickCount"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetFpsDrawn",
+      "address": "0044dae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dae0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetFpsDrawn"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetFPSSkip",
+      "address": "0044daf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044daf0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetFPSSkip"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "gnRecordingIndex",
+      "address": "0044db00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044db00"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "gnRecordingIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetStepsOfMissileMovement",
+      "address": "0044db10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044db10"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetStepsOfMissileMovement"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetD2GSGameType",
+      "address": "0044db30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044db30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_GetD2GSGameType"
+      ],
+      "usedTypes": [
+        "eD2GSGameType"
+      ]
+    },
+    {
+      "name": "GAMEDATA_ExtendTimeout",
+      "address": "0044db40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044db40"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_ExtendTimeout",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_LoadActTiles",
+      "address": "0044db60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044db60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_LoadActTiles",
+        "TXT_LvlTypes_CheckIfTypeIsAssignedToAct",
+        "LVLTBLS_GetLvlTypeFilename",
+        "Alloc"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_CheckColorTxtOverride",
+      "address": "0044dbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dbe0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_CheckColorTxtOverride",
+        "CheckIfFileExists",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetBloodFlag",
+      "address": "0044dc60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dc60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetBloodFlag"
+      ]
+    },
+    {
+      "name": "CLIENT_SetDifficulty",
+      "address": "0044dc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dc70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_SetDifficulty"
+      ]
+    },
+    {
+      "name": "CLIENT_SetExpansion",
+      "address": "0044dc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dc80"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_SetExpansion"
+      ]
+    },
+    {
+      "name": "CLIENT_SetLadder",
+      "address": "0044dc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dc90"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_SetLadder"
+      ]
+    },
+    {
+      "name": "GAMEDATA_GetLadderOrGameType",
+      "address": "0044dca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dca0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_GetLadderOrGameType"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_CheckExpansion",
+      "address": "0044dcc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dcc0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_CheckExpansion"
+      ]
+    },
+    {
+      "name": "GetDificulity",
+      "address": "0044dcd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dcd0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GetDificulity"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ClearInGameUIFlags",
+      "address": "0044dce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dce0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "ClearInGameUIFlags",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_RegisterEventHandlers",
+      "address": "0044dd20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dd20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_RegisterEventHandlers",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2CLIENT_ExitGame",
+      "address": "0044dd60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dd60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "D2CLIENT_ExitGame",
+        "D2CLIENT_SetExitVar1",
+        "NET_D2GS_CLIENT_Send_0x69"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_TimerGetRemaining",
+      "address": "0044dfb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dfb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_TimerGetRemaining",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_CheckTimerExpired",
+      "address": "0044dff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044dff0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_CheckTimerExpired",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2ClientTimerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Timer_IsActiveAndUpdate",
+      "address": "0044e040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e040"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "Timer_IsActiveAndUpdate",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2ClientTimerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendExitGameRequest",
+      "address": "0044e0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e0b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "SendExitGameRequest",
+        "UI_FreeAllPanelAssets",
+        "SELECT_InitConstants",
+        "NET_D2GS_CLIENT_Send_0x69"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_AllocAct",
+      "address": "0044e100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e100"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_AllocAct",
+        "GAMEDATA_LoadActTiles",
+        "FreeAct",
+        "AllocAct",
+        "GetCurrentRoom",
+        "DRLGENV_InitializeEnvironment",
+        "SetActNo",
+        "Draw_UI_LoadGame",
+        "AUTOMAP_InitPaletteColors",
+        "VIEW_Init",
+        "InitializeGlobalsWithColors",
+        "GFX_FreeMonsterCofCache",
+        "GFX_LoadMonsterCofArchive",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GAME_InitClientSide",
+      "address": "0044e200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e200"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_InitClientSide",
+        "memset",
+        "InitializePoolSystem",
+        "HANDSHAKE_SetClientPlayerUnit",
+        "GAMEDATA_CheckColorTxtOverride",
+        "AllocGameView",
+        "SetupMiniPanel",
+        "LoadingsScreen",
+        "Draw_UI_LoadGame",
+        "NET_D2GS_CLIENT_Send_0x6C",
+        "RegisterExitFunction",
+        "InitPal",
+        "PALETTE_InitItemPalettes",
+        "CLIENT_AdjustMemoryBudget",
+        "CLIENTMODE_InitializeCallback",
+        "GetTickCount",
+        "SetCenterXY",
+        "TypeOfUiOverlayOverWorld",
+        "CLIENT_ClearActiveUnitSlotArray",
+        "ENV_InitClientSide_NoOp",
+        "CLIENT_InitializeQuestStateGlobals",
+        "AllocClientMemory",
+        "CLIENT_ClearServerAndClientUnitLists",
+        "LIGHTMAP_ClearToBlack",
+        "WEATHER_Init",
+        "CHAT_InitHistoryIndices"
+      ]
+    },
+    {
+      "name": "CLIENT_ConnectionRefused",
+      "address": "0044e380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e380"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_ConnectionRefused",
+        "Timer_IsActiveAndUpdate",
+        "UI_CloseActivePanels",
+        "GetTickCount",
+        "D2CLIENT_SetExitVar1"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LoadingScreen_TickOrCleanup",
+      "address": "0044e400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e400"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "LoadingScreen_TickOrCleanup",
+        "GetTickCount",
+        "DrawLoadingMessage",
+        "CleanupAfterLoadingAct"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_HandleMinimapClick",
+      "address": "0044e460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e460"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "INPUT_HandleMinimapClick",
+        "GetMouseX",
+        "GetMouseY",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "Congratz_HandleOkButton",
+      "address": "0044e4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e4f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "Congratz_HandleOkButton",
+        "GetMouseX",
+        "GetMouseY",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "GAMEDATA_DrawCharacterPortrait",
+      "address": "0044e5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e5a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_DrawCharacterPortrait",
+        "D2IniData_Getter",
+        "UTF8_ConvertToWideChar",
+        "DRAW_text0",
+        "DRAW_text",
+        "D2WINSMACK_GetTitlePrefixIndexFromClass"
+      ],
+      "usedTypes": [
+        "D2CharPortraitTextStrc",
+        "D2IniConfigStrc",
+        "WCHAR",
+        "eD2PlayerStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_Congratz",
+      "address": "0044e770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044e770"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "DRAW_Congratz",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_BeginScene",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "LoadPalette",
+        "memset",
+        "DRAW_SetOrReloadPalleteMain",
+        "D2GFX_DrawImage",
+        "SetAndReturnLastFont",
+        "GAMEDATA_DrawLoadingScreenText",
+        "GAMEDATA_DrawCharacterPortrait",
+        "GAMEDATA_GetCenteredTextX",
+        "GetLocaleString",
+        "DRAW_text",
+        "DrawCursor",
+        "D2GFX_EndScene",
+        "DC6_FreeAndDelete",
+        "D2CLIENT_SetExitVar1"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAMEDATA_ShowEndGameCutscene",
+      "address": "0044ec80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ec80"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAMEDATA_ShowEndGameCutscene"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear",
+      "address": "0044ee50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ee50"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "TSIntrusiveList_Clear_Unreferenced",
+      "address": "0044ee70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ee70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "TSIntrusiveList_Clear_Unreferenced"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "Client_CheckConnectionTimeouts",
+      "address": "0044eec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044eec0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "Client_CheckConnectionTimeouts",
+        "GetTickCount",
+        "NET_CLIENT_GetConnectionTimeout",
+        "CLIENT_ConnectionRefused"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GameLoopFrame",
+      "address": "0044efa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044efa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "CLIENT_GameLoopFrame",
+        "GetPlayerUnit_UI",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "GetTickCount",
+        "UI_GetFlag",
+        "GetCurrentRoom",
+        "DRAW_AfterDraw",
+        "RecordCurrentStep",
+        "ProcessQueuedPrimaryClick",
+        "ProcessQueuedSecondaryClick",
+        "UpdateMouseModifierKeyState",
+        "NET_D2GS_CLIENT_Send_0x6D_PING",
+        "WARDEN_Tick",
+        "UpdateFrameStats",
+        "UNITMODE_ExecuteDeferredAction",
+        "NET_D2GS_SERVER_HandleAnyIncomingPacket",
+        "SrvProcessAllGames",
+        "QSERVER_DispatchAndCleanup",
+        "NET_D2GS_CLIENT_HandleAllNonVariableSizePackets",
+        "CHAT_ProcessBattleNetMessage",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "Client_CheckConnectionTimeouts",
+        "ClientSideGameLoop",
+        "ComputeFrameSkipLevel",
+        "PLAYER_ClearRecursionClick",
+        "SELECT_UpdateSelectedUnit",
+        "SOUND_IsAmbientStreaming",
+        "CleanupSoundBuffer",
+        "SOUND_StopMusic",
+        "SOUNDSMP_SetGlobalVolume",
+        "WARDEN_Cleanup",
+        "D2WINPAL_LoadActPalette",
+        "UI_CloseActivePanels",
+        "QSERVER_ShutdownAllGames"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "pfModes_EnterGame",
+      "address": "0044f360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044f360"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "pfModes_EnterGame",
+        "D2CLIENT_SetExitVar1",
+        "GetTickCount",
+        "VIEW_InitLookupTables",
+        "INV_ResetItemDescFlags",
+        "MESSAGE_SnapshotEventHandlers",
+        "UI_InitializeCursor",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "NET_D2GS_CLIENT_Send_0x68",
+        "WARDEN_Initialize",
+        "CLIENT_GetArenaFlags",
+        "NET_D2GS_CLIENT_Send_0x67",
+        "SOUNDHDR_Init",
+        "GAME_InitClientSide",
+        "IsNotRecording",
+        "IsRecording",
+        "SetCleanupFunction",
+        "RECORD_SetPlaybackActive",
+        "SetPoolIdForMemoryManager",
+        "MessageGameLoop",
+        "CleanupSoundBuffer",
+        "Cleanup",
+        "Timer_IsActiveAndUpdate",
+        "SaveGameRecordToFile",
+        "ExitGamePlayCutScene",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "ClearInGameUIFlags",
+        "CLIENT_SetScreenResolution",
+        "GAME_FreeClientSideStructures",
+        "SOUNDHDR_ShutdownCleanup",
+        "VIEW_FreeLookupTables",
+        "UI_FreeCursor",
+        "thunk_D2GFX_ClearCaches",
+        "ClientAppModeQueue"
+      ],
+      "usedTypes": [
+        "eD2ClientAppMode",
+        "int32_t",
+        "tagMSG",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GAME_TryCopyFrom",
+      "address": "00450d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450d50"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "GAME_TryCopyFrom",
+        "CopyConstructor"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "RegisterCmdLineLngOption",
+      "address": "00451260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451260"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "RegisterCmdLineLngOption",
+        "SCmdRegisterArgument"
+      ]
+    },
+    {
+      "name": "FreeLanguage",
+      "address": "00451290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451290"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "FreeLanguage"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca026",
+      "address": "006ca026",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca026"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca026"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

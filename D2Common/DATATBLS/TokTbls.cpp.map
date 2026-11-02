@@ -1,0 +1,394 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/TokTbls.cpp",
+  "functions": [
+    {
+      "name": "TXT_AllocTxt_plrmode_plrtype",
+      "address": "0065adc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065adc0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_plrmode_plrtype",
+        "CompileTxt",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy",
+        "UnloadBin"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PlrTypeModeTxt",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_monmode",
+      "address": "0065aef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065aef0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_monmode",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_objtype_objmode",
+      "address": "0065b1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b1b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_objtype_objmode",
+        "CompileTxt",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy",
+        "UnloadBin"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2ObjModeTxt",
+        "D2ObjTypeTxt",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_composit",
+      "address": "0065b2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b2e0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_composit",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_armtype",
+      "address": "0065b350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b350"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_armtype",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "FreeTokenTables",
+      "address": "0065b3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b3c0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "FreeTokenTables",
+        "FreeServerMemory",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "TxtGetPlrTypeModeLine",
+      "address": "0065b480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b480"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TxtGetPlrTypeModeLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PlrTypeModeTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TxtGetMonModeLine",
+      "address": "0065b500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b500"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TxtGetMonModeLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MonModeTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TxtGetObjTypeModeLine",
+      "address": "0065b570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b570"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TxtGetObjTypeModeLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ObjTypeTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TxtCompositGetLine",
+      "address": "0065b5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b5e0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TxtCompositGetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CompositTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TxtGetArmTypeLine",
+      "address": "0065b620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b620"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TxtGetArmTypeLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ArmTypeTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_inventory",
+      "address": "0065b660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065b660"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_inventory",
+        "CompileTxt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeInventoryTable",
+      "address": "0065c130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c130"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "FreeInventoryTable",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "TXT_Inventory_GetLine",
+      "address": "0065c140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c140"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TXT_Inventory_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetInvDimensions",
+      "address": "0065c180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c180"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "GetInvDimensions",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryScreenCoordinates",
+        "D2InventoryTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetGridDimensions",
+      "address": "0065c1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c1f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "GetGridDimensions",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryTxt",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetBodyDimensions",
+      "address": "0065c270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c270"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "GetBodyDimensions",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryEntryStrc",
+        "eInventoryBodyLoc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TOKTBLS_GetTokenIndex",
+      "address": "0065c300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c300"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::TokTbls",
+      "calledFunctions": [
+        "TOKTBLS_GetTokenIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

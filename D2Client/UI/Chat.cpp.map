@@ -1,0 +1,726 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Chat.cpp",
+  "functions": [
+    {
+      "name": "CHAT_HandleIMECandidateList",
+      "address": "0047ad60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ad60"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_HandleIMECandidateList",
+        "FreeClientMemory",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "HIMC"
+      ]
+    },
+    {
+      "name": "INPUT_HandleIMENotify",
+      "address": "0047ae00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ae00"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "INPUT_HandleIMENotify",
+        "SMsgBreakHandlerChain",
+        "GetHwnd",
+        "CHAT_HandleIMECandidateList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "HIMC",
+        "HKL",
+        "LPCANDIDATELIST"
+      ]
+    },
+    {
+      "name": "CHAT_CheckIMELanguage",
+      "address": "0047b010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b010"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_CheckIMELanguage"
+      ],
+      "usedTypes": [
+        "HKL",
+        "LANGID",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CHAT_ResetIMEState",
+      "address": "0047b070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b070"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ResetIMEState"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_InitIME",
+      "address": "0047b090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b090"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_InitIME",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "MISC_GetLanguageCode",
+        "CHAT_CheckIMELanguage"
+      ],
+      "usedTypes": [
+        "HIMC",
+        "HKL",
+        "LANGID",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_ShutdownIME",
+      "address": "0047b2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b2e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ShutdownIME",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "HIMC",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_CompareCaseInsensitive",
+      "address": "0047b3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b3b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_CompareCaseInsensitive",
+        "toupper"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_DrawCursor",
+      "address": "0047b450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b450"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_DrawCursor",
+        "GetLocaleString",
+        "DRAW_text",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_InitEmpty",
+      "address": "0047b4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b4d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_InitEmpty"
+      ]
+    },
+    {
+      "name": "CHAT_ShutdownEmpty",
+      "address": "0047b4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b4e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ShutdownEmpty"
+      ]
+    },
+    {
+      "name": "CHAT_DrawIMEComposition",
+      "address": "0047b4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b4f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_DrawIMEComposition",
+        "STRING_GetWideStringLength",
+        "DRAW_text0",
+        "DRAW_text",
+        "CHAT_DrawCursor"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_DrawIMECandidates",
+      "address": "0047b5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b5c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_DrawIMECandidates",
+        "D2WINFONT_GetCurrentFontHeight",
+        "sprintf",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "LPCANDIDATELIST",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_ChatInput",
+      "address": "0047b720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b720"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "DRAW_UI_ChatInput",
+        "SetAndReturnLastFont",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "DRAW_text",
+        "CHAT_DrawIMECandidates",
+        "D2GFX_DrawSolidRectExBySize",
+        "GAMEDATA_GetExitFlag3",
+        "SetUIFlag",
+        "STRING_GetWideStringLength",
+        "CHAT_DrawIMEComposition",
+        "WSTRING_PutWideCharIntoBuffer",
+        "D2WINFONT_WordWrapString",
+        "DRAW_text0",
+        "D2WINFONT_FreeWordWrapList",
+        "CHAT_DrawCursor"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_RestoreFromHistory",
+      "address": "0047b9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047b9c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_RestoreFromHistory",
+        "STRING_GetWideStringLength"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CHAT_AddToHistory",
+      "address": "0047ba00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ba00"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_AddToHistory"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHAT_ScrollHistory",
+      "address": "0047ba80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ba80"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ScrollHistory"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_ParseCommand",
+      "address": "0047bad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bad0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ParseCommand",
+        "strncpy",
+        "SStrLen",
+        "CLIENT_GetD2GSGameType",
+        "SStrCmpI",
+        "SStrTokenize",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2ChatCommandStrc",
+        "char *",
+        "eD2GSGameType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHAT_CheckChatboxBounds",
+      "address": "0047bc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bc70"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_CheckChatboxBounds",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_HandleChatScroll",
+      "address": "0047bca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bca0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "INPUT_HandleChatScroll",
+        "SMsgBreakHandlerChain",
+        "CHAT_RestoreFromHistory",
+        "CHAT_ScrollHistory"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "CHAT_IsWideStringASCII",
+      "address": "0047bd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bd00"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_IsWideStringASCII",
+        "STRING_GetWideStringLength"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_InitHistoryIndices",
+      "address": "0047bd30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bd30"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_InitHistoryIndices"
+      ]
+    },
+    {
+      "name": "CHAT_ExtractWhisperTarget",
+      "address": "0047bd60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bd60"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ExtractWhisperTarget",
+        "SStrChr"
+      ]
+    },
+    {
+      "name": "CHAT_ExtractWhisperPrefix",
+      "address": "0047bd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bd80"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ExtractWhisperPrefix",
+        "SStrChr",
+        "memcpy",
+        "SStrCopy"
+      ]
+    },
+    {
+      "name": "CHAT_ClearInput",
+      "address": "0047bdc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bdc0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ClearInput",
+        "memset"
+      ]
+    },
+    {
+      "name": "CHAT_ProcessBattleNetMessage",
+      "address": "0047bdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047bdf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ProcessBattleNetMessage",
+        "CLIENT_GetGameVersionInfo",
+        "CONTAINER_InitializeBuffer",
+        "MISC_GetIgnorelist",
+        "STRING_ConvertCharToWchar",
+        "STRING_GetWideStringLength",
+        "AppendToBuffer",
+        "TEXT_PrintGameString",
+        "CHAT_ExtractWhisperPrefix",
+        "sprintf",
+        "CHAT_ExtractWhisperTarget",
+        "GetLocaleString",
+        "UNICODE_FormatWideString"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc",
+        "IgnoreList",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CHAT_HandleResignCommand",
+      "address": "0047c100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047c100"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_HandleResignCommand",
+        "CHAT_CompareCaseInsensitive",
+        "strtok",
+        "CLIENT_GetGameVersionInfo",
+        "sprintf",
+        "TEXT_ProcessChatMessage"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc",
+        "MessageStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_HandleWhisperCommand",
+      "address": "0047c1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047c1f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_HandleWhisperCommand",
+        "CHAT_CompareCaseInsensitive",
+        "strtok",
+        "GetNextRosterPlayer",
+        "GetRosterName",
+        "_stricmp",
+        "strncpy",
+        "NET_D2GS_CLIENT_Send_Chat",
+        "sprintf",
+        "CLIENT_GetGameVersionInfo",
+        "TEXT_ProcessChatMessage"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc",
+        "D2ChatPacketBuildStrc",
+        "D2RosterStrc",
+        "MessageStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHAT_ExtractCommandParameter",
+      "address": "0047c3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047c3f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "CHAT_ExtractCommandParameter",
+        "SStrChr",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ChatCommandProcessor",
+      "address": "0047c420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047c420"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "ChatCommandProcessor",
+        "memset",
+        "_stricmp",
+        "STATLIST_ResetIfNotUpdating",
+        "SetUIFlag",
+        "ResetStats",
+        "_strnicmp",
+        "CLIENT_GetD2GSGameType",
+        "COMMAND_playersX",
+        "sprintf",
+        "SoundChaosDebug",
+        "CHAT_IsWideStringASCII",
+        "CHAT_ParseCommand",
+        "CHAT_CompareCaseInsensitive",
+        "MISC_GetIgnorelist",
+        "CONTAINER_InitializeBuffer",
+        "UTF8_ConvertToWideChar",
+        "GetLocaleString",
+        "AppendToBuffer",
+        "CHAT_ExtractCommandParameter",
+        "SStrCmpI",
+        "CHAT_HandleWhisperCommand",
+        "CHAT_HandleResignCommand",
+        "CLIENT_GetGameVersionInfo",
+        "STRING_GetWideStringLength",
+        "NET_D2GS_CLIENT_Send_Chat",
+        "UNICODE_FormatWideString",
+        "TEXT_PrintGameString"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc",
+        "D2ChatPacketBuildStrc",
+        "IgnoreList",
+        "IgnoreListVtable",
+        "WCHAR",
+        "eD2GSGameType",
+        "int32_t",
+        "uint16_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "INPUT_HandleChatCharInput",
+      "address": "0047ca70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ca70"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "INPUT_HandleChatCharInput",
+        "STRING_GetWideStringLength",
+        "isspace",
+        "CHAT_AddToHistory",
+        "ChatCommandProcessor",
+        "D2WINFONT_IsFontCharacterValid",
+        "SetAndReturnLastFont",
+        "D2WINFONT_WordWrapString",
+        "DRAW_text0",
+        "D2WINFONT_FreeWordWrapList",
+        "SetUIFlag",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6caaf0",
+      "address": "006caaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006caaf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "StaticInit_6caaf0"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6cab10",
+      "address": "006cab10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cab10"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "StaticInit_6cab10"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6cab30",
+      "address": "006cab30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cab30"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "StaticInit_6cab30"
+      ]
+    },
+    {
+      "name": "StaticInit_6cab90",
+      "address": "006cab90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cab90"
+        }
+      ],
+      "namespace": "D2Client::UI::Chat",
+      "calledFunctions": [
+        "StaticInit_6cab90"
+      ]
+    }
+  ]
+}

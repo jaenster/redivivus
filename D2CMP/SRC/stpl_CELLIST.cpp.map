@@ -1,0 +1,786 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/stpl_CELLIST.cpp",
+  "functions": [
+    {
+      "name": "SyncEnterLock",
+      "address": "00601b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601b80"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "SyncEnterLock"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NextLink",
+      "address": "00601bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601bc0"
+        }
+      ],
+      "namespace": "TSLink<CELLIST>",
+      "calledFunctions": [
+        "NextLink"
+      ],
+      "usedTypes": [
+        "TSLink<CELLIST>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NextLink_Unreferenced",
+      "address": "00601c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601c30"
+        }
+      ],
+      "namespace": "TSLink<CELLIST>",
+      "calledFunctions": [
+        "NextLink_Unreferenced"
+      ],
+      "usedTypes": [
+        "TSLink<CELLIST>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsForWriting",
+      "address": "00601cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601cb0"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "IsForWriting"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OperatorIndex",
+      "address": "00601cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601cc0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "OperatorIndex"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ComputeSlot",
+      "address": "00601d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601d00"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "ComputeSlot"
+      ],
+      "usedTypes": [
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NextLink_Unreferenced2",
+      "address": "00601d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601d30"
+        }
+      ],
+      "namespace": "TSLink<CELLIST>",
+      "calledFunctions": [
+        "NextLink_Unreferenced2"
+      ],
+      "usedTypes": [
+        "TSLink<CELLIST>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CalcChunkSize",
+      "address": "00601e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601e20"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "CalcChunkSize"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Assign",
+      "address": "00601e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601e80"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Assign"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Unlock",
+      "address": "00602090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602090"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "Unlock"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Link",
+      "address": "00602110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602110"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Link"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>"
+      ]
+    },
+    {
+      "name": "Unlink",
+      "address": "006021e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006021e0"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Unlink"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "TSLink<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RawNext",
+      "address": "00602260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602260"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "RawNext"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>"
+      ]
+    },
+    {
+      "name": "Link_Unreferenced",
+      "address": "00602280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602280"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Link_Unreferenced"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>"
+      ]
+    },
+    {
+      "name": "UnlinkNode",
+      "address": "006022a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006022a0"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "UnlinkNode"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetLinkOffset",
+      "address": "006022f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006022f0"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "SetLinkOffset"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Next",
+      "address": "00602310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602310"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Next"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetLinkOffset_Unreferenced",
+      "address": "00602350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602350"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "SetLinkOffset_Unreferenced"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopyConstructor",
+      "address": "006023b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006023b0"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "CopyConstructor"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SyncLeaveLock",
+      "address": "00602400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602400"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "SyncLeaveLock"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00602430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602430"
+        }
+      ],
+      "namespace": "TSHashObject<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSHashObject<CELLIST, HASHKEY_NONE>",
+        "TSLink<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LinkNode",
+      "address": "006024e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006024e0"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnlinkNode_Unreferenced",
+      "address": "00602590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602590"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "UnlinkNode_Unreferenced"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Delete",
+      "address": "00602620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602620"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Delete",
+        "Unlink"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSHashTable<CELLIST, HASHKEY_NONE>"
+      ]
+    },
+    {
+      "name": "UnlinkAll",
+      "address": "00602640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602640"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnlinkAll",
+      "address": "00602690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602690"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ChangeLinkOffset",
+      "address": "006026e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006026e0"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "ChangeLinkOffset",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Delete",
+      "address": "006027e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006027e0"
+        }
+      ],
+      "namespace": "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+      "calledFunctions": [
+        "Delete",
+        "Unlink"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExportTableSimple<CELLIST, HCELLIST__*, 0>"
+      ]
+    },
+    {
+      "name": "InternalClear",
+      "address": "00602800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602800"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "InternalClear",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor_Unreferenced",
+      "address": "00602890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602890"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Destructor_Unreferenced",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "006028d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006028d0"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DeleteUnlock",
+      "address": "00602a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602a10"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "DeleteUnlock",
+        "Unlink"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "00603b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603b60"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "Clear",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+        "TSHashObjectChunk<CELLIST, HASHKEY_NONE>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "00603bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603bd0"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Constructor",
+        "UnlinkAll",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "TSLink<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GrowListArray",
+      "address": "00603c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603c80"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "GrowListArray",
+        "UnlinkAll",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "TSLink<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InternalDestroy",
+      "address": "00603e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603e50"
+        }
+      ],
+      "namespace": "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "InternalDestroy",
+        "Clear"
+      ],
+      "usedTypes": [
+        "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "00603e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603e70"
+        }
+      ],
+      "namespace": "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "Constructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>"
+      ]
+    },
+    {
+      "name": "CalcChunkSize",
+      "address": "00603ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603ee0"
+        }
+      ],
+      "namespace": "TSGrowableArray<CELLIST>",
+      "calledFunctions": [
+        "CalcChunkSize"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<CELLIST>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Assign",
+      "address": "00603f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603f50"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "Assign"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>"
+      ]
+    },
+    {
+      "name": "CopyConstructor",
+      "address": "00603f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603f90"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "CopyConstructor"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>"
+      ]
+    },
+    {
+      "name": "LinkNode",
+      "address": "00603fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603fc0"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+        "TSHashObjectChunk<CELLIST, HASHKEY_NONE>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
+        "uint32_t"
+      ]
+    }
+  ]
+}

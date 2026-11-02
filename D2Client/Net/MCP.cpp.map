@@ -1,0 +1,24 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Net/MCP.cpp",
+  "functions": [
+    {
+      "name": "MCPCONNECT_SocketCallback_Dispatch",
+      "address": "0044b1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b1c0"
+        }
+      ],
+      "namespace": "D2Client::Net::MCP",
+      "calledFunctions": [
+        "MCPCONNECT_SocketCallback_Dispatch"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    }
+  ]
+}

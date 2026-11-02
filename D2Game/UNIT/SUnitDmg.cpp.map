@@ -1,0 +1,1732 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/UNIT/SUnitDmg.cpp",
+  "functions": [
+    {
+      "name": "DAMAGE_CheckMonsterTypeVsMonsterType",
+      "address": "0057a830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057a830"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CheckMonsterTypeVsMonsterType"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_RollPhysicalDamageRange",
+      "address": "0057a880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057a880"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_RollPhysicalDamageRange",
+        "D2ApplyPercent",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_RollElementalDamageWithBonus",
+      "address": "0057a8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057a8e0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_RollElementalDamageWithBonus",
+        "STATSEX_GetCurrentStat",
+        "DAMAGE_RollPhysicalDamageRange"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyHealingToUnit",
+      "address": "0057a980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057a980"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyHealingToUnit",
+        "CheckForModeZeroDeath",
+        "UNIT_GetUnitState",
+        "GetTxtMaxHp",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyManaToUnit",
+      "address": "0057aa00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057aa00"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyManaToUnit",
+        "GetTxtMaxMana",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_DrainManaFromUnit",
+      "address": "0057aa60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057aa60"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_DrainManaFromUnit",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_DrainStaminaFromUnit",
+      "address": "0057aaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057aaa0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_DrainStaminaFromUnit",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyStun",
+      "address": "0057aae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057aae0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyStun",
+        "CheckMonsterType",
+        "UnitIsMarkedBoss",
+        "TXT_MonStats_GetLine",
+        "MONSTER_GetMercType",
+        "GetStatsByState",
+        "GetGamePointer",
+        "SetTimeout_WithFlag",
+        "SetEvent",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2SeedStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyPoison",
+      "address": "0057ac50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ac50"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyPoison",
+        "GetStatsByState",
+        "GetGamePointer",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SetState",
+        "AllocStatList",
+        "STATLIST_SetStatValue",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_GetBaseStatValue",
+        "STATSEX_SetStatListTimeout",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_OnColdExpire",
+      "address": "0057ad80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ad80"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_OnColdExpire",
+        "CheckForModeZeroDeath",
+        "STATES_IsStateActive",
+        "SetState",
+        "UpdateAnimSpeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyBurning",
+      "address": "0057add0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057add0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyBurning",
+        "GetStatsByState",
+        "GetGamePointer",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SetState",
+        "AllocStatList",
+        "STATLIST_SetStatValue",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_GetBaseStatValue",
+        "STATSEX_SetStatListTimeout",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_GetMonsterDelayByDifficulty",
+      "address": "0057af30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057af30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_GetMonsterDelayByDifficulty"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyCold",
+      "address": "0057af80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057af80"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyCold",
+        "GetStatsByState",
+        "GetGamePointer",
+        "GetDifficultyLevels",
+        "SetState",
+        "AllocStatList",
+        "SetEvent",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_SetStatValue",
+        "UpdateAnimSpeed",
+        "STATLIST_GetFullListFromStatList",
+        "SetTimeout_WithFlag",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2SeedStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyFreeze",
+      "address": "0057b230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057b230"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SUNITDMG_StatExpireCallback_ResumeAI",
+        "DAMAGE_ApplyFreeze",
+        "DAMAGE_ApplyCold",
+        "UNIT_GetUnitState",
+        "TXT_MonStats_GetLine",
+        "UnitIsMarkedBoss",
+        "CheckMonsterType",
+        "MONSTER_GetMercType",
+        "GetStatsByState",
+        "GetGamePointer",
+        "DAMAGE_GetMonsterDelayByDifficulty",
+        "GetDifficultyLevels",
+        "SetState",
+        "AllocStatList",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_GetFullListFromStatList",
+        "SetTimeout_WithFlag",
+        "SetEvent",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "EVENT_RemoveUnitTimersByType"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2MonStatsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CalculatePhysicalDamage",
+      "address": "0057b420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057b420"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "D2ApplyPercent",
+        "DAMAGE_CalculatePhysicalDamage",
+        "PLAYER_GetActiveWeaponForSkill",
+        "STATSEX_GetCurrentStat",
+        "INVENTORY_GetWeaponHandedness",
+        "ITEM_GetMinimalStatValueShifted",
+        "ITEM_GetItemsTxt_wStrBonus",
+        "ITEM_GetItemsTxt_wDexBonus",
+        "SKILLS_GetItemBonusDamage",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyDemonBonus",
+      "address": "0057b630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057b630"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyDemonBonus",
+        "IsDemon",
+        "ITEM_GetMinimalStatValueShifted"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyUndeadBonusDamage",
+      "address": "0057b660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057b660"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyUndeadBonusDamage",
+        "MONSTER_IsMonsterUndead",
+        "PLAYER_GetActiveWeaponForSkill",
+        "ITEMS_IsA",
+        "ITEM_GetMinimalStatValueShifted"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyMonsterTypeBonusDamage",
+      "address": "0057b6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057b6a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyMonsterTypeBonusDamage",
+        "STATLIST_GetItemStatBonusValues"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2DataTableTxtStrc",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CalculateOffensiveDamage",
+      "address": "0057b7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057b7d0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CalculateOffensiveDamage",
+        "EQUIPMENT_RecalcDualWieldWeaponStats",
+        "STATSEX_GetAlignment",
+        "ITEM_GetMinimalStatValueShifted",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "IsDemon",
+        "DAMAGE_ApplyUndeadBonusDamage",
+        "DAMAGE_ApplyMonsterTypeBonusDamage",
+        "DAMAGE_CalculatePhysicalDamage",
+        "PLAYER_GetActiveWeaponForSkill",
+        "SKILLS_GetItemBonusDamage",
+        "RollBetweenMinAndMax",
+        "DAMAGE_RollElementalDamageWithBonus",
+        "MONSTER_GetMercType",
+        "DAMAGE_RollPhysicalDamageRange",
+        "RANDOM_RandomNumberSelector",
+        "UNITEVENT_DispatchEventsByType",
+        "D2ApplyPercent",
+        "UNIT_GetModuloFromSeed",
+        "ApplyDamageCritical",
+        "WEAPON_ApplyEquippedWeaponStats"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ElementalDamageType",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CalculateResistance",
+      "address": "0057be00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057be00"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CalculateResistance",
+        "STATSEX_GetCurrentStat",
+        "UNIT_GetUnitState",
+        "MONSTER_IsMonsterUndead"
+      ],
+      "usedTypes": [
+        "D2DamageContext",
+        "D2ResistTableEntry",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_AbsorbDamageByPercent",
+      "address": "0057bf10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057bf10"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_AbsorbDamageByPercent",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent"
+      ],
+      "usedTypes": [
+        "D2DamageContext",
+        "D2ResistTableEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyElementalDamageWithResist",
+      "address": "0057bf80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057bf80"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyElementalDamageWithResist",
+        "DAMAGE_CalculateResistance",
+        "D2ApplyPercent",
+        "nullsub_7Arg",
+        "DAMAGE_AbsorbDamageByPercent",
+        "nullsub_B"
+      ],
+      "usedTypes": [
+        "D2DamageContext",
+        "D2ResistTableEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CalculateExperienceMultiplier",
+      "address": "0057c060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057c060"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CalculateExperienceMultiplier",
+        "MONSTER_GetMercType",
+        "CheckFlags",
+        "UnitIsMarkedBoss",
+        "MONSTERS_CheckMonStatFlag0xc_Bit7"
+      ],
+      "usedTypes": [
+        "D2DamageContext",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ProcessFreezeAndPoisonImmunity",
+      "address": "0057c140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057c140"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ProcessFreezeAndPoisonImmunity",
+        "ITEM_GetMinimalStatValueShifted",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2DamageContext",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyDefensiveReduction",
+      "address": "0057c1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057c1e0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyDefensiveReduction",
+        "GetDifficultyLevels",
+        "MONSTER_GetMercType",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "DAMAGE_CalculateExperienceMultiplier",
+        "UNITEVENT_DispatchEventsByType",
+        "DAMAGE_ProcessFreezeAndPoisonImmunity",
+        "MONSTER_IsMonsterUndead",
+        "IsDemon",
+        "DAMAGE_ApplyElementalDamageWithResist"
+      ],
+      "usedTypes": [
+        "D2DamageContext",
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_GetMonsterDrainEffectiveness",
+      "address": "0057c3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057c3e0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_GetMonsterDrainEffectiveness"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyLifeAndManaLeech",
+      "address": "0057c420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057c420"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyLifeAndManaLeech",
+        "SKILLS_GetStateTransformGfx",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "GetTxtMaxHp",
+        "STATLIST_AddUnitStat",
+        "GetGamePointer",
+        "GetDifficultyLevels",
+        "MONSTER_GetMercType",
+        "DAMAGE_ApplyManaToUnit",
+        "DAMAGE_ApplyHealingToUnit",
+        "SetOverlay",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2DifficultyLevelsTxt",
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uD2UnitMode",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyDamageToUnit",
+      "address": "0057c6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057c6c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyDamageToUnit",
+        "UNITS_CheckIfCanAttackTarget",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "TXT_MonStats_GetLine",
+        "TXT_MonStats_GetFlagsByBitOffset",
+        "CheckForModeZeroDeath",
+        "StoreLastAttacker",
+        "DAMAGE_ApplyDefensiveReduction",
+        "UNITEVENT_DispatchEventsByType",
+        "STATSEX_GetCurrentStat",
+        "DAMAGE_ApplyLifeAndManaLeech",
+        "MONSTER_DispatchUModOnAttack",
+        "DAMAGE_ApplyHealingToUnit",
+        "STATLIST_SetUnitStat",
+        "DAMAGE_DrainManaFromUnit",
+        "DAMAGE_DrainStaminaFromUnit",
+        "DAMAGE_ApplyStun",
+        "DAMAGE_ApplyCold",
+        "DAMAGE_ApplyFreeze",
+        "DAMAGE_ApplyPoison",
+        "DAMAGE_ApplyBurning",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SKILLASS_ClearAllChargeUpStates"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStatsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeCombat",
+      "address": "0057c980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057c980"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "FreeCombat",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CombatEntryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "DAMAGE_RemoveDamageListEntry",
+      "address": "0057c9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057c9f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_RemoveDamageListEntry",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CombatEntryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "DAMAGE_AddDamageListEntry",
+      "address": "0057ca80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ca80"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_AddDamageListEntry",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2CombatEntryStrc",
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "DAMAGE_CheckKnockbackThreshold",
+      "address": "0057cb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057cb00"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CheckKnockbackThreshold",
+        "UNIT_GetUnitState",
+        "GetTxtMaxHp",
+        "RNG_GetRandomInRange",
+        "GetSomeMonsterStatFlag"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "eD2ElementalDamageTypeDWORD",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_RemoveObjectAtSameCoords",
+      "address": "0057cc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057cc30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_RemoveObjectAtSameCoords",
+        "UNITS_GetRoom",
+        "GetCoords",
+        "SetupUpdateFlag",
+        "RemoveCollision_Vector"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_KillMonster",
+      "address": "0057ccb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ccb0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SERVER_KillMonster",
+        "TXT_MonStats_GetFlagsByBitOffset",
+        "GetOwnerUnit",
+        "SERVERUNIT_RemovePetFromUnit",
+        "SERVER_AwardKillExperience",
+        "SERVER_ARENA_KillHandler",
+        "nullsub",
+        "SetCurrentSkill",
+        "GetDirection",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetDirectionToCoords",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "QUEST_OnMonsterKilled",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "DAMAGE_RemoveObjectAtSameCoords"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_GetElementalDamageTypeFlags",
+      "address": "0057ce30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ce30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_GetElementalDamageTypeFlags"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_GetHitCalculation",
+      "address": "0057cee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057cee0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SERVER_GetHitCalculation",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "TXT_MonStats_GetLine",
+        "DAMAGE_GetElementalDamageTypeFlags",
+        "UNIT_GetUnitState",
+        "STATSEX_GetCurrentStat",
+        "PLRMODES_MoveToLocation",
+        "STATLIST_SetUnitStat",
+        "PLRMODES_StartModeID",
+        "GetStatsByState",
+        "DAMAGE_CheckKnockbackThreshold",
+        "ROOM_LinkUnitToUpdateList",
+        "STATLIST_GetBaseStatValue",
+        "SKILLS_GetSkillByEnum",
+        "TXT_Skills_GetLine",
+        "SetupUpdateEvent_AttachEventSound",
+        "SKILL_GetFlags",
+        "SKILL_SetFlags",
+        "GetSomeMonsterStatFlag",
+        "MONSTER_CheckSpecialDeathFlag",
+        "SERVER_KillMonster",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "MONSTER_GetHpPercent128",
+        "MONSTER_DispatchUModOnSpecial",
+        "SetAiState",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStatsTxt",
+        "D2MonsterKillStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ReduceEquipmentDurability",
+      "address": "0057d3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057d3d0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ReduceEquipmentDurability",
+        "PLAYER_GetActiveWeaponForSkill",
+        "ITEMS_ReduceDurability",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMS_IsA",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ProcessCombatQueueEntry",
+      "address": "0057d4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057d4f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ProcessCombatQueueEntry",
+        "GetType",
+        "GetGUID",
+        "IsInMeleeRange",
+        "DAMAGE_ApplyDamageToUnit",
+        "SetOverlay",
+        "GetHitClassForPlayerOrMonster",
+        "DAMAGE_ReduceEquipmentDurability",
+        "UNITEVENT_DispatchEventsByType",
+        "SKILLEMONST_ApplyReflectedDamage",
+        "SERVER_GetHitCalculation",
+        "DAMAGE_RemoveDamageListEntry"
+      ],
+      "usedTypes": [
+        "D2CombatEntryStrc",
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_FindCombatEntry",
+      "address": "0057d690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057d690"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_FindCombatEntry",
+        "GetType",
+        "GetGUID"
+      ],
+      "usedTypes": [
+        "D2CombatEntryStrc",
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_RollMinMaxDamageRange",
+      "address": "0057d760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057d760"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_RollMinMaxDamageRange"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CheckPreventHealAndSetState",
+      "address": "0057d810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057d810"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CheckPreventHealAndSetState",
+        "ITEM_GetMinimalStatValueShifted",
+        "SetStateWithExpiryTime"
+      ],
+      "usedTypes": [
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyIgnoreAndFractionalAC",
+      "address": "0057d8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057d8a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyIgnoreAndFractionalAC",
+        "ITEM_GetMinimalStatValueShifted",
+        "CheckMonsterType",
+        "UnitIsMarkedBoss",
+        "MONSTER_GetMercType",
+        "D2ApplyPercent",
+        "IsDemon",
+        "MONSTER_IsMonsterUndead"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_RollAttackHit",
+      "address": "0057d9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057d9b0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_RollAttackHit",
+        "STATSEX_GetCurrentStat",
+        "GetDefense",
+        "GetAttackRate",
+        "DAMAGE_ApplyIgnoreAndFractionalAC",
+        "PLAYER_GetActiveWeaponForSkill",
+        "SKILLS_GetItemBonusDamage",
+        "ITEM_GetMinimalStatValueShifted",
+        "TXT_MonStats_GetLine",
+        "STATLIST_GetItemStatBonusValues",
+        "DAMAGE_CheckMonsterTypeVsMonsterType",
+        "D2ApplyPercent",
+        "GetGamePointer",
+        "nullsub",
+        "DAMAGE_CheckPreventHealAndSetState"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2SeedStrc",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CalculateAndApplyDamage",
+      "address": "0057dbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057dbf0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_CalculateOffensiveDamage",
+        "DAMAGE_ApplyDefensiveReduction",
+        "STATSEX_GetCurrentStat",
+        "DAMAGE_AddDamageListEntry"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_GetSkillDamageBonus",
+      "address": "0057dca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057dca0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_GetSkillDamageBonus",
+        "INVENTORY_GetItemByGridOffset",
+        "STATLIST_GetItemStatBonusValues",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CheckDefenseEvasion",
+      "address": "0057dd60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057dd60"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CheckDefenseEvasion",
+        "STATSEX_GetCurrentStat",
+        "GetGamePointer",
+        "nullsub_4Arg",
+        "DAMAGE_GetSkillDamageBonus",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CheckBlockAndEvasion",
+      "address": "0057dfb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057dfb0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CheckBlockAndEvasion",
+        "DAMAGE_CheckDefenseEvasion",
+        "GetBlockRate",
+        "IsInMovingMode",
+        "GetGamePointer",
+        "nullsub_4Arg"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_ApplyAreaOfEffectDamage",
+      "address": "0057e090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e090"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_ApplyAreaOfEffectDamage",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "memset",
+        "InitializeUnitFindData",
+        "UNITFINDS_FindCullRange",
+        "GetOwnerUnit",
+        "FreeUnitFindData",
+        "UNITS_CheckIfCanAttackTarget",
+        "SKILLS_HasLineOfSightToUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "MISSMODE_ApplyMissileHitDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2RoomStrc",
+        "D2UnitFindArgStrc",
+        "D2UnitFindDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "pfnAoEDamageFilter",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_AddSkillBonusDamage",
+      "address": "0057e240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e240"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_AddSkillBonusDamage",
+        "SKILLS_AddRandomSkillDamage",
+        "SetDamageOnEvent"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_CalculateDamageForEvent",
+      "address": "0057e270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e270"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SKILL_CalculateDamageForEvent",
+        "SKILL_CalcMinDamage",
+        "SKILL_CalcMaxDamage",
+        "DAMAGE_CalculatePhysicalDamage",
+        "SetDamageOnEvent"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EXPERIENCE_ApplyLevelDiffPenaulty",
+      "address": "0057e2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e2f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "D2ApplyPercent",
+        "EXPERIENCE_ApplyLevelDiffPenaulty"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_SafeShiftMultiply",
+      "address": "0057e350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e350"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_SafeShiftMultiply"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "XP_ApplyLevelExpRatio",
+      "address": "0057e390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e390"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "XP_ApplyLevelExpRatio",
+        "TXT_Experience_GetExpRatio"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CALC_Experience",
+      "address": "0057e3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e3f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "CALC_Experience",
+        "GetOwnerUnit",
+        "GetPlayersPetData",
+        "GetHirelingText",
+        "GetBaseExperience"
+      ],
+      "usedTypes": [
+        "D2HirelingTxt",
+        "D2PetDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_CalculateExperienceForUnit",
+      "address": "0057e480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e480"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SERVER_CalculateExperienceForUnit",
+        "TXT_Experience_GetMaxLevel",
+        "EXPERIENCE_ApplyLevelDiffPenaulty",
+        "XP_ApplyLevelExpRatio",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "CALC_Experience"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2PlayerClassID",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_PlayerUpdateExperience",
+      "address": "0057e510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e510"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SERVER_PlayerUpdateExperience",
+        "SERVER_GetUnitStat",
+        "TXT_Experience_GetMaxLevel",
+        "TXT_Experience_GetLineLevel",
+        "STATLIST_SetUnitStat",
+        "DATATBLS_GetLevelFromExperience",
+        "UpdateGameInfo",
+        "UNITEVENT_DispatchEventsByType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2PlayerClassID",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ExperienceLoopOverPlayers",
+      "address": "0057e5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e5a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "ExperienceLoopOverPlayers",
+        "CheckForModeZeroDeath",
+        "GetXPos",
+        "GetYPos",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "STATSEX_GetCurrentStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PartyExperienceStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_PartyShareExperience",
+      "address": "0057e6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e6c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SERVER_PartyShareExperience",
+        "memset",
+        "FindUnitWithFilter",
+        "SERVER_CalculateExperienceForUnit",
+        "SERVER_PlayerUpdateExperience"
+      ],
+      "usedTypes": [
+        "D2PartyExperienceStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "SERVER_GetOwnerFromMonsterUnit",
+      "address": "0057e7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e7b0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SERVER_GetOwnerFromMonsterUnit",
+        "GetOwnerUnit",
+        "STATES_HasCurseState",
+        "GetStatsByFlags",
+        "GetOwnerType",
+        "GetOwnerGUID",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_SEND_MercExperience",
+      "address": "0057e860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e860"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SERVER_SEND_MercExperience",
+        "GetPlayersPetData",
+        "GetHirelingText",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "TXT_Experience_GetMaxLevel",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience",
+        "GetBaseExperience",
+        "MERC_ApplyLevelStats",
+        "SendMercPackets",
+        "SetupUpdateEvent_AttachEventSound",
+        "UNITEVENT_DispatchEventsByType"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2HirelingTxt",
+        "D2PetDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_KillExperience",
+      "address": "0057e990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057e990"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SERVER_KillExperience",
+        "SERVER_GetUnitStat",
+        "SERVER_GetOwnerFromMonsterUnit",
+        "SERVER_GetUnitPetByTypeId",
+        "SERVER_CalculateExperienceForUnit",
+        "SERVER_SEND_MercExperience",
+        "GetPartyId",
+        "SERVER_PartyShareExperience",
+        "SERVER_PlayerUpdateExperience"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_AwardKillExperience",
+      "address": "0057eab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057eab0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_AwardKillExperience",
+        "SERVER_GetUnitStat",
+        "SERVER_PlayerUpdateExperience",
+        "GetOwnerUnit",
+        "SERVER_SEND_MercExperience"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_SetUnitToLevel",
+      "address": "0057eb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057eb10"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_SetUnitToLevel",
+        "SERVER_GetUnitStat",
+        "TXT_Experience_GetLineLevel",
+        "SERVER_PlayerUpdateExperience",
+        "GetOwnerUnit",
+        "TXT_Experience_GetMaxLevel",
+        "GetPlayersPetData",
+        "GetHirelingText",
+        "GetBaseExperience",
+        "SERVER_SEND_MercExperience"
+      ],
+      "usedTypes": [
+        "D2HirelingTxt",
+        "D2PetDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DAMAGE_CalculateHitCheck",
+      "address": "0057ec10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ec10"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "DAMAGE_CalculateHitCheck",
+        "UNITS_CheckIfCanAttackTarget",
+        "MONSTER_IsMonsterUnit",
+        "GetMeleeRange",
+        "IsInMeleeRange",
+        "DAMAGE_RollAttackHit",
+        "DAMAGE_CheckBlockAndEvasion",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint16_t"
+      ]
+    }
+  ]
+}

@@ -22,22 +22,22 @@ void __fastcall PATH_CheckPathPointsInRoom(struct D2DynamicPathStrc * pPath);
 void __stdcall PATH_GetTargetCoordinates(int32_t nDirIndex, int32_t * pnOutX, int32_t * pnOutY, int32_t nStepIndex);
 // PATH_FindAlternateAroundObstacle - Attempts to find an alternate path around an obstacle using directional triplets (left/right alternatives). Checks primary, secondary, and tertiary directions until a collision-free direction is found. Returns 1 if an alternate path was found.
 BOOL PATH_FindAlternateAroundObstacle(struct D2PathTypeArg * pPathState);
-void __stdcall PATH_GetScreenVelocity(struct D2UnitStrc * pUnit, int * pnParam1, int * pnParam2);
+void __stdcall PATH_GetScreenVelocity(struct D2UnitStrc * pUnit, int * pnVelocityX, int * pnVelocityY);
 uint32_t PATH_CanMonsterPathInArea(struct D2UnitStrc * pUnit, uint16_t * pPathData);
 void __stdcall STRUCT_FreePath(struct D2PoolManagerStrc * pMemory, void * pPath);
 // DRLGPATH_ClearPathPosition - Zeroes out a dynamic path's world and screen coordinates, resets path points, removes the unit from its room, and sets the pending-room-change flag (0x2).
 void __stdcall DRLGPATH_ClearPathPosition(struct D2DynamicPathStrc * pDynamicPath);
 // Given two 16.16 fixed-point coordinate pairs (from/to), computes a unit direction POINT (pPoint->x/y) and a 0..63 direction index (returned and written to *pnParam). Determines the dominant axis (X vs Y), normalizes the minor/major ratio to a 0..0x7f index, and looks up the vector components and base direction in the gnDrlgPathDirectionX / gaPathCalcDirectionVectorX tables, then applies octant/sign corrections (axis swap, Y-negate, X-negate, +8 rotation) to produce the final 64-direction value. __fastcall. Core direction primitive used by the DRLG path-building routines.
-int __fastcall DRLGPATH_CalcDirectionVector(POINT * pPoint, uint32_t * pnParam, uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp);
+int __fastcall DRLGPATH_CalcDirectionVector(POINT * pPoint, uint32_t * pnDirection, uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp);
 // DRLGPATH_CalcPathDirection - Wrapper for DRLGPATH_CalcDirectionVector. Converts path point coordinates to fixed-point format. Called by DRLGPATH_UpdatePathVelocityAndDirection and DRLGPATH_ScaleVelocityVector.
-void __fastcall DRLGPATH_CalcPathDirection(POINT * pPoint, uint32_t * pnParam, uint32_t nFromX, uint32_t nFromY);
+void __fastcall DRLGPATH_CalcPathDirection(POINT * pPoint, uint32_t * pnDirection, uint32_t nFromX, uint32_t nFromY);
 // DRLGPATH_GetDirectionFromCoords - Converts tile coordinates to fixed-point and calls DRLGPATH_CalcDirectionVector. Used by GetDirectionToCoords, Skills_SrvDoFunc_062, and Update to determine facing direction.
 uint32_t __stdcall DRLGPATH_GetDirectionFromCoords(uint32_t nX, int32_t nY, int32_t nNewX, int32_t nNewY);
 uint32_t __stdcall PATH_CalculateDistance(uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp);
 // Advances a dynamic path along its path points: skips points already reached, computes the direction vector and velocity toward the current point (flips the direction index when flag 0x200 is set), and returns 1 when the last point is reached or the next step lands on the target subtile.
-int32_t __fastcall DRLGPATH_AdvanceAlongPathPoints(struct D2DynamicPathStrc * pDynamicPath, int32_t nParam, int32_t bForceDirection);
+int32_t __fastcall DRLGPATH_AdvanceAlongPathPoints(struct D2DynamicPathStrc * pDynamicPath, int32_t bSetDirOnWaypoint, int32_t bForceDirection);
 // Re-runs A* pathfinding for a unit whose current path has become stale or blocked. If the path is not frozen (flag 0x10), marks the unit for update and resets the path point index. For walk/run/follow path types (2, 0xD, 0xF), selects ePathType 2 (restore saved target) or 0xD based on nParam, attempts PATH_CalculatePath, and falls back to type 0xF on failure. Returns the result of PATH_CalculatePath.
-uint32_t __stdcall PATH_RecalculatePath(struct D2UnitStrc * pUnit, int32_t nParam);
+uint32_t __stdcall PATH_RecalculatePath(struct D2UnitStrc * pUnit, int32_t bHasTargetUnit);
 uint32_t __fastcall PATH_CheckPathCollision(struct D2UnitStrc * pUnit, struct D2DynamicPathStrc * pDynamicPath);
 BOOL __stdcall PATH_HasReachedTarget(struct D2UnitStrc * pUnit);
 void __stdcall PATH_SnapPositionToTile(struct D2DynamicPathStrc * pDynamicPath);

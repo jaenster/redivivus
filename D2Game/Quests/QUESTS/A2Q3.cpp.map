@@ -1,0 +1,618 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A2Q3.cpp",
+  "functions": [
+    {
+      "name": "Q11_NotifyTaintedSunComplete",
+      "address": "00599f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00599f50"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "QUEST_SendQuestUpdateToPlayer",
+        "Q11_NotifyTaintedSunComplete",
+        "GetPlayerData",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_Callback10_PlayerLeavesGame",
+      "address": "00599fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00599fb0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_Callback10_PlayerLeavesGame",
+        "SetRewardAndFinishFlags",
+        "QUESTGUID_RemovePlayerFromList"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q11_SetCannotComplete",
+      "address": "00599fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00599fe0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_PropagateRewardToParty",
+      "address": "0059a0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a0b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_PropagateRewardToParty",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_SendDarknessPacket",
+      "address": "0059a100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a100"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_SendDarknessPacket",
+        "SUNIT_GetClient",
+        "GetAct",
+        "NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY",
+        "NET_D2GS_SERVER_Send_0x5D_QuestState"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x5D",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_SendSunRestoredPacket",
+      "address": "0059a170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a170"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_SendSunRestoredPacket",
+        "SUNIT_GetClient",
+        "GetAct",
+        "NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q11_ActiveFilter",
+      "address": "0059a1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a1c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_ActiveFilter",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q11_Callback00_NpcActivate",
+      "address": "0059a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a270"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_Callback00_NpcActivate",
+        "GetPlayerData",
+        "GetQuestState",
+        "AddGossipMessageOnMonster",
+        "QUEST_HasPlayerParticipated"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q11_BeginTaintedSun",
+      "address": "0059a350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a350"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "DRLGENV_TaintedSunBegin",
+        "Q11_BeginTaintedSun",
+        "QUEST_SetStateAndBroadcast",
+        "QUEST_SetStateFlag",
+        "IteratePlayerOrMonsterUnits"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q11_EndTaintedSun",
+      "address": "0059a3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a3c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "DRLGENV_TaintedSunEnd",
+        "Q11_EndTaintedSun",
+        "IteratePlayerOrMonsterUnits"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_OnViperAmuletInit",
+      "address": "0059a3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a3f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_BeginTaintedSun",
+        "Q11_OnViperAmuletInit",
+        "QUEST_SetStateAndBroadcast",
+        "SetupUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg",
+        "D2QuestDataA2Q3Strc",
+        "D2QuestDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q11_SequenceFilter",
+      "address": "0059a480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a480"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_SequenceFilter",
+        "GetQuestDataByQuestNoInternal",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q11_UpdateQuestRecord",
+      "address": "0059a4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a4f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_UpdateQuestRecord",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetQuestDataByQuestNoInternal",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_OnPlayerInteract",
+      "address": "0059a570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a570"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_OnPlayerInteract",
+        "Q11_BeginTaintedSun",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x5D_QuestState"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x5D",
+        "D2QuestDataA2Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q11_Callback13_PlayerStartedGame",
+      "address": "0059a5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a5d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_Callback13_PlayerStartedGame",
+        "GetPlayerData",
+        "GetQuestState",
+        "QUEST_SetQuestRecordState",
+        "Q11_OnPlayerInteract"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_CheckViperAmuletRoomComplete",
+      "address": "0059a680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a680"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_CheckViperAmuletRoomComplete",
+        "GetPlayerData",
+        "UNITS_GetRoom",
+        "GetQuestDataByQuestNoInternal",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetQuestState",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2QuestDataA2Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "Q11_PlayCompletionSound",
+      "address": "0059a730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a730"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_PlayCompletionSound",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_OnStaffViperPickup",
+      "address": "0059a770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a770"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_OnStaffViperPickup",
+        "HasQuestItem",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OBJOP_A2Q3_ActivateHoradricStaffAltar",
+      "address": "0059a7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a7e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "OBJOP_A2Q3_ActivateHoradricStaffAltar",
+        "GetQuestDataByQuestNoInternal",
+        "GetPlayerData",
+        "GetQuestState",
+        "HasQuestItem",
+        "SetupUpdateEvent_AttachEventSound",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "SetupUpdateFlag",
+        "DRLGENV_TaintedSunEnd",
+        "IteratePlayerOrMonsterUnits",
+        "QUEST_DebugPrint",
+        "QUEST_SetStateFlag",
+        "NotifyPlayersAboutEvent",
+        "SetQuestState",
+        "UnsetQuestState",
+        "QUEST_SetQuestRecordState",
+        "ITEM_RewardItemToDrop",
+        "ITEM_EditItemData_eItemFlag",
+        "RollChestDrops",
+        "GetQuestControlSeed",
+        "SpawnDrop",
+        "AddQuestTimer"
+      ],
+      "usedTypes": [
+        "D2ObjectOperateFnArg",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q11_IsTaintedSunComplete",
+      "address": "0059ac20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059ac20"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_IsTaintedSunComplete",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_InitTaintedSunForAct",
+      "address": "0059ac40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059ac40"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "DRLGENV_TaintedSunBegin",
+        "Q11_InitTaintedSunForAct",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataA3Q2Strc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q11_GetTaintedSunFlag",
+      "address": "0059ac80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059ac80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_GetTaintedSunFlag",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q11_Callback11_ScrollMessage",
+      "address": "0059ebe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059ebe0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_Callback11_ScrollMessage",
+        "QUEST_SetStateAndBroadcast",
+        "QUEST_SetStateFlag",
+        "IteratePlayerOrMonsterUnits",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "QUEST_SendNpcGossipPacket",
+        "SetQuestState",
+        "UnsetQuestState",
+        "QUESTGUID_AddPlayerToList",
+        "QUEST_SetQuestRecordState"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q11_StartDarknessTimer",
+      "address": "0059edc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059edc0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_StartDarknessTimer",
+        "GetQuestControlSeed",
+        "SEED_RollRange",
+        "AddQuestTimer"
+      ]
+    },
+    {
+      "name": "Q11_Callback03_ChangedLevel",
+      "address": "0059ee00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059ee00"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_StartDarknessTimer",
+        "Q11_Callback03_ChangedLevel",
+        "Q11_BeginTaintedSun",
+        "IteratePlayerOrMonsterUnits",
+        "QUESTGUID_RemovePlayerFromQuest",
+        "QUEST_SetStateFlag"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_TextStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataA2Q3Strc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q11_InitData",
+      "address": "0059eea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059eea0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_InitData",
+        "memset",
+        "AllocServerMemory",
+        "QUESTGUID_SetPlayerCountToZero"
+      ],
+      "usedTypes": [
+        "D2QuestDataA2Q3Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

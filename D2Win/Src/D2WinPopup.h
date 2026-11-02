@@ -21,7 +21,7 @@ void __stdcall D2WINPOPUP_Destroy();
 // Returns TRUE if the popup control exists, is of type FORM_Popup (0xb), is active (state & 4), and is visible (state & 1). Used to check if popup is ready for interaction.
 BOOL __stdcall D2WINPOPUP_IsActiveAndVisible();
 // Adds a message entry to the popup. Validates message count (max 8), copies 132-byte message data into next slot, calculates text width using font 1, updates popup width/height. Returns TRUE on success.
-uint32_t __stdcall D2WINPOPUP_AddMessage(struct D2WinPopupEntry * pnParam);
+uint32_t __stdcall D2WINPOPUP_AddMessage(struct D2WinPopupEntry * pEntry);
 // Handles click event on popup. Validates popup state, checks if a message is selected (nSelectedIndex != -1), retrieves callback function pointer for selected message, executes callback if present.
 BOOL __stdcall D2WINPOPUP_HandleClick(struct D2UIMouseMsgStrc * pMsg);
 BOOL __fastcall DrawEx(::D2WinPopup * pPopup);

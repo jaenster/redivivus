@@ -7,9 +7,9 @@
 #include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/SRC/TileProjects.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -88,7 +88,7 @@ D2TileCmpTileSetStrc * __stdcall TILECMP_AllocTileSet() {
 
 // @sourcefile .\SRC\Tilecmp.cpp
 static void TILECMP_FreeTileSet(D2TileCmpTileSetStrc * pTileSet) {
-    D2TileCmpTileNodeStrc* pvVar1;
+    D2TileCmpTileNodeStrc* pNextNode;
     if (!pTileSet) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x54);
       exit(-1);
@@ -96,13 +96,13 @@ static void TILECMP_FreeTileSet(D2TileCmpTileSetStrc * pTileSet) {
 
     D2TileCmpTileNodeStrc* pMemoryToFree = pTileSet->pNodeHead;
     while (pMemoryToFree) {
-      pvVar1 = pMemoryToFree->pNext;
+      pNextNode = pMemoryToFree->pNext;
       if (pMemoryToFree->pPixelBuf) {
         D2_FREE_AT(pMemoryToFree->pPixelBuf, ".\\SRC\\Tilecmp.cpp", 0x35);
       }
 
       D2_FREE_AT(pMemoryToFree, ".\\SRC\\Tilecmp.cpp", 0x38);
-      pMemoryToFree = pvVar1;
+      pMemoryToFree = pNextNode;
     }
 
     D2_FREE_AT(pTileSet, ".\\SRC\\Tilecmp.cpp", 0x60);
@@ -264,7 +264,7 @@ void __stdcall TILECMP_CacheTileData(int * pTileMeasures, uint32_t * pTilePixels
         pNewTileNode->wPixelSize = 0xc00;
         pNewTileNode->pPixelBuf = (uint8_t*)pNodePixelBuf;
         pNewTileNode->wFlags = 0x1001;
-        D2MEM_CopyRows((char*)pNodePixelBuf, pTilePixels, 0x60, nPitch, 0x20, 0x60);
+        D2Hell::D2MEM_CopyRows((char*)pNodePixelBuf, pTilePixels, 0x60, nPitch, 0x20, 0x60);
         if (nOffsetX < *pTileMeasures) {
           *pTileMeasures = nOffsetX;
         }
@@ -756,7 +756,7 @@ static int32_t __fastcall TILECMP_CalculateCacheSize(D2TileLibraryHeaderStrc * p
 }
 
 static size_t TILECMP_CopyTileNodes(void * pDstBuf, D2TileLibraryEntryStrc * pTileSetEntry) {
-    uint32_t uVar2;
+    uint32_t nNodeSize;
     int* pFixupPtr;
     size_t nCumSize = pTileSetEntry->nSubTiles * 0x14;
     memcpy(pDstBuf, pTileSetEntry->pSubTiles, nCumSize);
@@ -769,9 +769,9 @@ static size_t TILECMP_CopyTileNodes(void * pDstBuf, D2TileLibraryEntryStrc * pTi
         pDVar1 = pTileSetEntry->pSubTiles;
         memcpy(pWritePtr, (void*)pDVar1[iNode].pPixelData, (uint32_t)*(uint16_t*)&pDVar1[iNode].dwField0A);
         *pFixupPtr = (int)pWritePtr - (int)pDstBuf;
-        uVar2 = (uint32_t)*(uint16_t*)&pDVar1[iNode].dwField0A;
-        nCumSize += uVar2;
-        pWritePtr = (void*)((int)pWritePtr + uVar2);
+        nNodeSize = (uint32_t)*(uint16_t*)&pDVar1[iNode].dwField0A;
+        nCumSize += nNodeSize;
+        pWritePtr = (void*)((int)pWritePtr + nNodeSize);
         iNode++;
         pFixupPtr += 5;
       } while (iNode < pTileSetEntry->nSubTiles);
@@ -1227,16 +1227,16 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
 }
 
 // @sourcefile .\SRC\Tilecmp.cpp
-void __stdcall TILECMP_ShallowCopyZeroPointers(void * pParam, void * * pParam2, size_t * pnSize) {
+void __stdcall TILECMP_ShallowCopyZeroPointers(void * pSrcDt1, void * * ppDt1Copy, size_t * pnSize) {
     void* nErrAddress;
     int iCount;
     size_t nAllocSize;
-    if (!pParam) {
+    if (!pSrcDt1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x493);
       exit(-1);
     } else {
       uint32_t* pTileSetEntry;
-      nAllocSize = *(int*)((int)pParam + 0x10c) * 0x60 + 0x114;
+      nAllocSize = *(int*)((int)pSrcDt1 + 0x10c) * 0x60 + 0x114;
       nErrAddress = D2_ALLOC_AT(nAllocSize, ".\\SRC\\Tilecmp.cpp", 0x49a);
       if (!nErrAddress) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x49b);
@@ -1244,7 +1244,7 @@ void __stdcall TILECMP_ShallowCopyZeroPointers(void * pParam, void * * pParam2, 
       }
 
       memset(nErrAddress, 0, nAllocSize);
-      memcpy(nErrAddress, pParam, nAllocSize);
+      memcpy(nErrAddress, pSrcDt1, nAllocSize);
       *(int*)((int)nErrAddress + 0x110) = (int)nErrAddress + 0x114;
       if (*(int*)((int)nErrAddress + 0x10c) > 0) {
         pTileSetEntry = (uint32_t*)((int)nErrAddress + 0x164);
@@ -1258,7 +1258,7 @@ void __stdcall TILECMP_ShallowCopyZeroPointers(void * pParam, void * * pParam2, 
       }
 
       *(uint32_t*)((int)nErrAddress + 4) &= 4;
-      *pParam2 = nErrAddress;
+      *ppDt1Copy = nErrAddress;
       *pnSize = nAllocSize;
       return;
     }

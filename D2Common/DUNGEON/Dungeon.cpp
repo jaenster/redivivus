@@ -207,7 +207,7 @@ D2DrlgTileDataStrc * __stdcall GetTileDataFromAct(D2DrlgActStrc * pDrlgAct) {
 }
 
 void __stdcall DRLGROOM_GetRoomCoordinates(D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pCoords) {
-    int iVar1;
+    int nDwordsLeft;
     if (!pCoords) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd1);
       exit(-1);
@@ -225,7 +225,7 @@ void __stdcall DRLGROOM_GetRoomCoordinates(D2RoomStrc * pRoom, D2DrlgRoomCoordsS
     }
 
     D2DrlgRoomCoordsStrc* pSrcCoords = &pRoom->sCoords;
-    for (iVar1 = 8; iVar1; iVar1--) {
+    for (nDwordsLeft = 8; nDwordsLeft; nDwordsLeft--) {
       pCoords->dwXStart = pSrcCoords->dwXStart;
       pSrcCoords = (D2DrlgRoomCoordsStrc*)&pSrcCoords->dwYStart;
       pCoords = (D2DrlgRoomCoordsStrc*)&pCoords->dwYStart;
@@ -316,33 +316,33 @@ D2RoomStrc * __fastcall AllocRoom(D2DrlgActStrc * pDrlgAct, D2RoomExStrc * pRoom
 }
 
 uint32_t __stdcall DoRoomsTouchOrOverlap(D2RoomStrc * pRoom, D2RoomStrc * pRoom2) {
-    int nRoom1Left;
+    int nRoom2Start;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13e);
       exit(-1);
     } else {
-      int iVar1;
+      int nRoom1Left;
       if (!pRoom2) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x141);
         exit(-1);
       }
 
-      iVar1 = pRoom2->sCoords.sTileRect.left;
+      nRoom2Start = pRoom2->sCoords.sTileRect.left;
       nRoom1Left = pRoom->sCoords.sTileRect.left;
-      if (!(nRoom1Left <= pRoom2->sCoords.sTileRect.right + iVar1)) {
+      if (!(nRoom1Left <= pRoom2->sCoords.sTileRect.right + nRoom2Start)) {
         return 0;
       }
-      if (!(pRoom->sCoords.sTileRect.right + nRoom1Left >= iVar1)) {
+      if (!(pRoom->sCoords.sTileRect.right + nRoom1Left >= nRoom2Start)) {
         return 0;
       }
 
-      iVar1 = pRoom2->sCoords.sTileRect.top;
+      nRoom2Start = pRoom2->sCoords.sTileRect.top;
       nRoom1Left = pRoom->sCoords.sTileRect.top;
-      if (!(nRoom1Left <= pRoom2->sCoords.sTileRect.bottom + iVar1)) {
+      if (!(nRoom1Left <= pRoom2->sCoords.sTileRect.bottom + nRoom2Start)) {
         return 0;
       }
 
-      return (uint32_t)(pRoom->sCoords.sTileRect.bottom + nRoom1Left >= iVar1);
+      return (uint32_t)(pRoom->sCoords.sTileRect.bottom + nRoom1Left >= nRoom2Start);
     }
 }
 
@@ -373,8 +373,8 @@ int32_t __stdcall DRLGROOM_GetRoomShape(D2RoomStrc * pRoom, int32_t nMode) {
     }
 
     int nLeft = pRoom->sCoords.sTileRect.left;
-    int iVar1 = pRoom->sCoords.sTileRect.right + nLeft;
-    if (nLeft > iVar1) {
+    int nRight = pRoom->sCoords.sTileRect.right + nLeft;
+    if (nLeft > nRight) {
       return 0;
     }
 
@@ -388,7 +388,7 @@ int32_t __stdcall DRLGROOM_GetRoomShape(D2RoomStrc * pRoom, int32_t nMode) {
     if (nTop > nTopPlusHeight || pRoom->sCoords.sTileRect.bottom + nTop < nTop) {
       return 0;
     }
-    if (nLeft == iVar1) {
+    if (nLeft == nRight) {
       return 1;
     }
     if (nRightEdge == nLeft) {
@@ -753,8 +753,8 @@ eD2LevelId __stdcall GetWarpDestinationLevel(D2RoomStrc * pRoom, eD2LevelId eLev
       return LEVEL_None;
     }
 
-    eD2LevelId eVar1 = Drlg::DrlgRoom::DRLGWARP_GetWarpDestinationLevel(pRoom->pRoomEx, eLevel);
-    return eVar1;
+    eD2LevelId eDestLevel = Drlg::DrlgRoom::DRLGWARP_GetWarpDestinationLevel(pRoom->pRoomEx, eLevel);
+    return eDestLevel;
 }
 
 eD2LevelId __stdcall GetLevelIdFromPopulatedRoom(D2RoomStrc * pRoom) {
@@ -781,8 +781,8 @@ char * __stdcall GetPickedLevelPrestFilePathFromRoom(D2RoomStrc * pRoom) {
       return nullptr;
     }
 
-    char* pcVar1 = Drlg::DrlgRoom::GetPickedLevelPrestFilePathFromRoomEx(pRoom->pRoomEx);
-    return pcVar1;
+    char* szFilePath = Drlg::DrlgRoom::GetPickedLevelPrestFilePathFromRoomEx(pRoom->pRoomEx);
+    return szFilePath;
 }
 
 // @sourcefile .\DUNGEON\Dungeon.cpp
@@ -1081,9 +1081,9 @@ void __stdcall DRLGROOM_RemoveClientFromRoom(D2RoomStrc * pRoom, D2ClientStrc * 
       DRLGROOM_RemoveClientFromRoom_HaltTail(0x489);
     }
 
-    uint32_t uVar1 = pRoom->nClientsCount;
+    uint32_t nCount = pRoom->nClientsCount;
     uint32_t nFoundIdx = 0;
-    if (uVar1 > 0) {
+    if (nCount > 0) {
       pClientSearch = pRoom->pClients;
       do {
         if (*pClientSearch == nClientId) {
@@ -1092,13 +1092,13 @@ void __stdcall DRLGROOM_RemoveClientFromRoom(D2RoomStrc * pRoom, D2ClientStrc * 
 
         nFoundIdx++;
         pClientSearch++;
-      } while (nFoundIdx < uVar1);
+      } while (nFoundIdx < nCount);
     }
-    if (nFoundIdx >= uVar1) {
+    if (nFoundIdx >= nCount) {
       DRLGROOM_RemoveClientFromRoom_HaltTail(0x490);
     }
 
-    pRoom->pClients[nFoundIdx] = pRoom->pClients[uVar1 - 1];
+    pRoom->pClients[nFoundIdx] = pRoom->pClients[nCount - 1];
     pRoom->nClientsCount--;
     DRLGROOM_SortClientList(pRoom);
 }
@@ -1191,82 +1191,80 @@ void __fastcall DUNGEON_ClearRoomTiles(D2RoomStrc * pRoom) {
 
 // Unlinks pRoom from pDrlgAct's room linked list and removes it from the adjacency lists of all neighboring rooms. After unlinking, frees the room's DrlgRoomEx data and the room itself via FreeRoom. Halts with an internal error if pRoom is null or not found in the act's list.
 void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoom) {
-    D2RoomStrc* pCurRoom;
     D2RoomStrc* pPrevRoom;
     int i;
     D2RoomStrc** ppNearScan;
     uint32_t nAdjRoomListCount;
-    int32_t nLine;
     D2RoomStrc* nearRoom;
+    uint32_t* pnListCount;
     D2RoomStrc** ppAdjRoomList;
     D2RoomStrc* pRoomToRemove;
     pRoomToRemove = pRoom;
     if (!pRoom) {
-      nLine = 0x4f7;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4f7);
+      exit(-1);
     } else {
-      uint32_t* puVar1;
+      D2RoomStrc* pCurRoom;
       nearRoom = pDrlgAct->pRoom;
       pPrevRoom = 0;
       if (!pDrlgAct->pRoom) {
-        halt_room_not_found:
-        nLine = 0x502;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
+        exit(-1);
       } else {
         do {
           pCurRoom = nearRoom;
           if (pCurRoom == pRoom) {
-            if (pCurRoom) {
-              if (pPrevRoom) {
-                pPrevRoom->pDrlgRoomNext = pCurRoom->pDrlgRoomNext;
-              } else {
-                pDrlgAct->pRoom = pCurRoom->pDrlgRoomNext;
-              }
-
-              puVar1 = &pRoom->nRoomListCount;
-              pRoom = 0;
-              if ((int)*puVar1 > 0) {
-                do {
-                  nearRoom = pRoomToRemove->ppRoomList[(int)pRoom];
-                  if (nearRoom != pRoomToRemove) {
-                    nAdjRoomListCount = nearRoom->nRoomListCount;
-                    i = 0;
-                    if ((int)nAdjRoomListCount > 0) {
-                      ppAdjRoomList = nearRoom->ppRoomList;
-                      ppNearScan = ppAdjRoomList;
-                      do {
-                        if (*ppNearScan == pRoomToRemove) {
-                          ppAdjRoomList[i] = ppAdjRoomList[nAdjRoomListCount - 1];
-                          nearRoom->nRoomListCount--;
-                          break;
-                        }
-
-                        i++;
-                        ppNearScan++;
-                      } while (i < (int)nAdjRoomListCount);
-                    }
-                  }
-
-                  pRoom = (D2RoomStrc*)((uintptr_t)&pRoom->ppRoomList + 1);
-                } while ((int)pRoom < (int)pRoomToRemove->nRoomListCount);
-              }
-
-              Drlg::DrlgRoom::FreeDrlgRoomEx(pRoomToRemove->pRoomEx, pDrlgAct->bClientSide, pRoomToRemove->eFlags);
-              FreeRoom(pDrlgAct->pMemory, pRoomToRemove);
-              return;
+            if (!pCurRoom) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
+              exit(-1);
+            }
+            if (pPrevRoom) {
+              pPrevRoom->pDrlgRoomNext = pCurRoom->pDrlgRoomNext;
+            } else {
+              pDrlgAct->pRoom = pCurRoom->pDrlgRoomNext;
             }
 
-            goto halt_room_not_found;
+            pnListCount = &pRoom->nRoomListCount;
+            pRoom = 0;
+            if ((int)*pnListCount > 0) {
+              do {
+                nearRoom = pRoomToRemove->ppRoomList[(int)pRoom];
+                if (nearRoom != pRoomToRemove) {
+                  nAdjRoomListCount = nearRoom->nRoomListCount;
+                  i = 0;
+                  if ((int)nAdjRoomListCount > 0) {
+                    ppAdjRoomList = nearRoom->ppRoomList;
+                    ppNearScan = ppAdjRoomList;
+                    do {
+                      if (*ppNearScan == pRoomToRemove) {
+                        ppAdjRoomList[i] = ppAdjRoomList[nAdjRoomListCount - 1];
+                        nearRoom->nRoomListCount--;
+                        break;
+                      }
+
+                      i++;
+                      ppNearScan++;
+                    } while (i < (int)nAdjRoomListCount);
+                  }
+                }
+
+                pRoom = (D2RoomStrc*)((uintptr_t)&pRoom->ppRoomList + 1);
+              } while ((int)pRoom < (int)pRoomToRemove->nRoomListCount);
+            }
+
+            Drlg::DrlgRoom::FreeDrlgRoomEx(pRoomToRemove->pRoomEx, pDrlgAct->bClientSide, pRoomToRemove->eFlags);
+            FreeRoom(pDrlgAct->pMemory, pRoomToRemove);
+            return;
           }
 
           nearRoom = pCurRoom->pDrlgRoomNext;
           pPrevRoom = pCurRoom;
         } while (pCurRoom->pDrlgRoomNext);
 
-        nLine = 0x502;
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x502);
+        exit(-1);
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
 }
 
 void __stdcall DRLGROOM_SwapActiveRoomExBetweenLevels(D2RoomStrc * pRoom, D2RoomStrc * pRoom2) {
@@ -1289,8 +1287,8 @@ uint32_t __stdcall DRLGROOM_CheckLOSDraw(D2RoomStrc * pRoom) {
       return 0;
     }
 
-    uint32_t uVar1 = Drlg::DrlgRoom::CheckLOSDraw(pRoom->pRoomEx);
-    return uVar1;
+    uint32_t dwResult = Drlg::DrlgRoom::CheckLOSDraw(pRoom->pRoomEx);
+    return dwResult;
 }
 
 D2DrlgEnvironmentStrc * __fastcall DRLGENV_GetEnvironmentFromAct(D2DrlgActStrc * pDrlgAct) {
@@ -1599,7 +1597,7 @@ void __stdcall FreeAct(D2DrlgActStrc * pDrlgAct) {
     /* Finally frees D2DrlgAct it self */ D2_FREE_POOL_AT(pDrlgAct->pMemory, pDrlgAct, ".\\DUNGEON\\Dungeon.cpp", 0x52);
 }
 
-D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t nParam, int * pnParam1, int * pnParam2, uint32_t nParam2) {
+D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t nSpawnTypeOrMode, int * pnSpawnX, int * pnSpawnY, uint32_t nUnitSize) {
     D2RoomStrc* pSpawnRoom;
     D2RoomStrc* pFreeCoordRoom;
     POINT ptSpawnCoord;
@@ -1609,20 +1607,20 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
       ppDVar1 = &pDrlgAct->pDrlg;
       pDrlgAct = 0;
       nLocalY = 0;
-      pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nParam, (int*)&pDrlgAct, &nLocalY);
+      pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nSpawnTypeOrMode, (int*)&pDrlgAct, &nLocalY);
       if (pSpawnRoom) {
         Drlg::Transform::CoordsRoomToWorld((int32_t*)&pDrlgAct, &nLocalY);
         ptSpawnCoord.x = (uintptr_t)&pDrlgAct->eLevelIdFirst + 3;
         ptSpawnCoord.y = nLocalY + 3;
-        pFreeCoordRoom = Collision::GetFreeCoordinates_WithNeighboorRooms(pSpawnRoom, &ptSpawnCoord, nParam2, 0x1c09, 0);
+        pFreeCoordRoom = Collision::GetFreeCoordinates_WithNeighboorRooms(pSpawnRoom, &ptSpawnCoord, nUnitSize, 0x1c09, 0);
         if (!pFreeCoordRoom) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x238);
           exit(-1);
         }
 
-        *pnParam1 = ptSpawnCoord.x;
-        *pnParam2 = ptSpawnCoord.y;
-        pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, *pnParam1, ptSpawnCoord.y);
+        *pnSpawnX = ptSpawnCoord.x;
+        *pnSpawnY = ptSpawnCoord.y;
+        pSpawnRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pSpawnRoom, *pnSpawnX, ptSpawnCoord.y);
         return pSpawnRoom;
       }
 
@@ -1737,9 +1735,9 @@ void __fastcall DRLGROOMEX_InitTileDataAndPresets(D2RoomExStrc * pRoomEx) {
 // Recursively activates nearby RoomEx neighbours up to depth 3. For each adjacent room within pRoomEx->ppDrlgRoomsExNear[], calls DRLGROOMEX_InitNearRoomsAndVisTiles if not yet populated, increments the room's reference count at the current priority level, and dispatches gaRoomExActivationHandlers[priority] when the room's fRoomStatus meets the recursion priority threshold.
 void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, uint8_t nRecursion) {
     D2RoomExStrc* pDVar1;
-    uint32_t uVar2;
     int nRefSlotIdx;
     uint16_t* pnRefCount;
+    uint32_t nDepth;
     if (!pRoomEx->nDrlgRoomsExNearCount) {
       Drlg::DrlgRoom::DRLGROOMEX_InitNearRoomsAndVisTiles(pMemory, pRoomEx);
     }
@@ -1748,11 +1746,11 @@ void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomE
     nNearIndex = 0;
     if (nRecursion < 3) {
       if (pRoomEx->nDrlgRoomsExNearCount > 0) {
-        uVar2 = (uint32_t)nRecursion;
+        nDepth = (uint32_t)nRecursion;
         do {
           pDVar1 = pRoomEx->ppDrlgRoomsExNear[nNearIndex];
           InitNearRooms(pMemory, pDVar1, nRecursion + '\x01');
-          if (uVar2 <= pDVar1->fRoomStatus) {
+          if (nDepth <= pDVar1->fRoomStatus) {
             nRefSlotIdx = 0;
             pnRefCount = pDVar1->awRoomsInList;
             do {
@@ -1762,13 +1760,13 @@ void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomE
 
               nRefSlotIdx++;
               pnRefCount++;
-            } while (nRefSlotIdx <= (int)uVar2);
+            } while (nRefSlotIdx <= (int)nDepth);
 
-            (*gaRoomExActivationHandlers[uVar2])(pDVar1);
+            (*gaRoomExActivationHandlers[nDepth])(pDVar1);
           }
 
           count_reference:
-          pDVar1->awRoomsInList[uVar2]++;
+          pDVar1->awRoomsInList[nDepth]++;
           nNearIndex++;
           if (nNearIndex >= pRoomEx->nDrlgRoomsExNearCount) {
             return;
@@ -1776,10 +1774,10 @@ void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomE
         } while (true);
       }
     } else if (pRoomEx->nDrlgRoomsExNearCount > 0) {
-      uVar2 = (uint32_t)nRecursion;
+      nDepth = (uint32_t)nRecursion;
       do {
         pDVar1 = pRoomEx->ppDrlgRoomsExNear[nNearIndex];
-        if (uVar2 <= pDVar1->fRoomStatus) {
+        if (nDepth <= pDVar1->fRoomStatus) {
           nRefSlotIdx = 0;
           pnRefCount = pDVar1->awRoomsInList;
           do {
@@ -1789,13 +1787,13 @@ void __fastcall InitNearRooms(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomE
 
             nRefSlotIdx++;
             pnRefCount++;
-          } while (nRefSlotIdx <= (int)uVar2);
+          } while (nRefSlotIdx <= (int)nDepth);
 
-          (*gaRoomExActivationHandlers[uVar2])(pDVar1);
+          (*gaRoomExActivationHandlers[nDepth])(pDVar1);
         }
 
         count_reference_no_recurse:
-        pDVar1->awRoomsInList[uVar2]++;
+        pDVar1->awRoomsInList[nDepth]++;
         nNearIndex++;
       } while (nNearIndex < pRoomEx->nDrlgRoomsExNearCount);
     }
@@ -2005,16 +2003,16 @@ void __fastcall DRLGACTMISC_InitializeSubA0(D2DrlgStrc * pDrlg) {
 
 // Gets the current ActMiscSubA0 structure from the Drlg's linked list state. Returns NULL if the list head pointers equal the sentinel (empty list). Checks both field_0xBC and field_0x1A8 linked lists.
 D2RoomStrc * __fastcall DRLGROOMEX_GetCurrentSubA0(D2DrlgStrc * pDrlg) {
-    D2RoomExStrc* puVar1 = pDrlg->aSubA0[0].pStatusNext;
-    if (puVar1 == pDrlg->aSubA0 || !puVar1) {
-      puVar1 = pDrlg->aSubA0[1].pStatusNext;
-      if (puVar1 == pDrlg->aSubA0 + 1 || !puVar1) {
+    D2RoomExStrc* pRoomEx = pDrlg->aSubA0[0].pStatusNext;
+    if (pRoomEx == pDrlg->aSubA0 || !pRoomEx) {
+      pRoomEx = pDrlg->aSubA0[1].pStatusNext;
+      if (pRoomEx == pDrlg->aSubA0 + 1 || !pRoomEx) {
         return nullptr;
       }
     }
 
-    puVar1 = (D2RoomExStrc*)puVar1->pRoom;
-    return (D2RoomStrc*)puVar1;
+    pRoomEx = (D2RoomExStrc*)pRoomEx->pRoom;
+    return (D2RoomStrc*)pRoomEx;
 }
 
 // Gets the ActMiscSubA0 for a specific RoomEx within its Drlg context. Checks the RoomEx's field_0x44 priority and linked list position to determine the correct SubA0 entry. Returns NULL if at sentinel.

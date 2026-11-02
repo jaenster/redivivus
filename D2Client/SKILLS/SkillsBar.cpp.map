@@ -1,0 +1,779 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/SKILLS/SkillsBar.cpp",
+  "functions": [
+    {
+      "name": "Skills_CltStFunc_CheckTargetCorpseForRevive",
+      "address": "004c7c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c7c90"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckTargetCorpseForRevive",
+        "GetConfirmedTargetUnit",
+        "SKILLS_IsCorpseValidForRevive"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Bar_BloodParticlesOnTarget",
+      "address": "004c7cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c7cb0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Bar_BloodParticlesOnTarget",
+        "GetConfirmedTargetUnit",
+        "MONSTER_SpawnBloodParticles"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_AllocStatListByCltCalc",
+      "address": "004c7cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c7cf0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltStFunc_AllocStatListByCltCalc",
+        "D2GetSkillCalc",
+        "SKILLS_CltAllocStatListForSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Bar_DoubleSwing_Sound",
+      "address": "004c7d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c7d50"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_FindClosestTargetWithStats",
+        "Skills_CltDoFunc_Bar_DoubleSwing_Sound",
+        "GetHitClassForPlayerOrMonster",
+        "UNITSND_GetSkillCastSound",
+        "SOUND_PlaySound",
+        "GetConfirmedTargetUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "PATH_SetDirectionToTarget"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2Sounds",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Bar_ThrowItem",
+      "address": "004c7e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c7e10"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Bar_ThrowItem",
+        "GetWeaponBySkill",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetMinimalStatValueShifted",
+        "ITEM_GetItemsTxt_wMissileType",
+        "ITEMS_IsA",
+        "MakeMissileAtSkillTarget",
+        "MISSILE_CreateFromUnitWithOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckTargetIsSelectableCorpse",
+      "address": "004c7ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c7ee0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckTargetIsSelectableCorpse",
+        "GetConfirmedTargetUnit",
+        "SKILLS_IsSelectableCorpse"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Bar_SoftMonster_BloodParticles",
+      "address": "004c7f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c7f00"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Bar_SoftMonster_BloodParticles",
+        "GetConfirmedTargetUnit",
+        "IsSoftMonster",
+        "MONSTER_SpawnBloodParticles"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion",
+      "address": "004c7f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c7f50"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion",
+        "GetConfirmedTargetUnit",
+        "IsSoftMonster",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "TXT_MonStats_GetMonStats2",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "POINT",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_ValidateTeleportDestination",
+      "address": "004c80d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c80d0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_ValidateTeleportDestination",
+        "GetXPos",
+        "GetYPos",
+        "D2GetSkillCalc",
+        "GetDistanceToXY",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetUnitSizeX",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "GetUnitWidth",
+        "CheckCollision_BlockPlayer_Type",
+        "SKILLS_HasLineOfSight",
+        "UNITSND_PlayPlayerSound"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "POINT",
+        "eD2CollisionShapeType",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_CanUseAtLocation",
+      "address": "004c8350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8350"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_CanUseAtLocation",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_SetupLeapTeleportDest",
+      "address": "004c83c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c83c0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltStFunc_SetupLeapTeleportDest",
+        "GetCurrentSkill",
+        "GetPlayerUnit_UI",
+        "UNIT_GetUnitState",
+        "GetSkillId",
+        "SKILL_GetFlags",
+        "GetCooordinates",
+        "SKILL_CanUseAtLocation",
+        "SKILL_ValidateTeleportDestination",
+        "GetConfirmedTargetUnit",
+        "SKILL_SetParam4",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetUnitSizeX",
+        "UNITS_GetRoom",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetUnitWidth",
+        "AddCollision_Type",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "SKILL_SetFlags",
+        "SKILL_CreateActiveSkillStatList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "POINT",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_SetupLeapPath",
+      "address": "004c85b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c85b0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_SetupLeapPath",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "SKILL_SetFlags",
+        "PATH_SetCollisionPattern",
+        "PATH_ChangeCollisionType",
+        "SetSP1",
+        "PATH_SetPathType",
+        "TXT_MonStats_GetLine",
+        "INV_GetCharStatsTxtLine",
+        "SetVelocities",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2DynamicPathStrc",
+        "D2MonStatsTxt",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_CreateLeapArcParticle",
+      "address": "004c8670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8670"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_CreateLeapArcParticle",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "GetVelocity",
+        "GetDistanceToXY",
+        "AllocParticle",
+        "PARTICLE_SetVelocityOffset",
+        "PARTICLE_InitProjectile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_UpdateSkillMissilePosition",
+      "address": "004c8750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8750"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "CLIENT_UpdateSkillMissilePosition",
+        "SKILL_GetParam3",
+        "SKILL_GetParam4",
+        "UNITS_FindClientSideUnit",
+        "SKILL_SetFlags",
+        "SetSequenceFrame",
+        "PATH_SetOrClearFlag0x2000",
+        "PATH_SnapPositionToTile",
+        "OverwriteDistanceAndMaxDistance",
+        "SetStepNum",
+        "SetTarget",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SetSP1",
+        "PATH_SetPathType",
+        "SetDistance",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PATH_ResetCollisionOnLanding",
+      "address": "004c8890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8890"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "PATH_ResetCollisionOnLanding",
+        "UNITS_GetRoom",
+        "GetUnitWidth",
+        "RemoveCollision_Type",
+        "PATH_ChangeCollisionType",
+        "PATH_SetCollisionPattern",
+        "PATH_SetPathType",
+        "IsActive",
+        "PATH_SetCorpseCollision"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2CollisionShapeType",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_PlaySkillSound",
+      "address": "004c8970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8970"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "CLIENT_PlaySkillSound",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "PARTICLE_GetPosZShifted",
+        "PATH_ResetCollisionOnLanding",
+        "SetPosVectorShifted",
+        "GFX_AddOverlayToUnit",
+        "UNITSND_GetFootstepSound",
+        "SOUND_PlaySound",
+        "CLIENT_UpdateSkillMissilePosition",
+        "GetXPos",
+        "GetYPos",
+        "SetSequenceFrame",
+        "GetDistanceToXY"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SkillStrc",
+        "eD2Sounds",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_HandleTeleportLanding",
+      "address": "004c8b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8b80"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_HandleTeleportLanding",
+        "GetCollisionType",
+        "GetCurrentSkill",
+        "GetXPos",
+        "SKILL_GetParam1",
+        "GetYPos",
+        "SKILL_GetParam2",
+        "GetUnitWidth",
+        "UNITS_GetRoom",
+        "RemoveCollision_Type",
+        "CLIENT_TeleportUnitToPosition",
+        "PATH_ResetCollisionOnLanding"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2CollisionShapeType",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Bar_Leap_ArcParticle",
+      "address": "004c8c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8c60"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_SetFlags",
+        "Skills_CltDoFunc_Bar_Leap_ArcParticle",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetFlags",
+        "CLIENT_PlaySkillSound",
+        "SKILL_SetupLeapPath",
+        "SKILL_CreateLeapArcParticle",
+        "GetYPos",
+        "GetXPos",
+        "PATH_ResetCollisionOnLanding"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SkillStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_FindTeleportPositionForTarget",
+      "address": "004c8d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8d90"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltStFunc_FindTeleportPositionForTarget",
+        "SKILLS_GetSkillByEnum",
+        "GetPlayerUnit_UI",
+        "UNIT_GetUnitState",
+        "GetSkillId",
+        "SKILL_GetFlags",
+        "GetConfirmedTargetUnit",
+        "SKILL_FindTeleportPosition",
+        "IsInMeleeRange",
+        "CLIENT_HandleUnitMessage0x16",
+        "UNITSND_PlayPlayerSound",
+        "UNITS_GetRoom",
+        "GetUnitWidth",
+        "AddCollision_Type",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "SKILL_SetParam4",
+        "SKILL_SetFlags",
+        "SKILL_CreateActiveSkillStatList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2CollisionShapeType",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Bar_LeapAttack_ArcParticle",
+      "address": "004c8ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c8ed0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Bar_LeapAttack_ArcParticle",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetFlags",
+        "CLIENT_PlaySkillSound",
+        "SKILL_GetParam3",
+        "SKILL_GetParam4",
+        "UNITS_FindClientSideUnit",
+        "SKILL_FindClosestTargetWithStats",
+        "SetTargetUnitForDynamicUnit",
+        "FaceTarget",
+        "GetHitClassForPlayerOrMonster",
+        "UNITSND_GetSkillCastSound",
+        "SOUND_PlaySound",
+        "SKILL_SetFlags",
+        "SKILL_SetupLeapPath",
+        "SKILL_CreateLeapArcParticle",
+        "GetYPos",
+        "GetXPos",
+        "PATH_ResetCollisionOnLanding"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_DrawUnitAtRotatedAngle",
+      "address": "004c9060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9060"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_DrawUnitAtRotatedAngle",
+        "GetDirection",
+        "SetDirectionAndNewDirection",
+        "D2GFX_IsPerspectiveActive",
+        "GetTargetX",
+        "GetTargetY",
+        "GetPrecisionY",
+        "GetPrecisionX",
+        "D2GFX_PerspecitveScalePosition",
+        "DRAW_GetWorldOffsetX",
+        "DRAW_GetWorldOffsetY",
+        "DRAW_WORLD_Unit_1"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "DRAWMODE",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CalcLeapDestViaPathfind",
+      "address": "004c9120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9120"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltStFunc_CalcLeapDestViaPathfind",
+        "SKILLS_GetSkillByEnum",
+        "GetPlayerUnit_UI",
+        "GetSkillId",
+        "SKILL_GetFlags",
+        "UNIT_GetUnitState",
+        "GetCooordinates",
+        "GetConfirmedTargetUnit",
+        "IsInMeleeRange",
+        "CLIENT_HandleUnitMessage0x16",
+        "PATH_SetCollisionPattern",
+        "PATH_SetPathType",
+        "PATH_CalculatePath",
+        "TXT_MonStats_GetLine",
+        "SetVelocities",
+        "INV_GetCharStatsTxtLine",
+        "GetPathPoint",
+        "GetUnitWidth",
+        "UNITS_GetRoom",
+        "AddCollision_Type",
+        "SKILL_SetFlags",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_CreateActiveSkillStatList"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2DynamicPathStrc",
+        "D2MonStatsTxt",
+        "D2PathPointStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Bar_Whirlwind_EndCollision",
+      "address": "004c9320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9320"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Bar_Whirlwind_EndCollision",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "SKILL_GetFlags",
+        "GetUnitWidth",
+        "UNITS_GetRoom",
+        "RemoveCollision_Type",
+        "PATH_ChangeCollisionType",
+        "PATH_SetCollisionPattern",
+        "SKILL_SetFlags",
+        "UNITSND_GetMissileSound",
+        "SOUND_StopById",
+        "SetSequenceFrame"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2CollisionShapeType",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_StopAndClearSound",
+      "address": "004c9420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9420"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsBar",
+      "calledFunctions": [
+        "SKILL_StopAndClearSound",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetFlags",
+        "SKILL_SetFlags",
+        "UNITSND_GetMissileSound",
+        "SOUND_StopById"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -63,19 +63,19 @@ Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe 
 [`asm_matching/`](asm_matching/README.md) compiles the tree with Visual C++ 2005 SP1 and
 compares the machine code of each function with 1.14d. It is a check on the decompilation:
 where the code comes out identical, the decompiled function was read correctly.
-At this commit, generated from version 1813 of the Ghidra database:
+At this commit, generated from version 1838 of the Ghidra database:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|6,084 of 14,642 (41.6%)|
-|Code|488,320 of 2,602,915 bytes (18.76%)|
-|Instructions|1,748,193 of 2,602,915 bytes (67.2%), counting identical instructions in functions that still differ|
+|Functions|6,108 of 14,642 (41.7%)|
+|Code|496,852 of 2,602,915 bytes (19.09%)|
+|Instructions|1,750,826 of 2,602,915 bytes (67.3%), counting identical instructions in functions that still differ|
 
 These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt): the
 rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
 exceptions is left out as well. Over the whole binary, runtime
-included: 6,641 of 15,711 functions (42.3%), 587,025 of
-2,748,975 bytes (21.35%).
+included: 6,665 of 15,711 functions (42.4%), 595,557 of
+2,748,975 bytes (21.66%).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
@@ -120,6 +120,9 @@ checked against the databases, reviewed, and applied with you as the git author;
 ## License
 
 MIT, see [LICENSE](LICENSE). Code under `thirdparty/` keeps its own license.
+
+The `.cpp.map` files map every function and line back to its address in 1.14d `Game.exe`. They
+are part of this work under the same license: if you use them, credit Redivivus and link here.
 
 Diablo and Blizzard Entertainment are trademarks of Blizzard Entertainment, Inc. This
 project is not affiliated with or endorsed by Blizzard.

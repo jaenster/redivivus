@@ -1,0 +1,893 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/ItemStats.cpp",
+  "functions": [
+    {
+      "name": "SetState",
+      "address": "00639db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00639db0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "SetState",
+        "STATLIST_SetUnitState",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNIT_GetUnitState",
+      "address": "00639df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00639df0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "UNIT_GetUnitState",
+        "GetStateBitFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "D2StatesTogglegfx",
+      "address": "00639e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00639e30"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "D2StatesTogglegfx",
+        "STATLIST_GetUnitGfxFlags",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetStateGfxFlag",
+      "address": "00639e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00639e90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "GetStateGfxFlag",
+        "STATLIST_GetUnitGfxFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_ClearGfxFlags",
+      "address": "00639ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00639ee0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_ClearGfxFlags",
+        "STATLIST_GetUnitGfxFlags",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasAnyGfxFlag",
+      "address": "00639f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00639f20"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasAnyGfxFlag",
+        "STATLIST_GetUnitGfxFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STATES_AssertGetGfxFlags",
+      "address": "00639f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00639f70"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_AssertGetGfxFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATLIST_GetUnitGfxFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STATES_FilterStatesByContext",
+      "address": "00639fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00639fb0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_FilterStatesByContext",
+        "STATLIST_GetUnitGfxFlags",
+        "GetStateFlags",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "thunk_UNIT_GetStateList_StateFlags",
+      "address": "0063a100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a100"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "thunk_UNIT_GetStateList_StateFlags",
+        "GetStateFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasMatchingStateFlag",
+      "address": "0063a130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a130"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasMatchingStateFlag",
+        "GetStateFlags"
+      ],
+      "usedTypes": [
+        "D2StatesDataTbls",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STATES_MoveToGfxFlags",
+      "address": "0063a180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a180"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_MoveToGfxFlags",
+        "STATLIST_GetUnitGfxFlags",
+        "GetStateFlags",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMSTATS_CheckStateFlagArray1",
+      "address": "0063a210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a210"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "ITEMSTATS_CheckStateFlagArray1"
+      ],
+      "usedTypes": [
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_HasHideState",
+      "address": "0063a250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a250"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasHideState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMSTATS_CheckStateFlagArray4",
+      "address": "0063a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a270"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "ITEMSTATS_CheckStateFlagArray4"
+      ],
+      "usedTypes": [
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_HasTransformState",
+      "address": "0063a2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a2b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasTransformState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_MoveTransformToGfx",
+      "address": "0063a2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a2d0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_MoveTransformToGfx",
+        "STATES_MoveToGfxFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMSTATS_CheckStateFlagArray2",
+      "address": "0063a2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a2f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "ITEMSTATS_CheckStateFlagArray2"
+      ],
+      "usedTypes": [
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_HasLightState",
+      "address": "0063a320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a320"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasLightState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasDamageState",
+      "address": "0063a340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a340"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasDamageState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasBlueState",
+      "address": "0063a360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a360"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasBlueState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasAttackSpeedState",
+      "address": "0063a380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a380"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasAttackSpeedState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasAuraState",
+      "address": "0063a3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a3a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasAuraState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasResistState",
+      "address": "0063a3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a3c0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasResistState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasArmorState",
+      "address": "0063a3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a3e0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasArmorState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "UNITS_IsShapeshifted",
+      "address": "0063a400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a400"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "UNITS_IsShapeshifted"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMSTATS_CheckStateFlagArray11",
+      "address": "0063a420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a420"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "ITEMSTATS_CheckStateFlagArray11"
+      ],
+      "usedTypes": [
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMSTATS_CheckStateFlagArray12",
+      "address": "0063a460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a460"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "ITEMSTATS_CheckStateFlagArray12"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_IsStateActive",
+      "address": "0063a4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a4a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_IsStateActive"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_HasPoisonState",
+      "address": "0063a510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a510"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasPoisonState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasColdState",
+      "address": "0063a530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a530"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasColdState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasFireState",
+      "address": "0063a550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a550"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasFireState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasLifeState",
+      "address": "0063a570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a570"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasLifeState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasManaState",
+      "address": "0063a590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a590"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasManaState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasStaminaState",
+      "address": "0063a5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a5b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasStaminaState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasDefenseState",
+      "address": "0063a5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a5d0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasDefenseState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasExpState",
+      "address": "0063a5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a5f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasExpState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasGoldState",
+      "address": "0063a610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a610"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasGoldState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasMagicFindState",
+      "address": "0063a630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a630"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasMagicFindState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasSkillState",
+      "address": "0063a650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a650"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasSkillState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasAbsorbState",
+      "address": "0063a670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a670"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasAbsorbState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasCurseState",
+      "address": "0063a690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a690"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasCurseState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMSTATS_CheckStateFlagArray30",
+      "address": "0063a6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a6b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "ITEMSTATS_CheckStateFlagArray30"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_HasMaxState",
+      "address": "0063a6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a6f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasMaxState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMSTATS_CheckStateFlagArray31",
+      "address": "0063a710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a710"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "ITEMSTATS_CheckStateFlagArray31"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_HasProgressiveState",
+      "address": "0063a750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a750"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasProgressiveState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasPassiveState",
+      "address": "0063a770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a770"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasPassiveState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_HasDisguiseState",
+      "address": "0063a790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a790"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "STATES_HasDisguiseState",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMSTATS_CheckUnitHasStateFlagIndex",
+      "address": "0063a7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a7b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ItemStats",
+      "calledFunctions": [
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "STATES_HasMatchingStateFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    }
+  ]
+}

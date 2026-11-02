@@ -1,0 +1,200 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Glide/glFloorCache.cpp",
+  "functions": [
+    {
+      "name": "GLFLOOR_Initialize",
+      "address": "0050f320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f320"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_Initialize",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "GlFloorCacheNodeStrc",
+        "GlFloorCacheStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GLFLOOR_AppendNodeToTail",
+      "address": "0050f4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f4d0"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_AppendNodeToTail"
+      ],
+      "usedTypes": [
+        "GlFloorCacheNodeStrc",
+        "GlFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "GLFLOOR_RemoveNodeByIndex",
+      "address": "0050f570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f570"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_RemoveNodeByIndex"
+      ],
+      "usedTypes": [
+        "GlFloorCacheNodeStrc",
+        "GlFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "GLFLOOR_AllocateNode",
+      "address": "0050f5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f5f0"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_AllocateNode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlFloorCacheNodeStrc",
+        "GlFloorCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLFLOOR_PromoteNodeToMRU",
+      "address": "0050f670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f670"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_PromoteNodeToMRU",
+        "GLFLOOR_RemoveNodeByIndex",
+        "GLFLOOR_AppendNodeToTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlFloorCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLFLOOR_EvictLRU",
+      "address": "0050f6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f6d0"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_EvictLRU",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlFloorCacheNodeStrc",
+        "GlFloorCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLFLOOR_InvalidateByIndex",
+      "address": "0050f750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f750"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_InvalidateByIndex",
+        "GLFLOOR_RemoveNodeByIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlFloorCacheNodeStrc",
+        "GlFloorCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLFLOOR_Destroy",
+      "address": "0050f7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f7c0"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_Destroy",
+        "GLFLOOR_EvictLRU",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "GlFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "GLFLOOR_EnsureCapacity",
+      "address": "0050f820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f820"
+        }
+      ],
+      "namespace": "D2Glide::glFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_EnsureCapacity",
+        "GLFLOOR_AllocateNode",
+        "GLFLOOR_EvictLRU",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlFloorCacheStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

@@ -54,7 +54,7 @@ struct D2DrlgLevelStrc {
     /* 0x1AC */ struct D2DrlgLevelStrc * pLevelNext;
     /* 0x1B0 */ struct D2DrlgMapStrc * pDrlgMapFirst; // Head of linked list of DrlgMap entries for this level
     /* 0x1B4 */ struct D2DrlgStrc * pDrlg;
-    /* 0x1B8 */ uint32_t nUnknown_1B8;
+    /* 0x1B8 */ uint32_t nSpecialPresetCellCount;
     /* 0x1BC */ void * pAutomapEx;
     /* 0x1C0 */ int nLevelType;
     /* 0x1C4 */ D2SeedStrc sSeed;

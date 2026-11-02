@@ -1,0 +1,1019 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/PlrSkills.cpp",
+  "functions": [
+    {
+      "name": "STATES_IsUnitTransformable",
+      "address": "004d84c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d84c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_IsUnitTransformable"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_CheckSkillWhipAndLeap",
+      "address": "004d8520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8520"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_CheckSkillWhipAndLeap",
+        "GetCurrentSkill",
+        "STATES_IsUnitTransformable",
+        "GetSkillId",
+        "SKILL_GetFlags",
+        "SKILL_DrawChargeTrail",
+        "SKILL_DrawUnitAtRotatedAngle"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_DrawSkillTrail_Secondary",
+      "address": "004d85c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d85c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_DrawSkillTrail_Secondary",
+        "GetCurrentSkill",
+        "STATES_IsUnitTransformable",
+        "GetSkillId",
+        "SKILL_GetFlags",
+        "SKILL_DrawChargeTrail",
+        "SKILL_DrawUnitAtRotatedAngle"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_RemoveOverlayById",
+      "address": "004d8660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8660"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_RemoveOverlayById",
+        "OVERLAYTBLS_Get1ofN",
+        "GFX_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn01_ProgressiveCharge",
+      "address": "004d86a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d86a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn01_ProgressiveCharge",
+        "GFX_RemoveOverlayById",
+        "STATSEX_GetCurrentStat",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn01_ProgressiveCharge",
+      "address": "004d8760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8760"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn01_ProgressiveCharge",
+        "GFX_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn02_CloakOfShadows",
+      "address": "004d87e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d87e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn02_CloakOfShadows",
+        "UNITS_GetRoom",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "D2GetSkillCalc",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "CMD_InitKeyConfigUI"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "eD2Skills",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn03_Blaze",
+      "address": "004d88a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d88a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn03_Blaze",
+        "GetPlayerUnit_UI",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel",
+        "SKILL_GetMaxLevelForSkill",
+        "AddSkill",
+        "SKILLS_SetSkillLevelBonus"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn04_SourceUnit",
+      "address": "004d8960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8960"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn04_SourceUnit",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "StoreOwnerInfo"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn02_SourceUnit",
+      "address": "004d89a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d89a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn02_SourceUnit",
+        "StoreOwner"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn05_ChangeClass",
+      "address": "004d89b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d89b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn05_ChangeClass",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "MONSTER_TransformToClassId",
+        "UNITMODE_SetAnimMode",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "PATH_SetDirectionToTarget"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STATES_CalcDamageSeverityTier",
+      "address": "004d8a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8a30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_CalcDamageSeverityTier"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn03_BoneArmor",
+      "address": "004d8a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8a60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn03_BoneArmor",
+        "STATES_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn06_BoneArmor",
+      "address": "004d8b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8b90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn06_BoneArmor",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "D2AddStatToStatsListEx",
+        "PLRSKILLS_StateRemFn03_BoneArmor",
+        "GFX_AddOverlayToUnit",
+        "STATES_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eOverlayId"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_CalcDamageSeverityTier_Unreferenced",
+      "address": "004d8d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8d60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_CalcDamageSeverityTier_Unreferenced"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn05_CycloneArmor",
+      "address": "004d8d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8d90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn05_CycloneArmor",
+        "STATES_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn08_CycloneArmor",
+      "address": "004d8e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8e60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn08_CycloneArmor",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "D2AddStatToStatsListEx",
+        "PLRSKILLS_StateRemFn05_CycloneArmor",
+        "GFX_AddOverlayToUnit",
+        "STATES_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eOverlayId"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn07_Hurricane",
+      "address": "004d9090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9090"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn07_Hurricane",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn04_Hurricane",
+      "address": "004d90f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d90f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn04_Hurricane",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "UNITSND_GetMissileSound",
+        "SOUND_StopUnitSoundByIndex"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn09_ShrineSkill",
+      "address": "004d9160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9160"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn09_ShrineSkill",
+        "SKILLS_UpdateAllPassiveSkills"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn06_ShrineSkill",
+      "address": "004d9170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9170"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn06_ShrineSkill",
+        "SKILLS_UpdateAllPassiveSkills"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn10_Redeemed",
+      "address": "004d9180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9180"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn10_Redeemed",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn07_Uninterruptable",
+      "address": "004d9260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9260"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn07_Uninterruptable",
+        "GetCurrentSkill",
+        "GetSkillId",
+        "SKILL_GetParam2",
+        "SKILL_GetParam3",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "RemoveCollision_Type"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn11_VineBeast",
+      "address": "004d9310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9310"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn11_VineBeast"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn12_Invis",
+      "address": "004d9320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9320"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn12_Invis"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn08_Invis",
+      "address": "004d9340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9340"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn08_Invis"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn13_Attached",
+      "address": "004d9360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9360"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn13_Attached",
+        "AllocParticle",
+        "PARTICLE_SetAttachedToOwner"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn09_Attached",
+      "address": "004d9380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9380"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn09_Attached",
+        "PARTICLE_SetAttachedToOwner",
+        "SetPosVectorShifted"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn14_Shapeshift",
+      "address": "004d93b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d93b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn14_Shapeshift",
+        "GetXPos",
+        "GetYPos",
+        "HandleMessage",
+        "PATH_SetNewDirection"
+      ],
+      "usedTypes": [
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn15_Revive",
+      "address": "004d9450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9450"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn15_Revive",
+        "UNITMODE_SetAnimMode",
+        "PATH_UpdateCollisionWidth"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn16_StackOverlay",
+      "address": "004d9480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9480"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn16_StackOverlay",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "D2GetSkillCalc",
+        "GFX_HasOverlayOfType",
+        "GFX_AddOverlayToUnit",
+        "GFX_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2StatesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "eOverlayId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateRemFn11_StackOverlay",
+      "address": "004d9630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9630"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateRemFn11_StackOverlay",
+        "GFX_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn17_RestInPeace",
+      "address": "004d96b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d96b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn17_RestInPeace",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn18_CorpseExp",
+      "address": "004d9740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9740"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn18_CorpseExp",
+        "MONSTER_SpawnBloodParticles",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_StateSetFn19RemFn12_SkillDelay",
+      "address": "004d97e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d97e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_StateSetFn19RemFn12_SkillDelay",
+        "GAME_SetSkillDelayEndFrame"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "STATES_UpdateColorShiftAndLight",
+      "address": "004d97f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d97f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_UpdateColorShiftAndLight",
+        "UNIT_GetUnitState",
+        "GetPlayerUnit_UI",
+        "IsWindowMode",
+        "SetRGB"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STATES_AddStateOverlays",
+      "address": "004d9920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9920"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_AddStateOverlays",
+        "ITEMSTATS_CheckStateFlagArray1",
+        "OVERLAYTBLS_Get1ofN",
+        "RANDOM_RandomNumberSelector",
+        "SetState",
+        "STATES_HasHideState",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2StatesTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "eOverlayId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_ResetUnitGfxAndMode",
+      "address": "004d9ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9ad0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_ResetUnitGfxAndMode",
+        "GFX_FreeAllModesGfxInfo",
+        "UNITMODE_SetAnimMode",
+        "GFX_LoadUnitModeCof",
+        "InitAnimMode",
+        "SetCurrentSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATES_SetStateOnUnit",
+      "address": "004d9b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9b20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_SetStateOnUnit",
+        "SetState",
+        "UNIT_GetUnitState",
+        "SOUND_PlaySound",
+        "GetStatsByState",
+        "STATLIST_FreeChildStatLists",
+        "STATES_UpdateColorShiftAndLight",
+        "STATES_AddStateOverlays",
+        "IsActive",
+        "STATES_HasLightState",
+        "STATES_ResetUnitGfxAndMode"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_RemoveStateFromUnit",
+      "address": "004d9c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9c30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_RemoveStateFromUnit",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "GetState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "SOUND_PlaySound",
+        "SetState",
+        "STATES_UpdateColorShiftAndLight",
+        "OVERLAYTBLS_Get1ofN",
+        "RANDOM_RandomNumberSelector",
+        "GFX_AddOverlayToUnit",
+        "STATES_RemoveOverlayById",
+        "STATES_ResetUnitGfxAndMode",
+        "UpdateAnimSpeed"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2StatesTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "eOverlayId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_HandleAddSTatUnit",
+      "address": "004d9d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9d70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_HandleAddSTatUnit",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_GetBaseStatValue",
+        "D2AddStatToStatsListEx",
+        "CLIENT_UpdateMonsterAllegiance",
+        "UpdateAnimSpeed"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitDataUnion",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitStat",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_DispatchSetFunc",
+      "address": "004d9e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9e60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_DispatchSetFunc",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "AttachClientStateHandler"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "STATES_DispatchRemFunc",
+      "address": "004d9f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9f40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "STATES_DispatchRemFunc",
+        "GetStatsByState",
+        "CUNITEVENT_RemoveByTypeAndState"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "PLRSKILLS_CanUseSkillCheck",
+      "address": "004d9fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d9fc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlrSkills",
+      "calledFunctions": [
+        "PLRSKILLS_CanUseSkillCheck",
+        "SKILLS_CanUseSkill",
+        "GetPlayerUnit_Net",
+        "GetEntryIndex",
+        "GAME_GetSkillDelayEndFrame"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

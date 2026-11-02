@@ -1,0 +1,1493 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2MCPClient/McpConnect.cpp",
+  "functions": [
+    {
+      "name": "FreeMCP",
+      "address": "00449ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449ad0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "FreeMCP",
+        "FreeD2QSSocket"
+      ]
+    },
+    {
+      "name": "HasPeerName",
+      "address": "00449b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449b30"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "HasPeerName",
+        "NET_D2QSocket_GetSafesock",
+        "GetPeerNameDoesReturn"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "int32_t",
+        "sockaddr"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_ReadAndParsePacket",
+      "address": "00449b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449b70"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "ReadBytesFromSocket",
+        "HandleIncomingPacket"
+      ]
+    },
+    {
+      "name": "GetD2GSConnectIp",
+      "address": "00449bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449bc0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "GetD2GSConnectIp"
+      ]
+    },
+    {
+      "name": "GetD2GSRequestId",
+      "address": "00449bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449bd0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "GetD2GSRequestId"
+      ],
+      "usedTypes": [
+        "int16_t"
+      ]
+    },
+    {
+      "name": "GetD2GSGameToken",
+      "address": "00449be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449be0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "GetD2GSGameToken"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetD2GSJoinResult",
+      "address": "00449bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449bf0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "SetD2GSJoinResult"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetD2GSJoinResult",
+      "address": "00449c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c00"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "GetD2GSJoinResult"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MCPSTATE_GetConnectionEstablished",
+      "address": "00449c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c10"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_GetConnectionEstablished"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetConnectionEstablished",
+      "address": "00449c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c20"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetConnectionEstablished"
+      ]
+    },
+    {
+      "name": "MCPSTATE_GetCharLogonSuccess",
+      "address": "00449c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c30"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_GetCharLogonSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetCharLogonSuccess",
+      "address": "00449c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c40"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetCharLogonSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_GetJoinGameSuccess",
+      "address": "00449c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c50"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_GetJoinGameSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetJoinGameSuccess",
+      "address": "00449c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c60"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetJoinGameSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_GetCreateGameSuccess",
+      "address": "00449c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c70"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_GetCreateGameSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetCreateGameSuccess",
+      "address": "00449c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c80"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetCreateGameSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetListGameSuccess",
+      "address": "00449c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449c90"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetListGameSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetCharDeleteSuccess",
+      "address": "00449cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449cc0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetCharDeleteSuccess"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_GetGameNameAndPassword",
+      "address": "00449cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449cd0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_GetGameNameAndPassword"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_SetGameNameAndPassword",
+      "address": "00449d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449d10"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SetGameNameAndPassword"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_GetCharSelectBuffer",
+      "address": "00449d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449d50"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_GetCharSelectBuffer"
+      ],
+      "usedTypes": [
+        "D2McpGameInfoStrc"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_ClearCharSelectBuffer",
+      "address": "00449d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449d60"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_ClearCharSelectBuffer",
+        "memset"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetCharUpgradeSuccess",
+      "address": "00449d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449d90"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetCharUpgradeSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetCharCreateSuccess",
+      "address": "00449db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449db0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetCharCreateSuccess"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetD2GSConnectReady",
+      "address": "00449dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449dd0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetD2GSConnectReady"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_GetD2GSGameHash",
+      "address": "00449de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449de0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_GetD2GSGameHash"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_SendCharCreate",
+      "address": "00449df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449df0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SendCharCreate",
+        "NET_MCP_CLIENT_Send_0x02_CharCreate"
+      ]
+    },
+    {
+      "name": "thunk_NET_MCP_CLIENT_Send_0x07_CharLogon",
+      "address": "00449e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449e10"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "thunk_NET_MCP_CLIENT_Send_0x07_CharLogon",
+        "NET_MCP_CLIENT_Send_0x07_CharLogon"
+      ]
+    },
+    {
+      "name": "MCPSTATE_GetJoinTimestamp",
+      "address": "00449e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449e20"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_GetJoinTimestamp"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MCPSTATE_SetJoinTimestamp",
+      "address": "00449e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449e30"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPSTATE_SetJoinTimestamp"
+      ]
+    },
+    {
+      "name": "getIsMPCJoinSuccesfull",
+      "address": "00449e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449e40"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "getIsMPCJoinSuccesfull"
+      ]
+    },
+    {
+      "name": "SetIsMPCJoinSuccesfull",
+      "address": "00449e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449e50"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "SetIsMPCJoinSuccesfull"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_GetCharListPacket",
+      "address": "00449e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449e60"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_GetCharListPacket"
+      ]
+    },
+    {
+      "name": "CopyCharListToGlobal",
+      "address": "00449e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449e70"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "CopyCharListToGlobal",
+        "FreeClientMemory",
+        "AllocClientMemory",
+        "memcpy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "McpConnectionLoop",
+      "address": "00449fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449fb0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "McpConnectionLoop",
+        "NET_MCP_CLIENT_Send_0x01_StartUp",
+        "GetTickCount",
+        "NET_D2QSocket_GetSafesock",
+        "GetPeerNameDoesReturn"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "int32_t",
+        "sockaddr"
+      ]
+    },
+    {
+      "name": "ThreadHandler",
+      "address": "0044a070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a070"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "ThreadHandler",
+        "NET_MakeIPV4AddressHumanFriendly",
+        "STRUCT_D2QSSocket_Init",
+        "QSSOCKET_SetCallbackHandler1",
+        "NET_MCP_CLIENT_CreateConnectionThread",
+        "NET_D2QSocket_GetSafesock",
+        "GetSocketStatusAndWsaResultToArguments",
+        "D2QSSOCKET_BlockSocketIfValid",
+        "QSSOCKET_SendWithTimeout",
+        "McpConnectionLoop"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "D2QSSocketStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_CreateThread",
+      "address": "0044a130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a130"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_CreateThread"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRING_GetStringLength",
+      "address": "0044a170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a170"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "char *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x01_StartUp",
+      "address": "0044a1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a1d0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x01_StartUp",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCPPacketClt0x",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x02_CharCreate",
+      "address": "0044a2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a2e0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x02_CharCreate",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetConnectionEstablished",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCP_CHARCREATE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x07_CharLogon",
+      "address": "0044a380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a380"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x07_CharLogon",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x03_CreateGame",
+      "address": "0044a400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a400"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x03_CreateGame",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCP_CREATEGAME",
+        "int16_t",
+        "int32_t",
+        "mcp0x03data"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x04_JoinGame",
+      "address": "0044a4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a4e0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x04_JoinGame",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCPPacketCltStr",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x05_GameList",
+      "address": "0044a590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a590"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x05_GameList",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCPPacketClt0x",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x06_GameInfo",
+      "address": "0044a610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a610"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x06_GameInfo",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCPPacketCltStr",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x08",
+      "address": "0044a680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a680"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x08",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCPPacketCltStr",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x09",
+      "address": "0044a710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a710"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x09",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCPPacketCltStr",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x0A_CharDelete",
+      "address": "0044a7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a7a0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x0A_CharDelete",
+        "SetD2GSJoinResult",
+        "SStrCopy",
+        "SStrLen",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "MCPPacketCltStr",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x18_CharUpgrade",
+      "address": "0044a810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a810"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x18_CharUpgrade",
+        "SetD2GSJoinResult",
+        "SStrCopy",
+        "SStrLen",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x0B",
+      "address": "0044a870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a870"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x0B",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x0C",
+      "address": "0044a900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a900"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x0C",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x0D",
+      "address": "0044a980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a980"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x0D",
+        "SetD2GSJoinResult",
+        "NET_MCP_CLIENT_Send"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x0F",
+      "address": "0044a9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a9b0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x0F",
+        "SetD2GSJoinResult",
+        "NET_MCP_CLIENT_Send"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x10",
+      "address": "0044a9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044a9e0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x10",
+        "SetD2GSJoinResult",
+        "NET_MCP_CLIENT_Send"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x11_RequestLadderData",
+      "address": "0044aa10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aa10"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x11_RequestLadderData",
+        "SetD2GSJoinResult",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x12_MOTD",
+      "address": "0044aa50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aa50"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x12_MOTD",
+        "SetD2GSJoinResult",
+        "NET_MCP_CLIENT_Send"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x13_CancelGameCreate",
+      "address": "0044aa80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aa80"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x13_CancelGameCreate",
+        "SetD2GSJoinResult",
+        "NET_MCP_CLIENT_Send"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x19_CharList2",
+      "address": "0044aab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aab0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x19_CharList2",
+        "SetD2GSJoinResult",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send_0x16_CharRank",
+      "address": "0044aae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aae0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send_0x16_CharRank",
+        "SetD2GSJoinResult",
+        "STRING_GetStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_MCP_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "MCPPacketClt0x",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_IncomingReturn",
+      "address": "0044ab70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ab70"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_IncomingReturn"
+      ]
+    },
+    {
+      "name": "MCP_INCOMING_SetD2GSJoinResultAndSignal",
+      "address": "0044ab80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ab80"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCP_INCOMING_SetD2GSJoinResultAndSignal",
+        "SetD2GSJoinResult",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x02",
+      "address": "0044aba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aba0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x02",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetConnectionEstablished"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x07",
+      "address": "0044abc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044abc0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x07",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetCharLogonSuccess"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x03",
+      "address": "0044abe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044abe0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x03",
+        "SetD2GSJoinResult"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x04",
+      "address": "0044ac20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ac20"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x04",
+        "SetD2GSJoinResult",
+        "NET_MakeIPV4AddressHumanFriendly",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "MCPPacketSrv0x04",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x06",
+      "address": "0044aca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aca0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x06",
+        "SetD2GSJoinResult"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x08",
+      "address": "0044adf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044adf0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x08"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x09",
+      "address": "0044ae10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ae10"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x09"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x0A",
+      "address": "0044ae30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ae30"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x0A",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetJoinGameSuccess"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x18",
+      "address": "0044ae60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ae60"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x18",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetCreateGameSuccess"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x0B",
+      "address": "0044ae80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ae80"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x0B",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetListGameSuccess"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x0C",
+      "address": "0044aea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aea0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x0C",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetCharDeleteSuccess"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x0E",
+      "address": "0044aec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aec0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x0E",
+        "MCPCONNECT_SetGameNameAndPassword"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x0D",
+      "address": "0044aef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044aef0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x0D",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetCharUpgradeSuccess"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x0F",
+      "address": "0044af10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044af10"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x0F",
+        "SetD2GSJoinResult",
+        "MCPSTATE_SetCharCreateSuccess"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x10",
+      "address": "0044af30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044af30"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x10",
+        "SetD2GSJoinResult",
+        "NET_MakeIPV4AddressHumanFriendly",
+        "SStrCopy",
+        "MCPSTATE_SetD2GSConnectReady"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x11",
+      "address": "0044afc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044afc0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x11",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x12",
+      "address": "0044b120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b120"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x12"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x14",
+      "address": "0044b150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b150"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x14",
+        "MCPSTATE_SetJoinTimestamp",
+        "SetIsMPCJoinSuccesfull"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x17",
+      "address": "0044b170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b170"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x17",
+        "CopyCharListToGlobal"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x19",
+      "address": "0044b180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b180"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Incoming0x19",
+        "CopyCharListToGlobal"
+      ]
+    },
+    {
+      "name": "HandleIncomingPacket",
+      "address": "0044b190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b190"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "HandleIncomingPacket"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_SanitizeWideString",
+      "address": "0044b230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b230"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SanitizeWideString",
+        "STRING_GetWideStringLength",
+        "GetLocaleString",
+        "UNICODE_FindSubstring",
+        "memmove",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Incoming0x05",
+      "address": "0044b2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b2d0"
+        }
+      ],
+      "namespace": "D2MCPClient::McpConnect",
+      "calledFunctions": [
+        "SetD2GSJoinResult",
+        "NET_MCP_CLIENT_Incoming0x05",
+        "CONTAINER_InitializeBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "MCPCONNECT_SanitizeWideString",
+        "UNICODE_WideToMultiByte",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    }
+  ]
+}

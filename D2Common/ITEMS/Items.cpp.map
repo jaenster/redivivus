@@ -1,0 +1,4240 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/ITEMS/Items.cpp",
+  "functions": [
+    {
+      "name": "ITEMS_SearchItemCodeTable",
+      "address": "00627c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627c20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_SearchItemCodeTable",
+        "SKILLS_CompileSkillFormula"
+      ],
+      "usedTypes": [
+        "D2ItemCalcContextStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRUCT_CreateDataItem",
+      "address": "00627c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627c90"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "STRUCT_CreateDataItem",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMDATA_Free",
+      "address": "00627d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627d00"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMDATA_Free",
+        "INVENTORY_RemoveItemFromInventory",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetBodyLocation",
+      "address": "00627d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627d40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetBodyLocation"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2BodyLoc"
+      ]
+    },
+    {
+      "name": "SetBodyLoc",
+      "address": "00627d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627d70"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SetBodyLoc"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2BodyLoc"
+      ]
+    },
+    {
+      "name": "GetItemSeed",
+      "address": "00627d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627d90"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetItemSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ResetItemSeed",
+      "address": "00627dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627dc0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ResetItemSeed",
+        "SEED_InitDefault"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetModSeed",
+      "address": "00627df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627df0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetModSeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetModSeed",
+      "address": "00627e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627e20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SetModSeed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetItemQuality",
+      "address": "00627e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627e70"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetItemQuality"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetItemQuality",
+      "address": "00627ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627ea0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SetItemQuality"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemQuality"
+      ]
+    },
+    {
+      "name": "GetMagicPrefix",
+      "address": "00627ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627ec0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetMagicPrefix"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetMagixPrefix",
+      "address": "00627ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627ef0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SetMagixPrefix"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetAutoMagic",
+      "address": "00627f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627f20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetAutoMagic"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SetAutoMagic",
+      "address": "00627f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627f50"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SetAutoMagic"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "GetMagicSuffix",
+      "address": "00627f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627f80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetMagicSuffix"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SetMagicSuffix",
+      "address": "00627fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627fb0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SetMagicSuffix"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRarePrefix",
+      "address": "00627fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00627fe0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetRarePrefix"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "SetRarePrefix",
+      "address": "00628010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628010"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SetRarePrefix"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "GetRareSuffix",
+      "address": "00628040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628040"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetRareSuffix"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "SetRareSuffix",
+      "address": "00628070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628070"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SetRareSuffix"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "CheckItemFlag",
+      "address": "006280a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006280a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "CheckItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_EditItemData_eItemFlag",
+      "address": "006280d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006280d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_EditItemData_eItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2ItemFlag"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_eD2ItemFlag",
+      "address": "00628110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628110"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_eD2ItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemFlag"
+      ]
+    },
+    {
+      "name": "ITEM_CheckItemData_eD2ItemCmd",
+      "address": "00628140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628140"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckItemData_eD2ItemCmd"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemCmd",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_EditItemData_eD2ItemCmd",
+      "address": "00628170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628170"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_EditItemData_eD2ItemCmd"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2ItemCmd"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_eD2ItemCmd",
+      "address": "006281b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006281b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_eD2ItemCmd"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemCmd"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_nItemLevel",
+      "address": "006281e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006281e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_nItemLevel"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_nItemLevel",
+      "address": "00628220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628220"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_nItemLevel"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetContainingInventoryPage",
+      "address": "00628250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628250"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetContainingInventoryPage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eInventoryPage"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_ePage",
+      "address": "00628280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628280"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_ePage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eInventoryPage"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_eExchangePage",
+      "address": "006282a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006282a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_eExchangePage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_eExchangePage",
+      "address": "006282d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006282d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_eExchangePage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_ePreviousPage",
+      "address": "006282f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006282f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_ePreviousPage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_ePreviousPage",
+      "address": "00628320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628320"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_ePreviousPage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_szPlayerName",
+      "address": "00628340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628340"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_szPlayerName"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEM_GetPlayerNameAkaNamedString",
+      "address": "00628370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628370"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetPlayerNameAkaNamedString"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_nEarLevel",
+      "address": "006283a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006283a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_nEarLevel"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_nEarLevel",
+      "address": "006283d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006283d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_nEarLevel"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_bVariant",
+      "address": "006283f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006283f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_bVariant"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_bVariant",
+      "address": "00628420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628420"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_bVariant"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMTYPE_IsShoots",
+      "address": "00628440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628440"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMTYPE_IsShoots"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMTYPE_IsQuiver",
+      "address": "00628480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628480"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMTYPE_IsQuiver"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMTYPE_IsAutostack",
+      "address": "006284c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006284c0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMTYPE_IsAutostack"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_dwWClass",
+      "address": "00628500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628500"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_dwWClass",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_dw2HandedWClass",
+      "address": "00628530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628530"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_dw2HandedWClass",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_szCode",
+      "address": "00628590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628590"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_szCode",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_dwAlternateGfxIfExists",
+      "address": "006285f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006285f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_dwAlternateGfxIfExists",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_bComponent",
+      "address": "00628660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628660"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_bComponent",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_nWidthAndHeight",
+      "address": "006286c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006286c0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetType",
+      "address": "00628700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628700"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetType",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_nLevel",
+      "address": "00628740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628740"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_nLevel",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMFLAG_CheckFlag",
+      "address": "006287a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006287a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMFLAG_CheckFlag"
+      ],
+      "usedTypes": [
+        "eD2ItemFlag",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetServerSideFlag",
+      "address": "006287b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006287b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetServerSideFlag"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IITEM_GetItemsTxt_dwNormCode",
+      "address": "006287d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006287d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "IITEM_GetItemsTxt_dwNormCode",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_nullsub",
+      "address": "00628830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628830"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_nullsub"
+      ],
+      "usedTypes": [
+        "D2MagicAffixTxt",
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TXT_ItemTypes_CheckIfTypeIsThrowable",
+      "address": "00628860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628860"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_ItemTypes_CheckIfTypeIsThrowable"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_wMissileType",
+      "address": "006288a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006288a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_wMissileType",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_nRangeAdder",
+      "address": "006288d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006288d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_nRangeAdder",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_ConfirmWClass",
+      "address": "00628900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628900"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_ConfirmWClass",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HasWeaponClass",
+      "address": "00628950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628950"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "HasWeaponClass",
+        "TXT_Items_ConfirmWClass"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_Getb2Handed",
+      "address": "00628980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628980"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_Getb2Handed",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsTwoHanded",
+      "address": "006289c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006289c0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "IsTwoHanded",
+        "TXT_Items_Getb2Handed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "IsStackable",
+      "address": "006289f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006289f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "IsStackable",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CheckIfBothItemsAreSameTypeOfPotions",
+      "address": "00628a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628a40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckIfBothItemsAreSameTypeOfPotions",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CheckIfItemCanBeAutoBelted",
+      "address": "00628ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628ba0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "INVENTORY_CheckIfItemCanBeAutoBelted",
+        "TXT_Items_GetLine",
+        "INVENTORY_CanAutoBeltItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsUseable",
+      "address": "00628c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628c20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "IsUseable",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsUnique",
+      "address": "00628c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628c70"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "IsUnique",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsQuestItem",
+      "address": "00628cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628cd0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "IsQuestItem",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_CalcChargedSkillPriceModifier",
+      "address": "00628d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628d30"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CalcChargedSkillPriceModifier",
+        "STATLIST_GetItemStatBonusValues"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_AddStatCostsToPrices",
+      "address": "00628e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00628e70"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_AddStatCostsToPrices",
+        "STATLIST_CopyStatsToBuffer",
+        "STATLIST_GetStatBonusFromLists",
+        "ITEMMODS_CalculateRepairCost"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2SkillsTxt",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_AddInventoryValueToTotal",
+      "address": "006292f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006292f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_AddInventoryValueToTotal",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMS_CalculateGamblePrice",
+      "address": "00629370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629370"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CalculateGamblePrice",
+        "IITEM_GetItemsTxt_dwNormCode",
+        "TXT_Items_ConvertItemCodeToItemClassId",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetMaxStack",
+      "address": "00629570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629570"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetMaxStack",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetMaxStack",
+      "address": "006295b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006295b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetMaxStack",
+        "TXT_Items_GetMaxStack",
+        "STATSEX_GetCurrentStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetSpawnStack",
+      "address": "00629620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629620"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetSpawnStack",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_dwSpawnStack",
+      "address": "00629660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629660"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_dwSpawnStack",
+        "TXT_Items_GetSpawnStack",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetMinStack",
+      "address": "006296b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006296b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetMinStack",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_dwMinStack",
+      "address": "006296f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006296f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_dwMinStack",
+        "TXT_Items_GetMinStack",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetBitFieldAnd0x08",
+      "address": "00629740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629740"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetBitFieldAnd0x08",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_bDurWarning",
+      "address": "006297a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006297a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_bDurWarning",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_bQntWarning",
+      "address": "00629800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629800"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_bQntWarning",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_wStrBonus",
+      "address": "00629860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629860"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_wStrBonus",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_wDexBonus",
+      "address": "006298a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006298a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_wDexBonus",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetHavInv",
+      "address": "006298e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006298e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetHavInv",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_bHasInv",
+      "address": "00629900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629900"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_bHasInv",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CheckIfItemHasDurability",
+      "address": "00629930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629930"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckIfItemHasDurability",
+        "TXT_Items_GetLine",
+        "GetTxtMaxDurability",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetGemSockets",
+      "address": "00629990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629990"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetGemSockets",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetSocketsCount",
+      "address": "006299b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006299b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetSocketsCount",
+        "STATSEX_GetCurrentStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetGemApplyType",
+      "address": "00629a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629a00"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetGemApplyType",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_bGemApplyType",
+      "address": "00629a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629a40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_bGemApplyType",
+        "TXT_Items_GetGemApplyType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_ItemTypes_CheckEquivalence",
+      "address": "00629a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629a90"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_ItemTypes_CheckEquivalence",
+        "TXT_Items_GetLine",
+        "TXT_Items_GetType"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_CheckItemTypeEquivalence",
+      "address": "00629b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629b50"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CheckItemTypeEquivalence"
+      ],
+      "usedTypes": [
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_IsA",
+      "address": "00629bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629bb0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_IsA",
+        "TXT_Items_GetType",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetBitFieldAnd0x01",
+      "address": "00629c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629c80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetBitFieldAnd0x01",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetBitFieldAnd0x02",
+      "address": "00629cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629cc0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetBitFieldAnd0x02",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_GetBitFieldAnd0x04",
+      "address": "00629d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629d00"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_GetBitFieldAnd0x04",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_IsNotQuestOrHammerType",
+      "address": "00629d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629d40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_IsNotQuestOrHammerType",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_nFileIndex",
+      "address": "00629da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629da0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_nFileIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_nFileIndex",
+      "address": "00629df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629df0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_nFileIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_0x1Cand0x20",
+      "address": "00629e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629e40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_0x1Cand0x20"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_0x1Cand0x20",
+      "address": "00629ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629ea0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_0x1Cand0x20"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_nPlayerGUID",
+      "address": "00629ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629ed0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_nPlayerGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_nPlayerGUID",
+      "address": "00629f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629f20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_nPlayerGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_CheckIfHasClass",
+      "address": "00629f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629f70"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_CheckIfHasClass",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetWeaponAnimClass",
+      "address": "00629fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00629fe0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetWeaponAnimClass",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_Items_CheckTransmogrify",
+      "address": "0062a060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a060"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_Items_CheckTransmogrify",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CheckItemsTxt_bTransmogrify",
+      "address": "0062a0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a0a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckItemsTxt_bTransmogrify",
+        "TXT_Items_CheckTransmogrify",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CheckItemData_ItemQualityIsMagicOrBetter",
+      "address": "0062a0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a0f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckItemData_ItemQualityIsMagicOrBetter"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemQuality",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CheckItemData_eD2ItemFlag_Monster",
+      "address": "0062a130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a130"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckItemData_eD2ItemFlag_Monster",
+        "TXT_Items_IsNotQuestOrHammerType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemsTxt_bHitClass",
+      "address": "0062a180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a180"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemsTxt_bHitClass",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BARBARIAN_CheckItemData_b1or2Handed_isTrue",
+      "address": "0062a1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a1e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "BARBARIAN_CheckItemData_b1or2Handed_isTrue",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_ValidateItemQualityCode",
+      "address": "0062a250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a250"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_ValidateItemQualityCode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_HasSocketedItems",
+      "address": "0062a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a270"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_HasSocketedItems",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMS_GetCompactSaveFlag",
+      "address": "0062a2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a2b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_GetCompactSaveFlag",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QualityCanHaveSockets",
+      "address": "0062a2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a2f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "QualityCanHaveSockets"
+      ],
+      "usedTypes": [
+        "eD2ItemQuality"
+      ]
+    },
+    {
+      "name": "ITEM_ValidateItemQuantity",
+      "address": "0062a310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a310"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_ValidateItemQuantity",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMinimalStatValueShifted",
+        "ITEM_GetMaxStack",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ReturnFalse",
+      "address": "0062a360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a360"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ReturnFalse"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMS_GetEquippedSetItemsMask",
+      "address": "0062a370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a370"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_GetEquippedSetItemsMask",
+        "ITEM_GetItemData_nFileIndex",
+        "GetSetItemsLine",
+        "GetSetsLine",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "GetCarriedItem",
+        "GetItemQuality",
+        "CheckItemFlag"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2SetItemsTxt",
+        "D2SetsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSetItemsLine",
+      "address": "0062a490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a490"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetSetItemsLine",
+        "ITEM_GetItemData_nFileIndex"
+      ],
+      "usedTypes": [
+        "D2SetItemsTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+      "address": "0062a4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a4e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PLAYER_GetUnidentifiedItemsCount",
+      "address": "0062a530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a530"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "PLAYER_GetUnidentifiedItemsCount",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_ModifyPotionValueByDifficulty",
+      "address": "0062a5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a5d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_ModifyPotionValueByDifficulty"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_ModifyPotionSellValueByDifficulty",
+      "address": "0062a620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a620"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_ModifyPotionSellValueByDifficulty"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_wItemVersion",
+      "address": "0062a670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a670"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_wItemVersion",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemData_wItemVersion",
+      "address": "0062a6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a6c0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetItemData_wItemVersion",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CalcWeaponAttackSpeed",
+      "address": "0062a710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a710"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CalcWeaponAttackSpeed",
+        "ITEMS_IsA",
+        "ITEM_GetItemsTxt_dwWClass",
+        "COMPOSIT_BuildCofPath",
+        "ANIMDATA_GetFramesSpeedAndTrigger",
+        "__security_check_cookie",
+        "ITEM_GetMinimalStatValueShifted",
+        "STATSEX_GetCurrentStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_CheckChargedSkillFullyCharged",
+      "address": "0062a840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a840"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CheckChargedSkillFullyCharged",
+        "STATLIST_GetItemStatBonusValues"
+      ],
+      "usedTypes": [
+        "D2StatStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
+      "address": "0062a8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a8d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_CountContainerItems",
+      "address": "0062a900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a900"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CountContainerItems",
+        "TXT_Items_GetLine",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_DeserializeItemHeader",
+      "address": "0062a970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062a970"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_DeserializeItemHeader",
+        "ReadUnsigned",
+        "ITEM_SetItemData_wItemVersion",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "SetupUpdateFlag",
+        "TXT_Items_ConvertItemCodeToItemClassId",
+        "ITEMS_IsA",
+        "STATLIST_SetUnitStat",
+        "SetMagicSuffix",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEM_GetItemsTxt_szCode",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetStatListByStateOrFlagsIfNotExists",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx",
+        "ITEM_SetItemData_0x1Cand0x20",
+        "InitSeed_Param_666"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ItemStatCostTxt",
+        "D2ItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_DeserializeSingleStat",
+      "address": "0062ac80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062ac80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_DeserializeSingleStat",
+        "ReadUnsigned",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2StatListExStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReadInfoFromStreamVersioned",
+      "address": "0062ae20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062ae20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ReadInfoFromStreamVersioned",
+        "InitBitBuffer",
+        "ReadSigned",
+        "ReadUnsigned",
+        "TXT_Items_ConvertItemCodeToItemClassId"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitDataItemDetailsStrc",
+        "eD2ItemFlag",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMS_WriteClampedValueToBitBuffer",
+      "address": "0062af50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062af50"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_WriteClampedValueToBitBuffer",
+        "WriteValueToBitBuffer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SerializeSimpleItem",
+      "address": "0062af80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062af80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SerializeSimpleItem",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemData_wItemVersion",
+        "WriteValueToBitBuffer",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPos",
+        "GetYPos",
+        "ITEM_GetItemsTxt_szCode",
+        "ITEMS_IsA",
+        "STATSEX_GetCurrentStat",
+        "ITEMS_WriteClampedValueToBitBuffer",
+        "ITEM_GetItemData_nFileIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_GetItemData_0x1Cand0x20"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ItemStatCostTxt",
+        "D2ItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2ItemAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtSetItems_setIndex",
+      "address": "0062b3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062b3a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtSetItems_setIndex",
+        "ITEM_GetItemData_nFileIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_wType",
+      "address": "0062b400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062b400"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetItemData_wType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Items_GetType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_SumSocketedItemStats",
+      "address": "0062b450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062b450"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_SumSocketedItemStats",
+        "TXT_Items_GetLine",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "GetAnimMode",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitStat"
+      ]
+    },
+    {
+      "name": "ITEMS_CheckIfUpgradeable",
+      "address": "0062b4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062b4d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CheckIfUpgradeable",
+        "TXT_Items_GetLine",
+        "TXT_ItemTypes_CheckEquivalence",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ValidateAndGetClass",
+      "address": "0062b560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062b560"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_ValidateAndGetClass",
+        "ITEMS_CheckIfUpgradeable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CalcRequiredLevel",
+      "address": "0062b5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062b5b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CalcRequiredLevel",
+        "GetMagicPrefix",
+        "TXT_magicaffixes_GetLine",
+        "GetMagicSuffix",
+        "GetAutoMagic",
+        "ITEMS_nullsub",
+        "ITEM_GetItemData_nFileIndex",
+        "GetSetItemsLine",
+        "INV_GetUniqueItemsTxtLine",
+        "CheckFlagWithMask",
+        "ITEM_GetItemData_wItemVersion",
+        "TXT_Experience_GetMaxLevel",
+        "TXT_Items_GetLine",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "STATLIST_GetItemStatBonusValues",
+        "GetType",
+        "GetClassId",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2MagicAffixTxt",
+        "D2SetItemsTxt",
+        "D2SkillsTxt",
+        "D2StatStrc",
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemQuality",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetRequiredLevel",
+      "address": "0062ba60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062ba60"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetRequiredLevel",
+        "ITEM_CalcRequiredLevel"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_throwable",
+      "address": "0062ba80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062ba80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_beltable",
+      "address": "0062bad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062bad0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_beltable",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetSpellIcon",
+      "address": "0062bb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062bb20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetSpellIcon",
+        "ITEMS_IsA",
+        "TXT_Items_GetLine",
+        "TXT_Books_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_staffmods",
+      "address": "0062bbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062bbd0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_staffmods",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetMaxSockCount",
+      "address": "0062bc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062bc20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetMaxSockCount",
+        "ITEM_GetItemData_wType",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemData_nItemLevel"
+      ],
+      "usedTypes": [
+        "D2ItemTypesTxt",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_RollSocketCount",
+      "address": "0062bcb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062bcb0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_RollSocketCount",
+        "TXT_Items_GetLine",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxSockCount",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "eD2ItemQuality",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetSocketCount",
+      "address": "0062be00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062be00"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_SetSocketCount",
+        "TXT_Items_GetLine",
+        "ITEM_GetMaxSockCount",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_IsSocketable",
+      "address": "0062beb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062beb0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_IsSocketable",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CalculateRunewordByItem",
+      "address": "0062bed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062bed0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "CalculateRunewordByItem",
+        "TXT_Items_GetLine",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetSocketsCount",
+        "TXT_GetRuneTableSize",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2RuneTableStrc",
+        "D2RunesTxtTableStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_ItemTypes_CheckClass",
+      "address": "0062c060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062c060"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_ItemTypes_CheckClass",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_ItemTypes_GetClass",
+      "address": "0062c0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062c0b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "TXT_ItemTypes_GetClass",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "eD2PlayerClassIDDWORD",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetItemColor",
+      "address": "0062c100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062c100"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "GetItemColor",
+        "UNIT_GetUnitState",
+        "ITEMS_IsA",
+        "GetClassId",
+        "TXT_Items_GetLine",
+        "PALETTE_GetItemPalette",
+        "TXT_magicaffixes_GetLine",
+        "ITEM_GetItemData_nFileIndex",
+        "GetSetItemsLine",
+        "ITEMS_ValidateItemQualityCode",
+        "INV_GetUniqueItemsTxtLine",
+        "ITEM_GetMaxSockCount",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Gems_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2MagicAffixTxt",
+        "D2SetItemsTxt",
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemQuality",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "IsValidImbumeItem",
+      "address": "0062c590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062c590"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "IsValidImbumeItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Items_GetType",
+        "TXT_Items_GetBitFieldAnd0x01",
+        "ITEM_GetTxtItemTypes_throwable",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemsTxt_szCode",
+        "ITEMS_HasSocketedItems",
+        "CheckItemFlag",
+        "GetItemQuality"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CheckIfItemCanBeNamed",
+      "address": "0062c6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062c6a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckIfItemCanBeNamed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Items_GetType",
+        "ITEM_GetItemData_wType",
+        "CheckItemFlag",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "ITEMS_GetCompactSaveFlag",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CheckIfItemCanHaveSockets",
+      "address": "0062c770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062c770"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckIfItemCanHaveSockets",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Items_GetType",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemsTxt_szCode",
+        "ITEMS_HasSocketedItems",
+        "CheckItemFlag",
+        "ITEM_GetMaxSockCount",
+        "ITEM_GetSocketsCount"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "IsItemSocketable",
+      "address": "0062c850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062c850"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "IsItemSocketable",
+        "ITEM_GetItemData_nFileIndex",
+        "IsStackable",
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
+        "GetItemQuality",
+        "QualityCanHaveSockets",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetSocketsCount"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2ItemQuality",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ResolvePercentStatToBaseValue",
+      "address": "0062c9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062c9f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "STATLIST_SetUnitStat",
+        "ITEM_ResolvePercentStatToBaseValue",
+        "ITEM_GetItemsTxt_szCode",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "ITEMS_IsA",
+        "SERVER_GetUnitStat",
+        "ITEM_GetTxtItemTypes_throwable"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_DeserializeFromBitBuffer",
+      "address": "0062cbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062cbe0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_DeserializeFromBitBuffer",
+        "ReadUnsigned",
+        "ITEM_SetItemData_wItemVersion",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "SetupUpdateFlag",
+        "TXT_Items_ConvertItemCodeToItemClassId",
+        "InitSeed_Param_666",
+        "TXT_MagicAffixes_GetTableInfo",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEMS_IsA",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "SetMagicSuffix",
+        "SetMagixPrefix",
+        "GetSetsLine",
+        "GetSetItemsLine",
+        "SetRarePrefix",
+        "SetRareSuffix",
+        "ITEM_SetItemData_0x1Cand0x20",
+        "TXT_Items_GetLine",
+        "STATLIST_SetUnitStat",
+        "GetItemQuality",
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
+        "SERVER_GetUnitStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "IsStackable",
+        "ITEM_SetSocketCount",
+        "GetStatListByStateOrFlagsIfNotExists",
+        "GetGUID",
+        "GetMemPool",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "SetState",
+        "ITEMS_DeserializeSingleStat",
+        "D2AddStatToStatsListEx",
+        "ITEM_ResolvePercentStatToBaseValue",
+        "STATLIST_SetStatValue",
+        "ITEMMODS_GetQualityMinMax",
+        "TXT_ItemStatCost_GetLine",
+        "SKILLS_ValidateSkillDescIndex",
+        "ITEMMODS_GetQualityFields1_2_3",
+        "ITEMMODS_GetQualityFields2_3_4",
+        "ITEMMODS_GetQualityAllFields",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ItemStatCostTxt",
+        "D2ItemsTxt",
+        "D2MagicAffixTableStrc",
+        "D2PoolManagerStrc",
+        "D2SetItemsTxt",
+        "D2SetItemsTxt *",
+        "D2SetsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "eD2ItemQuality",
+        "eD2UnitStat",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ExtractItemDetails",
+      "address": "0062e410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e410"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ExtractItemDetails",
+        "ReadInfoFromStreamVersioned"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_LoadFromSaveData",
+      "address": "0062e430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e430"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_DeserializeFromBitBuffer",
+        "ITEMS_DeserializeItemHeader",
+        "ITEM_LoadFromSaveData",
+        "InitBitBuffer",
+        "ReadSigned",
+        "ReadUnsigned",
+        "GetNextPositon"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_IsReplenishable",
+      "address": "0062e5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e5d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_IsReplenishable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Items_GetType",
+        "ITEM_GetTxtItemTypes_throwable",
+        "IsStackable",
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CanBeRepaired",
+      "address": "0062e660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e660"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CanBeRepaired",
+        "ITEMS_CheckChargedSkillFullyCharged",
+        "ITEM_GetItemData_wType",
+        "ItemTypes_GetLine",
+        "ITEM_IsReplenishable",
+        "ITEM_CheckIfItemHasDurability"
+      ],
+      "usedTypes": [
+        "D2ItemTypesTxt",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_shoots",
+      "address": "0062e6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e6f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_shoots",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_quiver",
+      "address": "0062e740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e740"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_quiver",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_autostack",
+      "address": "0062e790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e790"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_autostack",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_reload",
+      "address": "0062e7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e7e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_reload",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_reequip",
+      "address": "0062e830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e830"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_reequip",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_storepage",
+      "address": "0062e880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e880"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_storepage",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_varinvgfx",
+      "address": "0062e8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e8d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_varinvgfx",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_invgfx",
+      "address": "0062e920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e920"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_invgfx",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2ItemTypesTxt",
+        "D2UnitStrc",
+        "char[32]",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_rare",
+      "address": "0062e990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e990"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_rare",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_magic",
+      "address": "0062e9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062e9e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_magic",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_normal",
+      "address": "0062ea30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062ea30"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_normal",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2",
+      "address": "0062ea80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062ea80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2ItemTypesTxt",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "eD2ItemTypes"
+      ]
+    },
+    {
+      "name": "ITEM_CheckEquipRequirements",
+      "address": "0062eaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062eaf0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_CheckEquipRequirements",
+        "TXT_Items_GetLine",
+        "ITEM_GetMinimalStatValueShifted",
+        "D2ApplyPercent",
+        "STATSEX_GetCurrentStat",
+        "SEVER_ITEM_GetOwner",
+        "ITEMS_SumSocketedItemStats",
+        "ITEM_CalcRequiredLevel",
+        "ITEM_GetItemData_wType",
+        "TXT_ItemTypes_GetClass",
+        "ValidateClassId"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitDataUnion",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_CheckBodyLocationFit",
+      "address": "0062ed50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062ed50"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CheckBodyLocationFit",
+        "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_CalcStaffModsPriceModifier",
+      "address": "0062edd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062edd0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CalcStaffModsPriceModifier",
+        "ITEM_GetItemData_wType",
+        "STATLIST_GetItemStatBonusValues"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_CalcTransactionCost",
+      "address": "0062efb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062efb0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CalcTransactionCost",
+        "STATSEX_GetCurrentStat",
+        "ITEM_CanBeRepaired",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemData_wItemVersion",
+        "IITEM_GetItemsTxt_dwNormCode",
+        "TXT_Items_ConvertItemCodeToItemClassId",
+        "ITEMS_CalculateGamblePrice",
+        "D2ApplyPercent",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "ITEMS_IsA",
+        "ITEM_GetTxtItemTypes_quiver",
+        "IsStackable",
+        "ITEM_GetMaxStack",
+        "GetMagicSuffix",
+        "TXT_Books_GetLine",
+        "ITEM_GetItemData_nFileIndex",
+        "TXT_MonStats_GetLine",
+        "ITEM_GetItemData_nEarLevel",
+        "SERVER_GetUnitStat",
+        "CheckItemFlag",
+        "ITEM_CheckItemData_ItemQualityIsMagicOrBetter",
+        "GetItemQuality",
+        "ITEMS_CalcStaffModsPriceModifier",
+        "GetAutoMagic",
+        "TXT_magicaffixes_GetLine",
+        "GetSetItemsLine",
+        "GetMagicPrefix",
+        "INV_GetUniqueItemsTxtLine",
+        "ITEMS_AddInventoryValueToTotal",
+        "TXT_ItemTypes_CheckClass",
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
+        "ITEM_CheckIfItemHasDurability",
+        "GetTxtMaxDurability",
+        "ITEM_GetTxtItemTypes_throwable",
+        "TXT_npc_GetLine",
+        "GetQuestState",
+        "ITEMS_CalcChargedSkillPriceModifier",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_AddStatCostsToPrices"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2BooksTxt",
+        "D2ItemsTxt",
+        "D2MagicAffixTxt",
+        "D2MonStatsTxt",
+        "D2NpcTxt",
+        "D2SetItemsTxt",
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "eD2ItemQuality",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CalculateTransactionCost_Thunk",
+      "address": "0062fdc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062fdc0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "CalculateTransactionCost_Thunk",
+        "ITEMS_CalcTransactionCost"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_GetRequiredBodyType",
+      "address": "0062fdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062fdf0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_GetRequiredBodyType",
+        "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2",
+        "ITEM_GetItemData_wType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_CalculateRepairAllCost",
+      "address": "0062fe60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062fe60"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEMS_CalculateRepairAllCost",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CanBeRepaired",
+        "ITEM_CheckIfItemHasDurability",
+        "GetTxtMaxDurability",
+        "STATSEX_GetCurrentStat",
+        "ITEM_IsReplenishable",
+        "ITEM_GetMaxStack",
+        "ITEMS_CheckChargedSkillFullyCharged",
+        "ITEMS_CalcTransactionCost"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "pfnItemTransactionCb",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_IsActiveCharm",
+      "address": "0062ff70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062ff70"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "ITEM_IsActiveCharm",
+        "ITEMS_IsA",
+        "ITEM_CheckEquipRequirements"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SerializeComplexItem",
+      "address": "0062fff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0062fff0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SerializeComplexItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "WriteValueToBitBuffer",
+        "GetXPos",
+        "GetYPos",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "IITEM_GetItemsTxt_dwNormCode",
+        "ITEM_GetItemsTxt_szCode",
+        "ITEMS_CountContainerItems",
+        "ITEM_GetTxtItemTypes_varinvgfx",
+        "TXT_MagicAffixes_GetTableInfo",
+        "ITEMS_IsA",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "GetMagicSuffix",
+        "ITEM_GetItemData_nFileIndex",
+        "GetMagicPrefix",
+        "GetRarePrefix",
+        "GetRareSuffix",
+        "CalculateRunewordByItem",
+        "ITEM_GetItemData_0x1Cand0x20",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "ITEMS_WriteClampedValueToBitBuffer",
+        "IsStackable",
+        "GetStatList",
+        "GetStatListByStateOrFlagsIfNotExists",
+        "memset",
+        "CopyStatsToBuffer",
+        "TXT_ItemStatCost_GetLine",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ItemStatCostTxt",
+        "D2MagicAffixTableStrc",
+        "D2RuneTableStrc",
+        "D2StatListExStrc",
+        "D2StatStrc",
+        "D2UnitDataMissileStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "eD2ItemQuality",
+        "eD2PlayerAnimMode",
+        "eD2States",
+        "eD2UnitStat",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SerializeItemToBitBuffer",
+      "address": "006312b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006312b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SerializeItemToBitBuffer",
+        "TXT_Items_GetLine",
+        "WriteValueToBitBuffer",
+        "SerializeComplexItem",
+        "SerializeSimpleItem",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "BitBufferEndCurrentByte",
+        "GetNextPositon",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SerializeItem",
+      "address": "006313e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006313e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::Items",
+      "calledFunctions": [
+        "SerializeItem",
+        "InitBitBuffer",
+        "SerializeItemToBitBuffer",
+        "GetNextPositon"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

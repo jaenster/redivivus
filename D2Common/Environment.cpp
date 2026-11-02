@@ -141,30 +141,30 @@ static void __stdcall DRLGENV_UpdateLightColor(int32_t nActNo, D2DrlgEnvironment
     }
 
     nTimeIndex = pDataCurrent->nLenght * pDrlgEnvironment->nTimeRate;
-    uint8_t bVar1 = *(uint8_t*)((uintptr_t)&pDataCurrent->nLightColorRGB + 1);
-    uint8_t bVar2 = *(uint8_t*)((uintptr_t)&pDataNext->nLightColorRGB + 1);
-    double dVar5 = (double)(pDrlgEnvironment->nTicks - nTimeIndex) / (double)(pDataNext->nLenght * pDrlgEnvironment->nTimeRate - nTimeIndex);
-    uint8_t bVar3 = *(uint8_t*)((uintptr_t)&pDataNext->nLightColorRGB + 2);
-    uint8_t bVar4 = *(uint8_t*)((uintptr_t)&pDataCurrent->nLightColorRGB + 2);
+    uint8_t byCurGreen = *(uint8_t*)((uintptr_t)&pDataCurrent->nLightColorRGB + 1);
+    uint8_t byNextGreen = *(uint8_t*)((uintptr_t)&pDataNext->nLightColorRGB + 1);
+    double fBlendFactor = (double)(pDrlgEnvironment->nTicks - nTimeIndex) / (double)(pDataNext->nLenght * pDrlgEnvironment->nTimeRate - nTimeIndex);
+    uint8_t byNextBlue = *(uint8_t*)((uintptr_t)&pDataNext->nLightColorRGB + 2);
+    uint8_t byCurBlue = *(uint8_t*)((uintptr_t)&pDataCurrent->nLightColorRGB + 2);
     uint8_t byRedBase = (uint8_t)pDataCurrent->nLightColorRGB;
-    char nRedDelta = (char)(int)std::nearbyint((double)(int)((uint32_t)(uint8_t)pDataNext->nLightColorRGB - (uint32_t)byRedBase) * dVar5 + 0.5);
+    char nRedDelta = (char)(int)std::nearbyint((double)(int)((uint32_t)(uint8_t)pDataNext->nLightColorRGB - (uint32_t)byRedBase) * fBlendFactor + 0.5);
     pDrlgEnvironment->nGlobalLightRed = nRedDelta + byRedBase;
-    char nGreenDeltaByte = (char)(int)((double)(int)((uint32_t)bVar2 - (uint32_t)bVar1) * dVar5 + 0.5);
+    char nGreenDeltaByte = (char)(int)((double)(int)((uint32_t)byNextGreen - (uint32_t)byCurGreen) * fBlendFactor + 0.5);
     pDrlgEnvironment->nGlobalLightGreen = *(char*)((uintptr_t)&pDataCurrent->nLightColorRGB + 1) + nGreenDeltaByte;
-    pDrlgEnvironment->nGlobalLightBlue = *(char*)((uintptr_t)&pDataCurrent->nLightColorRGB + 2) + (char)(int)((double)(int)((uint32_t)bVar3 - (uint32_t)bVar4) * dVar5 + 0.5);
+    pDrlgEnvironment->nGlobalLightBlue = *(char*)((uintptr_t)&pDataCurrent->nLightColorRGB + 2) + (char)(int)((double)(int)((uint32_t)byNextBlue - (uint32_t)byCurBlue) * fBlendFactor + 0.5);
 }
 
 // Initializes a DRLG environment cycle from the current time index. Sets the environment data type and tick count from lookup tables, using eclipse-specific tables when pEclipse is active.
 static void DRLGENV_InitEnvironmentCycle(D2DrlgEnvironmentStrc * pDrlgEnvironment) {
-    int iVar1 = pDrlgEnvironment->nTimeIndex;
+    int nCurTimeIndex = pDrlgEnvironment->nTimeIndex;
     if (!pDrlgEnvironment->bEclipse) {
-      pDrlgEnvironment->nEnvironmentData = aENVIRONMENTDATA1[iVar1 * 3 + 1];
-      pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * aENVIRONMENTDATA1[iVar1 * 3];
+      pDrlgEnvironment->nEnvironmentData = aENVIRONMENTDATA1[nCurTimeIndex * 3 + 1];
+      pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * aENVIRONMENTDATA1[nCurTimeIndex * 3];
       return;
     }
 
-    pDrlgEnvironment->nEnvironmentData = aENVIRONMENTDATA2[iVar1].nEnvData;
-    pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * aENVIRONMENTDATA2[iVar1].nLenght;
+    pDrlgEnvironment->nEnvironmentData = aENVIRONMENTDATA2[nCurTimeIndex].nEnvData;
+    pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * aENVIRONMENTDATA2[nCurTimeIndex].nLenght;
 }
 
 D2DrlgEnvironmentStrc * __fastcall DRLGENV_AllocEnvironment(D2PoolManagerStrc * pMemory) {

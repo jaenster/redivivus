@@ -31,7 +31,7 @@ namespace D2Game::Monster::MonsterRegion {
 // @sourcefile .\MONSTER\MonsterRegion.cpp
 void __fastcall AllocMonsterRegion(struct D2PoolManagerStrc * pMemory, D2Row_D2MonsterRegionStrc_1024 * pMonsterRegionList, struct D2SeedStrc * pSeed, int32_t nSeedLow, eD2Difficulty nDifficulty, BOOL bExpansion);
 // @sourcefile .\MONSTER\MonsterRegion.cpp
-void __fastcall FreeMonsterRegion(struct D2PoolManagerStrc * pMemory, int32_t nParam);
+void __fastcall FreeMonsterRegion(struct D2PoolManagerStrc * pMemory, int32_t ppMonsterRegion);
 struct D2MonsterRegionStrc * __fastcall ReturnMonsterRegionEntryForLevel(struct D2MonsterRegionStrc * * ppMonsterRegion, eD2LevelId eLevel);
 // Looks up a monster's entry in the region spawn table by class ID, or registers a new entry if the monster qualifies as a multi-piece champion (TxtMonStatsEx.TotalPieces > 2). Returns a pointer to the matching D2MonsterRegionFieldStrc, or NULL if the monster is a special-cased superunique (IDs 0xC3, 0xC4, 0x126, 0x128) or the table is full. Rolls champion-pack seed via SEED_RollChampionPack on insertion.
 short * __fastcall InitializeSpawnCount(struct D2MonsterRegionStrc * * ppMonsterRegion, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);

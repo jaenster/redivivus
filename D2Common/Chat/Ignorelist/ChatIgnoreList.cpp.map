@@ -1,0 +1,60 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat/Ignorelist/ChatIgnoreList.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "0060dd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060dd50"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::ChatIgnoreList",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "ChatIgnoreList"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "0060dd60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060dd60"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::ChatIgnoreList",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "ChatIgnoreList",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "0060ddd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ddd0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::ChatIgnoreList",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "ChatIgnoreList"
+      ]
+    }
+  ]
+}

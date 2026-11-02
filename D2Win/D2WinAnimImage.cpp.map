@@ -1,0 +1,232 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/D2WinAnimImage.cpp",
+  "functions": [
+    {
+      "name": "FORMS_DestroyD2WinAnimImage",
+      "address": "00500300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500300"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinAnimImage",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinAnimImage"
+      ]
+    },
+    {
+      "name": "D2WINANIMIMAGE_GetCurrentState",
+      "address": "00500310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500310"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "D2WINANIMIMAGE_GetCurrentState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinAnimImage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINANIMIMAGE_TryAdvanceToPlaying",
+      "address": "00500340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500340"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "D2WINANIMIMAGE_TryAdvanceToPlaying",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2WinAnimImage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawAnim",
+      "address": "005003a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005003a0"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "DrawAnim",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2WinAnimImage",
+        "DC6",
+        "DC6Block",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINANIMIMAGE_UpdateFrame",
+      "address": "00500480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500480"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "D2WINANIMIMAGE_UpdateFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DrawAnim",
+        "IMAGE_GetFramesCount",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2WinAnimImage",
+        "D2WinAnimImageNotifyStrc",
+        "DC6",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "005005b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005005b0"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "Draw",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "D2WINANIMIMAGE_UpdateFrame",
+        "IMAGE_GetFramesCount",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "GetDC6OffsetY",
+        "GetDC6OffsetX",
+        "D2GFX_DrawImage",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2WinAnimImage",
+        "DC6",
+        "DC6Block",
+        "DRAWMODE",
+        "FORMS_AnimFrameStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Push",
+      "address": "00500790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500790"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "Push",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinAnimImage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINANIMIMAGE_SetAnimate",
+      "address": "00500810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500810"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "D2WINANIMIMAGE_SetAnimate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinAnimImage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WinAnimImage",
+      "address": "00500850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500850"
+        }
+      ],
+      "namespace": "D2Win::D2WinAnimImage",
+      "calledFunctions": [
+        "D2WinAnimImage",
+        "AllocClientMemory",
+        "memset",
+        "GetTickCount",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinAnimImage",
+        "DC6",
+        "DRAWMODE",
+        "FORMS_AnimFrameStrc",
+        "OnPress",
+        "fpD2WinAnimImageNotify",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

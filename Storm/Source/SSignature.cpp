@@ -6,7 +6,6 @@
 #include "Storm/D2Srp.h"
 #include "Storm/Source/SBig.h"
 #include "Storm/Source/SMem.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -78,7 +77,7 @@ void __fastcall SSignatureVerifyStream_ProvideData(D2SsigContextStrc * pContext,
         Sha1_Append(&pContext->sSha1, pData, nRemaining);
       }
 
-      SSystem::SMemCopy(pContext->pDataBuffer, pData + nRemaining, pContext->nBufferSize);
+      SMem::SMemCopy(pContext->pDataBuffer, pData + nRemaining, pContext->nBufferSize);
       pContext->nBytesBuffered = pContext->nBufferSize;
       return;
     }
@@ -87,10 +86,10 @@ void __fastcall SSignatureVerifyStream_ProvideData(D2SsigContextStrc * pContext,
     if ((int)nRemaining > 0) {
       Sha1_Append(&pContext->sSha1, pContext->pDataBuffer, nRemaining);
       pContext->nBytesBuffered -= nRemaining;
-      SSystem::SMemMove(pContext->pDataBuffer, pContext->pDataBuffer + nRemaining, pContext->nBytesBuffered);
+      SMem::SMemMove(pContext->pDataBuffer, pContext->pDataBuffer + nRemaining, pContext->nBytesBuffered);
     }
 
-    SSystem::SMemCopy(pContext->pDataBuffer + pContext->nBytesBuffered, pData, nDataLen);
+    SMem::SMemCopy(pContext->pDataBuffer + pContext->nBytesBuffered, pData, nDataLen);
     pContext->nBytesBuffered += nDataLen;
 }
 
@@ -158,25 +157,25 @@ int __fastcall SSignatureGenerate(uint8_t * pData, uint32_t * pnDataLen, void * 
       nMarkerOffset = (int)nDataLen;                             // 0041d5bd  MOV [EBP-0x8],EDX
 
     uint8_t* pHash = (uint8_t*)__builtin_alloca(nKeySize);       // 0041d5c0-0041d5c7
-    SSystem::SMemFill(pHash, nKeySize, 0xbb);              // 0041d5c9-0041d5d0
+    SMem::SMemFill(pHash, nKeySize, 0xbb);              // 0041d5c9-0041d5d0
     pHash[nKeySize - 1] = 0x0b;                                  // 0041d5dc
     SSIG_HashData((uint32_t)nMarkerOffset, pDataBytes, pHash); // 0041d5d5-0041d5e1
 
     uint8_t* pSig1 = (uint8_t*)__builtin_alloca(nKeySize);       // 0041d5e6-0041d5ed
-    SSystem::SMemCopy(pSig1, pHash, nKeySize);               // 0041d5ef-0041d5f2
+    SMem::SMemCopy(pSig1, pHash, nKeySize);               // 0041d5ef-0041d5f2
     SSIG_InitRSAPair(rsaPair1);                                  // 0041d5f7 / 0041d5fa
     CryptRSA_Prepare(rsaPair1, pModulusBytes, nKeySize, pPrivateExponent, nPrivateExponentLen); // 0041d5ff-0041d60f
     CryptRSA_Process(rsaPair1, pSig1, nKeySize);                 // 0041d614-0041d619
 
     uint8_t* pSig2 = (uint8_t*)__builtin_alloca(nKeySize);       // 0041d61e-0041d625
-    SSystem::SMemCopy(pSig2, pSig1, nKeySize);               // 0041d627-0041d62d
+    SMem::SMemCopy(pSig2, pSig1, nKeySize);               // 0041d627-0041d62d
     SSIG_InitRSAPair(rsaPair2);                                  // 0041d632 / 0041d635
     CryptRSA_Prepare(rsaPair2, pModulusBytes, nKeySize, pPublicExponent, nPublicExponentLen); // 0041d63a-0041d64a
     CryptRSA_Process(rsaPair2, pSig2, nKeySize);                 // 0041d64f-0041d657
 
-    if (SSystem::SSYSTEM_MemCompare(pSig2, pHash, nKeySize) == 0) { // 0041d65c-0041d669
+    if (SMem::SMemCmp(pSig2, pHash, nKeySize) == 0) { // 0041d65c-0041d669
       *(uint32_t*)(pDataBytes + nMarkerOffset) = 0x5349474e;     // 0041d686  'SIGN'
-      SSystem::SMemCopy(pDataBytes + nMarkerOffset + 4, pSig1, nKeySize); // 0041d685-0041d693
+      SMem::SMemCopy(pDataBytes + nMarkerOffset + 4, pSig1, nKeySize); // 0041d685-0041d693
       *pnDataLen = (uint32_t)(nMarkerOffset + nKeySize + 4);     // 0041d69b / 0041d69f
       SSIG_FreeRSAPair(rsaPair2);                        // 0041d6a1 / 0041d6a4
       SSIG_FreeRSAPair(rsaPair1);                        // 0041d6a9 / 0041d6ac
@@ -232,19 +231,19 @@ int __fastcall SSignatureVerifyStream_Finish(D2SsigContextStrc * pContext, void 
       uint32_t nSigLen = pContext->nModulusLen;                     // 0041d705  MOV EBX,[ESI]
       uint8_t* pHash   = (uint8_t*)__builtin_alloca(nSigLen);    // 0041d709 / 0041d70e
 
-      SSystem::SMemFill(pHash, nSigLen, 0xbb);             // 0041d710-0041d717
+      SMem::SMemFill(pHash, nSigLen, 0xbb);             // 0041d710-0041d717
       pHash[pContext->nModulusLen - 1] = 0x0b;                      // 0041d71c / 0041d722
       Sha1_Finalize(&pContext->sSha1, pHash);                    // 0041d71e-0041d727  LEA ECX,[ESI+0x18]: the SHA-1 context
 
       uint8_t* pSig = (uint8_t*)__builtin_alloca(pContext->nModulusLen); // 0041d72c-0041d735
 
-      SSystem::SMemCopy(pSig, pContext->pDataBuffer + 4,
+      SMem::SMemCopy(pSig, pContext->pDataBuffer + 4,
                             pContext->nModulusLen);                 // 0041d733-0041d740
       SSIG_InitRSAPair(rsaPair);                                 // 0041d745 / 0041d748
       CryptRSA_Prepare(rsaPair, pModulusSaved, pContext->nModulusLen,
                        pExponentBytes, pContext->nExponentLen);         // 0041d74d-0041d75f
       CryptRSA_Process(rsaPair, pSig, pContext->nModulusLen);       // 0041d764-0041d76b
-      bVerified = (SSystem::SSYSTEM_MemCompare(pSig, pHash,
+      bVerified = (SMem::SMemCmp(pSig, pHash,
                        pContext->nModulusLen) == 0);             // 0041d770-0041d783
       SSIG_FreeRSAPair(rsaPair);                         // 0041d780 / 0041d786
     }
@@ -261,40 +260,40 @@ int __fastcall SSignatureVerify(uint8_t * pData, size_t nDataLen, void * pModulu
     SSignatureVerifyStream_Begin((D2SsigContextStrc**)&nExponentLen, nModulusLen, nExponentLen);
     uint32_t pContext = nExponentLen;
     SSignatureVerifyStream_ProvideData((D2SsigContextStrc*)nExponentLen, pData, nDataLen);
-    int iVar1 = SSignatureVerifyStream_Finish((D2SsigContextStrc*)pContext, pModulusBytes, pExponentBytes);
-    return iVar1;
+    int bVerified = SSignatureVerifyStream_Finish((D2SsigContextStrc*)pContext, pModulusBytes, pExponentBytes);
+    return bVerified;
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round1, filed under SBig. CONFIRMED CORRECT as to operation and ordering - one of the few Storm names in this database that survived checking. Body: E += rol(A,5) + ((~B & D) | (B & C)) + 0x5A827999 + W; B = rol(B,30). That is Ch with K1, i.e. SHA-1 rounds 0..19. No PPC counterpart: MWCC inlined every round into Sha1::Pump, so these four are MSVC out-of-line COMDAT copies with zero callers in this build. Kept the descriptive name (uppercase SHA1_, deliberately unlike the oracle-derived Sha1_ methods) and moved to the SSignature module.
-void __fastcall SHA1_Round1(uint32_t nParam, uint32_t * pnParam, uint32_t nC, uint32_t nD, int * pnParam1, int * pnParam2) {
-    *pnParam1 = *pnParam1 + (nParam << 5 | nParam >> 0x1b) + (~*pnParam & nD | *pnParam & nC) + 0x5a827999 + *pnParam2;
-    *pnParam = *pnParam << 0x1e | *pnParam >> 2;
-    *pnParam2 = 0;
+void __fastcall SHA1_Round1(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW) {
+    *pnE = *pnE + (nA << 5 | nA >> 0x1b) + (~*pnB & nD | *pnB & nC) + 0x5a827999 + *pnW;
+    *pnB = *pnB << 0x1e | *pnB >> 2;
+    *pnW = 0;
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round2. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0x6ED9EBA1 + W - Parity with K2, SHA-1 rounds 20..39. See SHA1_Round1's plate for provenance.
-void __fastcall SHA1_Round2(uint32_t nParam, uint32_t * pnParam, uint32_t nC, uint32_t nD, int * pnParam1, int * pnParam2) {
-    *pnParam1 = *pnParam1 + (nParam << 5 | nParam >> 0x1b) + (*pnParam ^ nC ^ nD) + 0x6ed9eba1 + *pnParam2;
-    *pnParam = *pnParam << 0x1e | *pnParam >> 2;
-    *pnParam2 = 0;
+void __fastcall SHA1_Round2(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW) {
+    *pnE = *pnE + (nA << 5 | nA >> 0x1b) + (*pnB ^ nC ^ nD) + 0x6ed9eba1 + *pnW;
+    *pnB = *pnB << 0x1e | *pnB >> 2;
+    *pnW = 0;
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round3. Confirmed: E += rol(A,5) + ((B & C) | (B & D) | (C & D)) + 0x8F1BBCDC + W - Maj with K3, SHA-1 rounds 40..59. See SHA1_Round1's plate.
-void __fastcall SHA1_Round3(uint32_t nParam, uint32_t * pnParam, uint32_t nC, uint32_t nD, int * pnParam1, int * pnParam2) {
-    *pnParam1 = *pnParam1 + ((nC | nD) & *pnParam | nC & nD) + 0x8f1bbcdc + (nParam << 5 | nParam >> 0x1b) + *pnParam2;
-    *pnParam = *pnParam << 0x1e | *pnParam >> 2;
-    *pnParam2 = 0;
+void __fastcall SHA1_Round3(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW) {
+    *pnE = *pnE + ((nC | nD) & *pnB | nC & nD) + 0x8f1bbcdc + (nA << 5 | nA >> 0x1b) + *pnW;
+    *pnB = *pnB << 0x1e | *pnB >> 2;
+    *pnW = 0;
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round4. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0xCA62C1D6 + W - Parity with K4, SHA-1 rounds 60..79. See SHA1_Round1's plate.
-void __fastcall SHA1_Round4(uint32_t nParam, uint32_t * pnParam, uint32_t nC, uint32_t nD, int * pnParam1, int * pnParam2) {
-    *pnParam1 = *pnParam1 + (*pnParam ^ nC ^ nD) + 0xca62c1d6 + (nParam << 5 | nParam >> 0x1b) + *pnParam2;
-    *pnParam = *pnParam << 0x1e | *pnParam >> 2;
-    *pnParam2 = 0;
+void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW) {
+    *pnE = *pnE + (*pnB ^ nC ^ nD) + 0xca62c1d6 + (nA << 5 | nA >> 0x1b) + *pnW;
+    *pnB = *pnB << 0x1e | *pnB >> 2;
+    *pnW = 0;
 }
 
 // SHA-1 cryptographic hash transform. Processes 512-bit message block in 80 rounds (4 phases with different functions). Updates 5 hash state variables (A,B,C,D,E).
@@ -302,18 +301,19 @@ void __fastcall SHA1_Round4(uint32_t nParam, uint32_t * pnParam, uint32_t nC, ui
 // Was SBIG_SHA1Transform, and filed under Storm::Source::SBig. Oracle name is the class method Sha1::Pump, PPC mangled symbol ".Pump__4Sha1FPUlPCUc" @100a2ee0 = Pump(unsigned long*, const unsigned char*). Basis: same two arguments (state array, 64-byte block), no callees in either build, and it is the sole callee of Sha1_Append/Sha1::Append. PPC body 1680 bytes vs 1339 here - both fully unrolled. NOT part of SBig: it is a client of SBig's file, not a member; module fixed to SSignature.
 void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
     uint32_t uVar1;
-    uint32_t uVar2;
     int nIndex2;
     uint32_t dwB;
-    uint32_t uVar4;
+    uint32_t uVar2;
     uint32_t dwTmp10;
     uint32_t auStack_194[10];
     uint32_t uStack_16c;
     uint32_t aMsgSchedule[80];
-    uint8_t byMsgByte0e;
     uint8_t byMsgByte10;
+    uint32_t dwSchedWord;
+    uint32_t dwSchedWord2;
     int nIndex = 0;
     do {
+      uint8_t byMsgByte0e;
       nIndex2 = nIndex + 4;
       (&uStack_16c)[nIndex2] = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)*pBuffer << 8 | (uint16_t)(uint8_t)pBuffer[1]) << 8 | (uint32_t)(uint8_t)pBuffer[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pBuffer[3]);
       byMsgByte10 = pBuffer[10];
@@ -335,94 +335,93 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
 
     uint32_t dwC = pHashState[2];
     uint32_t dwD = pHashState[3];
-    uint32_t uVar5 = *pHashState;
+    uint32_t dwWorkA = *pHashState;
     dwB = pHashState[1];
     uint32_t dwE = pHashState[4];
     nIndex = 0;
     do {
-      uVar1 = dwE + 0x5a827999 + (uVar5 << 5 | uVar5 >> 0x1b) + (~dwB & dwD | dwC & dwB) + aMsgSchedule[nIndex];
-      uVar4 = dwB << 0x1e | dwB >> 2;
+      uVar1 = dwE + 0x5a827999 + (dwWorkA << 5 | dwWorkA >> 0x1b) + (~dwB & dwD | dwC & dwB) + aMsgSchedule[nIndex];
+      uVar2 = dwB << 0x1e | dwB >> 2;
       aMsgSchedule[nIndex] = 0;
-      dwTmp10 = uVar5 << 0x1e | uVar5 >> 2;
-      dwB = dwD + 0x5a827999 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (~uVar5 & dwC | uVar4 & uVar5) + aMsgSchedule[nIndex + 1];
+      dwTmp10 = dwWorkA << 0x1e | dwWorkA >> 2;
+      dwB = dwD + 0x5a827999 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (~dwWorkA & dwC | uVar2 & dwWorkA) + aMsgSchedule[nIndex + 1];
       aMsgSchedule[nIndex + 1] = 0;
       dwE = uVar1 * 0x40000000 | uVar1 >> 2;
-      uVar5 = dwC + 0x5a827999 + (dwB * 0x20 | dwB >> 0x1b) + (~uVar1 & uVar4 | uVar1 & dwTmp10) + aMsgSchedule[nIndex + 2];
+      dwWorkA = dwC + 0x5a827999 + (dwB * 0x20 | dwB >> 0x1b) + (~uVar1 & uVar2 | uVar1 & dwTmp10) + aMsgSchedule[nIndex + 2];
       aMsgSchedule[nIndex + 2] = 0;
       dwD = dwB * 0x40000000 | dwB >> 2;
-      dwB = uVar4 + 0x5a827999 + (uVar5 * 0x20 | uVar5 >> 0x1b) + (~dwB & dwTmp10 | dwE & dwB) + aMsgSchedule[nIndex + 3];
+      dwB = uVar2 + 0x5a827999 + (dwWorkA * 0x20 | dwWorkA >> 0x1b) + (~dwB & dwTmp10 | dwE & dwB) + aMsgSchedule[nIndex + 3];
       aMsgSchedule[nIndex + 3] = 0;
-      uVar2 = aMsgSchedule[nIndex + 4];
+      dwSchedWord = aMsgSchedule[nIndex + 4];
       aMsgSchedule[nIndex + 4] = 0;
-      dwC = uVar5 * 0x40000000 | uVar5 >> 2;
+      dwC = dwWorkA * 0x40000000 | dwWorkA >> 2;
       nIndex += 5;
-      uVar5 = dwTmp10 + 0x5a827999 + (dwB * 0x20 | dwB >> 0x1b) + (~uVar5 & dwE | dwD & uVar5) + uVar2;
+      dwWorkA = dwTmp10 + 0x5a827999 + (dwB * 0x20 | dwB >> 0x1b) + (~dwWorkA & dwE | dwD & dwWorkA) + dwSchedWord;
     } while (nIndex < 0x14);
 
     do {
-      uVar4 = dwB << 0x1e | dwB >> 2;
-      dwB = dwE + 0x6ed9eba1 + (uVar5 << 5 | uVar5 >> 0x1b) + (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex];
+      uVar2 = dwB << 0x1e | dwB >> 2;
+      dwB = dwE + 0x6ed9eba1 + (dwWorkA << 5 | dwWorkA >> 0x1b) + (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex];
       aMsgSchedule[nIndex] = 0;
-      dwTmp10 = uVar5 << 0x1e | uVar5 >> 2;
-      uVar5 = dwD + 0x6ed9eba1 + (dwB * 0x20 | dwB >> 0x1b) + (dwC ^ uVar4 ^ uVar5) + aMsgSchedule[nIndex + 1];
+      dwTmp10 = dwWorkA << 0x1e | dwWorkA >> 2;
+      dwWorkA = dwD + 0x6ed9eba1 + (dwB * 0x20 | dwB >> 0x1b) + (dwC ^ uVar2 ^ dwWorkA) + aMsgSchedule[nIndex + 1];
       aMsgSchedule[nIndex + 1] = 0;
       nIndex2 = nIndex + 5;
       dwE = dwB * 0x40000000 | dwB >> 2;
-      uVar1 = dwC + 0x6ed9eba1 + (uVar5 * 0x20 | uVar5 >> 0x1b) + (dwB ^ uVar4 ^ dwTmp10) + aMsgSchedule[nIndex + 2];
+      uVar1 = dwC + 0x6ed9eba1 + (dwWorkA * 0x20 | dwWorkA >> 0x1b) + (dwB ^ uVar2 ^ dwTmp10) + aMsgSchedule[nIndex + 2];
       aMsgSchedule[nIndex + 2] = 0;
-      dwD = uVar5 * 0x40000000 | uVar5 >> 2;
-      dwB = uVar4 + 0x6ed9eba1 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (dwE ^ uVar5 ^ dwTmp10) + aMsgSchedule[nIndex + 3];
+      dwD = dwWorkA * 0x40000000 | dwWorkA >> 2;
+      dwB = uVar2 + 0x6ed9eba1 + (uVar1 * 0x20 | uVar1 >> 0x1b) + (dwE ^ dwWorkA ^ dwTmp10) + aMsgSchedule[nIndex + 3];
       aMsgSchedule[nIndex + 3] = 0;
-      uVar2 = aMsgSchedule[nIndex + 4];
+      dwSchedWord = aMsgSchedule[nIndex + 4];
       aMsgSchedule[nIndex + 4] = 0;
       dwC = uVar1 * 0x40000000 | uVar1 >> 2;
-      uVar5 = dwTmp10 + 0x6ed9eba1 + (dwB * 0x20 | dwB >> 0x1b) + (dwE ^ dwD ^ uVar1) + uVar2;
+      dwWorkA = dwTmp10 + 0x6ed9eba1 + (dwB * 0x20 | dwB >> 0x1b) + (dwE ^ dwD ^ uVar1) + dwSchedWord;
       nIndex = nIndex2;
     } while (nIndex2 < 0x28);
 
     do {
-      uVar4 = dwB << 0x1e | dwB >> 2;
-      dwB = ((dwC | dwB) & dwD | dwC & dwB) + aMsgSchedule[nIndex2] + dwE - 0x70e44324 + (uVar5 << 5 | uVar5 >> 0x1b);
+      uVar2 = dwB << 0x1e | dwB >> 2;
+      dwB = ((dwC | dwB) & dwD | dwC & dwB) + aMsgSchedule[nIndex2] + dwE - 0x70e44324 + (dwWorkA << 5 | dwWorkA >> 0x1b);
       aMsgSchedule[nIndex2] = 0;
-      dwTmp10 = uVar5 << 0x1e | uVar5 >> 2;
-      uVar5 = ((uVar4 | uVar5) & dwC | uVar4 & uVar5) + aMsgSchedule[nIndex2 + 1] + dwD - 0x70e44324 + (dwB * 0x20 | dwB >> 0x1b);
+      dwTmp10 = dwWorkA << 0x1e | dwWorkA >> 2;
+      dwWorkA = ((uVar2 | dwWorkA) & dwC | uVar2 & dwWorkA) + aMsgSchedule[nIndex2 + 1] + dwD - 0x70e44324 + (dwB * 0x20 | dwB >> 0x1b);
       aMsgSchedule[nIndex2 + 1] = 0;
       dwE = dwB * 0x40000000 | dwB >> 2;
-      uVar1 = ((dwB | dwTmp10) & uVar4 | dwB & dwTmp10) + aMsgSchedule[nIndex2 + 2] + dwC - 0x70e44324 + (uVar5 * 0x20 | uVar5 >> 0x1b);
+      uVar1 = ((dwB | dwTmp10) & uVar2 | dwB & dwTmp10) + aMsgSchedule[nIndex2 + 2] + dwC - 0x70e44324 + (dwWorkA * 0x20 | dwWorkA >> 0x1b);
       aMsgSchedule[nIndex2 + 2] = 0;
-      dwD = uVar5 * 0x40000000 | uVar5 >> 2;
-      dwB = ((dwE | uVar5) & dwTmp10 | dwE & uVar5) + aMsgSchedule[nIndex2 + 3] + uVar4 - 0x70e44324 + (uVar1 * 0x20 | uVar1 >> 0x1b);
+      dwD = dwWorkA * 0x40000000 | dwWorkA >> 2;
+      dwB = ((dwE | dwWorkA) & dwTmp10 | dwE & dwWorkA) + aMsgSchedule[nIndex2 + 3] + uVar2 - 0x70e44324 + (uVar1 * 0x20 | uVar1 >> 0x1b);
       aMsgSchedule[nIndex2 + 3] = 0;
-      uVar2 = aMsgSchedule[nIndex2 + 4];
+      dwSchedWord = aMsgSchedule[nIndex2 + 4];
       aMsgSchedule[nIndex2 + 4] = 0;
       dwC = uVar1 * 0x40000000 | uVar1 >> 2;
       nIndex2 += 5;
-      uVar5 = ((dwD | uVar1) & dwE | dwD & uVar1) + uVar2 + dwTmp10 - 0x70e44324 + (dwB * 0x20 | dwB >> 0x1b);
+      dwWorkA = ((dwD | uVar1) & dwE | dwD & uVar1) + dwSchedWord + dwTmp10 - 0x70e44324 + (dwB * 0x20 | dwB >> 0x1b);
     } while (nIndex2 < 0x3c);
 
     do {
-      uint32_t uVar3;
-      uVar4 = dwB << 0x1e | dwB >> 2;
-      dwB = (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex2] + dwE - 0x359d3e2a + (uVar5 << 5 | uVar5 >> 0x1b);
+      uVar2 = dwB << 0x1e | dwB >> 2;
+      dwB = (dwD ^ dwC ^ dwB) + aMsgSchedule[nIndex2] + dwE - 0x359d3e2a + (dwWorkA << 5 | dwWorkA >> 0x1b);
       aMsgSchedule[nIndex2] = 0;
-      dwTmp10 = uVar5 << 0x1e | uVar5 >> 2;
-      uVar5 = (dwC ^ uVar4 ^ uVar5) + aMsgSchedule[nIndex2 + 1] + dwD - 0x359d3e2a + (dwB * 0x20 | dwB >> 0x1b);
+      dwTmp10 = dwWorkA << 0x1e | dwWorkA >> 2;
+      dwWorkA = (dwC ^ uVar2 ^ dwWorkA) + aMsgSchedule[nIndex2 + 1] + dwD - 0x359d3e2a + (dwB * 0x20 | dwB >> 0x1b);
       aMsgSchedule[nIndex2 + 1] = 0;
       dwE = dwB * 0x40000000 | dwB >> 2;
-      uVar1 = (dwB ^ uVar4 ^ dwTmp10) + aMsgSchedule[nIndex2 + 2] + dwC - 0x359d3e2a + (uVar5 * 0x20 | uVar5 >> 0x1b);
+      uVar1 = (dwB ^ uVar2 ^ dwTmp10) + aMsgSchedule[nIndex2 + 2] + dwC - 0x359d3e2a + (dwWorkA * 0x20 | dwWorkA >> 0x1b);
       aMsgSchedule[nIndex2 + 2] = 0;
-      uVar2 = aMsgSchedule[nIndex2 + 3];
-      dwD = uVar5 * 0x40000000 | uVar5 >> 2;
+      dwSchedWord = aMsgSchedule[nIndex2 + 3];
+      dwD = dwWorkA * 0x40000000 | dwWorkA >> 2;
       aMsgSchedule[nIndex2 + 3] = 0;
-      uVar3 = aMsgSchedule[nIndex2 + 4];
-      dwB = (dwE ^ uVar5 ^ dwTmp10) + uVar2 + uVar4 - 0x359d3e2a + (uVar1 * 0x20 | uVar1 >> 0x1b);
+      dwSchedWord2 = aMsgSchedule[nIndex2 + 4];
+      dwB = (dwE ^ dwWorkA ^ dwTmp10) + dwSchedWord + uVar2 - 0x359d3e2a + (uVar1 * 0x20 | uVar1 >> 0x1b);
       dwC = uVar1 * 0x40000000 | uVar1 >> 2;
       aMsgSchedule[nIndex2 + 4] = 0;
       nIndex2 += 5;
-      uVar5 = (dwE ^ dwD ^ uVar1) + uVar3 + dwTmp10 - 0x359d3e2a + (dwB * 0x20 | dwB >> 0x1b);
+      dwWorkA = (dwE ^ dwD ^ uVar1) + dwSchedWord2 + dwTmp10 - 0x359d3e2a + (dwB * 0x20 | dwB >> 0x1b);
     } while (nIndex2 < 0x50);
 
-    *pHashState += uVar5;
+    *pHashState += dwWorkA;
     pHashState[1] += dwB;
     pHashState[2] += dwC;
     pHashState[3] += dwD;
@@ -477,15 +476,15 @@ void __thiscall Sha1_Append(D2Sha1ContextStrc * pCtx, uint8_t * pData, uint32_t 
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_PackTwoIntsToBytes. DESCRIPTIVE, not an oracle name. Writes 8 bytes big-endian: out[0..3] = the SECOND stack argument, out[4..7] = the first. The old parameter names (dwHighWord first) are therefore inverted with respect to the byte order it produces. This is the 64-bit bit-length encoder that Sha1_Finalize / Sha1::Finalize both emit inline (cf. Sha1_Finalize's byLen0..byLen7 stack bytes and the PPC's rlwimi/stb chain at 100a2b00). Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pParam, uint32_t dwHighWord, uint32_t dwParam) {
-    pParam[7] = (uint8_t)dwHighWord;
-    pParam[6] = (uint8_t)(dwHighWord >> 8);
-    pParam[5] = (uint8_t)(dwHighWord >> 0x10);
-    pParam[4] = (uint8_t)(dwHighWord >> 0x18);
-    pParam[3] = (uint8_t)dwParam;
-    pParam[2] = (uint8_t)(dwParam >> 8);
-    pParam[1] = (uint8_t)(dwParam >> 0x10);
-    *pParam = (uint8_t)(dwParam >> 0x18);
+uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pbOut, uint32_t dwHighWord, uint32_t dwParam) {
+    pbOut[7] = (uint8_t)dwHighWord;
+    pbOut[6] = (uint8_t)(dwHighWord >> 8);
+    pbOut[5] = (uint8_t)(dwHighWord >> 0x10);
+    pbOut[4] = (uint8_t)(dwHighWord >> 0x18);
+    pbOut[3] = (uint8_t)dwParam;
+    pbOut[2] = (uint8_t)(dwParam >> 8);
+    pbOut[1] = (uint8_t)(dwParam >> 0x10);
+    *pbOut = (uint8_t)(dwParam >> 0x18);
     return 0;
 }
 
@@ -575,7 +574,7 @@ int __thiscall Sha1_Finalize(D2Sha1ContextStrc * pCtx, uint8_t * pDigest) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    uint32_t uVar1;
+    uint32_t dwStateWord;
     uint32_t dwCountLow = pCtx->nBitCountLow;
     uint32_t dwCountHigh = pCtx->nBitCountHigh;
     __frame0.byLen0 = (uint8_t)dwCountLow;
@@ -592,44 +591,44 @@ int __thiscall Sha1_Finalize(D2Sha1ContextStrc * pCtx, uint8_t * pDigest) {
     uint8_t* pDigestCursor = pDigest + 1;
     int nWordsLeft = 5;
     do {
-      uVar1 = *pStateCursor;
-      pDigestCursor[2] = (uint8_t)uVar1;
-      pDigestCursor[1] = (uint8_t)(uVar1 >> 8);
-      *pDigestCursor = (uint8_t)(uVar1 >> 0x10);
-      pDigestCursor[-1] = (uint8_t)(uVar1 >> 0x18);
+      dwStateWord = *pStateCursor;
+      pDigestCursor[2] = (uint8_t)dwStateWord;
+      pDigestCursor[1] = (uint8_t)(dwStateWord >> 8);
+      *pDigestCursor = (uint8_t)(dwStateWord >> 0x10);
+      pDigestCursor[-1] = (uint8_t)(dwStateWord >> 0x18);
       pStateCursor++;
       pDigestCursor += 4;
       nWordsLeft--;
     } while (nWordsLeft);
 
-    return uVar1 >> 0x18;
+    return dwStateWord >> 0x18;
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_ModPowWrapper. DESCRIPTIVE, not an oracle name. Body = SBigPowMod(*p4, *p1, *p2, *p3) and nothing else - the middle of Crypt::RSA::Process, which the PPC emits inline. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-BigData * * __thiscall SSIGNATURE_RsaPowMod(BigData * * pnParam3, BigData * * ppBase, BigData * * pnParam1, BigData * * pnParam2) {
-    SBig::SBigPowMod(*pnParam3, *ppBase, *pnParam1, *pnParam2);
-    return pnParam3;
+BigData * * __thiscall SSIGNATURE_RsaPowMod(BigData * * ppResult, BigData * * ppBase, BigData * * ppExponent, BigData * * ppModulus) {
+    SBig::SBigPowMod(*ppResult, *ppBase, *ppExponent, *ppModulus);
+    return ppResult;
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_ExportBytesWithPadding. DESCRIPTIVE, not an oracle name. Body = SBigToBinaryBuffer into the caller's buffer, then zero-fill the remainder to the requested length - the exact tail of Crypt::RSA::Process. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * pnParam, void * pOutBuf, uint32_t nParam) {
-    uint32_t nOrigLen = nParam;
-    BigData* pnParamValue = *pnParam;
-    SBig::SBigToBinaryBuffer(pnParamValue, pOutBuf, nParam, &nParam);
-    if (nParam >= nOrigLen) {
+void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * ppBig, void * pOutBuf, uint32_t nBufLen) {
+    uint32_t nOrigLen = nBufLen;
+    BigData* ppBigValue = *ppBig;
+    SBig::SBigToBinaryBuffer(ppBigValue, pOutBuf, nBufLen, &nBufLen);
+    if (nBufLen >= nOrigLen) {
       return pOutBuf;
     }
 
-    SSystem::SMemZero((void*)(nParam + (int)pOutBuf), nOrigLen - nParam);
+    SMem::SMemZero((void*)(nBufLen + (int)pOutBuf), nOrigLen - nBufLen);
     return pOutBuf;
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadComponent. DESCRIPTIVE, not an oracle name - no PPC counterpart exists. Body is a single SBigFromBinary(this[0], bytes, len), i.e. one half of CryptRSA_Prepare. Zero callers in the whole program: an MSVC out-of-line COMDAT copy of a helper that was inlined at every use. Moved out of SBig into SSignature because that is the translation unit it belongs to.
-void __thiscall SSIGNATURE_RsaLoadComponent(BigData * * pnParam, void * pBytes, uint32_t nByteCount) {
-    SBig::SBigFromBinary(*pnParam, pBytes, nByteCount);
+void __thiscall SSIGNATURE_RsaLoadComponent(BigData * * ppBig, void * pBytes, uint32_t nByteCount) {
+    SBig::SBigFromBinary(*ppBig, pBytes, nByteCount);
 }
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
@@ -658,7 +657,7 @@ void __thiscall CryptRSA_Process(BigData * * ppKey, void * pData, uint32_t nData
     SBig::SBigPowMod(pCipherBn, pPlainBn, ppKey[1], *ppKey);
     SBig::SBigToBinaryBuffer(pCipherBn, pData, nBufCapacity, &nDataLen);
     if (nDataLen < nBufCapacity) {
-      SSystem::SMemZero((void*)(nDataLen + (int)pData), nBufCapacity - nDataLen);
+      SMem::SMemZero((void*)(nDataLen + (int)pData), nBufCapacity - nDataLen);
     }
 
     local_8 &= -256;

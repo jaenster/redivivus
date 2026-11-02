@@ -19,7 +19,7 @@ namespace D2Client::SKILLS::SkillsSor {
 BOOL __fastcall Skills_CltDoFunc_Sor_LinearMissileCount(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client StFunc for Sorceress Inferno. Checks if STATE_inferno is already active on pUnit; if not, adds the skill overlay and plays the prgsound. Retrieves or allocates a stat list for STATE_inferno, sets the expire callback to SKILLSSOR_StatExpireCallback_ClearState, attaches it to the unit, and sets the unit sequence frame to 8 with a frame count of 0x500. Maintains the continuous beam visual and state.
 BOOL __fastcall Skills_CltStFunc_ApplyInfernoState(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLSSOR_SetInfernoFrames(struct D2UnitStrc * pUnit, int32_t nParam);
+void __fastcall SKILLSSOR_SetInfernoFrames(struct D2UnitStrc * pUnit, int32_t nTotalFrames);
 // Client-side: spawns an Inferno (or Hydra-fire variant) missile for the Sorceress. Looks up cltmissilea/cltmissileb from SkillsTxt; randomly picks between them using the unit seed (50/50). Reads target coords via GetCooordinates, evaluates calc[0] for frame count (min 1), fires MakeMissile with nFlags=0x8020. If the missile is created and the unit has STATE_inferno active: advances the animation sequence to frame 8 (or decrements nGfxCurrentFrame by 0x200 if no anim sequence).
 struct D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Sor_Inferno(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -39,7 +39,7 @@ void __fastcall SKILLSSOR_CltCreateBlazeMissile(struct D2UnitStrc * pUnit);
 // Client DoFunc for Sorceress Blizzard. Spawns the cltmissilea missile at the confirmed target's position with nSkillLvl as ToHit. Sets the missile's Z position vector shifted to 0x118 and Z offset to -0x28 (high-altitude spawn). Calls WEATHER_InitBlizzardState(0) and adds the skill overlay to the target unit.
 BOOL __fastcall Skills_CltDoFunc_Sor_Blizzard(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client missile collision event callback for Sorceress Blizzard/Frozen Orb ice shard spawning. Fires only on nParam1==0 (hit event). Validates pUnit can interact with the missile owner, checks missile flags2 bit 1 (piercing/spawning flag), then spawns a cltmissilea sub-missile at the owner's position and adds the cltoverlaya overlay to the struck unit.
-int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMissile, int32_t nUnused, eD2Skills eSkill, int32_t nParam2);
+int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMissile, int32_t nUnused, eD2Skills eSkill, int32_t nSkillLevel);
 // Client DoFunc for Sorceress skills that fire missiles at random positions within a radius on a timer (e.g. Frozen Orb bolt scatter). Reads fire interval from cltcalc[0], radius from cltcalc[1], duration from cltcalc[2]. Increments skill param1 each tick; fires one missile at a random offset within radius only when param1 % fireInterval == 0, using a random duration offset from cltcalc[2].
 BOOL __fastcall Skills_CltDoFunc_Sor_RandomRadiusMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 

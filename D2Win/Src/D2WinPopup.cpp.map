@@ -1,0 +1,158 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinPopup.cpp",
+  "functions": [
+    {
+      "name": "D2WINPOPUP_Destroy",
+      "address": "005085a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005085a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPopup",
+      "calledFunctions": [
+        "D2WINPOPUP_Destroy",
+        "FORMS_DestroyControl"
+      ]
+    },
+    {
+      "name": "D2WINPOPUP_IsActiveAndVisible",
+      "address": "005085c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005085c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPopup",
+      "calledFunctions": [
+        "D2WINPOPUP_IsActiveAndVisible",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINPOPUP_AddMessage",
+      "address": "00508610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508610"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPopup",
+      "calledFunctions": [
+        "D2WINPOPUP_AddMessage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetAndReturnLastFont",
+        "DRAW_text0"
+      ],
+      "usedTypes": [
+        "D2WinPopup",
+        "D2WinPopupEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINPOPUP_HandleClick",
+      "address": "005086a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005086a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPopup",
+      "calledFunctions": [
+        "D2WINPOPUP_HandleClick",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "pfnVoidNoArgCallback"
+      ]
+    },
+    {
+      "name": "DrawEx",
+      "address": "00508710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508710"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPopup",
+      "calledFunctions": [
+        "DrawEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinPopup",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "005087a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005087a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPopup",
+      "calledFunctions": [
+        "Draw",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_GetColorFromCurrentPallete",
+        "D2GFX_DrawRectEx",
+        "D2GFX_DrawSolidRectEx",
+        "SetAndReturnLastFont",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "D2WinPopup",
+        "D2WinPopupEntry",
+        "RECT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WinPopup",
+      "address": "005088c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005088c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPopup",
+      "calledFunctions": [
+        "D2WinPopup",
+        "FORMS_DestroyControl",
+        "AllocClientMemory",
+        "memset",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinPopup"
+      ]
+    }
+  ]
+}

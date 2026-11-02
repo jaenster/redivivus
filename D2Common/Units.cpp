@@ -877,7 +877,7 @@ int32_t __stdcall GetInventoryPage(D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bL
     }
 
     eD2UnitType eUnitType = pUnit->eUnitType;
-    int iVar1 = -1;
+    int nPageResult = -1;
     switch (eUnitType) {
       case UNIT_PLAYER:
         {
@@ -897,11 +897,11 @@ int32_t __stdcall GetInventoryPage(D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bL
             while (pUnit->nClassId != aPlayerInventoryPage[i * 2]) {
               i++;
               if (i >= nPlayerInventoryPageSize) {
-                return iVar1;
+                return nPageResult;
               }
             }
 
-            iVar1 = aPlayerInventoryPage[i * 2 + 1];
+            nPageResult = aPlayerInventoryPage[i * 2 + 1];
           }
 
           break;
@@ -924,7 +924,7 @@ int32_t __stdcall GetInventoryPage(D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bL
         }
     }
 
-    return iVar1;
+    return nPageResult;
 }
 
 D2LightMapStrc * __stdcall GetLightMap(D2UnitStrc * pUnit) {
@@ -1174,7 +1174,7 @@ uint32_t __fastcall UNITS_CheckAnimateAtFrameEnd(int32_t nAnimMode, eD2UnitType 
     return (uint8_t)*((uint8_t*)pSkillsTxt + 0x6) & gadwBitMasks[3];
 }
 
-static int __stdcall UNITS_GetAnimFrameSkip(int32_t nAnimMode, int32_t nParam, eD2UnitType eUnitType) {
+static int __stdcall UNITS_GetAnimFrameSkip(int32_t nAnimMode, int32_t nClassId, eD2UnitType eUnitType) {
     switch (eUnitType) {
       case UNIT_PLAYER:
         {
@@ -1182,7 +1182,7 @@ static int __stdcall UNITS_GetAnimFrameSkip(int32_t nAnimMode, int32_t nParam, e
         }
       case UNIT_MONSTER:
         {
-          if (nParam < 0x19a) {
+          if (nClassId < 0x19a) {
             return gaAnimTableClassic[nAnimMode * 5 + 4];
           }
 
@@ -1235,7 +1235,7 @@ static BOOL HasSequenceTransition(D2UnitStrc * pUnit, int32_t nAnimMode, eD2Unit
 }
 
 // Returns the diminished (soft-capped) value of a unit stat indexed by nParam into gaUnitStatDiminished[]. If the entry has nDiminishedFlag==1 and the raw value is non-zero, applies a harmonic-mean formula: (base * value) / (base + value), producing diminishing returns. Otherwise returns the raw shifted stat value unchanged.
-static int32_t GetDiminishedStat(D2UnitStrc * pUnit, int32_t nParam) {
+static int32_t GetDiminishedStat(D2UnitStrc * pUnit, int32_t nIndex) {
     // Static local variables (originally global data)
     static D2UnitStatDiminishedEntryStrc gaUnitStatDiminished[5] = {
     {
@@ -1265,9 +1265,9 @@ static int32_t GetDiminishedStat(D2UnitStrc * pUnit, int32_t nParam) {
     }
 }; D2_STATIC_GUARD(gaUnitStatDiminished, "D2Common::Units::GetDiminishedStat::gaUnitStatDiminished");
 
-    int32_t nStatValue = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, gaUnitStatDiminished[nParam].eStat, 0);
-    if (gaUnitStatDiminished[nParam].nDiminishedFlag == 1 && nStatValue) {
-      return gaUnitStatDiminished[nParam].nBaseOffset * nStatValue / (gaUnitStatDiminished[nParam].nBaseOffset + nStatValue);
+    int32_t nStatValue = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, gaUnitStatDiminished[nIndex].eStat, 0);
+    if (gaUnitStatDiminished[nIndex].nDiminishedFlag == 1 && nStatValue) {
+      return gaUnitStatDiminished[nIndex].nBaseOffset * nStatValue / (gaUnitStatDiminished[nIndex].nBaseOffset + nStatValue);
     }
 
     return nStatValue;
@@ -1606,7 +1606,7 @@ int __stdcall GetDirectionToCoords(D2UnitStrc * pUnit, int32_t nNewX, int32_t nN
     return nX;
 }
 
-void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nParam) {
+void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nLayer) {
     eD2UnitType eUnitType;
     int32_t nUnitGUID;
     if (!((int)nOverlay >= 0 && (int)nOverlay < sgptDataTable->nTxtOverlaySize)) {
@@ -1631,7 +1631,7 @@ void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nParam)
     }
 
     Stats::StatsEx::STATLIST_ClearOverlayFlags(pUnit);
-    Stats::StatsEx::STATLIST_SetStatValueSimple(pStatsEx, UNITSTAT_unit_dooverlay, (uint16_t)nOverlay, nParam);
+    Stats::StatsEx::STATLIST_SetStatValueSimple(pStatsEx, UNITSTAT_unit_dooverlay, (uint16_t)nOverlay, nLayer);
     Unit::ROOM_LinkUnitToUpdateList(pUnit);
 }
 
@@ -2038,8 +2038,9 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
     int nToBlock;
     int32_t nShieldResult;
     D2CharStatsTxt* pCharStats;
-    int iVar1;
     int nLevel;
+    int nUnitClassId;
+    int nDexterity;
     eD2UnitType eUnitType = UNIT_COUNT;
     if (pUnit) {
       eUnitType = pUnit->eUnitType;
@@ -2054,22 +2055,22 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
           }
 
           nToBlock = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_toblock, 0);
-          iVar1 = pUnit->nClassId;
-          if (iVar1 < 0 || iVar1 >= sgptDataTable->nTxtCharStatsSize) {
+          nLevel = pUnit->nClassId;
+          if (nLevel < 0 || nLevel >= sgptDataTable->nTxtCharStatsSize) {
             pCharStats = 0;
           } else {
-            pCharStats = sgptDataTable->pTxtCharStats + iVar1;
+            pCharStats = sgptDataTable->pTxtCharStats + nLevel;
           }
 
           nToBlock += (uint32_t)pCharStats->BlockFactor;
           if (bExpansion) {
-            iVar1 = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
+            nDexterity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
             nLevel = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
             if (nLevel <= 1) {
               nLevel = 1;
             }
 
-            nToBlock = (iVar1 - 0xf) * nToBlock / (nLevel * 2);
+            nToBlock = (nDexterity - 0xf) * nToBlock / (nLevel * 2);
           }
 
           break;
@@ -2080,7 +2081,7 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
         }
       case UNIT_MONSTER:
         {
-          if (!pUnit || (iVar1 = pUnit->nClassId , iVar1 < 0) || iVar1 >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + iVar1) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[iVar1] + 0xf) & gadwBitMasks[2])) {
+          if (!pUnit || (nUnitClassId = pUnit->nClassId , nUnitClassId < 0) || nUnitClassId >= sgptDataTable->nTxtMonStatsSize || !(sgptDataTable->pTxtMonStats + nUnitClassId) || !((uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[nUnitClassId] + 0xf) & gadwBitMasks[2])) {
             nClassId = HasShield(pUnit);
             if (!nClassId) {
               return 0;
@@ -3004,7 +3005,7 @@ uint8_t __stdcall PATH_GetCurrentDirection(D2UnitStrc * pUnit) {
 
     uint32_t nTargetPos = PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
     if (nTargetPos == nCurPos) {
-      uint8_t bVar1;
+      uint8_t byDirection;
       eUnitType = pUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nCurPos = pUnit->pPath.pStaticPath->nPosY;
@@ -3016,8 +3017,8 @@ uint8_t __stdcall PATH_GetCurrentDirection(D2UnitStrc * pUnit) {
 
       nTargetPos = PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
       if (nTargetPos == nCurPos) {
-        bVar1 = PATH::DynamicPath::UpdateDirection(pUnit->pPath.pDynamicPath);
-        return bVar1;
+        byDirection = PATH::DynamicPath::UpdateDirection(pUnit->pPath.pDynamicPath);
+        return byDirection;
       }
     }
 
@@ -3395,8 +3396,8 @@ uint8_t __stdcall GetItemComponent(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
       }
     }
 
-    uint8_t uVar1 = ITEMS::Items::ITEM_GetItemsTxt_bComponent(pItem);
-    return uVar1;
+    uint8_t byComponent = ITEMS::Items::ITEM_GetItemsTxt_bComponent(pItem);
+    return byComponent;
 }
 
 // Advances pUnit's animation by one tick. Clears nActionFrame, then if not in sequence mode: increments nGfxCurrentFrame by nAnimSpeed, wraps on reaching nFrameCount (looping through GetWeaponAnimClass offsets), and scans the AnimData hash table for action-frame markers (values 1-4) crossed during the advance. In sequence mode: advances nSeqFrame by nSeqAnimSpeed with wrap, decrements nFrameCount, calls UpdateSequenceMode and sets UNITFLAG_SQGFXCHANGE if the sequence mode changed.
@@ -3717,14 +3718,14 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
     int nWeaponAnimClass;
-    BOOL BVar1;
+    BOOL bIsShapeshifted;
     D2ObjectsTxt* pObjTxt;
     uint32_t dwStatFlag;
     uint32_t nRandomSpeed;
     D2MissilesTxt* pMissileTxt;
     uint32_t nAnimRate;
     uint64_t qwAnimCalc;
-    int64_t lVar2;
+    int64_t lVar1;
     int32_t nClassId;
     eD2UnitType eUnitType;
     D2UnitStrc* pAnimMode;
@@ -3761,7 +3762,7 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         UpdateAnimSpeed(pUnit_00, ".\\UNITS\\Units.cpp", 0x967);
         return;
         case UNIT_MONSTER:
-          if (pUnit_00->eUnitType == UNIT_PLAYER && (BVar1 = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit_00) , BVar1 != 0) && (pUnitArg == (D2UnitStrc*)0xd || pUnitArg == (D2UnitStrc*)0xf)) {
+          if (pUnit_00->eUnitType == UNIT_PLAYER && (bIsShapeshifted = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit_00) , bIsShapeshifted != 0) && (pUnitArg == (D2UnitStrc*)0xd || pUnitArg == (D2UnitStrc*)0xf)) {
             AddWalkVelocityStatIfExistToPlayer(pUnit_00, pUnit_00->nClassId);
           }
         if (pUnitArg != (D2UnitStrc*)0xe) {
@@ -3807,8 +3808,8 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         if ((int)nAnimRate > 0x10000) {
           if ((int)(nAnimRate & -16) < 0x4000) {
             qwAnimCalc = (int64_t)(int)nAnimRate * 0x100;
-            lVar2 = (int64_t)qwAnimCalc / 0x400;
-            wAnimSpeed = (short int)lVar2;
+            lVar1 = (int64_t)qwAnimCalc / 0x400;
+            wAnimSpeed = (short int)lVar1;
           } else {
             wAnimSpeed = (short int)((int)nAnimRate / 1024 << 8);
           }

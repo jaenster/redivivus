@@ -153,7 +153,7 @@ struct D2UnitStrc * __fastcall SERVER_InitUnitObject(::SGAMEDATA * pGame, struct
 // @sourcefile .\OBJECTS\Objects.cpp
 struct D2TimerArgStrc * __fastcall AllocTimer(::SGAMEDATA * pGame);
 // @sourcefile .\OBJECTS\Objects.cpp
-void __fastcall FrreeTimer(::SGAMEDATA * pGame, void * * pParam);
+void __fastcall FrreeTimer(::SGAMEDATA * pGame, void * * ppTimerList);
 // Server-side initializer for a freshly created object unit. Looks up the unit's ObjectsTxt record, assigns its GUID, clears the sparkly-chest flag, and sets/clears CANBEATTACKED and TARGETABLE unit flags from the txt (IsAttackable / Selectable[animMode]). Validates class id < 0x23d and anim mode < 8 (halts via ErrorManager otherwise). Clears the unit's timer list, then dispatches to the per-object init function in the OBJECTSINITFN table (index = ObjectsTxt.InitFn, bounds-checked < 0x50, IsBadCodePtr-guarded) passing a D2ObjectInitFnArg with game/room/x/y/seed/txt. Rolls a 1-in-0xe seed chance to flag a PreOperate object for update, and allocates+attaches a timer arg. Inputs: pGame, pUnit, nAnimModeOrGUID (used as GUID), pRoom, nX, nY.
 void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nAnimModeOrGUID, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 void __fastcall Objects_InitFn10(struct D2ObjectInitFnArg * pInitArg);
@@ -218,7 +218,7 @@ void __fastcall OBJECT_FreeObjectData(::SGAMEDATA * pGame, struct D2UnitStrc * p
 void __fastcall FreeObjects(::SGAMEDATA * pGame);
 int32_t __fastcall OBJECT_GetDoubledTxtSize(struct D2ObjectsTxt * pObjectsTxt);
 uint8_t __stdcall OBJECT_GetDefaultSize();
-void __fastcall OBJECTS_SetUnitIdInTimerArg(struct D2UnitStrc * pUnit, int32_t nParam);
+void __fastcall OBJECTS_SetUnitIdInTimerArg(struct D2UnitStrc * pUnit, int32_t nUnitGUID);
 int32_t __fastcall GetUnitGUIDFromUnitTimerArg(struct D2UnitStrc * pUnit);
 void __fastcall Objects_InitFn16(struct D2ObjectInitFnArg * pInitArg);
 // Server-side object spawner for one object class in a room. Reads ObjectsTxt for nObjectClassId (size/orientation/selectable), advances the room RNG seed, and decides whether to spawn: a density-region check (OBJECTRGN_CheckDensityThreshold) either forces placement (up to 30 retries) or gates it on nChancePercent vs the seed roll. On success calls OBJECT_PlaceAtBiasedPosition near a spawn point, sets/clears UNITFLAG_TARGETABLE from the Selectable column, and for density spawns remaps to a shrine (OBJECT_SelectRandomShrineType, ShrinesTxt line 2) and bumps the level spawn count. Finally records the placed object's X/Y into the level RNG point set via AddPointsToLevelRngPoints1.

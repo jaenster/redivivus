@@ -31,7 +31,6 @@
 #include "Fog/Engine/Application.h"
 #include "Storm/H/stpl.h"
 #include "Storm/Storm.h"
-#include "Storm/_unnamespaced.h"
 
 // =============================================================================
 // Declaration closure — definitions
@@ -1235,51 +1234,51 @@ char s_DEU_006e0284[4] = { 'D', 'E', 'U', '\x00' }; D2_GLOBAL_GUARD(s_DEU_006e02
 D2MonsterEquipEntryStrc gaMonsterEquipTable[12] = {
     {
         /* .szItemCode = */ { 'b', 's', 'd', ' ' },
-        /* .field_0x4 = */ 0x104
+        /* .dwBodyLocAndFlag = */ 0x104
     },
     {
         /* .szItemCode = */ { 't', 'a', 'x', ' ' },
-        /* .field_0x4 = */ 0x104
+        /* .dwBodyLocAndFlag = */ 0x104
     },
     {
         /* .szItemCode = */ { 'v', 'o', 'u', ' ' },
-        /* .field_0x4 = */ 0x104
+        /* .dwBodyLocAndFlag = */ 0x104
     },
     {
         /* .szItemCode = */ { 't', 'o', 'w', ' ' },
-        /* .field_0x4 = */ 0x105
+        /* .dwBodyLocAndFlag = */ 0x105
     },
     {
         /* .szItemCode = */ { 't', 'a', 'x', ' ' },
-        /* .field_0x4 = */ 0x105
+        /* .dwBodyLocAndFlag = */ 0x105
     },
     {
         /* .szItemCode = */ { 'r', 'i', 'n', ' ' },
-        /* .field_0x4 = */ 0x106
+        /* .dwBodyLocAndFlag = */ 0x106
     },
     {
         /* .szItemCode = */ { 'f', 'l', 'd', ' ' },
-        /* .field_0x4 = */ 0x103
+        /* .dwBodyLocAndFlag = */ 0x103
     },
     {
         /* .szItemCode = */ { 'h', 'g', 'l', ' ' },
-        /* .field_0x4 = */ 0x10a
+        /* .dwBodyLocAndFlag = */ 0x10a
     },
     {
         /* .szItemCode = */ { 'f', 'l', 'd', ' ' },
-        /* .field_0x4 = */ 0x103
+        /* .dwBodyLocAndFlag = */ 0x103
     },
     {
         /* .szItemCode = */ { 'h', 'b', 't', ' ' },
-        /* .field_0x4 = */ 0x109
+        /* .dwBodyLocAndFlag = */ 0x109
     },
     {
         /* .szItemCode = */ { 'h', 'b', 't', ' ' },
-        /* .field_0x4 = */ 0x109
+        /* .dwBodyLocAndFlag = */ 0x109
     },
     {
         /* .szItemCode = */ { 'c', 'r', 'n', ' ' },
-        /* .field_0x4 = */ 0x101
+        /* .dwBodyLocAndFlag = */ 0x101
     }
 }; D2_GLOBAL_GUARD(gaMonsterEquipTable, "gaMonsterEquipTable");
 
@@ -37128,8 +37127,6 @@ int32_t gaChatTextBoxFontParams[2] = {}; D2_GLOBAL_GUARD(gaChatTextBoxFontParams
 
 D2SeedStrc gAncientsCloudSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gAncientsCloudSeed, "gAncientsCloudSeed");
 
-uint16_t gnMonsterUniqueNameBuffer[2] = {}; D2_GLOBAL_GUARD(gnMonsterUniqueNameBuffer, "gnMonsterUniqueNameBuffer");
-
 uint8_t gaDirectDrawDitherPaletteRemap[1024] = {}; D2_GLOBAL_GUARD(gaDirectDrawDitherPaletteRemap, "gaDirectDrawDitherPaletteRemap");
 
 D2RenderStatisticsStrc gnTextureMemoryUsageBytes = {}; D2_GLOBAL_GUARD(gnTextureMemoryUsageBytes, "gnTextureMemoryUsageBytes");
@@ -37951,7 +37948,6 @@ GUID ActivityId = {} /* 00000000-0000-0000-0000-000000000000 */; D2_GLOBAL_GUARD
 // =============================================================================
 
 uint8_t IMAGE_DOS_HEADER__00400000[128] = {}; D2_GLOBAL_GUARD(IMAGE_DOS_HEADER__00400000, "IMAGE_DOS_HEADER__00400000");
-LPCSTR lpCaption_006cc848 = (LPCSTR)s_Diablo_2_EXE_006cc838; D2_GLOBAL_GUARD(lpCaption_006cc848, "lpCaption_006cc848");
 uint8_t gbChatDlgUpdateMarker = 0x2d; D2_GLOBAL_GUARD(gbChatDlgUpdateMarker, "gbChatDlgUpdateMarker");
 float gfTwoPow32 = 4.294967E+9; D2_GLOBAL_GUARD(gfTwoPow32, "gfTwoPow32");
 uint16_t gnSymbolSearchPathSeparator = 0x3b; D2_GLOBAL_GUARD(gnSymbolSearchPathSeparator, "gnSymbolSearchPathSeparator");
@@ -37986,8 +37982,6 @@ uint16_t gaPossessiveNameData = 0x2073; D2_GLOBAL_GUARD(gaPossessiveNameData, "g
 char gDebugSpaceString = ' '; D2_GLOBAL_GUARD(gDebugSpaceString, "gDebugSpaceString");
 uint32_t gaScreenResolutionTableIndexArray = 0x40; D2_GLOBAL_GUARD(gaScreenResolutionTableIndexArray, "gaScreenResolutionTableIndexArray");
 uint32_t gaScreenResolutionModeArray = 0x1; D2_GLOBAL_GUARD(gaScreenResolutionModeArray, "gaScreenResolutionModeArray");
-int ScreenSizeX = 0x280; D2_GLOBAL_GUARD(ScreenSizeX, "ScreenSizeX");
-int ScreenSizeY = 0x1e0; D2_GLOBAL_GUARD(ScreenSizeY, "ScreenSizeY");
 uint32_t gnCursorInvTypeAutoOpenA = 0x5; D2_GLOBAL_GUARD(gnCursorInvTypeAutoOpenA, "gnCursorInvTypeAutoOpenA");
 D2DataTableTxtStrc * sgptDataTable = (D2DataTableTxtStrc *)&sgtDataTable; D2_GLOBAL_GUARD(sgptDataTable, "sgptDataTable");
 char * gaLanguageNames_0074430c_11[15] = {}; D2_GLOBAL_GUARD(gaLanguageNames_0074430c_11, "gaLanguageNames_0074430c_11");
@@ -38004,8 +37998,6 @@ HANDLE MCPThread = 0; D2_GLOBAL_GUARD(MCPThread, "MCPThread");
 pfnMCPGameListEntry g_pfnMCPGameListCallback = (pfnMCPGameListEntry)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCallback, "g_pfnMCPGameListCallback");
 pfnVoidNoArgCallback g_pfnMCPGameListCompleteCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCompleteCallback, "g_pfnMCPGameListCompleteCallback");
 pfnMCPMessage g_pfnMCPMessageCallback = (pfnMCPMessage)0; D2_GLOBAL_GUARD(g_pfnMCPMessageCallback, "g_pfnMCPMessageCallback");
-int WindowSizeY = 0; D2_GLOBAL_GUARD(WindowSizeY, "WindowSizeY");
-int WindowSizeX = 0; D2_GLOBAL_GUARD(WindowSizeX, "WindowSizeX");
 uint32_t gaSpriteArcaneStarYOffset = 0; D2_GLOBAL_GUARD(gaSpriteArcaneStarYOffset, "gaSpriteArcaneStarYOffset");
 uint32_t gaSpriteArcaneStarXOffset = 0; D2_GLOBAL_GUARD(gaSpriteArcaneStarXOffset, "gaSpriteArcaneStarXOffset");
 uint32_t gnEngineMode = 0; D2_GLOBAL_GUARD(gnEngineMode, "gnEngineMode");
@@ -38084,7 +38076,6 @@ HMODULE lpGLIDE3x_dll = 0; D2_GLOBAL_GUARD(lpGLIDE3x_dll, "lpGLIDE3x_dll");
 uint32_t gbPlayingCutScene = 0; D2_GLOBAL_GUARD(gbPlayingCutScene, "gbPlayingCutScene");
 IDirectDrawSurface1 * gpDDrawPrimarySurface = 0; D2_GLOBAL_GUARD(gpDDrawPrimarySurface, "gpDDrawPrimarySurface");
 uint32_t gbFaultHandlerListInitialized = 0; D2_GLOBAL_GUARD(gbFaultHandlerListInitialized, "gbFaultHandlerListInitialized");
-pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_GLOBAL_GUARD(g_pfnFaultErrorCallback, "g_pfnFaultErrorCallback");
 D2Srp * g_pSrpContext = 0; D2_GLOBAL_GUARD(g_pSrpContext, "g_pSrpContext");
 uint32_t gnQServerListenSocket = 0; D2_GLOBAL_GUARD(gnQServerListenSocket, "gnQServerListenSocket");
 unsigned int gpfnProfCoreInitCallback = {}; D2_GLOBAL_GUARD(gpfnProfCoreInitCallback, "gpfnProfCoreInitCallback");

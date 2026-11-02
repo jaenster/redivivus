@@ -43,7 +43,7 @@ namespace D2Game::UNIT::SUNITNPC {
 // Function declarations
 // Server-side: allocates and initializes the NPC inventory/hireling-slot block (0x450 bytes) for a newly spawned NPC unit if not already initialized. Fills up to 10 hireling name slots drawn from GetHirelingNamesAndSize, seeding each slot via the NPC control RNG. Halts fatally if hireling name lookup fails.
 // @sourcefile .\UNIT\SUNITNPC.CPP
-void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nParam, uint32_t nNpcUnit);
+void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClassId, uint32_t nNpcUnit);
 // Refreshes a repairable NPC item after a trade action. If the item is a throwable stackable, resets its quantity stat to max and notifies the client (0x3E). Handles cursor item state, and if not broken, resets durability to max and notifies the client. Side-effects: stat writes + net sends to pUnit's client.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall SUNITNPC_UpdateNpcInventory(::SGAMEDATA * pGame, struct D2UnitStrc * pItem, struct D2UnitStrc * pUnit);
@@ -53,7 +53,7 @@ void __fastcall SUNITNPC_SetItemForNpc(struct D2UnitStrc * pUnit, struct D2UnitS
 // Generates a single restocked NPC vendor item of a requested item code and stores it into the NPC's store inventory. Resolves the base item code, then on Nightmare/Hell difficulty (and high enough item level) may upgrade the code toward the item's uber/ultra/nightmare/hell upgrade variants via weighted RANDOM rolls against the NPC seed. Repeatedly calls ITEM_CreateFromTemplate until the generated item matches the target code and is not a 'Cracked' low-quality item (rejected items are deleted). On success picks the item's store page, attaches it to the NPC inventory grid via SERVER_ItemToInventory (falling back to the MERC page), or adds it to the NPC proxy if it doesn't fit. Returns the created item unit or NULL. Halts on null game/unit. Server-side D2Common SUnitNpc.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 // Stack-slot reuse: the low byte of the nParam2 slot holds eStorePage (ItemTypes storepage of the created item, 00576571); then the whole slot holds pCreatedItem->nUnitGUID (005765ea), passed as the item GUID to SERVER_ItemToInventory.
-struct D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(struct D2UnitStrc * pUnit, uint32_t nParam1, ::SGAMEDATA * pGame, int32_t bIsVendorItem, eD2ItemQuality eQuality, uint32_t nParam2, int32_t nParam);
+struct D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(struct D2UnitStrc * pUnit, uint32_t dwItemCode, ::SGAMEDATA * pGame, int32_t bIsVendorItem, eD2ItemQuality eQuality, uint32_t nItemLevel, int32_t nPlayerLevel);
 void __fastcall SUNITNPC_RefreshNpcItem(struct D2UnitStrc * pPlayerUnit, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2);
 void __fastcall SUNITNPC_FillNpcInventory(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, ::SGAMEDATA * pGame, int32_t bDeleteItem);
 // Server-side handler that sends the mercenary-for-hire list to a client when they interact with an NPC hireling vendor (Kashya, Greiz, Farah, Meshif). Validates the NPC class ID, initialises the NPC inventory on first interaction, then iterates the available hire slots and sends a 0x4E packet for each available (unsold, unstocked) mercenary entry. Calls ERROR_Halt on bad NPC or name-range data.
@@ -73,7 +73,7 @@ void __fastcall SUNITNPC_ApplyScrollSkill(struct D2UnitStrc * pUnit, eD2Skills e
 bool __fastcall SUNITNPC_CheckNpcCanSellItem(::SGAMEDATA * pGame, struct D2UnitStrc * pNpcUnit, struct D2UnitStrc * pUnit);
 void __fastcall SUNITNPC_GiveGoldOrDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nGoldAmount);
 // Handles post-purchase NPC item refresh. For gamble mode (nBuyMode==2) with a personal NPC inventory, scans the player's carried items and refreshes the matching gamble item via SUNITNPC_RefreshNpcItem. Otherwise checks if the NPC can still sell the item; if not, refills the NPC's inventory slot via SUNITNPC_FillNpcInventory.
-void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * param_1, struct D2UnitStrc * pPlayerRaw, int32_t nBuyMode);
+void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, struct D2UnitStrc * pPlayerRaw, int32_t nBuyMode);
 // Checks the hireling slot array for an NPC (indexed by nNpcClassId via D2HirelingTxt name range). If all slots with valid entries are unfilled (count==0), frees the slot array, clears the pointer and a flags byte, then re-initialises the NPC's hireling inventory via SUNITNPC_InitNpcInventory. Halts if the hireling entry or name range is invalid.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall ResetNpcHireListIfEmpty(::SGAMEDATA * pGame, int32_t nNpcClassId, uint32_t nFilledSlots);
@@ -124,7 +124,7 @@ void __fastcall ExecutePrayUnused(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit
 BOOL __fastcall SUNITNPC_DiscardTradeListRolls(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nQueueEntryField0, uint32_t dwTradeEntryValue);
 // Resurrects a player's mercenary (hireling): looks up the mercenary unit by gnMonsterSpawnTotalCount, skips units with a special AI sub. Clears and nulls the mercenary's inventory, then resets and re-runs the repair pass (SUNITNPC_RepairItem) so the merc's equipment is restored at full durability after resurrection.
 void __fastcall SUNITNPC_HandleResurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall SUNITNPC_CloseNpcInteraction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * param_1);
+void __fastcall SUNITNPC_CloseNpcInteraction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNpc);
 // Server-side mercenary hiring from a town NPC (e.g. Greiz/Asheara). Looks up the NPC's per-game hire-list state by class id; bails if the player already owns a hireable pet. For each available, not-yet-hired list slot in the hireling name range, marks the slot taken, sends a 0x50 quest-special packet to the player's client to confirm, spawns the merc monster (trying placement modes 4/6/0xC), and calls MERC_HireAndReplaceMerc to attach it as the player's hireling. Resets the NPC hire list if it becomes empty. Halts (error 0xFA2) if no hireling.txt entry exists.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, int32_t nNpcClassId);
@@ -132,7 +132,7 @@ void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer
 // @sourcefile .\UNIT\SUNITNPC.CPP
 BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pNpc, struct D2UnitStrc * pItem, int32_t nNpcDataIdx);
 // Handles a player trade action with an NPC (buy/repair). Looks up the NPC's game proxy, marks it active, processes the NPC action, then conditionally resets the proxy and triggers item repair (single item if nParam!=0, all items if nParam==0) for repairable NPC types. Refreshes inventory after repair. Skips class IDs 0x96, 0xC6, and 0x203 (non-repairing NPCs).
-void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNpc, int32_t bIsRepair, int32_t nParam);
+void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNpc, int32_t bIsRepair, int32_t nMode);
 // Handle NPC sell transaction - transfer item from NPC to player inventory with cost calculation
 // @sourcefile .\UNIT\SUNITNPC.CPP
 eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, int32_t nNpcGUID, int32_t nItemGUID, int32_t nMode, int32_t nPrice);

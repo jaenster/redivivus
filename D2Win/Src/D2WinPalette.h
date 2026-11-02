@@ -13,14 +13,14 @@ namespace D2Win::Src::D2WinPalette {
 // Function declarations
 // Builds the 72-entry palette pointer table on the stack and hands it to D2GFX_SetPaletteTable. The table is one contiguous array: [0..2] the three act1 palette planes, [3..51] the 49 gamma/data palettes, [52..64] the 13 transpose palettes, [65..71] act2/act5/neutral/units/index-counter/menu-in-game palettes. GetPalettePointer indexes it at +0x00..+0x11c.
 void __stdcall D2WINPALETTE_LoadPalettes();
-uint8_t * __fastcall D2WINPAL_GetActPalettePointer(int32_t nParam);
+uint8_t * __fastcall D2WINPAL_GetActPalettePointer(int32_t nPaletteIndex);
 void __stdcall DRAW_SetOrReloadPalleteMain();
-void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t nParam);
+void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t bEnableGammaShift);
 uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
-void __fastcall D2WINPAL_CopyPalette(void * pParam);
+void __fastcall D2WINPAL_CopyPalette(void * pDest);
 // @sourcefile .\Src\D2WinPalette.cpp
 BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2);
-BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nParam);
+BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct);
 int __stdcall LoadPalette(char * szDatFile, char * szPl2File);
 void __fastcall D2WINPAL_SetGammaRamp(uint32_t dwParam);
 

@@ -1,0 +1,1718 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2gfx/D2GFX.cpp",
+  "functions": [
+    {
+      "name": "D2GFX_Release",
+      "address": "004f5050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5050"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_Release",
+        "sprintf"
+      ]
+    },
+    {
+      "name": "D2GFX_GetRendererMode",
+      "address": "004f5140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5140"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetRendererMode"
+      ],
+      "usedTypes": [
+        "eD2RendererMode"
+      ]
+    },
+    {
+      "name": "D2GFX_GetResolutionMode",
+      "address": "004f5160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5160"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetResolutionMode"
+      ]
+    },
+    {
+      "name": "D2GFX_GetPerspectiveCapable",
+      "address": "004f5170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5170"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetPerspectiveCapable"
+      ]
+    },
+    {
+      "name": "D2GFX_GetFixAspect",
+      "address": "004f5180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5180"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetFixAspect"
+      ]
+    },
+    {
+      "name": "D2GFX_SetPerspectiveCapable",
+      "address": "004f5190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5190"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetPerspectiveCapable"
+      ]
+    },
+    {
+      "name": "IsWindowMode",
+      "address": "004f51c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f51c0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "IsWindowMode"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_IsPerspectiveActive",
+      "address": "004f51d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f51d0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_IsPerspectiveActive"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_SetPerspective",
+      "address": "004f51e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f51e0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetPerspective"
+      ]
+    },
+    {
+      "name": "D2GFX_SetBlendedShadows",
+      "address": "004f5200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5200"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetBlendedShadows"
+      ]
+    },
+    {
+      "name": "D2GFX_GetLowQuality",
+      "address": "004f5210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5210"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetLowQuality"
+      ]
+    },
+    {
+      "name": "D2GFX_SetLowQuality",
+      "address": "004f5220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5220"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetLowQuality"
+      ]
+    },
+    {
+      "name": "D2GFX_SetGamma",
+      "address": "004f5230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5230"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetGamma"
+      ]
+    },
+    {
+      "name": "D2GFX_CheckGamma",
+      "address": "004f5260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5260"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_CheckGamma"
+      ]
+    },
+    {
+      "name": "D2GFX_EnableVSync",
+      "address": "004f5270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5270"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_EnableVSync"
+      ]
+    },
+    {
+      "name": "D2GFX_DisableFixAspect",
+      "address": "004f5280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5280"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DisableFixAspect"
+      ]
+    },
+    {
+      "name": "D2GFX_GetRenderStatistics",
+      "address": "004f5290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5290"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetRenderStatistics"
+      ]
+    },
+    {
+      "name": "D2GFX_SetOverlayMode",
+      "address": "004f52a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f52a0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetOverlayMode"
+      ]
+    },
+    {
+      "name": "D2GFX_SetOption",
+      "address": "004f52b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f52b0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetOption"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_Initialize",
+      "address": "004f52e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f52e0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_Initialize",
+        "D2CheckExpansionGame",
+        "FAULT_ShowFormattedErrorWithArgs",
+        "D2GFX_SetupRenderFunctions",
+        "atexit",
+        "LOGFILE_WriteStringToFile",
+        "FOG_ErrorHandler"
+      ],
+      "usedTypes": [
+        "ATOM",
+        "D2RendererFunctionsStrc",
+        "WNDCLASSA",
+        "WNDPROC",
+        "eD2RendererMode"
+      ]
+    },
+    {
+      "name": "RENDERER_TogglePerspective",
+      "address": "004f54b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f54b0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "RENDERER_TogglePerspective"
+      ]
+    },
+    {
+      "name": "RENDERER_ToggleBlendedShadows",
+      "address": "004f54d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f54d0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "RENDERER_ToggleBlendedShadows"
+      ]
+    },
+    {
+      "name": "D2GFX_ToggleLowQuality",
+      "address": "004f54f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f54f0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ToggleLowQuality"
+      ]
+    },
+    {
+      "name": "HideOSCursor",
+      "address": "004f5510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5510"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "HideOSCursor"
+      ]
+    },
+    {
+      "name": "ShowOSCursor",
+      "address": "004f5540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5540"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "ShowOSCursor"
+      ]
+    },
+    {
+      "name": "D2GFX_GetWindowSizeByResolutionMode",
+      "address": "004f5570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5570"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetWindowSizeByResolutionMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_CreateWindow",
+      "address": "004f5610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5610"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_CreateWindow",
+        "sprintf",
+        "D2GFX_GetWindowSizeByResolutionMode",
+        "memset",
+        "FAULT_ShowFormattedErrorWithArgs",
+        "HideOSCursor",
+        "ShowOSCursor",
+        "D2GFX_InitializeWindowSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DEVMODEA",
+        "int32_t",
+        "tagRECT"
+      ]
+    },
+    {
+      "name": "D2GFX_DestroyWindow",
+      "address": "004f5900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5900"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DestroyWindow",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_OnActivationChange",
+      "address": "004f5990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5990"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_OnActivationChange"
+      ]
+    },
+    {
+      "name": "GetHwnd",
+      "address": "004f59a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f59a0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "GetHwnd"
+      ]
+    },
+    {
+      "name": "D2GFX_GetScreenSize",
+      "address": "004f59b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f59b0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetScreenSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateOSCursorVisibilty",
+      "address": "004f59f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f59f0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "UpdateOSCursorVisibilty",
+        "HideOSCursor",
+        "ShowOSCursor"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsFullscreen",
+      "address": "004f5a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5a30"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "IsFullscreen"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_ActivateWindow",
+      "address": "004f5a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5a50"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ActivateWindow",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_ResizeWindow",
+      "address": "004f5aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5aa0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ResizeWindow",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_GetWindowSizeByResolutionMode",
+        "D2GFX_InitializeWindowSize"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "tagRECT"
+      ]
+    },
+    {
+      "name": "D2GFX_UpdateWindowSize",
+      "address": "004f5bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5bc0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_UpdateWindowSize",
+        "D2GFX_GetWindowSizeByResolutionMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "tagRECT"
+      ]
+    },
+    {
+      "name": "D2GFX_ClearCaches",
+      "address": "004f5d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5d50"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ClearCaches"
+      ]
+    },
+    {
+      "name": "D2GFX_BeginCutScene",
+      "address": "004f5d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5d60"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_BeginCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_PlayCutScene",
+      "address": "004f5d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5d90"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_PlayCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_CheckCutScene",
+      "address": "004f5dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5dd0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_CheckCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DecodeSmacker",
+      "address": "004f5e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5e00"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DecodeSmacker",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_PlayerSmacker",
+      "address": "004f5e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5e40"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_PlayerSmacker",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_CloseSmacker",
+      "address": "004f5e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5e80"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_CloseSmacker",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_HideTaskbarAppBars",
+      "address": "004f5ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5ec0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "DRAW_HideTaskbarAppBars"
+      ],
+      "usedTypes": [
+        "D2GFXWindowPlacementStrc",
+        "_AppBarData"
+      ]
+    },
+    {
+      "name": "D2GFX_ResetViewport",
+      "address": "004f5f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5f60"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ResetViewport"
+      ],
+      "usedTypes": [
+        "D2GFXWindowPlacementStrc"
+      ]
+    },
+    {
+      "name": "D2GFX_EndCutScene",
+      "address": "004f5fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f5fa0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_EndCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRAW_HideTaskbarAppBars",
+        "D2GFX_ResetViewport",
+        "D2GFX_SetPalette",
+        "D2GFX_InitializeWindowSize"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_EndCutSceneReturnSceneState",
+      "address": "004f6070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6070"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_EndCutScene"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EndCutScene",
+      "address": "004f6080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6080"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "EndCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_EndCutScene",
+        "D2GFX_ResizeWindow",
+        "LOGFILE_WriteStringToFile",
+        "D2GFX_SetPalette"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_BeginScene",
+      "address": "004f60f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f60f0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_BeginScene"
+      ]
+    },
+    {
+      "name": "D2GFX_GetGammaFloat_Unused",
+      "address": "004f6110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6110"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetGammaFloat_Unused"
+      ],
+      "usedTypes": [
+        "LARGE_INTEGER"
+      ]
+    },
+    {
+      "name": "D2GFX_CalculateGammaRamp",
+      "address": "004f6130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6130"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_CalculateGammaRamp"
+      ],
+      "usedTypes": [
+        "LARGE_INTEGER",
+        "int64_t"
+      ]
+    },
+    {
+      "name": "D2GFX_EndScene",
+      "address": "004f6190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6190"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_EndScene",
+        "D2GFX_CalculateGammaRamp"
+      ]
+    },
+    {
+      "name": "D2GFX_GetBackBuffer",
+      "address": "004f6250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6250"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetBackBuffer"
+      ]
+    },
+    {
+      "name": "D2GFX_IsWindowActive",
+      "address": "004f6270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6270"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_IsWindowActive"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawRect",
+      "address": "004f6280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6280"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawRect"
+      ],
+      "usedTypes": [
+        "RECT"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawRectEx",
+      "address": "004f62a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f62a0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawRectEx"
+      ],
+      "usedTypes": [
+        "RECT"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawSolidRect",
+      "address": "004f62c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f62c0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawSolidRect"
+      ],
+      "usedTypes": [
+        "RECT"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawSolidSquare",
+      "address": "004f62e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f62e0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawSolidSquare"
+      ],
+      "usedTypes": [
+        "POINT"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawSolidRectEx",
+      "address": "004f6300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6300"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawSolidRectEx"
+      ],
+      "usedTypes": [
+        "DRAWMODE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawSolidRectAlpha",
+      "address": "004f6340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6340"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawSolidRectAlpha"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawLine",
+      "address": "004f6380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6380"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawLine"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_ClearScreen",
+      "address": "004f63b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f63b0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_ClearScreen"
+      ]
+    },
+    {
+      "name": "D2GFX_SetPalette",
+      "address": "004f63d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f63d0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetPalette"
+      ],
+      "usedTypes": [
+        "LPPALETTEENTRY",
+        "tagPALETTEENTRY"
+      ]
+    },
+    {
+      "name": "D2GFX_SetPaletteTable",
+      "address": "004f6410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6410"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetPaletteTable",
+        "PALETTE_InitColorLookupTables"
+      ],
+      "usedTypes": [
+        "BYTE *"
+      ]
+    },
+    {
+      "name": "D2GFX_SetGlobalLight",
+      "address": "004f6430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6430"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetGlobalLight"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawPerspectiveImage",
+      "address": "004f6450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6450"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawPerspectiveImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawImage",
+      "address": "004f6480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6480"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc",
+        "D2GfxDataStrc",
+        "DRAWMODE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawShiftedImage",
+      "address": "004f64b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f64b0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawShiftedImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DRAWMODE",
+        "GLOBALPALLETE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawVerticalCropImage",
+      "address": "004f64e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f64e0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawVerticalCropImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DRAWMODE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawSprite6",
+      "address": "004f6510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6510"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawSprite6"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2GfxTileRectStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawShadow",
+      "address": "004f6540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6540"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawShadow"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawImageColoredShape",
+      "address": "004f6570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6570"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawImageColoredShape"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DebugFillBackBuffer",
+      "address": "004f65a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f65a0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DebugFillBackBuffer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_UpdateScaleFactor",
+      "address": "004f65c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f65c0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_UpdateScaleFactor"
+      ]
+    },
+    {
+      "name": "D2GFX_GetScaleFactor",
+      "address": "004f65e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f65e0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_GetScaleFactor"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_SetDefaultScaleFactor",
+      "address": "004f65f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f65f0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetDefaultScaleFactor"
+      ]
+    },
+    {
+      "name": "D2GFX_SetPerspectiveScale",
+      "address": "004f6670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6670"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetPerspectiveScale",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_IsInPerspectiveBounds",
+      "address": "004f66e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f66e0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_IsInPerspectiveBounds",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_AdjustPerspectivePosition",
+      "address": "004f6760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6760"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_AdjustPerspectivePosition",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_PerspecitveScalePosition",
+      "address": "004f67c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f67c0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_PerspecitveScalePosition",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_SetDefaultPerspectiveFactor",
+      "address": "004f6830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6830"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetDefaultPerspectiveFactor",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawString",
+      "address": "004f6890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6890"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawString"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawLight",
+      "address": "004f68b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f68b0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawLight"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawGroundTile",
+      "address": "004f68e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f68e0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawGroundTile"
+      ],
+      "usedTypes": [
+        "D2GfxLightExStrc",
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawWallTile",
+      "address": "004f6920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6920"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawWallTile"
+      ],
+      "usedTypes": [
+        "D2GfxLightStrc",
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawTransWallTile",
+      "address": "004f6950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6950"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawTransWallTile"
+      ],
+      "usedTypes": [
+        "D2GfxLightStrc",
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawShadowTile",
+      "address": "004f6980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6980"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawShadowTile"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawTileSimple",
+      "address": "004f69b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f69b0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawTileSimple"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawTileAdvanced",
+      "address": "004f6bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6bb0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawTileAdvanced"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawWallTileBasic",
+      "address": "004f6f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f6f60"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawWallTileBasic"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawWallTileWithPerspective",
+      "address": "004f71a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f71a0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_DrawWallTileWithPerspective"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t[32]"
+      ]
+    },
+    {
+      "name": "D2GFX_InitializeLineBuffer",
+      "address": "004f7cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7cc0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_InitializeLineBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t[32]"
+      ]
+    },
+    {
+      "name": "PALETTE_InitColorLookupTables",
+      "address": "004f8e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8e40"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "PALETTE_InitColorLookupTables"
+      ],
+      "usedTypes": [
+        "BYTE *",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFX_InitializeWindowSize",
+      "address": "004f8ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8ea0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "D2GFX_InitializeWindowSize",
+        "SRegLoadValue",
+        "D2GFX_SetOption",
+        "D2GFX_SetGamma"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CreateWindowWithChecks",
+      "address": "004f8f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8f10"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "CreateWindowWithChecks",
+        "D2GFX_CreateWindow",
+        "GFX_InitCelDataCache",
+        "GetHwnd"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6cadf0",
+      "address": "006cadf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cadf0"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "StaticInit_6cadf0"
+      ]
+    },
+    {
+      "name": "StaticInit_6cae00",
+      "address": "006cae00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cae00"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "StaticInit_6cae00"
+      ]
+    },
+    {
+      "name": "StaticInit_6cae10",
+      "address": "006cae10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cae10"
+        }
+      ],
+      "namespace": "D2gfx::D2GFX",
+      "calledFunctions": [
+        "StaticInit_6cae10"
+      ]
+    }
+  ]
+}

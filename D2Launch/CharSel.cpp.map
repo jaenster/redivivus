@@ -1,0 +1,1336 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Launch/CharSel.cpp",
+  "functions": [
+    {
+      "name": "CHARSEL_FindRealmByName",
+      "address": "00437a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437a20"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_FindRealmByName",
+        "MAINMENU_GetRealmCount",
+        "MAINMENU_GetRealmName",
+        "SStrCmpI"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_GetCachedRealmData",
+      "address": "00437a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437a70"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "SStrHash",
+        "GetTickCount",
+        "CHARSEL_GetCachedRealmData"
+      ],
+      "usedTypes": [
+        "D2RealmCharListCacheEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_CacheRealmData",
+      "address": "00437ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437ab0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_CacheRealmData",
+        "SStrHash",
+        "SMemAlloc",
+        "memcpy",
+        "GetTickCount",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2RealmCharListCacheEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_FreeCachedRealmData",
+      "address": "00437b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437b90"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_FreeCachedRealmData",
+        "SMemFree",
+        "MAINMENU_FreeRealmList"
+      ],
+      "usedTypes": [
+        "D2RealmCharListCacheEntryStrc"
+      ]
+    },
+    {
+      "name": "UIMENU_ItsLikeRealmSelectionMenuButOffsetToRightSide",
+      "address": "00437bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437bf0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_ItsLikeRealmSelectionMenuButOffsetToRightSide",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08"
+      ]
+    },
+    {
+      "name": "CHARSEL_SelectRealmInDropdown",
+      "address": "00437cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437cb0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_SelectRealmInDropdown",
+        "MAINMENU_GetRealmCount",
+        "MAINMENU_GetRealmName",
+        "SStrCmpI",
+        "D2WINTEXTBOX_SetLineColor"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPreferedRealm",
+      "address": "00437d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437d00"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "GetPreferedRealm"
+      ]
+    },
+    {
+      "name": "CHARSEL_IsBetaRealm",
+      "address": "00437d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437d20"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_IsBetaRealm",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "STRING_CompareWideStrings"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "WCHAR[256]",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_GetClassNameString",
+      "address": "00437f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437f60"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_GetClassNameString",
+        "GetLocaleString",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHARSEL_ClassHasAlternateDeath",
+      "address": "00438030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00438030"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_ClassHasAlternateDeath"
+      ]
+    },
+    {
+      "name": "CHARSEL_DestroySelectedChar",
+      "address": "00438060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00438060"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_DestroySelectedChar",
+        "D2COMP_DestroyCompositeUnit",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "CHARSEL_GetDaysUntilExpiry",
+      "address": "004380b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004380b0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_GetDaysUntilExpiry",
+        "_time32"
+      ],
+      "usedTypes": [
+        "__time32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_LocalCharsInSelectionScreen",
+      "address": "004380f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004380f0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "DRAW_LocalCharsInSelectionScreen",
+        "D2WINTEXTBOX_ClearAllLines",
+        "MISC_GetLanguageCode",
+        "D2WINTEXTBOX_SetLinePadding",
+        "D2COMP_SetFlags",
+        "D2COMP_SetScreenX",
+        "D2COMP_SetScreenY",
+        "GetLocaleString",
+        "SetText",
+        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "sprintf",
+        "CHARSEL_GetClassNameString",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "_time32",
+        "UNICODE_FormatWideString"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "WCHAR",
+        "__time32_t",
+        "eD2PlayerClassID",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "DRAW_LocalCharsInSelectionScreen0",
+      "address": "00438560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00438560"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "DRAW_LocalCharsInSelectionScreen0",
+        "D2CheckExpansionGame",
+        "DRAW_LocalCharsInSelectionScreen",
+        "GetLocaleString",
+        "WideCharToUTF8",
+        "D2WINMAIN_SetControlActive",
+        "D2WINTEXTBOX_ClearAllLines",
+        "MISC_GetLanguageCode",
+        "D2WINTEXTBOX_SetLinePadding",
+        "D2COMP_SetFlags",
+        "D2COMP_SetScreenX",
+        "D2COMP_SetScreenY",
+        "D2WINIMAGE_SetPosition",
+        "SetText",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "sprintf",
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "CHARSEL_GetClassNameString",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "CHARSEL_GetDaysUntilExpiry",
+        "UNICODE_FormatWideString"
+      ],
+      "usedTypes": [
+        "D2CharSelLineBufStrc",
+        "D2CharSelStrc",
+        "D2WinTextBox *",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SAVEFILE_ParseSaveData",
+      "address": "00438ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00438ad0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "SAVEFILE_ParseSaveData",
+        "AllocClientMemory",
+        "SStrCopy",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "SAVEFILE_ReadEncodedInt14Bit",
+        "CHARSEL_IsBetaRealm",
+        "UNICODE_WideToMultiByte",
+        "LAUNCHER_DeleteCharacterFiles",
+        "memset",
+        "strncpy",
+        "D2CheckExpansionGame",
+        "AllocCharSelectComponent",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2COMP_SetAnimationSpeed",
+        "D2COMP_SetCurrentFrame",
+        "D2COMP_SetAnimationMode",
+        "DRAW_LocalCharsInSelectionScreen0"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "D2CharSelStrc",
+        "FILETIME",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_DestroyAllCharEntries",
+      "address": "00438ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00438ea0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_DestroyAllCharEntries",
+        "D2COMP_DestroyCompositeUnit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc"
+      ]
+    },
+    {
+      "name": "CHARSEL_EnumerateLocalSaves",
+      "address": "00438f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00438f70"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_EnumerateLocalSaves",
+        "GetAndCreateSavePath",
+        "sprintf",
+        "LAUNCHER_LoadCharacterAppearanceFromD2s",
+        "SAVEFILE_ParseSaveData"
+      ],
+      "usedTypes": [
+        "_WIN32_FIND_DATAA",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_UpdateSelectionExpansion",
+      "address": "004390a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004390a0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_UpdateSelectionExpansion",
+        "D2WINIMAGE_SetPosition",
+        "D2WINMAIN_SetControlActive",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINTEXTBOX_ClearAllLines",
+        "D2WINTEXTBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_UpdateSelectedCharDisplay",
+      "address": "00439210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439210"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_UpdateSelectedCharDisplay",
+        "D2CheckExpansionGame",
+        "CHARSEL_UpdateSelectionExpansion",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINIMAGE_SetPosition",
+        "D2WINMAIN_SetControlActive",
+        "D2COMP_DestroyCompositeUnit",
+        "FreeClientMemory",
+        "AllocClientMemory",
+        "SMemCopy",
+        "D2WINTEXTBOX_ClearAllLines",
+        "CHARSEL_ClassHasAlternateDeath",
+        "AllocCharSelectComponent",
+        "D2COMP_SetAnimationSpeed",
+        "D2COMP_SetCurrentFrame",
+        "D2COMP_SetAnimationMode",
+        "D2COMP_SetScreenX",
+        "D2COMP_SetScreenY",
+        "D2COMP_SetFlags",
+        "CONTAINER_InitializeBuffer",
+        "sprintf",
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "CHARSEL_GetClassNameString",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "SetText",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "D2CharSelStrc",
+        "D2WinImage",
+        "WCHAR",
+        "eD2PlayerClassID",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UIMENU_SelectDifficultySinglePlayerOrTcpip",
+      "address": "00439780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439780"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_SelectDifficultySinglePlayerOrTcpip",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "SetText",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SelectCharHandler",
+      "address": "00439840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439840"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "SelectCharHandler",
+        "thunk_UIMENU_CreateHeroSinglePlayer",
+        "D2WINTEXTBOX_ClearAllLines",
+        "GetLocaleString",
+        "SetText",
+        "D2CheckExpansionGame",
+        "MAINMENU_ShowPopupWithCancel",
+        "UIMENU_SelectDifficultySinglePlayerOrTcpip",
+        "UNICODE_WideToMultiByte",
+        "SelectedCharBnetSingleTcpIp"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "D2ControlMsg",
+        "D2IniConfigStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UIMENU_CALLBACK_SetDificultySingleplayerTcpIp",
+      "address": "00439af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439af0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_CALLBACK_SetDificultySingleplayerTcpIp",
+        "FORMS_DestroyList",
+        "UNICODE_WideToMultiByte",
+        "SelectedCharBnetSingleTcpIp"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_Callback_NormalButtonSingleplayerTcpIp",
+      "address": "00439b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439b80"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_Callback_NormalButtonSingleplayerTcpIp",
+        "UIMENU_CALLBACK_SetDificultySingleplayerTcpIp"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_Callback_NightmareButtonSingleplayerTcpIp",
+      "address": "00439ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439ba0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_Callback_NightmareButtonSingleplayerTcpIp",
+        "UIMENU_CALLBACK_SetDificultySingleplayerTcpIp"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_Callback_HellButtonSingleplayerTcpIp",
+      "address": "00439bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439bc0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_Callback_HellButtonSingleplayerTcpIp",
+        "UIMENU_CALLBACK_SetDificultySingleplayerTcpIp"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressShowExpansionCreditsPage",
+      "address": "00439be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439be0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "MAINMENU_OnPressShowExpansionCreditsPage",
+        "D2CheckExpansionGame",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2ControlStrc",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressDestroyFormListIfExpansion",
+      "address": "00439ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439ca0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "MAINMENU_OnPressDestroyFormListIfExpansion",
+        "D2CheckExpansionGame",
+        "FORMS_DestroyList"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_AreYouSureWouWantToDeleteThisCharacter",
+      "address": "00439cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439cc0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_AreYouSureWouWantToDeleteThisCharacter",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_OnPressDestroyFormList",
+      "address": "00439d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439d40"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_OnPressDestroyFormList",
+        "FORMS_DestroyList"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHARSEL_OnPressConfirmDeleteCharacter",
+      "address": "00439d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439d50"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_OnPressConfirmDeleteCharacter",
+        "UIMENU_AreYouSureWouWantToDeleteThisCharacter"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHARSEL_OnPressScrollCharListUp",
+      "address": "00439d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439d60"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_OnPressScrollCharListUp",
+        "DRAW_LocalCharsInSelectionScreen0",
+        "CHARSEL_UpdateSelectedCharDisplay"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHARSEL_OnPressScrollCharListDown",
+      "address": "00439da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439da0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_OnPressScrollCharListDown",
+        "DRAW_LocalCharsInSelectionScreen0",
+        "CHARSEL_UpdateSelectedCharDisplay"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_CharSelScrollbarCallback",
+      "address": "00439df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439df0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "MAINMENU_CharSelScrollbarCallback",
+        "D2WINTEXTBOX_RefreshScrollbar",
+        "DRAW_LocalCharsInSelectionScreen0",
+        "CHARSEL_UpdateSelectedCharDisplay"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "CHARSEL_ScrollCharList",
+      "address": "00439e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439e60"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_ScrollCharList",
+        "D2WINTEXTBOX_RefreshScrollbar",
+        "D2WINTEXTBOX_SetScrollbarPosition"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_HandleKeyNavExpansion",
+      "address": "00439e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00439e90"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_HandleKeyNavExpansion",
+        "CHARSEL_ScrollCharList",
+        "DRAW_LocalCharsInSelectionScreen0",
+        "CHARSEL_UpdateSelectedCharDisplay"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_HandleKeyNavClassic",
+      "address": "0043a0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a0d0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_HandleKeyNavClassic",
+        "D2CheckExpansionGame",
+        "CHARSEL_HandleKeyNavExpansion",
+        "DRAW_LocalCharsInSelectionScreen0",
+        "CHARSEL_UpdateSelectedCharDisplay"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_SetStatusMessage",
+      "address": "0043a1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a1f0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_SetStatusMessage",
+        "D2WINTEXTBOX_ClearAllLines",
+        "GetLocaleString",
+        "SetText",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINTEXTBOX_SetLineColor"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_ShowWaitTimeout",
+      "address": "0043a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a270"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_ShowWaitTimeout",
+        "D2WINTEXTBOX_ClearAllLines",
+        "GetTickCount",
+        "GetLocaleString",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_InitRealmSelection",
+      "address": "0043a2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a2b0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_InitRealmSelection",
+        "MAINMENU_QueryAndBuildRealmList",
+        "MAINMENU_GetRealmCount",
+        "LAUNCHER_DisconnectFromBnet",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2WINTIMER_Start",
+        "D2WINEDITBOX_Destroy",
+        "GetLocaleString",
+        "SetText",
+        "SRegLoadString",
+        "CHARSEL_FindRealmByName",
+        "Realm",
+        "SStrCopy",
+        "SRegSaveString",
+        "MAINMENU_GetRealmName",
+        "MAINMENU_ShowPopupWithCancel"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_CreateCharEntry",
+      "address": "0043a460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a460"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_CreateCharEntry",
+        "AllocClientMemory",
+        "WideCharToUTF8",
+        "STRING_CopyWideString",
+        "AllocCharSelectComponent",
+        "D2COMP_SetAnimationSpeed",
+        "D2COMP_SetCurrentFrame",
+        "D2COMP_SetAnimationMode",
+        "DRAW_LocalCharsInSelectionScreen0"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "D2CharSelStrc",
+        "WCHAR",
+        "eD2PlayerClassID",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_AddCreateNewEntry",
+      "address": "0043a5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a5d0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_AddCreateNewEntry",
+        "GetLocaleString",
+        "CHARSEL_CreateCharEntry"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_AddRetrievingEntry",
+      "address": "0043a610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a610"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_AddRetrievingEntry",
+        "GetLocaleString",
+        "CHARSEL_CreateCharEntry"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHARSEL_ClearCharDetailUI",
+      "address": "0043a650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a650"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_ClearCharDetailUI",
+        "D2COMP_DestroyCompositeUnit",
+        "FreeClientMemory",
+        "D2WINTEXTBOX_ClearAllLines",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINMAIN_SetControlActive",
+        "D2CheckExpansionGame"
+      ]
+    },
+    {
+      "name": "CHARSEL_ResetCharListUI",
+      "address": "0043a730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a730"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_ResetCharListUI",
+        "D2WINMAIN_SetControlVisible",
+        "D2CheckExpansionGame",
+        "CHARSEL_UpdateSelectedCharDisplay"
+      ]
+    },
+    {
+      "name": "UIMENU_ChangeHavingMultipleRealmsAsia123",
+      "address": "0043a800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a800"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_ChangeHavingMultipleRealmsAsia123",
+        "D2CheckExpansionGame",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "UIMENU_ItsLikeRealmSelectionMenuButOffsetToRightSide",
+        "GetLocaleString",
+        "SetText",
+        "D2WINTEXTBOX_SetLinePadding",
+        "MAINMENU_GetRealmCount",
+        "MAINMENU_GetRealmName",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "SStrCmpI",
+        "D2WINTEXTBOX_SetSelectedLine",
+        "CHARSEL_ClearCharDetailUI"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ChangeClosedRealmChoice",
+      "address": "0043a950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a950"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "ChangeClosedRealmChoice",
+        "SStrCopy",
+        "SRegSaveString",
+        "FORMS_DestroyList",
+        "CHARSEL_ResetCharListUI"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHARSEL_OpenRealmChangeDialog",
+      "address": "0043a9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a9a0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_OpenRealmChangeDialog",
+        "SStrCopy",
+        "UIMENU_ChangeHavingMultipleRealmsAsia123"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHARSEL_HandleCharListClick",
+      "address": "0043a9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043a9d0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_HandleCharListClick",
+        "D2CheckExpansionGame",
+        "GetTickCount",
+        "SelectCharHandler",
+        "CHARSEL_UpdateSelectedCharDisplay"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinTextBox",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_ParseRealmCharList",
+      "address": "0043aab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043aab0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_ParseRealmCharList",
+        "D2CheckExpansionGame",
+        "GetLocaleString",
+        "CHARSEL_CreateCharEntry",
+        "SAVEFILE_ParseSaveData",
+        "CHARSEL_FreeCachedRealmData",
+        "CHARSEL_CacheRealmData",
+        "CHARSEL_UpdateSelectedCharDisplay"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_OnPressPumpRealmCharListLoad",
+      "address": "0043ac00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ac00"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_OnPressPumpRealmCharListLoad",
+        "D2WINTEXTBOX_SetLineColor",
+        "CHARSEL_SelectRealmInDropdown",
+        "MAINMENU_ConnectToRealm",
+        "GetTickCount",
+        "CHARSEL_ShowWaitTimeout",
+        "MAINMENU_PollMCPThreadStatus",
+        "CopyCharListToGlobal",
+        "NET_MCP_CLIENT_Send_0x19_CharList2",
+        "GetD2GSJoinResult",
+        "CHARSEL_SetStatusMessage",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "MCPCONNECT_GetCharListPacket",
+        "CHARSEL_ParseRealmCharList"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_RequestRealmCharList",
+      "address": "0043ad10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ad10"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_RequestRealmCharList",
+        "CHARSEL_DestroyAllCharEntries",
+        "D2WINMAIN_SetControlVisible",
+        "SStrHash",
+        "GetTickCount",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupWithCancel",
+        "CHARSEL_ParseRealmCharList"
+      ],
+      "usedTypes": [
+        "D2RealmCharListCacheEntryStrc",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHARSEL_LoadCharList",
+      "address": "0043adb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043adb0"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_LoadCharList",
+        "D2WINTEXTBOX_ClearAllLines",
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "CHARSEL_RequestRealmCharList",
+        "CHARSEL_UpdateSelectedCharDisplay",
+        "DRAW_LocalCharsInSelectionScreen0",
+        "CHARSEL_DestroyAllCharEntries",
+        "D2CheckExpansionGame",
+        "CHARSEL_AddCreateNewEntry",
+        "CHARSEL_EnumerateLocalSaves"
+      ]
+    },
+    {
+      "name": "CHARSEL_InitCharSelScreen",
+      "address": "0043ae30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ae30"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "CHARSEL_InitCharSelScreen",
+        "FORMS_DestroyLists",
+        "D2GFX_SetPaletteForDraw",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2WINBUTTON_SetCustomData",
+        "D2WINTEXTBOX_SetScrollbarCallbackA",
+        "D2WINTEXTBOX_SetScrollbarCallbackB",
+        "D2CheckExpansionGame",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "D2WINPAL_SetGammaRamp",
+        "CHARSEL_InitRealmSelection",
+        "D2WINMAIN_SetControlVisible",
+        "CHARSEL_LoadCharList",
+        "D2WINTEXTBOX_SetScrollbarMaxRange",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_CharacterSelectAllGameTypes",
+      "address": "0043b080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b080"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "UIMENU_CharacterSelectAllGameTypes",
+        "D2CheckExpansionGame",
+        "CHARSEL_InitCharSelScreen",
+        "FORMS_DestroyLists",
+        "D2WINMAIN_SetBackgroundDC6",
+        "D2GFX_SetPaletteForDraw",
+        "MAINMENU_QueryAndBuildRealmList",
+        "MAINMENU_GetRealmCount",
+        "LAUNCHER_DisconnectFromBnet",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupWithCancel",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2WINTIMER_Start",
+        "D2WINEDITBOX_Destroy",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINMAIN_SetControlActive",
+        "D2WINPAL_SetGammaRamp",
+        "D2WINBUTTON_SetBounds",
+        "SetText",
+        "SRegLoadString",
+        "CHARSEL_FindRealmByName",
+        "Realm",
+        "SStrCopy",
+        "SRegSaveString",
+        "MAINMENU_GetRealmName",
+        "CHARSEL_LoadCharList",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca940",
+      "address": "006ca940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca940"
+        }
+      ],
+      "namespace": "D2Launch::CharSel",
+      "calledFunctions": [
+        "StaticInit_6ca940"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    }
+  ]
+}

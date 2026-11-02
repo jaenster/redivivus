@@ -177,14 +177,14 @@ D2CharTemplateTxt * __fastcall TXT_CharTemplate_GetLine(int nTemplate, int nLeve
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf5);
       exit(-1);
     } else {
-      int iVar1;
-      iVar1 = sgCharTemplateLevelIndex[nLevelIndex] - 1 + nTemplate;
-      if (!(iVar1 < nTxtCharTemplateSize)) {
+      int nTemplateRow;
+      nTemplateRow = sgCharTemplateLevelIndex[nLevelIndex] - 1 + nTemplate;
+      if (!(nTemplateRow < nTxtCharTemplateSize)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf8);
         exit(-1);
       }
 
-      return sgpTxtCharTemplate + iVar1;
+      return sgpTxtCharTemplate + nTemplateRow;
     }
 }
 

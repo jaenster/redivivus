@@ -1,0 +1,93 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/Bnet.cpp",
+  "functions": [
+    {
+      "name": "BNET_LogIndent",
+      "address": "00518c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518c70"
+        }
+      ],
+      "namespace": "Bnclient::Bnet",
+      "calledFunctions": [
+        "BNET_LogIndent",
+        "SLogCreate",
+        "atexit",
+        "SLogClose",
+        "BNCLIENT_GetBnetLogFilestream",
+        "SLogSetIndent"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BnetLog_WriteLine",
+      "address": "00518d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518d40"
+        }
+      ],
+      "namespace": "Bnclient::Bnet",
+      "calledFunctions": [
+        "BnetLog_WriteLine",
+        "_vsnprintf",
+        "SLogCreate",
+        "atexit",
+        "SLogWrite",
+        "__security_check_cookie"
+      ]
+    },
+    {
+      "name": "StaticInit_6cae80",
+      "address": "006cae80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cae80"
+        }
+      ],
+      "namespace": "Bnclient::Bnet",
+      "calledFunctions": [
+        "StaticInit_6cae80",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_00881860",
+      "address": "006cb420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb420"
+        }
+      ],
+      "namespace": "Bnclient::Bnet",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_00881860"
+      ]
+    },
+    {
+      "name": "StaticFini_gnBnetLogFileHandle",
+      "address": "006cb430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb430"
+        }
+      ],
+      "namespace": "Bnclient::Bnet",
+      "calledFunctions": [
+        "StaticFini_gnBnetLogFileHandle",
+        "SLogClose"
+      ]
+    }
+  ]
+}

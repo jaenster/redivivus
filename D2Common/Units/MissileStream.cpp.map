@@ -1,0 +1,137 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Units/MissileStream.cpp",
+  "functions": [
+    {
+      "name": "AllocMissileStream",
+      "address": "00663d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663d40"
+        }
+      ],
+      "namespace": "D2Common::Units::MissileStream",
+      "calledFunctions": [
+        "AllocMissileStream",
+        "GetStream",
+        "AllocServerMemory",
+        "SetStream"
+      ],
+      "usedTypes": [
+        "D2MissileStreamStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FreeMissileStream",
+      "address": "00663d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663d90"
+        }
+      ],
+      "namespace": "D2Common::Units::MissileStream",
+      "calledFunctions": [
+        "FreeMissileStream",
+        "GetStream",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2MissileStreamStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Return1",
+      "address": "00663df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663df0"
+        }
+      ],
+      "namespace": "D2Common::Units::MissileStream",
+      "calledFunctions": [
+        "Return1"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ExecuteHit",
+      "address": "00663e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663e00"
+        }
+      ],
+      "namespace": "D2Common::Units::MissileStream",
+      "calledFunctions": [
+        "ExecuteHit",
+        "PATH_SetPathType",
+        "PATH_CalculatePath",
+        "GetPathPoint",
+        "UNITS_GetRoom",
+        "CheckCollision_BlockAll_Width",
+        "CallCollisionFunction",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "fpHit",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Update",
+      "address": "00663ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663ed0"
+        }
+      ],
+      "namespace": "D2Common::Units::MissileStream",
+      "calledFunctions": [
+        "Update",
+        "PATH_SetPathType",
+        "PATH_CalculatePath",
+        "GetPathPoint",
+        "GetStream",
+        "AllocServerMemory",
+        "memset",
+        "ReAllocServerMemory",
+        "DRLGPATH_GetDirectionFromCoords",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissileStreamStrc",
+        "D2PathPointStrc",
+        "D2UnitStrc",
+        "fpCreate",
+        "fpUnknownMissileStream",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

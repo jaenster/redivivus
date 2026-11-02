@@ -140,14 +140,14 @@ void __fastcall Q02_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
       return;
     }
 
-    D2QuestDataA1Q2Strc* pvVar1 = pQuestData->pQuestSpecificData.pA1Q2;
-    if (pvVar1->bAcceptedQuest != '\x01') {
+    D2QuestDataA1Q2Strc* pA1Q2Data = pQuestData->pQuestSpecificData.pA1Q2;
+    if (pA1Q2Data->bAcceptedQuest != '\x01') {
       return;
     }
 
     pQuestData->nQuestPacketFlags = '\0';
     QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, true);
-    pvVar1->bAcceptedQuest = '\0';
+    pA1Q2Data->bAcceptedQuest = '\0';
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q02_SyncQuestStepToPlayer);
@@ -157,12 +157,12 @@ void __fastcall Q02_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
 void __fastcall Q02_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nLine;
-    short int sVar1 = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
+    short int nNpcNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     uint16_t nQuestMsg = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    if (sVar1 != 0x96) {
+    if (nNpcNo != 0x96) {
       return;
     }
     if (nQuestMsg == 0x51) {
@@ -541,7 +541,7 @@ bool __fastcall Q02_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // fpSequenceFilter.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
 bool __fastcall Q02_SequenceFilter(D2QuestDataStrc * pQuestData) {
-    bool bVar1;
+    bool bResult;
     D2QuestDataStrc* pNextQuestData;
     BOOL bBadFnPtr;
     if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
@@ -555,8 +555,8 @@ bool __fastcall Q02_SequenceFilter(D2QuestDataStrc * pQuestData) {
           exit(-1);
         }
 
-        bVar1 = pNextQuestData->fpSequenceFilter(pNextQuestData);
-        return bVar1;
+        bResult = pNextQuestData->fpSequenceFilter(pNextQuestData);
+        return bResult;
       }
 
       return false;

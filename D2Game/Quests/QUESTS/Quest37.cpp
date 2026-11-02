@@ -131,8 +131,8 @@ void __fastcall Q37_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, sTextMessage, nMonStatsId, 0);
 }
 
-bool __fastcall Q37_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown) {
-    *nUnknown = '\0';
+bool __fastcall Q37_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
+    *pbyStatusCode = '\0';
     return false;
 }
 

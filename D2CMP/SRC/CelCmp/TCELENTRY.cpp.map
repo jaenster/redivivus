@@ -1,0 +1,27 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/CelCmp/TCELENTRY.cpp",
+  "functions": [
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00602a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602a40"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp::TCELENTRY",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TCELENTRY",
+        "TSLink<TCELENTRY>",
+        "uint32_t"
+      ]
+    }
+  ]
+}

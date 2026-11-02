@@ -109,7 +109,7 @@ bool __fastcall Q11_IsTaintedSunComplete(::SGAMEDATA * pGame);
 void __fastcall Q11_InitTaintedSunForAct(::SGAMEDATA * pGame, char nActNo);
 // A2Q3 - Q11_GetTaintedSunFlag: accessor returning the A2Q3 bTaintedSunStartedFailed flag (low byte) from the
 // quest-specific data, or 0 if quest data missing. Read-only.
-uint8_t __fastcall Q11_GetTaintedSunFlag(int32_t nParam);
+uint8_t __fastcall Q11_GetTaintedSunFlag(int32_t pCallerQuestData);
 // A2Q3 - state-0xb quest-event callback (fpQuestStateHandler[0xb], Q11_Callback_11): handles NPC turn-in /
 // gossip messages. msg 0x15c on class 0xb1 (Fara/quest NPC): advances display state to 2 and stateFlag to 2,
 // syncing records via Q11_UpdateQuestRecord. msgs 0x16a..0x174: if record is JustCompleted, broadcast display

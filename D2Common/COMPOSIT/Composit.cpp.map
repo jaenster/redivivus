@@ -1,0 +1,221 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/COMPOSIT/Composit.cpp",
+  "functions": [
+    {
+      "name": "COMPOSIT_ReadCompositeFileRow",
+      "address": "0064efe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064efe0"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "COMPOSIT_ReadCompositeFileRow"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMPOSIT_GetItemTypeIndex",
+      "address": "0064f020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064f020"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "COMPOSIT_GetItemTypeIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMPOSIT_ResolveWeaponClass",
+      "address": "0064f060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064f060"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "COMPOSIT_ResolveWeaponClass",
+        "TXT_MonStats_GetMonStats2",
+        "COMPOSIT_GetItemTypeIndex",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "ITEM_GetItemsTxt_bComponent",
+        "ITEMS_IsA",
+        "GetEquipedWeapon",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEM_GetWeaponAnimClass",
+        "INVENTORY_GetWeaponHandedness",
+        "ITEM_GetItemsTxt_dwWClass",
+        "ITEM_GetItemsTxt_dw2HandedWClass"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2InventoryStrc",
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMPOSIT_GetWeaponClassWithTransform",
+      "address": "0064f380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064f380"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "COMPOSIT_ResolveWeaponClass"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DoesBodyHaveAppearanceColors",
+      "address": "0064f420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064f420"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "DoesBodyHaveAppearanceColors"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMPOSIT_HasWeaponDrawn",
+      "address": "0064f460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064f460"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "COMPOSIT_HasWeaponDrawn",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "COMPOSIT_ResolveWeaponClass"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMPOSIT_GetBodyPartTransform",
+      "address": "0064f500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064f500"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "COMPOSIT_GetBodyPartTransform",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "eD2BodyLocDWORD",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMPOSIT_BuildCofPath",
+      "address": "0064f5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064f5b0"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "COMPOSIT_BuildCofPath",
+        "TxtGetPlrTypeModeLine",
+        "COMPOSIT_ResolveWeaponClass",
+        "TxtGetMonModeLine",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "TxtGetObjTypeModeLine"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2MonModeTxt",
+        "D2ObjTypeTxt",
+        "D2PlrTypeModeTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMPOSIT_GetCofPathWithTransform",
+      "address": "0064fa00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064fa00"
+        }
+      ],
+      "namespace": "D2Common::COMPOSIT::Composit",
+      "calledFunctions": [
+        "COMPOSIT_GetCofPathWithTransform",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "COMPOSIT_BuildCofPath"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

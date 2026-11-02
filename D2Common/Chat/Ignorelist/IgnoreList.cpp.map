@@ -1,0 +1,440 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat/Ignorelist/IgnoreList.cpp",
+  "functions": [
+    {
+      "name": "CloseAppendFile",
+      "address": "0060dde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060dde0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "CloseAppendFile",
+        "fclose"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPersistentSetting",
+      "address": "0060ddf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ddf0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "GetPersistentSetting"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SavePersistentSetting",
+      "address": "0060de00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060de00"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "SavePersistentSetting",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AppendLineToFile",
+      "address": "0060df10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060df10"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "AppendLineToFile",
+        "SStrCopy",
+        "SStrPack",
+        "fopen",
+        "SStrLen",
+        "fwrite",
+        "fclose",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "FILE",
+        "IgnoreList",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SaveToFile",
+      "address": "0060f0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f0a0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "SaveToFile",
+        "fopen",
+        "fprintf",
+        "fclose"
+      ],
+      "usedTypes": [
+        "FILE",
+        "IgnoreList",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ClearAccountMappings",
+      "address": "0060f500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f500"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "ClearAccountMappings",
+        "InternalClear"
+      ],
+      "usedTypes": [
+        "IgnoreList"
+      ]
+    },
+    {
+      "name": "GetMappedValue",
+      "address": "0060f870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f870"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "GetMappedValue",
+        "Ptr",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "MappingEntryNode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveByPattern",
+      "address": "0060fb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060fb20"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "RemoveByPattern",
+        "memset",
+        "IGNORELIST_ParsePattern",
+        "Ptr",
+        "Unlink",
+        "SaveToFile",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "StringEntryNode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveByAccountName",
+      "address": "0060fbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060fbe0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "RemoveByAccountName",
+        "Ptr",
+        "Unlink",
+        "SaveToFile"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "StringEntryNode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckAccountNameIgnored",
+      "address": "0060fc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060fc40"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "CheckAccountNameIgnored",
+        "Ptr",
+        "SStrCopy",
+        "SStrLower",
+        "__security_check_cookie",
+        "strstr",
+        "Next"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "StringEntryNode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckCharNameIgnored",
+      "address": "0060fd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060fd50"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "CheckCharNameIgnored",
+        "Ptr"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "StringEntryNode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckIgnored",
+      "address": "00610380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610380"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "CheckIgnored",
+        "memset",
+        "IGNORELIST_ExtractPrefix",
+        "IGNORELIST_ExtractSuffix",
+        "CheckCharNameIgnored",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00610aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610aa0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "Destructor",
+        "InternalClear"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00610d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610d30"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AddByPattern",
+      "address": "00610eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610eb0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "AddByPattern",
+        "memset",
+        "IGNORELIST_ParsePattern",
+        "Ptr",
+        "New",
+        "AppendLineToFile",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "StringEntryNode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddByAccountName",
+      "address": "00610f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610f90"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "AddByAccountName",
+        "Ptr",
+        "New",
+        "memset",
+        "SStrPack",
+        "AppendLineToFile",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "StringEntryNode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LoadFromFile",
+      "address": "00611050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611050"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "LoadFromFile",
+        "fopen",
+        "memset",
+        "fgets",
+        "SStrLen",
+        "New",
+        "fclose",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "FILE",
+        "IgnoreList",
+        "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "00611200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611200"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "Constructor",
+        "SFILE_GetExecutableDirectory",
+        "SMemZero",
+        "SStrChrR",
+        "SStrPack",
+        "SStrCopy",
+        "SRegLoadValue",
+        "LoadFromFile",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "int32_t",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AddAccountMapping",
+      "address": "00611320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611320"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::IgnoreList",
+      "calledFunctions": [
+        "AddAccountMapping",
+        "SMemZero",
+        "SMemCopy",
+        "Ptr",
+        "New",
+        "SMemFree",
+        "memset",
+        "SStrPack",
+        "SStrDup",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "MappingEntryNode",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

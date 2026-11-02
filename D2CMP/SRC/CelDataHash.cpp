@@ -21,36 +21,36 @@
 namespace D2CMP::SRC::CelDataHash {
 
 // @sourcefile .\SRC\CelDataHash.cpp
-void __fastcall CELDATAHASH_UnlinkEntry(int32_t nParam, int * pnParam, D2PoolManagerStrc * pMemory) {
-    if (*(int**)(nParam + 0x800 + *pnParam * 4) == pnParam) {
-      *(int*)(nParam + 0x800 + *pnParam * 4) = pnParam[0xb];
+void __fastcall CELDATAHASH_UnlinkEntry(int32_t pHashTable, int * pEntry, D2PoolManagerStrc * pMemory) {
+    if (*(int**)(pHashTable + 0x800 + *pEntry * 4) == pEntry) {
+      *(int*)(pHashTable + 0x800 + *pEntry * 4) = pEntry[0xb];
     }
 
-    D2_FREE_POOL_AT(pMemory, pnParam, ".\\SRC\\CelDataHash.cpp", 0x3a);
+    D2_FREE_POOL_AT(pMemory, pEntry, ".\\SRC\\CelDataHash.cpp", 0x3a);
 }
 
-void __fastcall CELDATAHASH_InitHashTable(void * pParam) {
-    memset(pParam, 0, 0x1000);
+void __fastcall CELDATAHASH_InitHashTable(void * pHashTable) {
+    memset(pHashTable, 0, 0x1000);
 }
 
 // @sourcefile .\SRC\CelDataHash.cpp
-void __fastcall GFX_FreeAllCacheEntries(D2PoolManagerStrc * pMemory, int32_t nParam) {
+void __fastcall GFX_FreeAllCacheEntries(D2PoolManagerStrc * pMemory, int32_t pHashTable) {
     int* pNextEntry;
     uint32_t nBucketIdx = 0;
     while (true) {
       int* pCurEntry;
-      pCurEntry = *(int**)(nParam + 0x800 + nBucketIdx * 4);
+      pCurEntry = *(int**)(pHashTable + 0x800 + nBucketIdx * 4);
       while (pCurEntry) {
         pNextEntry = (int*)pCurEntry[0xb];
-        if (*(int**)(nParam + 0x800 + *pCurEntry * 4) == pCurEntry) {
-          *(int**)(nParam + 0x800 + *pCurEntry * 4) = (int*)pNextEntry;
+        if (*(int**)(pHashTable + 0x800 + *pCurEntry * 4) == pCurEntry) {
+          *(int**)(pHashTable + 0x800 + *pCurEntry * 4) = (int*)pNextEntry;
         }
 
         D2_FREE_POOL_AT(pMemory, pCurEntry, ".\\SRC\\CelDataHash.cpp", 0x3a);
         pCurEntry = pNextEntry;
       }
 
-      if (*(int*)(nParam + nBucketIdx * 4)) {
+      if (*(int*)(pHashTable + nBucketIdx * 4)) {
         break;
       }
 

@@ -127,20 +127,20 @@ int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint3
 // Each uint32 encodes x in low 16 bits and y in high 16 bits.
 // Same 5x5 grid clamping logic as DRLGPATH_GetDirectionIndex, producing index 0-24
 // for lookup into direction and path vector tables.
-int32_t __stdcall DRLGPATH_GetDirectionIndexPacked(uint32_t nParam1, uint32_t nParam2);
+int32_t __stdcall DRLGPATH_GetDirectionIndexPacked(uint32_t nPackedFrom, uint32_t nPackedTo);
 // Returns a single direction byte (0-7) between two points (separate coords).
 // Uses DRLGPATH_GetDirectionIndex to get the 5x5 table index, then looks up
 // the first byte of the 3-byte entry at table 0x6f1648.
 uint32_t __fastcall DRLGPATH_GetDirection(int32_t nY1, int32_t nX2, int32_t nX1, int32_t nY2);
 // Returns a single direction byte (0-7) between two packed coordinate points.
 // Packed variant of DRLGPATH_GetDirection, using DRLGPATH_GetDirectionIndexPacked.
-uint32_t __stdcall DRLGPATH_GetDirectionPacked(uint32_t nParam1, uint32_t nParam2);
+uint32_t __stdcall DRLGPATH_GetDirectionPacked(uint32_t nPackedFrom, uint32_t nPackedTo);
 // Returns the primary path direction vector (first dword of 12-byte entry) between
 // two points given as separate coordinates. Used by DRLGOUTROOM_FindPathBetweenExits
 // and DRLGOUTROOM_PathSearchStep for outdoor pathfinding.
 int __fastcall DRLGPATH_GetPathDirection(int32_t nY1, int32_t nX2, int32_t nX1, int32_t nY2);
 // Returns the primary path direction vector (first dword of 12-byte entry) between two packed coordinate points. Packed variant of DRLGPATH_GetPathDirection. Called only by the DRLG A* path search: DRLGPATH_AStarExpandNode and DRLGPATH_FindPathAStar.
-int __stdcall DRLGPATH_GetPathDirectionPacked(uint32_t nParam1, uint32_t nParam2);
+int __stdcall DRLGPATH_GetPathDirectionPacked(uint32_t nPackedFrom, uint32_t nPackedTo);
 // Returns all 3 path direction vectors (3 dwords from 12-byte table entry at 0x6f1518)
 // between two points given as separate coordinates. Writes the primary direction and
 // two alternate directions to the output array (paDirOut).
@@ -153,11 +153,11 @@ void __thiscall DRLGPATH_GetPathDirectionTripletPacked(int * paDirOut, uint32_t 
 // Returns all 3 direction bytes (from 3-byte table at 0x6f1648) between two points
 // given as separate coordinates. Writes primary direction + 2 alternates to output
 // array as expanded uint values. Separate-coords variant of GetDirectionTripletPacked.
-void __fastcall DRLGPATH_GetDirectionTriplet(int32_t nParam1, int32_t nParam2, int32_t nY1, int32_t nX2, uint32_t * pnParam);
+void __fastcall DRLGPATH_GetDirectionTriplet(int32_t nParam1, int32_t nParam2, int32_t nY1, int32_t nX2, uint32_t * pnDirOut);
 // Returns all 3 direction bytes (from 3-byte table at 0x6f1648) between two packed
 // coordinate points. Writes primary direction + 2 alternates to output array as
 // expanded uint values. Called by collision/pathing code at 0x00648120.
-void __thiscall DRLGPATH_GetDirectionTripletPacked(uint32_t * pnParam, uint32_t nPackedSrc, uint32_t nParam);
+void __thiscall DRLGPATH_GetDirectionTripletPacked(uint32_t * pnDirOut, uint32_t nPackedSrc, uint32_t nPackedDst);
 // Updates path velocity vector and facing direction for a path structure.
 // If source equals target, zeroes velocity and returns 1 (arrived).
 // Otherwise computes angle via atan2-like table lookup, scales unit vector by speed,
@@ -183,7 +183,7 @@ void __fastcall DRLGPATH_ApplyMissileOffset(struct D2UnitStrc * pMissileStrc);
 // Writes the effective target position (X at pOutPos[0], Y at pOutPos[1]) for a missile by reading its owner unit's position via pGfxDataCopy (static or dynamic path). If the missile carries a non-zero offset radius in uSideData[4], applies a direction-based polar offset using the sinTable, allowing missiles to spiral or orbit around their target point.
 void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, struct D2UnitStrc * pMissileStrc);
 // Computes a weighted distance between two packed coordinates. Uses a lookup table for distances within 8 tiles, falls back to a simple heuristic (minor + major*2) for larger distances.
-int32_t __stdcall DRLGPATH_GetWeightedDistancePacked(uint32_t nParam1, uint32_t nParam2);
+int32_t __stdcall DRLGPATH_GetWeightedDistancePacked(uint32_t nPackedPos1, uint32_t nPackedPos2);
 // Smooths a path by iterating through waypoints, choosing the best non-blocked direction at each step using direction triplets and collision checks. Builds a refined path with fewer unnecessary turns. Returns the waypoint count, which it also stores into pDynamicPath->dwPathPoints - the tail is MOV [ECX+0x28],EAX at 00679c71, so the count is live in EAX at the RET. PATH_FindPathToward tail-returns it for the nDirOffset case; typing this void made that caller return an uninitialised local, which reached PATH_CalculatePath as a waypoint count of ~2e9 and indexed PathPoints[] off the end.
 int32_t __fastcall DRLGPATH_SmoothPathPoints(struct D2PathTypeArg * pPathTypeArg);
 // Builds a coarse dynamic path from the unit's current position toward the target stored in pPathTypeArg, writing waypoints into pDynamicPath->PathPoints and returning the count. If a direction offset is already set, delegates to DRLGPATH_SmoothPathPoints. Otherwise: if the target is directly reachable (CheckTargetReachable) or within the IDA* distance threshold, emits a single waypoint; else walks step-by-step toward the target via DRLGPATH_GetPathDirectionTripletPacked + FindNonBlockedDirectionFromTriplet (using gPathDirectionOffsetsX/Y), recording a waypoint each time the chosen direction changes, bounded by nDistMax iterations and anti-backtracking.
@@ -205,9 +205,9 @@ void __fastcall DRLGPATH_ScaleVelocityVector(int32_t nVelocityScale, POINT * pPo
 // Validates an entire path by checking collision between each consecutive pair of waypoints. For adjacent tiles, does a direct collision check; for distant tiles, uses ray collision testing. Returns 1 if valid, 0 if any segment is blocked.
 uint32_t __fastcall DRLGPATH_ValidateFullPath(struct D2PathTypeArg * pPathTypeArgs);
 // Computes a simple distance heuristic between two packed coordinates: min(dx,dy) + max(dx,dy)*2. This is equivalent to a simple diagonal distance estimation.
-int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nParam1, uint32_t nParam2);
+int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nPackedPosA, uint32_t nPackedPosB);
 // Returns a pointer into the direction delta lookup table based on the difference between two direction indices. Each entry in the table provides directional offsets for path exploration. Trivial helper function.
-uint8_t * __stdcall DRLGPATH_GetDirectionDeltaTable(int32_t nParam1, int32_t nParam2);
+uint8_t * __stdcall DRLGPATH_GetDirectionDeltaTable(int32_t nDirFrom, int32_t nDirTo);
 // Checks if a packed coordinate (X|Y) is within the bounding rectangle of the path search area. Returns 1 if inside bounds, 0 otherwise.
 uint32_t __thiscall DRLGPATH_IsPositionInBounds(int32_t pThis, uint32_t nPackedPos);
 // Top-level A* pathfinding function for PathTypeFunc_00. Initializes the search grid, computes initial heuristic, then iteratively expands the search with increasing cost limits. Extracts and returns the found path length (0 if no path found).
@@ -215,7 +215,7 @@ int32_t __thiscall DRLGPATH_FindPathAStar(struct D2DrlgRoomCoordsStrc * pRoomCoo
 // Wrapper that computes the bounding box for A* search by merging the current room and (optionally) the next room extents, padding 10 tiles on any axis that didn't change, then delegates to DRLGPATH_FindPathAStar. nIdaStarVariable is doubled on entry (IDA* depth scaling). Returns the path length from the inner call.
 int32_t __fastcall PATH_FindPathAStar(struct D2PathTypeArg * pPathTypeArg);
 // Alternate simple distance heuristic between two packed coordinates. Same formula as DRLGPATH_GetSimpleDistancePacked but used by the secondary A* pathfinder (PathTypeFunc_01).
-int32_t __stdcall DRLGPATH_GetSimpleDistancePacked2(uint32_t nParam1, uint32_t nParam2);
+int32_t __stdcall DRLGPATH_GetSimpleDistancePacked2(uint32_t nPackedPos, uint32_t nPackedTarget);
 // Searches the open list hash table for a node matching the given packed position. Returns the node if found, NULL otherwise.
 short * __stdcall DRLGPATH_FindNodeInOpenList(int32_t nOpenListBase, uint32_t nPackedPos);
 // Searches the closed list hash table (offset 0x200 from the open list) for a node matching the given packed position. Returns the node if found, NULL otherwise.

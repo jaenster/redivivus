@@ -1,0 +1,555 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/MonUnique.cpp",
+  "functions": [
+    {
+      "name": "GetMonUModList",
+      "address": "004ac740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac740"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "GetMonUModList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetNameSeed",
+      "address": "004ac780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac780"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "SetNameSeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SetBossId",
+      "address": "004ac7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac7a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "SetBossId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "GetBossId",
+      "address": "004ac7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac7c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "GetBossId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CheckMonTypeForMonster",
+      "address": "004ac7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac7e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "CheckMonTypeForMonster"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SetUnsetMonsterType",
+      "address": "004ac810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac810"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "SetUnsetMonsterType"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SetUniqueMonsterFlag0x100",
+      "address": "004ac840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac840"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONSTER_SetUniqueMonsterFlag0x100"
+      ],
+      "usedTypes": [
+        "D2UnitDataUnion",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DefineSuperMonster",
+      "address": "004ac870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac870"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "DefineSuperMonster",
+        "UTF8_ConvertToWideChar",
+        "TXT_SuperUniques_GetLine",
+        "GetLocaleString",
+        "SetSuperUniqueName",
+        "IsMonsterChampion",
+        "wsprintf",
+        "InitSeed_Param_666",
+        "MONSTER_GetRandomUniqueSuffix",
+        "MONSTER_GetRandomUniquePrefix",
+        "UNIT_GetModuloFromSeed",
+        "MONSTER_GetRandomUniqueAppelation"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2SuperUniquesTxt",
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_ApplyModifierBishbosh",
+      "address": "004acc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004acc70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_ApplyModifierBishbosh",
+        "FreeLightMap",
+        "AllocLightMap",
+        "TXT_MonStats_GetMonStats2",
+        "GetRadiusX",
+        "SetLightRadius"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2MonStats2Txt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_ApplyModifierBloodRaven",
+      "address": "004acd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004acd70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_ApplyModifierBloodRaven",
+        "AddSkill",
+        "SKILLS_GetSkillByEnum",
+        "SetSkillMode"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetResistances",
+      "address": "004acdb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004acdb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "SetResistances",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_ApplyModifierEffects",
+      "address": "004ad020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad020"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_ApplyModifierEffects"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MakeFireExposionAttack",
+      "address": "004ad0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad0c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MakeFireExposionAttack",
+        "GetShiftedFrameMetrics",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CastAttack",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MakeMonsterCorpseExplodeAttack",
+      "address": "004ad1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad1a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MakeMonsterCorpseExplodeAttack",
+        "GetShiftedFrameMetrics",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CastAttack",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_SpawnDeathMissile",
+      "address": "004ad510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad510"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_SpawnDeathMissile",
+        "MISSILETBLS_CalculateVelocity",
+        "STATSEX_GetCurrentStat",
+        "SKILL_SpawnMissilesAtTarget",
+        "GetShiftedFrameMetrics",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "MakeMissileAtXY"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_DurielDeathAndSpawn",
+      "address": "004ad5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad5f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_DurielDeathAndSpawn",
+        "GetShiftedFrameMetrics",
+        "GFX_RemoveAllOverlays",
+        "GFX_AddOverlayToUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CLIENT_SpawnMonstersAroundUnit"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_SpawnDirectionalMissiles",
+      "address": "004ad6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad6e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_SpawnDirectionalMissiles",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_ApplyModifierGriswold",
+      "address": "004ad890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad890"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_ApplyModifierGriswold",
+        "GetShiftedFrameMetrics",
+        "STATSEX_GetCurrentStat",
+        "MONUNIQUE_SpawnDirectionalMissiles"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_ApplyModifierTheSmith",
+      "address": "004ad8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad8e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_ApplyModifierTheSmith",
+        "STATSEX_GetCurrentStat",
+        "MONUNIQUE_SpawnDirectionalMissiles"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_SpawnBugLightning",
+      "address": "004ad920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad920"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_SpawnBugLightning",
+        "GetShiftedFrameMetrics",
+        "STATSEX_GetCurrentStat",
+        "MONUNIQUE_SpawnDirectionalMissiles"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_ApplyModifierNihlathak",
+      "address": "004ad970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad970"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_ApplyModifierNihlathak",
+        "MISSILE_GetOwnerUnit",
+        "CheckMonTypeForMonster",
+        "GetConfirmedTargetUnit",
+        "GetXSP1",
+        "GetYSP1",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_SpawnExplodingArrowDeath",
+      "address": "004adb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004adb20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_SpawnExplodingArrowDeath",
+        "GetShiftedFrameMetrics",
+        "GetYPos",
+        "GetXPos",
+        "MakeMissileAtXY"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_SpawnSuicideExplosion",
+      "address": "004adbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004adbc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_SpawnSuicideExplosion",
+        "GetDificulity",
+        "GetShiftedFrameMetrics",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "MakeMissileAtXY",
+        "GetYPos",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONUNIQUE_PregnantCorpseBurst",
+      "address": "004adce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004adce0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::MonUnique",
+      "calledFunctions": [
+        "MONUNIQUE_PregnantCorpseBurst",
+        "GetXPos",
+        "GetYPos",
+        "CastAttack",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    }
+  ]
+}

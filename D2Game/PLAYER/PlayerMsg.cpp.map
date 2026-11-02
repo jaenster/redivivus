@@ -1,0 +1,3894 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/PLAYER/PlayerMsg.cpp",
+  "functions": [
+    {
+      "name": "GetWaypointsForCurrentDifficulty",
+      "address": "00547f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00547f50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "GetWaypointsForCurrentDifficulty",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2WaypointStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "UpgradeLifeAndHitClass",
+      "address": "00547f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00547f70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "UpgradeLifeAndHitClass",
+        "GetCurrentLifePercentage",
+        "GetYPos",
+        "GetXPos",
+        "NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendReassignPlayer",
+      "address": "00548010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548010"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SendReassignPlayer",
+        "GetYPos",
+        "GetXPos",
+        "NET_D2GS_SERVER_Send_0x15_WarpXY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SendUnitCast0x4d",
+      "address": "00548090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548090"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SendUnitCast0x4d",
+        "GetCurrentSkill",
+        "SKILL_GetFlags",
+        "CLIENTS_GetControlUnit",
+        "GetTargetEx",
+        "GetSkillId",
+        "GetSkillLevel",
+        "IsUnitNearClient",
+        "NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY",
+        "GetYSP1",
+        "GetXSP1",
+        "NET_D2GS_SERVER_Send_0x4D_SKILL_XY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SendPlayerMoveOrObject",
+      "address": "00548180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548180"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SendPlayerMoveOrObject",
+        "CLIENTS_GetControlUnit",
+        "GetTargetEx",
+        "IsUnitNearClient",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS",
+        "GetYPos",
+        "GetXPos",
+        "GetYSP1",
+        "GetXSP1",
+        "NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SendPlayerMove",
+      "address": "005482a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005482a0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SendPlayerMove",
+        "GetYPos",
+        "GetXPos",
+        "GetYSP1",
+        "GetXSP1",
+        "NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SendPlayerStop",
+      "address": "00548350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548350"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SendPlayerStop",
+        "GetCurrentLifePercentage",
+        "GetYPos",
+        "GetXPos",
+        "NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_SendPlayerStopToOtherClient",
+      "address": "00548400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548400"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_SendPlayerStopToOtherClient",
+        "CLIENTS_GetControlUnit",
+        "GetCurrentLifePercentage",
+        "GetYPos",
+        "GetXPos",
+        "NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "DispatchPlayerModeNetMsg",
+      "address": "005484b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005484b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "DispatchPlayerModeNetMsg",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "pfnPlayerModeNetMsg",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendAttributeUpdate",
+      "address": "00548520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548520"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SendAttributeUpdate",
+        "SUNIT_GetClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_D2GS_SERVER_Send_0x1D_0x1E_0x1F_SetAttribute",
+        "NET_D2GS_SERVER_Send_0x20_STATCHANGE_PLAYER"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetHPRegen",
+      "address": "005485b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005485b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "GetHPRegen",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "GetStatsByState",
+        "GetGamePointer",
+        "STATLIST_GetFullListPtr",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetMPRegen",
+      "address": "00548640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548640"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "GetMPRegen",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxMana",
+        "GetStatsByState",
+        "GetGamePointer",
+        "STATLIST_GetFullListPtr"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate",
+      "address": "00548760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548760"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate",
+        "SUNIT_GetClient",
+        "CLIENT_GetPlayerBasicsData",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXSP1",
+        "GetYSP1",
+        "GetHPRegen",
+        "GetMPRegen",
+        "NET_D2GS_SERVER_Send_0x96_PLAYERCOMMONSTATCHANGE_SMALL",
+        "NET_D2GS_SERVER_Send_0x95_PLAYERCOMMONSTATCHANGE_MEDIUM",
+        "NET_D2GS_SERVER_Send_0x18_PLAYERCOMMONSTATCHANGE_BIG",
+        "NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA",
+        "NET_D2GS_SERVER_Send_0x1A_0x1B_0x1C_Experience"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DynamicPathStrc",
+        "D2PlayerBasicsData",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SendInitUpdateAttributes",
+      "address": "005489f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005489f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SendInitUpdateAttributes",
+        "CLIENTS_GetControlUnit",
+        "SERVER_GetUnitStat",
+        "SendAttributeUpdate"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StartModeID",
+      "address": "00548a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548a50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "StartModeID",
+        "PLRMODES_StartModeID",
+        "PLAYER_SetSkillHitFlagAndStoreTarget"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "IsOtherAct",
+      "address": "00548a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548a80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "IsOtherAct",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_AreInDifferentActs",
+      "address": "00548ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548ac0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLAYER_AreInDifferentActs",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_InteractOrPick",
+      "address": "00548b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548b00"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "Interact",
+        "SERVER_PickToInventory",
+        "SERVER_InteractOrPick",
+        "FindUnitFromTable",
+        "GetDistanceBetweenUnits",
+        "StartModeID",
+        "IsInteractingWithPlayer",
+        "PLRMODES_PickupCorpse",
+        "CheckIfCanStartTradeWithPlayer",
+        "TXT_MonStats_GetLine",
+        "ZeroPathPointsSize",
+        "SetAiArgument",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "GetPlayerTradeTickOrBusy",
+        "GetMonsterAI",
+        "NPC_BeginInteractionFromUnit",
+        "TXT_Objects_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "IsObjectInInteractRange",
+        "TestCollisionBetweenInteractingUnits",
+        "SERVER_PickToCursor",
+        "TakeStairs"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2MonsterAiStrc",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYERMSG_GetMessageType",
+      "address": "00548eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548eb0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLAYERMSG_GetMessageType"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYERMSG_GetMessagePriority",
+      "address": "00548ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548ed0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLAYERMSG_GetMessagePriority"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckIfCoordsAreInRange",
+      "address": "00548ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548ef0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CheckIfCoordsAreInRange",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CloseEnoughToInteract",
+      "address": "00548f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00548f80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CloseEnoughToInteract",
+        "FindUnitFromTable",
+        "AlreadyHoldingItem",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetXPos",
+        "GetYPos",
+        "CheckIfCoordsAreInRange"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_IsItemOnCursor",
+      "address": "005490e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005490e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SERVER_IsItemOnCursor",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "INVENTORY_GetHandItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsPlayerTheOwner",
+      "address": "00549150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549150"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "IsPlayerTheOwner",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "INVENTORY_CheckDoItemBelongToInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ItemBelongsToUnit",
+      "address": "005491b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005491b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "ItemBelongsToUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "INVENTORY_CheckDoItemBelongToInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ItemIsOfPlayerAndNotOnCursor",
+      "address": "00549220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549220"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "ItemIsOfPlayerAndNotOnCursor",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "INVENTORY_CheckDoItemBelongToInventory",
+        "INVENTORY_GetHandItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_CheckWeaponSlotEmpty",
+      "address": "005492c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005492c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_CheckWeaponSlotEmpty",
+        "INVENTORY_GetItemByGridOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ItemBelongsToInventoryOf",
+      "address": "005492f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005492f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "ItemBelongsToInventoryOf",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "INVENTORY_CheckDoItemBelongToInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsAccessableCheck",
+      "address": "00549350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549350"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CheckIfCoordsAreInRange",
+        "IsAccessableCheck",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "ItemIsOfPlayerAndNotOnCursor",
+        "IsOtherAct",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_FindNearbyAllyUnit",
+      "address": "00549410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549410"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "MONSTER_FindNearbyAllyUnit",
+        "FindUnitFromTable",
+        "IsOtherAct",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CheckIfCoordsAreInRange"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckIfCanBeSkilled",
+      "address": "00549490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549490"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CheckIfCanBeSkilled",
+        "IsSkillBoundToClass",
+        "SkillCalculateIfWeCanSkillThisSkill",
+        "SpendSkillPointOnSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OrficeStaffCheck",
+      "address": "00549520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549520"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "OrficeStaffCheck",
+        "CloseEnoughToInteract",
+        "SERVER_IsItemOnCursor"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PlayerCanInteractWithWaypoint",
+      "address": "00549570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549570"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PlayerCanInteractWithWaypoint",
+        "FindUnitFromTable",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetXPos",
+        "GetYPos",
+        "CheckIfCoordsAreInRange",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindWaypointIdByLevelId",
+        "GetWaypointsForCurrentDifficulty",
+        "CheckWaypoint"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2WaypointStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckIfInrangeAndReassign",
+      "address": "005496f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005496f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CheckIfCoordsAreInRange",
+        "CheckIfInrangeAndReassign",
+        "GetPlayerData",
+        "SUNIT_GetClient",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "NET_D2GS_SERVER_Send_0x15_WarpXY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x01_WalkToLocation",
+      "address": "005497e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005497e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x01_WalkToLocation",
+        "CheckIfInrangeAndReassign",
+        "PLRMODES_MoveToLocation"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x01_WalkToLocation",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AnyPacketClickOnMap",
+      "address": "00549830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549830"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "AnyPacketClickOnMap",
+        "CloseEnoughToInteract"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x02_WalkToEntity",
+      "address": "00549890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549890"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CloseEnoughToInteract",
+        "SCMD_0x02_WalkToEntity",
+        "AnyPacketClickOnMap",
+        "PLRMODES_StartModeID"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x02_WalkToEntity",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x03_RunToLocation",
+      "address": "005498d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005498d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x03_RunToLocation",
+        "CheckIfInrangeAndReassign",
+        "PLRMODES_MoveToLocation"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x03_RunToLocation",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x04_RunToEntity",
+      "address": "00549920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549920"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "StartModeID",
+        "SCMD_0x04_RunToEntity",
+        "AnyPacketClickOnMap",
+        "PLRMODES_StartModeID"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x04_RunToEntity",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetDualSwingSkill",
+      "address": "00549960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549960"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "GetDualSwingSkill",
+        "GetSkillId",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "ITEM_GetItemData_wType",
+        "ITEMS_IsA",
+        "SKILL_GetParam4",
+        "GetSkillByIdAndOwner",
+        "SKILL_SetParam4",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_SendInventoryFullMessage",
+      "address": "00549a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549a60"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLAYER_SendInventoryFullMessage",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2Packet0x5aEventStructure",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CastSkillOnLocation",
+      "address": "00549ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549ad0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CastSkillOnLocation",
+        "CanDualWield",
+        "GetDualSwingSkill",
+        "SKILLS_CanUseSkill",
+        "GetSkillsTxt",
+        "GetSkillByIdAndOwner",
+        "GetSkillMode",
+        "PLRMODES_MoveToLocation",
+        "PLAYER_SendInventoryFullMessage"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_ProcessSkillOnEntity",
+      "address": "00549ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549ba0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLAYER_ProcessSkillOnEntity",
+        "CanDualWield",
+        "GetDualSwingSkill",
+        "SKILLS_CanUseSkill",
+        "GetSkillsTxt",
+        "GetSkillByIdAndOwner",
+        "GetSkillMode",
+        "FindUnitFromTable",
+        "UNIT_GetUnitState",
+        "GetOwnerUnit",
+        "SKILLS_GetSkillWeaponClass",
+        "IsInMovingModeEx",
+        "IsInMeleeRange",
+        "GetSkillId",
+        "StartModeID",
+        "PLRMODES_StartModeID"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x05_LeftSkillOnLocation",
+      "address": "00549d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549d00"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x05_LeftSkillOnLocation",
+        "CheckIfInrangeAndReassign",
+        "GetLeftSkill",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "CastSkillOnLocation"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x05_LeftSkillOnLocation",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x06_LeftSkillOnEntity",
+      "address": "00549d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549d80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x06_LeftSkillOnEntity",
+        "AnyPacketClickOnMap",
+        "GetLeftSkill",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "PLAYER_ProcessSkillOnEntity"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x06_LeftSkillOnEntity",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x07_LeftSkillOnEntityEx",
+      "address": "00549e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549e00"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x07_LeftSkillOnEntityEx",
+        "AnyPacketClickOnMap",
+        "GetLeftSkill",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "PLAYER_ProcessSkillOnEntity"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x07_LeftSkillOnEntityEx",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x08_LeftSkillOnLocationEx",
+      "address": "00549e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549e80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x08_LeftSkillOnLocationEx",
+        "CheckIfInrangeAndReassign",
+        "GetLeftSkill",
+        "SCMD_0x05_LeftSkillOnLocation"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x08_LeftSkillOnLocationEx",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity",
+      "address": "00549ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549ee0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity",
+        "AnyPacketClickOnMap",
+        "GetLeftSkill",
+        "SCMD_0x06_LeftSkillOnEntity"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x09_LeftSkillOnEntityEx2",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "SCMD_0x0A_LeftSkillOnEntityEx3",
+      "address": "00549f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549f40"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x0A_LeftSkillOnEntityEx3",
+        "AnyPacketClickOnMap",
+        "GetLeftSkill",
+        "SCMD_0x07_LeftSkillOnEntityEx"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x0A_LeftSkillOnEntityEx3",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x0B_Keepalive",
+      "address": "00549fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549fa0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x0B_Keepalive"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x0B_Keepalive",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x0C_RightSkillOnLocation",
+      "address": "00549fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00549fc0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x0C_RightSkillOnLocation",
+        "CheckIfInrangeAndReassign",
+        "GetRightSkill",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "CastSkillOnLocation"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x0C_RightSkillOnLocation",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x0D_RightSkillOnEntity",
+      "address": "0054a040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a040"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x0D_RightSkillOnEntity",
+        "AnyPacketClickOnMap",
+        "GetRightSkill",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "PLAYER_ProcessSkillOnEntity"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x0D_RightSkillOnEntity",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x0E_RightSkillOnEntityEx",
+      "address": "0054a0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a0c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x0E_RightSkillOnEntityEx",
+        "AnyPacketClickOnMap",
+        "GetRightSkill",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "PLAYER_ProcessSkillOnEntity"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x0E_RightSkillOnEntityEx",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x0F_RightSkillOnLocationEx",
+      "address": "0054a140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a140"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x0F_RightSkillOnLocationEx",
+        "CheckIfInrangeAndReassign",
+        "GetRightSkill",
+        "SCMD_0x0C_RightSkillOnLocation"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x0F_RightSkillOnLocationEx",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity",
+      "address": "0054a1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a1a0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity",
+        "AnyPacketClickOnMap",
+        "GetRightSkill",
+        "SCMD_0x0D_RightSkillOnEntity"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x10_RightSkillOnEntityEx2",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "SCMD_0x11_RightSkillOnEntityEx3",
+      "address": "0054a200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a200"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x11_RightSkillOnEntityEx3",
+        "AnyPacketClickOnMap",
+        "GetRightSkill",
+        "SCMD_0x0E_RightSkillOnEntityEx"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x11_RightSkillOnEntityEx3",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x12_CancelChanneledSkill",
+      "address": "0054a260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a260"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x12_CancelChanneledSkill",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x12_CancelChanneledSkill",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x14_OverheadMessage",
+      "address": "0054a290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a290"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x14_OverheadMessage",
+        "__security_check_cookie",
+        "SStrLen",
+        "SStrCopy",
+        "SStrChr",
+        "Free",
+        "Alloc",
+        "SetLanguageCode",
+        "ROOM_LinkUnitToUpdateList",
+        "GetExpireFrame",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x14_OverheadMessage",
+        "D2HoverTextStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHAT_IsInteractingWithOtherPlayer",
+      "address": "0054a420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a420"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CHAT_IsInteractingWithOtherPlayer",
+        "GetInteractInfo",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHAT_BroadcastToClient",
+      "address": "0054a470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a470"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CHAT_BroadcastToClient",
+        "CLIENT_GetGame",
+        "FindUnitFromTable",
+        "CLIENTS_GetControlUnit",
+        "PLAYERLIST_GetFlagsMasked",
+        "CHAT_IsInteractingWithOtherPlayer",
+        "NET_D2GS_SERVER_Send_0x26_CHATSTART"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x26",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "char *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHAT_DeliverWhisper",
+      "address": "0054a510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a510"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CHAT_DeliverWhisper",
+        "CLIENT_GetGame",
+        "GetCharName",
+        "SStrCmpI",
+        "FindUnitFromTable",
+        "CLIENTS_GetControlUnit",
+        "PLAYERLIST_GetFlagsMasked",
+        "NET_D2GS_SERVER_Send_0x26_CHATSTART"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x26",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "char *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x15_ChatMessage",
+      "address": "0054a5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a5d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CHAT_BroadcastToClient",
+        "CHAT_DeliverWhisper",
+        "SCMD_0x15_ChatMessage",
+        "memset",
+        "SStrCopy",
+        "SStrLen",
+        "__security_check_cookie",
+        "SUNIT_GetClient",
+        "GetCharName",
+        "STATSEX_GetCurrentStat",
+        "SStrChr",
+        "ForEachClient",
+        "NET_D2GS_SERVER_Send_0x26_CHATSTART",
+        "NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG"
+      ],
+      "usedTypes": [
+        "D2ChatBroadcastCtx",
+        "D2ChatMessage",
+        "D2ClientStrc",
+        "D2GSPacketClt0x15_ChatMessage",
+        "D2GSPacketSrv0x",
+        "D2Packet0x5aEventStructure",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "fpForEachClientFn",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PrepareClientMessage",
+      "address": "0054a930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a930"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PrepareClientMessage",
+        "ForEachClient",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CHAT_BroadcastMessageToAllClients",
+      "address": "0054a9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054a9b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CHAT_BroadcastMessageToAllClients",
+        "ForEachClient",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BroadcastEventMessage",
+      "address": "0054aa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054aa40"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "BroadcastEventMessage",
+        "ForEachClient"
+      ],
+      "usedTypes": [
+        "D2Packet0x5aEventStructure",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SCMD_0x13_InteractWithEntity",
+      "address": "0054aa90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054aa90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "Interact",
+        "SERVER_InteractOrPick",
+        "SCMD_0x13_InteractWithEntity"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x13_InteractWithEntity",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x16_InteractWithEntityEx",
+      "address": "0054aad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054aad0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x16_InteractWithEntityEx",
+        "SERVER_InteractOrPick"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x16_PickUpItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x17_DropItem",
+      "address": "0054ab40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054ab40"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x17_DropItem",
+        "SERVER_IsItemOnCursor",
+        "GetPlayerTradeTickOrBusy",
+        "IsInteractingWithPlayer",
+        "SERVER_DropItemFromPlayer"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x17_DropItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x18_ItemToInventory",
+      "address": "0054abb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054abb0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x18_ItemToInventory",
+        "SERVER_IsItemOnCursor",
+        "FindUnitFromTable",
+        "ITEM_SetItemData_ePage",
+        "SERVER_ItemToInventory",
+        "GetPlayerTradeTickOrBusy",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "IsInteractingWithPlayer"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x18_InsertItemToBuffer",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x19_PickUpToCursor",
+      "address": "0054acd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054acd0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x19_PickUpToCursor",
+        "IsPlayerTheOwner",
+        "INVENTORY_GetHandItem",
+        "FindUnitFromTable",
+        "ITEM_GetContainingInventoryPage",
+        "CheckItemMovePermission",
+        "SERVER_TakeItemToCursor",
+        "PLAYER_SendInventoryFullMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x19_RemoveItemFromBuffer",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eInventoryPage",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x1A_EquipItem",
+      "address": "0054ad90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054ad90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x1A_EquipItem",
+        "SERVER_IsItemOnCursor",
+        "SERVER_EquipItemToBodyLoc",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x1A_EquipItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x1B_EquipToSwapSlot",
+      "address": "0054ae30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054ae30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x1B_EquipToSwapSlot",
+        "SERVER_IsItemOnCursor",
+        "ITEMMODE_EquipItemToSwapBodyLoc"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x1B_UnequipItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x1C_UnequipToInventory",
+      "address": "0054aec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054aec0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x1C_UnequipToInventory",
+        "INVENTORY_GetItemByGridOffset",
+        "CheckItemMovePermission",
+        "PLAYERTRADE_CheckNoEquippedTradeItems",
+        "EquipItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x1C_SwapEquippedItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x1D_SwapBodyItem",
+      "address": "0054af50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054af50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x1D_SwapBodyItem",
+        "SERVER_IsItemOnCursor",
+        "INVENTORY_GetItemByGridOffset",
+        "PLAYERTRADE_CheckNoEquippedTradeItems",
+        "CheckItemMovePermission",
+        "SERVER_Swap2HandItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x1D_Swap2HandItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x1E_EquipToWeaponSwap",
+      "address": "0054b030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b030"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x1E_EquipToWeaponSwap",
+        "SERVER_IsItemOnCursor",
+        "INVENTORY_GetItemByGridOffset",
+        "CheckItemMovePermission",
+        "ITEMMODE_EquipItemToBodyLoc"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x1E_RemoveItemFromBelt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x1F_UseItem",
+      "address": "0054b0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b0f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x1F_UseItem",
+        "SERVER_IsItemOnCursor",
+        "IsPlayerTheOwner",
+        "FindUnitFromTable",
+        "ITEM_GetContainingInventoryPage",
+        "CheckItemMovePermission",
+        "ITEMMODE_ExchangeInventoryItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x1F_UseItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eInventoryPage",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x20_UseItemAtLocation",
+      "address": "0054b1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b1e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x20_UseItemAtLocation",
+        "IsPlayerTheOwner",
+        "CheckIfCoordsAreInRange",
+        "SpecialItemsBonuses",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x20_StackItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x27_UseItemOnItem",
+      "address": "0054b280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b280"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x27_UseItemOnItem",
+        "ItemIsOfPlayerAndNotOnCursor",
+        "ITEMMODE_UseItemOnItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x27_UseItemOnItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x21_MergeStackables",
+      "address": "0054b300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b300"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x21_MergeStackables",
+        "ItemIsOfPlayerAndNotOnCursor",
+        "StackItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x21_RemoveStackItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_Cmd0x22_RemoveStackItem",
+      "address": "0054b380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b380"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_Cmd0x22_RemoveStackItem",
+        "ItemIsOfPlayerAndNotOnCursor",
+        "RemoveStackItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x22_ItemToBelt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x23_ItemToBelt",
+      "address": "0054b3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b3e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x23_ItemToBelt",
+        "SERVER_IsItemOnCursor",
+        "ITEM_TryPlaceInBelt"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x23_ItemFromBelt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x24_ItemFromBelt",
+      "address": "0054b450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b450"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x24_ItemFromBelt",
+        "ItemBelongsToInventoryOf",
+        "CheckItemMovePermission",
+        "INVENTORY_GetHandItem",
+        "SERVER_BeltTakeItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x24_SwapBeltItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x25_SwapBeltItem",
+      "address": "0054b4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b4e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x25_SwapBeltItem",
+        "SERVER_IsItemOnCursor",
+        "ItemBelongsToInventoryOf",
+        "SERVER_BeltSwapItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x25_UseScroll",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x26_UseItemAtPlayerCoords",
+      "address": "0054b560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b560"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x26_UseItemAtPlayerCoords",
+        "GetXPos",
+        "GetYPos",
+        "ItemBelongsToInventoryOf",
+        "CheckIfCoordsAreInRange",
+        "SERVER_UseItemAtCoords"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x26_ItemToCube",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x28_SocketItem",
+      "address": "0054b650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b650"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x28_SocketItem",
+        "SERVER_IsItemOnCursor",
+        "ItemBelongsToUnit",
+        "GetInteractInfo",
+        "PutItemInItem",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x28_SocketItem",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x29_ScrollIntoBook",
+      "address": "0054b710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b710"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x29_ScrollIntoBook",
+        "IsAccessableCheck",
+        "IsPlayerTheOwner",
+        "ITEM_InsertScrollIntoBook"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x29_ScrollIntoBook",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x2A_ItemToCube",
+      "address": "0054b790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b790"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x2A_ItemToCube",
+        "IsAccessableCheck",
+        "IsPlayerTheOwner",
+        "ITEMMODE_HandleItemRepair"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x2A_ItemToCube",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_Cmd0x2C_ReturnBadParams",
+      "address": "0054b810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b810"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_Cmd0x2C_ReturnBadParams"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x2C_DeadStub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus"
+      ]
+    },
+    {
+      "name": "PLRMSG_Cmd0x2D_ReturnBadParams",
+      "address": "0054b820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b820"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_Cmd0x2D_ReturnBadParams"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x2D_DeadStub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus"
+      ]
+    },
+    {
+      "name": "LoadAreaOrSpawnPortal",
+      "address": "0054b830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b830"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "LoadAreaOrSpawnPortal",
+        "GetActNoFromLevelNumber",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetTownLevelIdFromActNo",
+        "InitLevel",
+        "GetXPos",
+        "GetYPos",
+        "SERVER_SpawnPortal"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_Cmd0x2E_ReturnOk",
+      "address": "0054b920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b920"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_Cmd0x2E_ReturnOk"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x2E_DeadStub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus"
+      ]
+    },
+    {
+      "name": "SCMD_0x2F_NpcInteract",
+      "address": "0054b930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b930"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "Interact",
+        "SCMD_0x2F_NpcInteract",
+        "FindUnitFromTable",
+        "IsOtherAct",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CheckIfCoordsAreInRange",
+        "NpcState_MoveState0To1"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x2F_NpcRepair",
+        "D2MonsterAiStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x30_NpcCancelDialog",
+      "address": "0054b9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054b9f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x30_NpcCancelDialog",
+        "FindUnitFromTable",
+        "IsOtherAct",
+        "FreeAndResetAiSub"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x30_NpcCancelDialog",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x31_NpcGossip",
+      "address": "0054ba90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054ba90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x31_NpcGossip",
+        "QUEST_OnNpcGossip"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x31_NpcGossip",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x32_NpcBuyConfirm",
+      "address": "0054bac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bac0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x32_NpcBuyConfirm",
+        "SUNITNPC_HandleBuyConfirmation"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x32_NpcBuyConfirm",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x33_NpcSell",
+      "address": "0054bb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bb20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x33_NpcSell",
+        "SUNITNPC_SellItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x33_NpcSell",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x35_NpcGamble",
+      "address": "0054bb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bb60"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x35_NpcGamble",
+        "SUNITNPC_ProcessGamble"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x35_NpcGamble",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x34_CainIdentify",
+      "address": "0054bba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bba0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x34_CainIdentify",
+        "SUNITNPC_HandleIdentify"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x34_CainIdentify",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x36_HireMerc",
+      "address": "0054bbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bbd0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x36_HireMerc",
+        "NPC_ValidateAndProcessMercHire"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x36_HireMerc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x62_NpcSellExpansion",
+      "address": "0054bc00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bc00"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x62_NpcSellExpansion",
+        "SUNITNPC_HandleSellAction"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x62_NpcSellExpansion",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x37_GambleConfirm",
+      "address": "0054bc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bc30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x37_GambleConfirm",
+        "FindUnitFromTable",
+        "GetPlayerData",
+        "SUNITNPC_CheckCanIdentify"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x37_GambleConfirm",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x38_NpcMenuSelect",
+      "address": "0054bca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bca0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x38_NpcMenuSelect",
+        "CloseEnoughToInteract",
+        "UseMenu"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x38_NpcMenuSelect",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_Cmd0x39_ReturnBadParams",
+      "address": "0054bd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bd00"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_Cmd0x39_ReturnBadParams"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus"
+      ]
+    },
+    {
+      "name": "SCMD_0x3A_AllocStatPoint",
+      "address": "0054bd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bd10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x3A_AllocStatPoint",
+        "PLAYER_AssignStatPoint"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x3A_AllocStatPoint",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x3B_AllocSkillPoint",
+      "address": "0054bd90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bd90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x3B_AllocSkillPoint",
+        "CheckIfCanBeSkilled",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel",
+        "SKILL_GetMaxLevelForSkill",
+        "SKILL_AllocSkillPoint",
+        "ITEMMODE_ReturnZero3",
+        "SKILLS_UpdatePassivesAndPets"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketClt0x3B_AllocSkillPoint",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x3C_SelectSkill",
+      "address": "0054be70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054be70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x3C_SelectSkill",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel",
+        "Server_SelectSkill",
+        "InitLeftSkill",
+        "InitRightSkill"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x3C_SelectSkill",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x3D_ActivateObject",
+      "address": "0054bf10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bf10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x3D_ActivateObject",
+        "CloseEnoughToInteract",
+        "OBJECT_UpdateCollisionOnModeChange"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x3D_ActivateObject",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x3E_QuestItemPickup",
+      "address": "0054bf60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054bf60"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "Interact",
+        "SCMD_0x3E_QuestItemPickup",
+        "FindUnitFromTable",
+        "AlreadyHoldingItem",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetXPos",
+        "GetYPos",
+        "CheckIfCoordsAreInRange",
+        "QUEST_HandleClientQuestMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x3E_QuestItemPickup",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x3F_PlayEmote",
+      "address": "0054c070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c070"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x3F_PlayEmote",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x3F_PlayEmote",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x40_RefreshQuestData",
+      "address": "0054c0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c0c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x40_RefreshQuestData",
+        "RefreshQuestDataForUnit"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x40_RefreshQuestData",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x41_Resurrect",
+      "address": "0054c0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c0e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x41_Resurrect",
+        "SUNIT_GetClient",
+        "CLIENT_TestFileFlags",
+        "SERVER_DisconnectClient",
+        "NullSub",
+        "SKILLS_ApplyAllPassiveStates",
+        "GetTxtMaxHp",
+        "GetTxtMaxMana",
+        "GetTxtMaxStamina",
+        "STATLIST_SetUnitStat",
+        "SendAttributeUpdate",
+        "SetState",
+        "GetActNoFromLevelNumber",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetTownLevelIdFromActNo",
+        "InitLevel",
+        "PLRMODES_MoveToLocation",
+        "GetLeftSkill",
+        "GetOwnerGUID",
+        "GetSkillId",
+        "Server_SelectSkill",
+        "GetRightSkill"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketClt0x41_Resurrect",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2ServerIncomingStatus",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x5D_CubeRecipeCheck",
+      "address": "0054c2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c2a0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x5D_CubeRecipeCheck",
+        "ARENA_IsNoCubeRecipes",
+        "PlayerScreen_DispatchAction"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x5D_CubeRecipeCheck",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x5E_CubeApply",
+      "address": "0054c300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c300"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x5E_CubeApply",
+        "ARENA_IsNoCubeRecipes",
+        "PlayerScreen_DispatchAction"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x5E_CubeApply",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x42_StaffInOrifice1",
+      "address": "0054c360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c360"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x42_StaffInOrifice1"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x43_StaffInOrifice2",
+      "address": "0054c370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c370"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x43_StaffInOrifice2"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x44_StaffInOrifice",
+      "address": "0054c380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c380"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x44_StaffInOrifice",
+        "GetPlayerTradeTickOrBusy",
+        "IsInteractingWithPlayer",
+        "OrficeStaffCheck"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x44_StaffInOrifice",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x45_Unused",
+      "address": "0054c420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c420"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x45_Unused"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CanInteractWithMerc",
+      "address": "0054c430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c430"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "CanInteractWithMerc",
+        "FindUnitFromTable",
+        "SERVER_GetUnitPetByTypeId",
+        "ResetAiGeneralStrc",
+        "CreateAiCmdAndFill",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2AiCmdArgumentsStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x46_NpcInteractMerc",
+      "address": "0054c4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c4b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x46_NpcInteractMerc",
+        "CloseEnoughToInteract",
+        "CanInteractWithMerc"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x46_NpcInteractMerc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x47_CommandMercenary",
+      "address": "0054c520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c520"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x47_CommandMercenary",
+        "CheckIfCoordsAreInRange",
+        "CanInteractWithMerc"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x47_CommandMercenary",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x48_CutsceneOver",
+      "address": "0054c590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c590"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x48_CutsceneOver",
+        "GetPlayerData",
+        "PLAYER_ClearCutsceneFlag"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x48_TransmogrifyItem",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x49_TakeWaypoint",
+      "address": "0054c5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c5d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x49_TakeWaypoint",
+        "GetHostileDelay",
+        "GetTickCount",
+        "SetupUpdateEvent_AttachEventSound",
+        "ClearInteractInfo",
+        "PlayerCanInteractWithWaypoint",
+        "GetInteractedNpc",
+        "FindUnitFromTable",
+        "TakeWaypoint"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x49_TakeWaypoint",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x4D_ResetNpcIntroFlag",
+      "address": "0054c690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c690"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x4D_ResetNpcIntroFlag",
+        "PLAYER_UnsetSpokenWithNPC_Intro2"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x4D_ResetNpcIntroFlag",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x4B_ForceUnitUpdate",
+      "address": "0054c6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c6d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x4B_ForceUnitUpdate",
+        "FindUnitFromTable",
+        "AreUnitsInNeighboredRooms",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x4B_ForceUnitUpdate",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x4C_TransmogrifyItem2",
+      "address": "0054c760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c760"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x4C_TransmogrifyItem2",
+        "FindUnitFromTable",
+        "Transmorgify"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x4C_TransmogrifyItem2",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x4F_GoToTownFolk",
+      "address": "0054c7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c7c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x4F_GoToTownFolk",
+        "ClickButton"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x4F_ClickButton",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x50_DropGold",
+      "address": "0054c800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c800"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x50_DropGold",
+        "GetPlayerTradeTickOrBusy",
+        "IsInteractingWithPlayer",
+        "GOLD_DropGoldFromInventory"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x50_DropGold",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x51_SetHotkey",
+      "address": "0054c870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c870"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x51_SetHotkey",
+        "GetSkillByIdAndOwner",
+        "SetHotkey"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x51_SetHotkey",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x52_Unused",
+      "address": "0054c930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c930"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x52_Unused"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x52_Unused",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x53_GamepadInput",
+      "address": "0054c940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c940"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x53_GamepadInput",
+        "STATSEX_GetCurrentStat",
+        "SetupUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x53_GamepadInput",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x54_StopRunning",
+      "address": "0054c990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c990"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x54_StopRunning",
+        "SetupUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x54_StackMerge",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x58_MarkQuestDone",
+      "address": "0054c9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054c9c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x58_MarkQuestDone",
+        "GetPlayerData",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x58_MarkQuestDone",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x59_CommandNPC",
+      "address": "0054ca10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054ca10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x59_CommandNPC",
+        "FindUnitFromTable",
+        "GetDistanceBetweenUnits",
+        "TXT_MonStats_GetLine",
+        "ZeroPathPointsSize",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SetAiArgument"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x59_CommandNPC",
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ValidateSyncWarpPath",
+      "address": "0054cb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054cb10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "ValidateSyncWarpPath",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "UNIT_GetUnitState",
+        "PATH_GetCollisionPattern",
+        "GetPathType",
+        "GetMaxDistance",
+        "GetTargetEx",
+        "GetXSP1",
+        "GetYSP1",
+        "PATH_SetCollisionPattern",
+        "PATH_SetPathType",
+        "OverwriteDistanceAndMaxDistance",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "GetLastPathPointX",
+        "GetLastPathPointY",
+        "SetTarget"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "RelocateAndApplySyncWarp",
+      "address": "0054cc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054cc40"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "RelocateAndApplySyncWarp",
+        "SUNIT_RelocateUnit",
+        "RecordSyncWarpTimestamp",
+        "CheckSyncWarpRateExceeded",
+        "SetState",
+        "AllocStatList",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "D2WarpChanceStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x5F_SyncPosition",
+      "address": "0054cd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054cd50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x5F_SyncPosition",
+        "SUNIT_GetClient",
+        "GetCurrentSkill",
+        "CheckForModeZeroDeath",
+        "GetDistanceToXY",
+        "UNIT_GetUnitState",
+        "ValidateSyncWarpPath",
+        "RelocateAndApplySyncWarp",
+        "SendReassignPlayer",
+        "GetTargetEx",
+        "PLRMODES_MoveToLocation",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2PlayerAnimMode",
+        "eD2ServerIncomingStatus",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x60_WeaponSwap",
+      "address": "0054ce70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054ce70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x60_WeaponSwap",
+        "GetCurrentSkill",
+        "CheckForModeZeroDeath",
+        "ITEMMODE_WeaponSwap"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x60_WeaponSwap",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MERC_SwapEquippedItem",
+      "address": "0054ced0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054ced0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "MERC_SwapEquippedItem",
+        "STRUCT_CreatePlayerInventory",
+        "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMS_IsA",
+        "ITEM_CloneFromSerializedData",
+        "SetupUpdateFlag",
+        "EVENT_RemoveUnitTimersByType",
+        "SERVER_EquipItemToBodyLoc",
+        "ToCursorItem",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_ApplyQuestReward",
+        "ITEMS_RecalcAndRefreshInventory",
+        "ITEMMODE_ReturnZero3",
+        "SetEvent",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "ITEMMODE_UnequipItemStats",
+        "ITEM_CheckEquipRequirements",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "ITEM_EditItemData_eItemFlag",
+        "RefreshInventory",
+        "INVENTORY_GetItemAtBodyLoc",
+        "PutItemInInventory",
+        "SetBodyLoc",
+        "ITEM_SetItemData_ePage",
+        "ITEMMODE_AddStatsList_ForMercSwap"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EquipOrUnequipMercItem",
+      "address": "0054d130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054d130"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "EquipOrUnequipMercItem",
+        "INVENTORY_GetItemByGridOffset",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "ITEMMODE_UnequipItemStats",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "ITEM_CloneFromSerializedData",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_ApplyQuestReward",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMS_RecalcAndRefreshInventory",
+        "ITEMMODE_RecalcAllEquippedStats",
+        "ITEMMODE_ReturnZero3"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MERC_CanEquipItem",
+      "address": "0054d230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054d230"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "MERC_CanEquipItem",
+        "CheckItemFlag",
+        "ITEMS_IsA",
+        "SKILLITEM_DispatchItemSpell",
+        "ToCursorItem",
+        "CopyInventoryOfPlayerOrFree",
+        "IsTwoHanded",
+        "ITEM_CheckEquipRequirements",
+        "MERC_SwapEquippedItem",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x61_MercEquipItem",
+      "address": "0054d430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054d430"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x61_MercEquipItem",
+        "GetPlayerTradeTickOrBusy",
+        "IsInteractingWithPlayer",
+        "GetCurrentSkill",
+        "CheckForModeZeroDeath",
+        "SERVER_GetUnitPetByTypeId",
+        "AreUnitsInNeighboredRooms",
+        "INVENTORY_GetHandItem",
+        "EquipOrUnequipMercItem",
+        "IsQuestItem",
+        "MERC_CanEquipItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x61_MercEquipItem",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_0x63_ItemToBeltAuto",
+      "address": "0054d520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054d520"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SCMD_0x63_ItemToBeltAuto",
+        "IsPlayerTheOwner",
+        "INVENTORY_GetHandItem",
+        "FindUnitFromTable",
+        "ITEM_GetTxtItemTypes_beltable",
+        "ITEM_GetContainingInventoryPage",
+        "INVENTORY_FindBeltSlotForPotion",
+        "CheckItemMovePermission",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ItemBelongsToInventoryOfPlayer",
+        "GetInventoryPage",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UnusedDebug",
+        "ITEM_SetItemData_ePreviousPage",
+        "ITEM_SetItemData_ePage",
+        "SUNIT_GetClient",
+        "Send0x9DRemoveItemFromContainer",
+        "SetupUpdateFlag",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "INVENTORY_CanPlaceItemInBelt",
+        "PutItemInInventory",
+        "Send0x9CItemPutInBelt",
+        "RefreshInventory",
+        "PLAYER_SendInventoryFullMessage"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketClt0x63_ItemToBeltAuto",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eD2ServerIncomingStatus",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMSG_Cmd0x66_WardenResponse_ReturnOk",
+      "address": "0054d740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054d740"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMSG_Cmd0x66_WardenResponse_ReturnOk"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x66_WardenStub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck",
+      "address": "0054d750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054d750"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck",
+        "PLRMODES_TryCancelModeAndMoveToLocation",
+        "LOGMGR_GetHighResolutionTime",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYERMSG_BroadcastPlayerSlain",
+      "address": "0054d8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054d8a0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLAYERMSG_BroadcastPlayerSlain",
+        "GetOwnerUnit",
+        "SUNIT_GetClient",
+        "GetCharName",
+        "SStrLen",
+        "SStrCopy",
+        "CheckMonsterType",
+        "GetBossNo",
+        "BroadcastEventMessage",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2Packet0x5aEventStructure",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendPlayerStopAndAtributeUpdate",
+      "address": "0054da10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054da10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "SendPlayerStopAndAtributeUpdate",
+        "SendPlayerStop",
+        "CLIENTS_GetControlUnit",
+        "STATSEX_GetCurrentStat",
+        "SendAttributeUpdate"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

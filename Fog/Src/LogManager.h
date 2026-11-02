@@ -37,7 +37,7 @@ int64_t __stdcall GetTimestamp();
 uint32_t __stdcall BenchmarkCpuSpeed();
 uint64_t __stdcall GetCpuVersionInfo();
 uint32_t __stdcall GetCpuBrandId();
-uint32_t __fastcall DispatchCpuidCall(int32_t nParam);
+uint32_t __fastcall DispatchCpuidCall(int32_t nLeaf);
 void __stdcall LogCpuInfo();
 BOOL __stdcall GetLoggerState_Stub();
 uint32_t ReturnParam2_Stub(uint32_t dwParam1, uint32_t dwParam2);

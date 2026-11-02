@@ -1,0 +1,195 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/Path.cpp",
+  "functions": [
+    {
+      "name": "ConfirmTarget",
+      "address": "00480420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480420"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Path",
+      "calledFunctions": [
+        "ConfirmTarget",
+        "GetTargetUnit",
+        "GetTargetTypeAndGUID",
+        "UNITS_FindClientSideUnit",
+        "SetTarget",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "thunk_PATH_SnapPositionToTile",
+      "address": "00480490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480490"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Path",
+      "calledFunctions": [
+        "thunk_PATH_SnapPositionToTile",
+        "PATH_SnapPositionToTile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PATH_SetTargetAndCalculate",
+      "address": "004804a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004804a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Path",
+      "calledFunctions": [
+        "PATH_SetTargetAndCalculate",
+        "SetSP1",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "int16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PATH_MoveUnitToPoint",
+      "address": "004804e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004804e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Path",
+      "calledFunctions": [
+        "PATH_MoveUnitToPoint",
+        "IsActive",
+        "UNITS_GetRoom",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetPlayerUnit_UI",
+        "GetPing",
+        "GetDistanceSquaredXY",
+        "GetTargetX",
+        "GetTargetY",
+        "CoordsMapToScreen",
+        "GFXUTIL_IsUnitSpriteOnScreen",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "FindRoomBySubtileCoordinates",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT",
+        "CLIENT_WarpPlayerAndContinueMove",
+        "PATH_CheckCollisionFlags"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PATH_SetTargetUnitAndCalculate",
+      "address": "00480780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480780"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Path",
+      "calledFunctions": [
+        "PATH_SetTargetUnitAndCalculate",
+        "UNITS_FindClientSideUnit",
+        "SetTarget",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PATH_StepAndCreateTrailEffects",
+      "address": "004807c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004807c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Path",
+      "calledFunctions": [
+        "PATH_StepAndCreateTrailEffects",
+        "ConfirmTarget",
+        "UNIT_GetUnitState",
+        "SKILLSSOR_CltCreateBlazeMissile",
+        "SKILLSMON_CltCreateSpiderLay",
+        "GetStepsOfMissileMovement",
+        "PATH_AdvanceUnitAlongPath"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_UpdateUnitFrame",
+      "address": "00480810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480810"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Path",
+      "calledFunctions": [
+        "CLIENT_UpdateUnitFrame",
+        "GetPlayerUnit_UI",
+        "RemoveStatListAfterTimeout",
+        "PARTICLE_UpdatePosition",
+        "GFX_UpdateOverlayAnimations",
+        "PLAYER_ProcessPlayerModeSimulation",
+        "CLIENT_UpdateUnitNameplate",
+        "OBJECT_UpdateAndExecuteClient",
+        "MISSILE_ClientFrameUpdate",
+        "ITEM_UpdateItemAnimation",
+        "UNITS_FindClientSideUnit",
+        "UNITS_FindServerSideUnit",
+        "SCMD_ProcessIncomingPacketBuffer",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "UNITS_RemoveFromClientHashTable"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

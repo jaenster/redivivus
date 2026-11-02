@@ -1,0 +1,141 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/DrlgAnim.cpp",
+  "functions": [
+    {
+      "name": "DRLGROOMTILE_CountAnimTilesFromGrid",
+      "address": "0066d290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d290"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgAnim",
+      "calledFunctions": [
+        "DRLGROOMTILE_CountAnimTilesFromGrid",
+        "GetGridFlags",
+        "TILEPROJECT_LookupTilesInAllProjects",
+        "TILEPROJECT_GetTileCount"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgTileGridStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "AnimateTile",
+      "address": "0066d3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d3b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgAnim",
+      "calledFunctions": [
+        "AnimateTile"
+      ],
+      "usedTypes": [
+        "D2DrlgAnimTileGridStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "AnimateTiles",
+      "address": "0066d410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d410"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgAnim",
+      "calledFunctions": [
+        "AnimateTiles",
+        "AnimateTile"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGANIM_AllocAnimatedTiles",
+      "address": "0066d440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d440"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgAnim",
+      "calledFunctions": [
+        "DRLGANIM_AllocAnimatedTiles",
+        "TILEPROJECT_GetTileCount",
+        "GetGridFlags",
+        "TILEPROJECT_LookupTilesInAllProjects",
+        "AllocServerMemory",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TILEPROJECT_GetAnimatedTileDataPtr",
+        "DRLGROOMTILE_CreateFloorTileData",
+        "DRLGROOMTILE_CreateShadowTileData",
+        "DRLGROOMTILE_CreateWallTileData",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2DrlgAnimTileGridStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgTileDataStrc",
+        "D2DrlgTileDataStrc *",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMTILE_AllocAnimTiles",
+      "address": "0066d700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d700"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgAnim",
+      "calledFunctions": [
+        "DRLGROOMTILE_AllocAnimTiles",
+        "DRLGANIM_AllocAnimatedTiles"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2DrlgTileGridStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGANIM_GetOrientationFromIndex",
+      "address": "0066d7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d7f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgAnim",
+      "calledFunctions": [
+        "DRLGANIM_GetOrientationFromIndex"
+      ]
+    }
+  ]
+}

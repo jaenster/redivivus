@@ -1,0 +1,55 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/BNGatewayAccess.cpp",
+  "functions": [
+    {
+      "name": "NumGateways",
+      "address": "0042e680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e680"
+        }
+      ],
+      "namespace": "D2Client::BNGatewayAccess",
+      "calledFunctions": [
+        "NumGateways"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CurGateway",
+      "address": "0042e690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e690"
+        }
+      ],
+      "namespace": "D2Client::BNGatewayAccess",
+      "calledFunctions": [
+        "CurGateway"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "operator=",
+      "address": "00517e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517e40"
+        }
+      ],
+      "namespace": "D2Client::BNGatewayAccess",
+      "usedTypes": [
+        "D2BNetGatewayAccessStr"
+      ]
+    }
+  ]
+}

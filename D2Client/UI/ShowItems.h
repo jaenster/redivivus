@@ -8,10 +8,29 @@
 #include <cstdarg>
 #include "d2_platform.h"
 
+// Forward declarations
+struct D2UnitStrc;
+
+// Data types
+struct D2GroundItemLabelStrc {
+    /* 0x000 */ int nLeft;
+    /* 0x004 */ int nTop;
+    /* 0x008 */ int nRight;
+    /* 0x00C */ int nBottom;
+    /* 0x010 */ struct D2UnitStrc * pItem;
+    /* 0x014 */ uint16_t wszName[128]; // filled by UI_FormatItemNameWithQuality with cap 0x100 bytes
+    /* 0x114 */ int nColorKey;
+    /* 0x118 */ int nDrawPosition;
+    /* 0x11C */ int nTextColor;
+};
+
 namespace D2Client::UI::ShowItems {
 
 // Function declarations
 // @sourcefile .\UI\showitems.cpp
 void __stdcall DRAW_AltItems();
+void StaticInit_6cadb0();
+void StaticInit_6cade0();
+void StaticFini_Empty_6cb400();
 
 } // namespace D2Client::UI::ShowItems

@@ -1,0 +1,528 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monster/MonsterAI.cpp",
+  "functions": [
+    {
+      "name": "SendMercPackets",
+      "address": "005726c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005726c0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "SendMercPackets",
+        "SERVER_GetUnitPetByTypeId",
+        "STATSEX_GetCurrentStat",
+        "UnitQueuePacket0x9E",
+        "SERVER_GetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MERC_ApplyLevelStats",
+      "address": "00572840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572840"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "MERC_ApplyLevelStats",
+        "SERVER_GetUnitPetByTypeId",
+        "STATSEX_GetCurrentStat",
+        "SendNpcMessageOrHoverText",
+        "STATLIST_SetUnitStat",
+        "GetPlayersPetData",
+        "GetHirelingText",
+        "TXT_Experience_GetMaxLevel",
+        "GetBaseExperience",
+        "SERVER_GetUnitStat",
+        "TXT_Skills_GetLine",
+        "SetSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2HirelingTxt",
+        "D2PetDataStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocMonsterAI",
+      "address": "00572ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572ba0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "AllocMonsterAI",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreeMonsterAi",
+      "address": "00572bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572bc0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "FreeMonsterAi",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "NPC_BeginInteraction",
+      "address": "00572c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572c10"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "NPC_BeginInteraction",
+        "GetInteractedNpc",
+        "GetPlayerTradeTickOrBusy",
+        "TXT_MonStats_GetFlagsByBitOffset",
+        "Q04_IsTristramActive",
+        "SUNIT_GetClient",
+        "AllocServerMemory",
+        "CLIENT_GetGame",
+        "SendMercForHireList",
+        "SetInteractInfo",
+        "STRUCT_AllocTxtMessageForPacket0x27",
+        "QUEST_OnNpcInteraction",
+        "BuildPacket0x27Messages",
+        "NET_D2GS_SERVER_Send_0x27_NpcInfo",
+        "STRUCT_FreeTxtMessageForPacket0x27",
+        "NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare",
+        "GetQuestBitBuffer",
+        "NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x27_TextStrc",
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CountMonstersByAi",
+      "address": "00572da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572da0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "CountMonstersByAi"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "HasAiSub",
+      "address": "00572dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572dc0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "HasAiSub"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc"
+      ]
+    },
+    {
+      "name": "HasUnitInSubAi",
+      "address": "00572de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572de0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "HasUnitInSubAi"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FreeSpecificAiForUnit",
+      "address": "00572e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572e00"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "FreeSpecificAiForUnit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "NpcState_MoveState0To1",
+      "address": "00572e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572e60"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "NpcState_MoveState0To1",
+        "Init"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "NpcState_MoveState1To2",
+      "address": "00572ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572ea0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "NpcState_MoveState1To2"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NpcStateIs2",
+      "address": "00572ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572ee0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "NpcStateIs2"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeAndResetAiSub",
+      "address": "00572f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572f20"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "FreeAndResetAiSub",
+        "QUEST_OnNpcDeactivate",
+        "GetInteractInfo",
+        "ClearInteractInfo",
+        "FreeServerMemory",
+        "SUNITPROXY_RemovePlayerProxyInventory"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2MonsterAiSubStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPC_BeginInteractionFromUnit",
+      "address": "00573020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573020"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "NPC_BeginInteractionFromUnit",
+        "NPC_BeginInteraction"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UnitHasSwitchAiSet",
+      "address": "00573040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573040"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "UnitHasSwitchAiSet"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AI_SetSwitchAiTargetParams",
+      "address": "00573090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573090"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "AI_SetSwitchAiTargetParams",
+        "UnitHasSwitchAiSet"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AI_GetSwitchAiParam1",
+      "address": "005730e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005730e0"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "AI_GetSwitchAiParam1"
+      ],
+      "usedTypes": [
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "AI_GetSwitchAiParam2",
+      "address": "00573100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573100"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "AI_GetSwitchAiParam2"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerArenaStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "AI_ClearSwitchAiTargetParams",
+      "address": "00573120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573120"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "AI_ClearSwitchAiTargetParams"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NpcStateIsntZero",
+      "address": "00573140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573140"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "NpcStateIsntZero"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ClearAISub",
+      "address": "00573180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573180"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "ClearAISub",
+        "GetGUID",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP",
+        "GetInteractInfo",
+        "ClearInteractInfo",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2MonsterAiStrc",
+        "D2MonsterAiSubStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "fpAiClear",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MERC_HireAndReplaceMerc",
+      "address": "00573270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573270"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterAI",
+      "calledFunctions": [
+        "MERC_HireAndReplaceMerc",
+        "SetAlignment",
+        "CreateUnitNode",
+        "SERVER_GetUnitPetByTypeId",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x9B_MercReviveCost",
+        "AssignMinionOwner",
+        "RemovePetByGuidAndNotify",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "GetMercAct",
+        "RollMercStats",
+        "RecastPetAndAssign",
+        "GetHirelingText",
+        "STATLIST_SetUnitStat",
+        "MERC_ApplyLevelStats",
+        "SendMercPackets",
+        "InitUmods"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2HirelingHireData",
+        "D2HirelingTxt",
+        "D2MercForHire",
+        "D2PetDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

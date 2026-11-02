@@ -64,7 +64,7 @@ BOOL __fastcall Draw(::D2WinImage * pImage);
 BOOL __fastcall Draw(::D2WinImageEx * pImageEx);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 // @sourcefile .\Src\D2WinImage.cpp
-::D2WinImage * __fastcall D2WinImage(int32_t nParam1, int32_t nParam2, int32_t nSizeX, int32_t nSizeY, struct DC6 * pDC6, OnPress pfnOnPress, struct D2WinImageHitArea * pHitAreas, ::Key pKey);
+::D2WinImage * __fastcall D2WinImage(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, struct DC6 * pDC6, OnPress pfnOnPress, struct D2WinImageHitArea * pHitAreas, ::Key pKey);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinImage

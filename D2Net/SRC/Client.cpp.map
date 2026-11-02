@@ -1,0 +1,295 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Net/SRC/Client.cpp",
+  "functions": [
+    {
+      "name": "NET_CLIENT_SetConnectionTimeout",
+      "address": "0052a610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a610"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_CLIENT_SetConnectionTimeout",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_CLIENT_GetConnectionTimeout",
+      "address": "0052a640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a640"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_CLIENT_GetConnectionTimeout",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_ServerConnectionThread_lpStartAddress",
+      "address": "0052a680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a680"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "CLIENT_ServerConnectionThread_lpStartAddress",
+        "WSAGetLastError",
+        "inet_nameToIp"
+      ],
+      "usedTypes": [
+        "u_short"
+      ]
+    },
+    {
+      "name": "NET_CLIENT_CreateServerConnectionThread",
+      "address": "0052a730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a730"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_CLIENT_CreateServerConnectionThread"
+      ]
+    },
+    {
+      "name": "NET_D2GS_ConnectToServer",
+      "address": "0052a750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a750"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_D2GS_ConnectToServer",
+        "AllocClientMemory",
+        "memset",
+        "NET_D2GS_CLIENT_SetD2GSConnectionType",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
+        "NET_D2GS_SERVER_Send_0xAF00"
+      ],
+      "usedTypes": [
+        "eD2GSConnectionType"
+      ]
+    },
+    {
+      "name": "NET_CLIENT_ShutdownConnection",
+      "address": "0052a7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a7e0"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_CLIENT_ShutdownConnection",
+        "FreeClientMemory",
+        "NET_D2GS_CLIENT_FreeAllClientD2Packets",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
+        "closeSocket",
+        "WSAGetLastError"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_ExtractPacketSize_to0xAE",
+      "address": "0052a890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a890"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_ExtractPacketSize_to0xAE",
+        "NET_D2GS_CLIENT_ExtractPacketSize"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
+      "address": "0052a8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a8b0"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
+        "NET_D2GS_CLIENT_ExtractPacketSize"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues",
+      "address": "0052a8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a8d0"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues",
+        "NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory",
+        "memcpy",
+        "COMPRESS_BuildHuffmanDecodeTable",
+        "GetTickCount",
+        "memmove",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2OnePacketClientStrc",
+        "D2OnePacketClientStrc *",
+        "D2PacketsClientStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ThreadClientToServer",
+      "address": "0052ab00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052ab00"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "ThreadClientToServer",
+        "WSAGetLastError",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
+        "NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues",
+        "NET_D2GS_CLIENT_DecompressPacket",
+        "memmove",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "fd_set",
+        "timeval",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_CLIENT_SendPacketToServer",
+      "address": "0052adc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052adc0"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_SendPacketToClient",
+        "NET_CLIENT_SendPacketToServer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_SendPacketToD2GSOnline",
+      "address": "0052ae00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052ae00"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_SendPacketToD2GSOnline",
+        "WSAGetLastError",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_SendPacketAfterChecks",
+      "address": "0052ae50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052ae50"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_SendPacketAfterChecks",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_SendPacketToClient",
+        "NET_SendPacketToD2GSOnline"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket",
+      "address": "0052aeb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052aeb0"
+        }
+      ],
+      "namespace": "D2Net::SRC::Client",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket",
+        "AllocClientMemory",
+        "NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize",
+        "memcpy",
+        "GetTickCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2OnePacketClientStrc",
+        "uint8_t"
+      ]
+    }
+  ]
+}

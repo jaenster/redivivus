@@ -26,16 +26,16 @@ BOOL __fastcall Skills_SrvDoFunc_114_SummonRaven(::SGAMEDATA * pGame, struct D2U
 // Server DoFunc for Druid skill 115 (Poison Creeper). Creates the vine summon via SKILL_CreateSummon, attaches it to the owner's node table, applies STATE_vine_beast, sets its level from calc[1], then calls SKILLNEC_ApplySummonBuffs. Differs from Raven: no UNITFLAG_CANBEATTACKED clear, no HP-regen zero, mode fixed to 8. Returns TRUE on success.
 BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // @sourcefile .\SKILLS\SkillDruid.cpp
-int32_t __fastcall SKILLDRUID_GetTransformGfx(struct D2UnitStrc * pUnit, int32_t nParam);
-void __fastcall SKILLDRUID_OnShapeshiftExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * param_1);
+int32_t __fastcall SKILLDRUID_GetTransformGfx(struct D2UnitStrc * pUnit, int32_t nDefaultGfx);
+void __fastcall SKILLDRUID_OnShapeshiftExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);
 // @sourcefile .\SKILLS\SkillDruid.cpp
 void __fastcall D2SetAurastatsFromSkills(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, struct D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl);
 // @sourcefile .\SKILLS\SkillDruid.cpp
-void __fastcall D2SetPassiveStatsFromSkills(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, struct D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nParam);
+void __fastcall D2SetPassiveStatsFromSkills(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, struct D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl);
 // Server do-function for Druid shapeshift skill 116 (Werewolf). If the aura state is already active, applies the skill delay and returns 0. Otherwise allocates a new stat list for the shapeshift duration (auralencalc frames), attaches SKILLDRUID_OnShapeshiftExpire, applies aura stats via D2SetAurastatsFromSkills, records the skill/level modifier stats, sets the skill's mode to 10, and schedules a timer event. Returns 1 on successful activation.
 BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server helper that spawns nMissileCount missiles of type pMissileId from the caster toward the target/cursor position. If nParam2 is non-zero, fires one missile via SkillsServer::CreatingAMissile first and decrements the count. Remaining missiles are looped through D2Game::Missiles::CreatingMissile using SKILL_InitChargedBoltPath as the path function. Used by Druid multi-projectile skills (e.g. Twister/Tornado variants).
-BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nMissileCount, eMissilesId pMissileId, eD2Skills eSkill, int32_t nParam1, int32_t nParam2);
+BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nMissileCount, eMissilesId pMissileId, eD2Skills eSkill, int32_t nSkillLvl, int32_t nParam2);
 // Server-side druid Firestorm do-func (srvdofunc 117). Fires a primary missile then spawns additional fire-streak missiles along a charged-bolt radiating path toward the target. Used by Druid Firestorm (Skills.txt srvdofunc==117).
 BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server-side druid Twister/Tornado do-func (srvdofunc 118). Casts multiple missiles via SKILLDRUID_CastMultiMissile using the charge-up missile for the skill. Used by Druid Twister/Tornado family (Skills.txt srvdofunc==118).

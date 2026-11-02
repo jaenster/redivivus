@@ -117,7 +117,7 @@ void __stdcall DIALOG_InitializeSystem();
 void __stdcall DIALOG_CleanupSystem();
 void __fastcall AllocDialogSub(struct D2DialogStrc * pDialog, void * pVtable, int32_t nParam2, int32_t nParam3);
 void __stdcall DIALOG_RegisterHandler();
-struct D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, fpDialogFunc nfpDialogFunc, int32_t fpDialogFunc2, int32_t nParam1, int32_t nParam2);
+struct D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, fpDialogFunc nfpDialogFunc, int32_t fpDialogFunc2, int32_t nBackgroundId, int32_t nExtraParam);
 struct D2DialogStrc * __fastcall AllocDialogStrc(int32_t nX, int32_t nY, fpDialogFunc fpDialogFunc1, fpDialogFunc fpDialogFunc2, int32_t nExtraParam1, int32_t nLayoutMode, int32_t nAutoLayout, int32_t nWidth, int32_t nHeight, int32_t nExtraParam2, int32_t nExtraParam3);
 void __fastcall FreeDialogStrc(struct D2DialogStrc * pDialog);
 void __fastcall DIALOG_DrawBackground(struct D2DialogStrc * pDialog);
@@ -127,7 +127,7 @@ void __fastcall DIALOG_SetHighlightStyle(struct D2DialogStrc * pDialog, int32_t 
 void __fastcall DIALOG_RecalculateLayout(struct D2DialogStrc * pDialog);
 int32_t __fastcall DIALOG_GetSelectedIndex(struct D2DialogStrc * pDialog);
 int __stdcall GetDialogCounter();
-void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t param_1, uint32_t param_2, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);
+void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t param_1, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);
 // 6 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Dialog

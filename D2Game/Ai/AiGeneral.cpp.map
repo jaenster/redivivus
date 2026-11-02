@@ -1,0 +1,598 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Ai/AiGeneral.cpp",
+  "functions": [
+    {
+      "name": "AllocAiGeneral",
+      "address": "0058ebc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ebc0"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "AllocAiGeneral",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SetAiArgument",
+      "address": "0058ec00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ec00"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "SetAiArgument"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetAiArgument",
+      "address": "0058ec50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ec50"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "GetAiArgument"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateAiCmdStrc",
+      "address": "0058ec90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ec90"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "CreateAiCmdStrc",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreeAi",
+      "address": "0058ed10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ed10"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "FreeAi",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreeAiCmds",
+      "address": "0058ed80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ed80"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "FreeAiCmds",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ResetAiGeneralStrc",
+      "address": "0058ede0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ede0"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "ResetAiGeneralStrc",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "GetAiCmd",
+      "address": "0058ee80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ee80"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "GetAiCmd"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "AI_SetCurrentAiCommand",
+      "address": "0058eea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058eea0"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "AI_SetCurrentAiCommand"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindMonsterAiCmd",
+      "address": "0058eef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058eef0"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "FindMonsterAiCmd"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateAiCmdAndFill",
+      "address": "0058ef40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ef40"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "CreateAiCmdAndFill",
+        "CreateAiCmdStrc"
+      ],
+      "usedTypes": [
+        "D2AiCmdArgumentsStrc",
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "AI_CreateCmdIfNotExists",
+      "address": "0058efa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058efa0"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "AI_CreateCmdIfNotExists",
+        "FindMonsterAiCmd",
+        "CreateAiCmdAndFill"
+      ],
+      "usedTypes": [
+        "D2AiCmdArgumentsStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetMonsterMapAi",
+      "address": "0058f000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f000"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "GetMonsterMapAi"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc *",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "AssignMinionOwner",
+      "address": "0058f030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f030"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "AssignMinionOwner",
+        "SetUnsetAiFlag"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetMonsterNameAndAi",
+      "address": "0058f090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f090"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "GetMonsterNameAndAi"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetOwnerUnit",
+      "address": "0058f0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f0d0"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "GetOwnerUnit",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "AddMinionToList",
+      "address": "0058f100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f100"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "AddMinionToList",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreeAiOfMinions",
+      "address": "0058f160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f160"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "FreeAiOfMinions",
+        "FindUnitFromTable",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList",
+        "D2MonsterDataMinionList *",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreeAiOfMinionsLessSafe",
+      "address": "0058f260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f260"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "FreeAiOfMinionsLessSafe",
+        "FindUnitFromTable",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ClearMinionList",
+      "address": "0058f350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f350"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "ClearMinionList",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2MonsterDataMinionList",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "CallForEachMinion",
+      "address": "0058f380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f380"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "CallForEachMinion",
+        "FindUnitFromTable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "pfnMinionForEachCallback"
+      ]
+    },
+    {
+      "name": "GetAndRemoveMinionList",
+      "address": "0058f440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f440"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "GetAndRemoveMinionList",
+        "GetFlagBit"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList *",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReplaceMinionList",
+      "address": "0058f4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f4d0"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "ReplaceMinionList",
+        "ClearMinionList",
+        "AssignMinionOwner"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddMinionToAi",
+      "address": "0058f530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f530"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "AddMinionToAi",
+        "FindUnitFromTable",
+        "SetUnsetAiFlag",
+        "AddMinionToList"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "RemoveMinionsFromAiIfFlag1Set2Not",
+      "address": "0058f6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f6c0"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "RemoveMinionsFromAiIfFlag1Set2Not",
+        "GetFlagBit",
+        "FindUnitFromTable",
+        "AddMinionToAi"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_GetUnitData_AiGeneral_Offset0x3C",
+      "address": "0058f710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f710"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "MONSTER_GetUnitData_AiGeneral_Offset0x3C"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateMinion",
+      "address": "0058f730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f730"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "CreateMinion",
+        "FindUnitFromTable",
+        "CreateAiCmdStrc"
+      ],
+      "usedTypes": [
+        "D2AiCmdArgumentsStrc",
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
+        "D2MonsterDataMinionList",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreeMonsterAi",
+      "address": "0058f810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f810"
+        }
+      ],
+      "namespace": "D2Game::Ai::AiGeneral",
+      "calledFunctions": [
+        "FreeMonsterAi",
+        "DRLGPRESET_FreeSpawnPointList",
+        "FreeServerMemory",
+        "FreeAiCmds"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterDataMinionList",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

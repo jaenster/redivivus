@@ -118,7 +118,7 @@ BOOL __fastcall SKILLAMA_SrvStFn06_PowerStrike(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Amazon skill helper that probabilistically consumes weapon quantity or durability on use. For stackable weapons: if the RNG roll (based on pUnit's seed vs. nParam1 threshold) triggers, removes one charge via RemoveQuanityOnUse. For non-stackable weapons with durability: on a trigger, decrements durability by nParam2 and sends stat update 0x3E to the client; if durability reaches zero, calls ITEMMODE_SendItemUpdate (item break). Returns non-zero if an action was taken.
-static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nParam1, int32_t nParam2, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nChancePct, int32_t nDurabilityLoss, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int nCurrentDurability;
     D2SeedStrc sNewSeed;
     uint32_t bIsWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_Weapon);
@@ -132,7 +132,7 @@ static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nPara
       if (nCurrentDurability > 0) {
         sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
         pUnit->sSeed = sNewSeed;
-        if ((int)(sNewSeed.nSeedLow % 100) < nParam1) {
+        if ((int)(sNewSeed.nSeedLow % 100) < nChancePct) {
           SkillsServer::RemoveQuanityOnUse(pGame, pUnit);
           return;
         }
@@ -142,9 +142,9 @@ static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nPara
       if (bIsWeapon) {
         sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
         pUnit->sSeed = sNewSeed;
-        if ((int)(sNewSeed.nSeedLow % 100) < nParam1) {
+        if ((int)(sNewSeed.nSeedLow % 100) < nChancePct) {
           nCurrentDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_durability, 0);
-          bIsWeapon = nCurrentDurability - nParam2;
+          bIsWeapon = nCurrentDurability - nDurabilityLoss;
           if ((int)bIsWeapon >= 0 && bIsWeapon) {
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit2, UNITSTAT_durability, bIsWeapon, 0);
             GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillAma.cpp", 0x9b), pUnit2, true, 0x48, bIsWeapon, 0);
@@ -350,7 +350,7 @@ BOOL __fastcall SKILLAMA_SrvStFn37_MultiStrike(::SGAMEDATA * pGame, D2UnitStrc *
 // Amazon lightning-damage strike-step. After a standard auto-hit check, rolls a random lightning damage value between SERVER_MinDamage and SERVER_MaxDamage, stores it in sDamage.dwLtngDamage, sets enhanced-damage bonus (calc[0]) and optional elemental conversion (calc[3]/EType), then applies via DAMAGE_CalculateAndApplyDamage. Defaults SrcDam to 0x80 if zero.
 BOOL __fastcall SKILLAMA_SrvStFn10_LightningStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nMaxDmg;
-    uint32_t uVar1;
+    uint32_t nDamageRoll;
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -373,8 +373,8 @@ BOOL __fastcall SKILLAMA_SrvStFn10_LightningStrike(::SGAMEDATA * pGame, D2UnitSt
       int32_t nMinDmg;
       nMinDmg = D2Common::Skills::SERVER_MinDamage(pUnit, eSkill, nSkillLvl, 1);
       nMaxDmg = D2Common::Skills::SERVER_MaxDamage(pUnit, eSkill, nSkillLvl, 1);
-      uVar1 = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMaxDmg - nMinDmg);
-      sDamage.dwLtngDamage = uVar1 + nMinDmg;
+      nDamageRoll = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMaxDmg - nMinDmg);
+      sDamage.dwLtngDamage = nDamageRoll + nMinDmg;
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
       if (pSkillsTxt->EType != ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
@@ -736,12 +736,12 @@ BOOL __fastcall Skills_SrvDoFunc_011_ChargedStrike(::SGAMEDATA * pGame, D2UnitSt
 
     sSkillArg.nMissileTxtNo = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
     if ((int)sSkillArg.nMissileTxtNo >= 0 && (int)sSkillArg.nMissileTxtNo < sgptDataTable->nTxtMissilesSize) {
-      int iVar1;
+      int nBoltIdx;
       memset(&sSkillArg, 0, 0x5c);
       sSkillArg.nX = nX;
       sSkillArg.nY = nY;
       sSkillArg.nUnitY = nY * 2 - nUnitY;
-      iVar1 = 0;
+      nBoltIdx = 0;
       sSkillArg.pOwner = pUnit;
       sSkillArg.nFlags = 0x21;
       sSkillArg.nUnitX = nX * 2 - nSrcX;
@@ -753,10 +753,10 @@ BOOL __fastcall Skills_SrvDoFunc_011_ChargedStrike(::SGAMEDATA * pGame, D2UnitSt
       }
 
       do {
-        sSkillArg.nFunctionParam = iVar1;
+        sSkillArg.nFunctionParam = nBoltIdx;
         MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-        iVar1++;
-      } while (iVar1 < nChargedBoltCount);
+        nBoltIdx++;
+      } while (nBoltIdx < nChargedBoltCount);
 
       return 1;
     }

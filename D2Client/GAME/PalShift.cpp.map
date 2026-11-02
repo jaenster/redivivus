@@ -1,0 +1,214 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/PalShift.cpp",
+  "functions": [
+    {
+      "name": "AllocPalShift_GreenBlood",
+      "address": "00476e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476e30"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "AllocPalShift_GreenBlood",
+        "CheckIfFileExists",
+        "AllocClientMemory",
+        "memset",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc",
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "InitPal",
+      "address": "00476ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476ea0"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "InitPal",
+        "AllocClientMemory",
+        "memset",
+        "CheckIfFileExists",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc",
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "FreeGamePalShift",
+      "address": "00476fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476fb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "FreeGamePalShift",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "PALSHIFT_FindPalShiftByToken",
+      "address": "00477030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477030"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "PALSHIFT_FindPalShiftByToken"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PALSHIFT_ApplyGreenBloodPalette",
+      "address": "00477060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477060"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "PALSHIFT_ApplyGreenBloodPalette"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PALSHIFT_LoadMonsterPalShift",
+      "address": "00477170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477170"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "PALSHIFT_LoadMonsterPalShift",
+        "TXT_MonStats_GetLine",
+        "PALSHIFT_FindPalShiftByToken",
+        "CheckIfFileExists",
+        "AllocClientMemory",
+        "memset",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile",
+        "PALSHIFT_ApplyGreenBloodPalette",
+        "GetTxtMonStatsSize"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PALSHIFT_InitPalShiftTable",
+      "address": "00477470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477470"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "PALSHIFT_InitPalShiftTable",
+        "FreeClientMemory",
+        "AllocClientMemory",
+        "memset",
+        "PALSHIFT_LoadMonsterPalShift"
+      ]
+    },
+    {
+      "name": "PALSHIFT_GetMonsterTransform",
+      "address": "00477530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477530"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "PALSHIFT_GetMonsterTransform",
+        "GetPalShiftIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GAMEDATA_GetBloodFlag",
+        "TXT_MonStats_GetMonStats2"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftRandTransformStrc *",
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PALSHIFT_GenerateShiftDuration",
+      "address": "00477620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477620"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "PALSHIFT_GenerateShiftDuration",
+        "InitSeed_Param_666"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PALSHIFT_GetGreenBloodTable",
+      "address": "00477680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477680"
+        }
+      ],
+      "namespace": "D2Client::GAME::PalShift",
+      "calledFunctions": [
+        "PALSHIFT_GetGreenBloodTable"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc"
+      ]
+    }
+  ]
+}

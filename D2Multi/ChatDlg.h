@@ -47,7 +47,7 @@ BOOL __stdcall CHATDLG_OnPressUserListPrevLine(struct D2ControlMsg * pControlMsg
 // Provenance: asm 0043da30 (RET 4); fpOnPressCallback of form record 0070d0f0 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fd15.
 BOOL __stdcall CHATDLG_OnPressUserListNextLine(struct D2ControlMsg * pControlMsg);
 // @sourcefile .\Src\ChatDlg.cpp
-void CHATDLG_FreeChatMsgNode(void * * pParam);
+void CHATDLG_FreeChatMsgNode(void * * pChatNode);
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_ProcessPendingMessages();
 void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, int32_t pszMessage);

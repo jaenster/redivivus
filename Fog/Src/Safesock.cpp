@@ -31,8 +31,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2NetDataStrc) == 0x78, "D2_NEW_AT(
 namespace Fog::Src::Safesock {
 
 int __fastcall closeSocket(SOCKET hSocket) {
-    int iVar1 = closesocket(hSocket);
-    return iVar1;
+    int nResult = closesocket(hSocket);
+    return nResult;
 }
 
 BOOL __stdcall StartUp() {
@@ -47,7 +47,7 @@ int __stdcall WSACleanup() {
 }
 
 // @sourcefile .\Src\Safesock.cpp
-D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szConnectionAlias, uint32_t nParam) {
+D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szConnectionAlias, uint32_t dwFlags) {
     uint32_t nLocalIpAddr;
     HANDLE hThread;
     char* pDstIp;
@@ -104,7 +104,7 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     nSendBufSize[2] = '\0';
     nSendBufSize[3] = '\0';
     /* char * optval for setsockopt */ /* int optname for setsockopt */ /* int level for setsockopt */ /* SOCKET s for setsockopt */ setsockopt(hSocket, 0xffff, 0x1005, nSendBufSize, 4);
-    uint32_t bNonBlocking = nParam & 1;
+    uint32_t bNonBlocking = dwFlags & 1;
     if (bNonBlocking) {
       /* u_long * argp for ioctlsocket */ /* long cmd for ioctlsocket */ /* SOCKET s for ioctlsocket */ nNonBlockArg = 1;
       ioctlsocket(hSocket, -0x7ffb9982, &nNonBlockArg);
@@ -346,8 +346,8 @@ char * __stdcall NET_GetLocalIp() {
       }
     }
 
-    char* pcVar3 = inet_ntoa((in_addr)sLocalSockAddr.sin_addr);
-    sprintf(cp_0075d040, "%s", pcVar3);
+    char* szIpAddress = inet_ntoa((in_addr)sLocalSockAddr.sin_addr);
+    sprintf(cp_0075d040, "%s", szIpAddress);
     WSACleanup();
     return cp_0075d040;
 }

@@ -47,28 +47,28 @@ int * __stdcall TILEPROJECT_AllocSlot(void * pTileProject, char * szFilename) {
     exit(-1);
 }
 
-void __stdcall TILEPROJECT_FreeSlot(int32_t nParam1, int32_t nParam2) {
-    if (!nParam2) {
+void __stdcall TILEPROJECT_FreeSlot(int32_t pnProjectIds, int32_t pProject) {
+    if (!pProject) {
       return;
     }
 
-    int nProjectId = SRC::TileProjects::TILEPROJECT_GetProjectId((char*)(nParam2 + 8));
+    int nProjectId = SRC::TileProjects::TILEPROJECT_GetProjectId((char*)(pProject + 8));
     if (!nProjectId) {
       return;
     }
 
     int nSlotIndex = 0;
-    while (*(int*)(nParam1 + nSlotIndex * 4) != nProjectId) {
+    while (*(int*)(pnProjectIds + nSlotIndex * 4) != nProjectId) {
       nSlotIndex++;
       if (nSlotIndex >= 0x20) {
         return;
       }
     }
 
-    *(uint32_t*)(nParam1 + nSlotIndex * 4) = 0;
+    *(uint32_t*)(pnProjectIds + nSlotIndex * 4) = 0;
 }
 
-uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nTileType, int32_t nTileSubType, int32_t nParam4, int * pnFoundTiles, uint32_t nParam) {
+uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex, int * pnFoundTiles, uint32_t nMaxTiles) {
     int32_t nTotalFound;
     if (!ppProjects) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d);
@@ -77,23 +77,23 @@ uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int
 
     int nFoundInProjectAccum = 0;
     int iProjectIdx = 0;
-    uint32_t nRemaining = nParam;
+    uint32_t nRemaining = nMaxTiles;
     do {
       if (!ppProjects[iProjectIdx]) {
         break;
       }
 
-      nTotalFound = SRC::FindTiles::FINDTILE_Lookup((int**)ppProjects[iProjectIdx], (int32_t)(pnFoundTiles + nFoundInProjectAccum), nRemaining, nTileType, nTileSubType, nParam4);
+      nTotalFound = SRC::FindTiles::FINDTILE_Lookup((int**)ppProjects[iProjectIdx], (int32_t)(pnFoundTiles + nFoundInProjectAccum), nRemaining, nTileType, nTileSubType, nSubIndex);
       nRemaining -= nTotalFound;
       nFoundInProjectAccum += nTotalFound;
       if (!nRemaining) {
-        return nParam;
+        return nMaxTiles;
       }
 
       iProjectIdx++;
     } while (iProjectIdx < 0x20);
 
-    return nParam - nRemaining;
+    return nMaxTiles - nRemaining;
 }
 
 int32_t __stdcall GetOrientation(D2TileLibraryEntryStrc * pTileLibraryEntry) {

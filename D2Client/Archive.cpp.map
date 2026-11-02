@@ -1,0 +1,328 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Archive.cpp",
+  "functions": [
+    {
+      "name": "ARCHIVE_WriteFormattedText",
+      "address": "0045b960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b960"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_WriteFormattedText"
+      ]
+    },
+    {
+      "name": "ARCHIVE_ComputeAddress",
+      "address": "0045b9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b9a0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_ComputeAddress"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_GetNodeOrDefault",
+      "address": "0045bb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bb30"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_GetNodeOrDefault"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_GetNodeValue",
+      "address": "0045bb50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bb50"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_GetNodeValue"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_UnlinkNode",
+      "address": "0045bb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bb70"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_UnlinkNode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_LinkNode",
+      "address": "0045bbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bbe0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_LinkNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_GetNodeSize",
+      "address": "0045bc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bc90"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_GetNodeSize"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_ClearList",
+      "address": "0045bd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bd00"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_ClearList"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_ClearAndFreeHead",
+      "address": "0045bd40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bd40"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_ClearAndFreeHead",
+        "ARCHIVE_ClearList"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_AllocNode",
+      "address": "0045bdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bdd0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_AllocNode",
+        "SMemAlloc",
+        "ARCHIVE_LinkNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_FreeNode",
+      "address": "0045be30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045be30"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_FreeNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_RemoveNode",
+      "address": "0045be90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045be90"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_RemoveNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_WriteMemoryCheckReport",
+      "address": "0045bf00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045bf00"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ARCHIVE_WriteMemoryCheckReport",
+        "ARCHIVE_WriteFormattedText",
+        "SMemFindNextHeap",
+        "SMemAlloc",
+        "ARCHIVE_LinkNode",
+        "SMemGetHeapByCaller",
+        "SMemFindNextBlock",
+        "ARCHIVE_ClearList"
+      ],
+      "usedTypes": [
+        "SMemBlockInfo",
+        "SMemHeapDetailsStrc",
+        "int * *",
+        "int * * *",
+        "uint16_t",
+        "uint16_t *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReadByteShortOrDword",
+      "address": "0045c300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c300"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ReadByteShortOrDword",
+        "ReadUnsigned"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReadByteOrShort",
+      "address": "0045c340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c340"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "ReadByteOrShort",
+        "ReadUnsigned"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNIT_GetModuloFromSeed",
+      "address": "0045c390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c390"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RANDOM_RandomNumberSelector",
+      "address": "0045c3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c3e0"
+        }
+      ],
+      "namespace": "D2Client::Archive",
+      "calledFunctions": [
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    }
+  ]
+}

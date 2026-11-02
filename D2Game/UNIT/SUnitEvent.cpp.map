@@ -1,0 +1,116 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/UNIT/SUnitEvent.cpp",
+  "functions": [
+    {
+      "name": "UNITEVENT_FreeAllEvents",
+      "address": "005c0a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0a90"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitEvent",
+      "calledFunctions": [
+        "UNITEVENT_FreeAllEvents",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2SUnitEventStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITEVENT_Alloc",
+      "address": "005c0ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0ad0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitEvent",
+      "calledFunctions": [
+        "SUNITEVENT_Alloc",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostItemEventFunc",
+        "D2SUnitEventStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITEVENT_RemoveEventsByQueueAndOwner",
+      "address": "005c0b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0b50"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitEvent",
+      "calledFunctions": [
+        "SUNITEVENT_RemoveEventsByQueueAndOwner",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2SUnitEventStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITEVENT_FindByCallbackParams",
+      "address": "005c0be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0be0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitEvent",
+      "calledFunctions": [
+        "UNITEVENT_FindByCallbackParams"
+      ],
+      "usedTypes": [
+        "D2SUnitEventStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITEVENT_DispatchEventsByType",
+      "address": "005c0c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0c30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitEvent",
+      "calledFunctions": [
+        "UNITEVENT_DispatchEventsByType",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SUnitEventStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

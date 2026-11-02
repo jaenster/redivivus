@@ -1479,18 +1479,18 @@ void __stdcall DRLGOUTDOOR_ApplyLvlSubTileData(D2PoolManagerStrc * pMemory, int3
 }
 
 // Iterates all substitution groups in a DRLG level-sub file and attempts to place each group's tile pattern on the outdoor room grid. Act 1: sweeps interior grid positions, applies overlap-checked tiles directly. Act 2: matches tile types and applies a randomly selected variant (using pSubTxt probability and the room seed) at each matching grid cell. Writes tile data via DRLGOUTDOOR_ApplyLvlSubTileData.
-void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pUnknown, D2LvlSubTxt * pSubTxt) {
+void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pWallLayerGrids, D2LvlSubTxt * pSubTxt) {
     D2SeedStrc DVar2;
-    uint64_t uVar3;
     BOOL bOverlapOk;
     int nMaxX;
     uint32_t nVariantIdx;
-    int nParam1;
+    int nCellX;
     int* pGroupEntry;
     int32_t nColIter;
     int nRowIter;
+    uint64_t nSeedHigh;
     uint32_t uSeedLow;
-    D2RoomExStrc* pDVar1 = pUnknown->pRoomEx;
+    D2RoomExStrc* pDVar1 = pWallLayerGrids->pRoomEx;
     D2PoolManagerStrc* pMemory = pDVar1->pLevel->pDrlg->pMemoryPool;
     D2DrlgFileStrc* pFile = pSubTxt->pDrlgFile;
     int local_28_groupOffset = 0;
@@ -1509,31 +1509,31 @@ void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pUnknown, D2LvlSubTxt * pSubT
             nRowIter = 0;
             do {
               for (nColIter = 0; nColIter < nMaxX; nColIter++) {
-                bOverlapOk = Outdoors::DRLGOUTDOOR_MatchSubTileTypes(nColIter, nRowIter, pUnknown, pSubTxt, pGroupEntry);
+                bOverlapOk = Outdoors::DRLGOUTDOOR_MatchSubTileTypes(nColIter, nRowIter, pWallLayerGrids, pSubTxt, pGroupEntry);
                 if (bOverlapOk) {
                   DVar2 = D2_SEED_NEXT(pDVar1->sSeed);
                   pDVar1->sSeed = DVar2;
-                  if (pSubTxt->Prob[pUnknown->nSubTypeIndex] < (int)(DVar2.nSeedLow % 100)) {
+                  if (pSubTxt->Prob[pWallLayerGrids->nSubTypeIndex] < (int)(DVar2.nSeedLow % 100)) {
                     nVariantIdx = pGroupEntry[5];
                     if ((int)nVariantIdx <= 0) {
                       nVariantIdx = 0;
                     } else {
                       uSeedLow = pDVar1->sSeed.nSeedLow;
-                      uVar3 = (uint64_t)pDVar1->sSeed.nSeedHigh;
+                      nSeedHigh = (uint64_t)pDVar1->sSeed.nSeedHigh;
                       if (nVariantIdx & nVariantIdx - 1) {
-                        DVar2 = (D2SeedStrc)((uint64_t)uSeedLow * 0x6ac690c5 + uVar3);
+                        DVar2 = (D2SeedStrc)((uint64_t)uSeedLow * 0x6ac690c5 + nSeedHigh);
                         pDVar1->sSeed.nSeedHigh = DVar2.nSeedHigh;
                         pDVar1->sSeed.nSeedLow = DVar2.nSeedLow;
                         nVariantIdx = (uint32_t)(DVar2.nSeedLow % nVariantIdx);
                       } else {
-                        DVar2 = (D2SeedStrc)((uint64_t)uSeedLow * 0x6ac690c5 + uVar3);
+                        DVar2 = (D2SeedStrc)((uint64_t)uSeedLow * 0x6ac690c5 + nSeedHigh);
                         pDVar1->sSeed.nSeedHigh = DVar2.nSeedHigh;
                         pDVar1->sSeed.nSeedLow = DVar2.nSeedLow;
                         nVariantIdx = nVariantIdx - 1 & DVar2.nSeedLow;
                       }
                     }
 
-                    DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nColIter, nRowIter, pUnknown, pGroupEntry, pSubTxt, (pGroupEntry[2] + 1) * (nVariantIdx + 1));
+                    DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nColIter, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt, (pGroupEntry[2] + 1) * (nVariantIdx + 1));
                   }
                 }
               }
@@ -1543,10 +1543,10 @@ void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pUnknown, D2LvlSubTxt * pSubT
           }
         } else {
           for (nRowIter = 1; nRowIter < nMaxY; nRowIter++) {
-            for (nParam1 = 1; nParam1 < nMaxX; nParam1++) {
-              bOverlapOk = Outdoors::DRLGOUTDOOR_CheckSubTileOverlap(nParam1, nRowIter, pUnknown, pGroupEntry, pSubTxt);
+            for (nCellX = 1; nCellX < nMaxX; nCellX++) {
+              bOverlapOk = Outdoors::DRLGOUTDOOR_CheckSubTileOverlap(nCellX, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt);
               if (bOverlapOk) {
-                DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nParam1, nRowIter, pUnknown, pGroupEntry, pSubTxt, 0);
+                DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nCellX, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt, 0);
               }
             }
           }
@@ -1820,21 +1820,21 @@ uint32_t __fastcall DRLGROOMEX_RollLevelSubstitutionMask(D2RoomExStrc * pRoomEx,
     return 0;
 }
 
-void __fastcall SubTypeWpShrine(D2DrlgWallLayerGridsStrc * pUnkn) {
+void __fastcall SubTypeWpShrine(D2DrlgWallLayerGridsStrc * pWallLayerGrids) {
     uint32_t dwSubTypeBitMask;
-    if (pUnkn->nSubTypeLookupId == -1) {
+    if (pWallLayerGrids->nSubTypeLookupId == -1) {
       return;
     }
 
-    D2LvlSubTxt* pLvlSubTxtRecord = DATATBLS::LvlTbls::TXT_LvlSub_GetLineFromSubType(pUnkn->nSubTypeLookupId);
-    for (dwSubTypeBitMask = pUnkn->nSubTypeCount; dwSubTypeBitMask; dwSubTypeBitMask >>= 1) {
-      D2PoolManagerStrc* pMemory = pUnkn->pRoomEx->pLevel->pDrlg->pDS1MemPool;
+    D2LvlSubTxt* pLvlSubTxtRecord = DATATBLS::LvlTbls::TXT_LvlSub_GetLineFromSubType(pWallLayerGrids->nSubTypeLookupId);
+    for (dwSubTypeBitMask = pWallLayerGrids->nSubTypeCount; dwSubTypeBitMask; dwSubTypeBitMask >>= 1) {
+      D2PoolManagerStrc* pMemory = pWallLayerGrids->pRoomEx->pLevel->pDrlg->pDS1MemPool;
       if (dwSubTypeBitMask & 1) {
         TileSub::InitializeDrlgFile(pMemory, pLvlSubTxtRecord);
         if (pLvlSubTxtRecord->CheckAll) {
-          CheckAll(pUnkn, pLvlSubTxtRecord);
+          CheckAll(pWallLayerGrids, pLvlSubTxtRecord);
         } else {
-          DoNotCheckAll(pUnkn, pLvlSubTxtRecord);
+          DoNotCheckAll(pWallLayerGrids, pLvlSubTxtRecord);
         }
       }
 
@@ -3141,15 +3141,15 @@ int32_t __fastcall PATH_FindPathTowardFallback(D2PathTypeArg * pPathTypeArg) {
     return nErrorLine;
 }
 
-void __fastcall DRLGGRID_OrFlagOnCellList(D2DrlgGridStrc * nGridPtr, int * pnParam, int32_t nFlag) {
-    int nCellX;
-    while (pnParam) {
-      int iVar1;
-      nCellX = *pnParam;
-      iVar1 = pnParam[1];
-      pnParam = (int*)pnParam[4];
-      if (nCellX >= 0 && nCellX < nGridPtr->nWidth && iVar1 >= 0 && iVar1 < nGridPtr->nHeight) {
-        (*DrlgGrid::apFlagOperations[0])((int*)(nGridPtr->pCellsFlags + nGridPtr->pCellsRowOffsets[iVar1] + nCellX), nFlag);
+void __fastcall DRLGGRID_OrFlagOnCellList(D2DrlgGridStrc * nGridPtr, int * pnCellNode, int32_t nFlag) {
+    int nY;
+    while (pnCellNode) {
+      int nCellX;
+      nCellX = *pnCellNode;
+      nY = pnCellNode[1];
+      pnCellNode = (int*)pnCellNode[4];
+      if (nCellX >= 0 && nCellX < nGridPtr->nWidth && nY >= 0 && nY < nGridPtr->nHeight) {
+        (*DrlgGrid::apFlagOperations[0])((int*)(nGridPtr->pCellsFlags + nGridPtr->pCellsRowOffsets[nY] + nCellX), nFlag);
       }
     }
 }
@@ -4002,22 +4002,22 @@ void __stdcall DRLGOUTROOM_ComputeExitTargetPositions(D2DrlgLevelStrc * pLevel) 
 }
 
 // Finalises one outdoor exit path (selected by nPathIdx) in pDrlgLevelData: prepends a head vertex at the near exit endpoint, converts each interior vertex from grid to world coords (x8 + level offset + 3) with seed-driven jitter from dx/dy tables scaled by (seed&1)+2, and appends a tail vertex at the far exit endpoint. Mutates the level's RNG seed.
-static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * param_eax, int nPathIdx) {
+static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * pLevel, int nPathIdx) {
     // Static local variables (originally global data)
     static int gaDrlgPathJitterDX[4] = { 0x1, 0x0, -0x1, 0x0 }; D2_STATIC_GUARD(gaDrlgPathJitterDX, "D2Common::Drlg::DRLGOUTROOM_BuildVertexPathsWithJitter::gaDrlgPathJitterDX");
     static int gnDrlgLevelVersion[4] = { 0x0, 0x1, 0x0, -0x1 }; D2_STATIC_GUARD(gnDrlgLevelVersion, "D2Common::Drlg::DRLGOUTROOM_BuildVertexPathsWithJitter::gnDrlgLevelVersion");
 
     D2DrlgVertexStrc* pHeadVertex;
-    int nGridX8;
     int nGridY8;
     int nJitterDy;
+    int nJitterX;
     D2SeedStrc sSeedRollY;
-    D2PoolManagerStrc* pMemory = param_eax->pDrlg->pMemoryPool;
-    D2DrlgLevelDataWildernessLevel* pWildData = param_eax->pDrlgLevelData.pDrlgLevelOutdoorsData;
+    D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;
+    D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     D2DrlgVertexStrc* pVertex = pWildData->pAdjacentVertices[nPathIdx];
-    D2SeedStrc sSeedRollX = D2_SEED_NEXT(param_eax->sSeed);
-    uint32_t uVar2 = sSeedRollX.nSeedLow & 3;
-    param_eax->sSeed = sSeedRollX;
+    D2SeedStrc sSeedRollX = D2_SEED_NEXT(pLevel->sSeed);
+    uint32_t uVar1 = sSeedRollX.nSeedLow & 3;
+    pLevel->sSeed = sSeedRollX;
     if (!pVertex) {
       return;
     }
@@ -4037,24 +4037,24 @@ static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * p
     }
 
     while (pVertex->pNext) {
-      int iVar1;
-      sSeedRollX = D2_SEED_NEXT(param_eax->sSeed);
-      param_eax->sSeed = sSeedRollX;
-      iVar1 = gaDrlgPathJitterDX[uVar2];
-      sSeedRollY = D2_SEED_NEXT(param_eax->sSeed);
-      param_eax->sSeed = sSeedRollY;
-      nJitterDy = gnDrlgLevelVersion[uVar2];
-      uVar2 = uVar2 + 1 & 0x80000003;
-      if ((int)uVar2 < 0) {
-        uVar2 = (uVar2 - 1 | -4) + 1;
+      int nGridX8;
+      sSeedRollX = D2_SEED_NEXT(pLevel->sSeed);
+      pLevel->sSeed = sSeedRollX;
+      nJitterX = gaDrlgPathJitterDX[uVar1];
+      sSeedRollY = D2_SEED_NEXT(pLevel->sSeed);
+      pLevel->sSeed = sSeedRollY;
+      nJitterDy = gnDrlgLevelVersion[uVar1];
+      uVar1 = uVar1 + 1 & 0x80000003;
+      if ((int)uVar1 < 0) {
+        uVar1 = (uVar1 - 1 | -4) + 1;
       }
 
       nGridX8 = pVertex->nPosX * 8;
       pVertex->nPosX = nGridX8;
       nGridY8 = pVertex->nPosY * 8;
       pVertex->nPosY = nGridY8;
-      pVertex->nPosX = param_eax->sCoordinatesAndSize.WorldPosition.x + nGridX8 + 3 + ((sSeedRollX.nSeedLow & 1) + 2) * iVar1;
-      pVertex->nPosY = param_eax->sCoordinatesAndSize.WorldPosition.y + nGridY8 + 3 + ((sSeedRollY.nSeedLow & 1) + 2) * nJitterDy;
+      pVertex->nPosX = pLevel->sCoordinatesAndSize.WorldPosition.x + nGridX8 + 3 + ((sSeedRollX.nSeedLow & 1) + 2) * nJitterX;
+      pVertex->nPosY = pLevel->sCoordinatesAndSize.WorldPosition.y + nGridY8 + 3 + ((sSeedRollY.nSeedLow & 1) + 2) * nJitterDy;
       pVertex = pVertex->pNext;
       if (!pVertex) {
         return;
@@ -4094,14 +4094,14 @@ void __fastcall DRLGOUTROOM_LinkOutdoorRoomExits(D2DrlgLevelStrc * pLevel) {
 }
 
 // Estimates path distance between two grid positions (nX1,nY1) and (nX2,nY2 on stack). Uses a weighted Manhattan heuristic: min(dx,dy) + 2*max(dx,dy), which approximates diagonal+cardinal movement cost. Used by outdoor room pathfinding to rank exit connections.
-int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int dwParam3, int dwParam4) {
+int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY2) {
     int nDist;
-    int nDx = nX1 - dwParam3;
+    int nDx = nX1 - nX2;
     if (nDx < 0) {
       nDx = -nDx;
     }
 
-    int nDy = nY1 - dwParam4;
+    int nDy = nY1 - nY2;
     if (nDy < 0) {
       nDy = -nDy;
     }

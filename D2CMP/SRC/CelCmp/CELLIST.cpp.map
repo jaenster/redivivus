@@ -1,0 +1,66 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/CelCmp/CELLIST.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "00602b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602b20"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp::CELLIST",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSLink<TCELENTRY>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00602cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602cb0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp::CELLIST",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "UnlinkAll",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSLink<TCELENTRY>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopyConstructor",
+      "address": "006040b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006040b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp::CELLIST",
+      "calledFunctions": [
+        "CopyConstructor"
+      ],
+      "usedTypes": [
+        "CELLIST"
+      ]
+    }
+  ]
+}

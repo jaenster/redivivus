@@ -1,0 +1,2111 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Engine/Gfx.cpp",
+  "functions": [
+    {
+      "name": "CLIENT_GetEffectiveInventory",
+      "address": "0046db30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046db30"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "CLIENT_GetEffectiveInventory",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GFX_HashTextureName",
+      "address": "0046db90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046db90"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_HashTextureName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SStrHash"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_ExtractFilenameFromPath",
+      "address": "0046dbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046dbf0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_ExtractFilenameFromPath",
+        "strncpy"
+      ]
+    },
+    {
+      "name": "GFX_FindTextureInCache",
+      "address": "0046dc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046dc40"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FindTextureInCache",
+        "memset",
+        "GFX_ExtractFilenameFromPath",
+        "_strlwr",
+        "GFX_HashTextureName"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadCofFile",
+      "address": "0046dcc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046dcc0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadCofFile",
+        "memset",
+        "GFX_ExtractFilenameFromPath",
+        "_strlwr",
+        "GFX_FindTextureInCache",
+        "AllocClientMemory",
+        "ReturnZero",
+        "D2FILE_AllocAndLoadD2File",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_HashTextureName"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadAndHashCofArchive",
+      "address": "0046ddf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ddf0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadAndHashCofArchive",
+        "ReturnZero",
+        "D2FILE_AllocAndLoadD2File",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SStrHash"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_SyncStateOverlayPriority",
+      "address": "0046def0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046def0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_SyncStateOverlayPriority"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc"
+      ]
+    },
+    {
+      "name": "GFX_RemoveStateOverlayAndReprioritize",
+      "address": "0046df40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046df40"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_RemoveStateOverlayAndReprioritize",
+        "UNIT_GetUnitState",
+        "SetState",
+        "STATES_HasHideState"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_RemoveOverlayFromUnit",
+      "address": "0046e040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e040"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_RemoveOverlayFromUnit",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeLightMap",
+        "GFX_RemoveStateOverlayAndReprioritize",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_HasOverlayOfType",
+      "address": "0046e100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e100"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_HasOverlayOfType",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_SetOverlayFrame",
+      "address": "0046e150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e150"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_SetOverlayFrame",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_DrawOverlayOnUnit",
+      "address": "0046e1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e1b0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_DrawOverlayOnUnit",
+        "GetGfxInfo",
+        "memset",
+        "GetDirection",
+        "DC6_AssignParams",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2GfxInfoStrc",
+        "D2OverlayTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_UNIT_States",
+      "address": "0046e300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e300"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "DRAW_UNIT_States",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_IsPerspectiveActive",
+        "GetAnimOrSeqMode",
+        "GetTargetX",
+        "DRAW_GetWorldOffsetX",
+        "GetTargetY",
+        "DRAW_GetWorldOffsetY",
+        "GetPrecisionY",
+        "GetPrecisionX",
+        "D2GFX_AdjustPerspectivePosition",
+        "DRAW_GetTypeOfBorder",
+        "PARTICLE_GetX",
+        "PARTICLE_GetY",
+        "PARTICLE_GetScreenZ",
+        "DRAW_UNIT_States_HaltTail",
+        "memset",
+        "GetDirection",
+        "DC6_AssignParams",
+        "GAMEDATA_GetBloodFlag",
+        "PALSHIFT_GetGreenBloodTable",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2GfxInfoStrc",
+        "D2OverlayTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_UNIT_States_HaltTail",
+      "address": "0046e31d",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e31d"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "DRAW_UNIT_States_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "GFX_GetGfxInfoCofData",
+      "address": "0046e570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e570"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetGfxInfoCofData",
+        "GetGfxInfo"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_FindGfxInfoByModeAndWeapon",
+      "address": "0046e5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e5a0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CLIENT_GetEffectiveAnimMode"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_FreeGfxInfoEntry",
+      "address": "0046e610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e610"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreeGfxInfoEntry",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_FindOrEvictGfxInfoEntry",
+      "address": "0046e690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e690"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FindOrEvictGfxInfoEntry",
+        "GetGfxInfo",
+        "CLIENT_GetEffectiveAnimMode",
+        "GFX_GetGfxInfoCofData",
+        "GFX_FreeGfxInfoEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2GfxInfoUnkStrc *",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadCompositCof",
+      "address": "0046e740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e740"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadCompositCof",
+        "memset",
+        "GFXUTIL_IsValidUnitType",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "COMPOSIT_GetCofPathWithTransform",
+        "GetGfxInfo",
+        "GFX_FindOrEvictGfxInfoEntry",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CLIENT_GetEffectiveUnitType",
+        "GFX_FindTextureInCache",
+        "GFX_LoadCofFile",
+        "GFX_GetGfxInfoCofData"
+      ],
+      "usedTypes": [
+        "D2CofCacheStrc",
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadMonsterModeCof",
+      "address": "0046e8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e8d0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadMonsterModeCof",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GetSomeMonsterStatFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFXUTIL_GetGfxInfoComponent",
+        "GFX_LoadCompositCof",
+        "GFXUTIL_SetGfxInfoComponent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadObjectModeCof",
+      "address": "0046e980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046e980"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadObjectModeCof",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "TXT_Objects_GetLine",
+        "GFXUTIL_GetGfxInfoComponent",
+        "GFX_LoadCompositCof",
+        "GFXUTIL_SetGfxInfoComponent",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadGenericModeCof",
+      "address": "0046ea50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ea50"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadGenericModeCof",
+        "GFX_LoadCompositCof",
+        "GFXUTIL_SetGfxInfoComponent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_FreeAllGfxInfoEntries",
+      "address": "0046eac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046eac0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreeAllGfxInfoEntries",
+        "GFXUTIL_SetGfxInfoComponent",
+        "GetGfxInfo",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_FreeOverlayList",
+      "address": "0046eb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046eb70"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreeOverlayList",
+        "FreeLightMap",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc"
+      ]
+    },
+    {
+      "name": "AllocGfxInfo",
+      "address": "0046ebb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ebb0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "AllocGfxInfo",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeGfxInfo",
+      "address": "0046ec10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ec10"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "FreeGfxInfo",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory",
+        "GFX_FreeOverlayList"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_FreeUnitGfxInfoList",
+      "address": "0046ec80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ec80"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreeUnitGfxInfoList",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_FreeNonBaseGfxInfoEntries",
+      "address": "0046ece0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ece0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreeNonBaseGfxInfoEntries",
+        "GetGfxInfo",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_GetUnitHealthBarColor",
+      "address": "0046ed50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ed50"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetUnitHealthBarColor",
+        "D2GFX_GetColorFromCurrentPallete",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GetTxtMaxHp",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DrawItemGfx",
+      "address": "0046ee80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ee80"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "DrawItemGfx",
+        "ITEM_GetItemData_wType",
+        "STATSEX_GetCurrentStat",
+        "memset",
+        "DC6_AssignParams",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Height",
+        "GFXUTIL_IsDC6BlockOnScreen",
+        "GetItemColor",
+        "CheckItemFlag",
+        "D2GFX_DrawImage",
+        "GetDC6Width",
+        "DRAW_UNIT_States"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc",
+        "D2GfxDataStrc",
+        "D2UnitStrc",
+        "DRAWMODE",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_DrawSolidRectExBySize",
+      "address": "0046efd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046efd0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "D2GFX_DrawSolidRectExBySize",
+        "D2GFX_DrawSolidRectEx"
+      ],
+      "usedTypes": [
+        "DRAWMODE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_FreeAllModesGfxInfo",
+      "address": "0046f000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f000"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreeAllModesGfxInfo",
+        "GFX_FreeAllGfxInfoEntries"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GFX_SetAllGfxInfoFlags",
+      "address": "0046f020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f020"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_SetAllGfxInfoFlags",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetParticleFromUnit",
+      "address": "0046f060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f060"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GetParticleFromUnit",
+        "GetGfxInfo"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetParticle",
+      "address": "0046f070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f070"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "SetParticle",
+        "GetGfxInfo"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GFX_RemoveOverlayById",
+      "address": "0046f0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f0c0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_RemoveOverlayById",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_RemoveOverlayFromUnit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_RemoveAllOverlays",
+      "address": "0046f170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f170"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_RemoveAllOverlays",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_RemoveOverlayFromUnit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_SetCofDataFlags",
+      "address": "0046f1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f1c0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_SetCofDataFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc"
+      ]
+    },
+    {
+      "name": "GFX_GetCofDataFlags",
+      "address": "0046f1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f1f0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetCofDataFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_SetPalShiftIndex",
+      "address": "0046f220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f220"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_SetPalShiftIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_GetPalShiftIndex",
+      "address": "0046f250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f250"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetPalShiftIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_ClearAllModeFlags",
+      "address": "0046f280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f280"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_ClearAllModeFlags",
+        "CLIENT_GetEffectiveUnitType",
+        "GFXUTIL_SetGfxInfoComponent",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadMonsterCofArchive",
+      "address": "0046f310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f310"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadMonsterCofArchive",
+        "GFX_LoadAndHashCofArchive"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_FreeUnusedCofEntries",
+      "address": "0046f370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f370"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreeUnusedCofEntries",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_FreePlayerCofCache",
+      "address": "0046f3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f3f0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreePlayerCofCache",
+        "GFX_FreeUnusedCofEntries",
+        "FreeClientMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_FreeMonsterCofCache",
+      "address": "0046f440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f440"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_FreeMonsterCofCache",
+        "GFX_FreeUnusedCofEntries",
+        "FreeClientMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_BuildMonsterCofPath",
+      "address": "0046f490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f490"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_BuildMonsterCofPath",
+        "TxtGetMonModeLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MonModeTxt",
+        "D2MonStats2Txt",
+        "D2MonStatsTxt",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_PrecacheMonsterCofSprites",
+      "address": "0046f650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f650"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_PrecacheMonsterCofSprites",
+        "memset",
+        "GFX_BuildMonsterCofPath",
+        "GFX_FindTextureInCache",
+        "GFX_LoadCofFile",
+        "GFXUTIL_Identity",
+        "GFXUTIL_GetCofLayerData",
+        "GFXUTIL_InitAndBuildMonsterCofParams",
+        "SPRITECACHE_GetOrLoadSprite",
+        "SPRITECACHE_PrecacheSpriteSync",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2MonStatsTxt",
+        "DC6",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_PrecacheMonsterAllModes",
+      "address": "0046f870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f870"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_PrecacheMonsterAllModes",
+        "memset",
+        "GFX_PrecacheMonsterCofSprites"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2MonStatsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_GetCofCacheFlags",
+      "address": "0046f980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f980"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetCofCacheFlags"
+      ]
+    },
+    {
+      "name": "GFX_GetCofCacheMemUsage",
+      "address": "0046f990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f990"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetCofCacheMemUsage"
+      ]
+    },
+    {
+      "name": "GFX_GetGfxSystemFlags",
+      "address": "0046f9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f9a0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetGfxSystemFlags"
+      ]
+    },
+    {
+      "name": "GFX_GetModeStatusEntry",
+      "address": "0046f9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f9d0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetModeStatusEntry"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadMonsterModeCofByState",
+      "address": "0046f9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f9e0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadMonsterModeCofByState",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GetSomeMonsterStatFlag",
+        "GFX_FreeUnitGfxInfoList",
+        "GFX_SetAllGfxInfoFlags",
+        "GFX_LoadMonsterModeCof"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_EnsureUnitCofLoaded",
+      "address": "0046fa80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046fa80"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_EnsureUnitCofLoaded",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GFX_LoadMonsterModeCofByState",
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GFX_LoadCompositCof",
+        "GFXUTIL_SetGfxInfoComponent",
+        "GFX_LoadObjectModeCof"
+      ],
+      "usedTypes": [
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_AsyncLoadUnitSprites",
+      "address": "0046fb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046fb60"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_AsyncLoadUnitSprites",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GFX_EnsureUnitCofLoaded",
+        "sprintf",
+        "GetGfxInfo",
+        "GFXUTIL_Identity",
+        "GetDirection",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GFXUTIL_CalcDirectionAndFrame",
+        "GFXUTIL_GetCofLayerData",
+        "memset",
+        "DC6_AssignParams",
+        "SPRITECACHE_GetOrLoadSprite",
+        "SPRITECACHE_PrecacheSpriteSync",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_AsyncLoadMonsterSprites",
+      "address": "0046fda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046fda0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_AsyncLoadMonsterSprites",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GFX_AsyncLoadUnitSprites",
+        "SPRITECACHE_IsLoadPending"
+      ],
+      "usedTypes": [
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_PrecacheMonsterModeSprites",
+      "address": "0046feb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046feb0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_PrecacheMonsterModeSprites",
+        "CLIENT_GetEffectiveClassId",
+        "GFX_AsyncLoadMonsterSprites"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_AsyncLoadPlayerSprites",
+      "address": "0046ff50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ff50"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_AsyncLoadPlayerSprites",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GFX_AsyncLoadUnitSprites",
+        "SPRITECACHE_IsLoadPending"
+      ],
+      "usedTypes": [
+        "D2GfxInfoUnkStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Gfx_UpdateNearbyUnitGfx",
+      "address": "00470070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470070"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "Gfx_UpdateNearbyUnitGfx",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "SPRITECACHE_CountPendingLoads",
+        "Draw_UI_LoadGame",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GFX_PrecacheMonsterModeSprites",
+        "GFX_AsyncLoadPlayerSprites"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_InitCofSystem",
+      "address": "00470200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470200"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_InitCofSystem",
+        "memset",
+        "AllocServerMemory",
+        "D2WINARCHIVE_GetArchiveHandle",
+        "InitializeModeTokens"
+      ]
+    },
+    {
+      "name": "GFX_ShutdownCofSystem",
+      "address": "00470290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470290"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_ShutdownCofSystem",
+        "GFX_FreeUnusedCofEntries",
+        "FreeClientMemory",
+        "memset",
+        "FreeServerMemory"
+      ]
+    },
+    {
+      "name": "GFXProcessGameGfxLists",
+      "address": "00470350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470350"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_UpdateGfxThrottled",
+        "GFXProcessGameGfxLists",
+        "GetTickCount",
+        "Gfx_UpdateNearbyUnitGfx"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_AddOverlayToUnit",
+      "address": "00470390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470390"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_AddOverlayToUnit",
+        "D2CheckExpansionGame",
+        "GetPlayerUnit_UI",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "GFX_HasOverlayOfType",
+        "GFX_RemoveOverlayById",
+        "AllocClientMemory",
+        "memset",
+        "GFXUTIL_GetOverlayFrameDelay",
+        "RANDOM_RandomNumberSelector",
+        "GetOverlayHeight",
+        "AllocLightMap",
+        "SetRadiusY",
+        "GetGfxInfo",
+        "GFX_SyncStateOverlayPriority",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
+        "D2LightMapStrc",
+        "D2OverlayTxt",
+        "D2UnitStrc",
+        "eOverlayId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_LoadUnitModeCof",
+      "address": "00470610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470610"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_LoadUnitModeCof",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GFX_LoadCompositCof",
+        "GFXUTIL_SetGfxInfoComponent",
+        "GFX_LoadMonsterModeCofByState",
+        "GFX_LoadObjectModeCof",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_GetUnitSpriteOffset",
+      "address": "004706e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004706e0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_GetUnitSpriteOffset",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GFX_EnsureUnitCofLoaded",
+        "GetGfxInfo",
+        "memset",
+        "GetDirection",
+        "DC6_AssignParams",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2InventoryStrc",
+        "D2PathUnion",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_IsUnitInsideBounds",
+      "address": "00470860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470860"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_IsUnitInsideBounds",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GFX_EnsureUnitCofLoaded",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GetGfxInfo",
+        "GFXUTIL_Identity",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_IsUnitOnScreen",
+      "address": "004709a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004709a0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_IsUnitOnScreen",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GFX_EnsureUnitCofLoaded",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GetGfxInfo",
+        "GFXUTIL_Identity",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_UpdateGfxThrottled",
+      "address": "00470b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470b10"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_UpdateGfxThrottled",
+        "Gfx_UpdateNearbyUnitGfx",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ANIM_ResetMonsterFrameCache",
+      "address": "00470b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470b70"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "ANIM_ResetMonsterFrameCache",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "UNITS_GetRoom",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "DRAW_GetLastPanelId",
+        "GFX_PrecacheMonsterModeSprites"
+      ],
+      "usedTypes": [
+        "D2MonsterCofStatusEntryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_UpdateOverlayAnimations",
+      "address": "00470c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470c30"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_UpdateOverlayAnimations",
+        "GetGfxInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount",
+        "CLIENT_GetEffectiveAnimMode",
+        "GFX_RemoveOverlayFromUnit",
+        "UNIT_GetUnitState",
+        "GFX_RemoveStateOverlayAndReprioritize",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eOverlayId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GFX_DrawUnitComponents",
+      "address": "00470ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00470ec0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_DrawUnitComponents",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "DRAW_GetWorldOffsetX",
+        "DRAW_GetWorldOffsetY",
+        "D2GFX_IsPerspectiveActive",
+        "DRAW_GetTypeOfBorder",
+        "D2GFX_GetPerspectiveCapable",
+        "GetPlayerUnit_UI",
+        "D2GFX_SetPerspectiveCapable",
+        "GFX_IsUnitOnScreen",
+        "DRAW_UNIT_States",
+        "GetShiftedFrameMetrics",
+        "D2WINPAL_GetActPalettePointer",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GFX_EnsureUnitCofLoaded",
+        "GetGfxInfo",
+        "GFXUTIL_Identity",
+        "PALSHIFT_GetMonsterTransform",
+        "IsSelected",
+        "GetDirection",
+        "GFXUTIL_CalcDirectionAndFrame",
+        "GFXUTIL_GetCofLayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Objects_GetLine",
+        "STATES_HasDisguiseState",
+        "IsWindowMode",
+        "GetClassId",
+        "TXT_MonStats_GetMonStats2",
+        "GAMEDATA_GetBloodFlag",
+        "PALSHIFT_GetGreenBloodTable",
+        "memset",
+        "DC6_AssignParams",
+        "GFXUTIL_GetEtherealTransparency",
+        "GFXUTIL_GetItemColorForBodyLoc",
+        "GFXUTIL_GetCofFrameCount",
+        "GetPrecisionX",
+        "GetPrecisionY",
+        "D2GFX_DrawPerspectiveImage",
+        "D2GFX_DrawImage",
+        "GFXUTIL_GetCofDrawOrder",
+        "UNIT_GetUnitState",
+        "DRAW_WORLD_Unit"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc",
+        "D2GfxDataStrc",
+        "D2GfxInfoStrc",
+        "D2GfxInfoUnkStrc",
+        "D2InventoryStrc",
+        "D2MonStats2Txt",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "DRAWMODE",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_DrawUnitShadow",
+      "address": "00471450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00471450"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_DrawUnitShadow",
+        "UNIT_GetUnitState",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "D2GFX_IsPerspectiveActive",
+        "TXT_Objects_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRAW_GetWorldOffsetX",
+        "GetTargetX",
+        "PARTICLE_GetPosXShifted",
+        "DRAW_GetWorldOffsetY",
+        "GetTargetY",
+        "PARTICLE_GetPosYShifted",
+        "DRAW_GetTypeOfBorder",
+        "GFX_IsUnitOnScreen",
+        "GetDirection",
+        "GetShiftedFrameMetrics",
+        "memset",
+        "DC6_AssignParams",
+        "D2GFX_DrawShadow"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DrawUnitShadows",
+      "address": "00471620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00471620"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "DrawUnitShadows",
+        "UNIT_GetUnitState",
+        "GFXUTIL_IsValidUnitType",
+        "GFX_DrawUnitShadow",
+        "D2GFX_GetPerspectiveCapable",
+        "D2GFX_IsPerspectiveActive",
+        "GetPlayerUnit_UI",
+        "CLIENT_GetEffectiveUnitType",
+        "D2GFX_SetPerspectiveCapable",
+        "PARTICLE_GetScreenZ",
+        "GetTargetX",
+        "GetTargetY",
+        "PARTICLE_GetPosZRaw",
+        "GetPrecisionX",
+        "GetPrecisionY",
+        "D2GFX_IsInPerspectiveBounds",
+        "D2GFX_AdjustPerspectivePosition",
+        "DRAW_GetWorldOffsetX",
+        "DRAW_GetWorldOffsetY",
+        "PARTICLE_GetX",
+        "PARTICLE_GetY",
+        "TXT_Objects_GetLine",
+        "DRAW_GetTypeOfBorder",
+        "GFX_IsUnitOnScreen",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GetShiftedFrameMetrics",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GFX_EnsureUnitCofLoaded",
+        "GFX_GetGfxInfoCofData",
+        "GFXUTIL_Identity",
+        "GetDirection",
+        "GFXUTIL_CalcDirectionAndFrame",
+        "GFXUTIL_GetCofLayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFXUTIL_CalcMaxSpriteHeight",
+        "GFXUTIL_GetCofAnimSpeed",
+        "memset",
+        "DC6_AssignParams",
+        "D2GFX_DrawShadow"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2InventoryStrc",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_DrawUnitColoredShape",
+      "address": "00471a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00471a30"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_DrawUnitColoredShape",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "D2GFX_IsPerspectiveActive",
+        "TXT_Objects_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRAW_GetWorldOffsetX",
+        "GetTargetX",
+        "DRAW_GetWorldOffsetY",
+        "GetTargetY",
+        "DRAW_GetTypeOfBorder",
+        "GFX_IsUnitOnScreen",
+        "GFX_GetUnitHealthBarColor",
+        "GetDirection",
+        "GetShiftedFrameMetrics",
+        "memset",
+        "DC6_AssignParams",
+        "D2GFX_DrawImageColoredShape"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GFX_DrawUnitSelectionShape",
+      "address": "00471bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00471bd0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "GFX_DrawUnitSelectionShape",
+        "D2GFX_IsPerspectiveActive",
+        "GFX_DrawUnitColoredShape",
+        "GetTargetX",
+        "DRAW_GetWorldOffsetX",
+        "PARTICLE_GetX",
+        "GetTargetY",
+        "DRAW_GetWorldOffsetY",
+        "PARTICLE_GetY",
+        "PARTICLE_GetScreenZ",
+        "GetPrecisionY",
+        "GetPrecisionX",
+        "D2GFX_AdjustPerspectivePosition",
+        "DRAW_GetTypeOfBorder",
+        "GFX_IsUnitOnScreen",
+        "GFX_GetUnitHealthBarColor",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GetDirection",
+        "GetShiftedFrameMetrics",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "GFX_FindGfxInfoByModeAndWeapon",
+        "GFX_EnsureUnitCofLoaded",
+        "GFX_GetGfxInfoCofData",
+        "GFXUTIL_Identity",
+        "GFXUTIL_CalcDirectionAndFrame",
+        "GFXUTIL_GetCofLayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFXUTIL_CalcMaxSpriteHeight",
+        "GFXUTIL_GetUnitCofDirectionOnScreen",
+        "memset",
+        "DC6_AssignParams",
+        "D2GFX_DrawImageColoredShape"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_WORLD_Unit_1",
+      "address": "00471ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00471ec0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Gfx",
+      "calledFunctions": [
+        "DRAW_WORLD_Unit_1",
+        "D2GFX_IsPerspectiveActive",
+        "DecrementGfxTimer",
+        "GFX_DrawUnitSelectionShape",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "PARTICLE_GetX",
+        "PARTICLE_GetY",
+        "PARTICLE_GetScreenZ",
+        "TXT_Objects_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFXUTIL_IsValidUnitType",
+        "GFX_DrawUnitComponents",
+        "GetDirection",
+        "GetShiftedFrameMetrics",
+        "GetPlayerUnit_UI",
+        "D2WINPAL_GetActPalettePointer",
+        "ITEM_GetItemData_wType",
+        "STATSEX_GetCurrentStat",
+        "memset",
+        "DC6_AssignParams",
+        "SPRITECACHE_GetOrLoadSprite",
+        "DRAW_GetWorldOffsetX",
+        "DRAW_GetWorldOffsetY",
+        "DRAW_GetTypeOfBorder",
+        "GetSelectedUnit",
+        "GetMissleById",
+        "GAMEDATA_GetBloodFlag",
+        "PALSHIFT_GetGreenBloodTable",
+        "D2GFX_DrawImage",
+        "GetItemColor",
+        "DRAW_UNIT_States"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc",
+        "D2GfxDataStrc",
+        "D2GfxInfoUnkStrc",
+        "D2MissilesTxt",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "DRAWMODE",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

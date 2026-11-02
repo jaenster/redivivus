@@ -1,0 +1,3873 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/MISSILES/MissilesMode.cpp",
+  "functions": [
+    {
+      "name": "MISSILE_RollAttackHit",
+      "address": "005a88e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a88e0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILE_RollAttackHit",
+        "STATSEX_GetCurrentStat",
+        "DAMAGE_RollAttackHit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_RollElementalDamage",
+      "address": "005a8910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8910"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILE_RollElementalDamage",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SetDamage",
+      "address": "005a89a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a89a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILE_SetDamage",
+        "memset",
+        "STATSEX_GetCurrentStat",
+        "RANDOM_RandomNumberSelector",
+        "MISSILE_RollElementalDamage",
+        "IsDemon",
+        "MONSTER_IsMonsterUndead",
+        "STATLIST_GetItemStatBonusValues",
+        "DAMAGE_CheckMonsterTypeVsMonsterType"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_CalculateElementalDamage",
+      "address": "005a8c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8c70"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_CalculateElementalDamage",
+        "GetElemTypeFromMissileId",
+        "MISSILE_RollElementalDamage",
+        "STATSEX_GetCurrentStat",
+        "IsDemon",
+        "MONSTER_IsMonsterUndead"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ElementalDamageType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_SetDamageByElementType",
+      "address": "005a8f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8f20"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_SetDamageByElementType",
+        "GetElemTypeFromMissileId"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ElementalDamageType"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SetElementalDamageField",
+      "address": "005a8fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8fb0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SetElementalDamageField",
+        "GetElemTypeFromMissileId"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "eD2ElementalDamageType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_GetElementalDamageField",
+      "address": "005a90e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a90e0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_GetElementalDamageField",
+        "GetElemTypeFromMissileId"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "eD2ElementalDamageType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_ClearDamageStruct",
+      "address": "005a91c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a91c0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_ClearDamageStruct",
+        "GetElemTypeFromMissileId"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ElementalDamageType"
+      ]
+    },
+    {
+      "name": "MISSILES_AddElementalDamageBonus",
+      "address": "005a9270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9270"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_AddElementalDamageBonus",
+        "GetElemTypeFromMissileId"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ElementalDamageType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_SpawnRadialPattern",
+      "address": "005a9370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9370"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_SpawnRadialPattern",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_CheckCollisionAtOffset",
+      "address": "005a94c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a94c0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_CheckCollisionAtOffset",
+        "TestCollision"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_SpawnAreaPattern",
+      "address": "005a9530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9530"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "TestCollision",
+        "MISSILES_SpawnAreaPattern",
+        "UNITS_GetRoom",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_SpawnSubMissileAlongPath",
+      "address": "005a9720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9720"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_SpawnSubMissileAlongPath",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "GetOwnerUnit",
+        "GetXPos",
+        "GetYPos",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_SpawnPeriodicRandom",
+      "address": "005a9820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9820"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_SpawnPeriodicRandom",
+        "GetRemainingFrames",
+        "GetOwnerUnit",
+        "UNITS_GetRoom",
+        "GetXPosFromDynamicPathUnit",
+        "InitSeed_Param_666",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "RANDOM_RandomNumberSelector",
+        "GetYPosFromDynamicPathUnit",
+        "CheckCollision_BlockPlayerMissile",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eCollisionFlags",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnPortal",
+      "address": "005a9930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9930"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "SpawnPortal",
+        "SetTargetX",
+        "GetOwnerUnit",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "SERVER_SpawnPortal",
+        "ToggleHasPortalFlagRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_UpdatePathToOwner",
+      "address": "005a99e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a99e0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_UpdatePathToOwner",
+        "GetOwnerUnit",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "PATH_GetCollisionMaskAt"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AreaElementalDamageExplosion",
+      "address": "005a9a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9a70"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_AreaElementalDamageExplosion",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "D2GetSkillCalc",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MISSILES_CalculateElementalDamage",
+        "SKILLS_ApplyAreaDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AreaPhysicalDamageExplosion",
+      "address": "005a9bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9bf0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILE_SetDamage",
+        "Missiles_SrvHitFunc_AreaPhysicalDamageExplosion",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "D2GetSkillCalc",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "SKILLS_ApplyAreaDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnRadialSubMissiles",
+      "address": "005a9d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9d80"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnRadialSubMissiles",
+        "GetLevel",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "MISSILES_SpawnRadialPattern"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AreaSplashDamage",
+      "address": "005a9e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9e10"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_AreaSplashDamage",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "D2GetSkillCalc",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MISSILE_SetDamage",
+        "SKILLS_ApplyAreaDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_WallHitDelegateToAreaDamage",
+      "address": "005a9f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9f90"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_WallHitDelegateToAreaDamage",
+        "Missiles_SrvHitFunc_AreaSplashDamage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_HealTarget",
+      "address": "005a9fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a9fb0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_HealTarget",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "UNITS_CheckSkillTargetAlignment",
+        "UNITS_CanUseSkillOnTarget",
+        "TXT_Skills_GetLine",
+        "D2GetSkillCalc",
+        "RANDOM_RandomNumberSelector",
+        "MISSILE_RollElementalDamage",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat",
+        "SetOverlay",
+        "IsDemon",
+        "MONSTER_IsMonsterUndead"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_BlockSelfHitByState",
+      "address": "005aa180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aa180"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_BlockSelfHitByState",
+        "GetOwnerUnit",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnMonsterAtHit",
+      "address": "005aa1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aa1c0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnMonsterAtHit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "SpawnMonster"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AreaDamageWithSpawnPattern",
+      "address": "005aa250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aa250"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_AreaDamageWithSpawnPattern",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "STATLIST_SetUnitStat",
+        "D2GetSkillCalc",
+        "MISSILE_EvalMissileCalc",
+        "MISSILES_SpawnAreaPattern",
+        "memset",
+        "MISSILES_CalculateElementalDamage",
+        "GetYPos",
+        "GetXPos",
+        "SKILLS_ApplyAreaDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SetupTargetAndRange",
+      "address": "005aa460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aa460"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "GetDistanceToXY",
+        "MISSILE_SetupTargetAndRange",
+        "CheckForModeZeroDeath",
+        "GetLevel",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "GetTargetY",
+        "GetXPos",
+        "GetYPos",
+        "SetSP1",
+        "SetTargetX",
+        "SetTarget",
+        "GetCollisionDistance",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_ApplyAreaHitEffect",
+      "address": "005aa5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aa5b0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_ApplyAreaHitEffect",
+        "GetTargetX",
+        "GetOwnerUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "MISSILE_SetupTargetAndRange"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_PierceOrExplodeOnWall",
+      "address": "005aa650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aa650"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_PierceOrExplodeOnWall",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetTargetX",
+        "CheckAndGetCollisionFlag",
+        "GetCurrentFrame",
+        "MISSILES_ApplyAreaHitEffect",
+        "GetTargetEx"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ChainPierceWithBounce",
+      "address": "005aa730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aa730"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "Missiles_SrvHitFunc_ChainPierceWithBounce",
+        "GetOwnerUnit",
+        "GetTargetX",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "TXT_Skills_GetLine",
+        "D2GetSkillCalc",
+        "memset",
+        "CreatingMissile",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AreaDamageWithDurationMod",
+      "address": "005aa8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aa8b0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_AreaDamageWithDurationMod",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "D2GetSkillCalc",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MISSILES_CalculateElementalDamage",
+        "MISSILES_SetDamageByElementType",
+        "SKILLS_ApplyAreaDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_SpawnRadialPattern18",
+      "address": "005aaa90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aaa90"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_SpawnRadialPattern18",
+        "GetXPos",
+        "GetYPos",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "memset",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AreaDamageAndRadialBurst",
+      "address": "005aabb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aabb0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_AreaDamageAndRadialBurst",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "memset",
+        "MISSILE_SetDamage",
+        "SKILLS_ApplyAreaDamage",
+        "MISSILE_GetBoltSpeed",
+        "MISSILES_SpawnRadialPattern18"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnStationarySubMissile",
+      "address": "005aad40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aad40"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnStationarySubMissile",
+        "GetOwnerUnit",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ApplyAuraStateToTarget",
+      "address": "005aae10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aae10"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_ApplyAuraStateToTarget",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "D2GetSkillCalc",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "D2SetAurastatsFromSkills",
+        "D2StatesTogglegfx",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ApplyTerrorToMonster",
+      "address": "005aafb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aafb0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_ApplyTerrorToMonster",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "UNIT_GetUnitState",
+        "STATSEX_GetCurrentStat",
+        "GetSkilParam1",
+        "GetSkillParam4",
+        "MISSILE_GetBoltSpeed",
+        "MONSTERAI_ApplyTerrorToMonster"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ApplyWarCryBuff",
+      "address": "005ab0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab0b0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_ApplyWarCryBuff",
+        "GetOwnerUnit",
+        "SKILL_CanUnitTargetAlly",
+        "GetLevel",
+        "GetSkillId",
+        "SKILLBAR_ApplyWarCryBuff"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ApplyTimedAuraState",
+      "address": "005ab110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab110"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_ApplyTimedAuraState",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "D2GetSkillCalc",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "D2SetAurastatsFromSkills",
+        "D2StatesTogglegfx",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_CreateSubMissileAtFrame",
+      "address": "005ab2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab2a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_CreateSubMissileAtFrame",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillCallbackContextStrc",
+        "D2SubMissileAreaArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnSubMissileAtFrameInArea",
+      "address": "005ab370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab370"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnSubMissileAtFrameInArea",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2SubMissileAreaArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered",
+      "address": "005ab500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab500"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "SKILLS_CheckTargetFlags",
+        "D2GetSkillCalc",
+        "SetStateWithExpiryTime",
+        "D2SetAurastatsFromSkills"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_CreateSubMissileInvertFrame",
+      "address": "005ab630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab630"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_CreateSubMissileInvertFrame",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillCallbackContextStrc",
+        "D2SubMissileAreaArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_CreateDirectionalMissiles",
+      "address": "005ab700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab700"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_CreateDirectionalMissiles",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnDirectionalSubMissiles",
+      "address": "005ab820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab820"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnDirectionalSubMissiles",
+        "GetOwnerUnit",
+        "GetLevel",
+        "GetSkillId",
+        "MISSMODE_CreateDirectionalMissiles"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos",
+      "address": "005ab8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ab8d0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "D2GetSkillCalc",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_NoOp",
+      "address": "005aba00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aba00"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_NoOp"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ApplyTerrorNearMinion",
+      "address": "005aba10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aba10"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_ApplyTerrorNearMinion",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "GetTargetX",
+        "FindUnitFromTable",
+        "TXT_Skills_GetSkillRange",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetDistanceSquaredXY",
+        "GetTxtSkillParam5",
+        "GetSkillParam4",
+        "MONSTERAI_ApplyTerrorToMonster"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnSpreadSubMissilesOnFirstFrame",
+      "address": "005abb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005abb00"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnSpreadSubMissilesOnFirstFrame",
+        "GetCurrentFrame",
+        "GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnSpreadSubMissiles",
+      "address": "005abc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005abc40"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnSpreadSubMissiles",
+        "GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_LeechHpToOwner",
+      "address": "005abd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005abd70"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_LeechHpToOwner",
+        "GetOwnerUnit",
+        "memset",
+        "MISSILES_CalculateElementalDamage",
+        "GetTxtMaxHp",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnPortalOnWallHit",
+      "address": "005abe50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005abe50"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnPortalOnWallHit",
+        "GetTargetX",
+        "SpawnPortal"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SetRoomPortalFlag",
+      "address": "005abeb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005abeb0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SetRoomPortalFlag",
+        "UNITS_GetRoom",
+        "ToggleHasPortalFlagRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ActivateObjectOnWallHit",
+      "address": "005abee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005abee0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_ActivateObjectOnWallHit",
+        "GetTargetX",
+        "FindUnitFromTable",
+        "UNITS_GetRoom",
+        "ToggleHasPortalFlagRoom",
+        "SetupUpdateFlag",
+        "TXT_Objects_GetLine",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnSubMissileAtWallHit",
+      "address": "005abf70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005abf70"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnSubMissileAtWallHit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetLevel",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "SKILLS_CreateMissileAtTarget",
+        "GetTargetX",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AlwaysPierce",
+      "address": "005ac020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac020"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_AlwaysPierce"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILES_SetPathFromTotalFramesCallback",
+      "address": "005ac040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac040"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILES_SetPathFromTotalFramesCallback",
+        "GetTotalFrames",
+        "GetXSP1",
+        "InitSeed_Param_666",
+        "PATH_SetPathType",
+        "OverwriteDistanceAndMaxDistance",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnMissileStarPattern",
+      "address": "005ac0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac0a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnMissileStarPattern",
+        "GetOwnerUnit",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "TXT_Skills_GetLine",
+        "D2GetSkillCalc",
+        "SKILLS_CreateMissileStar"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnRandomMonsterAtHit",
+      "address": "005ac1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac1d0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnRandomMonsterAtHit",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "SpawnRandomMonster"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_CastScatterMissiles",
+      "address": "005ac250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac250"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_CastScatterMissiles",
+        "GetOwnerUnit",
+        "GetLevel",
+        "GetSkillId",
+        "TXT_Skills_GetLine",
+        "D2GetSkillCalc",
+        "SKILLASS_CastScatterMissiles"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_HealTargetRandom",
+      "address": "005ac350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac350"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_HealTargetRandom",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "SKILL_CalcMinDamage",
+        "SKILL_CalcMaxDamage",
+        "RANDOM_RandomNumberSelector",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "SetOverlay",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnFixedMissileStar",
+      "address": "005ac480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac480"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnFixedMissileStar",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "GetLevel",
+        "SKILLS_CreateMissileStar"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst",
+      "address": "005ac550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac550"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst",
+        "GetOwnerUnit",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "MISSILE_SetDamage",
+        "GetSkillId",
+        "GetLevel",
+        "TXT_Skills_GetLine",
+        "D2GetSkillCalc",
+        "SKILLS_ApplyAreaDamage",
+        "MISSILES_SpawnRadialPattern18"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnSubMissileAtDirectionPoint",
+      "address": "005ac6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac6d0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnSubMissileAtDirectionPoint",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetXSP1",
+        "GetYSP1",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_BlockHitUntilFrame",
+      "address": "005ac800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac800"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_BlockHitUntilFrame",
+        "GetRemainingFrames",
+        "GetTotalFrames"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnUpToThreeSubMissiles",
+      "address": "005ac870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac870"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnUpToThreeSubMissiles",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnEightDirectionSubMissiles",
+      "address": "005ac940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ac940"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnEightDirectionSubMissiles",
+        "GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_ApplyDruidAuraWithMissile",
+      "address": "005aca50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aca50"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_ApplyDruidAuraWithMissile",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetTargetX",
+        "SKILLS_GetElementalLength",
+        "SKILLDRUID_ApplyAuraWithMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnMonsterFromSkillParam",
+      "address": "005acaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005acaf0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnMonsterFromSkillParam",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetParam1",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "SpawnMonster"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_DrainTargetManaPercent",
+      "address": "005acb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005acb60"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "STATLIST_SetUnitStat",
+        "Missiles_SrvHitFunc_DrainTargetManaPercent",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_AreaDamageAndSpawnSubMissile",
+      "address": "005acc50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005acc50"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_AreaDamageAndSpawnSubMissile",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "MISSILE_SetDamage",
+        "D2GetSkillCalc",
+        "SKILLS_ApplyAreaDamage",
+        "SKILLS_CreateMissileAtTarget"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnRandomOffsetSubMissile",
+      "address": "005acdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005acdf0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnRandomOffsetSubMissile",
+        "GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "InitSeed_Param_666",
+        "GetYPosFromDynamicPathUnit",
+        "UNIT_GetModuloFromSeed",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnDualRadialSubMissiles",
+      "address": "005acf20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005acf20"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnDualRadialSubMissiles",
+        "GetOwnerUnit",
+        "GetLevel",
+        "GetSkillId",
+        "MISSILES_SpawnRadialPattern"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_DispatchSrvDoFunc",
+      "address": "005acfc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005acfc0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_DispatchSrvDoFunc",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "SetTargetUnitForDynamicUnit",
+        "SKILLS_DispatchSrvDoFunc"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_PhysToElementalByCalc1",
+      "address": "005ad050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad050"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_PhysToElementalByCalc1",
+        "GetOwnerUnit",
+        "MISSILE_EvalMissileCalc",
+        "D2ApplyPercent",
+        "MISSILES_AddElementalDamageBonus"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_RecalcElementalWithClear",
+      "address": "005ad0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad0f0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_RecalcElementalWithClear",
+        "GetOwnerUnit",
+        "MISSILE_EvalMissileCalc",
+        "D2ApplyPercent",
+        "MISSILES_CalculateElementalDamage",
+        "MISSILES_ClearDamageStruct",
+        "MISSILES_AddElementalDamageBonus"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_FreezeLengthFromColdLengthPct",
+      "address": "005ad1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad1b0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_FreezeLengthFromColdLengthPct",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_RollChanceFlagBlessedAim",
+      "address": "005ad220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad220"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_RollChanceFlagBlessedAim"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_ConvertColdLengthToFreezeLength",
+      "address": "005ad290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad290"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_ConvertColdLengthToFreezeLength"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_CopyColdLengthToFreezeLength",
+      "address": "005ad2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad2b0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_CopyColdLengthToFreezeLength"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_ElementalBonusVsUndeadDemon",
+      "address": "005ad2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad2f0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_ElementalBonusVsUndeadDemon",
+        "MISSILES_CalculateElementalDamage",
+        "MONSTER_IsMonsterUndead",
+        "D2ApplyPercent",
+        "MISSILES_AddElementalDamageBonus",
+        "IsDemon"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_SetTargetNotControlled",
+      "address": "005ad3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad3a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_SetTargetNotControlled",
+        "GetOwnerUnit"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_SetStunLengthFromParam1",
+      "address": "005ad3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad3e0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "TXT_Skills_GetSkillRange",
+        "Missiles_SrvDmgFunc_SetStunLengthFromParam1",
+        "GetSkillId",
+        "GetLevel"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_ApplyProgOverlayToTarget",
+      "address": "005ad450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad450"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_ApplyProgOverlayToTarget",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_SetStunLengthFromSkillParam",
+      "address": "005ad4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad4a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_SetStunLengthFromSkillParam",
+        "GetSkillId"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_SynergyCappedPoisonLength",
+      "address": "005ad530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad530"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_SynergyCappedPoisonLength",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetTargetX",
+        "SKILLS_GetElementalLength"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_ScaleByDamagePctThenElemBonus",
+      "address": "005ad5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad5c0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_ScaleByDamagePctThenElemBonus",
+        "GetOwnerUnit",
+        "STATSEX_GetCurrentStat",
+        "Missiles_SrvDmgFunc_ElementalBonusVsUndeadDemon"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDmgFunc_RollMonsterSizeKnockbackChance",
+      "address": "005ad630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad630"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvDmgFunc_RollMonsterSizeKnockbackChance",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_ApplyMissileHitDamage",
+      "address": "005ad730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad730"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_ApplyMissileHitDamage",
+        "GetOwnerUnit",
+        "UNIT_GetUnitState",
+        "UNIT_GetModuloFromSeed",
+        "DAMAGE_CheckBlockAndEvasion",
+        "GetHitClass",
+        "ApplyDamageCritical",
+        "GetFlags",
+        "STATSEX_GetCurrentStat",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_RedemptionHitNoMana",
+      "address": "005ad8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad8f0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_RedemptionHitNoMana",
+        "SKILLSOR_GetBlizzardSubMissileCount"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_RedemptionHitWithMana",
+      "address": "005ad910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad910"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_RedemptionHitWithMana",
+        "SKILLSOR_GetBlizzardSubMissileCount"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_PortalArrival",
+      "address": "005ad930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad930"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_PortalArrival",
+        "SetTargetX",
+        "UNITS_GetRoom",
+        "CheckIntroductionFlagByInternalQuestId",
+        "SpawnTyrael",
+        "ToggleHasPortalFlagRoom"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnTyraelAndOpenPortal",
+      "address": "005ad970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad970"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnTyraelAndOpenPortal",
+        "GetTargetX",
+        "SetTargetX",
+        "UNITS_GetRoom",
+        "CheckIntroductionFlagByInternalQuestId",
+        "SpawnTyrael",
+        "ToggleHasPortalFlagRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_ExpireAndFree",
+      "address": "005ad9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ad9d0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_ExpireAndFree",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_CheckCollisionMode",
+      "address": "005ada40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ada40"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_CheckCollisionMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "getDamageTarget",
+      "address": "005ada80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ada80"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "getDamageTarget",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MISSMODE_ApplyNextHitState",
+      "address": "005adb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005adb00"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_ApplyNextHitState",
+        "GetGamePointer",
+        "AllocStatList",
+        "SetEvent",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MissileSrvDo",
+      "address": "005adbb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005adbb0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MissileSrvDo",
+        "UNITS_GetRoom",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetOwnerUnit",
+        "DRLGROOM_IsRoomInTown",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILEEVENT_DefaultCallback",
+      "address": "005adcc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005adcc0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILEEVENT_DefaultCallback",
+        "MissileSrvDo"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_HitWithArmorReduction",
+      "address": "005adcd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005adcd0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_HitWithArmorReduction",
+        "MISSMODE_ApplyMissileHitDamage",
+        "MONSTER_GetMercType",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnSubMissileInvertFrameInArea",
+      "address": "005add20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005add20"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Missiles_SrvHitFunc_SpawnSubMissileInvertFrameInArea",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetTargetY",
+        "GetTargetX",
+        "FindUnitFromTable",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "MISSILE_SetDamage",
+        "MISSMODE_HitWithArmorReduction",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2SubMissileAreaArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Hits",
+      "address": "005adf10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005adf10"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Hits",
+        "GetOwnerUnit",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMinimalStatValueShifted",
+        "getDamageTarget",
+        "UNIT_GetUnitState",
+        "CheckUnitIfOwner",
+        "SetOwner",
+        "MISSMODE_CheckCollisionMode",
+        "UNITS_CheckIfCanAttackTarget",
+        "DAMAGE_RollAttackHit",
+        "MISSMODE_ApplyNextHitState",
+        "UNITEVENT_DispatchEventsByType",
+        "MISSILE_SetDamage",
+        "MISSMODE_HitWithArmorReduction",
+        "UNITS_GetRoom",
+        "GetUnitSizeX",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "RemoveCollision_Width"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn01_BasicMissile",
+      "address": "005ae1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ae1f0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Hits",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "GetVelocity",
+        "UNITS_ProcessUnitMovement",
+        "GetCurrentFrame",
+        "SetCurrentFrame",
+        "UNITS_GetRoom",
+        "CheckAndGetCollisionFlag",
+        "GetActivateFrame",
+        "GetOwnerUnit",
+        "GetUnitSizeX",
+        "GetInitCoords",
+        "CheckCollision_BlockAll_Width",
+        "CallCollisionFunction"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissileSrvCollideCtxStrc",
+        "D2MissilesTxt",
+        "D2PathPointStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eCollisionFlags",
+        "eD2CollisionUnitSize",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn02_PoisonTrail",
+      "address": "005ae400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ae400"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn02_PoisonTrail",
+        "GetLevel",
+        "GetOwnerUnit",
+        "MISSILE_EvalMissileCalc",
+        "MISSILES_SpawnSubMissileAlongPath",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn03_StationaryCloud",
+      "address": "005ae480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ae480"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn03_StationaryCloud",
+        "GetVelocity",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "AddCollision"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eCollisionFlags",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn05_FireWall",
+      "address": "005ae520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ae520"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn05_FireWall",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "GetYPos",
+        "GetXPos",
+        "GetUnitSizeX",
+        "UNITS_GetRoom",
+        "AddCollision_Width",
+        "RANDOM_RandomNumberSelector",
+        "GetCurrentFrame"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn06_FireWallMaker",
+      "address": "005ae680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ae680"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn06_FireWallMaker",
+        "GetOwnerUnit",
+        "Get8FlagsFromDynamicPath",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn07_GuidedMissile",
+      "address": "005ae780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ae780"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn07_GuidedMissile",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetTargetX",
+        "GetTarget",
+        "GetTargetEx",
+        "UNITS_CheckIfCanAttackTarget",
+        "GetCurrentFrame",
+        "GetCollisionDistance",
+        "PATH_CalculatePath",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn08_MonBlizzCenter",
+      "address": "005ae8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ae8a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn08_MonBlizzCenter",
+        "GetLevel",
+        "MISSILES_SpawnPeriodicRandom",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn09_BatLightningBolt",
+      "address": "005ae940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ae940"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn09_BatLightningBolt",
+        "GetXPos",
+        "GetYPos",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn10_BlizzardCenter",
+      "address": "005aea60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aea60"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn10_BlizzardCenter",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "D2GetSkillCalc",
+        "MISSILES_SpawnPeriodicRandom",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn11_FingerMageSpider",
+      "address": "005aeb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aeb60"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn11_FingerMageSpider",
+        "GetTargetEx",
+        "GetOwnerUnit",
+        "GetCurrentFrame",
+        "GetCollisionDistance",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn12_DiabWallMaker",
+      "address": "005aeca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aeca0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn12_DiabWallMaker",
+        "GetOwnerUnit",
+        "Get8FlagsFromDynamicPath",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn13_BoneWallMaker",
+      "address": "005aeda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aeda0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn13_BoneWallMaker",
+        "GetOwnerUnit",
+        "GetTargetY",
+        "Get8FlagsFromDynamicPath",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "GetSkillId",
+        "GetLevel",
+        "TXT_Skills_GetLine",
+        "SKILLS_GetSummonMonsterClassId",
+        "GetTargetX",
+        "FindUnitFromTable",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SKILL_CreateSummon",
+        "AssignMinionOwner",
+        "AddMinionToList",
+        "InitUmods",
+        "SKILLNEC_ApplySummonBuffs",
+        "StoreOwner",
+        "AddNodeToTable",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MonsterCastPetStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn14_GrimWard",
+      "address": "005aef70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005aef70"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn14_GrimWard",
+        "GetRemainingFrames",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "GetSkillId",
+        "GetLevel",
+        "SKILLS_DispatchSrvDoFunc"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn15_FrozenOrb",
+      "address": "005af030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af030"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn15_FrozenOrb",
+        "GetOwnerUnit",
+        "GetRemainingFrames",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "GetTargetX",
+        "SetTargetX",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn16_FrozenOrbNova",
+      "address": "005af170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af170"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn16_FrozenOrbNova",
+        "GetRemainingFrames",
+        "GetTargetX",
+        "GetTargetY",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "SetTargetX",
+        "SetTargetY",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn17_CairnStones",
+      "address": "005af240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af240"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn17_CairnStones",
+        "GetCurrentFrame",
+        "MISSILES_SpawnPeriodicRandom",
+        "GetTargetX",
+        "SpawnPortal",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSMODE_SrvDoFn18_TowerChestSpawner",
+      "address": "005af300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af300"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSMODE_SrvDoFn18_TowerChestSpawner",
+        "GetCurrentFrame",
+        "GetTargetX",
+        "FindUnitFromTable",
+        "SetupUpdateEvent_AttachEventSound",
+        "SERVER_MissleKilled",
+        "SetTargetY",
+        "GetTargetY",
+        "GetCoords",
+        "RANDOM_RandomNumberSelector",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "memset",
+        "TXT_Items_ConvertItemCodeToItemClassId",
+        "ITEM_CreateItemInstance",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2MissilesTxt",
+        "D2ObjectOperateFnArg",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn20_BladeCreeper",
+      "address": "005af540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af540"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn20_BladeCreeper",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "MISSILES_UpdatePathToOwner",
+        "SetCurrentFrame",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "Hits"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn21_Distraction",
+      "address": "005af590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af590"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn21_Distraction",
+        "Get8FlagsFromDynamicPath",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetLevel",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "SKILLS_CreateMissileAtTarget",
+        "MISSILESMODE_SrvDoFn20_BladeCreeper"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn22_LightningTrailingJavelin",
+      "address": "005af620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af620"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn22_LightningTrailingJavelin",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetRemainingFrames",
+        "GetXSP1",
+        "GetYSP1",
+        "SetTargetX",
+        "SetTargetY",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetTargetX",
+        "GetTargetY",
+        "CreatingMissile",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn23_SubMissileTrail",
+      "address": "005af790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af790"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn23_SubMissileTrail",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn25_EruptionCenter",
+      "address": "005af880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af880"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn25_EruptionCenter",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "D2GetSkillCalc",
+        "MISSILES_SpawnPeriodicRandom",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn26_Vines",
+      "address": "005af980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005af980"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn26_Vines",
+        "GetRemainingFrames",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetLevel",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "SKILLS_CreateMissileAtTarget",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn27_Tornado",
+      "address": "005afa30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005afa30"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn27_Tornado",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "GetLevel",
+        "GetRemainingFrames",
+        "D2GetSkillCalc",
+        "MISSILE_SetDamage",
+        "SKILLS_ApplyAreaDamage",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn28_Volcano",
+      "address": "005afb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005afb80"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn28_Volcano",
+        "GetSkillId",
+        "GetLevel",
+        "GetOwnerUnit",
+        "D2GetSkillCalc",
+        "GetRemainingFrames",
+        "GetTargetX",
+        "InitSeed_Param_666",
+        "UNIT_GetModuloFromSeed",
+        "GetSeed_nSeedLow",
+        "SetTargetX",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CreatingMissile",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn29_RecyclerDelay",
+      "address": "005afd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005afd70"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn29_RecyclerDelay",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "GetLevel",
+        "GetRemainingFrames",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "D2GetSkillCalc",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat",
+        "SetOverlay",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn33_VineRecyclerDelay",
+      "address": "005afec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005afec0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn33_VineRecyclerDelay",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "GetLevel",
+        "GetRemainingFrames",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxMana",
+        "D2GetSkillCalc",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat",
+        "SetOverlay",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn30_RabiesPlague",
+      "address": "005b0010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b0010"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn30_RabiesPlague",
+        "GetSkillId",
+        "GetTargetY",
+        "GetTargetX",
+        "FindUnitFromTable",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "GetCurrentFrame",
+        "MISSILES_UpdatePathToOwner",
+        "GetRemainingFrames",
+        "memset",
+        "GetLevel",
+        "UNIT_GetModuloFromSeed",
+        "CreatingMissile",
+        "GetStatsByState",
+        "STATLIST_GetFullListPtr",
+        "SetTargetX",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "Hits"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn31_TwinWaveMaker",
+      "address": "005b01f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b01f0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn31_TwinWaveMaker",
+        "GetOwnerUnit",
+        "Get8FlagsFromDynamicPath",
+        "GetTargetX",
+        "GetTargetY",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "MISSMODE_ApplyNextHitState",
+        "UNITEVENT_DispatchEventsByType",
+        "UNITS_GetRoom",
+        "GetUnitSizeX",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "RemoveCollision_Width"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2CollisionUnitSize",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn32_TigerFury",
+      "address": "005b03e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b03e0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn32_TigerFury",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "MISSMODE_SrvDoFn07_GuidedMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn34_BaalTauntControl",
+      "address": "005b04a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b04a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn34_BaalTauntControl",
+        "GetRemainingFrames",
+        "GetXPos",
+        "InitSeed_Param_666",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile",
+        "Hits",
+        "MISSMODE_SrvDoFn03_StationaryCloud"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn35_RoyalStrikeChaosIce",
+      "address": "005b0640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b0640"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn35_RoyalStrikeChaosIce",
+        "GetRemainingFrames",
+        "MISSMODE_SrvDoFn01_BasicMissile",
+        "GetTargetX",
+        "InitSeed_Param_666",
+        "GetTargetY",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "GetSeed_nSeedLow",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnHitSubMissilesAndHit",
+      "address": "005b07a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b07a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Hits",
+        "Missiles_SrvHitFunc_SpawnHitSubMissilesAndHit",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Missiles_SrvHitFunc_SpawnHitSubMissiles",
+      "address": "005b0870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b0870"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "Hits",
+        "Missiles_SrvHitFunc_SpawnHitSubMissiles",
+        "memset",
+        "GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn19_RadamentDeath",
+      "address": "005b0940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b0940"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "SKILLS_SetupBaalWaveParams",
+        "MISSILESMODE_SrvDoFn19_RadamentDeath",
+        "GetCurrentFrame",
+        "GetYPos",
+        "GetXPos",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "fpBaalWaveFunction",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn36_BaalFxControl",
+      "address": "005b0a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b0a40"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn36_BaalFxControl",
+        "GetCurrentFrame",
+        "GetTargetX",
+        "SetTargetX",
+        "UNITS_GetRoom",
+        "CheckIntroductionFlagByInternalQuestId",
+        "SpawnTyrael",
+        "ToggleHasPortalFlagRoom",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_SrvDoFn37_Unused",
+      "address": "005b0aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b0aa0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_SrvDoFn37_Unused",
+        "GetRemainingFrames",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetLevel",
+        "GetSkillId",
+        "GetOwnerUnit",
+        "SKILLS_CreateMissileAtTarget",
+        "MISSMODE_SrvDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

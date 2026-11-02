@@ -1,0 +1,170 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Sound/D2SoundUntil.cpp",
+  "functions": [
+    {
+      "name": "SOUND_sD2SoundSmp_Alloc",
+      "address": "00516950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516950"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUND_sD2SoundSmp_Alloc",
+        "AllocClientMemory"
+      ]
+    },
+    {
+      "name": "SOUND_sD2SoundSmp_Free",
+      "address": "00516980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516980"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUND_sD2SoundSmp_Free",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDUTIL_FindInLinkedList",
+      "address": "005169d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005169d0"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUNDUTIL_FindInLinkedList"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDUTIL_FreeLinkedList",
+      "address": "00516a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516a10"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUNDUTIL_FreeLinkedList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "int *"
+      ]
+    },
+    {
+      "name": "SOUNDUTIL_AppendToLinkedList",
+      "address": "00516a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516a70"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUNDUTIL_AppendToLinkedList",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "void *"
+      ]
+    },
+    {
+      "name": "SOUNDUTIL_ReadVersionResource",
+      "address": "00516ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516ac0"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUNDUTIL_ReadVersionResource",
+        "memset",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "EH3_EXCEPTION_REGISTRATION",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDUTIL_GetVersionResourceSize",
+      "address": "00516c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516c40"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUNDUTIL_GetVersionResourceSize",
+        "SOUNDUTIL_ReadVersionResource"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDUTIL_ReadVersionResourceToBuffer",
+      "address": "00516c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516c80"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUNDUTIL_ReadVersionResourceToBuffer",
+        "SOUNDUTIL_ReadVersionResource"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDUTIL_GetFileVersionInfo",
+      "address": "00516ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516ca0"
+        }
+      ],
+      "namespace": "D2Sound::D2SoundUntil",
+      "calledFunctions": [
+        "SOUNDUTIL_GetFileVersionInfo",
+        "SOUNDUTIL_ReadVersionResource",
+        "AllocClientMemory",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    }
+  ]
+}

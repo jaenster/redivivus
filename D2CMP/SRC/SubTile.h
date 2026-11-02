@@ -30,7 +30,7 @@ struct __attribute__((packed)) D2GroundSubTileStrc {
 namespace D2CMP::SRC::SubTile {
 
 // Function declarations
-int __fastcall SUBTILE_CountRunLength(char cParam, char * pCur, char * pEnd, int32_t nMaxRunLen, uint32_t * pbAtEnd, uint32_t * pbExactMatch);
+int __fastcall SUBTILE_CountRunLength(char byRunValue, char * pCur, char * pEnd, int32_t nMaxRunLen, uint32_t * pbAtEnd, uint32_t * pbExactMatch);
 char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, char * * ppCompressedEnd);
 void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw);
 void __fastcall SUBTILE_ConvertToIndexed(uint32_t * pDstFrame, uint32_t * pSrcFrame, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);

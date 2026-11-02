@@ -88,18 +88,18 @@ int __fastcall D2WINTIMER_GetElapsed(::D2WinTimer * pTimer) {
       exit(-1);
     }
 
-    uint32_t uVar1 = pTimer->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
-      OnPress pOVar2;
+    uint32_t dwState = pTimer->sControl.dwState;
+    if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
+      OnPress pOVar1;
       dwTickCount = GetTickCount();
       if (dwTickCount < gnTimerNextFireTick) {
         return 1;
       }
 
-      pOVar2 = pTimer->sControl.fpOnPress;
-      if (pOVar2) {
+      pOVar1 = pTimer->sControl.fpOnPress;
+      if (pOVar1) {
         pCallbackArg.pControl = &pTimer->sControl;
-        (*pOVar2)(&pCallbackArg);
+        (*pOVar1)(&pCallbackArg);
       }
 
       gnTimerNextFireTick = pTimer->nTimeoutInSeconds + dwTickCount;

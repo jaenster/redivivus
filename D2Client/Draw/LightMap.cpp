@@ -92,9 +92,9 @@ D2LightMapStrc * __fastcall AllocLightMap(D2UnitStrc * pUnit, int32_t nLightType
 
       pLightMap->nUnitGUID = nUnitGUID;
       if (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1)) {
-        pLightMap->bUnknown = '\0';
+        pLightMap->bServerSideUnit = '\0';
       } else {
-        pLightMap->bUnknown = '\x01';
+        pLightMap->bServerSideUnit = '\x01';
       }
 
       uint32_t nPrecision = D2Common::Units::GetPrecisionX(pUnit);
@@ -144,23 +144,23 @@ void __fastcall SetRadiusY(D2LightMapStrc * pLightMap, int32_t nValue) {
     pLightMap->nRadiusY = nValue * 8;
 }
 
-void __fastcall LIGHTMAP_SetRadius(D2LightMapStrc * pLightMap, int32_t nParam) {
-    if (nParam <= 0) {
+void __fastcall LIGHTMAP_SetRadius(D2LightMapStrc * pLightMap, int32_t nDiameter) {
+    if (nDiameter <= 0) {
       return;
     }
-    if (nParam >= 0x12) {
-      nParam = 0x12;
+    if (nDiameter >= 0x12) {
+      nDiameter = 0x12;
     }
     if (!pLightMap) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x141);
       exit(-1);
     }
-    if (nParam >= 0x12) {
-      nParam = 0x12;
+    if (nDiameter >= 0x12) {
+      nDiameter = 0x12;
     }
 
-    pLightMap->nRadiusX = nParam * 8;
-    pLightMap->nRadiusY = nParam * 8;
+    pLightMap->nRadiusX = nDiameter * 8;
+    pLightMap->nRadiusY = nDiameter * 8;
     if (pLightMap->nLightType != 2) {
       return;
     }
@@ -854,7 +854,7 @@ static void LIGHTMAP_ApplyCollisionOccludedLight(D2LightMapStrc * pLightMap) {
     if (eUnitType == UNIT_COUNT) {
       return;
     }
-    if (pLightMap->bUnknown != '\0') {
+    if (pLightMap->bServerSideUnit != '\0') {
       pUnit = UNIT::Player::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eUnitType);
     } else {
       pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
@@ -1057,7 +1057,7 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
       D2UnitStrc* pUnit;
       eUnitType = pLightMap->eUnitType;
       if (eUnitType != UNIT_COUNT) {
-        if (pLightMap->bUnknown != '\0') {
+        if (pLightMap->bServerSideUnit != '\0') {
           pUnit = UNIT::Player::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eUnitType);
         } else {
           pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
@@ -1191,17 +1191,17 @@ int __stdcall LIGHTMAP_GetQualityLevel() {
     nQualityLevel = 0;
     commit_with_hysteresis:
     dwTickCount = gdwLightmapQualityLastCheck;
-    int iVar1 = gnLightmapQualityLevel;
+    int nNewLevel = gnLightmapQualityLevel;
     if (nQualityLevel != gnLightmapQualityLevel) {
       dwTickCount = GetTickCount();
-      iVar1 = nQualityLevel;
+      nNewLevel = nQualityLevel;
       if (dwTickCount - gdwLightmapQualityLastCheck <= 0x7d0) {
         return gnLightmapQualityLevel;
       }
     }
 
     gdwLightmapQualityLastCheck = dwTickCount;
-    gnLightmapQualityLevel = iVar1;
+    gnLightmapQualityLevel = nNewLevel;
     return nQualityLevel;
 }
 

@@ -1,0 +1,118 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A1Q7.cpp",
+  "functions": [
+    {
+      "name": "Q07_Callback00_NpcActivate",
+      "address": "00596a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596a90"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_Callback00_NpcActivate",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_GetQuestRecordState",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNIT_GetModuloFromSeed",
+        "AddGossipMessageOnMonster"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2SeedStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q07_Callback08_MonsterKilled",
+      "address": "00596ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596ba0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_Callback08_MonsterKilled"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q07_StatusFilter",
+      "address": "00596bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596bb0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q07_ActiveFilter",
+      "address": "00596bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596bc0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_ActiveFilter",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_GetQuestRecordState",
+        "GetPlayerData",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q07_InitData",
+      "address": "00596c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596c40"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_InitData",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc"
+      ]
+    }
+  ]
+}

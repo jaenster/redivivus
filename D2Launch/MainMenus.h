@@ -121,7 +121,7 @@ void __stdcall FORMS_DestroyList();
 struct D2ControlStrc * __fastcall FORMS_CreateAnyFormFromListExEx(int32_t nFormIndex);
 void __stdcall FORMS_DestroyLists();
 void __fastcall STRING_ZeroOneWCHAR(void * pBuffer);
-void __fastcall MAINMENU_CreateMessageBox(uint16_t * wszText1, uint16_t * wszText2, int32_t nButton1LabelId, int32_t nButton2LabelId, OnPress pfnOnPress1, OnPress pfnOnPress2, int32_t nParam1, int32_t nParam2);
+void __fastcall MAINMENU_CreateMessageBox(uint16_t * wszText1, uint16_t * wszText2, int32_t nButton1LabelId, int32_t nButton2LabelId, OnPress pfnOnPress1, OnPress pfnOnPress2, int32_t bEnableHotkeys, int32_t bSingleButtonEscape);
 // @abi __stdcall(void) -> void. Body is MOV [0x00779974],1 / RET - zero arguments, zero purge, so
 // __stdcall and __cdecl are indistinguishable from the RET alone. It is stored into
 // gpCurrentUIMenuInstance, whose funcdef pfnUIMenuInstance is void __stdcall(void), and every other
@@ -155,7 +155,7 @@ int __stdcall MAINMENU_ValidateGameNameChar(::D2WinEditBox * pEditBox, int nText
 int __stdcall MAINMENUS_EditBoxFilter_ValidateCharName_ForBnetDisconnect(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
 // Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 into D2WinEditBox+0x268 (fpFilterCallback, fpD2WinEditBoxFilter). Body is MOV EAX,1 / RET 0xc - accepts every character. Signature proven by RET 0xc (3 stack args, callee cleans).
 int __stdcall MAINMENUS_EditBoxFilter_ReturnTrue_ForBnetAccountForms(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
-void __fastcall MAINMENU_SetGlobalValue3(uint32_t dwParam);
+void __fastcall MAINMENU_SetGlobalValue3(uint32_t bShowBNetRealmPanel);
 void __stdcall MAINMENU_UpdateIPAddressDisplay();
 BOOL __stdcall MAINMENU_OnPressUpdateIpAddressDisplay(struct D2ControlMsg * pControlMsg);
 void __stdcall UIMENU_TCPIPOptions();
@@ -164,7 +164,7 @@ void __stdcall MAINMENU_DisableControlIfDataNonZero2(int32_t nParam);
 // Shows BNet account creation UI. Clears gbPasswordChangeInProgress, creates form with username/password/confirmation fields. Entry point for new account flow from main menu.
 void __stdcall UIMENU_CreateBattleNetAccount();
 void __stdcall UIMENU_BackgroundAndExpansionText();
-int16_t __stdcall MAINMENU_FilterNewlineKey(int16_t nParam);
+int16_t __stdcall MAINMENU_FilterNewlineKey(int16_t wChar);
 int __stdcall MAINMENU_PollRevisionCheckPump(int nFrameIndex);
 BOOL __stdcall MAINMENU_OnPressCreateBattleNetAccount(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_ScrollListExUp(struct D2ControlMsg * pControlMsg);
@@ -331,7 +331,7 @@ BOOL __stdcall MAINMENU_OnPressCreateHeroSinglePlayer(struct D2ControlMsg * pCon
 void __stdcall UIMENU_ConfirmCreateCharacter();
 // BNet account creation handler. Validates username/password from gbPasswordChangeInProgress inputs (2-15 chars, matching confirmation), shows please-read dialog on success or error popup on validation failure.
 BOOL __stdcall MAINMENU_Unused15(struct D2ControlStrc * pControl);
-BOOL __stdcall MAINMENU_Unused16(struct D2ControlStrc * nParam);
+BOOL __stdcall MAINMENU_Unused16(struct D2ControlStrc * pControl);
 void __stdcall MAINMENU_BnetConnectionProgress();
 BOOL __stdcall MAINMENU_OnPressConfirmSkipEmailPopup(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressAcceptEmailAddress(struct D2ControlMsg * pControlMsg);

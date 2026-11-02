@@ -354,7 +354,7 @@ struct D2MapAIStrc * __fastcall DRLGPRESET_CopyMapAI(struct D2PoolManagerStrc * 
 struct D2MapAIStrc * __fastcall DRLGPRESET_TransferMapAI(struct D2MapAIStrc * * ppSrcMapAI, struct D2MapAIStrc * * ppDstMapAI);
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall DRLGPRESET_FreeSpawnPointList(struct D2PoolManagerStrc * pMemory, struct D2AiGeneralStrc * pAiGeneral);
-void __stdcall CreatePresetObject_Unused(int32_t nParam1, int32_t nParam2, struct D2PoolManagerStrc * pMemory, int32_t nParam3, int32_t nParam4);
+void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, struct D2PoolManagerStrc * pMemory, int32_t nPosY, int32_t pDrlgMap);
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall DRLGROOMEX_FreeRoomExDataPresetArea(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGPRESET_FreePresetRoomGridsFromRoomEx(struct D2RoomExStrc * pRoomEx);

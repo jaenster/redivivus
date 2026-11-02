@@ -1,0 +1,398 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/Safesock.cpp",
+  "functions": [
+    {
+      "name": "closeSocket",
+      "address": "0040d880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d880"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "closeSocket"
+      ],
+      "usedTypes": [
+        "SOCKET"
+      ]
+    },
+    {
+      "name": "StartUp",
+      "address": "0040d890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d890"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "StartUp",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "WSADATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Create",
+      "address": "0040d8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d8e0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "Create",
+        "AllocClientMemory",
+        "memset",
+        "SStrCopy",
+        "FreeClientMemory",
+        "__security_check_cookie",
+        "WSAGetLastError"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "LPTHREAD_START_ROUTINE",
+        "SOCKET",
+        "WSADATA",
+        "sockaddr_in",
+        "u_long",
+        "u_short",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Free",
+      "address": "0040dbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040dbd0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "Free",
+        "WSAGetLastError",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2NetDataStrc",
+        "SOCKET"
+      ]
+    },
+    {
+      "name": "WSASocket2_Read",
+      "address": "0040dc60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040dc60"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "WSASocket2_Read",
+        "WSAGetLastError"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WSASocket2_Send",
+      "address": "0040dcc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040dcc0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "WSASocket2_Send",
+        "WSAGetLastError"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2NetDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WSASocket2_SendOrCloseOnTimeout",
+      "address": "0040dd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040dd80"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "WSASocket2_SendOrCloseOnTimeout",
+        "WSAGetLastError",
+        "LOGFILE_WriteStringToFile"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SAFESOCK_EnterCriticalSection",
+      "address": "0040ddd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040ddd0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "SAFESOCK_EnterCriticalSection"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc"
+      ]
+    },
+    {
+      "name": "LeaveCriticalSection_Safesock",
+      "address": "0040dde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040dde0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "LeaveCriticalSection_Safesock"
+      ]
+    },
+    {
+      "name": "Safesock_PollReadReady",
+      "address": "0040ddf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040ddf0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "Safesock_PollReadReady",
+        "WSAGetLastError",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "fd_set",
+        "int32_t",
+        "timeval"
+      ]
+    },
+    {
+      "name": "GetPeerNameDoesReturn",
+      "address": "0040dee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040dee0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "GetPeerNameDoesReturn"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "int32_t",
+        "sockaddr"
+      ]
+    },
+    {
+      "name": "GetSockNameDoesReturn",
+      "address": "0040df20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040df20"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "GetSockNameDoesReturn"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "sockaddr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_GetLocalIp",
+      "address": "0040df60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040df60"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "NET_GetLocalIp",
+        "sprintf",
+        "WSACleanup",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "SOCKET",
+        "WSADATA",
+        "hostent",
+        "sockaddr_in",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_MakeIPV4AddressHumanFriendly",
+      "address": "0040e080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040e080"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "NET_MakeIPV4AddressHumanFriendly"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSocketStatusAndWsaResultToArguments",
+      "address": "0040e0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040e0b0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "GetSocketStatusAndWsaResultToArguments"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc"
+      ]
+    },
+    {
+      "name": "inet_nameToIp",
+      "address": "0040e0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040e0d0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "inet_nameToIp",
+        "sscanf",
+        "WSACleanup",
+        "WSAGetLastError",
+        "StartUp"
+      ],
+      "usedTypes": [
+        "hostent"
+      ]
+    },
+    {
+      "name": "SAFESOCK_SetSocketNonBlocking",
+      "address": "0040e1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040e1a0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "SAFESOCK_SetSocketNonBlocking"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "u_long"
+      ]
+    },
+    {
+      "name": "SAFESOCK_EnableNonBlocking",
+      "address": "0040e1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040e1d0"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "SAFESOCK_EnableNonBlocking"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "u_long"
+      ]
+    },
+    {
+      "name": "SAFESOCK_DisableNonBlocking",
+      "address": "0040e200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040e200"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "SAFESOCK_DisableNonBlocking"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "u_long"
+      ]
+    },
+    {
+      "name": "Create_Flag0",
+      "address": "0040e230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040e230"
+        }
+      ],
+      "namespace": "Fog::Src::Safesock",
+      "calledFunctions": [
+        "Create_Flag0",
+        "Create"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "LPTHREAD_START_ROUTINE"
+      ]
+    }
+  ]
+}

@@ -41,8 +41,8 @@ int __fastcall SERVERCMD_SendBufferToClient(int32_t nClientId, uint16_t wGuildFl
     sPacket.nPacketId = 0xb2;
     sPacket.nUniqueCode = wUniqueCode;
     Storm::Source::SSTR::SStrCopy(sPacket.szPlayerName, szPlayerName, 0x10);
-    int32_t iVar1 = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', nClientId, (char*)&sPacket, 0x35);
-    return iVar1;
+    int32_t nSendResult = D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', nClientId, (char*)&sPacket, 0x35);
+    return nSendResult;
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(int32_t nClientId) {

@@ -1,0 +1,119 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A2Q8.cpp",
+  "functions": [
+    {
+      "name": "Q16_Callback11_ScrollMessage",
+      "address": "0059e3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059e3c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q8",
+      "calledFunctions": [
+        "Q16_Callback11_ScrollMessage",
+        "GetPlayerData",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q16_Callback00_NpcActivate",
+      "address": "0059e3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059e3f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q8",
+      "calledFunctions": [
+        "Q16_Callback00_NpcActivate",
+        "GetPlayerData",
+        "GetQuestDataByQuestNoInternal",
+        "GetQuestState",
+        "AddGossipMessageOnMonster"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q16_StatusFilter",
+      "address": "0059e4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059e4a0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q8",
+      "calledFunctions": [
+        "Q16_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q16_ActiveFilter",
+      "address": "0059e4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059e4b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q8",
+      "calledFunctions": [
+        "Q16_ActiveFilter",
+        "GetPlayerData",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_GetQuestRecordState",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q16_InitData",
+      "address": "0059e530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059e530"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q8",
+      "calledFunctions": [
+        "Q16_InitData",
+        "memset",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2QuestDataA2Q8Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

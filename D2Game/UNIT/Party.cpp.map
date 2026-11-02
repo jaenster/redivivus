@@ -1,0 +1,563 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/UNIT/Party.cpp",
+  "functions": [
+    {
+      "name": "ChangeGoldForPlayer",
+      "address": "0053ff00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053ff00"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "ChangeGoldForPlayer",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "GetInventoryGoldLimit",
+        "GetStashGoldLimit",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocPartyControl",
+      "address": "0053ff90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053ff90"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "AllocPartyControl",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControl",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreePartyControl",
+      "address": "00540000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540000"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "FreePartyControl",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControl",
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTY_UpdateNextPartyId",
+      "address": "005400b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005400b0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "PARTY_UpdateNextPartyId"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSub *",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "AllocPartyControlSub0x4",
+      "address": "00540100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540100"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "AllocPartyControlSub0x4",
+        "AllocServerMemory",
+        "PARTY_UpdateNextPartyId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControl",
+        "D2UnitPartyControlSub",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "PARTY_FreePartyMembers",
+      "address": "00540180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540180"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "PARTY_FreePartyMembers",
+        "FreeServerMemory",
+        "FindUnitFromTable",
+        "SendAllPlayersPartyInfo",
+        "NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTY_DisbandParty",
+      "address": "00540220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540220"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "PARTY_DisbandParty",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PARTY_FreePartyMembers"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControl",
+        "D2UnitPartyControlSub",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindPartyControlSub",
+      "address": "00540290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540290"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "FindPartyControlSub",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "SGAMEDATA",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "CheckUnitGUIDInAllPartyControlSubs",
+      "address": "005402d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005402d0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "CheckUnitGUIDInAllPartyControlSubs",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTY_AddUnitToParty",
+      "address": "00540320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540320"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "PARTY_AddUnitToParty",
+        "CheckUnitGUIDInAllPartyControlSubs",
+        "AllocServerMemory",
+        "NET_D2GS_SERVER_Send_0x8D_AssignPlayerToParty_Sender",
+        "FindUnitFromTable",
+        "PARTYSCREEN_ClearHostileRelation",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CountPartyControlSubSize",
+      "address": "00540460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540460"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "CountPartyControlSubSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CountAliveUnitsLevelSum",
+      "address": "005404c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005404c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "CountAliveUnitsLevelSum",
+        "CheckForModeZeroDeath",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CountModeZero",
+      "address": "005404f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005404f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "CountModeZero",
+        "CheckForModeZeroDeath"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ExecuteFunctionForEveryPartyMember",
+      "address": "00540510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540510"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "ExecuteFunctionForEveryPartyMember",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "fpExecuteOnUnitFunction",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindUnitWithFilter",
+      "address": "005405a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005405a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "FindUnitWithFilter",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetPartyId",
+        "FindPartyControlSub",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "pfnPartyMemberFilter",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GoldCalculations",
+      "address": "00540650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540650"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "GoldCalculations",
+        "GetInventoryGoldLimit",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BroadcastAutomapAllyPartyInfo",
+      "address": "005406a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005406a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "BroadcastAutomapAllyPartyInfo",
+        "SUNIT_GetClient",
+        "GetPartyId",
+        "FindPartyControlSub",
+        "FindUnitFromTable",
+        "NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetPartyIdFromUnit",
+      "address": "00540710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540710"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "GetPartyIdFromUnit",
+        "INVENTORY_GetCursorItemGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PARTY_RemoveUnitFromParty",
+      "address": "005407a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005407a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "PARTY_RemoveUnitFromParty",
+        "GetPartyIdFromUnit",
+        "FindPartyControlSub",
+        "SendAllPlayersPartyInfo",
+        "NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY",
+        "FreeServerMemory",
+        "CountPartyControlSubSize",
+        "PARTY_DisbandParty",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetPartiedUnitsLevelSum",
+      "address": "00540890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540890"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "GetPartiedUnitsLevelSum",
+        "GetPartyId",
+        "STATSEX_GetCurrentStat",
+        "FindUnitWithFilter"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CountDeadPartyMembers",
+      "address": "005408e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005408e0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "CountDeadPartyMembers",
+        "FindUnitWithFilter"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PARTY_SplitGoldToPartyMembers",
+      "address": "00540900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540900"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Party",
+      "calledFunctions": [
+        "PARTY_SplitGoldToPartyMembers",
+        "FindUnitWithFilter",
+        "GetInventoryGoldLimit",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_AddUnitStat",
+        "STATLIST_SetUnitStat",
+        "GetPartyId",
+        "FindPartyControlSub",
+        "ChangeGoldForPlayer",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "FindUnitFromTable",
+        "GetAnimMode",
+        "GoldCalculations"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitPartyControlSub",
+        "D2UnitPartyControlSubSub",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

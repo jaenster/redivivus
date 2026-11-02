@@ -1,0 +1,644 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/ClientModeInGame.cpp",
+  "functions": [
+    {
+      "name": "AppModeClientInit",
+      "address": "0044b400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b400"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "AppModeClientInit",
+        "IGNORELIST_Initialize",
+        "ServerInit_nullsub"
+      ],
+      "usedTypes": [
+        "fnAppModeRun *"
+      ]
+    },
+    {
+      "name": "AppModeClientShutdown",
+      "address": "0044b420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b420"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "AppModeClientShutdown",
+        "ServerClose_nullsub",
+        "CloseProfCore"
+      ]
+    },
+    {
+      "name": "fAPPMODE_client_ReturnAppMode_Caller",
+      "address": "0044b430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b430"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "fAPPMODE_client_ReturnAppMode_Caller",
+        "fAPPMODE_client_ReturnAppMode"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ClientAppModeQueue",
+      "address": "0044b440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b440"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "ClientAppModeQueue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "eD2ClientAppMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_GetCurrentAppMode",
+      "address": "0044b480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b480"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_GetCurrentAppMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "eD2ClientAppMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CmdLine_ShowHelpIfNotDeveloper",
+      "address": "0044b4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b4e0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CmdLine_ShowHelpIfNotDeveloper",
+        "SStrCmp"
+      ],
+      "usedTypes": [
+        "CMDPARAMS",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CmdLine_StopRecordingSetFlags",
+      "address": "0044b5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b5a0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CmdLine_StopRecordingSetFlags",
+        "StopRecordingSetFlags"
+      ],
+      "usedTypes": [
+        "CMDPARAMS"
+      ]
+    },
+    {
+      "name": "CmdLine_EnableRecording",
+      "address": "0044b5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b5b0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CmdLine_EnableRecording",
+        "SetupRecording"
+      ],
+      "usedTypes": [
+        "CMDPARAMS"
+      ]
+    },
+    {
+      "name": "CmdLine_ShowHelpCallback",
+      "address": "0044b5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b5c0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CmdLine_ShowHelpCallback",
+        "CmdLine_ShowHelpIfNotDeveloper"
+      ]
+    },
+    {
+      "name": "CLIENTMODEIN_CmdLineCallback_ShowHelp",
+      "address": "0044b5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b5d0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODEIN_CmdLineCallback_ShowHelp",
+        "CmdLine_ShowHelpIfNotDeveloper"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CmdLine_SaveDefaultCommandLine",
+      "address": "0044b5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b5e0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "SRegSaveString",
+        "CmdLine_SaveDefaultCommandLine"
+      ],
+      "usedTypes": [
+        "CMDPARAMS",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CmdLine_SetAppMode",
+      "address": "0044b600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b600"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CmdLine_SetAppMode",
+        "_stricmp",
+        "SStrCmp"
+      ],
+      "usedTypes": [
+        "CMDPARAMS",
+        "eD2ClientAppMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LoadDataForGameAndSetupServer",
+      "address": "0044b6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b6b0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "LoadDataForGameAndSetupServer",
+        "SCmdRegisterArgList",
+        "LoadDataForGame",
+        "SRegLoadString",
+        "SCmdProcess"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2IniData_Getter",
+      "address": "0044b7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b7a0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "D2IniData_Getter"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_GetGameVersionInfo",
+      "address": "0044b7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b7b0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENT_GetGameVersionInfo"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_GetGamePasswordPart1",
+      "address": "0044b7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b7c0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_GetGamePasswordPart1"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_GetGamePasswordPart2",
+      "address": "0044b7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b7f0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_GetGamePasswordPart2"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_GetGamePasswordPart3",
+      "address": "0044b820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b820"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_GetGamePasswordPart3"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_GetIngameUIFlags",
+      "address": "0044b850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b850"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_GetIngameUIFlags"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_ClearIngameUIFlag",
+      "address": "0044b860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b860"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_ClearIngameUIFlag"
+      ]
+    },
+    {
+      "name": "D2CLIENT_SetExitVar1",
+      "address": "0044b880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b880"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "D2CLIENT_SetExitVar1"
+      ]
+    },
+    {
+      "name": "fAPPMODE_client_ReturnAppMode",
+      "address": "0044b8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b8a0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "fAPPMODE_client_ReturnAppMode",
+        "InitializeMemoryManagers",
+        "SetPoolIdForMemoryManager",
+        "LoadDataForGameAndSetupServer",
+        "CLIENT_LoadLNG",
+        "UI_Init",
+        "INIT_SetWndProcBGlobalPointer",
+        "D2CheckExpansionGame",
+        "ReturnZero",
+        "TABLES_LoadStrings",
+        "TABLES_GetLangAbbreviation",
+        "TXT_InitTxtFiles",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeInGameGFX",
+        "FreeTables",
+        "STRINGTABLE_FreeStringTables",
+        "FreeLanguage",
+        "D2ProfileDump",
+        "FreeQServer"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SetScreenResolution",
+      "address": "0044ba20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ba20"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENT_SetScreenResolution",
+        "D2GFX_GetResolutionMode",
+        "D2GFX_SetVideoMode",
+        "DRAW_GetTypeOfBorder",
+        "TypeOfUiOverlayOverWorld",
+        "AUTOMAP_CenterOnPlayer",
+        "DRAW_NoOp",
+        "DRAW_RefreshNpcDialog"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_Unused3",
+      "address": "0044bad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bad0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_Unused3",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "GetTickCount",
+        "NET_CLIENT_GetConnectionTimeout",
+        "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
+        "NET_D2GS_CLIENT_PacketHandle_from0xAF",
+        "CLIENT_ConnectionRefused"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FreeQServer",
+      "address": "0044bb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bb80"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "FreeQServer",
+        "FreeServer"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_InitializeCallback",
+      "address": "0044bba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bba0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_InitializeCallback"
+      ]
+    },
+    {
+      "name": "GameLoopFuncInitGame",
+      "address": "0044bbb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bbb0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "GameLoopFuncInitGame",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "CreateThreadClientSocketOrSingleplayer",
+        "CLIENT_ConnectionRefused"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_QServer_StartServer",
+      "address": "0044bc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bc30"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "NET_QServer_StartServer",
+        "QSERVER_CreateAndInit",
+        "NET_D2GS_ConnectToServer",
+        "MessageGameLoop",
+        "NET_HACK_SetUseQServerHack",
+        "NET_SetPlayersCount",
+        "QSERVER_SetGlobalInstance",
+        "QSERVER_InitializeServerState",
+        "GetTickCount",
+        "CLIENTMODE_GetCurrentAppMode"
+      ],
+      "usedTypes": [
+        "eD2ClientAppMode",
+        "eD2GSConnectionType"
+      ]
+    },
+    {
+      "name": "CLIENTMODE_Unused4",
+      "address": "0044bd20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bd20"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "CLIENTMODE_Unused4",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "NET_D2GS_SERVER_HandleAnyIncomingPacket",
+        "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
+        "NET_D2GS_CLIENT_PacketHandle_from0xAF",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_QServer_ShutdownServer",
+      "address": "0044bd90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044bd90"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "NET_QServer_ShutdownServer",
+        "GetTickCount",
+        "MessageGameLoop",
+        "NET_CLIENT_ShutdownConnection",
+        "NET_QServer_FreeAndSend0xB0ToEveryone",
+        "CLIENTMODE_GetCurrentAppMode"
+      ],
+      "usedTypes": [
+        "eD2ClientAppMode"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca9a0",
+      "address": "006ca9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca9a0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "StaticInit_6ca9a0"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca9b0",
+      "address": "006ca9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca9b0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "StaticInit_6ca9b0"
+      ]
+    },
+    {
+      "name": "QSERVER_InitGlobalGameState",
+      "address": "006ca9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca9c0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "QSERVER_InitGlobalGameState",
+        "Constructor",
+        "atexit"
+      ]
+    },
+    {
+      "name": "QSERVER_DestroyGlobalGameState",
+      "address": "006cb3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb3e0"
+        }
+      ],
+      "namespace": "D2Client::ClientModeInGame",
+      "calledFunctions": [
+        "QSERVER_DestroyGlobalGameState",
+        "Destructor"
+      ]
+    }
+  ]
+}

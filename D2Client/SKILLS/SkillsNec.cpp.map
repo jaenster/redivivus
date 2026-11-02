@@ -1,0 +1,392 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/SKILLS/SkillsNec.cpp",
+  "functions": [
+    {
+      "name": "Skills_CltStFunc_SpawnCltMissileC",
+      "address": "004f34d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f34d0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltStFunc_SpawnCltMissileC",
+        "MakeMissileAtSkillTarget"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Nec_CurseCenter_StreamMissile",
+      "address": "004f3530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3530"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Nec_CurseCenter_StreamMissile",
+        "GetCooordinates",
+        "D2GetSkillCalc",
+        "memset",
+        "MakeMissile",
+        "FreeLightMap",
+        "AllocLightMap",
+        "SetRadiusY",
+        "SetStreamMissile",
+        "SetStreamRange"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSNEC_CltSetBoneWallGfx",
+      "address": "004f3680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3680"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "SKILLSNEC_CltSetBoneWallGfx",
+        "GetCooordinates",
+        "GetXPos",
+        "GetYPos",
+        "GetDistanceToXY",
+        "memset",
+        "MakeMissile",
+        "GetDirectionToCoords",
+        "PATH_SetNewDirection"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_SetBoneWallGraphics",
+      "address": "004f3810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3810"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltStFunc_SetBoneWallGraphics",
+        "SKILLSNEC_CltSetBoneWallGfx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckCorpseSetPositionParams",
+      "address": "004f3870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3870"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckCorpseSetPositionParams",
+        "GetCurrentSkill",
+        "GetConfirmedTargetUnit",
+        "D2CheckIfCorpseIsConsumable",
+        "GetXPosFromDynamicPathUnit",
+        "SKILL_SetParam1",
+        "GetYPosFromDynamicPathUnit",
+        "SKILL_SetParam2"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Nec_TargetedMissileAtParam",
+      "address": "004f38d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f38d0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Nec_TargetedMissileAtParam",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "GetCurrentSkill",
+        "memset",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "MakeMissile",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckSelectableCorpseSetParams",
+      "address": "004f39a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f39a0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckSelectableCorpseSetParams",
+        "GetCurrentSkill",
+        "GetConfirmedTargetUnit",
+        "GetPlayerUnit_UI",
+        "SKILLS_IsSelectableCorpse2",
+        "GetXPos",
+        "SKILL_SetParam1",
+        "GetYPos",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSNEC_CltCreateTeethMissiles",
+      "address": "004f3a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3a60"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "SKILLSNEC_CltCreateTeethMissiles",
+        "TXT_MonStats_GetMonStats2",
+        "memset",
+        "UNIT_GetModuloFromSeed",
+        "SKILLS_CreateMissileScatter",
+        "GetMissleById",
+        "MakeMissile",
+        "GetConfirmedTargetUnit",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2MonStats2Txt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Nec_Teeth",
+      "address": "004f3c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3c80"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Nec_Teeth",
+        "GetCurrentSkill",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "SKILL_GetParam3",
+        "SKILLSNEC_CltCreateTeethMissiles"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSNEC_CltCreateBoneSpearMissile",
+      "address": "004f3ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3ce0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "SKILLSNEC_CltCreateBoneSpearMissile",
+        "memset",
+        "MakeMissile",
+        "MISSILE_CreateRadialBurst",
+        "GetConfirmedTargetUnit",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Nec_BoneSpear",
+      "address": "004f3e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3e50"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Nec_BoneSpear",
+        "GetCurrentSkill",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "SKILL_GetParam3",
+        "SKILLSNEC_CltCreateBoneSpearMissile"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckCasterRoomNotInTownNec",
+      "address": "004f3eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3eb0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckCasterRoomNotInTownNec",
+        "UNITS_GetRoom",
+        "GetCooordinates",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckTargetIsUnclaimedGroundItem",
+      "address": "004f3f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f3f50"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckTargetIsUnclaimedGroundItem",
+        "GetConfirmedTargetUnit",
+        "TXT_Items_GetBitFieldAnd0x02",
+        "CheckItemFlag",
+        "UNITS_GetRoom",
+        "SEVER_ITEM_GetOwner"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_SelectReviveMissileByMonsterSize",
+      "address": "004f4000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4000"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsNec",
+      "calledFunctions": [
+        "Skills_CltStFunc_SelectReviveMissileByMonsterSize",
+        "GetConfirmedTargetUnit",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "D2CheckIfCorpseIsConsumable",
+        "MONSTER_CanBeConverted",
+        "TXT_MonStats_GetMonStats2",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

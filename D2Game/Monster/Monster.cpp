@@ -81,8 +81,8 @@ typedef void (__fastcall *fpStatListExChangeCb)(::SGAMEDATA * pGame, D2UnitStrc 
 
 namespace D2Game::Monster {
 
-D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nParam) {
-    D2MonStatsTxt* pMonStatsTxt = nParam >= 0 && nParam < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nParam : nullptr;
+D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nClassId) {
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       short int nMonPropIndex;
       nMonPropIndex = pMonStatsTxt->MonProp;
@@ -280,12 +280,12 @@ int32_t __fastcall PlayerMultiplyer(int32_t nPlayers) {
     return (nPlayers - 2) * 0x32;
 }
 
-int32_t __fastcall PlayerMultiplyer2(int32_t nParam) {
-    if (nParam < 9) {
-      return ::PlayerMultiplyer2[nParam];
+int32_t __fastcall PlayerMultiplyer2(int32_t nPlayerCount) {
+    if (nPlayerCount < 9) {
+      return ::PlayerMultiplyer2[nPlayerCount];
     }
 
-    return (nParam * 5 + 0x82) * 2;
+    return (nPlayerCount * 5 + 0x82) * 2;
 }
 
 // Initialises a D2MonsterLevelDataStrc with player-count and difficulty multipliers for a monster. Queries the current player count (SERVER_GAME_CountPlayers), computes PlayerMultiplyer/2/3, and reads MonsterSkillBonus from the DifficultyLevels txt. Skips scaling for boss/special-aligned monsters (Align != 0) and sets nPlayerMultiplyer3=1 for them instead.

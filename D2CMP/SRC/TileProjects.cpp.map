@@ -1,0 +1,97 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/TileProjects.cpp",
+  "functions": [
+    {
+      "name": "Free",
+      "address": "006006b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006006b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::TileProjects",
+      "calledFunctions": [
+        "Free",
+        "TILECMP_FreeTileCache",
+        "FINDTILE_FreeHashTable",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TileProjectStrc"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_FindByFilename",
+      "address": "00600710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600710"
+        }
+      ],
+      "namespace": "D2CMP::SRC::TileProjects",
+      "calledFunctions": [
+        "TILEPROJECT_FindByFilename"
+      ],
+      "usedTypes": [
+        "D2TileProjectStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_GetProjectId",
+      "address": "00600760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600760"
+        }
+      ],
+      "namespace": "D2CMP::SRC::TileProjects",
+      "calledFunctions": [
+        "TILEPROJECT_GetProjectId",
+        "TILEPROJECT_FindByFilename"
+      ],
+      "usedTypes": [
+        "D2TileProjectStrc"
+      ]
+    },
+    {
+      "name": "Alloc",
+      "address": "00600790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600790"
+        }
+      ],
+      "namespace": "D2CMP::SRC::TileProjects",
+      "calledFunctions": [
+        "Alloc",
+        "TILEPROJECT_FindByFilename",
+        "SPRITECACHE_LoadFromFile",
+        "AllocClientMemory",
+        "memset",
+        "CheckIfFileExists",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile",
+        "TILECMP_FixupMinimalPointers",
+        "TILECMP_RegisterTilesForLookup",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2TileLibraryHashStrc",
+        "D2TileLibraryHashStrc *",
+        "D2TileLibraryHeaderStrc",
+        "D2TileProjectStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,635 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/Arena.cpp",
+  "functions": [
+    {
+      "name": "ARENA_TestFlag",
+      "address": "0053f470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f470"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_TestFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocArenaControl",
+      "address": "0053f4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f4b0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "AllocArenaControl",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2ArenaControlStrc",
+        "SGAMEDATA",
+        "eD2ArenaFlags",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FreeArenaControl",
+      "address": "0053f500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f500"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "FreeArenaControl",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "AllocPlayerArena",
+      "address": "0053f530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f530"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "AllocPlayerArena",
+        "AllocServerMemory",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerArenaStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreePlayerArena",
+      "address": "0053f580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f580"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "FreePlayerArena",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetTownLevelFromArenaCtrl",
+      "address": "0053f5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f5d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "GetTownLevelFromArenaCtrl",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARENA_GetArenaTxtRecord",
+      "address": "0053f600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f600"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_GetArenaTxtRecord",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ARENA_ApplyScoreModifier",
+      "address": "0053f630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f630"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_ApplyScoreModifier",
+        "GetPlayerData",
+        "GetArenaTxtRecord",
+        "ROOM_LinkUnitToUpdateList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ArenaTxt",
+        "D2UnitDataPlayerArenaStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ArenaFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_ARENA_KillHandler",
+      "address": "0053f720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f720"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "SERVER_ARENA_KillHandler",
+        "GetPlayerData",
+        "GetArenaTxtRecord",
+        "ROOM_LinkUnitToUpdateList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ArenaControlStrc",
+        "D2ArenaTxt",
+        "D2UnitDataPlayerArenaStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ArenaFlags",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARENA_ClearScoreDirty",
+      "address": "0053fa90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fa90"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_ClearScoreDirty",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARENA_ClearUpdateFlag",
+      "address": "0053fae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fae0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_ClearUpdateFlag"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ARENA_IsScoreDirty",
+      "address": "0053fb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fb00"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_IsScoreDirty",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdatePlayerKillCount",
+      "address": "0053fb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fb30"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "UpdatePlayerKillCount",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_D2GS_SERVER_Send_0x65_SCORE_UPDATE"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerArenaStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARENA_BroadcastKillToPlayers",
+      "address": "0053fb90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fb90"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_BroadcastKillToPlayers",
+        "CLIENTS_GetControlUnit",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UpdatePlayerKillCount"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARENA_UpdatePlayerKillState",
+      "address": "0053fc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fc20"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_UpdatePlayerKillState",
+        "CLIENTS_GetControlUnit",
+        "ARENA_IsScoreDirty",
+        "UpdatePlayerKillCount",
+        "ARENA_IsClientDead",
+        "ARENA_BroadcastKillToPlayers"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ARENA_BroadcastScoreOnJoin",
+      "address": "0053fc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fc70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_BroadcastScoreOnJoin",
+        "ARENA_BroadcastKillToPlayers",
+        "CLIENTS_GetControlUnit",
+        "UpdatePlayerKillCount"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ARENA_GetClientUpdateFlag",
+      "address": "0053fca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fca0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_GetClientUpdateFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARENA_IsArenaLevel",
+      "address": "0053fce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fce0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_IsArenaLevel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARENA_IsNoCubeRecipes",
+      "address": "0053fd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fd10"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_IsNoCubeRecipes",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARENA_GetFlags",
+      "address": "0053fd40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fd40"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_GetFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "eD2ArenaFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARENA_TestFlags",
+      "address": "0053fd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fd70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_TestFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "eD2ArenaFlags"
+      ]
+    },
+    {
+      "name": "ARENA_SetOrClearFlags",
+      "address": "0053fda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fda0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_SetOrClearFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ArenaControlStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NullSub",
+      "address": "0053fdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fdf0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "NullSub"
+      ]
+    },
+    {
+      "name": "ARENA_IsFlag0x40Set",
+      "address": "0053fe00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fe00"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_IsFlag0x40Set",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ARENA_IsFlag0x80Set",
+      "address": "0053fe40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fe40"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_IsFlag0x80Set",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ARENA_IsArenaMode",
+      "address": "0053fe70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fe70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_IsArenaMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARENA_GetTemplate",
+      "address": "0053fea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fea0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_GetTemplate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARENA_IsFlag0x200Set",
+      "address": "0053fed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053fed0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Arena",
+      "calledFunctions": [
+        "ARENA_IsFlag0x200Set",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

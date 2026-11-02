@@ -216,7 +216,7 @@ uint8_t __stdcall MONSTERS_GetGfxOffsetTable1(uint8_t bParam) {
     return gaMonsterGfxOffsetTable3[bParam];
 }
 
-uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t bParam) {
+uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t byDirection) {
     // Static local variables (originally global data)
     static uint8_t gaMonsterGfxOffsetTable2[64] = {
     '\x00',
@@ -285,7 +285,7 @@ uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t bParam) {
     '\x00'
 }; D2_STATIC_GUARD(gaMonsterGfxOffsetTable2, "D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2::gaMonsterGfxOffsetTable2");
 
-    return gaMonsterGfxOffsetTable2[bParam];
+    return gaMonsterGfxOffsetTable2[byDirection];
 }
 
 // Returns the byte value at index bParam in gaMonsterGfxOffsetTable1 (the third monster graphics direction-offset table). Used to map an animation direction index to a table-specific graphics offset byte.
@@ -392,11 +392,11 @@ uint32_t __fastcall MONSTER_IsBossOrChampion(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    uint32_t uVar1 = (uint32_t)(uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[pMonData] + 0xd);
-    if (gadwBitMasks[0] & uVar1) {
+    uint32_t dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[pMonData] + 0xd);
+    if (gadwBitMasks[0] & dwMonStatsFlags) {
       return 1;
     }
-    if (gadwBitMasks[2] & uVar1) {
+    if (gadwBitMasks[2] & dwMonStatsFlags) {
       return 1;
     }
 
@@ -444,8 +444,8 @@ BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    uint32_t uVar1 = (uint32_t)(uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[pMonStatsTxt] + 0xd);
-    if (!(gadwBitMasks[3] & uVar1 || gadwBitMasks[4] & uVar1)) {
+    uint32_t dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)&sgptDataTable->pTxtMonStats[pMonStatsTxt] + 0xd);
+    if (!(gadwBitMasks[3] & dwMonStatsFlags || gadwBitMasks[4] & dwMonStatsFlags)) {
       return 0;
     }
 
@@ -474,21 +474,21 @@ BOOL __stdcall CheckIfMonsterIsDead(D2UnitStrc * pUnit) {
 }
 
 // Resolves the monster class ID, world position, and animation mode to use when summoning or spawning a unit. If pUnit is a live monster and nParam1 is set, reads spawn data (spawn/spawnx/spawny/spawnmode) from MonStats.txt. Otherwise reads summon/summode from Skills.txt for skill nParam2. Writes results to pnMode, pnParam1 (X), pnParam2 (Y); returns the monster class ID or -1 if not found.
-int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, int32_t nMode, int * pnMode, int * pnParam1, int * pnParam2) {
+int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpawn, int32_t nSkillId, int32_t nMode, int * pnMode, int * pnSpawnX, int * pnSpawnY) {
     int32_t nPosXY;
     int nSumModeOrSpawnMode;
     D2SkillsTxt* pSkillsTxt;
     short int nSpawnId;
-    if (!nParam1 || !pUnit || pUnit->eUnitType != UNIT_MONSTER) {
-      pSkillsTxt = nParam2 >= 0 && nParam2 < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nParam2 : nullptr;
+    if (!bUseMonStatsSpawn || !pUnit || pUnit->eUnitType != UNIT_MONSTER) {
+      pSkillsTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
       if (pSkillsTxt && pSkillsTxt->summon >= 0 && (int)pSkillsTxt->summon < sgptDataTable->nTxtMonStatsSize) {
-        if (pnParam1) {
+        if (pnSpawnX) {
           nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          *pnParam1 = nPosXY;
+          *pnSpawnX = nPosXY;
         }
-        if (pnParam2) {
+        if (pnSpawnY) {
           nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-          *pnParam2 = nPosXY;
+          *pnSpawnY = nPosXY;
         }
         if (!pnMode) {
           return (int)pSkillsTxt->summon;
@@ -509,13 +509,13 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t nParam1, int32_t
       pMonStatsTxt = nSumModeOrSpawnMode >= 0 && nSumModeOrSpawnMode < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nSumModeOrSpawnMode : nullptr;
       if (pMonStatsTxt) {
         nSpawnId = pMonStatsTxt->spawn;
-        if (pnParam1) {
+        if (pnSpawnX) {
           nPosXY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
-          *pnParam1 = nPosXY + pMonStatsTxt->spawnx;
+          *pnSpawnX = nPosXY + pMonStatsTxt->spawnx;
         }
-        if (pnParam2) {
+        if (pnSpawnY) {
           nPosXY = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-          *pnParam2 = nPosXY + pMonStatsTxt->spawny;
+          *pnSpawnY = nPosXY + pMonStatsTxt->spawny;
         }
         if (!pnMode) {
           return (int)nSpawnId;
@@ -535,7 +535,7 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t nParam1, int32_t
     return -1;
 }
 
-void __stdcall MONSTERS_OnInitMonster_NoOp(D2UnitStrc * dwParam1, uint32_t dwParam2) {
+void __stdcall MONSTERS_OnInitMonster_NoOp(D2UnitStrc * pUnit, uint32_t dwParam2) {
 
 }
 
@@ -554,15 +554,15 @@ uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
       return '\0';
     }
 
-    char* pcVar2 = pDVar1->pUnitDataPlayer->szCharName + 4;
-    if (!pcVar2) {
+    char* pComponents = pDVar1->pUnitDataPlayer->szCharName + 4;
+    if (!pComponents) {
       return '\0';
     }
 
     uint32_t nComponentIdx = 0;
     do {
       uint32_t pComponentOverlay;
-      pComponentOverlay = DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnitSaved, nComponentIdx, (uint32_t)(uint8_t)pcVar2[nComponentIdx]);
+      pComponentOverlay = DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay(pUnitSaved, nComponentIdx, (uint32_t)(uint8_t)pComponents[nComponentIdx]);
       if (pComponentOverlay && pComponentOverlay != 0x2074696c && pComponentOverlay != 0x2064656d && pComponentOverlay != 0x20797668) {
         pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pComponentOverlay, &nClassId);
         if (pItemsTxt && (uint8_t)pItemsTxt->bLightRadius > *(uint8_t*)((char*)&pUnit + 3)) {
@@ -660,12 +660,12 @@ int32_t __stdcall GetMonsterBaseId(D2RoomStrc * pRoom, int32_t nMonsterId) {
     return nUpgradedId;
 }
 
-uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pnParam) {
-    if (!(pnParam && pnParam->eUnitType == UNIT_MONSTER)) {
+uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pUnit) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return 0;
     }
 
-    int pMonStatsTxt = pnParam->nClassId;
+    int pMonStatsTxt = pUnit->nClassId;
     if (!(pMonStatsTxt >= 0 && pMonStatsTxt < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + pMonStatsTxt)) {
       return 0;
     }
@@ -739,7 +739,7 @@ uint32_t __stdcall MONSTER_GetMercType(D2UnitStrc * pUnit) {
 }
 
 // Scales a non-champion (Align != 1) monster's core combat stats (up to 3 entries from gaDifficultyScalingTable_MonsterApply) by a difficulty-specific percent/divisor pair selected by bParam (1 = first difficulty tier, else second). Also raises the monster's level by bParam*25. Only acts when nParam==0 and bParam!=0.
-void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam, uint8_t bParam) {
+void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t bExpansion, uint8_t byDifficulty) {
     // Static local variables (originally global data)
     static int gMonLvl_U_UniqueMonsterLevelChance2[3][5] = {
     { 0x7, 0x1, 0x2, 0x1, 0x2 },
@@ -751,7 +751,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
     int32_t nValue;
     int nPercent;
     uint16_t nLayer;
-    if (!(!nParam && bParam && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
+    if (!(!bExpansion && byDifficulty && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
 
@@ -765,7 +765,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
     do {
       int nCurrentStatVal;
       nCurrentStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (*(int (*)[5])(pScalingEntry - 2))[0], 0);
-      if (bParam == 1) {
+      if (byDifficulty == 1) {
         nPercent = pScalingEntry[-1];
         nDivisor = *pScalingEntry;
       } else {
@@ -780,7 +780,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t nParam
       nEntriesLeft--;
     } while (nEntriesLeft);
 
-    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, (int)pMonStats->aLevel[0] + (uint32_t)bParam * 0x19, 0);
+    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, (int)pMonStats->aLevel[0] + (uint32_t)byDifficulty * 0x19, 0);
 }
 
 // Computes the monster class id, spawn X/Y position and spawn-mode for a unit that spawns/generates other monsters (super-uniques and generator-type monsters such as nests, spawners, statues, Blood Raven, Maggot Queen, Izual, etc.). Outputs via pnMonId/pnPosX/pnPosY/pdwSpawnMode. Resolves the unit's MonStats BaseId, then switches on it: each generator case picks the spawned monster (via GetMonsterClassByDifficulty/upgrade data, clamped to MonStats table size) and an offset position relative to the parent's path coords, using the unit seed for randomized cases. pfnCallback supplies the class id for hut/NPC cases. Default/unknown returns monId 0, pos (0,0), mode 1. Uses nRandSeed for seeded variants.

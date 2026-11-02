@@ -1,0 +1,1242 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/SpellSel.cpp",
+  "functions": [
+    {
+      "name": "SPELLSEL_Initialize",
+      "address": "004a8a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8a30"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_Initialize",
+        "ARCHIVE_LoadOverlayImageUsedInGame",
+        "memset"
+      ],
+      "usedTypes": [
+        "DC6"
+      ]
+    },
+    {
+      "name": "SPELLSEL_Cleanup",
+      "address": "004a8c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8c00"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_Cleanup",
+        "DC6_FreeAndDelete"
+      ],
+      "usedTypes": [
+        "D2ClassIconWithNameStrc"
+      ]
+    },
+    {
+      "name": "ARCHIVE_LoadSpellsClassSkillicon",
+      "address": "004a8c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8c80"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "ARCHIVE_LoadSpellsClassSkillicon",
+        "SKILLS_GetCharClassFromSkillId",
+        "ARCHIVE_LoadOverlayImageUsedInGame"
+      ],
+      "usedTypes": [
+        "DC6",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_SetMouseHandFlag",
+      "address": "004a8ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8ce0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_SetMouseHandFlag"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_IsMouseInRect",
+      "address": "004a8cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8cf0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_IsMouseInRect",
+        "GetMouseX",
+        "GetMouseY"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_GetSkillPalette",
+      "address": "004a8d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8d30"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_GetSkillPalette",
+        "PLRSKILLS_CanUseSkillCheck"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawSkillTooltip",
+      "address": "004a8d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8d50"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawSkillTooltip",
+        "GetMouseX",
+        "GetMouseY",
+        "GetPlayerUnit_UI",
+        "SKILLDESC_BuildSkillShortTooltip"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawKeyBindingText",
+      "address": "004a8df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8df0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawKeyBindingText",
+        "CMD_GetKeyForCommand",
+        "CMD_GetKeyDescForCommand",
+        "DRAW_text0",
+        "WSTRING_PutWideCharIntoBuffer",
+        "STRING_GetWideStringLength",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawKeyBindingsForLeftHand",
+      "address": "004a8ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a8ed0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawKeyBindingsForLeftHand",
+        "SPELLSEL_DrawKeyBindingText"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawSkillLevel",
+      "address": "004a9260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9260"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawSkillLevel",
+        "_itoa",
+        "UTF8_ConvertToWideChar",
+        "STRING_GetWideStringLength",
+        "DRAW_text0",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawKeyBindingsForRightHand",
+      "address": "004a9300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9300"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawKeyBindingsForRightHand",
+        "SPELLSEL_DrawKeyBindingText"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawSkillIconWithQuantity",
+      "address": "004a9690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9690"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawSkillIconWithQuantity",
+        "GetMouseX",
+        "GetMouseY",
+        "memset",
+        "D2GFX_DrawShiftedImage",
+        "SPELLSEL_DrawKeyBindingsForRightHand",
+        "SPELLSEL_DrawKeyBindingsForLeftHand",
+        "GetPlayerUnit_UI",
+        "GetEquipedWeapon",
+        "ITEM_GetTxtItemTypes_throwable",
+        "IsStackable",
+        "STATSEX_GetCurrentStat",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMS_IsA",
+        "SPELLSEL_DrawSkillLevel"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "DC6",
+        "GLOBALPALLETE",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawSkillIcon",
+      "address": "004a9870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9870"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawSkillIcon",
+        "SKILLS_GetCharClassFromSkillId",
+        "ARCHIVE_LoadOverlayImageUsedInGame",
+        "GetMouseX",
+        "GetMouseY",
+        "memset",
+        "D2GFX_DrawShiftedImage",
+        "SPELLSEL_DrawKeyBindingsForLeftHand",
+        "SPELLSEL_DrawSkillLevel",
+        "SPELLSEL_DrawKeyBindingsForRightHand"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6",
+        "GLOBALPALLETE",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_RegisterSkillSlot",
+      "address": "004a9a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9a00"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_RegisterSkillSlot",
+        "GetSkillId",
+        "SKILLS_GetSkillData"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_FindChargedSkill1",
+      "address": "004a9a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9a90"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_FindChargedSkill1",
+        "GetFirstSkill",
+        "GetSkillsTxt",
+        "SKILL_GetQuantity",
+        "GetNext"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_FindChargedSkill2",
+      "address": "004a9ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9ae0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_FindChargedSkill2",
+        "GetFirstSkill",
+        "GetSkillsTxt",
+        "SKILL_GetQuantity",
+        "GetNext"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_FindChargedSkill3",
+      "address": "004a9b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9b30"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_FindChargedSkill3",
+        "GetFirstSkill",
+        "GetSkillsTxt",
+        "SKILL_GetQuantity",
+        "GetNext"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_FindChargedSkill4",
+      "address": "004a9b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9b80"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_FindChargedSkill4",
+        "GetFirstSkill",
+        "GetSkillsTxt",
+        "SKILL_GetQuantity",
+        "GetNext"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_SpellSelectClick",
+      "address": "004a9bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9bd0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "INPUT_SpellSelectClick",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetMouseY",
+        "GetMouseX",
+        "GetSkillByIdAndOwner",
+        "GetOwnerGUID",
+        "SKILLS_GetSkillData",
+        "GetUIFlag",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "UI_ResetInputState",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_ClearSkillBinding",
+      "address": "004a9d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9d70"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_ClearSkillBinding",
+        "NET_D2GS_CLIENT_Send_INT_INT"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_ClearChargedSkillBindings",
+      "address": "004a9df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9df0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_ClearChargedSkillBindings",
+        "GetPlayerUnit_UI",
+        "GetFirstSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetSkillsTxt",
+        "SKILL_GetQuantity",
+        "SPELLSEL_ClearSkillBinding",
+        "GetNext"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_HandleSkillSelection",
+      "address": "004a9e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9e60"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_HandleSkillSelection",
+        "GetMouseX",
+        "GetMouseY",
+        "NET_D2GS_CLIENT_Send_INT_INT"
+      ],
+      "usedTypes": [
+        "D2SpellSelGridRegionStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_IsSkillSlotValid",
+      "address": "004a9fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a9fc0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_IsSkillSlotValid",
+        "GetPlayerUnit_UI",
+        "GetSkillByIdAndOwner",
+        "GetOwnerGUID",
+        "SKILLS_GetSkillData"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_ActivateSkillSlot",
+      "address": "004aa030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa030"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_ActivateSkillSlot",
+        "SPELLSEL_IsSkillSlotValid",
+        "GetPlayerUnit_UI",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "SelectSkillLeft",
+        "SelectSkillRight"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_SetSkillSlot",
+      "address": "004aa0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa0c0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_SetSkillSlot"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_AssignSkillToSlot",
+      "address": "004aa0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa0f0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_AssignSkillToSlot",
+        "NET_D2GS_CLIENT_Send_INT_INT"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_AutoBindNonChargedSkills",
+      "address": "004aa160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa160"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_AutoBindNonChargedSkills",
+        "GetPlayerUnit_UI",
+        "GetFirstSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillsTxt",
+        "SPELLSEL_AssignSkillToSlot"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawSkillRequirementTooltip",
+      "address": "004aa1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa1f0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawSkillRequirementTooltip",
+        "GetMouseX",
+        "GetMouseY",
+        "GetLocaleString",
+        "SKILLDESC_GetStatNameString",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "UTF8_ConvertToWideChar",
+        "TEXT_TooltipSetAttributes"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawSkillGrid",
+      "address": "004aa3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa3a0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawSkillGrid",
+        "memset",
+        "GetFirstSkill",
+        "GetNext",
+        "GetSkillsTxt",
+        "SKILL_GetFlags",
+        "SKILLS_GetSkillData",
+        "SKILL_GetQuantity",
+        "PLRSKILLS_CanUseSkillCheck",
+        "SPELLSEL_DrawSkillIcon",
+        "SPELLSEL_RegisterSkillSlot",
+        "GetSkillLevel",
+        "SPELLSEL_DrawSkillTooltip",
+        "SPELLSEL_DrawSkillRequirementTooltip"
+      ],
+      "usedTypes": [
+        "D2SkillDescTxt",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "GLOBALPALLETE",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_CycleRightHandSkills",
+      "address": "004aa740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa740"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_CycleRightHandSkills",
+        "IsPlayerDead",
+        "SPELLSEL_IsSkillSlotValid",
+        "SPELLSEL_ActivateSkillSlot"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_RenderAllSkillGrids",
+      "address": "004aa7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa7e0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_RenderAllSkillGrids",
+        "memset",
+        "GetPlayerUnit_UI",
+        "SPELLSEL_DrawSkillGrid"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_ClearWaitingForSkillFlag",
+      "address": "004aa8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa8f0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_ClearWaitingForSkillFlag"
+      ]
+    },
+    {
+      "name": "SPELLSEL_IsWaitingForSkill",
+      "address": "004aa900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa900"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_IsWaitingForSkill",
+        "GetPlayerUnit_UI",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "ARCHIVE_LoadSpellsClassSkilltree",
+      "address": "004aa920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa920"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "ARCHIVE_LoadSpellsClassSkilltree",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ARCHIVE_LoadOverlayImageUsedInGame"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_FreeSkilltreeGraphic",
+      "address": "004aa980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa980"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_FreeSkilltreeGraphic",
+        "DC6_FreeAndDelete"
+      ]
+    },
+    {
+      "name": "SPELLSEL_GetSkillTreeRowOffset",
+      "address": "004aa9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aa9c0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_GetSkillTreeRowOffset"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_GetSkillTreeColumnOffset",
+      "address": "004aaa50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aaa50"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_GetSkillTreeColumnOffset"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawTabHeader",
+      "address": "004aaaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aaaa0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawTabHeader",
+        "UI_DrawTextCentered"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawSkilltreeBackground",
+      "address": "004aaae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aaae0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawSkilltreeBackground",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_SkillsWindow_II",
+      "address": "004aace0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004aace0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "DRAW_UI_SkillsWindow_II",
+        "GetLocaleString",
+        "UI_DrawTextCentered",
+        "SPELLSEL_DrawTabHeader"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "thunk_D2GFX_GetColorFromPalette_C",
+      "address": "004ab2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ab2f0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "thunk_D2GFX_GetColorFromPalette_C",
+        "D2GFX_GetColorFromCurrentPallete"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawTabHighlight",
+      "address": "004ab310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ab310"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SPELLSEL_DrawTabHighlight",
+        "GetMouseX",
+        "GetMouseY",
+        "D2GFX_GetColorFromCurrentPallete",
+        "SetAndReturnLastFont",
+        "D2GFX_DrawSolidRectExBySize",
+        "GetLocaleString",
+        "UI_DrawTextCentered"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLTREE_DrawBackground",
+      "address": "004ab530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ab530"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SKILLTREE_DrawBackground",
+        "memset",
+        "GetBuySellBtnDC6",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "SKILLTREE_IsMouseOnSkillNode",
+      "address": "004ab5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ab5f0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SKILLTREE_IsMouseOnSkillNode",
+        "GetMouseX",
+        "GetMouseY"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLTREE_RenderSkillTree",
+      "address": "004ab630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ab630"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SKILLTREE_RenderSkillTree",
+        "GetMouseX",
+        "GetMouseY",
+        "SKILLTREE_IsMouseOnSkillNode",
+        "GetLocaleString",
+        "TEXT_TooltipSetAttributes"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_SkillTreeLeftClick",
+      "address": "004ab7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ab7e0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "INPUT_SkillTreeLeftClick",
+        "PANEL_CalculateBeltSlotIndex",
+        "GetPlayerUnit_UI",
+        "GAMEDATA_ClearQueuedClicks",
+        "SMsgBreakHandlerChain",
+        "SERVER_GetUnitStat",
+        "AmountOfSkillsByClassId",
+        "SKILLS_GetClassSkillByIndex",
+        "TXT_Skills_GetLine",
+        "GetSkillDescription",
+        "SPELLSEL_GetSkillTreeRowOffset",
+        "SPELLSEL_GetSkillTreeColumnOffset",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "SetUIFlag",
+        "SOUND_PlaySound",
+        "SKILLTREE_IsMouseOnSkillNode",
+        "UI_HandleCursorMouseMove"
+      ],
+      "usedTypes": [
+        "D2SkillDescTxt",
+        "D2SkillsTxt",
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ClickOnScreenSkillWindow",
+      "address": "004abc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004abc30"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "ClickOnScreenSkillWindow",
+        "GetPlayerUnit_UI",
+        "UI_HandleCursorMouseUp",
+        "PANEL_CalculateBeltSlotIndex",
+        "GAMEDATA_ClearQueuedClicks",
+        "SMsgBreakHandlerChain",
+        "SERVER_GetUnitStat",
+        "AmountOfSkillsByClassId",
+        "SKILLS_GetClassSkillByIndex",
+        "TXT_Skills_GetLine",
+        "GetSkillDescription",
+        "SPELLSEL_GetSkillTreeRowOffset",
+        "SPELLSEL_GetSkillTreeColumnOffset",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel",
+        "D2GetSkillCalc",
+        "SKILL_GetMaxLevelForSkill",
+        "SPELLSEL_IsWaitingForSkill",
+        "NET_D2GS_CLIENT_Send_SHORT",
+        "SKILLTREE_IsMouseOnSkillNode",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2SkillDescTxt",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLTREE_FreeResources",
+      "address": "004abf10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004abf10"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SKILLTREE_FreeResources",
+        "GetPlayerUnit_UI",
+        "GetClassId",
+        "AmountOfSkillsByClassId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLTREE_DrawSkillNode",
+      "address": "004abf60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004abf60"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SKILLTREE_DrawSkillNode",
+        "SPELLSEL_GetSkillTreeRowOffset",
+        "GetMouseX",
+        "GetMouseY",
+        "ARCHIVE_LoadSpellsClassSkillicon",
+        "GetPlayerUnit_UI",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel",
+        "GetSkillBonus",
+        "memset",
+        "D2GFX_DrawShiftedImage",
+        "SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck",
+        "SKILLDESC_BuildSkillTooltip",
+        "UTF8_ConvertToWideChar",
+        "SetAndReturnLastFont",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2SkillDescTxt",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "DC6",
+        "GLOBALPALLETE",
+        "WCHAR",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_SkillSkillsWithAvailableSkills",
+      "address": "004ac200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac200"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "DRAW_UI_SkillSkillsWithAvailableSkills",
+        "GetPlayerUnit_UI",
+        "SERVER_GetUnitStat",
+        "UTF8_ConvertToWideChar",
+        "UNIT_GetUnitState",
+        "DRAW_text",
+        "AmountOfSkillsByClassId",
+        "SKILLS_GetClassSkillByIndex",
+        "SkillCalculateIfWeCanSkillThisSkill",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel",
+        "SKILL_GetMaxLevelForSkill",
+        "SpendSkillPointOnSkill",
+        "D2GetSkillCalc",
+        "SKILLTREE_DrawSkillNode"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "GLOBALPALLETE",
+        "WCHAR",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLTREE_DrawAllSkillNodes",
+      "address": "004ac4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac4d0"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "SKILLTREE_DrawAllSkillNodes",
+        "GetPlayerUnit_UI",
+        "UTF8_ConvertToWideChar",
+        "UI_DrawTextCentered",
+        "GetClassId",
+        "AmountOfSkillsByClassId",
+        "SKILLS_GetClassSkillByIndex",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel",
+        "SKILLTREE_DrawSkillNode"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "WCHAR",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_SkillWindow",
+      "address": "004ac690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ac690"
+        }
+      ],
+      "namespace": "D2Client::UI::SpellSel",
+      "calledFunctions": [
+        "DRAW_UI_SkillWindow",
+        "GetPlayerUnit_UI",
+        "SetAndReturnLastFont",
+        "SPELLSEL_DrawSkilltreeBackground",
+        "DRAW_UI_SkillsWindow_II",
+        "SERVER_GetUnitStat",
+        "SKILLTREE_DrawAllSkillNodes",
+        "DRAW_UI_SkillSkillsWithAvailableSkills",
+        "SKILLTREE_DrawBackground",
+        "SKILLTREE_RenderSkillTree",
+        "SPELLSEL_DrawTabHighlight"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

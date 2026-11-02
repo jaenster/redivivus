@@ -1,0 +1,208 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/Level.cpp",
+  "functions": [
+    {
+      "name": "InitDrlgAct",
+      "address": "0053ac70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053ac70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "InitDrlgAct",
+        "ARENA_IsArenaLevel",
+        "GetTownLevelIdFromActNo",
+        "GetTownLevelFromArenaCtrl",
+        "AllocAct",
+        "Q11_InitTaintedSunForAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_WarpToAct",
+      "address": "0053acc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053acc0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "CLIENT_WarpToAct",
+        "ARENA_IsArenaLevel",
+        "GetActNoFromLevelNumber",
+        "InitDrlgAct",
+        "CLIENT_SetConnectionState",
+        "CLIENTS_GetControlUnit",
+        "PETS_FreeAllPetsByType",
+        "STATES_RemoveAllProgressiveStates",
+        "GetUnitSizeX",
+        "SpawnUnit",
+        "GetFreeCoordinates_WithIncrementValue",
+        "UNITS_GetRoom",
+        "PATH_GetCollisionMaskAt",
+        "UNITS_UpdateRoomClientVisibility",
+        "CLIENT_SetRoom",
+        "NET_D2GS_SERVER_SendStateCommand",
+        "CLIENT_SetAct",
+        "TellClientToLoadAct",
+        "ROOM_LinkUnitToUpdateList",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "PETS_ManagePetsByType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DrlgActStrc *",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InitLevel",
+      "address": "0053aec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053aec0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "InitLevel",
+        "GetActNoFromLevelNumber",
+        "SUNIT_GetClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetAct",
+        "IterateNpcIntroUnits",
+        "CLIENT_WarpToAct",
+        "GetUnitSizeX",
+        "SpawnUnit",
+        "SUNIT_RelocateUnit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EnsureDrlgActLoaded",
+      "address": "0053afb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053afb0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "EnsureDrlgActLoaded",
+        "InitDrlgAct"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreeAllUnits",
+      "address": "0053afd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053afd0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "FreeAllUnits",
+        "FreeMonsters",
+        "FreeObjects",
+        "FreePlayers",
+        "FreeMissiles",
+        "FreeItems",
+        "FreeWarpUnits"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ProcessUnitUpdateFlags",
+      "address": "0053b000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b000"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "ProcessUnitUpdateFlags",
+        "DRLGROOM_GetRoomFromAct",
+        "UNITS_ResetUnitForReuse",
+        "ROOM_ClearUnitUpdateList",
+        "ARENA_ClearUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgActStrc *",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "LEVEL_CountRoomsInAct",
+      "address": "0053b090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b090"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "LEVEL_CountRoomsInAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetRoomFromAct"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    }
+  ]
+}

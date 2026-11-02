@@ -114,7 +114,7 @@ void __stdcall QUESTLOG_ResetQuestFilterArrays();
 void __stdcall QUESTLOG_ResetQuestSelections();
 void __stdcall QUESTLOG_PlayLevelUpCinematic();
 void __stdcall QUESTLOG_PlayActBossCinematic();
-void __fastcall QUESTLOG_SetZooSpawnFlag(uint32_t dwParam);
+void __fastcall QUESTLOG_SetZooSpawnFlag(uint32_t nZooSpawnCounter);
 uint8_t __stdcall QUESTLOG_GetZooSpawnFlag();
 bool QUESTLOG_FindZooDummyMonster();
 void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY);
@@ -125,7 +125,7 @@ void __stdcall GameOverWtf();
 void __stdcall DRAW_UI_Quest();
 // QuestLog.cpp - Main mouse down handler for quest screen: act tabs, quest icons, buttons
 void __stdcall QUESTLOG_OnMouseDown(struct D2UIMouseMsgStrc * pMsg);
-void __fastcall QUESTLOG_ToggleQuestScreen(DWORD dwParam);
+void __fastcall QUESTLOG_ToggleQuestScreen(DWORD bAdjustMouse);
 void __fastcall NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS(char * pBytes);
 void __stdcall QUESTLOG_OnButtonMouseUp(struct D2UIMouseMsgStrc * pMsg);
 // Checks quest availability by index. Scans gQuestIconsPerActTable to map index to quest ID, validates quest state (not just completed, reward awaits, can complete). Returns 1 if quest is available for interaction.

@@ -25,8 +25,9 @@
 #include "D2Win/Src/D2WinPalette.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"
-#include "Storm/_unnamespaced.h"
+#include "Fog/File.h"
 #include "globals/globals.h"
+#include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -35,7 +36,6 @@ namespace D2Client::UI::ShowItems {
 
 // @sourcefile .\UI\showitems.cpp
 void __stdcall DRAW_AltItems() {
-    bool bVar1;
     uint8_t nMaxSockets;
     int32_t nWorldOffsetX;
     uint32_t uBorderType;
@@ -57,6 +57,7 @@ void __stdcall DRAW_AltItems() {
     int nItemPosX;
     int nItemX;
     D2UnitStrc* pCurrentItem;
+    bool bLabelSlotFound;
     uint32_t bPerspectiveActive;
     bPerspectiveActive = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     D2UnitStrc* pPlayerUnit_lcl;
@@ -164,7 +165,7 @@ void __stdcall DRAW_AltItems() {
                 nItemNameHeight = nColorIdx - nItemNameHeight + 4;
                 nPrecisionX = nItemNameWidth + nItemX;
                 nDrawCount = 0;
-                bVar1 = true;
+                bLabelSlotFound = true;
                 do {
                   nColorIdx = nMaxX;
                   bSocketedFlag = ui::UI_DrawGroundItemTooltip(&nItemX, &nItemNameHeight, &nPrecisionX, &nItemVisY, nDrawCount, nMaxX, nItemPosY);
@@ -176,10 +177,10 @@ void __stdcall DRAW_AltItems() {
                   nDrawCount++;
                 } while (nDrawCount < 0xc);
 
-                bVar1 = false;
+                bLabelSlotFound = false;
                 commit_label:
                 nDrawCount = gItemDrawFlags;
-                if (nPrecisionX <= nColorIdx && nItemX >= nItemPosY && bVar1) {
+                if (nPrecisionX <= nColorIdx && nItemX >= nItemPosY && bLabelSlotFound) {
                   gaGroundItemLabels[nItemSlotIdx].nLeft = nItemX;
                   gaGroundItemLabels[nItemSlotIdx].nTop = nItemNameHeight;
                   gaGroundItemLabels[nItemSlotIdx].nRight = nPrecisionX;
@@ -271,6 +272,22 @@ void __stdcall DRAW_AltItems() {
 
     GAME::Select::ClearSelectedUnit();
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(nullptr, 0, 0, 0, 0);
+}
+
+void StaticInit_6cadb0() {
+    int nRemaining = 0x1f;
+    do {
+      Fog::File::CONTAINER_InitializeBuffer(gaGroundItemLabels[-nRemaining + 31].wszName, 2, 0x80, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      nRemaining--;
+    } while (nRemaining >= 0);
+}
+
+void StaticInit_6cade0() {
+    atexit(StaticFini_Empty_6cb400);
+}
+
+void StaticFini_Empty_6cb400() {
+
 }
 
 } // namespace D2Client::UI::ShowItems

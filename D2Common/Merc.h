@@ -52,9 +52,9 @@ int32_t __stdcall GetCounter1(struct D2UnitStrc * pUnit);
 // 2022.01.09 - dzik
 int32_t __stdcall GetCounter2(struct D2UnitStrc * pUnit);
 // 2022.01.09 - dzik
-void __stdcall ANIM_GetSequenceFrameInfo(struct D2MonSeqTxt * pSeqData, int32_t nStartFrame, int32_t nEndFrame, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4);
+void __stdcall ANIM_GetSequenceFrameInfo(struct D2MonSeqTxt * pSeqData, int32_t nStartFrame, int32_t nEndFrame, uint32_t * pnMode, uint32_t * pnFrame, uint32_t * pnDirection, uint32_t * pnEvent);
 // 2022.01.09 - dzik
-void __stdcall ANIM_GetEventFrame(struct D2MonSeqTxt * pSeqData, int32_t nFrameIdx, uint32_t * pnParam);
+void __stdcall ANIM_GetEventFrame(struct D2MonSeqTxt * pSeqData, int32_t nFrameIdx, uint32_t * pnEvent);
 // Deterministically rolls a hireling's combat stats from a seed. Inputs: nSeed (per-merc rng seed), pMercStats (in/out; nMercClass 0-3 selects merc type: Rogue/DesertMerc/IronWolf/Barbarian), nDifficulty (0-2). Seeds a D2SeedStrc and runs five RANDOM_RandomNumberSelector rolls indexing the merc data tables (secondary/tertiary/quaternary/quinary) to populate attack rating, defense, damage/armor bonuses, state(s) (nStateA for class<3 else nStateB), and quinary ability/secondary (sets nAbilityActiveFlag for ability ids 9-11). Finally applies the per-difficulty modifier table. Returns 1 on success, 0 if seed/ptr null, difficulty>=3, or merc class>=4.
 uint32_t __fastcall MERC_GenerateStatsFromSeed(int32_t nSeed, struct D2MercRolledStatsStrc * pMercStats, uint8_t nDifficulty);
 // 2022.01.09 - dzik

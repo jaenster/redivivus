@@ -1,0 +1,1594 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Source/ClientEngine.cpp",
+  "functions": [
+    {
+      "name": "CLIENT_QuestEvent_CairnStonesPortal",
+      "address": "0046aee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046aee0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_CairnStonesPortal",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CastAttack",
+        "CMD_InitKeyConfigUI"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DenOfEvilSpecific",
+      "address": "0046af70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046af70"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "DenOfEvilSpecific",
+        "GetPlayerUnit_Net",
+        "memset",
+        "DRLGROOM_GetRoomCoordinates",
+        "CheckCollision_BlockPlayerMissile",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_DenOfEvilLightReset",
+      "address": "0046b0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b0c0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_DenOfEvilLightReset"
+      ]
+    },
+    {
+      "name": "ClientLight_ApplyDenOfEvilLighting",
+      "address": "0046b0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b0d0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "ClientLight_ApplyDenOfEvilLighting",
+        "DRLGROOM_GetRoomFromAct",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "DenOfEvilSpecific"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_PlaceHoradricStaff",
+      "address": "0046b100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b100"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_PlaceHoradricStaff",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "WALL2_ScheduleSoundSequence",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CastAttack",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "PARTICLE_SetBoundsOffset",
+        "PARTICLE_SetReverseDirection",
+        "GFX_AddOverlayToUnit",
+        "GFX_PrecacheMonsterAllModes"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_RestoreTaintedSun",
+      "address": "0046b1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b1e0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_RestoreTaintedSun",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "GetYPos",
+        "GetXPos",
+        "CastAttack",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_DiabloSpawnInChaosSanctuary",
+      "address": "0046b290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b290"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_DiabloSpawnInChaosSanctuary",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CastAttack",
+        "GFX_PrecacheMonsterAllModes"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_HoradricForge",
+      "address": "0046b300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b300"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_HoradricForge",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "WALL2_ScheduleSoundSequence",
+        "SOUND_PlaySound",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CastAttack",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_StartGameEndCountdown",
+      "address": "0046b3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b3a0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_StartGameEndCountdown",
+        "LOGMGR_GetHighResolutionTime"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SpawnOverseerControlMissile",
+      "address": "0046b3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b3c0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SpawnOverseerControlMissile",
+        "GetYPos",
+        "GetXPos",
+        "CastAttack",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_FreeAnyaFromIce",
+      "address": "0046b440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b440"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_FreeAnyaFromIce",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "CastAttack",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_NihlathakTransformation",
+      "address": "0046b4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b4a0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_NihlathakTransformation",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CastAttack"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_QuestEvent_WorldstoneShake",
+      "address": "0046b520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b520"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_QuestEvent_WorldstoneShake"
+      ]
+    },
+    {
+      "name": "CLIENT_SpawnAncientDeathMissile",
+      "address": "0046b530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b530"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SpawnAncientDeathMissile",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "HandleIncoming0x89",
+      "address": "0046b630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b630"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "HandleIncoming0x89",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_BossDeath_BloodRaven",
+      "address": "0046b680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b680"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_BossDeath_BloodRaven",
+        "memset",
+        "MakeMissile",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_SpawnTowerMistEffect",
+      "address": "0046b710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b710"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SpawnTowerMistEffect",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MakeMissile",
+        "CastAttack",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SpawnOrbMistEffect",
+      "address": "0046b850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b850"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SpawnOrbMistEffect",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "GetXPos",
+        "GetYPos",
+        "WALL2_ScheduleSoundSequence",
+        "memset",
+        "MakeMissile",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_BossDeath_Mephisto",
+      "address": "0046b9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046b9a0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_BossDeath_Mephisto",
+        "memset",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_BossDeath_Andariel",
+      "address": "0046ba50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ba50"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_BossDeath_Andariel",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_BossDeath_Radament",
+      "address": "0046ba90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ba90"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_BossDeath_Radament",
+        "GetPlayerUnit_Net",
+        "GetYPos",
+        "GetXPos",
+        "CastAttack"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_BossDeath_SandMaggotQueen",
+      "address": "0046bb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bb10"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_BossDeath_SandMaggotQueen",
+        "GetPlayerUnit_Net",
+        "GetYPos",
+        "GetXPos",
+        "CastAttack"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_BossDeath_Duriel",
+      "address": "0046bb90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bb90"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_BossDeath_Duriel",
+        "GetPlayerUnit_Net",
+        "GetYPos",
+        "GetXPos",
+        "CastAttack"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_BossDeath_Izual",
+      "address": "0046bc10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bc10"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_BossDeath_Izual",
+        "WALL2_ScheduleSoundSequence",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_StoreUnitGuidForQuestTracking",
+      "address": "0046bc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bc70"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_StoreUnitGuidForQuestTracking"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_BossDeath_Baal",
+      "address": "0046bc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bc90"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_BossDeath_Baal",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "GetYPos",
+        "GetXPos",
+        "CastAttack"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetDenOfEvilLightIntensity",
+      "address": "0046bd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bd50"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_GetDenOfEvilLightIntensity",
+        "GetQuestAvailabilityByIndex",
+        "MATH_sinTable_f32_LookupOffset"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ROOM_GetLevelLightColor",
+      "address": "0046bdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bdd0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "ROOM_GetLevelLightColor",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "CLIENT_GetDenOfEvilLightIntensity"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "DenOfEvilLight",
+      "address": "0046be60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046be60"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "DenOfEvilLight",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "DenOfEvilSpecific"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ClientLight_UpdateLightTimers",
+      "address": "0046beb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046beb0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "ClientLight_UpdateLightTimers",
+        "ClientLight_UpdateRoomLightPulse",
+        "ClientLight_ApplyDenOfEvilLighting"
+      ]
+    },
+    {
+      "name": "CLIENT_CheckWorldstoneShake",
+      "address": "0046bf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bf30"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_CheckWorldstoneShake",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetPlayerUnit_Net",
+        "MakeMissileAtSkillTarget"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "CLIENT_InitializeQuestStateGlobals",
+      "address": "0046bf90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bf90"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_InitializeQuestStateGlobals",
+        "memset"
+      ]
+    },
+    {
+      "name": "CLIENT_SetQuestGameEndTimer",
+      "address": "0046bfd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bfd0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SetQuestGameEndTimer",
+        "LOGMGR_GetHighResolutionTime"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SpawnWorldstoneShakeParticle",
+      "address": "0046bff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046bff0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SpawnWorldstoneShakeParticle",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "AllocParticle",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "PARTICLE_SetBoundsOffset",
+        "PARTICLE_SetReverseDirection",
+        "SetTargetY",
+        "GetCurrentRoom",
+        "CLIENT_CheckWorldstoneShake"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_Overlay_SecondsLeftToGame",
+      "address": "0046c060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c060"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "DRAW_Overlay_SecondsLeftToGame",
+        "LOGMGR_GetHighResolutionTime",
+        "UNITS_FindClientSideUnit",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "SetAndReturnLastFont",
+        "DRAW_text0",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSomeMonsterStatFlag",
+      "address": "0046c140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c140"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "GetSomeMonsterStatFlag"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROOM_FindSpawnPositionForMonster",
+      "address": "0046c1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c1a0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "ROOM_FindSpawnPositionForMonster",
+        "DRLGROOM_GetRoomCoordinates",
+        "CheckCollision_BlockAll_Width",
+        "CreateMissileOrMonster"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "eD2CollisionUnitSize",
+        "int32_t",
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SpawnMonstersAroundUnit",
+      "address": "0046c320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c320"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SpawnMonstersAroundUnit",
+        "UNITS_GetRoom",
+        "GetCoords",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "CheckCollision_BlockAll_Width",
+        "CreateMissileOrMonster"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "eCollisionFlags",
+        "int32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_SpawnRandomMonsters",
+      "address": "0046c460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c460"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "DRLGROOM_SpawnRandomMonsters",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetLine",
+        "RANDOM_RandomNumberSelector",
+        "ROOM_FindSpawnPositionForMonster"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "D2MonStatsTxt",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "eD2LevelId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_ForEachUnitInAdjacentRooms",
+      "address": "0046c570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c570"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_ForEachUnitInAdjacentRooms",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetAdjacentRoomsList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "fnRoomUnitScanCallback",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_FindClosestDeadUnitCallback",
+      "address": "0046c600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c600"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_FindClosestDeadUnitCallback",
+        "IsActive",
+        "GetCollisionDistance"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_FindNearbyCorpseCallback",
+      "address": "0046c660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c660"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_FindNearbyCorpseCallback",
+        "GetCollisionDistance",
+        "GetPlayerUnit_UI",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_RegisterActiveUnitInSlot",
+      "address": "0046c6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c6e0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_RegisterActiveUnitInSlot"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_UnregisterActiveUnitFromSlot",
+      "address": "0046c700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c700"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_UnregisterActiveUnitFromSlot"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_FindClosestTrackedUnit",
+      "address": "0046c720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c720"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_FindClosestTrackedUnit",
+        "GetCollisionDistance"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SendMonsterMoveToUnitMessage",
+      "address": "0046c770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c770"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SendMonsterMoveToUnitMessage",
+        "GetPathType",
+        "GetMaxDistance",
+        "MonsterMessage"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_TryMoveTowardTarget",
+      "address": "0046c7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c7d0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "MONSTER_TryMoveTowardTarget",
+        "GetXPos",
+        "GetYPos",
+        "GetCollisionType",
+        "UNITS_GetRoom",
+        "CheckCollision_BlockAll_Width",
+        "GetPathType",
+        "GetMaxDistance",
+        "MonsterMessage"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SendMonsterMoveToRandomNearbyPosMessage",
+      "address": "0046c960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046c960"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SendMonsterMoveToRandomNearbyPosMessage",
+        "GetXPos",
+        "GetYPos",
+        "GetPathType",
+        "GetMaxDistance",
+        "MonsterMessage"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SendMonsterMoveToTargetMessage",
+      "address": "0046ca60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ca60"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SendMonsterMoveToTargetMessage",
+        "GetPathType",
+        "GetMaxDistance",
+        "MonsterMessage"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SendMonsterAttackMessage",
+      "address": "0046cab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046cab0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SendMonsterAttackMessage",
+        "GetXPos",
+        "GetYPos",
+        "MonsterMessage"
+      ],
+      "usedTypes": [
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "CLIENT_SendMonsterWanderMessage",
+      "address": "0046cb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046cb40"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SendMonsterWanderMessage",
+        "GetXPos",
+        "GetYPos",
+        "MonsterMessage"
+      ],
+      "usedTypes": [
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "CLIENT_SetMonsterAiTimer",
+      "address": "0046cbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046cbd0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SetMonsterAiTimer",
+        "GetMonsterAi"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_CheckIfUnitPositionsMatch",
+      "address": "0046cbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046cbf0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_CheckIfUnitPositionsMatch",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_FindAndChaseNearestEnemy",
+      "address": "0046ccd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ccd0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "MONSTER_FindAndChaseNearestEnemy",
+        "CLIENT_ForEachUnitInAdjacentRooms",
+        "PATH_ChangeCollisionType",
+        "MONSTER_TryMoveTowardTarget",
+        "CLIENT_SendMonsterMoveToRandomNearbyPosMessage",
+        "GetMonsterAi"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_MonsterAi_IdleWanderBehavior",
+      "address": "0046cdc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046cdc0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_MonsterAi_IdleWanderBehavior",
+        "MONSTER_TryMoveTowardTarget",
+        "CLIENT_SendMonsterMoveToRandomNearbyPosMessage"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_MonsterIdleApproach",
+      "address": "0046ce40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ce40"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_MonsterIdleApproach",
+        "MONSTER_GetAiDataPtr",
+        "GetPlayerUnit_UI",
+        "GetCollisionDistance",
+        "UNITS_RemoveFromClientHashTable",
+        "GetXPos",
+        "GetYPos",
+        "OverwriteDistanceAndMaxDistance",
+        "CLIENT_SendMonsterMoveToTargetMessage"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_MonsterThinkBehavior",
+      "address": "0046d070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d070"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_MonsterThinkBehavior",
+        "CheckIfMonsterIsDead",
+        "CLIENT_CheckIfUnitPositionsMatch",
+        "CLIENT_SendMonsterAttackMessage",
+        "GetMonsterAi",
+        "CLIENT_SendMonsterWanderMessage",
+        "CLIENT_SendMonsterMoveToRandomNearbyPosMessage"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_MonsterAi_CorpseSeekerBehavior",
+      "address": "0046d110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d110"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_MonsterAi_CorpseSeekerBehavior",
+        "CLIENT_CheckIfUnitPositionsMatch",
+        "CLIENT_SendMonsterAttackMessage",
+        "MONSTER_TryMoveTowardTarget",
+        "CLIENT_ForEachUnitInAdjacentRooms",
+        "MONSTER_GetAiDataPtr",
+        "UNIT_GetModuloFromSeed",
+        "CLIENT_SendMonsterMoveToRandomNearbyPosMessage",
+        "GetMonsterAi",
+        "CLIENT_SendMonsterWanderMessage",
+        "CLIENT_SendMonsterMoveToUnitMessage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2MonsterAnimMode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_MonsterAi_BasicChaseBehavior",
+      "address": "0046d280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d280"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_MonsterAi_BasicChaseBehavior",
+        "CheckIfMonsterIsDead",
+        "CLIENT_CheckIfUnitPositionsMatch",
+        "CLIENT_SendMonsterAttackMessage",
+        "MONSTER_TryMoveTowardTarget",
+        "UNIT_GetModuloFromSeed",
+        "GetMonsterAi",
+        "CLIENT_SendMonsterWanderMessage",
+        "CLIENT_SendMonsterMoveToRandomNearbyPosMessage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_MonsterSeekCorpse",
+      "address": "0046d310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d310"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_MonsterSeekCorpse",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "CheckCollision_BlockPlayerMissile",
+        "CLIENT_SendMonsterAttackMessage",
+        "CLIENT_ForEachUnitInAdjacentRooms",
+        "PATH_ChangeCollisionType",
+        "MONSTER_TryMoveTowardTarget",
+        "CLIENT_SendMonsterMoveToRandomNearbyPosMessage",
+        "UNIT_GetModuloFromSeed",
+        "GetMonsterAi"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SpawnWorldstoneChipDebris",
+      "address": "0046d450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d450"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_SpawnWorldstoneChipDebris",
+        "GetPlayerUnit_Net",
+        "GetMonsterAi",
+        "GetXPos",
+        "GetYPos",
+        "CastAttack",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "PARTICLE_SetBoundsOffset",
+        "PARTICLE_SetReverseDirection",
+        "PARTICLE_UpdatePosition",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ProcessPathCallback",
+      "address": "0046d660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d660"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "MONSTER_ProcessPathCallback",
+        "CheckIfMonsterIsDead",
+        "GetSomeMonsterStatFlag",
+        "GetMonsterAi",
+        "CLIENT_SendMonsterWanderMessage",
+        "CLIENT_SendMonsterMoveToUnitMessage",
+        "MONSTER_TryMoveTowardTarget",
+        "CLIENT_SendMonsterMoveToRandomNearbyPosMessage"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_ClearActiveUnitSlotArray",
+      "address": "0046d750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d750"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_ClearActiveUnitSlotArray"
+      ]
+    },
+    {
+      "name": "CLIENT_DispatchMonsterAiBehavior",
+      "address": "0046d780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d780"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_DispatchMonsterAiBehavior",
+        "GetMonsterAi",
+        "CLIENT_FindClosestTrackedUnit",
+        "GetPlayerUnit_UI",
+        "CLIENT_SendMonsterWanderMessage",
+        "CLIENT_SetMonsterAiTimer",
+        "TXT_MonStats_GetFlagsByBitOffset",
+        "MONSTER_ProcessPathCallback",
+        "CLIENT_MonsterSeekCorpse",
+        "MONSTER_FindAndChaseNearestEnemy",
+        "CLIENT_MonsterAi_CorpseSeekerBehavior",
+        "CLIENT_MonsterIdleApproach",
+        "CLIENT_MonsterAi_IdleWanderBehavior",
+        "CLIENT_MonsterThinkBehavior",
+        "CLIENT_MonsterAi_BasicChaseBehavior",
+        "CLIENT_SpawnWorldstoneChipDebris"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetEffectiveUnitType",
+      "address": "0046d9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046d9f0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_GetEffectiveUnitType",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetEffectiveAnimMode",
+      "address": "0046da60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046da60"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_GetEffectiveAnimMode",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetEffectiveClassId",
+      "address": "0046dac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046dac0"
+        }
+      ],
+      "namespace": "D2Client::Source::ClientEngine",
+      "calledFunctions": [
+        "CLIENT_GetEffectiveClassId",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    }
+  ]
+}

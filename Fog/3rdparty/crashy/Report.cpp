@@ -50,11 +50,11 @@ int8_t __thiscall Open(::Report * pThis, char * szFileName) {
     __time64_t tTime = _time64(nullptr);
     _localtime64_s(&localTime, &tTime);
     if (gszCrashLogTempDir[0] == '\0') {
-      bool bVar1;
-      bVar1 = File::FILETOOLS_GetTempPath_UTF8(gszCrashLogTempDir);
-      if (bVar1) {
-        bVar1 = File::STRING_AppendBlizzardErrorSubfolderToPath(gszCrashLogTempDir);
-        if (!bVar1) {
+      bool bSuccess;
+      bSuccess = File::FILETOOLS_GetTempPath_UTF8(gszCrashLogTempDir);
+      if (bSuccess) {
+        bSuccess = File::STRING_AppendBlizzardErrorSubfolderToPath(gszCrashLogTempDir);
+        if (!bSuccess) {
           return '\0';
         }
       } else {
@@ -67,8 +67,8 @@ int8_t __thiscall Open(::Report * pThis, char * szFileName) {
       return '\0';
     }
 
-    uint8_t Var2 = (uint8_t)File::FILETOOLS_CreateFolder_UTF8(pThis->szReportDir);
-    if ((uint8_t)(uint32_t)Var2 == '\0') {
+    uint8_t Var1 = (uint8_t)File::FILETOOLS_CreateFolder_UTF8(pThis->szReportDir);
+    if ((uint8_t)(uint32_t)Var1 == '\0') {
       return '\0';
     }
 
@@ -98,7 +98,7 @@ bool __thiscall IsOpen(::Report * pThis) {
 
 int8_t __thiscall AddAttachment(::Report * pThis, char * szPath, int8_t bCopyToReportDir) {
     char* pBaseDirPtr;
-    uint32_t uVar1;
+    uint32_t bExtracted;
     char* pDst;
     char (*pEntrySlot)[1024];
     int nCopyRemaining;
@@ -137,8 +137,8 @@ int8_t __thiscall AddAttachment(::Report * pThis, char * szPath, int8_t bCopyToR
         pBaseDirPtr += -1 - (int)pThis->szReportDir;
         if (pBaseDirPtr < (char*)0x400) {
           szPathCopy[(int)pBaseDirPtr] = '/';
-          uVar1 = File::FILETOOLS_ExtractFilename(szPathCopy + (int)(pBaseDirPtr + 1), szPath, (uintptr_t)&local_8 - (int)(szPathCopy + (int)(pBaseDirPtr + 1)));
-          if ((char)uVar1 != '\0') {
+          bExtracted = File::FILETOOLS_ExtractFilename(szPathCopy + (int)(pBaseDirPtr + 1), szPath, (uintptr_t)&local_8 - (int)(szPathCopy + (int)(pBaseDirPtr + 1)));
+          if ((char)bExtracted != '\0') {
             File::FILETOOLS_CopyFile_UTF8(szPath, szPathCopy);
             szPath = szPathCopy;
             goto store_path;

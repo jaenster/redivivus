@@ -6,6 +6,7 @@
 #include "D2Client/Engine/Application.h"
 #include "D2Common/Chat/Ignorelist.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Launch/Engine/Application.h"
 #include "Fog/3rdparty/crashy.h"
@@ -19,7 +20,6 @@
 #include "Storm/Engine/Application.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/_unnamespaced.h"
 #include "support/d2_trace.h"
 #include "globals/globals.h"
 #include "D2Client/ClientModeInGame.h"
@@ -346,7 +346,7 @@ static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModuleP
     return nMbLen < 0x100;
 }
 
-bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pnParam) {
+bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pModuleList) {
     // Frame slots -556..-12 are ONE object: &nBytesNeeded is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -366,7 +366,7 @@ bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pnParam) {
     pfnGetModuleBaseNameW pGetModuleBaseNameW;
     uint32_t nModuleCount;
     HANDLE hProcess2;
-    __frame0.pList = pnParam;
+    __frame0.pList = pModuleList;
     hProcess = GetCurrentProcess();
     HMODULE hModule = LoadLibraryW(L"psapi.dll");
     if (hModule) {
@@ -439,7 +439,7 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
     return true;
 }
 
-bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pnParam) {
+bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
     // Static local variables (originally global data)
     static void * ProcessEnvironmentBlock = (void *)0x00000000; D2_STATIC_GUARD(ProcessEnvironmentBlock, "Fog::Engine::Application::DEBUG_EnumerateModulesViaPEB::ProcessEnvironmentBlock");
 
@@ -466,7 +466,7 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pnParam) {
         return true;
       }
 
-      bVar1 = DEBUG_AddModuleToList(pnParam, (LPCWSTR)pEntry[8], (uint32_t)*(uint16_t*)(pEntry + 7), (short int*)pEntry[4]);
+      bVar1 = DEBUG_AddModuleToList(pModuleList, (LPCWSTR)pEntry[8], (uint32_t)*(uint16_t*)(pEntry + 7), (short int*)pEntry[4]);
       if (!bVar1) {
         break;
       }
@@ -527,8 +527,8 @@ static uint32_t DEBUG_ParseNB01DebugInfo(void * pDebugRecord, D2FogDebugModuleEn
     }
 
     strncpy_s(pModuleInfo->szImagePath, 0x100, (LPCSTR)((int)pDebugRecord + 0x10), -1);
-    pModuleInfo->dwUnknown21c = *(uint32_t*)((int)pDebugRecord + 0xc);
-    pModuleInfo->dwUnknown208 = *(uint32_t*)((int)pDebugRecord + 8);
+    pModuleInfo->dwPdbAge = *(uint32_t*)((int)pDebugRecord + 0xc);
+    pModuleInfo->dwPdbSignature = *(uint32_t*)((int)pDebugRecord + 8);
     pModuleInfo->guidPdb.Data1 = 0;
     pModuleInfo->guidPdb.Data2 = 0;
     pModuleInfo->guidPdb.Data3 = 0;
@@ -548,7 +548,7 @@ static uint8_t DEBUG_ParseRSDSDebugInfo(void * pDebugRecord, D2FogDebugModuleEnt
     }
 
     strncpy_s(pModuleInfo->szImagePath, 0x100, (LPCSTR)((int)pDebugRecord + 0x18), -1);
-    pModuleInfo->dwUnknown21c = *(uint32_t*)((int)pDebugRecord + 0x14);
+    pModuleInfo->dwPdbAge = *(uint32_t*)((int)pDebugRecord + 0x14);
     pModuleInfo->guidPdb.Data1 = *(uint32_t*)((int)pDebugRecord + 4);
     uint32_t uVar1 = *(uint32_t*)((int)pDebugRecord + 8);
     pModuleInfo->guidPdb.Data2 = (short int)uVar1;
@@ -768,22 +768,22 @@ void MISC_OperatorDeleteShim(void * p) {
 }
 
 void * MISC_OperatorNewShim(uint32_t nSize) {
-    void* pvVar1 = Storm::Source::SMem::SMemAlloc(nSize, "new", -1, 0);
-    return pvVar1;
+    void* pMemory = Storm::Source::SMem::SMemAlloc(nSize, "new", -1, 0);
+    return pMemory;
 }
 
 void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
     UINT dwIniValue;
     char* pDestField;
     char szIniPath[260];
-    uint8_t cVar1;
+    uint8_t nArgType;
     Source::SFile::SFILE_GetExecutableDirectory(szIniPath, 0x104);
     Storm::Source::SSTR::SStrPack(szIniPath, "D2.ini", 0x104);
     uint32_t nEntryOffset = 0;
     do {
-      cVar1 = (char)D2IniConfigValues[nEntryOffset].nType;
+      nArgType = (char)D2IniConfigValues[nEntryOffset].nType;
       pDestField = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nEntryOffset].nOffset;
-      switch (cVar1) {
+      switch (nArgType) {
         case '\0':
           {
             /* LPCSTR lpFileName for GetPrivateProfileIntA */ /* INT nDefault for GetPrivateProfileIntA */ /* LPCSTR lpKeyName for GetPrivateProfileIntA */ /* LPCSTR lpAppName for GetPrivateProfileIntA */ dwIniValue = GetPrivateProfileIntA(D2IniConfigValues[nEntryOffset].szAppName, D2IniConfigValues[nEntryOffset].szKeyName, D2IniConfigValues[nEntryOffset].nDefaultValue, szIniPath);
@@ -991,19 +991,19 @@ void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, D2IniCon
     int nPos;
     uint8_t szArgName[256];
     char szArgValue[256];
-    uint8_t bVar2;
+    uint8_t nArgType;
     char* pCmdEnd = szText;
     pCmdEnd = pCmdEnd + strlen(pCmdEnd) + 1;
-    int iVar1 = (int)pCmdEnd - (int)(szText + 1);
-    for (nPos = 0; nPos < iVar1; nPos++) {
+    int nCmdLineLen = (int)pCmdEnd - (int)(szText + 1);
+    for (nPos = 0; nPos < nCmdLineLen; nPos++) {
       if (szText[nPos] == '-') {
         nPos++;
-        if (nPos < iVar1) {
+        if (nPos < nCmdLineLen) {
           nDstOffset = INI_ParseCommandLineArg(szArgName, szText + nPos, szArgValue);
           if (nDstOffset != -1) {
-            bVar2 = D2IniConfigValues[nDstOffset].nType;
+            nArgType = D2IniConfigValues[nDstOffset].nType;
             pCmdEnd = pD2IniData->bD2ExpMpqExistsOrLanugageCode + D2IniConfigValues[nDstOffset].nOffset;
-            switch (bVar2) {
+            switch (nArgType) {
               case 0:
                 {
                   *pCmdEnd = '\x01';
@@ -1137,7 +1137,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
     Storm::Source::SSTR::SStrPack(__frame0.szExePathBuf, "SystemSurvey.exe", 0x400);
     char bSignatureValid = Bnclient::D2FILE_VerifyFileSignature(__frame0.szExePathBuf);
     if (bSignatureValid != '\0') {
-      D2FILE_CreateProcess(__frame0.szExePathBuf);
+      D2Hell::D2FILE_CreateProcess(__frame0.szExePathBuf);
     }
 
     D2TRACE("ApplicationMain returned");
@@ -1260,9 +1260,9 @@ void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl) {
 void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     D2IniConfigStrc pD2IniData;
     char szVersionString[260];
-    char* local_4e0 = "";
+    char* szRawCommandLine = "";
     if (argc > 1) {
-      local_4e0 = argv[argc - 1];
+      szRawCommandLine = argv[argc - 1];
     }
 
     D2TRACE("PreInitApplication enter");
@@ -1278,13 +1278,13 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     }
 
     D2TRACE("D2INIT_CheckCommandLine");
-    D2Launch::Engine::Application::D2INIT_CheckCommandLineOrLoadItFromRegistry(&local_4e0);
+    D2Launch::Engine::Application::D2INIT_CheckCommandLineOrLoadItFromRegistry(&szRawCommandLine);
     D2TRACE("CreateRegedit");
     CreateRegedit();
-    char* szCommandLine = local_4e0;
+    char* szCommandLine = szRawCommandLine;
     eD2ApplicationMode eAppMode = APPMODE_launcher;
     D2TRACE("CheckApplicationMode");
-    CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument(&eAppMode, local_4e0);
+    CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument(&eAppMode, szRawCommandLine);
     D2TRACE("MISC_InitD2IniAndIgnorelist");
     MISC_InitD2IniAndIgnorelist(&pD2IniData, szCommandLine);
     pD2IniData.pTrueFunction = ReturnTrue;

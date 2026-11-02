@@ -31,6 +31,6 @@ void __fastcall FORMS_DestroyD2WinSmack(::D2WinSmack * pSmack);
 BOOL __fastcall Draw(::D2WinSmack * pSmack);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 // @sourcefile .\Src\D2WinSmack.cpp
-::D2WinSmack * __fastcall D2WinSmack(int32_t nParam1, int32_t nParam2, int32_t nWidth, int32_t nHeight, OnPress pfnOnPress);
+::D2WinSmack * __fastcall D2WinSmack(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, OnPress pfnOnPress);
 
 } // namespace D2Win::Src::D2WinSmack

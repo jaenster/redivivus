@@ -25,10 +25,10 @@ namespace D2Game::Quests::QUESTS::A4Q2 {
 // [A4Q3 Terror's End — kill Diablo] Q26 Izual-kill notify (shared A4Q1 helper reused here): on Izual death, if The Fallen Angel quest is in intro state and step<2, advance its internal nStateFlag to 2 and broadcast via Q26_PlayerNotifyCompleted. NOTE: Q26_* belong to A4Q1 (Izual); they live here because A4Q2.cpp bundles the Act4 Diablo questline.
 void __fastcall Q26_NotifyIzualKilledToPlayers(::SGAMEDATA * pGame);
 // [A4Q1 Izual helper] Per-unit IterateAllUnits callback: if this unit is within collision-distance 5 of the tracked target (Izual), set the "near" flag in the iteration context.
-void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nParam);
+void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t pQuestSpecificData);
 // [A4Q1 Izual helper] Returns true if NO player is near Izual: looks up The Fallen Angel quest data, then iterates all units via Q26_CheckIzualProximity to test proximity.
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
-BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, int32_t nParam);
+BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, int32_t pTargetUnit);
 // [A4Q1 Izual helper] Plays the Izual-complete sound to every player/monster unit in the game.
 void __fastcall Q26_PlayIzualCompleteSoundToAll(::SGAMEDATA * pGame);
 // [A4Q3 Terror's End] ActiveFilter for the Tyrael/Hadriel gossip NPCs (classId 0x16f=Tyrael, 0xf6=Hadriel/Hand-of-Justice angel). Decides whether a quest gossip entry is currently "active" for the NPC, gated on QUEST_TerrorsEnd states: Completed/FinishedInPreviousGame plus the per-NPC dialog-tracking steps 0x06/0x07 (classic) and 0x08/0x09 (expansion).
@@ -85,7 +85,7 @@ void __fastcall Q27_Callback_08_KillHandler(struct D2QuestDataStrc * pQuestData,
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 void __fastcall Q27_InitData(struct D2QuestDataStrc * pQuestData);
 // [A4Q3 Terror's End] Object init-fn (seal object): records which seal/lever was touched into the A4Q2 struct; if all 5 seals + 3 bosses are accounted for, triggers Q27_ActivateAllSealsKillChaos and arms the spawn-Diablo timer (QuitGameAfterDia).
-void __fastcall Objects_InitFn55(struct D2ObjectInitFnArg * pdwParam);
+void __fastcall Objects_InitFn55(struct D2ObjectInitFnArg * pInitArg);
 // [A4Q3 Terror's End] Object operate-fn for the 5 Chaos Sanctuary seal objects (class 0x188-0x18c). On activation sets the corresponding per-seal flag in the A4Q2 struct; once all 5 seals + 3 seal-bosses are done, calls Q27_ActivateAllSealsKillChaos (summon Diablo) and arms the spawn timer.
 BOOL __fastcall OBJOP_A4Q2_DiabloSealActivateKillChaos(struct D2ObjectOperateFnArg * pOperation);
 // [A4Q3 Terror's End] Getter: returns the "Diablo currently spawned" flag (field_0x14) from the A4Q2 quest-specific struct.

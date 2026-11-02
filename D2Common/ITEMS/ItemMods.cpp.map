@@ -1,0 +1,1932 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/ITEMS/ItemMods.cpp",
+  "functions": [
+    {
+      "name": "TXT_magixaffixes_GetModEntry",
+      "address": "0065c660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c660"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "TXT_magixaffixes_GetModEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MagicAffixTxt",
+        "D2MagixAffixModStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_UniqueItems_GetModEntry",
+      "address": "0065c6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c6a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "TXT_UniqueItems_GetModEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GetMaxLevelAtIndex",
+      "address": "0065c6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c6d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_GetMaxLevelAtIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GemsTxt",
+        "D2MagixAffixModStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GetPropertyFromAffix",
+      "address": "0065c730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c730"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_GetPropertyFromAffix",
+        "TXT_magixaffixes_GetModEntry",
+        "ITEMMOD_GetMaxLevelAtIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MagicAffixTxt",
+        "D2MagixAffixModStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_GetQualityMinMax",
+      "address": "0065c7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c7a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMODS_GetQualityMinMax"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_GetQualityAllFields",
+      "address": "0065c7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c7d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMODS_GetQualityAllFields"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_FindChargedSkill",
+      "address": "0065c820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c820"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_FindChargedSkill",
+        "GetStatsByFlags",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_FindStatListWithFlags"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2StatListExStrc *",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_SetChargedSkillCharges",
+      "address": "0065c940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c940"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_SetChargedSkillCharges",
+        "GetStatsByFlags",
+        "STATLIST_FindStatListWithFlags",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_SetStatValueInBaseArraySafe",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_CalculateRepairCost",
+      "address": "0065ca30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ca30"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMODS_CalculateRepairCost"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_GetQualityField1",
+      "address": "0065cb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065cb00"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMODS_GetQualityField1"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_GetQualityFields2_3_4",
+      "address": "0065cb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065cb10"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMODS_GetQualityFields2_3_4"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_GetQualityField2",
+      "address": "0065cb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065cb40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMODS_GetQualityField2"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_GetQualityFields1_2_3",
+      "address": "0065cb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065cb60"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMODS_GetQualityFields1_2_3",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_GetQualityField3",
+      "address": "0065cbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065cbd0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMODS_GetQualityField3"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GetOrCreateStatList",
+      "address": "0065cbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065cbf0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_GetOrCreateStatList",
+        "GetStatListByStateOrFlagsIfNotExists",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "SetState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_MaximizeStatForEnhanced",
+      "address": "0065ccc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ccc0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEM_GetItemsTxt_szCode",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "ITEMS_IsA",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "ITEM_GetTxtItemTypes_throwable"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ScaleValueForStatType",
+      "address": "0065ce40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ce40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ScaleValueForStatType"
+      ],
+      "usedTypes": [
+        "eD2UnitStat"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyRandomStatValue",
+      "address": "0065cf40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065cf40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyRandomStatValue",
+        "ITEM_GetItemData_wItemVersion",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEMMOD_ScaleValueForStatType",
+        "ITEMMOD_GetOrCreateStatList",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_AddStatValue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_SimpleStat",
+      "address": "0065d070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d070"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_SimpleStat",
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEMMOD_ScaleValueForStatType",
+        "ITEMMOD_GetOrCreateStatList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_AddStatValue"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_SimpleStatWithContext",
+      "address": "0065d110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d110"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_SimpleStatWithContext",
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEMMOD_ScaleValueForStatType",
+        "ITEMMOD_GetOrCreateStatList",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_AddStatValue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_PropFunc_ApplyRolledStat",
+      "address": "0065d1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d1c0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyRandomStatValue",
+        "ITEMMODS_PropFunc_ApplyRolledStat"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_SimpleStatThunk1",
+      "address": "0065d1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d1f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_SimpleStatThunk1",
+        "PropertyFunc_SimpleStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplySocketCount",
+      "address": "0065d220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d220"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplySocketCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_SetSocketCount"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyIndestructible",
+      "address": "0065d270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d270"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyIndestructible",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODS_PropFunc_ApplyRolledStatAndMaximize",
+      "address": "0065d2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d2b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyRandomStatValue",
+        "ITEMMODS_PropFunc_ApplyRolledStatAndMaximize"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_SimpleStatThunk2",
+      "address": "0065d2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d2e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_SimpleStatThunk2",
+        "PropertyFunc_SimpleStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_AllResistances",
+      "address": "0065d310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d310"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_AllResistances",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_ApplyRandomStatValue",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "PropertyFunc_SimpleStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_AllMaxResistances",
+      "address": "0065d4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d4b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_AllMaxResistances",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_ApplyRandomStatValue",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "PropertyFunc_SimpleStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_MinDamage",
+      "address": "0065d650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d650"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_MinDamage",
+        "ITEM_GetItemData_wItemVersion",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "TXT_Items_GetLine",
+        "ITEMS_IsA",
+        "PropertyFunc_SimpleStat",
+        "ITEM_GetTxtItemTypes_throwable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_MaxDamage",
+      "address": "0065d7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d7d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_MaxDamage",
+        "ITEM_GetItemData_wItemVersion",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "TXT_Items_GetLine",
+        "ITEMS_IsA",
+        "PropertyFunc_SimpleStat",
+        "ITEM_GetTxtItemTypes_throwable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_EnhancedDamage",
+      "address": "0065d950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065d950"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_EnhancedDamage",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_ApplyRandomStatValue",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "TXT_Items_GetLine",
+        "ITEMS_IsA",
+        "PropertyFunc_SimpleStat",
+        "ITEM_GetTxtItemTypes_throwable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_AllSkills",
+      "address": "0065db90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065db90"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_AllSkills",
+        "ITEMMOD_ApplyRandomStatValue"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_Charges",
+      "address": "0065dbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065dbc0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_Charges",
+        "TXT_Skills_GetReqLevel",
+        "ITEM_GetItemData_nItemLevel",
+        "SKILL_GetMaxLevelForSkill",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "ITEMMOD_GetOrCreateStatList",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_PackedStat",
+      "address": "0065dd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065dd80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_PackedStat",
+        "ITEMMOD_GetOrCreateStatList",
+        "D2AddStatToStatsListEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_MinMaxDamagePair",
+      "address": "0065de40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065de40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_MinMaxDamagePair",
+        "ITEMMOD_ScaleValueForStatType",
+        "TXT_Items_GetLine",
+        "ITEMS_IsA",
+        "PropertyFunc_SimpleStat",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEMMOD_GetOrCreateStatList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_AddStatValue"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyTripleStat",
+      "address": "0065e070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e070"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyTripleStat",
+        "ITEMMOD_ScaleValueForStatType",
+        "ITEMMOD_GetOrCreateStatList",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_AddStatValue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_SingleSkillBonus",
+      "address": "0065e170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e170"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_SingleSkillBonus",
+        "ITEM_GetItemData_wItemVersion",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "ITEMMOD_GetOrCreateStatList",
+        "thunk_STATLIST_GetStatFromBaseArray",
+        "STATLIST_AddStatValue"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_ElemSkillBonus",
+      "address": "0065e230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e230"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_ElemSkillBonus",
+        "ITEM_GetItemData_wItemVersion",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "ITEMMOD_GetOrCreateStatList",
+        "thunk_STATLIST_GetStatFromBaseArray",
+        "STATLIST_AddStatValue"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_ClassSkillsBonus",
+      "address": "0065e2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e2d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_ClassSkillsBonus",
+        "ITEM_GetItemData_wItemVersion",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "ITEMMOD_GetOrCreateStatList",
+        "thunk_STATLIST_GetStatFromBaseArray",
+        "STATLIST_AddStatValue"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_ReturnTrue",
+      "address": "0065e440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e440"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_ReturnTrue"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PropertyFunc_SimpleStatWithRoll",
+      "address": "0065e450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e450"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "PropertyFunc_SimpleStatWithRoll",
+        "ITEM_GetItemData_wItemVersion",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "PropertyFunc_SimpleStat"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyEtherealBonus",
+      "address": "0065e4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e4d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyEtherealBonus",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMS_IsA",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_CanApplyAutomod",
+      "address": "0065e620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e620"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_CanApplyAutomod",
+        "ITEM_GetItemData_wItemVersion",
+        "IsStackable",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetItemsTxt_bHasInv",
+        "ITEM_GetMaxSockCount",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_CanApplyAffix",
+      "address": "0065e710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e710"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_CanApplyAffix",
+        "ITEM_GetItemData_wItemVersion",
+        "IsStackable",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_MatchesRepairType",
+      "address": "0065e7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e7d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_MatchesRepairType",
+        "ITEM_GetItemData_wType",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2RepairTypeEntryStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollGemRuneType",
+      "address": "0065e8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e8e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_RollGemRuneType",
+        "GetItemSeed",
+        "ITEM_SetItemData_nFileIndex",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollRandomValue",
+      "address": "0065e9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065e9e0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_RollRandomValue",
+        "RANDOM_RandomNumberSelector",
+        "GetItemSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_AddStatToItem",
+      "address": "0065ea50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ea50"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_AddStatToItem",
+        "ITEMMOD_GetOrCreateStatList",
+        "STATLIST_AddStatValue",
+        "D2AddStatToStatsListEx",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_EnhancedIfItem",
+      "address": "0065eb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065eb30"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_EnhancedIfItem",
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_EnhancedAlways",
+      "address": "0065eba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065eba0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_EnhancedAlways",
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem",
+      "address": "0065ec10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ec10"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem",
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_PreserveRolledValue",
+      "address": "0065ec80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ec80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_PreserveRolledValue",
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddMinDamage",
+      "address": "0065ecf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ecf0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddMinDamage",
+        "TXT_Items_GetLine",
+        "ITEMMOD_RollRandomValue",
+        "ITEMS_IsA",
+        "ITEMMOD_AddStatToItem",
+        "ITEM_GetTxtItemTypes_throwable"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddMaxDamage",
+      "address": "0065ee80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ee80"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddMaxDamage",
+        "TXT_Items_GetLine",
+        "ITEMMOD_RollRandomValue",
+        "ITEMS_IsA",
+        "ITEMMOD_AddStatToItem",
+        "ITEM_GetTxtItemTypes_throwable"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddEnhancedDamage",
+      "address": "0065f010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f010"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddEnhancedDamage",
+        "ITEMMOD_RollRandomValue",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemsTxt_szCode",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "ITEMS_IsA",
+        "STATLIST_SetUnitStat",
+        "ITEM_GetTxtItemTypes_throwable",
+        "D2ApplyPercent",
+        "ITEMPROP_AddMaxDamage",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_Simple",
+      "address": "0065f2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f2b0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_Simple",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddSkillBonus",
+      "address": "0065f310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f310"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddSkillBonus",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_WithLayerFromParam4",
+      "address": "0065f390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f390"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_WithLayerFromParam4",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddClassSkillBonus",
+      "address": "0065f3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f3f0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddClassSkillBonus",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddSkillOnEvent",
+      "address": "0065f470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f470"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddSkillOnEvent",
+        "TXT_Skills_GetReqLevel",
+        "ITEM_GetItemData_nItemLevel",
+        "SKILL_GetMaxLevelForSkill",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddSkillCharges",
+      "address": "0065f6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f6a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddSkillCharges",
+        "TXT_Skills_GetLine",
+        "TXT_Skills_GetReqLevel",
+        "ITEM_GetItemData_nItemLevel",
+        "SKILL_GetMaxLevelForSkill",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "ITEMMOD_GetOrCreateStatList",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddTimedStat",
+      "address": "0065f870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f870"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddTimedStat",
+        "ITEMMOD_GetOrCreateStatList",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_SetFixedMinDamage",
+      "address": "0065f960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f960"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_SetFixedMinDamage",
+        "ITEMPROP_AddMinDamage",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_SetFixedMaxDamage",
+      "address": "0065f9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f9d0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_SetFixedMaxDamage",
+        "ITEMPROP_AddMaxDamage",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_FixedOrRolledMaxDamageAware",
+      "address": "0065fa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fa40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_FixedOrRolledMaxDamageAware",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem",
+        "ITEMPROP_AddMaxDamage"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_SetIndestructible",
+      "address": "0065fae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fae0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_SetIndestructible",
+        "ITEMMOD_GetOrCreateStatList",
+        "STATLIST_AddStatValue"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_WithLayerFromParam7",
+      "address": "0065fb50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fb50"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_WithLayerFromParam7",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7",
+      "address": "0065fba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fba0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_LayerFromParam4Lo",
+      "address": "0065fbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fbf0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_LayerFromParam4Lo",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_RandLevelAsLayer",
+      "address": "0065fc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fc40"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_RandLevelAsLayer",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_AddStat_WithMaxDurabilityReset",
+      "address": "0065fc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fc90"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_AddStat_WithMaxDurabilityReset",
+        "ITEMMOD_MaximizeStatForEnhanced",
+        "ITEMMOD_RollRandomValue",
+        "ITEMMOD_AddStatToItem",
+        "GetTxtMaxDurability",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMPROP_ApplyEthereal",
+      "address": "0065fd20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fd20"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_ApplyEthereal",
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
+        "ITEM_CheckIfItemHasDurability",
+        "ITEMMOD_ApplyEtherealBonus"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyPropertyToUnitStatsExpansion",
+      "address": "0065fd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fd70"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyPropertyToUnitStatsExpansion"
+      ],
+      "usedTypes": [
+        "D2PropertiesTxt",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyPropertyToUnitStats",
+      "address": "0065fe10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fe10"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyPropertyToUnitStatsExpansion",
+        "ITEMMOD_ApplyPropertyToUnitStats",
+        "ITEM_GetItemData_wItemVersion",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ApplyRuneAndGemStats",
+      "address": "0065fec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065fec0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ApplyRuneAndGemStats",
+        "ITEM_GetItemData_nFileIndex",
+        "INV_GetUniqueItemsTxtLine",
+        "ITEMMOD_ApplyPropertyToUnitStats",
+        "GetSetItemsLine",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_GetPropertyFromAffix"
+      ],
+      "usedTypes": [
+        "D2MagicAffixTxt",
+        "D2SetItemsTxt",
+        "D2SetsTxtFStrc",
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RollRunewordMostlikely",
+      "address": "006600a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006600a0"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "RollRunewordMostlikely",
+        "CalculateRunewordByItem",
+        "GetStatListByStateOrFlagsIfNotExists",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMMOD_ApplyPropertyToUnitStatsExpansion"
+      ],
+      "usedTypes": [
+        "D2RuneTableStrc",
+        "D2SetsTxtFStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplySetBonuses",
+      "address": "00660120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660120"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyPropertyToUnitStats",
+        "ITEMMOD_ApplySetBonuses",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex",
+        "GetSetItemsLine",
+        "GetSetsLine",
+        "ITEMS_GetEquippedSetItemsMask"
+      ],
+      "usedTypes": [
+        "D2SetItemsTxt",
+        "D2SetsTxt",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyRunewordProperties",
+      "address": "00660240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660240"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMMOD_ApplyRunewordProperties",
+        "ITEMMOD_ApplyPropertyToUnitStats",
+        "CheckItemFlag",
+        "ITEMMOD_ApplyEtherealBonus"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

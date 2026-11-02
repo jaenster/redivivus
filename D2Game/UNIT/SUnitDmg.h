@@ -123,7 +123,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, struct D2UnitStrc 
 // @sourcefile .\UNIT\SUnitDmg.cpp
 void __fastcall FreeCombat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\SUnitDmg.cpp
-void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, struct D2UnitStrc * pnParam, struct D2UnitStrc * pUnit2);
+void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, struct D2UnitStrc * pUnit2);
 // Returns 1 (no knockback) if unit is frozen, damage is pure poison, or total damage is below 256. Otherwise tests whether damage meets a fraction of max HP threshold (divisor varies by elemental type: physical=16, lightning/drain/burn=8, cold=32, poison=64) with probabilistic fallback rolls. Also checks a monster stat flag (index 3) to allow knockback immunity on specific monster types. Returns 0 if knockback should be applied.
 BOOL __stdcall DAMAGE_CheckKnockbackThreshold(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage1, eD2ElementalDamageTypeDWORD pDamage2);
 // Server-side kill handler for player and monster units. Guards against already-dead or unkillable units (MonStats killable flag). For monsters: optionally removes the unit from its owner's pet list, awards kill XP and arena credit to the attacker, fires the Death lifecycle transition (computing facing direction from attacker position), triggers quest callbacks, and handles objCol-flagged monster cleanup (e.g. removing companion objects at coords 0x23B/0x23C). No-ops on invalid unit types.
@@ -133,7 +133,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, struct D2UnitStr
 // Resolves a pending deferred-hit combat queue entry between pUnit (attacker) and pVictim. Finds the matching D2CombatEntryStrc, verifies melee range, applies damage via DAMAGE_ApplyDamageToUnit, dispatches hit/defend unit events, applies reflected damage, runs GetHitCalculation, and removes the entry from the queue. No-ops if either unit is null or out of range.
 void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, uint32_t dwParam);
 struct D2DamageStrc * __fastcall DAMAGE_FindCombatEntry(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
-uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t nParam, uint32_t * pnParam1, uint32_t * pnParam2);
+uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnParam1, uint32_t * pnParam2);
 // TO-HIT CALCULATION: AR vs AC formula with level penalty.
 // Formula:
 //   AR_final = AR + (AR * ToHit_bonus%)
@@ -148,11 +148,11 @@ void __fastcall DAMAGE_CalculateAndApplyDamage(::SGAMEDATA * pGame, struct D2Uni
 uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pDefUnit, int32_t bIsMissile, int32_t bRollBlock);
 // Applies missile hit damage to all units within nRadius of (nCenterX,nCenterY) that pass targeting checks. Builds a UnitFind result set (flags nUnitFlags, default 0x583), skips the owner and owner-owner unless bHitOwner/bHitOwnerOwner are set, requires line-of-sight (COLLISION_LOS), optionally filters through pfnProc callback, then calls MISSMODE_ApplyMissileHitDamage for each hit. Returns 1 if any unit was hit, 0 otherwise.
 void __fastcall DAMAGE_ApplyAreaOfEffectDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nCenterX, int32_t nCenterY, int32_t nRadius, struct D2DamageStrc * pDamage, BOOL bHitOwner, BOOL bHitOwnerOwner, pfnAoEDamageFilter pfnProc, int32_t nUnitFlags);
-void __fastcall DAMAGE_AddSkillBonusDamage(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, struct D2DamageStrc * param_1);
+void __fastcall DAMAGE_AddSkillBonusDamage(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, struct D2DamageStrc * pDamage);
 void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLevel, struct D2DamageStrc * pDamage);
-int32_t __fastcall DAMAGE_SafeShiftMultiply(int32_t nParam1, int32_t nParam2, int32_t nShiftBits);
+int32_t __fastcall DAMAGE_SafeShiftMultiply(int32_t nMultiplicand, int32_t nMultiplier, int32_t nShiftBits);
 // Iterator callback used when distributing kill experience to nearby party members. For each candidate player unit (pUnit), checks if dead (early-return), then tests whether the unit is within range of the victim (squared-distance threshold 0x1900). If in range, appends the unit and its level into the pPartyExp accumulator struct (max 8 players); halts fatally if the party array is full.
-BOOL __fastcall ExperienceLoopOverPlayers(uint32_t dwParam, struct D2UnitStrc * pUnit, struct D2PartyExperienceStrc * pPartyExp);
+BOOL __fastcall ExperienceLoopOverPlayers(uint32_t pGame, struct D2UnitStrc * pUnit, struct D2PartyExperienceStrc * pPartyExp);
 void __fastcall SERVER_KillExperience(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim);
 void __fastcall DAMAGE_AwardKillExperience(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nXpGain);
 // Forces a player or mercenary unit to reach nTargetLevel by granting the required XP delta. For players, reads the Experience.txt threshold and calls SERVER_PlayerUpdateExperience with the deficit. For merc monsters, locates the owner's pet data and HirelingTxt record, then calls SERVER_SEND_MercExperience to synchronise. No-ops if unit is already at or above nTargetLevel.

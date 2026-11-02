@@ -1,0 +1,577 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/SRP.cpp",
+  "functions": [
+    {
+      "name": "SRP_GetTime32",
+      "address": "00527db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527db0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "_time32",
+        "SRP_GetTime32"
+      ],
+      "usedTypes": [
+        "__time32_t"
+      ]
+    },
+    {
+      "name": "SRP_ConstructContext",
+      "address": "00527dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527dc0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ConstructContext"
+      ],
+      "usedTypes": [
+        "D2Srp"
+      ]
+    },
+    {
+      "name": "SRP_InitializeRandomState",
+      "address": "00527dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527dd0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "_time32",
+        "rand",
+        "srand",
+        "SHA1_Update",
+        "SRP_InitializeRandomState",
+        "SHA1_Init",
+        "SHA1_Final",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2Srp",
+        "D2SrpSeedEntropyStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_ExtractSessionKeyBytes",
+      "address": "00527e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527e70"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ExtractSessionKeyBytes",
+        "memcpy",
+        "SHA1_Init",
+        "SHA1_Update",
+        "SHA1_Final",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_ComputePasswordHash",
+      "address": "00527f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527f40"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ComputePasswordHash",
+        "SHA1_Init",
+        "SStrLen",
+        "SHA1_Update",
+        "SHA1_Final",
+        "SHA1_FromBigIntBytes",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BigData",
+        "D2Srp",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRP_ComputeScramblingParam",
+      "address": "00528010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528010"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ComputeScramblingParam",
+        "SHA1_BigIntPowMod"
+      ],
+      "usedTypes": [
+        "BigData *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SRP_HashBigNumToU32",
+      "address": "00528030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528030"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_HashBigNumToU32",
+        "SHA1_ToBigIntBytes",
+        "SHA1_Init",
+        "SHA1_Update",
+        "SHA1_Final",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BigData *",
+        "D2Srp",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRP_ClientComputeSharedSecret",
+      "address": "005280c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005280c0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ClientComputeSharedSecret",
+        "SHA1_CompareBigInt",
+        "SHA1_BigIntCompareValue",
+        "SRP_HashBigNumToU32",
+        "SHA1_BigIntFromUnsigned",
+        "SRP_ComputeScramblingParam",
+        "SHA1_BigIntAdd",
+        "SHA1_BigIntSub",
+        "SHA1_BigIntMulValue",
+        "SHA1_BigIntPowMod",
+        "SHA1_BigIntFree"
+      ],
+      "usedTypes": [
+        "BigData",
+        "BigData *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_ServerComputeSharedSecret",
+      "address": "005281d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005281d0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ServerComputeSharedSecret",
+        "SRP_HashBigNumToU32",
+        "SHA1_BigIntFromUnsigned",
+        "SHA1_BigIntPowModValue",
+        "SHA1_BigIntMulMod",
+        "SHA1_BigIntCompareValue",
+        "SHA1_BigIntAddValue",
+        "SHA1_CompareBigInt",
+        "SHA1_BigIntFree",
+        "SHA1_BigIntPowMod"
+      ],
+      "usedTypes": [
+        "BigData",
+        "BigData *",
+        "D2Srp",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SRP_ComputeClientProof",
+      "address": "005282a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005282a0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ComputeClientProof",
+        "SHA1_ToBigIntBytes",
+        "SHA1_Init",
+        "SHA1_Update",
+        "SHA1_Final",
+        "SStrLen",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRP_ComputeServerProof",
+      "address": "00528480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528480"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ComputeServerProof",
+        "SHA1_Init",
+        "SHA1_Update",
+        "SHA1_Final",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2Srp",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRP_IsContextInitialized",
+      "address": "005284f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005284f0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_IsContextInitialized"
+      ],
+      "usedTypes": [
+        "D2Srp"
+      ]
+    },
+    {
+      "name": "SRP_CreateContext",
+      "address": "00528500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528500"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_CreateContext",
+        "SMemAlloc",
+        "SRP_ConstructContext"
+      ],
+      "usedTypes": [
+        "D2Srp",
+        "D2Srp *"
+      ]
+    },
+    {
+      "name": "SRP_ExportPublicValues",
+      "address": "00528550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528550"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ExportPublicValues",
+        "SHA1_ToBigIntBytes"
+      ],
+      "usedTypes": [
+        "D2Srp *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_SetParameters",
+      "address": "005285a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005285a0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_SetParameters",
+        "SHA1_BigIntFree",
+        "SHA1_FromBigIntBytes",
+        "SRP_IsContextInitialized"
+      ],
+      "usedTypes": [
+        "BigData",
+        "D2Srp *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRP_SeedRandom",
+      "address": "00528620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528620"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_InitializeRandomState",
+        "SRP_SeedRandom"
+      ],
+      "usedTypes": [
+        "D2Srp *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_FreeParameters",
+      "address": "00528630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528630"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_FreeParameters",
+        "SHA1_BigIntFree"
+      ],
+      "usedTypes": [
+        "D2Srp *"
+      ]
+    },
+    {
+      "name": "SRP_ClientGenerateVerifier",
+      "address": "00528660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528660"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ClientGenerateVerifier",
+        "SRP_ExtractSessionKeyBytes",
+        "SRP_ComputePasswordHash",
+        "SHA1_BigIntFromUnsigned",
+        "SRP_ComputeScramblingParam",
+        "SHA1_ToBigIntBytes",
+        "SHA1_BigIntFree"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_GenerateAccountCredentials",
+      "address": "005286d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005286d0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_GenerateAccountCredentials",
+        "SStrCopy",
+        "SRP_ExtractSessionKeyBytes",
+        "SHA1_FromBigIntBytes",
+        "SHA1_BigIntFromUnsigned",
+        "SHA1_BigIntPowMod",
+        "SHA1_BigIntFree",
+        "SHA1_ToBigIntBytes"
+      ],
+      "usedTypes": [
+        "BigData"
+      ]
+    },
+    {
+      "name": "SRP_ClientKeyExchange",
+      "address": "00528760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528760"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ClientKeyExchange",
+        "SHA1_FromBigIntBytes",
+        "SHA1_BigIntCompareValue",
+        "SRP_ComputePasswordHash",
+        "SHA1_BigIntFromUnsigned",
+        "SRP_ClientComputeSharedSecret",
+        "SHA1_BigIntFree",
+        "SHA1_ToBigIntBytes",
+        "SHA1_HashWideString",
+        "SRP_ComputeClientProof",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BigData",
+        "D2SrpCredentialsStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_ClientVerifyServerProof",
+      "address": "00528890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528890"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ClientVerifyServerProof",
+        "SRP_ComputeServerProof",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2Srp *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRP_ParseChallenge",
+      "address": "00528970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528970"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ParseChallenge",
+        "SStrCopy",
+        "SHA1_FromBigIntBytes",
+        "SHA1_BigIntCompareValue",
+        "SHA1_BigIntFree"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_ServerComputePublicB",
+      "address": "005289f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005289f0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ServerComputePublicB",
+        "SHA1_FromBigIntBytes",
+        "SRP_ExtractSessionKeyBytes",
+        "SHA1_BigIntFromUnsigned",
+        "SHA1_BigIntPowMod",
+        "SHA1_BigIntAdd",
+        "SHA1_CompareBigInt",
+        "SHA1_BigIntSub",
+        "SHA1_BigIntFree",
+        "SHA1_ToBigIntBytes"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SRP_ClientVerifyAndComputeKey",
+      "address": "00528ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528ac0"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ClientVerifyAndComputeKey",
+        "SHA1_BigIntFromUnsigned",
+        "SHA1_FromBigIntBytes",
+        "SRP_ServerComputeSharedSecret",
+        "SHA1_BigIntFree",
+        "SHA1_ToBigIntBytes",
+        "SHA1_HashWideString",
+        "SRP_ComputeClientProof",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRP_ComputeFinalProof",
+      "address": "00528c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528c60"
+        }
+      ],
+      "namespace": "Bnclient::SRP",
+      "calledFunctions": [
+        "SRP_ComputeFinalProof",
+        "SRP_ComputeServerProof"
+      ],
+      "usedTypes": [
+        "D2Srp *",
+        "int32_t"
+      ]
+    }
+  ]
+}

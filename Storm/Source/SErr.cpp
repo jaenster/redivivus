@@ -102,17 +102,17 @@ static LPSTR * SERR_GetString(int32_t nErrorIndex) {
     static char gszErrorStringBuffer[256] = {}; D2_STATIC_GUARD(gszErrorStringBuffer, "Storm::Source::SErr::SERR_GetString::gszErrorStringBuffer");
 
     int nLen = 0x100;
-    char* pcVar1 = gszErrorStringBuffer;
+    char* szErrorString = gszErrorStringBuffer;
     UINT uID = nErrorIndex + 0x5100;
     HMODULE hInstance_lcl = SSystem::StormGetInstance();
-    /* HINSTANCE hInstance for LoadStringA */ nLen = LoadStringA(hInstance_lcl, uID, pcVar1, nLen);
-    pcVar1 = gszErrorStringBuffer;
+    /* HINSTANCE hInstance for LoadStringA */ nLen = LoadStringA(hInstance_lcl, uID, szErrorString, nLen);
+    szErrorString = gszErrorStringBuffer;
     if (nLen) {
-      return (LPSTR*)pcVar1;
+      return (LPSTR*)szErrorString;
     }
 
-    pcVar1 = gaSErrMessageStrings[nErrorIndex];
-    return (LPSTR*)pcVar1;
+    szErrorString = gaSErrMessageStrings[nErrorIndex];
+    return (LPSTR*)szErrorString;
 }
 
 // Lazily initialises the SErr critical section (InterlockedIncrement guard around InitializeCriticalSection) and enters it.
@@ -153,22 +153,22 @@ static BOOL __stdcall SERR_UndecorateObjectName(char * szMangled, int32_t nMaxLe
       return 0;
     }
 
-    char* pcVar1 = strpbrk(szMangled + 4, "?@");
-    if (!pcVar1) {
+    char* pSeparator = strpbrk(szMangled + 4, "?@");
+    if (!pSeparator) {
       return 0;
     }
 
     SSTR::SStrCopy(szText, szMangled + 4, nMaxLen);
-    pcVar1 = strpbrk(szText, "?@");
-    if (pcVar1) {
-      *pcVar1 = '\0';
+    pSeparator = strpbrk(szText, "?@");
+    if (pSeparator) {
+      *pSeparator = '\0';
       while (true) {
-        pcVar1--;
-        if (!(pcVar1 >= szText && *pcVar1 == '_')) {
+        pSeparator--;
+        if (!(pSeparator >= szText && *pSeparator == '_')) {
           break;
         }
 
-        *pcVar1 = '\0';
+        *pSeparator = '\0';
       }
 
       SSTR::SStrPack(szText, " (", nMaxLen);
@@ -280,16 +280,16 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
       pNode = &gnStormErrorCallbackCount.pPrevLink;
     }
 
-    StormLinkStrc* iVar1 = *pNode;
-    if (iVar1) {
+    StormLinkStrc* pNextNode = *pNode;
+    if (pNextNode) {
       nPrevLinkOffset = (uint32_t)pNode[1];
       if ((int)nPrevLinkOffset < 0) {
         pPrevLink = (int*)~nPrevLinkOffset;
       } else {
-        pPrevLink = (int*)((int)pNode + (nPrevLinkOffset - iVar1->pNext));
+        pPrevLink = (int*)((int)pNode + (nPrevLinkOffset - pNextNode->pNext));
       }
 
-      *pPrevLink = (int)iVar1;
+      *pPrevLink = (int)pNextNode;
       (*pNode)->pNext = (int)pNode[1];
       *pNode = 0;
       pNode[1] = 0;
@@ -373,7 +373,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     uint32_t nCallbackNode;
     StormSErrHandlerNode* pCallbackNode;
     int32_t nErrStringIndex;
-    int iVar1;
+    int nResult;
     LPDWORD lpExitCode;
     uint32_t nErrorCodeArg;
     int32_t nMaxCopyLen;
@@ -389,7 +389,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ __frame0.szModuleFile[0] = '\0';
     __frame0.szModuleName[0] = '\0';
     GetModuleFileNameA((HMODULE)0x0, __frame0.szModuleFile, 0x104);
-    SSystem::SMemZero(&__frame0.findData, 0x140);
+    SMem::SMemZero(&__frame0.findData, 0x140);
     HANDLE hFindHandle;
     hFindHandle = FindFirstFileA(__frame0.szModuleFile, &__frame0.findData);
     if (hFindHandle) {
@@ -522,7 +522,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
       (*pfnBlizzardErrorCallback)(__frame0.findData.cFileName + 0x10, __frame0.szFullMessage, nullptr, 0, nTraceFlags, false);
     }
 
-    iVar1 = 7;
+    nResult = 7;
     __frame0.nMsgBoxFlags = (nMessageFlags != 0 ? 0x3U : 0x1U) | 0x52010;
     for (pCallbackNode = (StormSErrHandlerNode*)(gnStormErrorCallbackCount.pNext <= 0 ? 0 : gnStormErrorCallbackCount.pNext); 0 < (int)pCallbackNode; pCallbackNode = pCallbackNode->pNext) {
       pCustomMsgArg = __frame0.pCustomMsgPtr;
@@ -543,15 +543,15 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
         hWnd = (HWND)0x0;
       }
 
-      /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ iVar1 = MessageBoxA(hWnd, __frame0.szFullMessage, __frame0.szModuleName, __frame0.nMsgBoxFlags);
+      /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ nResult = MessageBoxA(hWnd, __frame0.szFullMessage, __frame0.szModuleName, __frame0.nMsgBoxFlags);
     }
 
     continue_or_terminate:
     SERR_InternalLeaveCriticalSection();
-    if (nMessageFlags && iVar1 == 7) {
-      iVar1 = 1;
+    if (nMessageFlags && nResult == 7) {
+      nResult = 1;
     } else {
-      if (iVar1 == 2) {
+      if (nResult == 2) {
         SSystem::__break();
       }
 
@@ -570,11 +570,11 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
         /* HANDLE hProcess for TerminateProcess */ TerminateProcess(hFindHandle, nExitCode);
       }
 
-      iVar1 = 0;
+      nResult = 0;
     }
 
     gbSSystemErrorDialogActive = 0;
-    return iVar1;
+    return nResult;
 }
 
 // @was SSYSTEM_DisplayErrorDialogFormatted (pass 6, 2026.08.28)
@@ -651,7 +651,7 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
     uint32_t* pContextCallback = 0;
     uint32_t nContextParam = 0;
     if (gpSSystemThreadContextCallback.dwThreadId == dwCurrentThreadId_lcl) {
-      SSystem::SMemZero(&gpSSystemThreadContextCallback, 0xc);
+      SMem::SMemZero(&gpSSystemThreadContextCallback, 0xc);
       pContextCallback = (uint32_t*)pSavedCallback;
       nContextParam = nSavedContextParam;
     }
@@ -677,18 +677,18 @@ void StaticInit_6ca8a0() {
 
 // Runs at exit: removes every element from the Storm error callback list, then unlinks the list head itself.
 void StaticFini_gStormErrorCallbackList() {
-    uint32_t* puVar1;
-    SSystem::SSYSTEM_ListClearPositive(&gnStormErrorCallbackCount);
+    uint32_t* pBackLink;
+    SSystem::TSList_HANDLER_UnlinkAll(&gnStormErrorCallbackCount);
     if (!gnStormErrorCallbackCount.pPrevLink) {
       return;
     }
     if (gnStormErrorCallbackCount.pNext < 0) {
-      puVar1 = (uint32_t*)~gnStormErrorCallbackCount.pNext;
+      pBackLink = (uint32_t*)~gnStormErrorCallbackCount.pNext;
     } else {
-      puVar1 = (uint32_t*)(gnStormErrorCallbackCount.pNext + ((int)((char*)&gnStormErrorCallbackCount + 4) - gnStormErrorCallbackCount.pPrevLink->pNext));
+      pBackLink = (uint32_t*)(gnStormErrorCallbackCount.pNext + ((int)((char*)&gnStormErrorCallbackCount + 4) - gnStormErrorCallbackCount.pPrevLink->pNext));
     }
 
-    *puVar1 = (uint32_t)(uintptr_t)gnStormErrorCallbackCount.pPrevLink;
+    *pBackLink = (uint32_t)(uintptr_t)gnStormErrorCallbackCount.pPrevLink;
     gnStormErrorCallbackCount.pPrevLink->pNext = gnStormErrorCallbackCount.pNext;
     gnStormErrorCallbackCount.pPrevLink = 0;
     gnStormErrorCallbackCount.pNext = 0;

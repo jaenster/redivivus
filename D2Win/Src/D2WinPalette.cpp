@@ -53,8 +53,8 @@ void __stdcall D2WINPALETTE_LoadPalettes() {
     D2gfx::D2GFX::D2GFX_SetPaletteTable((BYTE**)aPaletteTable);
 }
 
-uint8_t * __fastcall D2WINPAL_GetActPalettePointer(int32_t nParam) {
-    return gPaletteAct1Outdoor + nParam * 0x100;
+uint8_t * __fastcall D2WINPAL_GetActPalettePointer(int32_t nPaletteIndex) {
+    return gPaletteAct1Outdoor + nPaletteIndex * 0x100;
 }
 
 void __stdcall DRAW_SetOrReloadPalleteMain() {
@@ -82,8 +82,8 @@ void __stdcall DRAW_SetOrReloadPalleteMain() {
     D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
 }
 
-void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t nParam) {
-    if (nParam) {
+void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t bEnableGammaShift) {
+    if (bEnableGammaShift) {
       gbGammaShiftActive = 1;
       gdwPaletteShiftStartTick = GetTickCount();
       gnPaletteGammaShiftState = 2;
@@ -102,8 +102,8 @@ uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen,
     return bVar1;
 }
 
-void __fastcall D2WINPAL_CopyPalette(void * pParam) {
-    memcpy(pParam, gPaletteDataBase, 0x3100);
+void __fastcall D2WINPAL_CopyPalette(void * pDest) {
+    memcpy(pDest, gPaletteDataBase, 0x3100);
 }
 
 // @sourcefile .\Src\D2WinPalette.cpp
@@ -222,17 +222,17 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     return 1;
 }
 
-BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nParam) {
-    char acStack_20c[260];
+BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct) {
+    char szDatPath[260];
     char szPl2Path[260];
-    uint32_t nActIndex = nParam + 1;
+    uint32_t nActIndex = nAct + 1;
     if (!nActIndex || 5 < (int32_t)nActIndex) {
       nActIndex = 1;
     }
 
-    sprintf(acStack_20c, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActIndex, "pal.dat");
+    sprintf(szDatPath, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActIndex, "pal.dat");
     sprintf(szPl2Path, "%s\\palette\\act%d\\%s", "DATA\\GLOBAL", nActIndex, "pal.pl2");
-    BOOL nResult = D2WINPAL_LoadPaletteFiles(acStack_20c, szPl2Path);
+    BOOL nResult = D2WINPAL_LoadPaletteFiles(szDatPath, szPl2Path);
     D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
     return nResult;
 }

@@ -1,0 +1,180 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/npcmenu/Merc.cpp",
+  "functions": [
+    {
+      "name": "AddMercForHireToGlobalList",
+      "address": "004b3240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3240"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "AddMercForHireToGlobalList"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x4E"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST",
+      "address": "004b3290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3290"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST"
+      ]
+    },
+    {
+      "name": "NPCMENU_GetMercHireCost",
+      "address": "004b32e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b32e0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "NPCMENU_GetMercHireCost"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_SetSelectedMercIndex",
+      "address": "004b3340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3340"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "NPCMENU_SetSelectedMercIndex",
+        "UI_InitializeHirelingIconsUI"
+      ],
+      "usedTypes": [
+        "D2MercForHire",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_MercItemFoundCb",
+      "address": "004b3360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3360"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "NPCMENU_MercItemFoundCb"
+      ]
+    },
+    {
+      "name": "NPCMENU_HandleMercListPacket",
+      "address": "004b3380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3380"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "NPCMENU_HandleMercListPacket",
+        "UNITS_FindClientSideUnit",
+        "GetOwnerGUID",
+        "SOUND_PlaySound",
+        "GFX_AddOverlayToUnit",
+        "GetInteractedUnit",
+        "GetQuestState",
+        "CUNIT_IterateItemsWithCallback"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x8A",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ResurrectMerc",
+      "address": "004b3610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3610"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "NPCMENU_ResurrectMerc",
+        "FreeDialogStrc",
+        "NPCMENU_ShowTransactionConfirmDialog"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowMercResurrectDialog",
+      "address": "004b3660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3660"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "NPCMENU_ShowMercResurrectDialog",
+        "SOUND_PlaySound",
+        "GetPlayerUnit_UI",
+        "GetRosterPetGUID",
+        "CLIENT_CheckExpansion",
+        "NPCMENU_HireMerc",
+        "CountRostersForUnitFilterBySkill",
+        "NPCMENU_ResurrectMerc"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MERC_ClearHireInventory",
+      "address": "004b3790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3790"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu::Merc",
+      "calledFunctions": [
+        "MERC_ClearHireInventory",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "RemoveObjectFromServerObjectTable",
+        "INVENTORY_RemoveAllItems",
+        "NullSub"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    }
+  ]
+}

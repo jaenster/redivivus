@@ -68,10 +68,10 @@ BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_
     return 0;
 }
 
-void __stdcall DrawPopupOk(int32_t nParam) {
+void __stdcall DrawPopupOk(int32_t bDiscPrompt) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
-    if (nParam) {
+    if (bDiscPrompt) {
       sGfxData.pDC6 = (DC6*)IMG_popupok_DiscPrompt;
     } else {
       sGfxData.pDC6 = (DC6*)IMG_popupok_ConnLost;
@@ -100,11 +100,11 @@ void __stdcall LOADER_CheckForInsertedDiscs() {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
-void __stdcall DrawOkCancel(int32_t nParam) {
+void __stdcall DrawOkCancel(int32_t nFrameNumber) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = (DC6*)IMG_okcancelbtn;
-    sGfxData.nFrameNumber = nParam;
+    sGfxData.nFrameNumber = nFrameNumber;
     sGfxData.nDirection = 0;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x110, 0x13e - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
 }

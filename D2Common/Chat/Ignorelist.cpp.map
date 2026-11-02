@@ -1,0 +1,139 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat/Ignorelist.cpp",
+  "functions": [
+    {
+      "name": "IGNORELIST_Shutdown",
+      "address": "0060ddb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ddb0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "IGNORELIST_Shutdown"
+      ]
+    },
+    {
+      "name": "IGNORELIST_ExtractPrefix",
+      "address": "0060de30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060de30"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "IGNORELIST_ExtractPrefix"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IGNORELIST_ExtractSuffix",
+      "address": "0060dea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060dea0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "IGNORELIST_ExtractSuffix"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IGNORELIST_ParsePattern",
+      "address": "0060dff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060dff0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "IGNORELIST_ParsePattern",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "IGNORELIST_ExtractSuffix",
+        "IGNORELIST_ExtractPrefix",
+        "SStrCopy",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISC_InitIgnorelist",
+      "address": "006114e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006114e0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "MISC_InitIgnorelist",
+        "SMemAlloc",
+        "Constructor"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "MISC_GetIgnorelist",
+      "address": "00611560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611560"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "MISC_GetIgnorelist",
+        "SMemAlloc",
+        "Constructor"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "IGNORELIST_Initialize",
+      "address": "006115f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006115f0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "IGNORELIST_Initialize"
+      ]
+    }
+  ]
+}

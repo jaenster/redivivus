@@ -1,0 +1,1412 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/PLAYER/PlayerModes.cpp",
+  "functions": [
+    {
+      "name": "PLRMODES_HasAnimEventLastOrComing5Frames",
+      "address": "0057ed70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ed70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_HasAnimEventLastOrComing5Frames",
+        "EVENT_TimerTypeExistsOnUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_HasEndAnimEventAndSeqInput",
+      "address": "0057ed90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ed90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_HasEndAnimEventAndSeqInput",
+        "GetCurrentSkill",
+        "GetSkillsTxt",
+        "EVENT_TimerTypeExistsOnUnit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLRMODES_CanInterruptCurrentMode",
+      "address": "0057edd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057edd0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_CanInterruptCurrentMode",
+        "INVENTORY_GetHandItem",
+        "PLRMODES_HasAnimEventLastOrComing5Frames",
+        "PLRMODES_HasEndAnimEventAndSeqInput"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_TryCancelModeAndMoveToLocation",
+      "address": "0057eec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057eec0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_TryCancelModeAndMoveToLocation",
+        "UNIT_GetUnitState",
+        "GetCurrentSkill",
+        "GetSkillId",
+        "TXT_Skills_GetLine",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "UNIT_GetModuloFromSeed",
+        "PLRMODES_MoveToLocation",
+        "PLRMODES_HasAnimEventLastOrComing5Frames"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_SetIdleMode",
+      "address": "0057f020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f020"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_SetIdleMode",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "UNITS_ClearAnimTimerEvents",
+        "FreeCombatAndChangeAnimMode",
+        "SetCurrentSkill"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ModeCallback_DeathDead",
+      "address": "0057f070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f070"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ModeCallback_DeathDead"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ModeCallback_Neutral",
+      "address": "0057f080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f080"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ModeCallback_Neutral"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_StartPathAndChangeMode",
+      "address": "0057f090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f090"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_StartPathAndChangeMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PATH_RestoreVelocityAndPathType",
+        "STATSEX_GetCurrentStat",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "PATH_SetPathType",
+        "SetDistance",
+        "PATH_CalculatePath",
+        "SetCurrentSkill",
+        "GetPathPointsSize",
+        "FreeCombatAndChangeAnimMode",
+        "UNITS_ClearAnimTimerEvents",
+        "UNITS_ClearAnimAndTriggerEndAnim",
+        "PLRMODES_SetIdleMode"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2PlayerAnimMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_SetTargetAndStartPath",
+      "address": "0057f190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f190"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_SetTargetAndStartPath",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetTarget",
+        "PLRMODES_StartPathAndChangeMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_SetMoveTargetPosition",
+      "address": "0057f1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f1f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_SetMoveTargetPosition",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetSP1",
+        "PLRMODES_StartPathAndChangeMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_DrainStamina",
+      "address": "0057f240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f240"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_DrainStamina",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "INVENTORY_GetItemByGridOffset",
+        "TXT_Items_GetLine",
+        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_AddUnitStat",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ClearModeAndSetDead",
+      "address": "0057f330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f330"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ClearModeAndSetDead",
+        "STATLIST_SetUnitStat",
+        "STATLIST_RecalcAfterRemove",
+        "STATES_FilterStatesByContext",
+        "SUNIT_GetClient",
+        "AttachUnitType",
+        "PATH_SetCorpseCollision",
+        "EVENT_RemoveUnitTimersByType",
+        "UNITS_ClearAnimTimerEvents"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SERVERUNIT_GoldAmmountForDeadBody",
+      "address": "0057f390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f390"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "SERVERUNIT_GoldAmmountForDeadBody",
+        "DROP_SpawnGoldPiles",
+        "ITEM_GetItemData_wType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetGUID",
+        "ITEM_SetItemData_nPlayerGUID"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_UnequipAndPrepareItemForDrop",
+      "address": "0057f410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f410"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_UnequipAndPrepareItemForDrop",
+        "ReturnFalse",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "ITEM_GetItemData_wType",
+        "ITEMMODE_RemoveItemFromBelt",
+        "ITEMMODE_UnequipItemStats",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "ITEMMODE_ReturnOne",
+        "ITEM_ProcessSetItemEquip",
+        "RefreshInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ClearCursorAndDeleteItem",
+      "address": "0057f4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f4f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ClearCursorAndDeleteItem",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PLRMODES_DropAllEquipmentAndGold",
+      "address": "0057f540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f540"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_DropAllEquipmentAndGold",
+        "INVENTORY_GetHandItem",
+        "INVENTORY_GetItemByGridOffset",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PLRMODES_UnequipAndPrepareItemForDrop",
+        "ITEM_CloneFromSerializedData",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "DropItem",
+        "STATSEX_GetCurrentStat",
+        "GetInventoryGoldLimit",
+        "STATLIST_SetUnitStat",
+        "GOLD_DropGoldFromInventory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_CleanupInvalidCorpses",
+      "address": "0057f690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f690"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_CleanupInvalidCorpses",
+        "INVENTORY_GetCorpse",
+        "INVENTORY_GetNextCorpse",
+        "ROOMCORPSE_GetGUID",
+        "FindUnitFromTable",
+        "INVENTORY_RemoveCorpse"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_CreateDeadBody",
+      "address": "0057f700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057f700"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_CreateDeadBody",
+        "PLRMODES_CleanupInvalidCorpses",
+        "INVENTORY_GetCorpseCount",
+        "PLRMODES_DropAllEquipmentAndGold",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "CreateUnit",
+        "SUNIT_GetClient",
+        "SetClient",
+        "GetCharName",
+        "SetNameInPlayerData",
+        "SetSeed",
+        "SetupUpdateFlag",
+        "SetState",
+        "GetExperience",
+        "_allmul",
+        "_alldiv",
+        "SetExperience",
+        "STATLIST_SetUnitStat",
+        "INVENTORY_AddCorpse",
+        "INVENTORY_SetOwnerGUID",
+        "INVENTORY_GetHandItem",
+        "INVENTORY_GetItemByGridOffset",
+        "PLRMODES_ClearCursorAndDeleteItem",
+        "PLRMODES_UnequipAndPrepareItemForDrop",
+        "ITEM_SetItemData_ePage",
+        "ITEM_CloneFromSerializedData",
+        "GetInventoryPage",
+        "INVENTORY_AutoPlaceItemInGrid",
+        "PutItemInInventory",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "QUEST_OnItemPickedUp",
+        "INVENTORY_GetItemAtBodyLoc",
+        "SetBodyLoc",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "DropItem",
+        "STATSEX_GetCurrentStat",
+        "GetInventoryGoldLimit",
+        "SERVERUNIT_GoldAmmountForDeadBody",
+        "NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "int32_t",
+        "int64_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_IsCorpseOwnedByPlayer",
+      "address": "0057faf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057faf0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_IsCorpseOwnedByPlayer",
+        "INVENTORY_GetCursorItemGUID",
+        "FindUnitFromTable",
+        "PLAYERLIST_GetFlagsMasked",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_PickupCorpse",
+      "address": "0057fb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057fb70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_PickupCorpse",
+        "UNIT_GetUnitState",
+        "PLRMODES_IsCorpseOwnedByPlayer",
+        "INVENTORY_GetCursorItemGUID",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "DAMAGE_AwardKillExperience",
+        "ITEMMODE_EquipCorpseItems",
+        "INVENTORY_RemoveCorpse",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender",
+        "RemoveCollision_Vector",
+        "FreeServerUnit",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_HandlePlayerDeath",
+      "address": "0057fca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057fca0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_HandlePlayerDeath",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "PLRMODES_CreateDeadBody",
+        "PETS_FreeAllPetsByType",
+        "SUNIT_GetClient",
+        "SetFlagIf",
+        "CLIENT_TestFileFlags",
+        "GetCharName",
+        "SaveGameAllGameTypes",
+        "FreeCombatAndChangeAnimMode",
+        "InitAnimFrame",
+        "PLRMODES_ClearModeAndSetDead",
+        "UNITS_ClearAnimTimerEvents"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_StartModeWithTarget",
+      "address": "0057fdc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057fdc0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_StartModeWithTarget",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeCombatAndChangeAnimMode",
+        "InitAnimFrame",
+        "SetCurrentSkill",
+        "UNITS_ClearAnimTimerEvents",
+        "UNITS_SetupAnimTimerEvents"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ModeCallback_GetHitCast",
+      "address": "0057fe20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057fe20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ModeCallback_GetHitCast"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ChangeAnimModeAndResetSkill",
+      "address": "0057fe30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057fe30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ChangeAnimModeAndResetSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeCombatAndChangeAnimMode",
+        "InitAnimFrame",
+        "SetCurrentSkill",
+        "UNITS_ClearAnimTimerEvents",
+        "UNITS_SetupAnimTimerEvents"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_StartCastAtPosition",
+      "address": "0057fe90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057fe90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_StartCastAtPosition",
+        "SetSP1",
+        "FreeCombatAndChangeAnimMode",
+        "SetTargetUnitForDynamicUnit",
+        "InitAnimFrame",
+        "UNITS_ClearAnimTimerEvents",
+        "UNITS_SetupAnimTimerEvents",
+        "SKILLS_OnModeComplete"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_StartCastAtEntity",
+      "address": "0057fef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057fef0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_StartCastAtEntity",
+        "FreeCombatAndChangeAnimMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetTargetUnitForDynamicUnit",
+        "InitAnimFrame",
+        "UNITS_ClearAnimTimerEvents",
+        "UNITS_SetupAnimTimerEvents",
+        "SKILLS_OnModeComplete"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ReequipWeaponAfterThrow",
+      "address": "0057ff70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057ff70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ReequipWeaponAfterThrow",
+        "GetWeaponGUID",
+        "FindUnitFromTable",
+        "ITEM_GetContainingInventoryPage",
+        "INVENTORY_CheckDoItemBelongToInventory",
+        "ITEMMODE_FindBestBodyLocForItem",
+        "INVENTORY_GetItemByGridOffset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEMMODE_ProcessItemBuy",
+        "SetWeaponGUID"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_HandleDepletedAmmoOrThrowable",
+      "address": "00580030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580030"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_HandleDepletedAmmoOrThrowable",
+        "IsStackable",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetMinimalStatValueShifted",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "ITEMS_IsA",
+        "ITEM_CheckItemData_ItemQualityIsMagicOrBetter",
+        "ITEM_GetTxtItemTypes_reload",
+        "ITEM_GetItemData_wType",
+        "GetBodyLocation",
+        "ITEM_GetTxtItemTypes_reequip",
+        "SetupUpdateFlag",
+        "EquipItem",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "INVENTORY_FindItemByType",
+        "GetClassId",
+        "CheckItemFlag",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMMODE_ProcessItemBuy",
+        "PLRMODES_ReequipWeaponAfterThrow",
+        "ITEMMODE_SendItemUpdate"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_CheckSwapWeaponSkill",
+      "address": "005801e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005801e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_CheckSwapWeaponSkill",
+        "GetLeftSkill",
+        "GetOwnerGUID",
+        "GetSkillId",
+        "GetRightSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "PLRMODES_RestoreSwappedSkill",
+      "address": "00580280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580280"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_RestoreSwappedSkill",
+        "GetSkillByIdAndOwner",
+        "GetLeftSkill",
+        "SKILLS_CanUseSkill",
+        "Server_SelectSkill",
+        "GetRightSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_CheckWeaponQuantityAndDurability",
+      "address": "00580310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580310"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_CheckWeaponQuantityAndDurability",
+        "PLRMODES_CheckSwapWeaponSkill",
+        "INVENTORY_GetItemByGridOffset",
+        "PLRMODES_HandleDepletedAmmoOrThrowable",
+        "PLRMODES_RestoreSwappedSkill"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLRMODES_BreakZeroDurabilityWeapons",
+      "address": "00580380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580380"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_BreakZeroDurabilityWeapons",
+        "INVENTORY_GetFirstItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEMS_IsA",
+        "ITEM_CheckIfItemHasDurability",
+        "STATSEX_GetCurrentStat",
+        "CheckItemFlag",
+        "SetupUpdateFlag",
+        "ITEMMODE_SendItemUpdate"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLRMODES_ModeCallback_AttackSkill",
+      "address": "00580460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580460"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ModeCallback_AttackSkill",
+        "GetCurrentSkill",
+        "SetSequenceFrame",
+        "SKILL_GetFlags",
+        "GetTarget",
+        "UNITS_ProcessUnitMovement",
+        "SKILL_SetFlags",
+        "SKILLS_PeriodicSkillSpawnAndTimer",
+        "CheckForModeZeroDeath"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_RecoverStamina",
+      "address": "00580500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580500"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_RecoverStamina",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxStamina",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_GetHpPercent128",
+      "address": "005805d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005805d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_GetHpPercent128",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_RegenHp",
+      "address": "00580610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580610"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_RegenHp",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "STATLIST_SetUnitStat",
+        "UnitQueuePacket0xAB"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_RegenMana",
+      "address": "005806f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005806f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_RegenMana",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxMana",
+        "UNIT_GetUnitState",
+        "D2ApplyPercent",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_RemoveExpiredStatLists",
+      "address": "00580800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580800"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_RemoveExpiredStatLists",
+        "RemoveStatListAfterTimeout"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_PeriodicStatRegen",
+      "address": "00580810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580810"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_PeriodicStatRegen",
+        "SetEvent",
+        "CheckForModeZeroDeath",
+        "PLRMODES_RegenHp",
+        "PLRMODES_RecoverStamina",
+        "PLRMODES_RegenMana"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PacketUpdateForClient",
+      "address": "00580860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580860"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PacketUpdateForClient",
+        "CLIENTS_GetControlUnit",
+        "SendReassignPlayer",
+        "SendUpdatedItemsToClient",
+        "NET_D2GS_SERVER_Send_0x47_ITEMUPDATEMODIFIERS",
+        "NET_D2GS_SERVER_Send_0x48_ITEMUPDATEREQUIREMENTSMET",
+        "DispatchPlayerModeNetMsg",
+        "SERVER_UnitQueuePacketSend",
+        "UNITMSG_SendSoundPacketToClient",
+        "PLAYER_SendHoverTextToClient",
+        "UpgradeLifeAndHitClass",
+        "STATES_HasAnyGfxFlag",
+        "PLAYER_SendStateUpdate",
+        "STATLIST_HasChangedStats",
+        "PLAYER_SendOverlayToClient",
+        "STATLIST_DispatchUnchangedStatToCallback"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_MoveToLocation",
+      "address": "005809d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005809d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_MoveToLocation",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PLRMODES_CanInterruptCurrentMode",
+        "PLRMODES_TryCancelModeAndMoveToLocation",
+        "SetCurrentSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_StartModeID",
+      "address": "00580a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580a70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_StartModeID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "LOGGING_LogLine",
+        "PLRMODES_CanInterruptCurrentMode",
+        "PLRMODES_TryCancelModeAndMoveToLocation",
+        "SetCurrentSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "HoverTextEvent",
+      "address": "00580b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580b70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "HoverTextEvent",
+        "GetExpireFrame",
+        "Free",
+        "ROOM_LinkUnitToUpdateList",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_BroadcastAllyAndPartyInfo",
+      "address": "00580be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580be0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_BroadcastAllyAndPartyInfo",
+        "BroadcastAutomapAllyPartyInfo",
+        "SendAllyInfo",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ModeCallback_WalkRunBlock",
+      "address": "00580c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580c20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ModeCallback_WalkRunBlock",
+        "GetTarget",
+        "UNIT_GetUnitState",
+        "BlazePath",
+        "PLRMODES_DrainStamina",
+        "PLRMODES_StartPathAndChangeMode",
+        "UNITS_ProcessUnitMovement",
+        "GetTickCount",
+        "GetPlayerData",
+        "GetXPos",
+        "GetYPos",
+        "GetDistanceSquaredXY",
+        "PLRMODES_SetIdleMode",
+        "SERVER_InteractOrPick",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillMode",
+        "PLRMODES_StartModeID"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_Death",
+      "address": "00580ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00580ec0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_Death",
+        "STATES_RemoveAllProgressiveStates",
+        "INVENTORY_GetHandItem",
+        "PLRMODES_SetIdleMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PLAYER_HandleDeathPenalties",
+        "FreeCombatAndChangeAnimMode",
+        "SUNIT_GetClient",
+        "SetFlagIf",
+        "InitAnimFrame",
+        "PLRMODES_ClearModeAndSetDead",
+        "UNITS_ClearAnimTimerEvents",
+        "UNITS_SetupAnimTimerEvents",
+        "UNIT_GetUnitState",
+        "GetOwnerUnit",
+        "ITEM_DropEarOnPvpDeath",
+        "PLAYERMSG_BroadcastPlayerSlain",
+        "SERVER_ARENA_KillHandler",
+        "PLAYER_EndInteraction"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_OnModeComplete",
+      "address": "00581020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00581020"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_OnModeComplete",
+        "GetCurrentSkill",
+        "GetSkillId",
+        "PLRMODES_CheckWeaponQuantityAndDurability",
+        "PLRMODES_BreakZeroDurabilityWeapons",
+        "PLRMODES_HandlePlayerDeath",
+        "PLRMODES_SetIdleMode",
+        "INVENTORY_GetHandItem",
+        "PLRMODES_HasAnimEventLastOrComing5Frames",
+        "PLRMODES_HasEndAnimEventAndSeqInput",
+        "PLRMODES_TryCancelModeAndMoveToLocation",
+        "PLRMODES_ChangeAnimModeAndResetSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2PlayerAnimMode",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_ProcessPlayerMode",
+      "address": "005811d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005811d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLRMODES_ProcessPlayerMode",
+        "PLRMODES_OnModeComplete"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYEREVENT_DefaultCallback",
+      "address": "00581220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00581220"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerModes",
+      "calledFunctions": [
+        "PLAYEREVENT_DefaultCallback"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2TimerTypeDWORD",
+        "int32_t"
+      ]
+    }
+  ]
+}

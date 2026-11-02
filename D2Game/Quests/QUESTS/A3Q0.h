@@ -22,7 +22,7 @@ void __fastcall Q17_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData
 // A3Q0 handler [0x00] — on-interact gossip. If target is Hratli (0xfd) and this player has NOT yet completed SpokeToHratli, queue a gossip line on him: variant 1 for Amazon (nClassId==1), variant 0 otherwise. Pure flavor; no state change.
 void __fastcall Q17_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A3Q0 status filter — stub, always returns false (SpokeToHratli is never gated by the status-filter path).
-bool __fastcall Q17_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q17_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // A3Q0 active filter — decides whether Hratli (0xfd) is "interactable" for the SpokeToHratli interaction. Returns true (active) only while this player has NOT completed SpokeToHratli; once spoken, returns false.
 bool __fastcall Q17_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 // A3Q0 handler [0x0d] — player join / quest refresh. If this player already has SpokeToHratli Completed, re-broadcast it as JustCompleted so the joining client's quest log syncs. No new progress.

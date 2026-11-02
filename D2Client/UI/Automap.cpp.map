@@ -1,0 +1,1451 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Automap.cpp",
+  "functions": [
+    {
+      "name": "MoveY16Plus",
+      "address": "004574d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004574d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "MoveY16Plus"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "MoveY16Minus",
+      "address": "004574e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004574e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "MoveY16Minus"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "MoveX16Plus",
+      "address": "004574f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004574f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "MoveX16Plus"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "MoveX16Minus",
+      "address": "00457500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457500"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "MoveX16Minus"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "AUTOMAP_OnKeyDownEnd_NoOp",
+      "address": "00457510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457510"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_OnKeyDownEnd_NoOp"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SetupPosition",
+      "address": "00457520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457520"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SetupPosition",
+        "HIREABLE_IsNotInMercPurchaseMode",
+        "AUTOMAP_CenterOnPlayer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_CenterOnPlayer",
+      "address": "00457640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457640"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_CenterOnPlayer",
+        "AUTOMAP_SetupPosition"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetFade",
+      "address": "004576c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004576c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetFade"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SetFade",
+      "address": "004576f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004576f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SetFade",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetCenters",
+      "address": "00457740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457740"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetCenters"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SetCenters",
+      "address": "00457750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457750"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SetCenters",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetLeft",
+      "address": "00457770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457770"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetLeft"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SetLeft",
+      "address": "00457780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457780"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SetLeft",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetParty",
+      "address": "004577b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004577b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetParty"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SetParty",
+      "address": "004577c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004577c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SetParty",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetPartyNames",
+      "address": "004577e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004577e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetPartyNames"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SetPartyNames",
+      "address": "004577f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004577f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SetPartyNames",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RotateCellRight",
+      "address": "00457860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457860"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RotateCellRight",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RotateCellLeft",
+      "address": "004578b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004578b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RotateCellLeft",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RebalanceTreeRight",
+      "address": "00457900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457900"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RebalanceTreeRight",
+        "AUTOMAP_RotateCellRight",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RebalanceTreeLeft",
+      "address": "004579e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004579e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RebalanceTreeLeft",
+        "AUTOMAP_RotateCellLeft",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_InsertCellIntoTree",
+      "address": "00457b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457b00"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_InsertCellIntoTree",
+        "AUTOMAP_RebalanceTreeRight",
+        "AUTOMAP_RebalanceTreeLeft"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_AllocCell",
+      "address": "00457c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457c30"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_AllocCell",
+        "AllocClientMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapStrc",
+        "D2AutomapStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RevealTile",
+      "address": "00457cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457cf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RevealTile",
+        "TXT_LevelDefs_GetLevelType",
+        "GetOrientation",
+        "GetIndex",
+        "GetSubIndex",
+        "GetRandomCellNo",
+        "AUTOMAP_AllocCell",
+        "CoordsMiniMapToScreen",
+        "AUTOMAP_InsertCellIntoTree",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "D2DrlgTileDataStrc",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_AddCellByCoords",
+      "address": "00457e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457e40"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_AddCellByCoords",
+        "AUTOMAP_AllocCell",
+        "AUTOMAP_InsertCellIntoTree"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_AddCellForUnit",
+      "address": "00457e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457e80"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_AddCellForUnit",
+        "AUTOMAP_AllocCell",
+        "GetTargetX",
+        "GetTargetY",
+        "AUTOMAP_InsertCellIntoTree",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetMapFileHandle",
+      "address": "00457f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457f40"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetMapFileHandle",
+        "memset",
+        "GetAndCreateSavePath",
+        "sprintf",
+        "thunk_CreateFileA",
+        "SStrPrintf",
+        "SafeCreateDirectoryTree",
+        "SStrCopy",
+        "thunk_ReadFile",
+        "thunk_DeleteFileA",
+        "SFILE_Win32SetFilePointer",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle"
+      ],
+      "usedTypes": [
+        "AutomapSeedHeader",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SaveLayerToFile",
+      "address": "00458200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458200"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SaveLayerToFile",
+        "AUTOMAP_GetMapFileHandle",
+        "memset",
+        "thunk_ReadFile",
+        "SFILE_Win32SetFilePointer",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle"
+      ],
+      "usedTypes": [
+        "D2AutomapFileEntryStrc"
+      ]
+    },
+    {
+      "name": "AUTOMAP_CalcCellTreeSize",
+      "address": "00458440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458440"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_CalcCellTreeSize"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SerializeCellTree",
+      "address": "00458470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458470"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SerializeCellTree"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SaveCurrentLayer",
+      "address": "004584c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004584c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SaveCurrentLayer",
+        "AUTOMAP_CalcCellTreeSize",
+        "AllocClientMemory",
+        "AUTOMAP_SerializeCellTree",
+        "AUTOMAP_SaveLayerToFile",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2AutomapFileEntryStrc",
+        "D2AutomapLayerStrc"
+      ]
+    },
+    {
+      "name": "AUTOMAP_FreeCurrentLayerCells",
+      "address": "00458680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458680"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_FreeCurrentLayerCells",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2AutomapLayerStrc",
+        "D2AutomapStrc"
+      ]
+    },
+    {
+      "name": "AUTOMAP_InvalidateLayerEntry",
+      "address": "004586e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004586e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_InvalidateLayerEntry",
+        "SFILE_Win32SetFilePointer",
+        "thunk_WriteFile"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_LoadLayerFromFile",
+      "address": "00458750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458750"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_LoadLayerFromFile",
+        "AUTOMAP_GetMapFileHandle",
+        "memset",
+        "thunk_ReadFile",
+        "SFILE_Win32SetFilePointer",
+        "AUTOMAP_InvalidateLayerEntry",
+        "SFILE_Win32CloseHandle",
+        "AllocClientMemory",
+        "AUTOMAP_AllocCell",
+        "AUTOMAP_InsertCellIntoTree",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapCellStrc *",
+        "D2AutomapFileEntryStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SwitchLayer",
+      "address": "00458cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458cd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SwitchLayer",
+        "AUTOMAP_SaveCurrentLayer",
+        "AUTOMAP_FreeCurrentLayerCells",
+        "AUTOMAP_LoadLayerFromFile"
+      ],
+      "usedTypes": [
+        "D2AutomapLayerStrc"
+      ]
+    },
+    {
+      "name": "AUTOMAP_AllocLayer",
+      "address": "00458cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458cf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_AllocLayer",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2AutomapLayerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_AddLayer",
+      "address": "00458d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458d40"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_AddLayer",
+        "AllocClientMemory",
+        "AUTOMAP_SaveCurrentLayer",
+        "AUTOMAP_FreeCurrentLayerCells",
+        "AUTOMAP_LoadLayerFromFile"
+      ],
+      "usedTypes": [
+        "D2AutomapLayerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RevealUnitsInRoom",
+      "address": "00458dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458dc0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RevealUnitsInRoom",
+        "TXT_Objects_GetLine",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "AUTOMAP_AddCellForUnit"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc *",
+        "D2ObjectsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RevealRoom",
+      "address": "00458f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00458f40"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RevealRoom",
+        "GetRoomExFromRoom",
+        "DRLGROOM_GetFloorTilesFromRoom",
+        "AUTOMAP_RevealTile",
+        "DRLGROOM_GetWallTilesFromRoom",
+        "AUTOMAP_RevealUnitsInRoom"
+      ],
+      "usedTypes": [
+        "D2AutomapLayerStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_Update",
+      "address": "00459020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00459020"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_Update",
+        "GetPlayerUnit_UI",
+        "GetTargetX",
+        "GetTargetY",
+        "GetCurrentRoom",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_LevelDefs_GetLine",
+        "AUTOMAP_AddLayer",
+        "AUTOMAP_RevealRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutomapLayerStrc",
+        "D2LevelDefsTxt",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SetRefreshDelay",
+      "address": "00459140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00459140"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SetRefreshDelay"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RevealRoomCallback",
+      "address": "00459150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00459150"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RevealRoomCallback",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_LevelDefs_GetLine",
+        "AUTOMAP_AddLayer",
+        "AUTOMAP_RevealRoom"
+      ],
+      "usedTypes": [
+        "D2AutomapLayerStrc",
+        "D2LevelDefsTxt",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "AUTOMAP_RevealTownCallback",
+      "address": "004591a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004591a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_RevealTownCallback",
+        "TXT_LevelDefs_GetLine",
+        "AUTOMAP_AddLayer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CoordsMiniMapToScreen",
+        "AUTOMAP_AllocCell",
+        "AUTOMAP_InsertCellIntoTree"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapLayerStrc",
+        "D2LevelDefsTxt",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawCellTree",
+      "address": "00459440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00459440"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawCellTree",
+        "DRAW_GetTypeOfBorder",
+        "memset",
+        "AUTOMAP_GetFade",
+        "GetPlayerUnit_UI",
+        "HIREABLE_IsNotInMercPurchaseMode",
+        "D2GFX_DrawSprite6"
+      ],
+      "usedTypes": [
+        "D2AutomapCellStrc",
+        "D2AutomapDrawCtxStrc",
+        "D2GfxDataStrc",
+        "D2GfxTileRectStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawMap",
+      "address": "00459700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00459700"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawMap",
+        "DRAW_GetTypeOfBorder",
+        "GetMouseXOffset",
+        "GetMouseYOffset",
+        "AUTOMAP_DrawCellTree"
+      ],
+      "usedTypes": [
+        "D2AutomapDrawCtxStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetUnitColor",
+      "address": "00459bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00459bc0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetUnitColor",
+        "GetPlayerUnit_UI",
+        "GetPlayerUnitPartyId",
+        "INVENTORY_GetCursorItemGUID",
+        "TXT_MonStats_GetFlagsByBitOffset",
+        "SKILLS_GetStateTransformGfx",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "ROSTER_GetPetOwnershipRelation",
+        "CheckFlags",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uD2UnitMode",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawGamePassword",
+      "address": "00459e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00459e90"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawGamePassword",
+        "CLIENTMODE_GetGamePasswordPart1",
+        "CLIENTMODE_GetGamePasswordPart3",
+        "sprintf",
+        "UTF8_ConvertToWideChar",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "DRAW_text0",
+        "DRAW_text",
+        "CLIENTMODE_GetGamePasswordPart2"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawExpansionTag",
+      "address": "00459ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00459ff0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawExpansionTag",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "DRAW_text0",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawLevelName",
+      "address": "0045a050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a050"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawLevelName",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "CLIENT_GetLevelNameByLevelId",
+        "DRAW_text0",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "WCHAR",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawVersion",
+      "address": "0045a0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a0a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawVersion",
+        "SStrPrintf",
+        "UTF8_ConvertToWideChar",
+        "DRAW_text0",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawServerIP",
+      "address": "0045a120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a120"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawServerIP",
+        "NET_GetLocalIp",
+        "UTF8_ConvertToWideChar",
+        "DRAW_text0",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawDifficulty",
+      "address": "0045a190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a190"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawDifficulty",
+        "GetDificulity",
+        "GetLocaleString",
+        "STRING_GetWideStringLength",
+        "UNICODE_FormatWideString",
+        "DRAW_text0",
+        "DRAW_text",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_LoadDC6Sprites",
+      "address": "0045a2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a2b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_LoadDC6Sprites",
+        "memset",
+        "DC6_FreeAndDelete",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "IMAGE_GetFramesCount",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "DC6 *"
+      ]
+    },
+    {
+      "name": "AUTOMAP_Init",
+      "address": "0045a4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a4c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_Init",
+        "AUTOMAP_LoadDC6Sprites",
+        "SRegLoadValue"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_Free",
+      "address": "0045a5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a5c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_Free",
+        "AUTOMAP_SaveCurrentLayer",
+        "AUTOMAP_FreeCurrentLayerCells",
+        "DC6_FreeAndDelete",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2AutomapLayerStrc",
+        "DC6 *"
+      ]
+    },
+    {
+      "name": "AUTOMAP_InitPaletteColors",
+      "address": "0045a620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a620"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_InitPaletteColors",
+        "D2GFX_GetColorFromCurrentPallete"
+      ]
+    },
+    {
+      "name": "AUTOMAP_GetMiniMapType",
+      "address": "0045a710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a710"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_GetMiniMapType"
+      ]
+    },
+    {
+      "name": "AUTOMAP_SetMiniMapType",
+      "address": "0045a720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a720"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_SetMiniMapType",
+        "AUTOMAP_LoadDC6Sprites",
+        "AUTOMAP_CenterOnPlayer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawTextCentered",
+      "address": "0045a760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a760"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawTextCentered",
+        "SetAndReturnLastFont",
+        "memset",
+        "UTF8_ConvertToWideChar",
+        "DRAW_text0",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawXMarker",
+      "address": "0045a7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a7f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawXMarker",
+        "D2GFX_DrawLine"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawUnitMarker",
+      "address": "0045a860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045a860"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawUnitMarker",
+        "IsActive",
+        "UNIT_GetUnitState",
+        "AUTOMAP_GetUnitColor",
+        "GetTargetX",
+        "GetTargetY",
+        "AUTOMAP_DrawXMarker",
+        "GetPlayerUnit_UI",
+        "GetPlayerData",
+        "AUTOMAP_DrawTextCentered",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "DRAW_text0",
+        "DRAW_text",
+        "TXT_MonStats_GetFlagsByBitOffset",
+        "GetName",
+        "SKILLS_GetStateTransformGfx",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "MISSILE_GetOwnerUnit",
+        "GetPlayerUnitPartyId"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "WCHAR",
+        "eD2PlayerAnimMode",
+        "eD2States",
+        "int16_t",
+        "int32_t",
+        "uD2UnitMode",
+        "uint32_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawPartyMember",
+      "address": "0045ab60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ab60"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawPartyMember",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetRosterArea",
+        "GetActNoFromLevelNumber",
+        "GetRosterPosition",
+        "CoordsMapToScreen",
+        "D2GFX_DrawLine",
+        "GetRosterName",
+        "AUTOMAP_DrawTextCentered"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_DrawPlayersAndParty",
+      "address": "0045ac90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ac90"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_DrawPlayersAndParty",
+        "GetNextRosterPlayer",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "AUTOMAP_DrawUnitMarker",
+        "GetRosterPartyId",
+        "GetRosterGUID",
+        "UNITS_FindClientSideUnit",
+        "AUTOMAP_DrawPartyMember"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2RoomStrc * *",
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "AUTOMAP_Draw",
+      "address": "0045ad60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ad60"
+        }
+      ],
+      "namespace": "D2Client::UI::Automap",
+      "calledFunctions": [
+        "AUTOMAP_Draw",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "AUTOMAP_SetupPosition",
+        "AUTOMAP_DrawMap",
+        "AUTOMAP_DrawPlayersAndParty",
+        "CLIENT_GetD2GSGameType",
+        "SetAndReturnLastFont",
+        "AUTOMAP_DrawGamePassword",
+        "AUTOMAP_DrawLevelName",
+        "AUTOMAP_DrawVersion",
+        "AUTOMAP_DrawDifficulty",
+        "AUTOMAP_DrawServerIP",
+        "CLIENT_CheckExpansion",
+        "AUTOMAP_DrawExpansionTag"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2GSGameType",
+        "int32_t"
+      ]
+    }
+  ]
+}

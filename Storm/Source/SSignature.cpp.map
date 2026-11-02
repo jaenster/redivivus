@@ -1,0 +1,554 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SSignature.cpp",
+  "functions": [
+    {
+      "name": "SSIG_InitBigNum",
+      "address": "0041d320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d320"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_InitBigNum",
+        "SBigNew"
+      ],
+      "usedTypes": [
+        "BigData *"
+      ]
+    },
+    {
+      "name": "SSIG_FreeBigNum",
+      "address": "0041d330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d330"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_FreeBigNum",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "void *"
+      ]
+    },
+    {
+      "name": "SSIG_FindSignatureMarker",
+      "address": "0041d340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d340"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_FindSignatureMarker"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSIG_HashData",
+      "address": "0041d370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d370"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_HashData",
+        "Sha1_Initialize",
+        "Sha1_Append",
+        "Sha1_Finalize",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2Sha1ContextStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSignatureVerifyStream_Begin",
+      "address": "0041d3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d3b0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSignatureVerifyStream_Begin",
+        "SMemAlloc",
+        "Sha1_Initialize"
+      ],
+      "usedTypes": [
+        "D2SsigContextStrc",
+        "D2SsigContextStrc *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSignatureVerifyStream_GetSignatureLength",
+      "address": "0041d410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d410"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSignatureVerifyStream_GetSignatureLength"
+      ],
+      "usedTypes": [
+        "D2SsigContextStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSignatureVerifyStream_ProvideData",
+      "address": "0041d420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d420"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSignatureVerifyStream_ProvideData",
+        "Sha1_Append",
+        "SMemCopy",
+        "SMemMove"
+      ],
+      "usedTypes": [
+        "D2SsigContextStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSIG_InitRSAPair",
+      "address": "0041d4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d4d0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_InitRSAPair",
+        "SBigNew"
+      ],
+      "usedTypes": [
+        "BigData *",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "SSIG_FreeRSAPair",
+      "address": "0041d530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d530"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_FreeRSAPair",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData *",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "SSignatureGenerate",
+      "address": "0041d590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d590"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_HashData",
+        "SSignatureGenerate",
+        "SSIG_FindSignatureMarker",
+        "SMemFill",
+        "SMemCopy",
+        "SSIG_InitRSAPair",
+        "CryptRSA_Prepare",
+        "CryptRSA_Process",
+        "SMemCmp",
+        "SSIG_FreeRSAPair",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSignatureVerifyStream_Finish",
+      "address": "0041d6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d6d0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_InitRSAPair",
+        "SSIG_FreeRSAPair",
+        "SSignatureVerifyStream_Finish",
+        "SMemFill",
+        "Sha1_Finalize",
+        "SMemCopy",
+        "CryptRSA_Prepare",
+        "CryptRSA_Process",
+        "SMemCmp",
+        "SMemFree",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BigData",
+        "D2SsigContextStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSignatureVerify",
+      "address": "0041d7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d7d0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSignatureVerify",
+        "SSignatureVerifyStream_Begin",
+        "SSignatureVerifyStream_ProvideData",
+        "SSignatureVerifyStream_Finish"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SHA1_Round1",
+      "address": "00425730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425730"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SHA1_Round1"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_Round2",
+      "address": "00425770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425770"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SHA1_Round2"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_Round3",
+      "address": "004257b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004257b0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SHA1_Round3"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_Round4",
+      "address": "004257f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004257f0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SHA1_Round4"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Sha1_Pump",
+      "address": "00425850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425850"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "Sha1_Pump"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Sha1_Append",
+      "address": "00425dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425dd0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "Sha1_Append",
+        "Sha1_Pump"
+      ],
+      "usedTypes": [
+        "D2Sha1ContextStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSIG_StoreBigEndian64",
+      "address": "00425e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425e80"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIG_StoreBigEndian64"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Sha1_Finalize",
+      "address": "00425f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425f00"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "Sha1_Finalize",
+        "Sha1_Append",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2Sha1ContextStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSIGNATURE_RsaPowMod",
+      "address": "00425fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425fe0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SBigPowMod",
+        "SSIGNATURE_RsaPowMod"
+      ],
+      "usedTypes": [
+        "BigData *"
+      ]
+    },
+    {
+      "name": "SSIGNATURE_RsaExportZeroPadded",
+      "address": "00426010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426010"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SSIGNATURE_RsaExportZeroPadded",
+        "SBigToBinaryBuffer",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigData *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSIGNATURE_RsaLoadComponent",
+      "address": "00426050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426050"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SBigFromBinary",
+        "SSIGNATURE_RsaLoadComponent"
+      ],
+      "usedTypes": [
+        "BigData *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CryptRSA_Prepare",
+      "address": "00426070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426070"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SBigPowMod",
+        "CryptRSA_Prepare",
+        "SBigFromBinary"
+      ],
+      "usedTypes": [
+        "BigData *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CryptRSA_Process",
+      "address": "004260a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004260a0"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "SBigPowMod",
+        "CryptRSA_Process",
+        "SBigNew",
+        "SBigFromBinary",
+        "SBigToBinaryBuffer",
+        "SMemZero",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "BigData *",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9ef8",
+      "address": "006c9ef8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9ef8"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9ef8",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9f28",
+      "address": "006c9f28",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9f28"
+        }
+      ],
+      "namespace": "Storm::Source::SSignature",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9f28",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

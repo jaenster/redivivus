@@ -22,7 +22,7 @@ struct __attribute__((packed)) D2GSMsg67GameLogonSPStrc {
     /* 0x13 */ uint8_t nTemplate;
     /* 0x14 */ uint8_t nDifficulty;
     /* 0x15 */ char szCharName[16];
-    /* 0x25 */ int16_t field_0x25;
+    /* 0x25 */ int16_t nArena;
     /* 0x27 */ eD2ArenaFlags eArenaFlags;
     /* 0x2B */ uint8_t field_0x2b;
     /* 0x2C */ uint8_t field_0x2c;
@@ -34,7 +34,7 @@ struct __attribute__((packed)) D2GSMsg68GameLogonMultiStrc {
     /* 0x01 */ uint32_t dwGameHash;
     /* 0x05 */ uint16_t nGameToken;
     /* 0x07 */ uint8_t nCharClass;
-    /* 0x08 */ uint32_t field_0x8; // IsTokenFirstGame rejects anything but 0xE
+    /* 0x08 */ uint32_t dwClientVersion; // IsTokenFirstGame rejects anything but 0xE
     /* 0x0C */ uint8_t field_0xc;
     /* 0x0D */ uint8_t field_0xd;
     /* 0x0E */ uint8_t field_0xe;

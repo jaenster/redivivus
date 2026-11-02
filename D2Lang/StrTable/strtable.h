@@ -36,16 +36,16 @@ namespace D2Lang::StrTable::strtable {
 // Function declarations
 BOOL __stdcall ARCHIVE_LoadMPQFiles();
 // @sourcefile .\StrTable\strtable.cpp
-void __fastcall STRTABLE_FreeMemory(void * pParam);
+void __fastcall STRTABLE_FreeMemory(void * pMemory);
 uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount);
 uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex);
 // @sourcefile .\StrTable\strtable.cpp
-uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbParam);
-uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbParam, uint16_t * * ppwszText);
-uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * pbParam);
+uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey);
+uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText);
+uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * szKey);
 // @sourcefile .\StrTable\strtable.cpp
 void __stdcall STRINGTABLE_FreeStringTables();
-void STRTABLE_InitCRC(uint16_t * wParam);
+void STRTABLE_InitCRC(uint16_t * pwCRC);
 void STRTABLE_UpdateCRC(uint16_t * pwCRC, uint8_t byData);
 void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, int32_t pBuffer, uint32_t nOffset, uint32_t nEndOffset);
 void __fastcall STRTABLE_NormalizeLanguageCode(char * szText);
@@ -55,8 +55,8 @@ uint32_t __stdcall MISC_GetLanguageCode();
 uint32_t __stdcall STRTABLE_GetRegistryLanguage();
 void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat);
 void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_t nMaxLen);
-void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nParam1, int32_t nParam2, int32_t nParam3);
-void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwParam1, uint32_t dwParam2, int32_t nParam);
+void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nValueLo, int32_t nValueHi, int32_t nMaxLen);
+void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwValueLo, uint32_t dwValueHi, int32_t nMaxLen);
 // @sourcefile .\StrTable\strtable.cpp
 int __fastcall TABLES_LoadStrings(struct D2PoolManagerStrc * pPoolManager, char * szText, int32_t isXpac);
 // 4 internal functions (defined in .cpp)

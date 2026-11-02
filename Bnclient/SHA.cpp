@@ -4,7 +4,6 @@
 #include "Storm/D2Srp.h"
 #include "Storm/Source/SBig.h"
 #include "Storm/Source/SMem.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -415,22 +414,22 @@ void __fastcall SHA1_Init(uint32_t * pState) {
     pState[5] = 0;
 }
 
-void __fastcall SHA1_Update(uint32_t * pnParam, void * pParam, uint32_t nByteLen) {
+void __fastcall SHA1_Update(uint32_t * pShaCtx, void * pData, uint32_t nByteLen) {
     size_t nProcessed;
-    uint32_t nBufOffset = pnParam[5] + nByteLen * 8;
-    uint32_t nBitLo = pnParam[5] >> 3 & 0x3f;
-    pnParam[5] = nBufOffset;
+    uint32_t nBufOffset = pShaCtx[5] + nByteLen * 8;
+    uint32_t nBitLo = pShaCtx[5] >> 3 & 0x3f;
+    pShaCtx[5] = nBufOffset;
     if (nBufOffset < nByteLen * 8) {
-      pnParam[6]++;
+      pShaCtx[6]++;
     }
 
-    pnParam[6] += nByteLen >> 0x1d;
+    pShaCtx[6] += nByteLen >> 0x1d;
     if (nBitLo + nByteLen > 0x3f) {
       nProcessed = -nBitLo + 0x40;
-      memcpy((void*)(nBitLo + 0x1c + (int)pnParam), pParam, nProcessed);
-      SHA1_Transform(pnParam + 7, pnParam);
+      memcpy((void*)(nBitLo + 0x1c + (int)pShaCtx), pData, nProcessed);
+      SHA1_Transform(pShaCtx + 7, pShaCtx);
       for (nBufOffset = -nBitLo + 0x7f; nBufOffset < nByteLen; nBufOffset += 0x40) {
-        SHA1_Transform((uint32_t*)((int)pParam + (nBufOffset - 0x3f)), pnParam);
+        SHA1_Transform((uint32_t*)((int)pData + (nBufOffset - 0x3f)), pShaCtx);
         nProcessed += 0x40;
       }
 
@@ -439,7 +438,7 @@ void __fastcall SHA1_Update(uint32_t * pnParam, void * pParam, uint32_t nByteLen
       nProcessed = 0;
     }
 
-    memcpy((void*)(nBitLo + 0x1c + (int)pnParam), (void*)(nProcessed + (int)pParam), nByteLen - nProcessed);
+    memcpy((void*)(nBitLo + 0x1c + (int)pShaCtx), (void*)(nProcessed + (int)pData), nByteLen - nProcessed);
 }
 
 void __fastcall SHA1_Final(uint8_t * pHashOut, uint32_t * pShaCtx) {
@@ -564,13 +563,13 @@ uint32_t __fastcall SHA1_ToBigIntBytes(BigData * pBigNum, void * pOutBuf, uint32
       return nBufSize;
     }
 
-    Storm::Source::SSystem::SMemZero((void*)(nBufSize + (int)pOutBuf), nOrigBufSize - nBufSize);
+    Storm::Source::SMem::SMemZero((void*)(nBufSize + (int)pOutBuf), nOrigBufSize - nBufSize);
     return nBufSize;
 }
 
 int32_t __fastcall SHA1_CompareBigInt(BigData * pBigA, BigData * pBigB) {
-    int32_t iVar1 = Storm::Source::SBig::SBIG_CompareBigBuffers_ForSha1(pBigA, pBigB);
-    return iVar1;
+    int32_t nCmpResult = Storm::Source::SBig::SBIG_CompareBigBuffers_ForSha1(pBigA, pBigB);
+    return nCmpResult;
 }
 
 // Compares pBigInt with the unsigned dwValue: builds a temporary BigData from dwValue (SBigNew + SBigFromUnsigned), returns SBIG_CompareBigBuffers_ForSha1(pBigInt, tmp) and frees the temporary.

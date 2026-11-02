@@ -1,0 +1,333 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Path.cpp",
+  "functions": [
+    {
+      "name": "DRAW_GetTypeOfBorder",
+      "address": "0045ae90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ae90"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_GetTypeOfBorder"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TypeOfUiOverlayOverWorld",
+      "address": "0045aea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045aea0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "TypeOfUiOverlayOverWorld",
+        "D2GFX_SetOverlayMode",
+        "SetViewRectangleSize",
+        "GAMEDATA_ClearQueuedClicks"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetMouseXOffset",
+      "address": "0045afa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045afa0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "GetMouseXOffset"
+      ]
+    },
+    {
+      "name": "GetMouseYOffset",
+      "address": "0045afb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045afb0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "GetMouseYOffset"
+      ]
+    },
+    {
+      "name": "DRAW_GetWorldOffsetX",
+      "address": "0045afc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045afc0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_GetWorldOffsetX"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_GetWorldOffsetY",
+      "address": "0045afd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045afd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_GetWorldOffsetY"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ConvertCoordToPerspectiveView",
+      "address": "0045aff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045aff0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "ConvertCoordToPerspectiveView",
+        "D2GFX_IsPerspectiveActive",
+        "DRLG_WorldToScreenShift5"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_DrawRoomUnits",
+      "address": "0045b0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b0b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_DrawRoomUnits",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "GetTargetX",
+        "GetTargetY",
+        "D2GFX_DrawSolidRectEx",
+        "D2GFX_DrawLine"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DEBUG_DrawRoomBoundsRect",
+      "address": "0045b1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b1a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DEBUG_DrawRoomBoundsRect",
+        "D2GFX_DrawRect"
+      ],
+      "usedTypes": [
+        "RECT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DEBUG_DrawUnitShadowBounds",
+      "address": "0045b1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b1e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DEBUG_DrawUnitShadowBounds",
+        "UNITS_GetRoom",
+        "DUNGEON_GetLvlWarpTxtForWarpUnit",
+        "GetXPos",
+        "GetYPos",
+        "CoordsMapToScreen",
+        "D2GFX_DrawLine",
+        "D2GFX_DrawRect"
+      ],
+      "usedTypes": [
+        "D2LvlWarpTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "RECT",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DEBUG_DrawWarpUnitBounds",
+      "address": "0045b3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b3e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DEBUG_DrawWarpUnitBounds",
+        "GetCurrentRoom",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "DEBUG_DrawUnitShadowBounds"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_UpdateMouseWorldOffsets",
+      "address": "0045b440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b440"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_UpdateMouseWorldOffsets",
+        "GetPlayerUnit_UI",
+        "GetTargetX",
+        "GetTargetY",
+        "SHAKE_GetShake"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_DrawRoomCollisionGrid",
+      "address": "0045b4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b4f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_DrawRoomCollisionGrid",
+        "DRLGROOM_GetRoomCoordinates",
+        "GetGridIndex",
+        "CoordsMapToScreen",
+        "D2GFX_DrawRect",
+        "D2GFX_DrawString"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "RECT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_DrawRoomWallTiles",
+      "address": "0045b5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b5f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DRAW_DrawRoomWallTiles",
+        "DRLGROOM_GetWallTilesFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetRoomCoordinates",
+        "CoordsMapToScreen",
+        "TILEPROJECT_GetTileCount",
+        "DEBUG_DrawRoomBoundsRect",
+        "D2GFX_DrawRect",
+        "D2GFX_DrawString",
+        "GetCurrentRoom",
+        "GetCoordList",
+        "CoordsMiniMapToScreen",
+        "D2GFX_DrawLine"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "RECT",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DEBUG_DrawLogicalRoomOverlay",
+      "address": "0045b8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b8b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Path",
+      "calledFunctions": [
+        "DEBUG_DrawLogicalRoomOverlay",
+        "D2GFX_GetRendererMode",
+        "GetPlayerUnit_Net",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "GetGridIndex",
+        "D2GFX_DrawString",
+        "DRAW_DrawRoomCollisionGrid",
+        "DRAW_DrawRoomWallTiles"
+      ],
+      "usedTypes": [
+        "eD2RendererMode",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/DataTbls/MonsterTbls.cpp",
+  "functions": [
+    {
+      "name": "TXT_MonStats_GetLine",
+      "address": "00451f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f80"
+        }
+      ],
+      "namespace": "D2Client::DataTbls::MonsterTbls",
+      "calledFunctions": [
+        "TXT_MonStats_GetLine"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_MonStats_GetMonStats2",
+      "address": "00451fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451fe0"
+        }
+      ],
+      "namespace": "D2Client::DataTbls::MonsterTbls",
+      "calledFunctions": [
+        "TXT_MonStats_GetMonStats2"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_States_GetLine",
+      "address": "00452040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00452040"
+        }
+      ],
+      "namespace": "D2Client::DataTbls::MonsterTbls",
+      "calledFunctions": [
+        "TXT_States_GetLine"
+      ],
+      "usedTypes": [
+        "D2StatesTxt",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "TXT_MonStats_GetFlagsByBitOffset",
+      "address": "00457490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457490"
+        }
+      ],
+      "namespace": "D2Client::DataTbls::MonsterTbls",
+      "calledFunctions": [
+        "TXT_MonStats_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "TxtMonStatsField0x0c",
+        "int32_t"
+      ]
+    }
+  ]
+}

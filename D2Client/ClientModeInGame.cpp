@@ -155,8 +155,8 @@ void __stdcall CLIENTMODEIN_CmdLineCallback_ShowHelp(uint32_t * pnErrorCode) {
 // "-set" command-line callback: saves the option's string value with SRegSaveString("Diablo II", "Default Command Line") and returns its result.
 // @provenance 1.14d asm 0044b5e0; the help text in CmdLine_SetAppMode lists -set as "Set new default command line string".
 BOOL __stdcall CmdLine_SaveDefaultCommandLine(CMDPARAMS * pParams, char * szCmdLine) {
-    int32_t iVar1 = Storm::Source::SReg::SRegSaveString("Diablo II", "Default Command Line", 0, pParams->uValue.szStringValue);
-    return iVar1;
+    int32_t bSaved = Storm::Source::SReg::SRegSaveString("Diablo II", "Default Command Line", 0, pParams->uValue.szStringValue);
+    return bSaved;
 }
 
 // App-mode command-line callback: matches the option's string value case-insensitively against gaClientModeHandlerTable and sets gdwAppMode on a hit (returns TRUE). Otherwise, once, shows the command-line help box (skipped for user name "rseis") and returns FALSE.

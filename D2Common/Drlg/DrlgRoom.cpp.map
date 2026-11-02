@@ -1,0 +1,1257 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/DrlgRoom.cpp",
+  "functions": [
+    {
+      "name": "DRLGWARP_GetWarpDestinationRoom",
+      "address": "0066ab00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ab00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_GetWarpDestinationRoom",
+        "InitRoomEx"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2LvlWarpTxt *",
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "DRLGWARP_SetAllWarpTilesSelectValue",
+      "address": "0066ab70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ab70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_SetAllWarpTilesSelectValue"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGWARP_UpdateWarpRoomExSelect",
+      "address": "0066ab90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ab90"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_UpdateWarpRoomExSelect"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomExStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "DRLGWARP_UpdateWarpRoomExDeselect",
+      "address": "0066abe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066abe0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_UpdateWarpRoomExDeselect"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomExStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "DRLGSPAWN_GetRandomPresetSpawnPoint",
+      "address": "0066ac40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ac40"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGSPAWN_GetRandomPresetSpawnPoint",
+        "GetRoomOfCoords"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "DRLGSPAWN_FindWaypointRoomAndCoords",
+      "address": "0066ad80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ad80"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGSPAWN_FindWaypointRoomAndCoords",
+        "GetWaypointFlags",
+        "InitRoomEx",
+        "TXT_Objects_GetLine"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2ObjectsTxt",
+        "D2PresetUnitStrc",
+        "D2RoomExStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGSPAWN_GetRoomAtLevelCenterOffset",
+      "address": "0066ae30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ae30"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGSPAWN_GetRoomAtLevelCenterOffset",
+        "GetRoomOfCoord"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGSPAWN_GetRandomRoomFromLevel",
+      "address": "0066ae70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ae70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGSPAWN_GetRandomRoomFromLevel",
+        "RANDOM_RandomNumberSelector",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGACTMISC_GetWarpsIdIfExists",
+      "address": "0066aec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066aec0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGACTMISC_GetWarpsIdIfExists",
+        "TXT_LevelDefs_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActWarpsInfoStrc",
+        "D2DrlgStrc",
+        "D2LevelDefsTxt",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGLEVEL_GetWarpsIdIfExistsAndSetup",
+      "address": "0066af50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066af50"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "TXT_LvlWarp_Setup",
+        "DRLGLEVEL_GetWarpsIdIfExistsAndSetup",
+        "DRLGACTMISC_GetWarpsIdIfExists"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LvlWarpTxt",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_GetLvlWarpTxtForWarpUnit",
+      "address": "0066af80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066af80"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOM_GetLvlWarpTxtForWarpUnit"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2LvlWarpTxt",
+        "D2RoomExStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGWARP_FindNthVisEntryForLevel",
+      "address": "0066afb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066afb0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_FindNthVisEntryForLevel",
+        "DRLGWARP_GetVisArrayFromLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "eD2LevelId",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGWARP_InitWarpConnectionsBetweenLevels",
+      "address": "0066b030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b030"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_InitWarpConnectionsBetweenLevels",
+        "DRLGACTMISC_AllocDrlgLevelForAct",
+        "GetLevelAndAlloc",
+        "InitLevel",
+        "DRLGWARP_GetVisArrayFromLevelId",
+        "DRLGACTMISC_GetWarpsIdIfExists",
+        "InitRoomEx",
+        "GetPresetUnits"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "D2PresetUnitStrc",
+        "D2RoomExStrc",
+        "eD2LevelId",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGWARP_ValidateWarpFlagsAgainstVis",
+      "address": "0066b1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b1f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_ValidateWarpFlagsAgainstVis",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_LevelDefs_GetLine"
+      ],
+      "usedTypes": [
+        "D2DrlgActWarpsInfoStrc",
+        "D2DrlgLevelStrc",
+        "D2LevelDefsTxt",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGSPAWN_FindSpawnLocationInLevel",
+      "address": "0066b2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b2b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGSPAWN_FindSpawnLocationInLevel",
+        "TXT_LevelDefs_GetLine",
+        "GetLevelAndAlloc",
+        "InitLevel",
+        "DRLGSPAWN_FindWaypointRoomAndCoords",
+        "InitRoomEx",
+        "DRLGSPAWN_GetRandomPresetSpawnPoint",
+        "DRLGWARP_ValidateWarpFlagsAgainstVis",
+        "GetRoomOfCoord",
+        "DRLGSPAWN_GetRandomRoomFromLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "D2LevelDefsTxt",
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_AllocRoomEx",
+      "address": "0066b3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b3e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_AllocRoomEx",
+        "AllocServerMemory",
+        "memset",
+        "InitSeed_Param_666",
+        "DRLGOUTROOM_AllocOutdoorRoomData",
+        "DRLGROOMEX_AllocRoomExDataPresetArea"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc",
+        "D2SeedStrc"
+      ]
+    },
+    {
+      "name": "FreeDrlgRoomEx",
+      "address": "0066b4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b4c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "FreeDrlgRoomEx",
+        "FreeRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_FreeDrlgRoomTile",
+      "address": "0066b4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b4f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_FreeDrlgRoomTile",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "FreeRoomData",
+      "address": "0066b530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b530"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "FreeRoomData",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgOrthStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_AllocNodesFromRoomExToRoomEx",
+      "address": "0066b560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b560"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_AllocNodesFromRoomExToRoomEx",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgOrthStrc",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_AllocNodesForBothRoomEx",
+      "address": "0066b5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b5e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGROOMEX_AllocNodesFromRoomExToRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx",
+      "address": "0066b610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b610"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgOrthStrc",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_FindReplaceAndFreeSub00ForBothRoomEx",
+      "address": "0066b670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b670"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_FindReplaceAndFreeSub00ForBothRoomEx",
+        "DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGORTH_CompareByDirectionAndCoord",
+      "address": "0066b6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b6a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGORTH_CompareByDirectionAndCoord"
+      ],
+      "usedTypes": [
+        "D2DrlgOrthStrc",
+        "eDrlgDirection"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_ReplaceSub00",
+      "address": "0066b720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b720"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_ReplaceSub00",
+        "DRLGORTH_CompareByDirectionAndCoord"
+      ],
+      "usedTypes": [
+        "D2DrlgOrthStrc",
+        "D2DrlgOrthStrc *"
+      ]
+    },
+    {
+      "name": "AllocDrlgOrth",
+      "address": "0066b790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b790"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "AllocDrlgOrth",
+        "AllocServerMemory",
+        "DRLGROOMEX_ReplaceSub00"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgOrthStrc",
+        "D2DrlgOrthStrc *",
+        "eDrlgDirection"
+      ]
+    },
+    {
+      "name": "DRLGCOORDS_IsWithinDistance",
+      "address": "0066b800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b800"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGCOORDS_IsWithinDistance"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_CoordsWithinDistance",
+      "address": "0066b860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b860"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOM_CoordsWithinDistance",
+        "DRLGCOORDS_IsWithinDistance"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGCOORDS_IsAdjacentOrOverlapping",
+      "address": "0066b880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b880"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGCOORDS_IsAdjacentOrOverlapping"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ComputeRectanglesManhattanDistance",
+      "address": "0066b900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b900"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "ComputeRectanglesManhattanDistance"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddRoomExToLevel",
+      "address": "0066b970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b970"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "AddRoomExToLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AreXYInsideCoordinates",
+      "address": "0066b980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b980"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "AreXYInsideCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGCOORDS_IsPointInside",
+      "address": "0066b9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066b9d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGCOORDS_IsPointInside"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_CheckWorldCoordsInRoomBounds",
+      "address": "0066ba20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ba20"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_CheckWorldCoordsInRoomBounds"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckLOSDraw",
+      "address": "0066ba70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ba70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "CheckLOSDraw"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_IsPresetWithOutdoorBorder",
+      "address": "0066ba90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ba90"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_IsPresetWithOutdoorBorder",
+        "DRLGOUTROOM_HasOutdoorBorderFlag"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetWaypointFlags",
+      "address": "0066baa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066baa0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetWaypointFlags"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetLevelId",
+      "address": "0066bab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bab0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetLevelId"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "DRLGWARP_GetWarpDestinationLevel",
+      "address": "0066bac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bac0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_GetWarpDestinationLevel",
+        "DRLGWARP_GetWarpDestinationRoom",
+        "GetRoomExFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LvlWarpTxt",
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetLevelIdFromPopulatedRoomEx",
+      "address": "0066bb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bb20"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetLevelIdFromPopulatedRoomEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "HasWaypoint",
+      "address": "0066bb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bb60"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "HasWaypoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPickedLevelPrestFilePathFromRoomEx",
+      "address": "0066bba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bba0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetPickedLevelPrestFilePathFromRoomEx",
+        "DRLGPRESET_GetPickedFilePathFromRoomEx"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "ReorderNearRoomList",
+      "address": "0066bbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bbc0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "ReorderNearRoomList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *"
+      ]
+    },
+    {
+      "name": "DefineRoomsNear",
+      "address": "0066bc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bc20"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DefineRoomsNear",
+        "ReorderNearRoomList",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "D2RoomExStrc *",
+        "D2RoomStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetRoomsNearCount",
+      "address": "0066bcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bcf0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetRoomsNearCount"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRealRoomsNearCount",
+      "address": "0066bd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bd00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetRealRoomsNearCount"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_FlagRoomExBorderingTown",
+      "address": "0066bd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bd50"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOM_FlagRoomExBorderingTown",
+        "LEVEL_CheckIfLevelIsTown"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_ResizeArrayAndAddNewNearRoom",
+      "address": "0066bda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bda0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_ResizeArrayAndAddNewNearRoom",
+        "ReAllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ReorderNearRoomList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "D2RoomExStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_AllocRoomTile",
+      "address": "0066be10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066be10"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_AllocRoomTile",
+        "AllocServerMemory",
+        "DRLGLEVEL_GetWarpsIdIfExistsAndSetup"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2LvlWarpTxt",
+        "D2RoomExStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_LinkNearRoomByDirection",
+      "address": "0066be80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066be80"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_LinkNearRoomByDirection",
+        "DRLGROOMEX_ResizeArrayAndAddNewNearRoom",
+        "DRLGROOMEX_AllocRoomTile"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "AllocPresetUnit",
+      "address": "0066bf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bf30"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "AllocPresetUnit",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "D2RoomExStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPresetUnits",
+      "address": "0066bfa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bfa0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetPresetUnits"
+      ],
+      "usedTypes": [
+        "D2PresetUnitStrc",
+        "D2RoomExStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetRoom",
+      "address": "0066bfc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bfc0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "SetRoom"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "GetRGB_IntensityFromRoomEx",
+      "address": "0066bfd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066bfd0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetRGB_IntensityFromRoomEx",
+        "TXT_LevelDefs_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelDefsTxt",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGWARP_GetVisArrayFromLevelId",
+      "address": "0066c040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066c040"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGWARP_GetVisArrayFromLevelId",
+        "TXT_LevelDefs_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActWarpsInfoStrc",
+        "D2DrlgStrc",
+        "D2LevelDefsTxt",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetDrlgFromRoomEx",
+      "address": "0066c0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066c0b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "GetDrlgFromRoomEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgStrc",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_FreeDrlgRoomEx",
+      "address": "0066c100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066c100"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_FreeDrlgRoomTile",
+        "FreeServerMemory",
+        "DRLGOUTROOM_FreeDrlgOutdoorRoomData",
+        "DRLGROOMEX_FreeRoomExDataPresetArea",
+        "DRLGPRESETUNIT_FreeDrlgPresetUnit",
+        "DRLGROOMEX_FindReplaceAndFreeSub00VsTargetRoomEx",
+        "FreeRoomData",
+        "DRLGROOMTILE_FreeRoomTilesAll",
+        "FreeDrlgCoordList"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgOrthStrc",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_LinkNearRoomsByVis",
+      "address": "0066c220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066c220"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_LinkNearRoomsByVis",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGWARP_GetVisArrayFromLevelId",
+        "GetLevelAndAlloc",
+        "DRLGWARP_GetWarpDestinationFromArray",
+        "InitLevel",
+        "DRLGROOMEX_LinkNearRoomByDirection"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "eD2LevelId",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_InitNearRoomsAndVisTiles",
+      "address": "0066c370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066c370"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgRoom",
+      "calledFunctions": [
+        "DRLGROOMEX_InitNearRoomsAndVisTiles",
+        "DefineRoomsNear",
+        "DRLGROOMEX_LinkNearRoomsByVis",
+        "DRLGROOM_FlagRoomExBorderingTown"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

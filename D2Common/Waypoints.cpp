@@ -72,10 +72,10 @@ BOOL __stdcall FindWaypointIdByLevelId(eD2LevelId eLevel, int16_t * pWaypointId)
 
     D2LevelsTxt* pLevelsTxt = DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
     if (pLevelsTxt) {
-      uint8_t bVar1;
-      bVar1 = pLevelsTxt->Waypoint;
-      *pWaypointId = (uint16_t)bVar1;
-      if (bVar1 != 0xff) {
+      uint8_t byWaypointId;
+      byWaypointId = pLevelsTxt->Waypoint;
+      *pWaypointId = (uint16_t)byWaypointId;
+      if (byWaypointId != 0xff) {
         return 1;
       }
     }
@@ -131,9 +131,9 @@ D2WaypointStrc * __stdcall Alloc(D2PoolManagerStrc * pMemory) {
 // TRUE when the waypoint history already carries signature 0x102. Otherwise it requires 0 or 0x101 (halt, Waypoint.cpp line 275, pHistory[0] == 0 OR pHistory[0] == 0x101), then stores 0x102 and returns FALSE.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __fastcall WAYPOINT_UpgradeSignature(D2WaypointStrc * pWaypoint) {
-    uint16_t uVar1 = pWaypoint->nSignature;
-    if (uVar1 != 0x102) {
-      if (uVar1 && uVar1 != 0x101) {
+    uint16_t wSignature = pWaypoint->nSignature;
+    if (wSignature != 0x102) {
+      if (wSignature && wSignature != 0x101) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x113);
         exit(-1);
       }

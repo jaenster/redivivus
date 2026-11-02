@@ -1,0 +1,213 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Lang/D2Lang.cpp",
+  "functions": [
+    {
+      "name": "UI_FormatNumberWithCommas",
+      "address": "00525fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525fb0"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "UI_FormatNumberWithCommas",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "_itoa",
+        "__security_check_cookie",
+        "UTF8_ConvertToWideChar",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UTF8_DecodeNextChar",
+      "address": "00526100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526100"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "UTF8_DecodeNextChar"
+      ],
+      "usedTypes": [
+        "D2Utf8DecodeRowStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "EncodeUTF8CodePoint",
+      "address": "00526190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526190"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "EncodeUTF8CodePoint"
+      ],
+      "usedTypes": [
+        "D2Utf8DecodeRowStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_GetNextCharWidth",
+      "address": "00526200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526200"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "UTF8_GetNextCharWidth"
+      ],
+      "usedTypes": [
+        "D2Utf8DecodeRowStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_GetStringLength",
+      "address": "005262a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005262a0"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "UTF8_GetStringLength",
+        "UTF8_GetNextCharWidth"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_EncodeCodePoint",
+      "address": "005262f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005262f0"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "UTF8_EncodeCodePoint",
+        "EncodeUTF8CodePoint",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_ConvertToWideChar",
+      "address": "00526320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526320"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "UTF8_ConvertToWideChar",
+        "UTF8_DecodeNextChar"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WideCharToUTF8",
+      "address": "005263e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005263e0"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "WideCharToUTF8",
+        "EncodeUTF8CodePoint"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UTF8_GetEncodedLength",
+      "address": "00526430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526430"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "UTF8_GetEncodedLength",
+        "EncodeUTF8CodePoint",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UI_CompareCharsUsingLookupTable",
+      "address": "00526490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526490"
+        }
+      ],
+      "namespace": "D2Lang",
+      "calledFunctions": [
+        "UI_CompareCharsUsingLookupTable"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    }
+  ]
+}

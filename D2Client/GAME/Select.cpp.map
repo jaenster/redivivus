@@ -1,0 +1,536 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Select.cpp",
+  "functions": [
+    {
+      "name": "SELECT_GetConstant13_X",
+      "address": "00466dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466dc0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_GetConstant13_X"
+      ]
+    },
+    {
+      "name": "SELECT_GetConstant13_Y",
+      "address": "00466dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466dd0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_GetConstant13_Y"
+      ]
+    },
+    {
+      "name": "SetSelectedUnit_I",
+      "address": "00466de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466de0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SetSelectedUnit_I",
+        "TEXT_IsScrollingTextActive",
+        "TEXT_GetOverheadSpeakerUnit",
+        "TEXT_SetNpcMenuSelection",
+        "TEXT_ClearNpcMenuSelection",
+        "HitTestScreen",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_FindClientSideUnit",
+        "UNITS_GetRoom",
+        "UpdateWarpRoomDeselect",
+        "SetFlag0x1",
+        "TXT_MonStats_GetLine",
+        "TXT_MonStats_GetMonStats2",
+        "IsDoor",
+        "GetTickCount",
+        "sprintf",
+        "NET_D2GS_CLIENT_Send_INT",
+        "UpdateWarpRoomSelect"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2MonStatsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ClearSelectedUnit",
+      "address": "00466fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466fe0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "ClearSelectedUnit"
+      ]
+    },
+    {
+      "name": "SetCanBeSelectedToFalse",
+      "address": "00466ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466ff0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SetCanBeSelectedToFalse"
+      ]
+    },
+    {
+      "name": "SELECT_IsWarpDoubleClicked",
+      "address": "00467000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467000"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_IsWarpDoubleClicked",
+        "WARP_IsPointInClickArea",
+        "IsInMovingMode",
+        "GAMEDATA_GetQueuedPrimaryClick",
+        "GAMEDATA_GetGlobalTickCount",
+        "GAME_GetSyncTickCount",
+        "GAME_SetSyncTickCount"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SELECT_ScreenToWorldCoords",
+      "address": "004670a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004670a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_ScreenToWorldCoords",
+        "D2GFX_IsPerspectiveActive",
+        "DRAW_GetWorldOffsetX",
+        "DRAW_GetWorldOffsetY"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SELECT_HandleMouseInput",
+      "address": "00467130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467130"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_HandleMouseInput",
+        "DRAW_GetTypeOfBorder",
+        "TEXT_IsScrollingTextActive",
+        "TEXT_GetOverheadSpeakerUnit",
+        "TEXT_SetNpcMenuSelection",
+        "TEXT_ClearNpcMenuSelection",
+        "UNITS_FindClientSideUnit",
+        "UNITS_GetRoom",
+        "UpdateWarpRoomDeselect",
+        "SetFlag0x1",
+        "GetMouseX",
+        "GetMouseY",
+        "SELECT_ScreenToWorldCoords",
+        "SetSelectedUnit_I"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SELECT_IsDoorBlockingUnit",
+      "address": "00467250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467250"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_IsDoorBlockingUnit",
+        "GetPlayerUnit_UI",
+        "GetCoords",
+        "GetObjectTxtRecordFromObject"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "POINT",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SELECT_IsUnitBehindDoor",
+      "address": "00467310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467310"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_IsUnitBehindDoor",
+        "GetObjectTxtRecordFromObject",
+        "GetPlayerUnit_UI",
+        "GetCoords"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "POINT",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SELECT_GetDistanceSquared",
+      "address": "004673c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004673c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_GetDistanceSquared",
+        "GetTargetX",
+        "GetTargetY"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SELECT_SetPetSeedTimestamp",
+      "address": "00467410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467410"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_SetPetSeedTimestamp",
+        "GetSeed"
+      ],
+      "usedTypes": [
+        "D2RosterPetSeedStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SELECT_SetExclusionRect",
+      "address": "00467430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467430"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_SetExclusionRect"
+      ],
+      "usedTypes": [
+        "RECT"
+      ]
+    },
+    {
+      "name": "SKILL_FindTargetInRange",
+      "address": "00467490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467490"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SKILL_FindTargetInRange",
+        "IsActive",
+        "GetXPos",
+        "GetYPos",
+        "GetSkillId",
+        "TXT_Items_GetBitFieldAnd0x02",
+        "memset",
+        "GetPlayerUnit_Net",
+        "GetCurrentRoom",
+        "InitializeUnitFindData",
+        "UNITFINDS_FindCullRange",
+        "GetDistanceToXY",
+        "HitTestScreen",
+        "FreeUnitFindData"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitFindArgStrc",
+        "D2UnitFindDataStrc",
+        "D2UnitStrc",
+        "UNITFINDTEST",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnitIsOfTypeMonster",
+      "address": "00467640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467640"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "UnitIsOfTypeMonster"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SELECT_FindTargetInFacingDirection",
+      "address": "00467660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467660"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_FindTargetInFacingDirection",
+        "PATH_GetCurrentDirection",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "CheckCollision_BlockAll_Width",
+        "CallCollisionFunction",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "CanInteractWith",
+        "SetTargetUnitForDynamicUnit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SELECT_GetTargetCoords",
+      "address": "004677b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004677b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "GetFreeCoordinates_WithMaxDistance",
+        "SELECT_GetTargetCoords",
+        "GetXPos",
+        "GetYPos",
+        "GetCurrentRoom",
+        "CheckCollision_BlockPlayerMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "eCollisionFlags",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "SKILL_ValidateTarget",
+      "address": "00467880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467880"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SKILL_ValidateTarget",
+        "GetSkillsTxt",
+        "GetPlayerUnit_UI",
+        "IsActive",
+        "SetSelectedUnit_I",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPos",
+        "GetYPos",
+        "GetPositionNextToPlayerDirection",
+        "IsInMovingMode",
+        "PLRSKILLS_CanUseSkillCheck",
+        "SKILL_FindTargetInRange",
+        "SELECT_FindTargetInFacingDirection",
+        "SELECT_GetTargetCoords"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SELECT_InitConstants",
+      "address": "00467a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467a00"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_InitConstants"
+      ]
+    },
+    {
+      "name": "GetSelectedUnit",
+      "address": "00467a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467a10"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "GetSelectedUnit",
+        "UNITS_FindClientSideUnit",
+        "HitTestScreen"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SELECT_UpdateUnitSelection",
+      "address": "00467a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467a70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_UpdateUnitSelection",
+        "HitTestScreen",
+        "SetSelectedUnit_I"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SELECT_UpdateSelectedUnit",
+      "address": "00467ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467ac0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Select",
+      "calledFunctions": [
+        "SELECT_UpdateSelectedUnit",
+        "SELECT_HandleMouseInput",
+        "GetSelectedUnit",
+        "HitTestScreen",
+        "SetSelectedUnit_I",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CoordsMapToScreen",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SELECT_IsWarpDoubleClicked",
+        "IsActive",
+        "CheckIfMonsterIsDead",
+        "UNIT_GetUnitState",
+        "IsDoor",
+        "SELECT_IsUnitBehindDoor",
+        "SELECT_IsDoorBlockingUnit",
+        "SELECT_GetDistanceSquared"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

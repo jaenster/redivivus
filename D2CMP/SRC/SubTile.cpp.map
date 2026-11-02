@@ -1,0 +1,261 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/SubTile.cpp",
+  "functions": [
+    {
+      "name": "SUBTILE_CountRunLength",
+      "address": "0060d310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d310"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CountRunLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_CompressToRLE",
+      "address": "0060d430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d430"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CompressToRLE",
+        "AllocClientMemory",
+        "SUBTILE_CountRunLength",
+        "SUBTILE_CountRunLengthForByte"
+      ],
+      "usedTypes": [
+        "char *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_AllocAndCompress",
+      "address": "0060d510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d510"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_AllocAndCompress",
+        "SUBTILE_CompressToRLE",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_ConvertToIndexed",
+      "address": "0060d5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d5b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_ConvertToIndexed",
+        "AllocClientMemory",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnRGBToPaletteIndex",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_ConvertRGBToIndexed",
+      "address": "0060d6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d6f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_ConvertRGBToIndexed",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnRGBToPaletteIndex",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_CheckIfIsometricEmpty",
+      "address": "0060d7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d7e0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CheckIfIsometricEmpty"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_CompressIsometricShape",
+      "address": "0060d840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d840"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CompressIsometricShape",
+        "AllocClientMemory",
+        "memset",
+        "SUBTILE_CountRunLength",
+        "SUBTILE_CountRunLengthForByte",
+        "memcpy",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_ExtractIsometricPixels",
+      "address": "0060d9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d9c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_ExtractIsometricPixels",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_CompressWithColorKey",
+      "address": "0060da80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060da80"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CompressWithColorKey",
+        "SUBTILE_ConvertRGBToIndexed",
+        "SUBTILE_CheckIfIsometricEmpty",
+        "SUBTILE_ExtractIsometricPixels",
+        "SUBTILE_CompressIsometricShape",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "pfnRGBToPaletteIndex",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUBTILE_RecompressExisting",
+      "address": "0060db20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060db20"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_RecompressExisting",
+        "SUBTILE_CheckIfIsometricEmpty",
+        "SUBTILE_ExtractIsometricPixels",
+        "SUBTILE_CompressIsometricShape",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CELCMP_CompressAllFramesWithColorKey",
+      "address": "0060db60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060db60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "CELCMP_CompressAllFramesWithColorKey",
+        "SUBTILE_CompressWithColorKey",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

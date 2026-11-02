@@ -1,0 +1,974 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/QuestLog.cpp",
+  "functions": [
+    {
+      "name": "QUESTLOG_FindQuestIndexById",
+      "address": "004a1910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a1910"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_FindQuestIndexById"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_PopulateQuestEntry",
+      "address": "004a1950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a1950"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "sprintf",
+        "QUESTLOG_PopulateQuestEntry",
+        "GetQuestInfo",
+        "NPCMENU_GetMercHireCost",
+        "GetQuestState",
+        "GetLocaleString",
+        "WSTRING_PutWideCharIntoBuffer",
+        "UNICODE_FormatWideString",
+        "CONTAINER_InitializeBuffer",
+        "UTF8_ConvertToWideChar",
+        "STRING_CopyWideString",
+        "STRING_GetWideStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AppendToBuffer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestLogEntryStrc",
+        "WCHAR",
+        "eD2Quests",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_SetActiveAct",
+      "address": "004a2220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2220"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_SetActiveAct",
+        "GetQuestInfo",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_SetActiveActFromPlayerRoom",
+      "address": "004a2300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2300"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_SetActiveActFromPlayerRoom",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "QUESTLOG_SetActiveAct"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ResetState",
+      "address": "004a2390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2390"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ResetState"
+      ]
+    },
+    {
+      "name": "LoadQuestimages",
+      "address": "004a23d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a23d0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "LoadQuestimages",
+        "INV_GetItemDescDirtyFlag",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FreeQuestImages",
+      "address": "004a2550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2550"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "FreeQuestImages",
+        "DC6_FreeAndDelete"
+      ],
+      "usedTypes": [
+        "DC6 *"
+      ]
+    },
+    {
+      "name": "QUESTLOG_HitTestCloseButton",
+      "address": "004a2610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2610"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_HitTestCloseButton"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_HitTestQuestIcon",
+      "address": "004a2630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2630"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_HitTestQuestIcon",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_HitTestOpenButton",
+      "address": "004a2690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2690"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_HitTestOpenButton"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CloseQuestLogWeird",
+      "address": "004a26b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a26b0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "CloseQuestLogWeird",
+        "FreeQuestImages",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "QUESTLOG_HitTestActTab",
+      "address": "004a26f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a26f0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_HitTestActTab",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_AcknowledgeNewQuests",
+      "address": "004a2760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2760"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_AcknowledgeNewQuests",
+        "GetQuestInfo",
+        "SetQuestState",
+        "NET_D2GS_CLIENT_Send_SHORT"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ScrollCompleteCallback_ClearButton",
+      "address": "004a27b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a27b0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ScrollCompleteCallback_ClearButton",
+        "TEXT_SetScrollCompleteCallback"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ShowQuestDescription",
+      "address": "004a27d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a27d0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ShowQuestDescription",
+        "TEXT_ShowScrollingText",
+        "TEXT_SetScrollCompleteCallback"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_OnCloseClick",
+      "address": "004a2840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2840"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_OnCloseClick",
+        "SMsgBreakHandlerChain",
+        "FreeQuestImages",
+        "SetUIFlag",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "QUESTLOG_HandleSpecialPacket",
+      "address": "004a28a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a28a0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_HandleSpecialPacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x50"
+      ]
+    },
+    {
+      "name": "QUESTLOG_CloseAndFreeImages",
+      "address": "004a28d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a28d0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_CloseAndFreeImages",
+        "QUESTLOG_AcknowledgeNewQuests",
+        "FreeQuestImages"
+      ]
+    },
+    {
+      "name": "QUESTLOG_GetDrawPosition",
+      "address": "004a2900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2900"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_GetDrawPosition",
+        "GetUIFlag",
+        "D2GFX_GetResolutionMode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_IsPointInQuestLog",
+      "address": "004a2970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2970"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_IsPointInQuestLog",
+        "DRAW_GetTypeOfBorder",
+        "QUESTLOG_GetDrawPosition"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_OnQuestLogMouseDown",
+      "address": "004a2a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2a20"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_OnQuestLogMouseDown",
+        "QUESTLOG_IsPointInQuestLog",
+        "SOUND_PlaySound",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "QUESTLOG_DrawQuestLogButton",
+      "address": "004a2a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2a80"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_DrawQuestLogButton",
+        "IsPlayerDead",
+        "SetUIFlag",
+        "DRAW_GetTypeOfBorder",
+        "GetUIFlag",
+        "memset",
+        "QUESTLOG_GetDrawPosition",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "GetDC6Width",
+        "GetLocaleString",
+        "DRAW_text0",
+        "DRAW_text",
+        "D2GFX_DrawImage",
+        "GetMouseY",
+        "GetMouseX",
+        "QUESTLOG_IsPointInQuestLog"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6Block",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_SelectQuestByIndex",
+      "address": "004a2c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2c30"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_SelectQuestByIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ClearMissileFlagCb_Missile146",
+      "address": "004a2c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2c70"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ClearMissileFlagCb_Missile146"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ClearMissileFlagCb_Missile527",
+      "address": "004a2c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2c90"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ClearMissileFlagCb_Missile527"
+      ]
+    },
+    {
+      "name": "QUESTLOG_HandleQuestStatePacket",
+      "address": "004a2cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a2cb0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_HandleQuestStatePacket",
+        "GetLocaleString",
+        "TEXT_PrintGameString",
+        "CUNIT_IterateMissilesWithCallback",
+        "GAMEDATA_InitializeEclipseEnvironment",
+        "GFX_PrecacheMonsterAllModes",
+        "D2CLIENT_SetExitVar3ToTrue",
+        "SOUND_PlaySound",
+        "SetPendingExitCutsceneId",
+        "GetQuestInfo",
+        "GetQuestState",
+        "CLIENT_SetQuestGameEndTimer",
+        "QUESTLOG_FindQuestIndexById",
+        "SetUIFlag",
+        "QUESTLOG_SelectQuestByIndex",
+        "GetUIFlag",
+        "CLIENT_CheckExpansion",
+        "INV_SetItemDescHighlight",
+        "GAMEDATA_ShowEndGameCutscene",
+        "INV_SetItemDescFlag"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GSPacketClt0x5D",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ResetNpcDialogState",
+      "address": "004a3000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3000"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ResetNpcDialogState"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ResetQuestFilterArrays",
+      "address": "004a3020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3020"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ResetQuestFilterArrays"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ResetQuestSelections",
+      "address": "004a3050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3050"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ResetQuestSelections"
+      ]
+    },
+    {
+      "name": "QUESTLOG_PlayLevelUpCinematic",
+      "address": "004a30a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a30a0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_PlayLevelUpCinematic",
+        "GFX_PrecacheMonsterAllModes"
+      ]
+    },
+    {
+      "name": "QUESTLOG_PlayActBossCinematic",
+      "address": "004a30c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a30c0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_PlayActBossCinematic",
+        "GFX_PrecacheMonsterAllModes"
+      ]
+    },
+    {
+      "name": "QUESTLOG_SetZooSpawnFlag",
+      "address": "004a3100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3100"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_SetZooSpawnFlag"
+      ]
+    },
+    {
+      "name": "QUESTLOG_GetZooSpawnFlag",
+      "address": "004a3110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3110"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_GetZooSpawnFlag"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_FindZooDummyMonster",
+      "address": "004a3120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3120"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_FindZooDummyMonster",
+        "UNITS_FindServerSideUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "QUESTLOG_SpawnZooDummyMonsters",
+      "address": "004a3150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3150"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_SpawnZooDummyMonsters",
+        "GetPlayerUnit_UI",
+        "CreateMissileOrMonster"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_LoadQuestIconsForAct",
+      "address": "004a3220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3220"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_LoadQuestIconsForAct",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "QUESTLOG_PopulateQuestEntry"
+      ],
+      "usedTypes": [
+        "D2QuestLogEntryStrc",
+        "DC6",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GameOverWtf",
+      "address": "004a3410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3410"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "GameOverWtf",
+        "SRegSaveValue",
+        "memset"
+      ]
+    },
+    {
+      "name": "DRAW_UI_Quest",
+      "address": "004a34f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a34f0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "DRAW_UI_Quest",
+        "memset",
+        "IsPlayerDead",
+        "FreeQuestImages",
+        "SetUIFlag",
+        "GetUIFlag",
+        "INV_GetItemDescDirtyFlag",
+        "CloseQuestLogWeird",
+        "LoadQuestimages",
+        "QUESTLOG_LoadQuestIconsForAct",
+        "D2GFX_DrawImage",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "GetQuestInfo",
+        "GetQuestState",
+        "QUESTLOG_PopulateQuestEntry",
+        "SetQuestState",
+        "NET_D2GS_CLIENT_Send_SHORT",
+        "GetTickCount",
+        "SOUND_PlaySound",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "DRAW_text0",
+        "DRAW_text",
+        "D2WINFONT_WordWrapString",
+        "FreeClientMemory",
+        "GetBuySellBtnDC6",
+        "GetMouseX",
+        "GetMouseY",
+        "TEXT_TooltipSetAttributes"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GfxDataStrc",
+        "D2TextLineStrc",
+        "WCHAR",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_OnMouseDown",
+      "address": "004a3e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3e40"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_OnMouseDown",
+        "INV_GetItemDescDirtyFlag",
+        "D2GFX_GetResolutionMode",
+        "QUESTLOG_HitTestActTab",
+        "QUESTLOG_HitTestQuestIcon",
+        "QUESTLOG_HitTestOpenButton",
+        "QUESTLOG_HitTestCloseButton",
+        "SOUND_PlaySound",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "QUESTLOG_AcknowledgeNewQuests",
+        "QUESTLOG_SetActiveAct",
+        "QUESTLOG_LoadQuestIconsForAct",
+        "QUESTLOG_ResetState",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_ToggleQuestScreen",
+      "address": "004a3fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a3fe0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_ToggleQuestScreen",
+        "GetTickCount",
+        "IsPlayerDead",
+        "INV_GetItemDescDirtyFlag",
+        "SetUIFlag",
+        "LoadQuestimages",
+        "QUESTLOG_SetActiveActFromPlayerRoom",
+        "QUESTLOG_LoadQuestIconsForAct",
+        "NET_D2GS_CLIENT_Send_CMD",
+        "CloseQuestLogWeird",
+        "TEXT_HandleEscapeKey_Thunk"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS",
+      "address": "004a40d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a40d0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS",
+        "INV_GetItemDescDirtyFlag",
+        "LoadQuestimages",
+        "QUESTLOG_LoadQuestIconsForAct"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_OnButtonMouseUp",
+      "address": "004a4110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a4110"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_OnButtonMouseUp",
+        "QUESTLOG_IsPointInQuestLog",
+        "SetUIFlag",
+        "QUESTLOG_ToggleQuestScreen",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "QUESTLOG_IsQuestAvailableForInteraction",
+      "address": "004a4180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a4180"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_IsQuestAvailableForInteraction",
+        "GetQuestAvailabilityByIndex",
+        "NPCMENU_GetMercHireCost",
+        "GetQuestState",
+        "GetQuestInfo",
+        "QUESTLOG_PopulateQuestEntry"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestLogEntryStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QUESTLOG_OnMouseUp",
+      "address": "004a42a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a42a0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "QUESTLOG_OnMouseUp",
+        "QUESTLOG_ShowQuestDescription",
+        "QUESTLOG_HitTestQuestIcon",
+        "QUESTLOG_ToggleQuestScreen",
+        "D2GFX_GetResolutionMode",
+        "GAMEDATA_ClearQueuedClicks",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6cac30",
+      "address": "006cac30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cac30"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "StaticInit_6cac30"
+      ]
+    },
+    {
+      "name": "StaticInit_6cacd0",
+      "address": "006cacd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cacd0"
+        }
+      ],
+      "namespace": "D2Client::UI::QuestLog",
+      "calledFunctions": [
+        "StaticInit_6cacd0",
+        "SKILLDESC_InitMissileBuffers"
+      ]
+    }
+  ]
+}

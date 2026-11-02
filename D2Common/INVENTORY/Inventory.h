@@ -123,26 +123,26 @@ struct D2UnitStrc * __stdcall INVENTORY_GetLastItem(struct D2InventoryStrc * pIn
 uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, struct D2InventoryGridInfoStrc * pGridInfo);
 // Finds a valid grid position in pInventory for pUnit (must be UNIT_ITEM) on the inventory page eInvPage. Queries the item's width/height via ITEM_GetItemsTxt_nWidthAndHeight, retrieves or creates the grid via ReinitializeInventoryGrid, then dispatches to INVENTORY_FindPlacementSlot, INVENTORY_FindGridPositionByOwner, INVENTORY_FindGridPositionByOwner2, or INVENTORY_FindGridPositionByOwner3 depending on item/inventory size class. Returns 0 on any validation failure.
 // @sourcefile .\INVENTORY\Inventory.cpp
-int __stdcall INVENTORY_FindItemGridPosition(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int * ppnOutX, int * pnOutY, uint8_t bParam);
+int __stdcall INVENTORY_FindItemGridPosition(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int * ppnOutX, int * pnOutY, uint8_t byPage);
 // @wasnamed INVENTORY_PlaceItemInGrid - one name on two different functions.
 // @evidence Calls INVENTORY_FindItemGridPosition first, then 0063afd0 with
 // the found x/y. The explicit-position placement is 0063afd0.
-BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint32_t nParam2, char * szFile, int32_t nLine);
+BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint32_t nPage, char * szFile, int32_t nLine);
 // Checks whether an item (pUnit) can be placed at grid position (nGridX, nGridY) on page eInvPage in pInventory without colliding with existing items. Reads item dimensions via ITEM_GetItemsTxt_nWidthAndHeight, reinitializes the grid layout, then walks the item's footprint cells. Writes collision count to *pnParam; returns 1 if all cells are clear, 0 if any cell is occupied or inputs are invalid.
 // @sourcefile .\INVENTORY\Inventory.cpp
-BOOL __stdcall INVENTORY_CheckGridCollisions(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, struct D2UnitStrc * * ppCollidedItemOut, int * pnParam, uint32_t nParam);
+BOOL __stdcall INVENTORY_CheckGridCollisions(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, struct D2UnitStrc * * ppCollidedItemOut, int * pnCollidingItemCount, uint32_t nPage);
 // Checks whether the rectangular region [nGridX, nGridY, nGridX+itemW, nGridY+itemH] in the inventory grid for eInvPage is clear enough to place pUnit. Iterates every cell in the bounding box via the reinitialised grid; returns 0 if a box-code item blocks placement (when bCheckBox set) or if more than one distinct item occupies the region, otherwise returns 1. Writes a blocking item pointer to *pnOutItem when a conflict is found.
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CheckGridOccupancy(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, int * pnOutItem, uint32_t nPageByte, int bCheckBox);
 BOOL __stdcall INVENTORY_PlaceItemAtCoords(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, int32_t nUnused, uint8_t bGridIndex);
 void __stdcall UnusedDebug(char * szFilename, uint32_t nLine, struct D2InventoryStrc * pInventory, int32_t nX, int32_t nY, eInventoryPage neInventoryPage, uint32_t dwParam, int32_t nInvPage);
-void __stdcall NullSub(struct D2InventoryStrc * dwParam);
+void __stdcall NullSub(struct D2InventoryStrc * pInventory);
 struct D2UnitStrc * __stdcall GetUnitAndXAndY(struct D2InventoryStrc * pInventory, int32_t nGridX, int32_t nGridY, int * pnOutX, int * pnOutY, int32_t eInvPage, uint8_t nGridSize);
 BOOL __stdcall INVENTORY_GetItemAtBodyLoc(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eBodyLoc);
 struct D2UnitStrc * __stdcall INVENTORY_GetItemByGridOffset(struct D2InventoryStrc * pInventory, int32_t nGridOffset);
 // @wasnamed NullSub - one name on two different functions.
 // @evidence Bare RET, 2 parameters. 0063bd00 is a bare RET with 1 parameter.
-void __stdcall NullSub_2Arg(struct D2InventoryStrc * dwParam1, uint32_t dwParam2);
+void __stdcall NullSub_2Arg(struct D2InventoryStrc * pInventory, uint32_t dwParam2);
 // Returns 1 if pInventory has a non-broken, non-disabled item matching weapon class ConfirmWClass equipped in either the primary right-arm slot (grid cell 5) or primary left-arm slot (grid cell 4). Checks both slots independently via ITEM_CheckIfItemIsNotBrokenAndNotDisabled and HasWeaponClass. Returns 0 if no match or inventory is invalid.
 uint32_t __stdcall INVENTORY_HasEquippedWeaponClass(struct D2InventoryStrc * pInventory, int32_t ConfirmWClass);
 struct D2UnitStrc * __stdcall GetEquipedWeapon(struct D2InventoryStrc * pInventory);
@@ -159,10 +159,10 @@ struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInStash(struct D2Inven
 // Scans the main inventory grid of pInventory for the first item that is socketable (per IsItemSocketable) relative to pUnit1, is not fully stacked, and — if pUnit2 is non-null — appears after pUnit2 in the item list. Returns the matching D2UnitStrc* or NULL.
 struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInMain(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
-struct D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(struct D2InventoryStrc * pnParam, struct D2UnitStrc * pScrollItem, struct D2UnitStrc * pStartAfterItem);
+struct D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pScrollItem, struct D2UnitStrc * pStartAfterItem);
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CanPlaceItemInBelt(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, uint32_t nBeltSlot);
-void __stdcall INVENTORY_OnBeltChanged_NoOp(struct D2InventoryStrc * dwParam1, uint32_t dwParam2);
+void __stdcall INVENTORY_OnBeltChanged_NoOp(struct D2InventoryStrc * pInventory, uint32_t dwParam2);
 BOOL __stdcall INVENTORY_CanAutoBeltItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 // Finds the best belt slot index for pUnit (a potion item) and writes it to *dwParam. Prefers a column already containing the same potion type (stacking behaviour), falling back to any empty slot if the item's txt entry has bAutoBelt set. Only considers 1x1 beltable items; slot count is capped by the equipped belt's nBoxes. Does nothing if no valid slot is found.
 // @sourcefile .\INVENTORY\Inventory.cpp
@@ -170,18 +170,18 @@ BOOL __stdcall INVENTORY_FindBeltSlotForPotion(struct D2InventoryStrc * pInvento
 int __stdcall INVENTORY_PlacePotionInBelt(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(struct D2InventoryStrc * pInventory, uint32_t nBeltSlot);
 // @sourcefile .\INVENTORY\Inventory.cpp
-BOOL __stdcall INVENTORY_CheckBeltSlotAndGetItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItemUnit, uint32_t dwParam1, struct D2UnitStrc * * ppOutItem);
+BOOL __stdcall INVENTORY_CheckBeltSlotAndGetItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItemUnit, uint32_t nBeltSlot, struct D2UnitStrc * * ppOutItem);
 // Returns true if a non-broken, non-disabled shield is equipped in either the primary (grid cell 4) or secondary (grid cell 5) weapon slot of the inventory. If ppUnit is non-null, writes the found shield unit pointer to *ppUnit. Returns false and leaves *ppUnit null if no shield is equipped.
 BOOL __stdcall INVENTORY_GetEquippedShield(struct D2InventoryStrc * pInventory, struct D2UnitStrc * * ppUnit);
 // Returns the currently equipped weapon from the primary (body-loc 4) or secondary (body-loc 5) weapon slot. Checks each slot via ReinitializeInventoryGrid grid-cell [4]/[5], verifies the item is not broken/disabled and is of type ITEMTYPE_Weapon, writes it to *ppUnit and its body-loc index to *eBodyLoc. Sets *bResult=1 if the returned item matches the active weapon hand. Returns 0 if no valid weapon is equipped.
 BOOL __stdcall INVENTORY_GetEquippedWeaponInfo(struct D2InventoryStrc * pInventory, struct D2UnitStrc * * ppUnit, int32_t * eBodyLoc, BOOL * bResult);
 uint32_t __stdcall INVENTORY_CheckHasArmorEquipped(struct D2InventoryStrc * pInventory);
-uint32_t __stdcall INVENTORY_CanMoveEquippedToPage(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pPlayer, uint32_t nParam, int32_t ePage);
+uint32_t __stdcall INVENTORY_CanMoveEquippedToPage(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pPlayer, uint32_t nBodyLoc, int32_t ePage);
 void __stdcall INVENTORY_RemoveAllItems(struct D2InventoryStrc * pInventory);
 struct D2InventoryToBeUpdatedStrc * __stdcall GetUpdates(struct D2InventoryStrc * pInventory);
 // @sourcefile .\INVENTORY\Inventory.cpp
 void __stdcall FreeUpdatesFromInventory(struct D2InventoryStrc * pInventory);
-BOOL __stdcall SERVER_IsInToBeUpdatedList(struct D2InventoryStrc * pInventory, int32_t nParam);
+BOOL __stdcall SERVER_IsInToBeUpdatedList(struct D2InventoryStrc * pInventory, int32_t nUnitGuid);
 // @sourcefile .\INVENTORY\Inventory.cpp
 void __stdcall UpsertToUpdateList(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 struct D2InventoryToBeUpdatedStrc * __stdcall GetNextUpdate(struct D2InventoryToBeUpdatedStrc * pUpdate);
@@ -212,12 +212,12 @@ void __stdcall INVENTORY_AddCorpse(struct D2InventoryStrc * pInventory, int32_t 
 BOOL __stdcall INVENTORY_RemoveCorpse(struct D2InventoryStrc * pInventory, int32_t nGUID, int32_t eUnitType);
 struct D2CorpseStrc * __stdcall INVENTORY_GetCorpse(struct D2InventoryStrc * pInventory);
 // @sourcefile .\INVENTORY\Inventory.cpp
-void __stdcall INVENTORY_FreeNotifications(struct D2InventoryStrc * pnParam);
+void __stdcall INVENTORY_FreeNotifications(struct D2InventoryStrc * pInventory);
 int32_t __stdcall INVENTORY_GetCorpseCount(struct D2InventoryStrc * pInventory);
 // Returns pCorpse->pNext (+0xc).
 struct D2CorpseStrc * __stdcall INVENTORY_GetNextCorpse(struct D2CorpseStrc * pCorpse);
 int32_t __stdcall ROOMCORPSE_GetGUID(struct D2CorpseStrc * pCorpse);
-int32_t __stdcall CORPSE_GetMercClassId(struct D2CorpseStrc * nParam);
+int32_t __stdcall CORPSE_GetMercClassId(struct D2CorpseStrc * pCorpse);
 struct D2RoomStrc * * __stdcall CORPSE_GetData(struct D2CorpseStrc * pRoom);
 // One-time initializer (guarded by gbItemTypeTableInitialized) that builds gaItemTypeBaseIdTable and gwItemTypeEquivByIndex — a compact lookup table mapping item base-type IDs to their item-type equivalence index. Iterates all Items.txt rows, filters out non-equippable types (no weapons/armor/shields/helms/circlets), deduplicates by base-type ID, and assigns slots by weapon/armor category match. Also seeds gaItemTypeStringBuffer literals ("lit", "med", "hvy") and gnItemTypeAltGfxSentinel=0xFF.
 void __stdcall INVENTORY_InitializeItemTypeTable();

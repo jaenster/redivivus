@@ -1,0 +1,402 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinButton.cpp",
+  "functions": [
+    {
+      "name": "FORMS_DestroyD2WinButton",
+      "address": "00500930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500930"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinButton",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_IsPressed",
+      "address": "00500960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500960"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_IsPressed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_SetPressed",
+      "address": "005009a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005009a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_SetPressed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_SetTextWithFont",
+      "address": "005009d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005009d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_SetTextWithFont",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_SetLocalizedTextWithFont",
+      "address": "00500a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500a20"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_SetLocalizedTextWithFont",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetLocaleString",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_SetBounds",
+      "address": "00500a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500a70"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_SetBounds",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_InvokeClickCallback",
+      "address": "00500ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500ab0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_InvokeClickCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinButton *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_SetImageIndex",
+      "address": "00500b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500b20"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_SetImageIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_HandleMouseWheel",
+      "address": "00500b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500b50"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_HandleMouseWheel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinButton",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_SetCustomData",
+      "address": "00500bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500bf0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_SetCustomData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_IsPointInside",
+      "address": "00500c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500c20"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_IsPointInside"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_DrawText",
+      "address": "00500c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500c50"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_DrawText",
+        "SetAndReturnLastFont",
+        "D2WINFONT_GetCurrentFontHeight",
+        "DRAW_text0",
+        "GetLocaleString",
+        "D2WINFONT_DrawTextWithOptionalBackground"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "DRAWMODE",
+        "GLOBALPALLETE",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "00500db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00500db0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "Draw",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINBUTTON_IsPointInside",
+        "memset",
+        "D2GFX_DrawImage",
+        "D2WINBUTTON_DrawText",
+        "D2WINMAIN_GetFormImage"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2ControlStrc",
+        "D2GfxDataStrc",
+        "D2WinButton",
+        "DRAWMODE",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Push",
+      "address": "00501090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00501090"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "Push",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_PlaySoundEffect"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinButton",
+        "OnPress",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Mouse",
+      "address": "00501150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00501150"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "Mouse",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinButton",
+        "OnPress",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WINBUTTON_HandleHotkey",
+      "address": "005011f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005011f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WINBUTTON_HandleHotkey",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinButton",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WinButton",
+      "address": "00501290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00501290"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinButton",
+      "calledFunctions": [
+        "D2WinButton",
+        "AllocClientMemory",
+        "memset",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "DC6",
+        "Mouse",
+        "OnPress",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

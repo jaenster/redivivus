@@ -303,13 +303,13 @@ char * __fastcall StripPathPrefixToRelative(char * szText) {
     }
 
     pResult = Storm::Source::SSTR::SStrLen(szText);
-    char* pcVar1 = szText + g_nPathStripOffset;
+    char* pszResult = szText + g_nPathStripOffset;
     if (pResult > g_nPathStripOffset) {
-      return pcVar1;
+      return pszResult;
     }
 
-    pcVar1 = szText;
-    return pcVar1;
+    pszResult = szText;
+    return pszResult;
 }
 
 // Returns the caller's return address, i.e. the instruction pointer of the call site. Body is MOV EAX,[ESP]; RET - it reads the return address off the stack and returns it. Takes NO arguments: the RET (not RET 4) leaves the caller's stack untouched, and the DWORD after the call is the __LINE__ value the caller pushed for the assert/halt call that follows. Fog ordinal #10265 @ RVA 0x8090.
@@ -628,7 +628,7 @@ void FOG_ErrorHandler(eFOG_ErrorType eErrorType, char * szFile, int32_t nLine, c
     char szFormattedReasonBuffer[4096];
     uint32_t local_8;
     bool bIsFatalErrorType;
-    uint32_t uVar1;
+    uint32_t bDebuggerPresent;
     int32_t nLineSaved;
     if (eErrorType == ERROR_Deadlock) {
       szFile = ".\\Src\\ErrorManager.cpp";
@@ -647,8 +647,8 @@ void FOG_ErrorHandler(eFOG_ErrorType eErrorType, char * szFile, int32_t nLine, c
         bIsFatalErrorType = true;
       }
 
-      uVar1 = _3rdparty::crashy::isDebuggerPresent();
-      if ((char)uVar1 == '\0') {
+      bDebuggerPresent = _3rdparty::crashy::isDebuggerPresent();
+      if ((char)bDebuggerPresent == '\0') {
         Storm::Source::SSTR::SStrPrintf(szFormattedReasonBuffer, 0x1000, szReasonFormat, __va);
         nLineSaved = nLine;
         szRelativeFile = StripPathPrefixToRelative(szFile);
@@ -706,7 +706,7 @@ void ERROR_UnrecoverableInternalError_Any(eFOG_ErrorType eErrorType, uint32_t dw
 
 // Displays an unrecoverable error message box and logs to file. Formats the error message via vsnprintf with varargs, optionally prepends file/line info if provided, constructs a "Diablo II Error" title, and shows MessageBoxA with MB_ICONEXCLAMATION. Logs the full error message to the error log before displaying. Uses three buffers: 4096 bytes for vsnprintf formatting, 4096 bytes for final message (with file/line), and 256 bytes for the title string.
 // EDI is not an argument: saved at 00408b40 PUSH EDI, then loaded from [EBP+0xc].
-void __fastcall ShowUnrecoverableErrorDialog(int32_t nParam, char * szText, int nLine, char * szSourceFile, va_list vaArgs) {
+void __fastcall ShowUnrecoverableErrorDialog(int32_t eErrorType, char * szText, int nLine, char * szSourceFile, va_list vaArgs) {
     char* szRelativePath2;
     char* pScan;
     char szMessageBoxBuffer[4096];
@@ -733,7 +733,7 @@ void __fastcall ShowUnrecoverableErrorDialog(int32_t nParam, char * szText, int 
     if (szText) {
       pScan = szFormattedMessageBuffer;
       szRelativePath2 = StripPathPrefixToRelative(szText);
-      Storm::Source::SSTR::SStrPrintf(szFinalErrorMessage, 0x1000, "%s\nLocation : %s, line #%d\nExpression : %s", gaErrorTypeNames[nParam], szRelativePath2, nLine, pScan);
+      Storm::Source::SSTR::SStrPrintf(szFinalErrorMessage, 0x1000, "%s\nLocation : %s, line #%d\nExpression : %s", gaErrorTypeNames[eErrorType], szRelativePath2, nLine, pScan);
     } else {
       nCopyIdx = 0;
       do {
@@ -4862,10 +4862,10 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
     static int gbFogErrorManagerPadding; D2_STATIC_GUARD_BSS(gbFogErrorManagerPadding, "Fog::Src::ErrorManager::ERRORMANAGER_InitErrorManager::gbFogErrorManagerPadding");
     static uint64_t gFogMemoryPoolPadding = 0; D2_STATIC_GUARD(gFogMemoryPoolPadding, "Fog::Src::ErrorManager::ERRORMANAGER_InitErrorManager::gFogMemoryPoolPadding");
 
-    // Frame slots -4108..-8 are ONE object: &local_100c is passed out and the callee reaches the rest by byte offset.
+    // Frame slots -4108..-8 are ONE object: &bTraceUnfreedMemory is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      int32_t local_100c;
+      int32_t bTraceUnfreedMemory;
       char szPathBuffer[4096];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 4100, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -4905,9 +4905,9 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
       /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&lpCriticalSection_0074d848);
       gbFogErrorManagerInitialized = 1;
       LogManager::InitHighResTimer();
-      __frame0.local_100c = 0;
-      Storm::Source::SReg::SRegLoadValue("Diablo II", "TraceUnfreedMemory", 0, &__frame0.local_100c);
-      *(uint32_t*)(char*)&gFogMemoryPoolPadding = __frame0.local_100c;
+      __frame0.bTraceUnfreedMemory = 0;
+      Storm::Source::SReg::SRegLoadValue("Diablo II", "TraceUnfreedMemory", 0, &__frame0.bTraceUnfreedMemory);
+      *(uint32_t*)(char*)&gFogMemoryPoolPadding = __frame0.bTraceUnfreedMemory;
       Memory::InitializePoolSystem(nullptr, "Global Pool System", 0x40000, 0x8000);
       SMem::SMemInitPerfCounters();
       iBitIdx = 0;

@@ -155,13 +155,13 @@ uint32_t __stdcall LOADER_RunInsertDiscPopup() {
     IMG_okcancelbtn = (D2ArchiveStrc*)Core::Archive::IMAGE_LoadDC6Ex("Data\\Global\\UI\\Menu\\okcancelbtn", 0);
     D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(0);
     GAME::Game::GAMEDATA_SetDrawFunction(1);
-    int32_t iVar2 = 4;
+    int32_t nHandlerCount = 4;
     HWND pHVar1 = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_RegisterEventHandlerBatch(pHVar1, gsUIEngineFlagInit, iVar2);
+    _Message::MESSAGE_RegisterEventHandlerBatch(pHVar1, gsUIEngineFlagInit, nHandlerCount);
     _Message::MessageGameLoop((::fpGameLoopFunction)Engine::fpGameLoopFunction);
-    iVar2 = 4;
+    nHandlerCount = 4;
     pHVar1 = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(pHVar1, gsUIEngineFlagInit, iVar2);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(pHVar1, gsUIEngineFlagInit, nHandlerCount);
     GAME::Game::GAMEDATA_SetDrawFunction(0);
     Engine::LOADER_FreePopupImages();
     return 1;
@@ -186,8 +186,8 @@ int __fastcall SKILL_SelectProc_IsSelectableCorpse2(D2UnitStrc * pUnit, D2UnitSt
 
 // SelectProc=2 handler: target must be a consumable corpse (basic check). Forwards to D2CheckIfCorpseIsConsumable(pTargetUnit, bCheckDead=0). pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
 int __fastcall SKILL_SelectProc_IsCorpseConsumableBasic(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    uint32_t uVar1 = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
-    return uVar1;
+    uint32_t bConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
+    return bConsumable;
 }
 
 // SelectProc=3 handler: target must be a consumable corpse that can be converted and is not monsterId 0x4e (Bone Golem/special). Used for Raise Skeleton-type skills. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
@@ -219,20 +219,20 @@ int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitSt
 
 // SelectProc=4 handler: target must be a corpse valid for revive (Necromancer Revive). Thunk forwarding to SKILLS_IsCorpseValidForRevive. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
 int __fastcall SKILL_SelectProc_IsCorpseValidForRevive(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    uint32_t uVar1 = D2Common::Skills::SKILLS_IsCorpseValidForRevive(pTargetUnit);
-    return uVar1;
+    uint32_t bValid = D2Common::Skills::SKILLS_IsCorpseValidForRevive(pTargetUnit);
+    return bValid;
 }
 
 // SelectProc=6 handler: target must be a living monster that can be revived. Thunk forwarding to SKILL_CanReviveMonster. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
 int __fastcall SKILL_SelectProc_CanReviveMonster(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    uint32_t uVar1 = D2Common::Skills::SKILL_CanReviveMonster(pTargetUnit);
-    return uVar1;
+    uint32_t bCanRevive = D2Common::Skills::SKILL_CanReviveMonster(pTargetUnit);
+    return bCanRevive;
 }
 
 // SelectProc=5 handler: target must be a selectable corpse (primary type). Thunk forwarding to SKILLS_IsSelectableCorpse. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
 int __fastcall SKILL_SelectProc_IsSelectableCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    int iVar1 = D2Common::Skills::SKILLS_IsSelectableCorpse(pTargetUnit);
-    return iVar1;
+    int bSelectable = D2Common::Skills::SKILLS_IsSelectableCorpse(pTargetUnit);
+    return bSelectable;
 }
 
 BOOL __fastcall ITEM_IsQuestItem(D2UnitStrc * pItem, D2UnitFindArgStrc * pUnitFindArg) {
@@ -241,8 +241,8 @@ BOOL __fastcall ITEM_IsQuestItem(D2UnitStrc * pItem, D2UnitFindArgStrc * pUnitFi
     }
 
     int nClassId = pItem->nClassId;
-    uint32_t uVar1 = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x02(nClassId);
-    if (uVar1) {
+    uint32_t bIsQuest = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x02(nClassId);
+    if (bIsQuest) {
       return 1;
     }
 
@@ -259,8 +259,8 @@ void __stdcall CMD_ToggleInventory() {
 }
 
 void __stdcall CMD_TogglePartyScreen() {
-    eD2GSGameType eVar1 = GAME::Game::CLIENT_GetD2GSGameType();
-    if (eVar1 == GAMETYPE_SINGLEPLAYER) {
+    eD2GSGameType eGameType = GAME::Game::CLIENT_GetD2GSGameType();
+    if (eGameType == GAMETYPE_SINGLEPLAYER) {
       return;
     }
 
@@ -277,8 +277,8 @@ void __stdcall CMD_ToggleQuestLog() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -309,8 +309,8 @@ void __stdcall CMD_AutomapCenterOnPlayer() {
 }
 
 void __stdcall CMD_AutomapCycleFade() {
-    int32_t iVar1 = UI::Automap::AUTOMAP_GetFade();
-    uint32_t nAutomapFade = (int)(iVar1 + 1U) % 4;
+    int32_t nCurrentFade = UI::Automap::AUTOMAP_GetFade();
+    uint32_t nAutomapFade = (int)(nCurrentFade + 1U) % 4;
     UI::Automap::AUTOMAP_SetFade(nAutomapFade);
 }
 
@@ -320,13 +320,13 @@ void __stdcall CMD_AutomapToggleParty() {
 }
 
 void __stdcall CMD_AutomapTogglePartyNames() {
-    int32_t iVar1 = UI::Automap::AUTOMAP_GetPartyNames();
-    UI::Automap::AUTOMAP_SetPartyNames((uint32_t)!iVar1);
+    int32_t bPartyNames = UI::Automap::AUTOMAP_GetPartyNames();
+    UI::Automap::AUTOMAP_SetPartyNames((uint32_t)!bPartyNames);
 }
 
 void __stdcall CMD_AutomapToggleLeft() {
-    int32_t iVar1 = UI::Automap::AUTOMAP_GetLeft();
-    UI::Automap::AUTOMAP_SetLeft((uint32_t)!iVar1);
+    int32_t bLeft = UI::Automap::AUTOMAP_GetLeft();
+    UI::Automap::AUTOMAP_SetLeft((uint32_t)!bLeft);
 }
 
 void __stdcall CMD_ToggleSkillTree() {
@@ -346,8 +346,8 @@ void __stdcall CMD_SelectSkillHotkeySlot(int nSlot) {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
     if (nSlot > 8) {
@@ -376,8 +376,8 @@ void __stdcall CMD_ActivateSkillSlot_F1() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -396,8 +396,8 @@ void __stdcall CMD_ActivateSkillSlot_F2() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -416,8 +416,8 @@ void __stdcall CMD_ActivateSkillSlot_F3() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -436,8 +436,8 @@ void __stdcall CMD_ActivateSkillSlot_F4() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -456,8 +456,8 @@ void __stdcall CMD_ActivateSkillSlot_F5() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -476,8 +476,8 @@ void __stdcall CMD_ActivateSkillSlot_F6() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -496,8 +496,8 @@ void __stdcall CMD_ActivateSkillSlot_F7() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -516,8 +516,8 @@ void __stdcall CMD_ActivateSkillSlot_F8() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -536,8 +536,8 @@ void __stdcall CMD_ActivateSkillSlot_F9() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -556,8 +556,8 @@ void __stdcall CMD_ActivateSkillSlot_F10() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -581,8 +581,8 @@ void __stdcall CMD_ActivateSkillSlot_F11() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -606,8 +606,8 @@ void __stdcall CMD_ActivateSkillSlot_F12() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -631,8 +631,8 @@ void __stdcall CMD_ActivateSkillSlot_F13() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -656,8 +656,8 @@ void __stdcall CMD_ActivateSkillSlot_F14() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -681,8 +681,8 @@ void __stdcall CMD_ActivateSkillSlot_F15() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -706,8 +706,8 @@ void __stdcall CMD_ActivateSkillSlot_F16() {
       return;
     }
 
-    uint32_t uVar2 = UNIT::Player::IsPlayerDead();
-    if (uVar2) {
+    uint32_t bIsDead = UNIT::Player::IsPlayerDead();
+    if (bIsDead) {
       return;
     }
 
@@ -837,9 +837,9 @@ void __stdcall ClientLight_UpdateRoomLightPulse() {
 }
 
 int32_t __fastcall RNG_GetRandomInRangeWithMin(uint32_t * pSeed, int32_t nMin, int32_t nRange) {
-    int64_t lVar1 = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
-    *(int64_t*)pSeed = lVar1;
-    return (nRange - 1U & (uint32_t)lVar1) + nMin;
+    int64_t nNextSeed = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
+    *(int64_t*)pSeed = nNextSeed;
+    return (nRange - 1U & (uint32_t)nNextSeed) + nMin;
 }
 
 // Returns 1 if the current arena level flag (bit 1 of CLIENT_ArenaFlags) is set, indicating the active level is designated as an arena level.
@@ -1251,10 +1251,10 @@ void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod,
       return;
     }
 
-    uint32_t uVar1 = pUnit->nClassId;
-    if (uVar1 <= 0x100) {
-      if (uVar1 != 0x100) {
-        switch (uVar1) {
+    uint32_t nClassId = pUnit->nClassId;
+    if (nClassId <= 0x100) {
+      if (nClassId != 0x100) {
+        switch (nClassId) {
           case 0x9c:
             if (pUnit->eAnimMode.ePlayerMode == Death) {
               Source::ClientEngine::CLIENT_BossDeath_Andariel(pUnit);
@@ -1297,11 +1297,11 @@ void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod,
           return;
         }
       }
-    } else if (uVar1 <= 0x1df) {
-      if (uVar1 != 0x1df) {
-        if (uVar1 != 0x10b) {
-          if (uVar1 != 0x11c) {
-            if (uVar1 == 0x16e && pUnit->eAnimMode.ePlayerMode == Death) {
+    } else if (nClassId <= 0x1df) {
+      if (nClassId != 0x1df) {
+        if (nClassId != 0x10b) {
+          if (nClassId != 0x11c) {
+            if (nClassId == 0x16e && pUnit->eAnimMode.ePlayerMode == Death) {
               Source::ClientEngine::CLIENT_SpawnOrbMistEffect(pUnit);
               return;
             }
@@ -1323,9 +1323,9 @@ void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod,
           return;
         }
       }
-    } else if (uVar1 >= 0x21c) {
-      if (uVar1 > 0x21e) {
-        if (uVar1 == 0x220 && pUnit->eAnimMode.ePlayerMode == Death) {
+    } else if (nClassId >= 0x21c) {
+      if (nClassId > 0x21e) {
+        if (nClassId == 0x220 && pUnit->eAnimMode.ePlayerMode == Death) {
           Source::ClientEngine::CLIENT_BossDeath_Baal();
           return;
         }
@@ -1341,18 +1341,18 @@ void __fastcall MONUNIQUE_Clt_SpawnPainWormDeathExplosion(D2UnitStrc * pUnit, in
     UNIT::MonUnique::MONUNIQUE_PregnantCorpseBurst(pUnit);
 }
 
-void __fastcall MONSTER_FreeMonsterPath(int * pThis) {
-    if (!(pThis && *pThis == 1)) {
+void __fastcall MONSTER_FreeMonsterPath(int * pUnit) {
+    if (!(pUnit && *pUnit == 1)) {
       return;
     }
 
-    int iVar1 = pThis[5];
-    if (!(iVar1 && *(void**)(iVar1 + 0x2c))) {
+    int nMonsterData = pUnit[5];
+    if (!(nMonsterData && *(void**)(nMonsterData + 0x2c))) {
       return;
     }
 
-    D2_FREE_AT(*(void**)(iVar1 + 0x2c), ".\\UNIT\\Monster.cpp", 0x66);
-    *(uint32_t*)(iVar1 + 0x2c) = 0;
+    D2_FREE_AT(*(void**)(nMonsterData + 0x2c), ".\\UNIT\\Monster.cpp", 0x66);
+    *(uint32_t*)(nMonsterData + 0x2c) = 0;
 }
 
 int __stdcall NPCMENU_ConfirmTransactionReturn() {
@@ -1399,8 +1399,8 @@ int __stdcall NPCMENU_GetCurrentMenuId() {
     }
 }
 
-void __fastcall TRADE_HandleTradeComplete(int32_t nValue, char cParam) {
-    if (cParam != '\0') {
+void __fastcall TRADE_HandleTradeComplete(int32_t nValue, char bIsGoldAmount) {
+    if (bIsGoldAmount != '\0') {
       gnTradePlayerGoldAmount = nValue;
       return;
     }
@@ -1416,20 +1416,20 @@ int __stdcall D2CLIENT_GetTradePlayerGoldAmount() {
     return gnTradePlayerGoldAmount;
 }
 
-void __fastcall TRADE_SendGoldToPartner(uint32_t nParam) {
+void __fastcall TRADE_SendGoldToPartner(uint32_t nGoldAmount) {
     uint16_t nLayer;
     if (g_nTradeWindowState != 4 && g_nTradeWindowState != 5 && g_nTradeWindowState != 6) {
       eD2UnitStat eUnitStat;
       nLayer = 0;
       eUnitStat = UNITSTAT_gold;
       gnTradePlayerGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nLayer);
-      if (nParam >= gnTradePlayerGoldAmount) {
+      if (nGoldAmount >= gnTradePlayerGoldAmount) {
         GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 8, (int16_t)(gnTradePlayerGoldAmount >> 0x10), (int16_t)gnTradePlayerGoldAmount);
         return;
       }
 
-      gnTradePlayerGoldAmount = nParam;
-      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 8, (int16_t)(nParam >> 0x10), (int16_t)nParam);
+      gnTradePlayerGoldAmount = nGoldAmount;
+      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 8, (int16_t)(nGoldAmount >> 0x10), (int16_t)nGoldAmount);
       return;
     }
 
@@ -1525,8 +1525,8 @@ uint32_t __stdcall GetQuestAvailabilityByIndex(int32_t nUnused, int32_t nQuestIn
     }
 }
 
-void __fastcall thunk_ExitGamePlayCutScene(int32_t nParam) {
-    ExitGamePlayCutScene((uint32_t)*(uint8_t*)(nParam + 1));
+void __fastcall thunk_ExitGamePlayCutScene(int32_t pPacket) {
+    ExitGamePlayCutScene((uint32_t)*(uint8_t*)(pPacket + 1));
 }
 
 // Handles GS→client packet 0x89: forwards byte pBytes[1] (subcommand/type) to Storm::Source::ClientEngine::HandleIncoming0x89 for game-state update processing.
@@ -1773,7 +1773,7 @@ BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY) {
     return 0;
 }
 
-int32_t __fastcall UI_GetDialogLineCount(int16_t nParam) {
+int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId) {
     // Static local variables (originally global data)
     static uint32_t gnUIDialogLineCountA[1730] = {
     0xda0,
@@ -3517,7 +3517,7 @@ int32_t __fastcall UI_GetDialogLineCount(int16_t nParam) {
       if (!*pDialogEntry) {
         return 0;
       }
-      if ((short int)pDialogEntry[1] == nParam) {
+      if ((short int)pDialogEntry[1] == nDialogId) {
         return *pDialogEntry;
       }
 
@@ -3527,13 +3527,13 @@ int32_t __fastcall UI_GetDialogLineCount(int16_t nParam) {
     return 0;
 }
 
-int32_t __thiscall WARDEN_DecryptBuffer(int * pnParam, int32_t param_1) {
-    int pContext = *pnParam;
+int32_t __thiscall WARDEN_DecryptBuffer(int * ppModule, int32_t nOrdinal) {
+    int pContext = *ppModule;
     if (!pContext) {
       return 0;
     }
 
-    uint32_t nOffset = param_1 - *(int*)(pContext + 0x18);
+    uint32_t nOffset = nOrdinal - *(int*)(pContext + 0x18);
     if (nOffset >= *(uint32_t*)(pContext + 0x14)) {
       return 0;
     }
@@ -4079,7 +4079,7 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
 
 void AtexitCleanup_FreeLinkedListAndCritSec() {
     EnterCriticalSection(&gcsErrorHandlerList);
-    Storm::Source::SSystem::LINKEDLIST_FreeAllNodes(&gFaultHandlerList);
+    Storm::Source::SSystem::TSList_TMESSAGESOURCE_Clear(&gFaultHandlerList);
     LeaveCriticalSection(&gcsErrorHandlerList);
     DeleteCriticalSection(&gcsErrorHandlerList);
     gbFaultHandlerListInitialized = 0;

@@ -1,0 +1,179 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/stpl_TCELENTRY.cpp",
+  "functions": [
+    {
+      "name": "Link",
+      "address": "00601fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601fa0"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "Link"
+      ],
+      "usedTypes": [
+        "TCELENTRY",
+        "TSLink<TCELENTRY>",
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
+      ]
+    },
+    {
+      "name": "LinkNode",
+      "address": "00601fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601fc0"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "TCELENTRY",
+        "TSLink<TCELENTRY>",
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Next",
+      "address": "00602070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602070"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "Next"
+      ],
+      "usedTypes": [
+        "TCELENTRY",
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnlinkNode",
+      "address": "00602190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602190"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "UnlinkNode"
+      ],
+      "usedTypes": [
+        "TCELENTRY",
+        "TSLink<TCELENTRY>",
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RawNext",
+      "address": "006023e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006023e0"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "RawNext"
+      ],
+      "usedTypes": [
+        "TCELENTRY",
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
+      ]
+    },
+    {
+      "name": "UnlinkAll",
+      "address": "006025e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006025e0"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "006027a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006027a0"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSLink<TCELENTRY>",
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopyConstructor",
+      "address": "00602980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602980"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "CopyConstructor"
+      ],
+      "usedTypes": [
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
+      ]
+    },
+    {
+      "name": "NewNode",
+      "address": "006029b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006029b0"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "NewNode",
+        "SMemAlloc",
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "TCELENTRY",
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "uint32_t"
+      ]
+    }
+  ]
+}

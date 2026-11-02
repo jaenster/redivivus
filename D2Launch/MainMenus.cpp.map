@@ -1,0 +1,4535 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Launch/MainMenus.cpp",
+  "functions": [
+    {
+      "name": "CRYPTO_ByteSwap16Array",
+      "address": "0042e5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e5d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "CRYPTO_ByteSwap16Array"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CRYPTO_ByteSwap32Array",
+      "address": "0042e600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e600"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "CRYPTO_ByteSwap32Array"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CRYPTO_ByteSwap64Array",
+      "address": "0042e650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e650"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "CRYPTO_ByteSwap64Array"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetGlobalValue1",
+      "address": "0042e6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e6a0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetGlobalValue1"
+      ],
+      "usedTypes": [
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetGlobalFlag",
+      "address": "0042e6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e6b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetGlobalFlag"
+      ]
+    },
+    {
+      "name": "IMAGE_LoadPredefinedImages",
+      "address": "0042e6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e6d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "IMAGE_LoadPredefinedImages",
+        "IMAGE_LoadDC6",
+        "D2CheckExpansionGame",
+        "sprintf"
+      ]
+    },
+    {
+      "name": "IMAGE_FreePredefinedImages",
+      "address": "0042ef50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042ef50"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "IMAGE_FreePredefinedImages",
+        "IMAGE_FreeImage",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "DC6 *"
+      ]
+    },
+    {
+      "name": "D2GFX_SetPaletteForDraw",
+      "address": "0042f2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f2e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "D2GFX_SetPaletteForDraw",
+        "LoadPalette"
+      ]
+    },
+    {
+      "name": "FORMS_CreateAnyFormFromList",
+      "address": "0042f3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f3a0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "FORMS_CreateAnyFormFromList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FORMS_CreateAnyForm"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyList",
+      "address": "0042f3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f3f0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "FORMS_DestroyList",
+        "FORMS_DestroyAnyForm"
+      ],
+      "usedTypes": [
+        "D2ControlStrc *"
+      ]
+    },
+    {
+      "name": "FORMS_CreateAnyFormFromListExEx",
+      "address": "0042f430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f430"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FORMS_CreateAnyForm"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyLists",
+      "address": "0042f480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f480"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "FORMS_DestroyLists",
+        "FORMS_DestroyAnyForm",
+        "D2WINMAIN_SetBackgroundDC6",
+        "D2GFX_SetPaletteForDraw",
+        "CHARSEL_DestroyAllCharEntries",
+        "CHARSEL_FreeCachedRealmData",
+        "D2WINMAIN_SetCursorVisible"
+      ],
+      "usedTypes": [
+        "D2ControlStrc *"
+      ]
+    },
+    {
+      "name": "STRING_ZeroOneWCHAR",
+      "address": "0042f530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f530"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "STRING_ZeroOneWCHAR"
+      ]
+    },
+    {
+      "name": "MAINMENU_CreateMessageBox",
+      "address": "0042f540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f540"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_CreateMessageBox",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "D2WINTEXTBOX_SetTextW"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "OnPress",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetConnectFlag",
+      "address": "0042f6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f6c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetConnectFlag"
+      ]
+    },
+    {
+      "name": "MAINMENU_GetGlobalValue2",
+      "address": "0042f6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f6d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetGlobalValue2"
+      ]
+    },
+    {
+      "name": "UIMENU_PleaseWaitWithCancelButton",
+      "address": "0042f6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f6e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_PleaseWaitWithCancelButton",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressShowBnetConnectFailedPopup",
+      "address": "0042f790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f790"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressShowBnetConnectFailedPopup",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_PleaseWaitWithWorkingCancelButton",
+      "address": "0042f800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f800"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_PleaseWaitWithWorkingCancelButton",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "UIMENU_DownloadingPatch",
+      "address": "0042f890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f890"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_DownloadingPatch",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2WINIMAGE_SetDrawModeSolid",
+        "GetLocaleString",
+        "SetText",
+        "D2WINIMAGE_StopAnimation",
+        "D2WINIMAGE_SetFrame",
+        "sprintf",
+        "D2WINTEXTBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_UpdateProgressBar",
+      "address": "0042f990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042f990"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_UpdateProgressBar",
+        "D2WINTEXTBOX_ClearAllLines",
+        "D2WINIMAGE_StopAnimation",
+        "D2WINIMAGE_SetFrame",
+        "sprintf",
+        "D2WINTEXTBOX_SetTextFromAnsi"
+      ]
+    },
+    {
+      "name": "LAUNCHER_ClearPatchDownloadFlag",
+      "address": "0042fa20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fa20"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "LAUNCHER_ClearPatchDownloadFlag"
+      ]
+    },
+    {
+      "name": "LAUNCHER_GetPatchDownloadFlag",
+      "address": "0042fa30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fa30"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "LAUNCHER_GetPatchDownloadFlag"
+      ]
+    },
+    {
+      "name": "MAINMENU_ReadBattleNetRegistry",
+      "address": "0042fa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fa40"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ReadBattleNetRegistry",
+        "SRegLoadString",
+        "sprintf",
+        "SRegSaveString"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_CheckBattleNetIPFlag",
+      "address": "0042fab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fab0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_CheckBattleNetIPFlag",
+        "SRegLoadString",
+        "sscanf"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_MainScreenBeforeMenu",
+      "address": "0042fb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fb20"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_MainScreenBeforeMenu",
+        "FORMS_DestroyLists",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2GFX_SetPaletteForDraw",
+        "memset",
+        "D2CheckExpansionGame",
+        "GetLocaleString",
+        "WideCharToUTF8",
+        "SStrLen",
+        "strstr",
+        "SStrCopy",
+        "UTF8_ConvertToWideChar",
+        "SetText",
+        "D2WINMAIN_SetCursorVisible",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_CheckFileExists",
+      "address": "0042fce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fce0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_CheckFileExists",
+        "SFileOpenFileEx",
+        "SFileCloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "MAINMENU_GetLocalizedFilePath",
+      "address": "0042fd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fd10"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetLocalizedFilePath",
+        "TABLES_GetLangAbbreviation",
+        "sprintf",
+        "SFileOpenFileEx",
+        "SFileCloseFile",
+        "MISC_GetLanguageCode"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_CloseAndLaunchCharSelect",
+      "address": "0042fdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fdd0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_CloseAndLaunchCharSelect",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes"
+      ]
+    },
+    {
+      "name": "MAINMENU_ValidateCharNameChar",
+      "address": "0042fde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fde0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ValidateCharNameChar"
+      ],
+      "usedTypes": [
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "MAINMENUS_EditBoxFilter_ReturnTrue_ForMainMenuAgain",
+      "address": "0042fe60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fe60"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENUS_EditBoxFilter_ReturnTrue_ForMainMenuAgain"
+      ],
+      "usedTypes": [
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "MAINMENU_ValidateGameNameChar",
+      "address": "0042fe70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fe70"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ValidateGameNameChar"
+      ],
+      "usedTypes": [
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "MAINMENUS_EditBoxFilter_ValidateCharName_ForBnetDisconnect",
+      "address": "0042fef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042fef0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENUS_EditBoxFilter_ValidateCharName_ForBnetDisconnect",
+        "MAINMENU_ValidateCharNameChar"
+      ],
+      "usedTypes": [
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "MAINMENUS_EditBoxFilter_ReturnTrue_ForBnetAccountForms",
+      "address": "0042ff00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042ff00"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENUS_EditBoxFilter_ReturnTrue_ForBnetAccountForms"
+      ],
+      "usedTypes": [
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetGlobalValue3",
+      "address": "0042ff10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042ff10"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetGlobalValue3"
+      ]
+    },
+    {
+      "name": "MAINMENU_UpdateIPAddressDisplay",
+      "address": "0042ff20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042ff20"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_UpdateIPAddressDisplay",
+        "NET_GetLocalIp",
+        "D2WINTEXTBOX_ClearAllLines",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressUpdateIpAddressDisplay",
+      "address": "0042ffd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042ffd0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressUpdateIpAddressDisplay",
+        "MAINMENU_UpdateIPAddressDisplay"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_TCPIPOptions",
+      "address": "0042ffe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042ffe0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_TCPIPOptions",
+        "LAUNCHER_DisconnectFromBnet",
+        "FORMS_DestroyLists",
+        "D2GFX_SetPaletteForDraw",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINMAIN_SetControlActive",
+        "D2WINMAIN_SetFormFourth",
+        "D2WINTIMER_Start",
+        "D2WINEDITBOX_Destroy",
+        "MAINMENU_UpdateIPAddressDisplay"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "MAINMENU_DisableControlIfDataNonZero",
+      "address": "00430120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430120"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_DisableControlIfDataNonZero",
+        "D2WINMAIN_SetControlActive"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_DisableControlIfDataNonZero2",
+      "address": "00430160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430160"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_DisableControlIfDataNonZero2",
+        "D2WINMAIN_SetControlActive"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_CreateBattleNetAccount",
+      "address": "004301a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004301a0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_CreateBattleNetAccount",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2CheckExpansionGame",
+        "SetText",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_LinkTabOrder"
+      ],
+      "usedTypes": [
+        "D2WinEditBox",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_BackgroundAndExpansionText",
+      "address": "00430390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430390"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_BackgroundAndExpansionText",
+        "FORMS_DestroyLists",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2WINANIMIMAGE_SetAnimate",
+        "D2GFX_SetPaletteForDraw"
+      ],
+      "usedTypes": [
+        "D2WinAnimImage"
+      ]
+    },
+    {
+      "name": "MAINMENU_FilterNewlineKey",
+      "address": "004303e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004303e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_FilterNewlineKey"
+      ],
+      "usedTypes": [
+        "int16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_PollRevisionCheckPump",
+      "address": "00430400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430400"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PollRevisionCheckPump",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressCreateBattleNetAccount",
+      "address": "00430430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430430"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressCreateBattleNetAccount",
+        "UIMENU_CreateBattleNetAccount"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_ScrollListExUp",
+      "address": "00430440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430440"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ScrollListExUp",
+        "D2WINMAIN_GetFirstElement",
+        "D2WINTEXTBOX_GetScrollPosition",
+        "D2WINTEXTBOX_ScrollToLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinTextBox",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_ScrollListExDown",
+      "address": "004304b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004304b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ScrollListExDown",
+        "D2WINMAIN_GetFirstElement",
+        "D2WINTEXTBOX_GetScrollPosition",
+        "D2WINTEXTBOX_ScrollToLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinTextBox",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_AreYouSureToCreateHardcoreCharacter",
+      "address": "00430520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430520"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_AreYouSureToCreateHardcoreCharacter",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_ValidateCharacterName",
+      "address": "00430590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430590"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ValidateCharacterName",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8"
+      ],
+      "usedTypes": [
+        "D2WinEditBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "MAINMENU_ValidateCharacterNameCallback",
+      "address": "00430620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430620"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ValidateCharacterNameCallback",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "WideCharToUTF8",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_ValidatePasswordChangeForm",
+      "address": "004306c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004306c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ValidatePasswordChangeForm",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressToggleLadderFlag",
+      "address": "00430750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430750"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressToggleLadderFlag"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressToggleExpansionFlag",
+      "address": "00430770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430770"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressToggleExpansionFlag",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetClassDescriptionTooltip",
+      "address": "004307a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004307a0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetClassDescriptionTooltip",
+        "D2WINTEXTBOX_ClearAllLines",
+        "GetLocaleString",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetSorceressDescription",
+      "address": "00430840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430840"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetClassDescriptionTooltip",
+        "MAINMENU_SetSorceressDescription"
+      ],
+      "usedTypes": [
+        "D2WinAnimImageNotifyStrc"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetAmazonDescription",
+      "address": "00430870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430870"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetClassDescriptionTooltip",
+        "MAINMENU_SetAmazonDescription"
+      ],
+      "usedTypes": [
+        "D2WinAnimImageNotifyStrc"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetAssassinDescription",
+      "address": "004308a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004308a0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetClassDescriptionTooltip",
+        "MAINMENU_SetAssassinDescription",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "D2WinAnimImageNotifyStrc"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetDruidDescription",
+      "address": "004308e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004308e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetClassDescriptionTooltip",
+        "MAINMENU_SetDruidDescription",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "D2WinAnimImageNotifyStrc"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetNecromancerDescription",
+      "address": "00430920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430920"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetClassDescriptionTooltip",
+        "MAINMENU_SetNecromancerDescription"
+      ],
+      "usedTypes": [
+        "D2WinAnimImageNotifyStrc"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetBarbarianDescription",
+      "address": "00430950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430950"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetClassDescriptionTooltip",
+        "MAINMENU_SetBarbarianDescription"
+      ],
+      "usedTypes": [
+        "D2WinAnimImageNotifyStrc"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetPaladinDescription",
+      "address": "00430980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430980"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetClassDescriptionTooltip",
+        "MAINMENU_SetPaladinDescription"
+      ],
+      "usedTypes": [
+        "D2WinAnimImageNotifyStrc"
+      ]
+    },
+    {
+      "name": "LAUNCHER_SetExitAppModeResult",
+      "address": "004309b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004309b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "LAUNCHER_SetExitAppModeResult"
+      ]
+    },
+    {
+      "name": "MAINMENU_AddRealmToList",
+      "address": "004309c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004309c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_AddRealmToList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BNetRealmEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_FreeRealmList",
+      "address": "00430a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430a20"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_FreeRealmList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2BNetRealmEntryStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_CompareRealmNames",
+      "address": "00430b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430b00"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_CompareRealmNames"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_GetRealmCount",
+      "address": "00430b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430b40"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetRealmCount"
+      ]
+    },
+    {
+      "name": "MAINMENU_GetRealmName",
+      "address": "00430b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430b50"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetRealmName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_GetRealmDescription",
+      "address": "00430b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430b80"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetRealmDescription",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "MAINMENU_ReturnTrue",
+      "address": "00430bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430bb0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ReturnTrue"
+      ]
+    },
+    {
+      "name": "SAVEFILE_FindAllSaveFiles",
+      "address": "00430bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430bc0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "SAVEFILE_FindAllSaveFiles",
+        "GetAndCreateSavePath",
+        "sprintf"
+      ],
+      "usedTypes": [
+        "_WIN32_FIND_DATAA"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressGotoCharacterSelect",
+      "address": "00430c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430c30"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressGotoCharacterSelect",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "Test",
+      "address": "00430c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430c50"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "Test",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_AppendCreditsEnd",
+      "address": "00430c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430c80"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_AppendCreditsEnd",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "D2WINTEXTBOX_GetScrollPosition"
+      ]
+    },
+    {
+      "name": "MAINMENU_LoadCreditsFile",
+      "address": "00430cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430cd0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_LoadCreditsFile",
+        "TABLES_GetLangAbbreviation",
+        "D2CheckExpansionGame",
+        "SStrPrintf",
+        "ARCHIVE_OpenD2FileWrap",
+        "ERRORMANAGER_FGetFileSize",
+        "AllocClientMemory",
+        "memset",
+        "ERRORMANAGER_FReadFile",
+        "ERRORMANAGER_FCloseFile",
+        "memcpy",
+        "CRYPTO_ByteSwap16Array",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_SyncCreditsColumns",
+      "address": "00430ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00430ef0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SyncCreditsColumns",
+        "D2WINTEXTBOX_GetScrollPosition",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple"
+      ]
+    },
+    {
+      "name": "MAINMENU_DisplayCredits",
+      "address": "00431050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431050"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_DisplayCredits",
+        "MAINMENU_LoadCreditsFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "MAINMENU_AppendCreditsEnd",
+        "FreeClientMemory",
+        "STRING_CopyWideString",
+        "SetText",
+        "STRING_GetWideStringLength",
+        "isalpha",
+        "D2WINTEXTBOX_SetTextW",
+        "MAINMENU_SyncCreditsColumns"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_InitCreditsScreen",
+      "address": "004312c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004312c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_InitCreditsScreen",
+        "FORMS_DestroyLists",
+        "D2GFX_SetPaletteForDraw",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2CheckExpansionGame",
+        "D2WINTIMER_Start",
+        "D2WINEDITBOX_Destroy",
+        "MAINMENU_DisplayCredits",
+        "D2WINTEXTBOX_ScrollToLine"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_SelectCinematics",
+      "address": "004313d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004313d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_SelectCinematics",
+        "FORMS_DestroyLists",
+        "FORMS_DestroyList",
+        "D2GFX_SetPaletteForDraw",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINBUTTON_SetTextWithFont"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton",
+      "address": "00431570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431570"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_ShowCinematicsMenu",
+      "address": "00431600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431600"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ShowCinematicsMenu",
+        "CleanupSoundBuffer",
+        "SOUND_StopMusic",
+        "SOUNDSMP_SetGlobalVolume",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "SRegLoadString",
+        "sprintf",
+        "SRegSaveString",
+        "sscanf",
+        "D2CheckExpansionGame",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINMAIN_SetControlVisible",
+        "UIMENU_SelectCinematics"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetAndDispatchAllPossible",
+      "address": "004317d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004317d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "GetAndDispatchAllPossible"
+      ],
+      "usedTypes": [
+        "tagMSG"
+      ]
+    },
+    {
+      "name": "UIMENU_PlayCutScene",
+      "address": "00431870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431870"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_PlayCutScene",
+        "FORMS_DestroyLists",
+        "FORMS_DestroyList",
+        "GetAndDispatchAllPossible",
+        "BeginCutSceneAtResolutionMode0",
+        "GetLoggerState_Stub",
+        "MAINMENU_GetLocalizedFilePath",
+        "D2GFX_PlayCutScene",
+        "SetResolutionModeWithEndCutScene",
+        "MAINMENU_ShowCinematicsMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressSetInsertPlayCd",
+      "address": "00431910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431910"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressSetInsertPlayCd"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENUS_OnPressSetInsertPlayCd_ForCinematicDisc",
+      "address": "00431920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431920"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENUS_OnPressSetInsertPlayCd_ForCinematicDisc"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_ShowCinematicsMenuAndSetFlag",
+      "address": "00431930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431930"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ShowCinematicsMenuAndSetFlag",
+        "MAINMENU_ShowCinematicsMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_PollDisconnectFlagPump",
+      "address": "00431950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431950"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PollDisconnectFlagPump",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons",
+      "address": "00431970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431970"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fpRequiredUserAction",
+      "address": "00431a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431a00"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "fpRequiredUserAction",
+        "UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons",
+        "MessagePump",
+        "FORMS_DestroyList"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressTcpIpOptions",
+      "address": "00431a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431a40"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressTcpIpOptions",
+        "UIMENU_TCPIPOptions"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_DetectDoubleClick",
+      "address": "00431a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431a60"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_DetectDoubleClick",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "tagPOINT",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_ShowRealmNameOnButton",
+      "address": "00431af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431af0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_ShowRealmNameOnButton",
+        "Name",
+        "SStrCopy",
+        "UTF8_ConvertToWideChar",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "memset",
+        "UNICODE_FormatWideString",
+        "STRING_GetWideStringLength",
+        "D2WINBUTTON_SetTextWithFont"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_CleanupSoundAndClearMessageLoop",
+      "address": "00431c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431c30"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_CleanupSoundAndClearMessageLoop",
+        "CleanupSoundBuffer",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_HandleNetworkPacket",
+      "address": "00431c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431c90"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_HandleNetworkPacket",
+        "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "MAINMENU_ClearLoopFlagPump",
+      "address": "00431d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431d10"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ClearLoopFlagPump",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressStartTcpIpTimer",
+      "address": "00431e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431e00"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressStartTcpIpTimer",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2WINTIMER_Start",
+        "D2WINEDITBOX_Destroy"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_CreateGameServerThreadPump",
+      "address": "00431e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431e30"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_CreateGameServerThreadPump",
+        "CreateThreadClientSocketOrSingleplayer",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetSelectedClassInINI",
+      "address": "00431e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431e70"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetSelectedClassInINI"
+      ],
+      "usedTypes": [
+        "eD2PlayerClassID"
+      ]
+    },
+    {
+      "name": "MAINMENU_CheckCharacterSaveFileExists",
+      "address": "00431f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00431f70"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_CheckCharacterSaveFileExists",
+        "GetAndCreateSavePath",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8",
+        "sprintf",
+        "thunk_CreateFileA",
+        "SFILE_Win32CloseHandle"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressInvokeCurrentMenuInstance",
+      "address": "00432060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432060"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressInvokeCurrentMenuInstance"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_SaveAccountAndPasswordToINI",
+      "address": "00432080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432080"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SaveAccountAndPasswordToINI",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "SStrHashHT",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_ChangePassword",
+      "address": "00432100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432100"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_ChangePassword",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2CheckExpansionGame",
+        "SetText",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_LinkTabOrder"
+      ],
+      "usedTypes": [
+        "D2WinEditBox",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressSaveAccountNameAndShowDisconnected",
+      "address": "00432310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432310"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressSaveAccountNameAndShowDisconnected",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "UIMENU_YouWereDisconnectedFromBattleNet2"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2",
+      "address": "00432340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432340"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressShowDisconnectedFromBattleNet2",
+        "UIMENU_YouWereDisconnectedFromBattleNet2"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_IsD2GSJoinErrorRecoverable",
+      "address": "00432350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432350"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_IsD2GSJoinErrorRecoverable"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_PollMCPThreadStatus",
+      "address": "00432400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432400"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PollMCPThreadStatus",
+        "GetMCPThread",
+        "GetD2GSJoinResult",
+        "MAINMENU_IsD2GSJoinErrorRecoverable"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_PollMCPThreadStatusPump",
+      "address": "00432450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432450"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PollMCPThreadStatusPump",
+        "MAINMENU_PollMCPThreadStatus",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_ConnectToRealm",
+      "address": "00432480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432480"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ConnectToRealm",
+        "HasPeerName",
+        "UIMENU_PleaseWaitWithCancelButton",
+        "FreeMCP",
+        "FORMS_DestroyList",
+        "SStrCopy",
+        "MCPCONNECT_CreateThread",
+        "MessagePump",
+        "MAINMENU_PollMCPThreadStatus"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UIMENU_PleaseReadAfterCreatingAccount",
+      "address": "004325b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004325b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_PleaseReadAfterCreatingAccount",
+        "FORMS_DestroyLists",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2WINANIMIMAGE_SetAnimate",
+        "D2GFX_SetPaletteForDraw",
+        "FORMS_CreateAnyFormFromList",
+        "GetLocaleString",
+        "SetText",
+        "SetAndReturnLastFont",
+        "D2WINFONT_GetCurrentFontHeight",
+        "D2WINTEXTBOX_SetLinePadding"
+      ],
+      "usedTypes": [
+        "D2WinAnimImage",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IMAGE_LoadPredefinedImagesEx",
+      "address": "004326f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004326f0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "IMAGE_LoadPredefinedImagesEx",
+        "IMAGE_LoadDC6",
+        "D2CheckExpansionGame"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressDestroyFormList",
+      "address": "00432ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432ee0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressDestroyFormList",
+        "FORMS_DestroyList"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_AdjustFormsForKorean",
+      "address": "00432ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432ef0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_AdjustFormsForKorean",
+        "MISC_GetLanguageCode"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_PollMCPConnectionPump",
+      "address": "00432fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432fa0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PollMCPConnectionPump",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "MCPSTATE_GetConnectionEstablished",
+        "HasPeerName",
+        "MCPSTATE_SetConnectionEstablished",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_PollMCPCharLogonPump",
+      "address": "00432fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00432fe0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PollMCPCharLogonPump",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "MCPSTATE_GetCharLogonSuccess",
+        "HasPeerName",
+        "MCPSTATE_SetCharLogonSuccess",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_PollMCPJoinGamePump",
+      "address": "00433020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433020"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PollMCPJoinGamePump",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "MCPSTATE_GetJoinGameSuccess",
+        "HasPeerName",
+        "MCPSTATE_SetJoinGameSuccess",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_PollMCPCreateGamePump",
+      "address": "00433060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433060"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PollMCPCreateGamePump",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "MCPSTATE_GetCreateGameSuccess",
+        "HasPeerName",
+        "MCPSTATE_SetCreateGameSuccess",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_SetMultilineText",
+      "address": "004330a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004330a0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_SetMultilineText",
+        "WSTRING_PutWideCharIntoBuffer",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UIMENU_CreatePopupWithContent",
+      "address": "00433130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433130"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_CreatePopupWithContent",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "MAINMENU_SetMultilineText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "UIMENU_CreatePopupWithContentAndFooter",
+      "address": "004331c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004331c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_CreatePopupWithContentAndFooter",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "MAINMENU_SetMultilineText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "UIMENU_CrashingCantTestIt",
+      "address": "004332b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004332b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_CrashingCantTestIt",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "MAINMENU_SetMultilineText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "MAINMENU_ShowPopupDialog",
+      "address": "00433380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433380"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ShowPopupDialog",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "MAINMENU_SetMultilineText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "MAINMENU_ShowPopupWithCancel",
+      "address": "00433450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433450"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ShowPopupWithCancel",
+        "MAINMENU_ShowPopupDialog"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "UIMENU_CreateSmallPopup",
+      "address": "00433460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433460"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_CreateSmallPopup",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "MAINMENU_SetMultilineText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "MAINMENU_PlayExpansionIntro",
+      "address": "004334e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004334e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PlayExpansionIntro",
+        "GetAndDispatchAllPossible",
+        "GetLoggerState_Stub",
+        "TABLES_GetLangAbbreviation",
+        "sprintf",
+        "SFileOpenFileEx",
+        "SFileCloseFile",
+        "D2GFX_PlayCutScene",
+        "SRegLoadString",
+        "sscanf",
+        "SRegSaveString"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_PlayD2Intro",
+      "address": "00433640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433640"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_PlayD2Intro",
+        "GetAndDispatchAllPossible",
+        "GetLoggerState_Stub",
+        "MAINMENU_GetLocalizedFilePath",
+        "D2GFX_PlayCutScene",
+        "UIMENU_MainScreenBeforeMenu"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_MainMenu",
+      "address": "004336c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004336c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_MainMenu",
+        "LAUNCHER_DisconnectFromBnet",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "D2CheckExpansionGame",
+        "FORMS_CreateAnyFormFromListExEx",
+        "UIMENU_ShowRealmNameOnButton",
+        "D2WINARCHIVE_GetArchiveHandle",
+        "D2WINMAIN_SetControlVisible",
+        "SStrPrintf",
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_ShowTermsOfService",
+      "address": "00433810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433810"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_ShowTermsOfService",
+        "UIMENU_PleaseWaitWithWorkingCancelButton",
+        "TABLES_GetLangAbbreviation",
+        "SStrCopy",
+        "SStrPack",
+        "MessagePump",
+        "FORMS_DestroyList",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupDialog",
+        "UIMENU_BackgroundAndExpansionText",
+        "FORMS_CreateAnyFormFromListExEx",
+        "thunk_CreateFileA",
+        "AllocClientMemory",
+        "thunk_ReadFile",
+        "SFILE_Win32CloseHandle",
+        "thunk_DeleteFileA",
+        "CRYPTO_ByteSwap16Array",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "FreeClientMemory",
+        "D2WINTEXTBOX_ScrollToLine",
+        "SetText",
+        "memset",
+        "DRAW_text0",
+        "STRING_GetWideStringLength",
+        "UNICODE_CheckLineBreakPosition"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EDITBOX_Cb_MAINMENU_ValidateCharacterNameCallback",
+      "address": "00433bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433bd0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "EDITBOX_Cb_MAINMENU_ValidateCharacterNameCallback",
+        "MAINMENU_ValidateCharacterNameCallback"
+      ]
+    },
+    {
+      "name": "EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm",
+      "address": "00433be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433be0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm",
+        "MAINMENU_ValidatePasswordChangeForm"
+      ]
+    },
+    {
+      "name": "ClickOnClassCreate",
+      "address": "00433bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00433bf0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "ClickOnClassCreate",
+        "D2WINANIMIMAGE_GetCurrentState",
+        "D2CheckExpansionGame",
+        "D2WINANIMIMAGE_TryAdvanceToPlaying",
+        "SOUND_FadeOutAllSoundEffects",
+        "SOUND_PlaySoundEffect",
+        "MAINMENU_SetClassDescriptionTooltip",
+        "MAINMENU_SetDruidDescription",
+        "MAINMENU_SetAssassinDescription",
+        "MAINMENU_SetSelectedClassInINI",
+        "D2WINMAIN_SetControlActive",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINBUTTON_SetPressed"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2ControlStrc",
+        "D2ControlStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_QueryAndBuildRealmList",
+      "address": "00434060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434060"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_QueryAndBuildRealmList",
+        "UIMENU_PleaseWaitWithCancelButton",
+        "MessagePump",
+        "FORMS_DestroyList",
+        "MAINMENU_FreeRealmList",
+        "AllocClientMemory",
+        "memset",
+        "SStrCopy",
+        "MAINMENU_AddRealmToList",
+        "qsort",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BNetRealmEntryStrc",
+        "D2BNetRealmEntryStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressCreditsEndCheck",
+      "address": "004341f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004341f0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressCreditsEndCheck",
+        "D2WINTEXTBOX_GetScrollPosition",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "fpInsertPlayCd",
+      "address": "00434220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434220"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "fpInsertPlayCd",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "SetText",
+        "MessagePump"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fpInsertExpansionCd",
+      "address": "004342e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004342e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "fpInsertExpansionCd",
+        "UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton",
+        "MessagePump",
+        "FORMS_DestroyList"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused1",
+      "address": "00434320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434320"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused1",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "MPQ_LoadVideoMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "UIMENU_PlayCutScene"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused2",
+      "address": "00434380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434380"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused2",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "MPQ_LoadVideoMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "UIMENU_PlayCutScene"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused3",
+      "address": "004343e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004343e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused3",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "MPQ_LoadVideoMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "UIMENU_PlayCutScene"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused4",
+      "address": "00434440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434440"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused4",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "MPQ_LoadVideoMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "UIMENU_PlayCutScene"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused5",
+      "address": "004344a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004344a0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused5",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "MPQ_LoadVideoMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "UIMENU_PlayCutScene"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused6",
+      "address": "00434500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434500"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused6",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "UIMENU_PlayCutScene"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused7",
+      "address": "00434560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434560"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused7",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "UIMENU_PlayCutScene"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressReloadMediaMpqAndReturnToMainMenu",
+      "address": "004345c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004345c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressReloadMediaMpqAndReturnToMainMenu",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused8",
+      "address": "00434600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434600"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused8",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "Name",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "D2WINTEXTBOX_GetScrollPosition",
+        "D2WINTEXTBOX_GetVisibleLineCount",
+        "D2WINTEXTBOX_ScrollToLine",
+        "D2WINTEXTBOX_SetSelectedLine",
+        "UIMENU_ShowRealmNameOnButton"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "D2ControlMsg",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StorePreferedRealmAgain",
+      "address": "00434700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434700"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "StorePreferedRealmAgain",
+        "D2WINTEXTBOX_GetSelectedLine",
+        "SetCurGateway",
+        "Realm",
+        "SRegSaveString",
+        "FORMS_DestroyLists",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressDestroyListsAndReturnToMainMenu",
+      "address": "00434760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434760"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressDestroyListsAndReturnToMainMenu",
+        "FORMS_DestroyLists",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_ConnectToServerCallback",
+      "address": "00434790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434790"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_ConnectToServerCallback",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8",
+        "strncpy",
+        "SRegSaveString",
+        "sscanf",
+        "inet_nameToIp",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "UIMENU_PleaseWaitWithCancelButton",
+        "MessagePump",
+        "NET_D2GS_ConnectToServer",
+        "NET_CLIENT_ShutdownConnection",
+        "FORMS_DestroyList",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupDialog",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "MAINMENU_DeleteCharacterOnRealm",
+      "address": "00434960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434960"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_DeleteCharacterOnRealm",
+        "HasPeerName",
+        "MAINMENU_ConnectToRealm",
+        "FreeMCP",
+        "UIMENU_PleaseWaitWithCancelButton",
+        "NET_MCP_CLIENT_Send_0x0A_CharDelete",
+        "MessagePump"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_UpgradeCharacterToExpansion",
+      "address": "004349b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004349b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_UpgradeCharacterToExpansion",
+        "HasPeerName",
+        "MAINMENU_ConnectToRealm",
+        "FreeMCP",
+        "UIMENU_PleaseWaitWithCancelButton",
+        "NET_MCP_CLIENT_Send_0x18_CharUpgrade",
+        "MessagePump",
+        "GetD2GSJoinResult"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SelectedCharBnetSingleTcpIp",
+      "address": "00434a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434a00"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "SelectedCharBnetSingleTcpIp",
+        "MAINMENU_SetSelectedClassInINI",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "CLIENT_ConnectToBattleNet",
+        "EnterEmailMessagePumper",
+        "MAINMENU_ConnectToRealm",
+        "GetD2GSJoinResult",
+        "thunk_NET_MCP_CLIENT_Send_0x07_CharLogon",
+        "UIMENU_PleaseWaitWithCancelButton",
+        "MessagePump",
+        "HasPeerName",
+        "FORMS_DestroyList",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupDialog",
+        "CONTAINER_InitializeBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "FreeMCP",
+        "UNICODE_FormatWideString",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "WCHAR",
+        "eD2PlayerClassID",
+        "eD2PlayerStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_PlayIntroAndReturnToMainScreen",
+      "address": "00434d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434d90"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_PlayIntroAndReturnToMainScreen",
+        "BeginCutSceneAtResolutionMode0",
+        "MAINMENU_PlayD2Intro",
+        "SetResolutionModeWithEndCutScene",
+        "UIMENU_MainScreenBeforeMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "thunk_UIMENU_MainMenu",
+      "address": "00434dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434dc0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "thunk_UIMENU_MainMenu",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressReturnToMainMenu",
+      "address": "00434df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434df0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressReturnToMainMenu",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_AndOneMorePleaseWait",
+      "address": "00434e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00434e00"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_AndOneMorePleaseWait",
+        "MAINMENU_SaveAccountAndPasswordToINI",
+        "GetAndCreateSavePath",
+        "UIMENU_ShowTermsOfService",
+        "GetLocaleString",
+        "FORMS_DestroyAnyForm",
+        "FORMS_CreateAnyForm",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "MAINMENU_SetMultilineText",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2ControlStrc",
+        "D2ControlStrc *",
+        "D2WinTextBox",
+        "FORMS_PredefinedFormStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain",
+      "address": "00435020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435020"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_HandlePasswordChange",
+      "address": "00435030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435030"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_HandlePasswordChange",
+        "UIMENU_YouWereDisconnectedFromBattleNet2",
+        "MAINMENU_SaveAccountAndPasswordToINI",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "STRING_GetWideStringLength",
+        "UNICODE_CompareWideStringsNoCase",
+        "EnterEmailMessagePumper",
+        "UIMENU_ChangePassword",
+        "SRegSaveString",
+        "FORMS_DestroyList",
+        "MAINMENU_CloseAndLaunchCharSelect",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupDialog"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UIMENU_AnotherSmallPopupWithContentAndSomeKindofTypeSelection",
+      "address": "00435180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435180"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_AnotherSmallPopupWithContentAndSomeKindofTypeSelection",
+        "FORMS_DestroyList",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "MAINMENU_SetMultilineText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "pfnUIMenuInstance"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressCancelTermsOfServiceDownload",
+      "address": "00435200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435200"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressCancelTermsOfServiceDownload",
+        "UIMENU_MainMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "PlaysBlizzardNorthCutScene",
+      "address": "00435230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435230"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "PlaysBlizzardNorthCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINMAIN_SetCursorVisible",
+        "FORMS_DestroyLists",
+        "GetAndDispatchAllPossible",
+        "BeginCutSceneAtResolutionMode0",
+        "GetLoggerState_Stub",
+        "D2GFX_PlayCutScene",
+        "MAINMENU_ReadBattleNetRegistry",
+        "SFileOpenArchive",
+        "MAINMENU_PlayD2Intro",
+        "SFileCloseArchive",
+        "SetResolutionModeWithEndCutScene",
+        "UIMENU_MainScreenBeforeMenu",
+        "D2CheckExpansionGame",
+        "MAINMENU_CheckBattleNetIPFlag",
+        "MAINMENU_PlayExpansionIntro"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_MainMenuAgain",
+      "address": "00435330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435330"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_MainMenuAgain",
+        "LAUNCHER_IsBnetConnectInProgress",
+        "LAUNCHER_DisconnectFromBnet",
+        "UIMENU_MainMenu",
+        "CLIENT_ConnectToBattleNet",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2CheckExpansionGame",
+        "SetText",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINEDITBOX_SetFilterCallback",
+        "SRegLoadString",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_LinkTabOrder",
+        "MAINMENU_ValidatePasswordChangeForm",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled"
+      ],
+      "usedTypes": [
+        "D2WinEditBox",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_CreateHeroSinglePlayer",
+      "address": "00435580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435580"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_CreateHeroSinglePlayer",
+        "IMAGE_LoadPredefinedImagesEx",
+        "FORMS_DestroyLists",
+        "D2GFX_SetPaletteForDraw",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "SetText",
+        "D2WINTEXTBOX_SetLinePadding",
+        "D2WINMAIN_SetFormFourth",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2CheckExpansionGame",
+        "D2WINMAIN_SetControlActive",
+        "D2WINMAIN_SetControlVisible",
+        "MAINMENU_ValidateCharacterNameCallback"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "fAPPMODE_launcher_ReturnAppMode_Caller",
+      "address": "004359d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004359d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "fAPPMODE_launcher_ReturnAppMode_Caller",
+        "UI_Init",
+        "D2CheckExpansionGame",
+        "ReturnZero",
+        "TABLES_LoadStrings",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "IMAGE_LoadPredefinedImages",
+        "D2WINMAIN_SetCursorDC6",
+        "SOUND_InitSoundEffectBuffers",
+        "SOUND_LoadWavFile",
+        "D2GFX_SetVideoMode",
+        "UIMENU_CharacterSelectAllGameTypes",
+        "LAUNCHER_InitNetworkLobbyQueue",
+        "UIMENU_TCPIPOptions",
+        "D2GFX_UpdateWindowSize",
+        "PlaysBlizzardNorthCutScene",
+        "UIMENU_MainMenu",
+        "SRegLoadValue",
+        "UIMENU_MainMenuAgain",
+        "D2WINMAIN_SetExitCallback",
+        "MessagePump",
+        "SOUND_FadeOutAllSoundEffects",
+        "SOUND_IsAnySoundEffectPlaying",
+        "SOUND_FreeSoundEffectBuffers",
+        "FORMS_DestroyLists",
+        "IMAGE_FreePredefinedImages",
+        "STRINGTABLE_FreeStringTables",
+        "FreeInGameGFX"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused9",
+      "address": "00435cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435cd0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused9",
+        "SAVEFILE_FindAllSaveFiles",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes",
+        "UIMENU_CreateHeroSinglePlayer"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused10",
+      "address": "00435d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435d10"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused10",
+        "UIMENU_MainMenuAgain"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused11",
+      "address": "00435d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435d30"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused11",
+        "UIMENU_MainMenuAgain"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused12",
+      "address": "00435d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435d50"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused12",
+        "MAINMENU_DetectDoubleClick",
+        "StorePreferedRealmAgain"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "thunk_UIMENU_CreateHeroSinglePlayer",
+      "address": "00435e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435e00"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "thunk_UIMENU_CreateHeroSinglePlayer",
+        "UIMENU_CreateHeroSinglePlayer"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_HandleCharCreation",
+      "address": "00435e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00435e10"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_HandleCharCreation",
+        "GetPreferedRealm",
+        "MAINMENU_ConnectToRealm",
+        "UIMENU_CreateHeroSinglePlayer",
+        "GetD2GSJoinResult",
+        "HasPeerName",
+        "SMemCopy",
+        "SMemZero",
+        "MCPCONNECT_SendCharCreate",
+        "UIMENU_PleaseWaitWithCancelButton",
+        "MessagePump",
+        "FORMS_DestroyList",
+        "FreeMCP",
+        "CONTAINER_InitializeBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "MAINMENU_ShowPopupDialog",
+        "LOGFILE_WriteStringToFile",
+        "STRING_CopyWideString",
+        "sprintf",
+        "UTF8_ConvertToWideChar",
+        "AppendToBuffer",
+        "LAUNCHER_MarkCharacterHardcore",
+        "SStrCopy",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused13",
+      "address": "004361b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004361b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused13",
+        "UIMENU_MainMenu",
+        "D2WINMAIN_GetControlVisible",
+        "MAINMENU_SaveAccountAndPasswordToINI",
+        "EnterEmailMessagePumper",
+        "SRegSaveString",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes",
+        "SAVEFILE_FindAllSaveFiles",
+        "MAINMENU_CloseAndLaunchCharSelect",
+        "UIMENU_CreateHeroSinglePlayer"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressReturnToMainMenuAgain",
+      "address": "00436270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436270"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressReturnToMainMenuAgain",
+        "UIMENU_MainMenuAgain"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused14",
+      "address": "00436280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436280"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused14",
+        "EnterEmailMessagePumper",
+        "UIMENU_MainMenuAgain",
+        "SRegSaveString",
+        "SAVEFILE_FindAllSaveFiles",
+        "SOUND_FadeOutAllSoundEffects",
+        "FORMS_DestroyLists",
+        "UIMENU_CharacterSelectAllGameTypes",
+        "UIMENU_CreateHeroSinglePlayer"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain",
+      "address": "00436300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436300"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain",
+        "FORMS_DestroyList",
+        "UIMENU_MainMenuAgain"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressCommitNewCharacterAndStartGame",
+      "address": "00436360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436360"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressCommitNewCharacterAndStartGame",
+        "FreeMCP",
+        "LAUNCHER_MarkCharacterHardcore",
+        "LAUNCHER_InitNewCharacterSaveFile",
+        "LAUNCHER_WriteSaveFileToD2s",
+        "D2WINMAIN_ClearMessageLoopFlag",
+        "NET_MCP_CLIENT_HandleCharCreation"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressCreateHeroSinglePlayer",
+      "address": "00436590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436590"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressCreateHeroSinglePlayer",
+        "FORMS_DestroyList",
+        "UIMENU_CreateHeroSinglePlayer"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_ConfirmCreateCharacter",
+      "address": "004365b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004365b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_ConfirmCreateCharacter",
+        "MAINMENU_CheckCharacterSaveFileExists",
+        "GetLocaleString",
+        "UIMENU_CreateSmallPopup",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8",
+        "sprintf",
+        "UIMENU_AreYouSureToCreateHardcoreCharacter",
+        "FORMS_DestroyLists",
+        "LAUNCHER_InitNewCharacterSaveFile",
+        "LAUNCHER_WriteSaveFileToD2s",
+        "D2WINMAIN_ClearMessageLoopFlag",
+        "LAUNCHER_MarkCharacterHardcore",
+        "FreeMCP",
+        "SMemCopy",
+        "SMemZero",
+        "NET_MCP_CLIENT_HandleCharCreation"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused15",
+      "address": "00436910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436910"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused15",
+        "UIMENU_MainMenuAgain",
+        "MAINMENU_SaveAccountAndPasswordToINI",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "UNICODE_CompareWideStringsNoCase",
+        "UIMENU_PleaseReadAfterCreatingAccount",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupDialog"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused16",
+      "address": "004369f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004369f0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused16",
+        "D2WINMAIN_GetControlVisible",
+        "GetAndCreateSavePath",
+        "GetLocaleString",
+        "UIMENU_CreateSmallPopup",
+        "D2WINMAIN_SetControlVisible",
+        "UIMENU_ConfirmCreateCharacter"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_BnetConnectionProgress",
+      "address": "00436ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436ad0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_BnetConnectionProgress",
+        "D2WINTEXTBOX_ClearAllLines",
+        "GetLocaleString",
+        "SetText",
+        "GetTickCount",
+        "sprintf",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused17",
+      "address": "00436c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436c10"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused17",
+        "SStrChr",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressConfirmSkipEmailPopup",
+      "address": "00436c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436c90"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressConfirmSkipEmailPopup",
+        "GetLocaleString",
+        "MAINMENU_CreateMessageBox"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "OnPress"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressAcceptEmailAddress",
+      "address": "00436cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436cd0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressAcceptEmailAddress",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_EnterEmailCleanup",
+      "address": "00436cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436cf0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_EnterEmailCleanup",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EDITBOX_Cb_MAINMENU_EnterEmailCleanup",
+      "address": "00436d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436d40"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "EDITBOX_Cb_MAINMENU_EnterEmailCleanup",
+        "MAINMENU_EnterEmailCleanup"
+      ]
+    },
+    {
+      "name": "UIMENU_EnterEmailAddress",
+      "address": "00436d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436d50"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_EnterEmailAddress",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "GetLocaleString",
+        "SetText",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_LinkTabOrder",
+        "MAINMENU_EnterEmailCleanup"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_ReturnOnePump",
+      "address": "00436e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436e90"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ReturnOnePump"
+      ]
+    },
+    {
+      "name": "MAINMENU_EnterEmailCallback",
+      "address": "00436ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436ea0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_EnterEmailCallback"
+      ]
+    },
+    {
+      "name": "MAINMENU_ShowDisconnectMessage",
+      "address": "00436eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436eb0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ShowDisconnectMessage",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "WideCharToUTF8",
+        "MAINMENU_Unused17",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EDITBOX_Cb_MAINMENU_ShowDisconnectMessage",
+      "address": "00436f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436f20"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "EDITBOX_Cb_MAINMENU_ShowDisconnectMessage",
+        "MAINMENU_ShowDisconnectMessage"
+      ]
+    },
+    {
+      "name": "UIMENU_YouWereDisconnectedFromBattleNet",
+      "address": "00436f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00436f30"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_YouWereDisconnectedFromBattleNet",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupWithCancel",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "SetText",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_LinkTabOrder",
+        "MAINMENU_ShowDisconnectMessage"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_YouWereDisconnectedFromBattleNet2",
+      "address": "004370c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004370c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_YouWereDisconnectedFromBattleNet2",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupWithCancel",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressChangePassword",
+      "address": "004371b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004371b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressChangePassword",
+        "UIMENU_ChangePassword"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet",
+      "address": "004371c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004371c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressShowDisconnectedFromBattleNet",
+        "UIMENU_YouWereDisconnectedFromBattleNet"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressReturnToMainMenuAgain_ForBnetDisconnected2",
+      "address": "004371d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004371d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressReturnToMainMenuAgain_ForBnetDisconnected2",
+        "UIMENU_MainMenuAgain"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_ShowDisconnectMessage2",
+      "address": "004371e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004371e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_ShowDisconnectMessage2",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "WideCharToUTF8",
+        "MAINMENU_Unused17",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EDITBOX_Cb_MAINMENU_ShowDisconnectMessage2",
+      "address": "004372a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004372a0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "EDITBOX_Cb_MAINMENU_ShowDisconnectMessage2",
+        "MAINMENU_ShowDisconnectMessage2"
+      ]
+    },
+    {
+      "name": "UIMENU_YouWereDisconnectedFromBattleNet3",
+      "address": "004372b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004372b0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_YouWereDisconnectedFromBattleNet3",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupWithCancel",
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_CreateAnyFormFromListExEx",
+        "SetText",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_LinkTabOrder",
+        "MAINMENU_ShowDisconnectMessage2"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2_ForBnetDisconnected3",
+      "address": "004374e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004374e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressShowDisconnectedFromBattleNet2_ForBnetDisconnected3",
+        "UIMENU_YouWereDisconnectedFromBattleNet2"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "LAUNCHER_BnetConnectionPollCallback",
+      "address": "004374f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004374f0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "LAUNCHER_BnetConnectionPollCallback",
+        "MAINMENU_BnetConnectionProgress",
+        "LAUNCHER_ClearBusyFlag",
+        "D2WINMAIN_ClearMessageLoopFlag",
+        "LAUNCHER_GetBusyFlag"
+      ]
+    },
+    {
+      "name": "UIMENU_ConnectinToBattleNetWitProgressDots",
+      "address": "00437550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437550"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "UIMENU_ConnectinToBattleNetWitProgressDots",
+        "GetTickCount",
+        "FORMS_DestroyList",
+        "MAINMENU_SetGlobalFlag",
+        "FORMS_CreateAnyFormFromList",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "GetLocaleString",
+        "SetText",
+        "MAINMENU_SetGlobalValue1",
+        "MAINMENU_BnetConnectionProgress"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused19",
+      "address": "00437620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437620"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused19",
+        "FORMS_TextInput_GetValue",
+        "STRING_CompareWideStrings",
+        "GetLocaleString",
+        "MAINMENU_CreateMessageBox",
+        "WideCharToUTF8",
+        "MAINMENU_Unused17",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "OnPress",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2Alt2",
+      "address": "00437710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437710"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_OnPressShowDisconnectedFromBattleNet2Alt2",
+        "UIMENU_YouWereDisconnectedFromBattleNet2"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "thunk_UIMENU_YouWereDisconnectedFromBattleNet3",
+      "address": "00437720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437720"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "thunk_UIMENU_YouWereDisconnectedFromBattleNet3",
+        "UIMENU_YouWereDisconnectedFromBattleNet3"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused20",
+      "address": "00437730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437730"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused20",
+        "UIMENU_YouWereDisconnectedFromBattleNet2",
+        "D2WINMAIN_GetControlVisible",
+        "FORMS_TextInput_GetValue",
+        "STRING_CompareWideStrings",
+        "WideCharToUTF8",
+        "UIMENU_MainMenuAgain",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupWithCancel",
+        "CONTAINER_InitializeBuffer",
+        "MAINMENU_CreateMessageBox"
+      ],
+      "usedTypes": [
+        "OnPress",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_Unused21",
+      "address": "004378d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004378d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_Unused21",
+        "UIMENU_YouWereDisconnectedFromBattleNet2",
+        "D2WINMAIN_GetControlVisible",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8",
+        "GetLocaleString",
+        "MAINMENU_CreateMessageBox",
+        "MAINMENU_ShowPopupWithCancel"
+      ],
+      "usedTypes": [
+        "OnPress",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_GetTime32",
+      "address": "004379c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004379c0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetTime32",
+        "_time32"
+      ],
+      "usedTypes": [
+        "__time32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_TestFlag0x20",
+      "address": "004379d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004379d0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_TestFlag0x20"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_GetFlagBits8To12",
+      "address": "004379e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004379e0"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetFlagBits8To12"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MAINMENU_GetRealmNameIfValid",
+      "address": "00437a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00437a00"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "MAINMENU_GetRealmName",
+        "MAINMENU_GetRealmCount",
+        "MAINMENU_GetRealmNameIfValid"
+      ]
+    },
+    {
+      "name": "LAUNCHER_PollBNConnectionPump",
+      "address": "0043b890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b890"
+        }
+      ],
+      "namespace": "D2Launch::MainMenus",
+      "calledFunctions": [
+        "LAUNCHER_PollBNConnectionPump",
+        "D2WINMAIN_ClearMessageLoopFlag",
+        "MAINMENU_GetGlobalValue2"
+      ]
+    }
+  ]
+}

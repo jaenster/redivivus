@@ -87,7 +87,7 @@ struct D2TCStackEntryStrc {
 namespace D2Game::ITEMS::Items::Drop {
 
 // Function declarations
-struct D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nParam);
+struct D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType);
 void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, int32_t pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset);
 int32_t __stdcall ITEMDROP_GetDropListEntry(int32_t pDropListBase, int32_t nEntryIdx, int32_t nMaxEntries);
 void __fastcall ITEM_InitializeDroppedItem(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t dwUnitGUID, uint32_t dwUnused);
@@ -138,7 +138,7 @@ int32_t __fastcall UNIT_GetMaxAvailableHPCharCode(struct D2UnitStrc * pUnit);
 int32_t __fastcall UNIT_GetMaxAvailableMPCharCode(struct D2UnitStrc * pUnit);
 void __fastcall RefreshDurability(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall RefreshQuantity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-int32_t __fastcall ITEMDROP_AdjustDrop(int32_t nParam1, int32_t nParam2, int32_t nMFAdjusted);
+int32_t __fastcall ITEMDROP_AdjustDrop(int32_t nMagicFind, int32_t nDiminishFactor, int32_t nMFAdjusted);
 // Calculates the game-frame at which a ground item should despawn. Quest items never expire (returns 0). Unique/set quality: +30000 frames. High-tier quality (5–9): +45000. Gold &gt;10000: +45000. Socketable items: +30000. All others: +15000.
 int32_t __fastcall ITEM_CalculateDespawnTimer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall DropItem(::SGAMEDATA * pGame, struct D2UnitStrc * pSourceUnit, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t x, int32_t y);
@@ -146,7 +146,7 @@ void __fastcall DropItem(::SGAMEDATA * pGame, struct D2UnitStrc * pSourceUnit, s
 void __fastcall FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct);
 void __fastcall ITEM_RemoveRuneword(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Deserialises a saved item into a live server unit. Validates game pointer and classId bounds, allocates a unit via CreateUnit, loads save-data blob via ITEM_LoadFromSaveData, sets SERVER/clears NEW flags, refreshes durability and quantity. Returns null on any failure and frees the partially-created unit.
-struct D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t * pSaveData, size_t nSaveDataSize, uint32_t bCheckItemHeader, struct D2UnitDataItemDetailsStrc * pUnitDataItemDetails, int * pnParam, uint32_t nParam2);
+struct D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, uint8_t * pSaveData, size_t nSaveDataSize, uint32_t bCheckItemHeader, struct D2UnitDataItemDetailsStrc * pUnitDataItemDetails, int * pnBytesConsumed, uint32_t nParam2);
 // Low-level item instance creator. Allocates D2UnitStrc (type 4), initializes unit fields, sets item data fields (classId, flags, quality, graphic, colors), links to owner inventory. Does NOT apply affixes - just base structure.
 // @sourcefile .\ITEMS\Items.cpp
 struct D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, struct D2ItemGenContextStrc * pItemGenCtx, int32_t bFromCustomData);
@@ -161,7 +161,7 @@ void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, struct D2RoomStrc * pR
 // Spawns a single elite/special drop item into the world near pCoords in pRoom. Derives an effective item level from the room's level id (clamped, monster-level-for-difficulty, or 1 in town/no level), then rolls an item class via ITEMDROP_RollEliteItemClass (using the room seed, treasure-class filter nTCFilter, monster level, and whether pUnit is a monster). Finds a nearby better room and a free collision-clear coordinate (GetFreeCoordinates_WithFieldCoords); if a valid spawn spot is found, fills a D2ItemGenContextStrc (mode 3, quality invalid/auto, the rolled class id and item level) and creates the item instance via ITEM_CreateItemInstance. Uses Fog GuardStack as the tail epilogue. No return; side effect is the new world item.
 void __fastcall DROP_SpawnEliteItem(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, POINT * pCoords, int32_t nTCFilter, int32_t nMonsterLevel, struct D2UnitStrc * pUnit);
 // Server-side: rolls and creates a reward/drop item instance to be dropped near a unit. Determines item level from the source unit (monster level, player level, or level-table mon level by difficulty/expansion; min 2) and writes it to *pnParam. If the unit carries a forced drop code, converts it to a class id; otherwise rolls an item class by level (for gold drops, retries up to 11 times until an Items.txt entry with the gold bitfield is found, then falls back to a normal class roll). Finds the best passable spawn spot in the unit's room, fills a D2ItemGenContextStrc (quality, position, level, class id) and calls ITEM_CreateItemInstance. If ppUnit is non-null, copies the 0x84-byte context out to it. Returns the created item unit (NULL on spawn-spot failure); halts with unrecoverable error on bad game ptr or bad item code.
-struct D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2ItemTypes eItemType, int32_t * pnParam, struct D2UnitStrc * * ppUnit, int32_t nParam1, int32_t nParam2);
+struct D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2ItemTypes eItemType, int32_t * pnItemLevel, struct D2UnitStrc * * ppUnit, int32_t nTCFilter, int32_t nParam2);
 // Explicit GuardStack((int)pCreatedItem) tail: return value is the newly-created item unit, or NULL on failure.
 struct D2UnitStrc * __fastcall ITEM_CreateFromTemplate(struct D2UnitStrc * pUnit, int32_t nItemClassId, ::SGAMEDATA * pGame, int32_t dwMode, eD2ItemQuality eQuality, BOOL bIgnoreFlag, BOOL bBoughtFlag, int32_t nItemLevel, int32_t nCreateParam, int32_t nInitSeed, int32_t nModSeed);
 // Server-side: probabilistically reduces an item's durability on use (attack/take-hit). Only acts on weapons/armor that have durability. Rolls the item-owner's RNG against a threshold (4, or 10 for throwables / expansion) — i.e. a chance-based decrement, not every hit. On a hit it lowers UNITSTAT_durability by 1: if still >0 it sets the new value (clamped to max) and refreshes; if it would drop to 0 it either breaks the item (sets durability 0) or, for stackable/quantity items (e.g. throwing weapons), decrements quantity and resets durability to max, sending the appropriate 0x3E item-stat updates to the client and running PLRMODES_CheckWeaponQuantityAndDurability when a stack is exhausted. pGame/pUnit=owner, pItem=item. Returns nothing; every exit leaves the last call's EAX.

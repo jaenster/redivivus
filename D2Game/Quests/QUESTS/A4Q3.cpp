@@ -237,14 +237,14 @@ BOOL __fastcall Q28_PlayerNotifyCompletedForge(::SGAMEDATA * pGame, D2UnitStrc *
 
 // A4Q3 Hell's Forge — Objects_InitFn48: init for the Hellforge object. No quest data / not yet introduced -> update-flag 3 (default/unstarted visual). Otherwise sets update-flag from cached pA4Q3 state word; if the prior state flag is not one of {0xd,2,3} (i.e. not already in/after the smash sequence) it resets eFlags and broadcasts state 2 (forge-active) via QUEST_SetStateAndBroadcast + Q28_PlayerNotifyCompletedForge.
 void __fastcall Objects_InitFn48(D2ObjectInitFnArg * pInitArg) {
-    uint8_t nUpdateFlag;
+    uint16_t wForgeState;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_HellsForge);
     if (!pQuestData || pQuestData->bIsNotIntroduction == '\0') {
       D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 3);
     } else {
-      uint16_t uVar1;
-      uVar1 = (uint16_t)((uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->nForgeStage | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->field_0x01 << 8);
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, (uint32_t)uVar1);
+      uint8_t nUpdateFlag;
+      wForgeState = (uint16_t)((uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->nForgeStage | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->byForgeStageHigh << 8);
+      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, (uint32_t)wForgeState);
       nUpdateFlag = pQuestData->nStateFlagPrev;
       if (nUpdateFlag != 0xd && nUpdateFlag != 2 && nUpdateFlag != 3) {
         pQuestData->nQuestPacketFlags = '\0';
@@ -374,7 +374,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
                 pGame = pOperation->sArg.pGame;
                 GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
                 pA4Q3Data->nForgeStage = 2;
-                pA4Q3Data->field_0x01 = 0;
+                pA4Q3Data->byForgeStageHigh = 0;
                 pForgeQuestData->nQuestPacketFlags = '\0';
                 QUEST_SetStateAndBroadcast(pForgeQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q28_PlayerNotifyCompletedForge, true);
                 QUEST_RemoveQuestItemFromPlayer(pOperation->sArg.pGame, pOperation->pAttacker, 0x2073736d);
@@ -417,7 +417,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
 
                     D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 3);
                     pA4Q3Data->nForgeStage = 3;
-                    pA4Q3Data->field_0x01 = 0;
+                    pA4Q3Data->byForgeStageHigh = 0;
                     QUEST_RemoveQuestItemFromPlayer(pOperation->sArg.pGame, pOperation->pAttacker, 0x20686668);
                     pQuestBitBuffer = GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker);
                     /* SetQuestState(QUEST_HellsForge=0x1b, JustCompleted=0xd): the SMASH succeeded
@@ -877,7 +877,7 @@ void __fastcall Q28_InitData(D2QuestDataStrc * pQuestData) {
     D2QuestDataA4Q3Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA4Q3Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q3.cpp", 0x358);
     pQuestData->pQuestSpecificData.pA4Q3 = pQuestSpecificData;
     pQuestSpecificData->nForgeStage = 0;
-    pQuestSpecificData->field_0x01 = 0;
+    pQuestSpecificData->byForgeStageHigh = 0;
     pQuestSpecificData->bForgeQuestAccepted = 0;
     pQuestSpecificData->bDropActive = 0;
     pQuestSpecificData->bSetupUpdateFlag = 0;

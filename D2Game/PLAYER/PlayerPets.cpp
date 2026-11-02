@@ -142,7 +142,7 @@ static D2PetListStrc * __stdcall GetPetListFromId(D2UnitDataPlayerPetsStrc * pPe
 
 // Iterates a player's pet list performing free or kill operations on each entry. If nParam1==0 calls KillHandlerPet (kill path); otherwise locates the pet monster, broadcasts a 0x7A summon-log packet, removes it from the DRLG room, and either frees the server unit (nParam2==0) or executes a Death lifecycle transition and sends a 0x9B merc-revive-cost packet to the client. Decrements nPets2/nMax and frees the D2PetStrc node from the game memory pool on removal.
 // @sourcefile .\PLAYER\PlayerPets.cpp
-static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc * pPetList, int32_t bIsHireable, int32_t nParam2, ::SGAMEDATA * pGame) {
+static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc * pPetList, int32_t bIsHireable, int32_t bKillForRevive, ::SGAMEDATA * pGame) {
     D2UnitStrc* pPetUnit;
     D2RoomStrc* pPetRoom;
     uint32_t nReviveCost;
@@ -172,7 +172,7 @@ static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc *
           nPetUnitGUID = pPetUnit->nUnitGUID;
           ePetUnitType = UNIT_MONSTER;
           D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pPetUnit), ePetUnitType, nPetUnitGUID);
-          if (!nParam2) {
+          if (!bKillForRevive) {
             UNIT::SUnit::FreeServerUnit(pGame, pPetUnit);
             pPetList->nPets2--;
             pPetList->nMax--;
@@ -193,7 +193,7 @@ static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc *
             GAME::SCmd::NET_D2GS_SERVER_Send_0x9B_MercReviveCost(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0xdb), (uint16_t)pPetStrc->pPetData.nNameId, nReviveCost);
           }
         }
-        if (!nParam2) {
+        if (!bKillForRevive) {
           pPetList->nPets2--;
           pPetList->nMax--;
           D2_FREE_POOL_AT(pGame->pMemoryPool, pPetStrc, ".\\PLAYER\\PlayerPets.cpp", 0xe8);
@@ -416,20 +416,20 @@ void __fastcall PETS_ResummonPetByUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       exit(-1);
     }
 
-    D2UnitDataPlayerPetsStrc* pDVar1 = pPlayerData->pPets;
-    if (!pDVar1) {
+    D2UnitDataPlayerPetsStrc* pPlayerPets = pPlayerData->pPets;
+    if (!pPlayerPets) {
       return;
     }
 
-    int iVar2 = sgptDataTable->nTxtPetTypeSize;
+    int nPetTypeCount = sgptDataTable->nTxtPetTypeSize;
     int nPetListOffset = 1;
-    if (1 >= iVar2) {
+    if (1 >= nPetTypeCount) {
       return;
     }
 
     do {
-      if (nPetListOffset >= 0 && nPetListOffset < iVar2) {
-        pPetListEntry = (D2PetStrc*)&pDVar1->pPetList[nPetListOffset].pPets;
+      if (nPetListOffset >= 0 && nPetListOffset < nPetTypeCount) {
+        pPetListEntry = (D2PetStrc*)&pPlayerPets->pPetList[nPetListOffset].pPets;
         if (pPetListEntry) {
           for (pPetEntry = *(D2PetStrc**)pPetListEntry; pPetEntry; pPetEntry = pPetEntry->pNext) {
             nPetUnitGUID = D2Client::UNIT::GetGUID(pPetUnit);
@@ -437,19 +437,23 @@ void __fastcall PETS_ResummonPetByUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
               *(uint32_t*)pPetEntry &= -2;
               D2PetArgStrc sPetArgs = {0};
               sPetArgs.nPetGUID = pPetEntry->nPetGUID;
+              uint16_t nPetClassIdValue;
               if (!pPetUnit) {
-                sPetArgs.nPetClassId = 0xffff;
+                nPetClassIdValue = 0xffff;
               } else {
-                sPetArgs.nPetClassId = (uint16_t)pPetUnit->nClassId;
+                nPetClassIdValue = (uint16_t)pPetUnit->nClassId;
               }
 
+              sPetArgs.nPetClassId = nPetClassIdValue;
               sPetArgs._pad0A = 0;
+              int32_t nOwnerGUIDValue;
               if (!pUnit) {
-                sPetArgs.nOwnerGUID = -1;
+                nOwnerGUIDValue = -1;
               } else {
-                sPetArgs.nOwnerGUID = pUnit->nUnitGUID;
+                nOwnerGUIDValue = pUnit->nUnitGUID;
               }
 
+              sPetArgs.nOwnerGUID = nOwnerGUIDValue;
               sPetArgs.nSeed = pPetEntry->pPetData.nSeed;
               sPetArgs.nNameId = pPetEntry->pPetData.nNameId;
               sPetArgs.nPetType = nPetListOffset;
@@ -461,7 +465,7 @@ void __fastcall PETS_ResummonPetByUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       }
 
       nPetListOffset++;
-    } while (nPetListOffset < iVar2);
+    } while (nPetListOffset < nPetTypeCount);
 }
 
 // Searches all of a player's pet-type lists for a pet matching nPetGUID and returns a pointer to its D2PetDataStrc (holds seed, name ID, etc.). Returns null if not found or if pPets is uninitialised. Halts fatally if player data is null.
@@ -502,8 +506,8 @@ D2PetDataStrc * __fastcall GetPlayersPetData(D2UnitStrc * pUnit, int32_t nPetGUI
 }
 
 // @sourcefile .\PLAYER\PlayerPets.cpp
-static void __stdcall PLAYERPETS_FreeAllPetsInList(D2PetListStrc * pParam, ::SGAMEDATA * pGame) {
-    D2PetStrc* pMemoryToFree = pParam->pPets;
+static void __stdcall PLAYERPETS_FreeAllPetsInList(D2PetListStrc * pPetList, ::SGAMEDATA * pGame) {
+    D2PetStrc* pMemoryToFree = pPetList->pPets;
     while (pMemoryToFree) {
       D2PetStrc* pNextPet;
       pNextPet = pMemoryToFree->pNext;
@@ -512,8 +516,8 @@ static void __stdcall PLAYERPETS_FreeAllPetsInList(D2PetListStrc * pParam, ::SGA
       pMemoryToFree = pNextPet;
     }
 
-    pParam->nPets2 = 0;
-    pParam->pPets = 0;
+    pPetList->nPets2 = 0;
+    pPetList->pPets = 0;
 }
 
 // Instantly relocates a pet monster unit to the target room and tile position. Updates collision, act assignment, pDrlgAct pointer, and client visibility if the room changed. Sets UNITFLAGEX_TELEPORTED and switches collision type back to COLLIDE_MONSTER if the unit is alive. Also triggers mage-AI rethink.
@@ -554,10 +558,10 @@ static void __stdcall PETS_TeleportToRoom(D2UnitStrc * pUnit, ::SGAMEDATA * pGam
     D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pUnit->pPath.pDynamicPath, 0x100);
 }
 
-static void __stdcall ROOM_SpawnPetsFromSaveData(D2RoomStrc * pRoom, uint16_t wPosX, ::SGAMEDATA * pGame, uint8_t * * pbParam, uint16_t wPosY) {
+static void __stdcall ROOM_SpawnPetsFromSaveData(D2RoomStrc * pRoom, uint16_t wPosX, ::SGAMEDATA * pGame, uint8_t * * ppPetListHead, uint16_t wPosY) {
     D2UnitStrc* pUnit;
     uint8_t* pPetNode;
-    for (pPetNode = *pbParam; pPetNode; pPetNode = *(uint8_t**)(pPetNode + 0x14)) {
+    for (pPetNode = *ppPetListHead; pPetNode; pPetNode = *(uint8_t**)(pPetNode + 0x14)) {
       if (!(*pPetNode & 1)) {
         pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pPetNode + 4));
         if (pUnit) {
@@ -865,8 +869,7 @@ D2UnitDataPlayerPetsStrc * __fastcall PETS_HandleDeadPet(::SGAMEDATA * pGame, D2
 }
 
 // Iterates the player's pet list (pbParam) and removes any pet whose distance from pUnit exceeds nParam tiles. For each live, non-disabled pet node, looks up the monster unit by GUID, computes the 2D distance from the player, and calls RemovePetByGuidAndNotify if too far. Called with custom convention: pGame/pUnit/nParam on stack, pbParam in EAX.
-static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMaxDistanceSq, uint8_t * * pbParam) {
-    eD2UnitType eVar1;
+static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMaxDistanceSq, uint8_t * * ppPetListHead) {
     D2UnitStrc* pPetUnit;
     int32_t nPetPosX;
     int32_t nDist;
@@ -874,7 +877,8 @@ static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * p
     int32_t nCalcDist;
     int32_t nPetPosY;
     eD2UnitType eUnitType;
-    uint8_t* pPetNode = *pbParam;
+    eD2UnitType eCurUnitType;
+    uint8_t* pPetNode = *ppPetListHead;
     while (true) {
       uint8_t* pCurPetNode;
       pCurPetNode = pPetNode;
@@ -895,8 +899,8 @@ static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * p
             nPetPosY = 0;
           }
 
-          eVar1 = pPetUnit->eUnitType;
-          if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
+          eCurUnitType = pPetUnit->eUnitType;
+          if (eCurUnitType == UNIT_OBJECT || (int)eCurUnitType > 3 && (int)eCurUnitType <= 5) {
             nPetPosX = pPetUnit->pPath.pStaticPath->nPosX;
           } else if (pPetUnit->pPath.pDynamicPath) {
             nPetPosX = D2Common::PATH::DynamicPath::GetXPos(pPetUnit->pPath.pDynamicPath);
@@ -904,8 +908,8 @@ static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * p
             nPetPosX = 0;
           }
 
-          eVar1 = pUnit->eUnitType;
-          if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
+          eCurUnitType = pUnit->eUnitType;
+          if (eCurUnitType == UNIT_OBJECT || (int)eCurUnitType > 3 && (int)eCurUnitType <= 5) {
             nDist = pUnit->pPath.pStaticPath->nPosY;
           } else if (pUnit->pPath.pDynamicPath) {
             nDist = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
@@ -913,8 +917,8 @@ static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * p
             nDist = 0;
           }
 
-          eVar1 = pUnit->eUnitType;
-          if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
+          eCurUnitType = pUnit->eUnitType;
+          if (eCurUnitType == UNIT_OBJECT || (int)eCurUnitType > 3 && (int)eCurUnitType <= 5) {
             nOwnerX = pUnit->pPath.pStaticPath->nPosX;
           } else if (pUnit->pPath.pDynamicPath) {
             nOwnerX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
@@ -1453,22 +1457,30 @@ void __fastcall RecastPetAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2
 
     D2PetArgStrc sPetArgs = {0};
     sPetArgs.nPetType = nPetType;
+    int32_t nPetGUIDValue;
     if (!pPet) {
-      sPetArgs.nPetGUID = -1;
+      nPetGUIDValue = -1;
     } else {
-      sPetArgs.nPetGUID = pPet->nUnitGUID;
-    }
-    if (!pPlayer) {
-      sPetArgs.nOwnerGUID = -1;
-    } else {
-      sPetArgs.nOwnerGUID = pPlayer->nUnitGUID;
-    }
-    if (!pPet) {
-      sPetArgs.nPetClassId = 0xffff;
-    } else {
-      sPetArgs.nPetClassId = (uint16_t)pPet->nClassId;
+      nPetGUIDValue = pPet->nUnitGUID;
     }
 
+    sPetArgs.nPetGUID = nPetGUIDValue;
+    int32_t nOwnerGUIDValue;
+    if (!pPlayer) {
+      nOwnerGUIDValue = -1;
+    } else {
+      nOwnerGUIDValue = pPlayer->nUnitGUID;
+    }
+
+    sPetArgs.nOwnerGUID = nOwnerGUIDValue;
+    uint16_t nPetClassIdValue;
+    if (!pPet) {
+      nPetClassIdValue = 0xffff;
+    } else {
+      nPetClassIdValue = (uint16_t)pPet->nClassId;
+    }
+
+    sPetArgs.nPetClassId = nPetClassIdValue;
     sPetArgs.nSeed = pPetArgs->nSeed;
     sPetArgs.nNameId = pPetArgs->nNameId;
     sPetArgs._pad0A = 0;

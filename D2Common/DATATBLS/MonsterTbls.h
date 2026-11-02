@@ -117,9 +117,9 @@ int32_t __stdcall MONSTERTBLS_ReturnZero();
 void __fastcall TXT_AllocTxt_hireling(struct D2PoolManagerStrc * pMemory);
 void __stdcall MONSTERTBLS_FreeMonLvlTxt();
 struct D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelingId, int32_t nLevel);
-struct D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, int32_t nParam);
-struct D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, int32_t nParam);
-struct D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, int32_t nParam);
+struct D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, int32_t pPrevEntry);
+struct D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, int32_t pPrevEntry);
+struct D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, int32_t pPrevEntry);
 struct D2HirelingTxt * __stdcall GetHirelingDataTable(int32_t nVersion, int32_t nAct, int32_t nDifficulty, struct D2HirelingTxt * pHirelingTxt);
 // Loads and compiles the npc.txt data table (vendor pricing). Builds a D2BinFieldInputStrc field-definition array (npc name linked to MonStats, sell/buy/rep mult, questflag A/B/C, per-quest sell/buy/rep multipliers, and max buy gold per difficulty) and passes it to DataTbls::CompileTxt with row size 0x4C, storing the result into sgtDataTable.pTxtNpc and the row count into sgtDataTable.nTxtNpcSize. Allocates from the supplied D2PoolManagerStrc. Called once during data-table init.
 void __fastcall TXT_AllocTxt_npc(struct D2PoolManagerStrc * pMemory);
@@ -127,7 +127,7 @@ struct D2NpcTxt * __stdcall TXT_npc_GetLine(int32_t nNpc);
 // Table loader for monsounds.txt. Builds a stack array of D2BinFieldInputStrc column descriptors (Id, Attack1/2 + delay/prob, Weapon1/2 + delay/vol, HitSound, DeathSound, footsteps, Neutral, Init, Taunt, Flee, CvtMo/CvtSk/CvtTgt 1-3, etc., each with field type/offset into a 0x94-byte record), creates the linker strc, then calls CompileTxt to parse the txt into sgtDataTable.pTxtMonSounds and store the row count in sgtDataTable.nTxtMonSoundsSize. pMemory = pool for the compiled table. Pure data-table init; no game-state side effects.
 void __fastcall TXT_AllocTxt_monsounds(struct D2PoolManagerStrc * pMemory);
 struct D2MonSoundsTxt * __stdcall TxtGetMonSoundsLine(int32_t nSoundId);
-struct D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nParam);
+struct D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nMonStatsId);
 // Parses one comma-separated component-code field of a MonSeq/monster txt row into the row's compiled code table. For sequence slot nSeqSlot (<0x10) it clears the slot's count byte and three code entries, strips surrounding quotes, then tokenizes the input string on commas; each <=4-char token is packed into a 4-char code (space-padded), resolved to a class id via Excel GetClassIdFromName against pTxtCompCodeLink, and stored as a byte. Writes the resolved code count back to offset 0x15+nSeqSlot (max 12 codes). On the final slot (0xf) it sums frame counts across the parsed component groups and stores the clamped (<=0xfe) total at offset 0x25. Pure table-build side effects; no return.
 void __fastcall MONSTERTBLS_ParseMonSeqField(char * szText, char * pRecord, uint32_t nSeqSlot, int32_t nLinkerCtx1, int32_t nLinkerCtx2, int32_t nLinkerCtx3);
 // Builds the field-descriptor table for monstats2.txt and compiles it into the in-memory MonStatsEx binary table. Fills a 126-entry D2BinFieldInputStrc array mapping every monstats2 column (Height, sizes, gfx component vectors mode-link bits HD/TR/.../S8 with MONSTERTBLS_ParseMonSeqField linkers, selection/collision flags, light/transform, Heart/BodyPart, Inferno, ResurrectMode/Skill), creates the txt link strc, then calls DataTbls::CompileTxt to allocate sgtDataTable.pTxtMonStatsEx (record size 0x134) and store its row count. __fastcall, pMemory(ECX)=pool allocator; no return.
@@ -145,7 +145,7 @@ void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32
 // Parses monpreset.txt (Act/CHAR + Place/LINKER_BIT) via CompileTxt, then builds the per-act index arrays sgtDataTable.pTxtMonPresetPerAct[] and pTxtMonPresetPerActId[] so presets can be looked up by act number. Side-effects: sgtDataTable.pTxtMonPresetPlace, pTxtMonPresetPerAct, pTxtMonPresetPerActId.
 void __fastcall TXT_AllocTxt_monpreset(struct D2PoolManagerStrc * pMemory);
 void __stdcall MONSTERTBLS_FreeMonPresetTxt();
-struct D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nParam, int * pnParam);
+struct D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * pnRecordCount);
 int32_t __stdcall MONSTERTBLS_GetPresetActValue(int32_t nParam1, int32_t nParam2);
 void __fastcall TXT_AllocTxt_sounds(struct D2PoolManagerStrc * pMemory);
 void __stdcall TXT_FreeTxt_sounds();

@@ -10,7 +10,7 @@
 
 namespace D2Lang {
 
-void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nParam1, int32_t nParam2) {
+void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nNumber, int32_t nMaxLen) {
     // Frame slots -76..-8 are ONE object: &nCommaCounter is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -24,24 +24,24 @@ void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nParam1, in
     char cCurChar;
     int nDigitIdx;
     __frame0.nCommaCounter = 0;
-    if (nParam2 <= 2) {
+    if (nMaxLen <= 2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4b9);
       exit(-1);
     }
-    if (nParam1 < 0) {
+    if (nNumber < 0) {
       *wszText = L'-';
       wszText++;
-      nParam2--;
-      nParam1 = -nParam1;
+      nMaxLen--;
+      nNumber = -nNumber;
     }
 
-    _itoa(nParam1, __frame0.aDigitBuffer, 10);
+    _itoa(nNumber, __frame0.aDigitBuffer, 10);
     char* pcDigitPtr = __frame0.aDigitBuffer;
     pcDigitPtr = pcDigitPtr + strlen(pcDigitPtr) + 1;
     int nDigitCount = (int)pcDigitPtr - (int)(__frame0.aDigitBuffer + 1);
     if (nDigitCount) {
       nFormattedLen = (nDigitCount - 1) / 3 + nDigitCount;
-      if (nFormattedLen >= 1 && nFormattedLen < nParam2 - 1) {
+      if (nFormattedLen >= 1 && nFormattedLen < nMaxLen - 1) {
         wszText[nFormattedLen] = L'\0';
         while (nFormattedLen) {
           nDigitIdx = nDigitCount - 1;
@@ -88,7 +88,7 @@ int32_t __stdcall UTF8_DecodeNextChar(uint8_t * pUtf8, uint16_t * pwCharOut, int
     uint32_t uCodePoint = (uint32_t)(short int)(uint16_t)byCurByte;
     uint16_t wTableMask = gaUtf8DecodeTable[0].wMask;
     while (true) {
-      uint8_t* pbVar1;
+      uint8_t* pbContByte;
       if (!wTableMask) {
         return -1;
       }
@@ -107,13 +107,13 @@ int32_t __stdcall UTF8_DecodeNextChar(uint8_t * pUtf8, uint16_t * pwCharOut, int
         return -1;
       }
 
-      pbVar1 = pUtf8 + 1;
+      pbContByte = pUtf8 + 1;
       pUtf8++;
-      if ((*pbVar1 ^ 0x80) & 0xc0) {
+      if ((*pbContByte ^ 0x80) & 0xc0) {
         break;
       }
 
-      uCodePoint = uCodePoint << 6 | (int)(short int)(uint16_t)(*pbVar1 ^ 0x80);
+      uCodePoint = uCodePoint << 6 | (int)(short int)(uint16_t)(*pbContByte ^ 0x80);
       wTableMask = gaUtf8DecodeTable[nByteWidth].wMask;
     }
 
@@ -121,8 +121,8 @@ int32_t __stdcall UTF8_DecodeNextChar(uint8_t * pUtf8, uint16_t * pwCharOut, int
 }
 
 // Encodes a single UTF-16 code point to UTF-8 bytes. Returns number of bytes written (1-4). Uses lookup table at 0x007309b8.
-static int32_t __stdcall EncodeUTF8CodePoint(uint16_t nParam, uint8_t * pbParam) {
-    uint32_t uCodePt = (uint32_t)nParam;
+static int32_t __stdcall EncodeUTF8CodePoint(uint16_t wCodePoint, uint8_t * pbyUtf8Out) {
+    uint32_t uCodePt = (uint32_t)wCodePoint;
     int nByteWidth = 0;
     uint16_t wTableMask = gaUtf8DecodeTable[0].wMask;
     while (true) {
@@ -139,15 +139,15 @@ static int32_t __stdcall EncodeUTF8CodePoint(uint16_t nParam, uint8_t * pbParam)
     }
 
     int nShiftBits = (int)(short int)gaUtf8DecodeTable[nByteWidth - 1].wShift;
-    *pbParam = (uint8_t)((int)uCodePt >> ((uint8_t)gaUtf8DecodeTable[nByteWidth - 1].wShift & 0x1f)) | (uint8_t)gaUtf8DecodeTable[nByteWidth - 1].wExpect;
+    *pbyUtf8Out = (uint8_t)((int)uCodePt >> ((uint8_t)gaUtf8DecodeTable[nByteWidth - 1].wShift & 0x1f)) | (uint8_t)gaUtf8DecodeTable[nByteWidth - 1].wExpect;
     if (nShiftBits <= 0) {
       return nByteWidth;
     }
 
     do {
       nShiftBits += -6;
-      pbParam++;
-      *pbParam = (uint8_t)((int)uCodePt >> ((uint8_t)nShiftBits & 0x1f)) & 0x3f | 0x80;
+      pbyUtf8Out++;
+      *pbyUtf8Out = (uint8_t)((int)uCodePt >> ((uint8_t)nShiftBits & 0x1f)) & 0x3f | 0x80;
     } while (nShiftBits > 0);
 
     return nByteWidth;

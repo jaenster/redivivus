@@ -1,0 +1,590 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A5Q1.cpp",
+  "functions": [
+    {
+      "name": "Q31_NpcGossipHandler",
+      "address": "00586c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586c80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_NpcGossipHandler",
+        "GetPlayerData",
+        "GetQuestState",
+        "QUEST_SendQuestUpdateToPlayer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q31_StatusFilter",
+      "address": "00586ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586ce0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_StatusFilter",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q31_Callback02_NpcDeactivate",
+      "address": "00586d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586d80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_Callback02_NpcDeactivate",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q1Strc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q31_HandleLarzukRewardState",
+      "address": "00586d88",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586d88"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_HandleLarzukRewardState",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q1Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q31_SyncQuestProgress",
+      "address": "00586de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586de0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_SyncQuestProgress",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetQuestDataByQuestNoInternal",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q31_Callback11_ScrollMessage",
+      "address": "00586e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586e70"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_Callback11_ScrollMessage",
+        "GetPlayerData",
+        "QUEST_SetStateFlag",
+        "IteratePlayerOrMonsterUnits",
+        "QUEST_SendNpcGossipPacket",
+        "GetQuestState",
+        "UnsetQuestStepStates",
+        "SetQuestState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "QUEST_SetStateAndBroadcast",
+        "QUESTGUID_AddPlayerToList"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q1Strc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Q31_Callback00_NpcActivate",
+      "address": "00586ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586ff0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_Callback00_NpcActivate",
+        "GetPlayerData",
+        "GetQuestState",
+        "AddGossipMessageOnMonster"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q31_Callback10_PlayerLeavesGame",
+      "address": "005870d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005870d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_Callback10_PlayerLeavesGame",
+        "QUESTGUID_RemovePlayerFromList"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q31_CheckNearShenk",
+      "address": "00587100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587100"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_CheckNearShenk",
+        "GetPlayerData",
+        "UNITS_GetRoom",
+        "GetQuestState",
+        "GetQuestDataByQuestNoInternal",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataA5Q1Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q31_SetCompleteForPartyMember",
+      "address": "005871c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005871c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_SetCompleteForPartyMember",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2RoomStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q31_PropagateCompleteToParty",
+      "address": "00587240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587240"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_PropagateCompleteToParty",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q31_SetCannotComplete",
+      "address": "00587290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587290"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q31_PlayCompletionSound",
+      "address": "005872f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005872f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_PlayCompletionSound",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q31_Callback08_MonsterKilled",
+      "address": "00587330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587330"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_CheckNearShenk",
+        "Q31_SetCannotComplete",
+        "Q31_Callback08_MonsterKilled",
+        "UNITS_GetRoom",
+        "IteratePlayerOrMonsterUnits",
+        "QUEST_SetQuestRecordState",
+        "NotifyPlayersAboutEvent",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "Q31_Callback03_ChangedLevel",
+      "address": "005873e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005873e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_Callback03_ChangedLevel",
+        "QUEST_SetStateFlag",
+        "IteratePlayerOrMonsterUnits",
+        "QUESTGUID_RemovePlayerFromQuest",
+        "GetPlayerData",
+        "GetQuestState",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q31_ActiveFilter",
+      "address": "005874e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005874e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_ActiveFilter",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q31_SequenceFilter",
+      "address": "00587560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587560"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_SequenceFilter",
+        "GetQuestDataByQuestNoInternal",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q31_Callback13_PlayerStartedGame",
+      "address": "005875f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005875f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_Callback13_PlayerStartedGame",
+        "GetPlayerData",
+        "GetQuestState",
+        "PLAYER_CheckIfSpokenWithNPC"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q31_InitData",
+      "address": "005876e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005876e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_InitData",
+        "memset",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q1Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q31_ClaimReward",
+      "address": "005877c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005877c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_ClaimReward",
+        "GetPlayerData",
+        "SetQuestState",
+        "UnsetQuestState",
+        "GetQuestState",
+        "GetQuestDataByQuestNoInternal",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Objects_InitFn70",
+      "address": "00587830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587830"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Objects_InitFn70"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg"
+      ]
+    },
+    {
+      "name": "Objects_InitFn71",
+      "address": "00587840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587840"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Objects_InitFn71",
+        "GetQuestDataByQuestNoInternal",
+        "FindSpawnableLocation",
+        "SpawnMonsterAtRoomPos",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc *",
+        "D2ObjectInitFnArg",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT"
+      ]
+    },
+    {
+      "name": "Q31_OnOverseerDeath",
+      "address": "00587900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587900"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_OnOverseerDeath",
+        "GetQuestDataByQuestNoInternal",
+        "GetBossNo",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "Q31_OnPresetObjectLoad",
+      "address": "00587950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00587950"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q1",
+      "calledFunctions": [
+        "Q31_OnPresetObjectLoad",
+        "GetQuestDataByQuestNoInternal",
+        "DRLGPRESET_CopyMapAI",
+        "FindUnitFromTable",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc",
+        "D2MapAIStrc *",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    }
+  ]
+}

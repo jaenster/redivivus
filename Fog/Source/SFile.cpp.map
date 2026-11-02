@@ -1,0 +1,558 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Source/SFile.cpp",
+  "functions": [
+    {
+      "name": "SFILE_InitializeFileSystem",
+      "address": "00406870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406870"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InitializeFileSystem",
+        "SFileSetBasePath",
+        "SFileEnableDirectAccess",
+        "SFileSetIoErrorMode",
+        "SFileEnableSeekOptimization",
+        "SSYSTEM_SetSystemOption"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_OpenD2FileWrap",
+      "address": "004068e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004068e0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "ARCHIVE_OpenD2FileWrap",
+        "SFileOpenFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_FCloseFile",
+      "address": "004068f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004068f0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "ERRORMANAGER_FCloseFile",
+        "SFileCloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_FReadFile",
+      "address": "00406900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406900"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "ERRORMANAGER_FReadFile",
+        "SFileReadFileEx2"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2StormAsyncCompletionStrc",
+        "LPOVERLAPPED",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_FGetFileSize",
+      "address": "00406930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406930"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "ERRORMANAGER_FGetFileSize",
+        "SFileGetFileSize"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "LPDWORD"
+      ]
+    },
+    {
+      "name": "SFILE_SetFilePointerThunk",
+      "address": "00406940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406940"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFileSetFilePointer",
+        "SFILE_SetFilePointerThunk"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "thunk_CreateFileA",
+      "address": "00406960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406960"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "thunk_CreateFileA"
+      ],
+      "usedTypes": [
+        "LPSECURITY_ATTRIBUTES"
+      ]
+    },
+    {
+      "name": "thunk_DeleteFileA",
+      "address": "00406990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406990"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "thunk_DeleteFileA"
+      ]
+    },
+    {
+      "name": "SFILE_Win32CloseHandle",
+      "address": "004069a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004069a0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_Win32CloseHandle"
+      ]
+    },
+    {
+      "name": "thunk_ReadFile",
+      "address": "004069b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004069b0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "thunk_ReadFile"
+      ],
+      "usedTypes": [
+        "LPDWORD",
+        "LPOVERLAPPED"
+      ]
+    },
+    {
+      "name": "thunk_WriteFile",
+      "address": "004069d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004069d0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "thunk_WriteFile"
+      ],
+      "usedTypes": [
+        "LPDWORD",
+        "LPOVERLAPPED"
+      ]
+    },
+    {
+      "name": "SFILE_Win32SetFilePointer",
+      "address": "004069f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004069f0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_Win32SetFilePointer"
+      ],
+      "usedTypes": [
+        "PLONG"
+      ]
+    },
+    {
+      "name": "SafeCreateDirectoryTree",
+      "address": "00406a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406a10"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SafeCreateDirectoryTree",
+        "__security_check_cookie",
+        "SStrChr",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_EnsurePathEndsWithBackslash",
+      "address": "00406b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406b20"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_EnsurePathEndsWithBackslash",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_GetExecutableDirectory",
+      "address": "00406b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406b60"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetExecutableDirectory",
+        "SStrChrR"
+      ]
+    },
+    {
+      "name": "SFILE_GetInstallPath",
+      "address": "00406ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406ba0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetInstallPath",
+        "SRegLoadString",
+        "SStrChrR",
+        "SRegSaveString",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_GetBlizzardAppDataPath",
+      "address": "00406c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406c40"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetBlizzardAppDataPath",
+        "SStrPack",
+        "SStrLen",
+        "SafeCreateDirectoryTree",
+        "SStrCopy",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetUseDirectCommand",
+      "address": "00406d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406d20"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "GetUseDirectCommand"
+      ]
+    },
+    {
+      "name": "SFILE_GetSaveGamePath",
+      "address": "00406d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406d30"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetSaveGamePath",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PATH_GetKnownFolderPath",
+        "SFILE_EnsurePathEndsWithBackslash",
+        "SStrPack"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_MoveDirectoryRecursive",
+      "address": "00406de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00406de0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_MoveDirectoryRecursive",
+        "SStrCopy",
+        "strrchr",
+        "SafeCreateDirectoryTree",
+        "__security_check_cookie",
+        "SStrLen",
+        "SStrPrintf"
+      ],
+      "usedTypes": [
+        "_WIN32_FIND_DATAA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetAndCreateSavePath",
+      "address": "00407050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407050"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "GetAndCreateSavePath",
+        "SRegLoadString",
+        "SFILE_GetSaveGamePath",
+        "SFILE_MoveDirectoryRecursive",
+        "SStrLen",
+        "SRegSaveString",
+        "SStrCopy",
+        "SafeCreateDirectoryTree",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CalculateBufferOffset",
+      "address": "004072a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004072a0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CalculateBufferOffset"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_SprintfToBuffer",
+      "address": "00407310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407310"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "ERRORMANAGER_SprintfToBuffer",
+        "vsprintf"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_SnprintfTerminated",
+      "address": "00407330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407330"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "ERRORMANAGER_SnprintfTerminated",
+        "_vsnprintf"
+      ]
+    },
+    {
+      "name": "SFILE_GetGlobalPointer",
+      "address": "00407360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407360"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetGlobalPointer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_JulianDayNumber",
+      "address": "00407370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407370"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_JulianDayNumber",
+        "CRT_Floor"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_GregorianCalendarFromJulian",
+      "address": "00407440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407440"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GregorianCalendarFromJulian"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_DeleteOldLogFiles",
+      "address": "00407570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407570"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "SFILE_DeleteOldLogFiles",
+        "FILETOOLS_GetExecutableFolderPath",
+        "SStrPack",
+        "SafeCreateDirectoryTree",
+        "SFILE_JulianDayNumber",
+        "SFILE_GregorianCalendarFromJulian",
+        "SStrPrintf",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "_SYSTEMTIME",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LOGFILE_StoreGameStartupInfo",
+      "address": "004076b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004076b0"
+        }
+      ],
+      "namespace": "Fog::Source::SFile",
+      "calledFunctions": [
+        "LOGFILE_StoreGameStartupInfo",
+        "LOGFILE_WriteStringToFile",
+        "LogCpuInfo",
+        "FILETOOLS_GetExecutableFolderPath",
+        "NET_GetLocalIp",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "_SYSTEMTIME",
+        "uint32_t"
+      ]
+    }
+  ]
+}

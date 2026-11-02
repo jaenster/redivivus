@@ -261,15 +261,15 @@ void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUn
     uint32_t uFillLevel = (uint32_t)byComponent;
     uint8_t bVar1 = OBJECT_GetDefaultSize();
     if ((int)uFillLevel / pObjectTxt->Parm[2] < (int)(uint32_t)bVar1) {
-      uint32_t uVar2;
+      uint32_t nDoubledTxtSize;
       byComponent++;
       pUnit->pUnitData.pUnitDataMonster->Components[0] = byComponent;
-      uVar2 = OBJECT_GetDoubledTxtSize(pObjectTxt);
-      if ((int)((uint8_t)uVar2 - uFillLevel) < 0) {
+      nDoubledTxtSize = OBJECT_GetDoubledTxtSize(pObjectTxt);
+      if ((int)((uint8_t)nDoubledTxtSize - uFillLevel) < 0) {
         nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
         pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nErrorLine;
-        uVar2 = OBJECT_GetDoubledTxtSize(pObjectTxt);
-        if ((int)((uint8_t)uVar2 - uFillLevel) < 0) {
+        nDoubledTxtSize = OBJECT_GetDoubledTxtSize(pObjectTxt);
+        if ((int)((uint8_t)nDoubledTxtSize - uFillLevel) < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe3);
           exit(-1);
         }
@@ -1119,12 +1119,14 @@ BOOL __fastcall OBJOP_OpenHoradricCube(D2ObjectOperateFnArg * pOperation) {
         D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 3);
         pVictimUnit = pOperation->sArg.pVictim;
         sPacket.nPacketId = 'X';
+        uint32_t nUnitGUIDValue;
         if (!pVictimUnit) {
-          sPacket.nUnitGUID = -1;
+          nUnitGUIDValue = -1;
         } else {
-          sPacket.nUnitGUID = pVictimUnit->nUnitGUID;
+          nUnitGUIDValue = pVictimUnit->nUnitGUID;
         }
 
+        sPacket.nUnitGUID = nUnitGUIDValue;
         sPacket.nUIType = '\0';
         GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pClient, &sPacket);
       }
@@ -1448,14 +1450,16 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
 
     pTargetUnit = pArguments->sArg.pVictim;
     eUnitType = pTargetUnit->eUnitType;
+    int nYValue2;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sUnitFindArg.nY = pTargetUnit->pPath.pStaticPath->nPosY;
+      nYValue2 = pTargetUnit->pPath.pStaticPath->nPosY;
     } else if (pTargetUnit->pPath.pDynamicPath) {
-      sUnitFindArg.nY = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
+      nYValue2 = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
     } else {
-      sUnitFindArg.nY = 0;
+      nYValue2 = 0;
     }
 
+    sUnitFindArg.nY = nYValue2;
     memset(&sUnitFindArg, 0, 0x38);
     sUnitFindArg.nDistance = pTxtShrinesLocal->dwArg1;
     sUnitFindArg.nFlags = 0x583;
@@ -1489,23 +1493,28 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
         pTargetUnit = pArguments->sArg.pVictim;
         sSkillArg.nFlags = 3;
         eUnitType = pTargetUnit->eUnitType;
+        int nXValue;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          sSkillArg.nX = pTargetUnit->pPath.pStaticPath->nPosX;
+          nXValue = pTargetUnit->pPath.pStaticPath->nPosX;
         } else if (pTargetUnit->pPath.pDynamicPath) {
-          sSkillArg.nX = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
+          nXValue = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
         } else {
-          sSkillArg.nX = 0;
+          nXValue = 0;
         }
 
+        sSkillArg.nX = nXValue;
         pTargetUnit = pArguments->sArg.pVictim;
         eUnitType = pTargetUnit->eUnitType;
+        int nYValue;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          sSkillArg.nY = pTargetUnit->pPath.pStaticPath->nPosY;
+          nYValue = pTargetUnit->pPath.pStaticPath->nPosY;
         } else if (pTargetUnit->pPath.pDynamicPath) {
-          sSkillArg.nY = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
+          nYValue = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
         } else {
-          sSkillArg.nY = 0;
+          nYValue = 0;
         }
+
+        sSkillArg.nY = nYValue;
         if (nRowParity) {
           sSkillArg.nUnitX = (int)pRoom;
         } else {
@@ -1664,24 +1673,28 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
       sItemGenCtx.usually_one = 0x520;
       sItemGenCtx.wItemFormat = 0;
       eUnitType = pCreatedItem->eUnitType;
+      uint32_t maxDurabilityValue;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        sItemGenCtx.maxDurability = pCreatedItem->pPath.pStaticPath->nPosX;
+        maxDurabilityValue = pCreatedItem->pPath.pStaticPath->nPosX;
       } else if (pCreatedItem->pPath.pDynamicPath) {
-        sItemGenCtx.maxDurability = D2Common::PATH::DynamicPath::GetXPos(pCreatedItem->pPath.pDynamicPath);
+        maxDurabilityValue = D2Common::PATH::DynamicPath::GetXPos(pCreatedItem->pPath.pDynamicPath);
       } else {
-        sItemGenCtx.maxDurability = 0;
+        maxDurabilityValue = 0;
       }
 
+      sItemGenCtx.maxDurability = maxDurabilityValue;
       pCreatedItem = pArguments->sArg.pVictim;
       eUnitType = pCreatedItem->eUnitType;
+      uint32_t dwFileIndexValue;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        sItemGenCtx.dwFileIndex = pCreatedItem->pPath.pStaticPath->nPosY;
+        dwFileIndexValue = pCreatedItem->pPath.pStaticPath->nPosY;
       } else if (pCreatedItem->pPath.pDynamicPath) {
-        sItemGenCtx.dwFileIndex = D2Common::PATH::DynamicPath::GetYPos(pCreatedItem->pPath.pDynamicPath);
+        dwFileIndexValue = D2Common::PATH::DynamicPath::GetYPos(pCreatedItem->pPath.pDynamicPath);
       } else {
-        sItemGenCtx.dwFileIndex = 0;
+        dwFileIndexValue = 0;
       }
 
+      sItemGenCtx.dwFileIndex = dwFileIndexValue;
       sItemGenCtx.neD2ItemFlag = aMissileOffsets[iMissileIdx + 6] + sItemGenCtx.maxDurability;
       sItemGenCtx.nInitSeed = aMissileOffsets[iMissileIdx] + sItemGenCtx.dwFileIndex;
       sItemGenCtx.bFromCustomData = (int)pArguments->pAttacker;
@@ -1795,24 +1808,28 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
       sItemGenCtx.usually_one = 0x520;
       sItemGenCtx.wItemFormat = 0;
       eUnitType = pCreatedItem->eUnitType;
+      uint32_t maxDurabilityValue;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        sItemGenCtx.maxDurability = pCreatedItem->pPath.pStaticPath->nPosX;
+        maxDurabilityValue = pCreatedItem->pPath.pStaticPath->nPosX;
       } else if (pCreatedItem->pPath.pDynamicPath) {
-        sItemGenCtx.maxDurability = D2Common::PATH::DynamicPath::GetXPos(pCreatedItem->pPath.pDynamicPath);
+        maxDurabilityValue = D2Common::PATH::DynamicPath::GetXPos(pCreatedItem->pPath.pDynamicPath);
       } else {
-        sItemGenCtx.maxDurability = 0;
+        maxDurabilityValue = 0;
       }
 
+      sItemGenCtx.maxDurability = maxDurabilityValue;
       pCreatedItem = pArguments->sArg.pVictim;
       eUnitType = pCreatedItem->eUnitType;
+      uint32_t dwFileIndexValue;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        sItemGenCtx.dwFileIndex = pCreatedItem->pPath.pStaticPath->nPosY;
+        dwFileIndexValue = pCreatedItem->pPath.pStaticPath->nPosY;
       } else if (pCreatedItem->pPath.pDynamicPath) {
-        sItemGenCtx.dwFileIndex = D2Common::PATH::DynamicPath::GetYPos(pCreatedItem->pPath.pDynamicPath);
+        dwFileIndexValue = D2Common::PATH::DynamicPath::GetYPos(pCreatedItem->pPath.pDynamicPath);
       } else {
-        sItemGenCtx.dwFileIndex = 0;
+        dwFileIndexValue = 0;
       }
 
+      sItemGenCtx.dwFileIndex = dwFileIndexValue;
       sItemGenCtx.neD2ItemFlag = aMissileOffsets[iMissileIdx + 6] + sItemGenCtx.maxDurability;
       sItemGenCtx.nInitSeed = aMissileOffsets[iMissileIdx] + sItemGenCtx.dwFileIndex;
       sItemGenCtx.bFromCustomData = (int)pArguments->pAttacker;
@@ -1833,10 +1850,10 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
 }
 
 // Computes the effective to-hit (attack rate) for a skill+weapon pair and writes it into *pnParam. Starts from the unit's base attack rate; if no explicit weapon is provided (pUnit2==null), falls back to the equipped weapon. Missile-potion weapons force *pnParam=0. Final value combines skill's LevToHit/ToHit columns, item bonus damage, UNITSTAT_item_tohit_percent, and the character class's ToHitFactor from CharStats.txt. Halts if pSkill is null.
-static void __stdcall SKILL_GetAttackRateForWeapon(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int * pnParam, int32_t nParam, D2UnitStrc * pUnit2) {
+static void __stdcall SKILL_GetAttackRateForWeapon(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int * pnToHit, int32_t nSkillLevel, D2UnitStrc * pUnit2) {
     int32_t nAttackRate;
     nAttackRate = D2Common::Units::GetAttackRate(pUnit);
-    *pnParam = nAttackRate;
+    *pnToHit = nAttackRate;
     if (!pSkill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x963);
       exit(-1);
@@ -1851,15 +1868,15 @@ static void __stdcall SKILL_GetAttackRateForWeapon(D2SkillStrc * pSkill, D2UnitS
     eD2ItemTypes eItemType;
     eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit2);
     if (eItemType == ITEMTYPE_MissilePotion) {
-      *pnParam = 0;
+      *pnToHit = 0;
     }
 
     apply_tohit_bonuses:
     nAttackRate = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit, pUnit2, pSkill, 0);
     int32_t iVar1 = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_tohit_percent, 0);
     D2SkillsTxt* pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
-    int nComputedToHit = *pnParam + ((nParam - 1) * pSkillsTxt->LevToHit + pSkillsTxt->ToHit + nAttackRate + iVar1) * *pnParam / 100;
-    *pnParam = nComputedToHit;
+    int nComputedToHit = *pnToHit + ((nSkillLevel - 1) * pSkillsTxt->LevToHit + pSkillsTxt->ToHit + nAttackRate + iVar1) * *pnToHit / 100;
+    *pnToHit = nComputedToHit;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
     }
@@ -1870,7 +1887,7 @@ static void __stdcall SKILL_GetAttackRateForWeapon(D2SkillStrc * pSkill, D2UnitS
       return;
     }
 
-    *pnParam = pCharStatsTxt->ToHitFactor + nComputedToHit;
+    *pnToHit = pCharStatsTxt->ToHitFactor + nComputedToHit;
 }
 
 // Returns a shrine's effective stat bonus for the given unit stat. For most stats (resistances, stamina, experience, etc.) returns nParam unchanged. For UNITSTAT_tohit, computes the attack rate via SKILL_GetAttackRateForWeapon. For UNITSTAT_mindamage, resolves whether to use primary or secondary min-damage stat based on dual-wield handedness, then fetches the raw stat value and scales it as (statValue * nParam) / 100.
@@ -2166,23 +2183,23 @@ BOOL __fastcall OBJOP_SpawnQuestItemReward(D2ObjectOperateFnArg * pOperation) {
     }
 
     D2Common::Units::GetCoords(pOperation->sArg.pVictim, &ptPos);
-    D2SeedStrc* pDVar2 = pOperation->pSeed;
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pDVar2);
-    *pDVar2 = seedNext;
-    pDVar2 = pOperation->pSeed;
+    D2SeedStrc* pDVar1 = pOperation->pSeed;
+    D2SeedStrc seedNext = D2_SEED_NEXT(*pDVar1);
+    *pDVar1 = seedNext;
+    pDVar1 = pOperation->pSeed;
     if ((int)(seedNext.nSeedLow % 0x14) > 0xc) {
-      seedNext = D2_SEED_NEXT(*pDVar2);
-      pDVar2->nSeedHigh = seedNext.nSeedHigh;
-      pDVar2->nSeedLow = seedNext.nSeedLow;
+      seedNext = D2_SEED_NEXT(*pDVar1);
+      pDVar1->nSeedHigh = seedNext.nSeedHigh;
+      pDVar1->nSeedLow = seedNext.nSeedLow;
       if (seedNext.nSeedLow & 1) {
         pOperation->sArg.pVictim->dwDropItemCode = 0x206b6269;
       } else {
         pOperation->sArg.pVictim->dwDropItemCode = 0x206b6274;
       }
     } else {
-      seedNext = D2_SEED_NEXT(*pDVar2);
-      pDVar2->nSeedHigh = seedNext.nSeedHigh;
-      pDVar2->nSeedLow = seedNext.nSeedLow;
+      seedNext = D2_SEED_NEXT(*pDVar1);
+      pDVar1->nSeedHigh = seedNext.nSeedHigh;
+      pDVar1->nSeedLow = seedNext.nSeedLow;
       if (seedNext.nSeedLow & 1) {
         pOperation->sArg.pVictim->dwDropItemCode = 0x20637369;
       } else {
@@ -2257,19 +2274,19 @@ static int OBJMODE_ApplyCounterAttackToNearbyUnits(::SGAMEDATA * * ppGame) {
     D2Common::Units::GetCoords((D2UnitStrc*)ppGame[1], &ptPos);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom((D2UnitStrc*)ppGame[1]);
     for (pTarget = (::SGAMEDATA*)pRoom->pUnitList; pTarget; pTarget = (::SGAMEDATA*)pTarget->pInactiveUnitList[4]) {
-      eD2PlayerAnimMode eVar1;
+      eD2PlayerAnimMode eTargetMode;
       eUnitType = pTarget->m_hashval;
-      eVar1 = ((uD2UnitMode*)&pTarget->m_linktofull.m_next)->ePlayerMode;
+      eTargetMode = ((uD2UnitMode*)&pTarget->m_linktofull.m_next)->ePlayerMode;
       if (pTarget != ppGame[1] && eUnitType != UNIT_WARP) {
         if (eUnitType == UNIT_PLAYER) {
-          if (eVar1 != eD2PlayerAnimMode_ns::Dead) {
+          if (eTargetMode != eD2PlayerAnimMode_ns::Dead) {
             _bInRange = D2Common::Collision::COLLISION_IsUnitInRange((D2UnitStrc*)pTarget, (int*)&ptPos.x, 3);
             if (_bInRange) {
               Monster::AI::MONSTERAI_CalculateCounterAttackDamage(*ppGame, (D2UnitStrc*)ppGame[1], (D2UnitStrc*)pTarget, 0);
             }
           }
         } else if (eUnitType == UNIT_MONSTER) {
-          if (eVar1 != Kick) {
+          if (eTargetMode != Kick) {
             _bInRange = D2Common::Collision::COLLISION_IsUnitInRange((D2UnitStrc*)pTarget, (int*)&ptPos.x, 3);
             if (_bInRange) {
               Monster::AI::MONSTERAI_CalculateCounterAttackDamage(*ppGame, (D2UnitStrc*)ppGame[1], (D2UnitStrc*)pTarget, 0);
@@ -2557,7 +2574,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     D2LevelDefsTxt* pTxtLevelDefs;
     uint32_t nCollisionFlagsArg;
     int32_t nPortalObjGUID;
-    uint32_t uVar1;
+    uint32_t nPortalOwnerObjGUID;
     eD2LevelId eLevelId;
     eD2LevelId eEnteredLevelId;
     eD2LevelId ePreviousLevelId;
@@ -2571,7 +2588,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     eCollisionFlags eCollisionFlag;
     uint32_t* pnSpawnY;
     eD2Quests eQuestId;
-    BOOL BVar2;
+    BOOL BVar1;
     int32_t nAttackerUID;
     nAttackerUID = PLAYER::Player::GetPlayerTradeTickOrBusy(pOperation->pAttacker);
     if (nAttackerUID) {
@@ -2664,18 +2681,18 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
         goto dest_from_paired_portal;
       }
       if (__frame0.pPortalOwnerObj) {
-        uVar1 = D2Client::UNIT::GetGUID(__frame0.pPortalOwnerObj);
+        nPortalOwnerObjGUID = D2Client::UNIT::GetGUID(__frame0.pPortalOwnerObj);
         pUnit = __frame0.pPortalOwnerObj;
-        if (nCollisionFlagsArg != uVar1) {
+        if (nCollisionFlagsArg != nPortalOwnerObjGUID) {
           if (pOperation->sArg.pGame->bExpansion) {
             eQuestId = pTxtLevelDefs->QuestFlagEx;
           } else {
             eQuestId = pTxtLevelDefs->QuestFlag;
           }
           if ((int)eQuestId > 0) {
-            BVar2 = D2Common::QuestRecord::GetQuestState(__frame0.pQuestRecord, eQuestId, QUESTSTATE_Completed);
+            BVar1 = D2Common::QuestRecord::GetQuestState(__frame0.pQuestRecord, eQuestId, QUESTSTATE_Completed);
             pUnit = __frame0.pPortalOwnerObj;
-            if (!BVar2) {
+            if (!BVar1) {
               goto refuse_portal;
             }
           }
@@ -2706,8 +2723,8 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     pClient = (D2ClientStrc*)((uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pClient + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byPortalFlags) | 5);
     D2Common::Units::SetObjectPortalFlags(pOperation->sArg.pVictim, (uint8_t)(uintptr_t)pClient);
     D2RoomStrc* pAttackerRoom = D2Common::Units::UNITS_GetRoom(pOperation->pAttacker);
-    BVar2 = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pAttackerRoom);
-    if (BVar2) {
+    BVar1 = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pAttackerRoom);
+    if (BVar1) {
       pUnit = pOperation->pAttacker;
       eEnteredLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
       pAttackerRoom = D2Common::Units::UNITS_GetRoom(pOperation->pAttacker);
@@ -2722,8 +2739,8 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
       return 0;
     }
 
-    BVar2 = UNIT::SUnit::SUNIT_RelocateUnit(pOperation->sArg.pGame, pOperation->pAttacker, pRoom, ptDest.x, ptDest.y, 0, 0);
-    if (!BVar2) {
+    BVar1 = UNIT::SUnit::SUNIT_RelocateUnit(pOperation->sArg.pGame, pOperation->pAttacker, pRoom, ptDest.x, ptDest.y, 0, 0);
+    if (!BVar1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf52);
       exit(-1);
     }
@@ -2898,12 +2915,14 @@ BOOL __fastcall OBJOP_ActivateWaypoint(D2ObjectOperateFnArg * pOperation) {
       if (!bPlayerBusy) {
         pUnit = pOperation->sArg.pVictim;
         sPacket.nPacketId = 'c';
+        int32_t nUnitGUIDValue;
         if (!pUnit) {
-          sPacket.nUnitGUID = -1;
+          nUnitGUIDValue = -1;
         } else {
-          sPacket.nUnitGUID = pUnit->nUnitGUID;
+          nUnitGUIDValue = pUnit->nUnitGUID;
         }
 
+        sPacket.nUnitGUID = nUnitGUIDValue;
         D2Common::Waypoints::CopyWaypoint(pWaypoint, &sPacket.sWaypoints);
         pClient = UNIT::SUnit::SUNIT_GetClient(pOperation->pAttacker, ".\\OBJECTS\\ObjMode.cpp", 0x101e);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x63_WAYPOINTLIST(pClient, &sPacket);
@@ -3037,7 +3056,7 @@ uint32_t __fastcall OBJMODE_ShrineSkillPointBoost(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Probabilistic dispatcher for an object's per-mode operate handler. Indexes gaObjectsModeFuncTable by bParam (mode index, bounds-checked against gnObjectsModeFunctionDispatchTableCount), advances the object's RNG seed at nParam+0x20 (LCG *0x6ac690c5) and rolls 0..99; only if the roll is below that mode's nSpriteThreshold does it invoke the table's pfnHandler (validated via IsBadCodePtr, halting on a bad pointer) with the mode's nModeFlags, returning the handler's result. Returns 0 if out of range or the probability gate fails. Custom convention (nParam in EDI).
-static uint32_t __stdcall OBJMODE_DispatchOperateFunction(::SGAMEDATA * pGame, uint8_t bParam, int32_t nParam) {
+static uint32_t __stdcall OBJMODE_DispatchOperateFunction(::SGAMEDATA * pGame, uint8_t byFuncIndex, int32_t pUnit) {
     // Static local variables (originally global data)
     static D2ObjModeFuncEntryStrc gaObjectsModeFuncTable[21] = {
     {
@@ -3149,13 +3168,13 @@ static uint32_t __stdcall OBJMODE_DispatchOperateFunction(::SGAMEDATA * pGame, u
     static int gnObjectsModeFunctionDispatchTableCount = 0x15; D2_STATIC_GUARD(gnObjectsModeFunctionDispatchTableCount, "D2Game::Objects::ObjectsMode::OBJMODE_DispatchOperateFunction::gnObjectsModeFunctionDispatchTableCount");
 
     uint32_t dwResult;
-    uint32_t nModeIdx = (uint32_t)bParam;
+    uint32_t nModeIdx = (uint32_t)byFuncIndex;
     if ((int)nModeIdx >= gnObjectsModeFunctionDispatchTableCount) {
       return 0;
     }
 
-    uint64_t ullSeedRoll = (uint64_t)*(uint32_t*)(nParam + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(nParam + 0x24);
-    *(uint64_t*)(nParam + 0x20) = ullSeedRoll;
+    uint64_t ullSeedRoll = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
+    *(uint64_t*)(pUnit + 0x20) = ullSeedRoll;
     if ((uint32_t)((int)ullSeedRoll + (int)((ullSeedRoll & 0xffffffff) / 100) * -100) < gaObjectsModeFuncTable[nModeIdx].nSpriteThreshold) {
       BOOL bBadCode;
       /* FARPROC lpfn for IsBadCodePtr */ bBadCode = IsBadCodePtr((FARPROC)gaObjectsModeFuncTable[nModeIdx].pfnHandler);
@@ -3164,7 +3183,7 @@ static uint32_t __stdcall OBJMODE_DispatchOperateFunction(::SGAMEDATA * pGame, u
         exit(-1);
       }
 
-      dwResult = gaObjectsModeFuncTable[nModeIdx].pfnHandler(pGame, (D2UnitStrc*)nParam, gaObjectsModeFuncTable[nModeIdx].nModeFlags);
+      dwResult = gaObjectsModeFuncTable[nModeIdx].pfnHandler(pGame, (D2UnitStrc*)pUnit, gaObjectsModeFuncTable[nModeIdx].nModeFlags);
       return dwResult;
     }
 
@@ -3173,7 +3192,7 @@ static uint32_t __stdcall OBJMODE_DispatchOperateFunction(::SGAMEDATA * pGame, u
 
 // Server-side handler for the 0x44 object-interaction packet (well/Horadric-orifice/quest container). Resolves the player, object and item units by GUID. For nParam==2 sends the 0x58 OpenUI response (result 1) and clears interaction. For nParam==3 it tries to consume an item: special-cases the Horadric Orifice object (classId 0x98) requiring the "tsh " (Horadric Staff) item code, otherwise moves the item to the player's cursor; on success dispatches the object's operate function (or the orifice's Q14_OnStaffUsedInOrifice for A2Q7), sends OpenUI result 5 and schedules the object anim event; on failure sends result 4. Returns 1.
 // @sourcefile .\OBJECTS\ObjMode.cpp
-int __fastcall _x44PacketHandler(::SGAMEDATA * pGame, DWORD dwParam, DWORD param_1, DWORD dwItemGUID, int16_t nParam) {
+int __fastcall _x44PacketHandler(::SGAMEDATA * pGame, DWORD dwPlayerGUID, DWORD dwObjectGUID, DWORD dwItemGUID, int16_t nParam) {
     D2ClientStrc* pClient;
     uint32_t nItemClassId;
     D2ItemsTxt* pTxtItem;
@@ -3182,15 +3201,15 @@ int __fastcall _x44PacketHandler(::SGAMEDATA * pGame, DWORD dwParam, DWORD param
     D2ObjectsTxt* pTxtObjects;
     D2GSPacketSrv0x58 sPacket;
     D2UnitStrc* pObject;
-    pObject = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, param_1);
+    pObject = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, dwObjectGUID);
     D2UnitStrc* pPlayer;
-    pPlayer = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwParam);
+    pPlayer = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwPlayerGUID);
     D2UnitStrc* pItem;
     pItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwItemGUID);
     if (pPlayer) {
       if (pObject) {
         pClient = UNIT::SUnit::SUNIT_GetClient(pPlayer, ".\\OBJECTS\\ObjMode.cpp", 0x1135);
-        sPacket.nUnitGUID = param_1;
+        sPacket.nUnitGUID = dwObjectGUID;
         sPacket.nPacketId = 'X';
         if (nParam == 2) {
           sPacket.nUIType = '\x01';
@@ -3510,7 +3529,7 @@ void __fastcall SpawnDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t sCod
     }
 }
 
-void __fastcall OBJMODE_DropItemAtPosition(int32_t nParam, D2UnitStrc * pUnit, int32_t nItemClassId, eD2ItemTypes eItemType) {
+void __fastcall OBJMODE_DropItemAtPosition(int32_t pGame, D2UnitStrc * pUnit, int32_t nItemClassId, eD2ItemTypes eItemType) {
     POINT ptUnitPos;
     POINT ptSpawnPos;
     D2ItemGenContextStrc sItemGenCtx;
@@ -3528,7 +3547,7 @@ void __fastcall OBJMODE_DropItemAtPosition(int32_t nParam, D2UnitStrc * pUnit, i
     }
 
     memset(&sItemGenCtx, 0, 0x84);
-    sItemGenCtx.wItemFormat = *(short int*)(nParam + 0x78);
+    sItemGenCtx.wItemFormat = *(short int*)(pGame + 0x78);
     sItemGenCtx.nItemClassid = nItemClassId;
     sItemGenCtx.nPosX = ptSpawnPos.x;
     sItemGenCtx.eQuality = eItemType;
@@ -3537,9 +3556,9 @@ void __fastcall OBJMODE_DropItemAtPosition(int32_t nParam, D2UnitStrc * pUnit, i
     sItemGenCtx.nPosY = ptSpawnPos.y;
     sItemGenCtx.usually_one = 1;
     sItemGenCtx.pUnit = pUnit;
-    sItemGenCtx.pGame = (::SGAMEDATA*)nParam;
+    sItemGenCtx.pGame = (::SGAMEDATA*)pGame;
     sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
-    ITEMS::Items::Drop::ITEM_CreateItemInstance((::SGAMEDATA*)nParam, &sItemGenCtx, 0);
+    ITEMS::Items::Drop::ITEM_CreateItemInstance((::SGAMEDATA*)pGame, &sItemGenCtx, 0);
 }
 
 // Server-side loot roll for an opened chest object. Resolves the chest's room level, determines act and difficulty-scaled monster level tier, selects the appropriate treasure class via RollTreasureClass, and calls SERVER_ITEM_RollItemToDrop to generate up to 6 drop items. Returns the first dropped item unit, or NULL on any lookup failure.
@@ -3685,7 +3704,6 @@ void __fastcall KillUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Object operate callback for missile-killed barrel/urn-type objects. Early-exits if the victim is not already in Death mode. Rolls three gold drops via RollChestDrops, then queries the victim's max HP and MP char-codes: for each non-zero code it stores dwDropItemCode and calls ITEM_RewardItemToDrop twice (HP then MP). After drops, either queues an open animation (Mode[1] flag) or marks the object destroyed and clears UNITFLAG_TARGETABLE. Halts with an error if char-codes are unexpectedly zero.
 void __fastcall SERVER_MissleKilled(D2ObjectOperateFnArg * pKill) {
-    ::SGAMEDATA* pGame;
     POINT ptPos;
     int32_t nDropArg;
     D2UnitStrc* pVictim = pKill->sArg.pVictim;
@@ -3703,6 +3721,7 @@ void __fastcall SERVER_MissleKilled(D2ObjectOperateFnArg * pKill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x594);
       exit(-1);
     } else {
+      ::SGAMEDATA* pGame;
       pKill->sArg.pVictim->dwDropItemCode = nCharCode;
       ITEMS::Items::Drop::ITEM_RewardItemToDrop(pKill->sArg.pGame, pKill->sArg.pVictim, ITEMTYPE_Shield, &nDropArg, nullptr, -1, 1);
       ITEMS::Items::Drop::ITEM_RewardItemToDrop(pKill->sArg.pGame, pKill->sArg.pVictim, ITEMTYPE_Shield, &nDropArg, nullptr, -1, 1);
@@ -3736,7 +3755,7 @@ void __fastcall SERVER_MissleKilled(D2ObjectOperateFnArg * pKill) {
 // Server-side object-operate handler for opening a sparkly/special chest (and the Hardcore corpse/necro variant). Validates the chest is in its death/opened anim, then rolls its loot table via RollChestDrops using seed RNG: special classes (e.g. classId 0x18d) roll a weighted item-type bucket (body part / bow/crossbow quiver / gold piles), with retry loops to guarantee at least some magic-or-better drops; the necro-flagged variant (Components[0] bit 0x80) gates on the attacker class and forces extra gold/potion (gld/hp3/mp3) SpawnDrop bursts. Finally sets the chest's opened update-flag (immediate or timed via SetEvent on FrameCnt), clears UNITFLAG_TARGETABLE, drops any attached reward item, and dispatches the operate callback. Returns 1.
 // @sourcefile .\OBJECTS\ObjMode.cpp
 BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
-    D2SeedStrc* pDVar2;
+    D2SeedStrc* pDVar1;
     ::SGAMEDATA* pGame;
     bool bMagicCheck5;
     bool bMagicCheck0;
@@ -3746,17 +3765,17 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     bool bMagicCheck8;
     bool bMagicCheck3;
     bool bMagicCheck4;
-    BOOL nRollResult;
     D2ClientStrc* pClient;
     D2UnitStrc* pDroppedItem;
     bool bMagicCheck6;
     D2UnitStrc** pFallbackItemRoll;
     D2UnitStrc* pRolledItem;
-    int iVar4;
+    int iVar3;
     int nAttempts;
     uint32_t nRetryCount;
     POINT ptPos;
     eD2ItemTypes eDropTypeSpark;
+    int nCount;
     D2ObjectsTxt* pTxtObjectsFinal;
     D2SeedStrc sNextSeed;
     D2UnitStrc* pVictim;
@@ -3777,6 +3796,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     uint8_t byNecroFlag;
     byNecroFlag = byComponents0 & 0x80;
     if (byNecroFlag) {
+      BOOL nRollResult;
       pVictim = pOperation->pAttacker;
       if (!pVictim || pVictim->nClassId != 6) {
         nRollResult = ITEMS::ItemMode::ITEMMODE_CheckEquipRestrictions(pOperation->sArg.pGame, pVictim);
@@ -3796,12 +3816,12 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     D2Common::Units::GetCoords(pOperation->sArg.pVictim, &ptPos);
     int nGoldDropped;
     nGoldDropped = 0;
-    uint8_t bVar3;
-    bVar3 = UNIT::SUnit::GetSparklyChestFlag(pOperation->sArg.pVictim);
-    if (bVar3 & 1) {
-      pDVar2 = pOperation->pSeed;
-      sNextSeed = D2_SEED_NEXT(*pDVar2);
-      *pDVar2 = sNextSeed;
+    uint8_t bVar2;
+    bVar2 = UNIT::SUnit::GetSparklyChestFlag(pOperation->sArg.pVictim);
+    if (bVar2 & 1) {
+      pDVar1 = pOperation->pSeed;
+      sNextSeed = D2_SEED_NEXT(*pDVar1);
+      *pDVar1 = sNextSeed;
       nGoldDropped = 1;
       eDropTypeSpark = (uint32_t)((int)(sNextSeed.nSeedLow % 100) < 5) * 2 + ITEMTYPE_Gold;
     } else {
@@ -3812,17 +3832,17 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     eDropType = eDropTypeSpark;
     pVictim = pOperation->sArg.pVictim;
     if (!pVictim || pVictim->nClassId != 0x18d) {
-      pDVar2 = pOperation->pSeed;
-      sNextSeed = D2_SEED_NEXT(*pDVar2);
-      *pDVar2 = sNextSeed;
+      pDVar1 = pOperation->pSeed;
+      sNextSeed = D2_SEED_NEXT(*pDVar1);
+      *pDVar1 = sNextSeed;
       if ((int)(sNextSeed.nSeedLow % 100) >= 0x19 || nGoldDropped || byNecroFlag) {
-        iVar4 = 0;
+        nCount = 0;
         for (; (uint32_t)nDropCount > 0; nDropCount--) {
           pRolledItem = (D2UnitStrc*)RollChestDrops(pOperation, eDropType);
           if (pRolledItem) {
             bMagicCheck0 = D2Common::ITEMS::Items::ITEM_CheckItemData_ItemQualityIsMagicOrBetter(pRolledItem);
             if (bMagicCheck0) {
-              iVar4++;
+              nCount++;
             }
           }
         }
@@ -3830,7 +3850,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
         nDropCount = 0;
         if (nGoldDropped) {
           nRetryCount = 0;
-          if (!iVar4) {
+          if (!nCount) {
             do {
               pVictim = (D2UnitStrc*)RollChestDrops(pOperation, eDropType);
               if (pVictim) {
@@ -3851,11 +3871,12 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
 
     eDropTypeSpark = ITEMTYPE_None1;
     nGoldDropped = 0;
-    pDVar2 = pOperation->pSeed;
-    sNextSeed = D2_SEED_NEXT(*pDVar2);
-    *pDVar2 = sNextSeed;
-    iVar4 = sNextSeed.nSeedLow % 10000;
-    if (iVar4 < 200) {
+    pDVar1 = pOperation->pSeed;
+    sNextSeed = D2_SEED_NEXT(*pDVar1);
+    *pDVar1 = sNextSeed;
+    int nRoll;
+    nRoll = sNextSeed.nSeedLow % 10000;
+    if (nRoll < 200) {
       pVictim = (D2UnitStrc*)RollChestDrops(pOperation, ITEMTYPE_PlayerBodyPart);
       if (pVictim) {
         bMagicCheck0 = D2Common::ITEMS::Items::ITEM_CheckItemData_ItemQualityIsMagicOrBetter(pVictim);
@@ -3874,7 +3895,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
           }
         }
       }
-    } else if (iVar4 < 600) {
+    } else if (nRoll < 600) {
       pVictim = (D2UnitStrc*)RollChestDrops(pOperation, ITEMTYPE_BowQuiver);
       if (pVictim) {
         bMagicCheck0 = D2Common::ITEMS::Items::ITEM_CheckItemData_ItemQualityIsMagicOrBetter(pVictim);
@@ -3885,7 +3906,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
         eDropType = ITEMTYPE_BowQuiver;
         goto reroll_for_magic;
       }
-    } else if (iVar4 < 0x4b0) {
+    } else if (nRoll < 0x4b0) {
       pVictim = (D2UnitStrc*)RollChestDrops(pOperation, ITEMTYPE_CrossbowQuiver);
       if (pVictim) {
         bMagicCheck0 = D2Common::ITEMS::Items::ITEM_CheckItemData_ItemQualityIsMagicOrBetter(pVictim);
@@ -3897,27 +3918,27 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
         goto reroll_for_magic;
       }
     } else {
-      if (iVar4 < 0xc80) {
-        iVar4 = 0;
+      if (nRoll < 0xc80) {
+        iVar3 = 0;
         nAttempts = 0;
         do {
           pDroppedItem = (D2UnitStrc*)RollChestDrops(pOperation, ITEMTYPE_Gold);
           if (pDroppedItem) {
             bMagicCheck0 = D2Common::ITEMS::Items::ITEM_CheckItemData_ItemQualityIsMagicOrBetter(pDroppedItem);
             if (bMagicCheck0) {
-              iVar4++;
+              iVar3++;
             }
 
             nGoldDropped++;
           }
 
           bMagicCheck3 = nGoldDropped;
-        } while (iVar4 < 3 && (nAttempts++ , nAttempts < 10));
+        } while (iVar3 < 3 && (nAttempts++ , nAttempts < 10));
 
         goto check_roll_satisfied;
       }
-      if (iVar4 < 0x1838) {
-        iVar4 = 0;
+      if (nRoll < 0x1838) {
+        iVar3 = 0;
         nAttempts = 0;
         do {
           pVictim = (D2UnitStrc*)RollChestDrops(pOperation, ITEMTYPE_Gold);
@@ -3926,26 +3947,26 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
             if (bMagicCheck0) {
               eDropTypeSpark += ITEMTYPE_None2;
             } else {
-              iVar4++;
+              iVar3++;
             }
           }
         } while ((int)eDropTypeSpark < 2 && (nAttempts++ , nAttempts < 10));
 
-        if (!iVar4) {
+        if (!iVar3) {
           pFallbackItemRoll = RollChestDrops(pOperation, ITEMTYPE_None1);
           if (pFallbackItemRoll) {
-            iVar4 = 1;
+            iVar3 = 1;
           }
-        } else if (iVar4 >= 7) {
+        } else if (iVar3 >= 7) {
           goto finish_opening;
         }
 
-        iVar4 = 7 - iVar4;
-        if (iVar4 > 0) {
+        iVar3 = 7 - iVar3;
+        if (iVar3 > 0) {
           do {
             SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_INVALID);
-            iVar4--;
-          } while (iVar4);
+            iVar3--;
+          } while (iVar3);
         }
 
         goto finish_opening;
@@ -3953,7 +3974,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     }
 
     nAttempts = 0;
-    iVar4 = nGoldDropped;
+    iVar3 = nGoldDropped;
     do {
       pVictim = (D2UnitStrc*)RollChestDrops(pOperation, ITEMTYPE_Gold);
       if (pVictim) {
@@ -3962,39 +3983,39 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
           break;
         }
 
-        iVar4++;
+        iVar3++;
       }
 
       nAttempts++;
     } while (nAttempts < 10);
 
-    if (iVar4 < 4) {
-      iVar4 = 4 - iVar4;
-      if (iVar4 > 0) {
+    if (iVar3 < 4) {
+      iVar3 = 4 - iVar3;
+      if (iVar3 > 0) {
         do {
           RollChestDrops(pOperation, ITEMTYPE_None1);
-          iVar4--;
-        } while (iVar4);
+          iVar3--;
+        } while (iVar3);
       }
     }
 
-    iVar4 = 5;
+    iVar3 = 5;
     do {
       SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_INVALID);
-      iVar4--;
-    } while (iVar4);
+      iVar3--;
+    } while (iVar3);
 
-    iVar4 = 2;
+    iVar3 = 2;
     do {
       SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20337068, QUALITY_INVALID);
-      iVar4--;
-    } while (iVar4);
+      iVar3--;
+    } while (iVar3);
 
-    iVar4 = 2;
+    iVar3 = 2;
     do {
       SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x2033706d, QUALITY_INVALID);
-      iVar4--;
-    } while (iVar4);
+      iVar3--;
+    } while (iVar3);
 
     finish_opening:
     pTxtObjectsFinal = pTxtObjects;
@@ -4022,9 +4043,8 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
 
 // Object operate callback for trapped chests. If the chest object is in Death/pre-open state, rolls chest drops; on a successful roll, marks it open (update flag 1), clears UNITFLAG_TARGETABLE, schedules the open animation event, then probabilistically (seed mod 10000) spawns a monster via OBJMODE_SpawnMonsterFromObject. Removes collision if the txt HasCollision[1] flag is clear, then dispatches any operate sub-callbacks. Always returns TRUE.
 BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
-    int32_t nObjectHandleResult;
-    D2UnitStrc* pDVar2 = pOperation->sArg.pVictim;
-    if (!(!pDVar2 || pDVar2->eAnimMode.ePlayerMode == Death)) {
+    D2UnitStrc* pDVar1 = pOperation->sArg.pVictim;
+    if (!(!pDVar1 || pDVar1->eAnimMode.ePlayerMode == Death)) {
       return 1;
     }
 
@@ -4036,9 +4056,9 @@ BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
-    pDVar2 = pOperation->sArg.pVictim;
-    if (pDVar2) {
-      pDVar2->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+    pDVar1 = pOperation->sArg.pVictim;
+    if (pDVar1) {
+      pDVar1->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     }
 
     D2ObjectsTxt* pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
@@ -4048,6 +4068,7 @@ BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
     D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
     *pSeed = sNewSeed;
     if (sNewSeed.nSeedLow % 10000 & -8192) {
+      int32_t nObjectHandleResult;
       nObjectHandleResult = ObjectsRgn::OBJECT_HandleObjectMode(&pOperation->sArg);
       OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode_ns::Skill1, nObjectHandleResult, &pOperation->sArg);
     }
@@ -4200,7 +4221,6 @@ void __fastcall OBJMODE_RollChestLoot(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // OperateFn for trap-chest objects. When the chest object is in Death mode (closed/triggered): if the operating player has the Kick skill, sets the chest as skill target and starts the Kick mode via PLRMODES_StartModeID. Clears UNITFLAG_TARGETABLE and removes collision on the chest. Rolls two seeds: one to conditionally spawn a monster (OBJMODE_SpawnMonsterFromObject, p < 1/10000), one to drop items (RollChestDrops, p < 21%). Schedules an object-mode event after FrameCnt[1] frames. When chest returns to Neutral, clears player interact info.
 BOOL __fastcall OBJOP_OpenTrapChestSkillTrigger(D2ObjectOperateFnArg * pOperation) {
-    D2SkillStrc* pSkill;
     DWORD nVictimGUID;
     int32_t nObjectMode;
     eD2UnitType eUnitType;
@@ -4214,6 +4234,7 @@ BOOL __fastcall OBJOP_OpenTrapChestSkillTrigger(D2ObjectOperateFnArg * pOperatio
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     pUnit = pOperation->pAttacker;
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+      D2SkillStrc* pSkill;
       pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Kick, -1);
       if (pSkill) {
         D2Common::Units::SetTargetUnitForDynamicUnit(pOperation->pAttacker, pOperation->sArg.pVictim);

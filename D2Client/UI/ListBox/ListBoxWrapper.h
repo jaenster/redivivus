@@ -214,26 +214,26 @@ struct __attribute__((packed)) ListBoxImplementation {
     /* 0x18070C */ int nPosY;
     /* 0x180710 */ int nWidth;
     /* 0x180714 */ int nHeight;
-    /* 0x180718 */ uint32_t field_0x180718; // 004be206 LISTBOX_DrawScrollbar
+    /* 0x180718 */ uint32_t nScrollTrackSegments; // 004be206 LISTBOX_DrawScrollbar
     /* 0x18071C */ uint32_t bMouseDown; // 004bf483 LISTBOX_OnMouseDown
     /* 0x180720 */ uint32_t bScrollUpPressed; // 004beeff LISTBOX_Draw
     /* 0x180724 */ uint32_t bScrollDownPressed; // 004bef7e LISTBOX_Draw / 004bf4xx OnMouseDown - scroll-down pending flag
     /* 0x180728 */ uint32_t bScrollTrackPressed; // 004bf4fc LISTBOX_OnMouseDown - scroll-track pending flag
-    /* 0x18072C */ uint32_t field_0x18072c; // 004bf502 LISTBOX_OnMouseDown
+    /* 0x18072C */ uint32_t nTrackPressMouseY; // 004bf502 LISTBOX_OnMouseDown
     /* 0x180730 */ int32_t nFirstVisibleIndex; // 004be11a LISTBOX_DrawScrollbar
     /* 0x180734 */ int nPressedItemIndex; // 004bf521 OnMouseDown stores the hit-tested index; OnMouseUp compares it and resets it to -1
     /* 0x180738 */ int nSelectedIndex; // LISTBOX_GetSelectedIndex @004bec30 returns it; compared against -1 in AddItem/OnMouseClick
-    /* 0x18073C */ uint32_t field_0x18073c; // 004be579 LISTBOX_AddItem increments it once per non-null column
+    /* 0x18073C */ uint32_t nTotalLineCount; // 004be579 LISTBOX_AddItem increments it once per non-null column
     /* 0x180740 */ uint32_t nDefaultTextColor; // 004be6cb LISTBOX_AddItem - default value used when bUseDefaultValue
     /* 0x180744 */ uint32_t nDefaultFont; // 004beed2 LISTBOX_Draw
     /* 0x180748 */ uint16_t nItemCount; // ushort. LISTBOX_GetItemCount @004be0a0 MOVZX EAX,word ptr[ECX+0x180748]; AddItem guards <0x80 and increments; ClearAllItems zeroes it
     /* 0x18074A */ void (*pfnOnItemActivated)(); // 004bec07 MOV EAX,[EDI+0x18074a] / 004bec0d CALL EAX, no arguments pushed. Also the null guard at the head of LISTBOX_OnMouseClick, SelectPrevItem @004be913, SelectNextItem @004be993, HitTestItem @004bea6c.
     /* 0x18074E */ int nVisibleRows;
-    /* 0x180752 */ uint32_t field_0x180752; // 004be12c LISTBOX_DrawScrollbar
-    /* 0x180756 */ uint32_t field_0x180756; // 004be132 LISTBOX_DrawScrollbar
+    /* 0x180752 */ uint32_t nThumbStartSegment; // 004be12c LISTBOX_DrawScrollbar
+    /* 0x180756 */ uint32_t nThumbEndSegment; // 004be132 LISTBOX_DrawScrollbar
     /* 0x18075A */ int nScrollBarX; // 004be26f DrawScrollbar; hit-test left/x origin in IsMouseOnScrollUp/Down/Track, HitTestItem, Draw
     /* 0x18075E */ int nScrollBarY; // 004be269 DrawScrollbar; hit-test top/y origin in IsMouseOnScrollUp/Down/Track, Draw
-    /* 0x180762 */ uint32_t field_0x180762; // 004be790 IsMouseOnScrollDown / 004bef2d Draw
+    /* 0x180762 */ uint32_t nScrollBarTileCount; // 004be790 IsMouseOnScrollDown / 004bef2d Draw
     /* 0x180766 */ int nLineHeight;
     /* 0x18076A */ int nItemSpacing;
     /* 0x18076E */ uint32_t nScrollRepeatCount; // 004bf252 LISTBOX_Draw

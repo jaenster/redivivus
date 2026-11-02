@@ -1,0 +1,57 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/net_sid.cpp",
+  "functions": [
+    {
+      "name": "NET_SID_CLIENT_SHA1Init",
+      "address": "00523ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00523ac0"
+        }
+      ],
+      "namespace": "D2Client::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_SHA1Init"
+      ]
+    },
+    {
+      "name": "SHA0_Update",
+      "address": "00524140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524140"
+        }
+      ],
+      "namespace": "D2Client::_net_sid",
+      "calledFunctions": [
+        "SHA0_Update",
+        "SHA0_Transform"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_IDEAMultInverse",
+      "address": "005242f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005242f0"
+        }
+      ],
+      "namespace": "D2Client::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IDEAMultInverse"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint64_t"
+      ]
+    }
+  ]
+}

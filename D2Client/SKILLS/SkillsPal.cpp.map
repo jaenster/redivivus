@@ -1,0 +1,441 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/SKILLS/SkillsPal.cpp",
+  "functions": [
+    {
+      "name": "SKILLS_GetManaCostMultiplier",
+      "address": "004c9460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9460"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "SKILLS_GetManaCostMultiplier"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile",
+      "address": "004c9490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9490"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile",
+        "GetConfirmedTargetUnit",
+        "GetVelocity",
+        "UNIT_GetModuloFromSeed",
+        "GetDirection",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "MakeMissileAtXY"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Pal_ChargePathMissile",
+      "address": "004c95e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c95e0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Pal_ChargePathMissile",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "GetCooordinates",
+        "memset",
+        "MakeMissile",
+        "PATH_SetPathType",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Pal_FistOfHeavens",
+      "address": "004c96d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c96d0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Pal_FistOfHeavens",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "GetConfirmedTargetUnit",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Pal_RandomRadiusMissileField",
+      "address": "004c97c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c97c0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Pal_RandomRadiusMissileField",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "D2GetSkillCalc",
+        "UNIT_GetModuloFromSeed",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "RANDOM_RandomNumberSelector",
+        "MakeMissile",
+        "SetDirectionAndNewDirection"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_DrawChargeTrail",
+      "address": "004c9990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9990"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "SKILL_DrawChargeTrail",
+        "GetCurrentSkill",
+        "GetTargetX",
+        "GetTargetY",
+        "PATH_GetScreenVelocity",
+        "D2GFX_IsPerspectiveActive",
+        "SKILL_GetParam3",
+        "GetPrecisionY",
+        "GetPrecisionX",
+        "D2GFX_PerspecitveScalePosition",
+        "DRAW_GetWorldOffsetX",
+        "DRAW_GetWorldOffsetY",
+        "DRAW_WORLD_Unit_1"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "DRAWMODE",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_SetupHolyChargeMovement",
+      "address": "004c9b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9b40"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "Skills_CltStFunc_SetupHolyChargeMovement",
+        "GetCurrentSkill",
+        "GetSkillId",
+        "GetPlayerUnit_UI",
+        "SKILL_GetFlags",
+        "GetConfirmedTargetUnit",
+        "IsInMeleeRange",
+        "CLIENT_HandleUnitMessage0x16",
+        "SKILLSCLT_CalcChargeSkillDuration",
+        "SOUND_PlaySound",
+        "UNIT_GetUnitState",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam4",
+        "INV_GetCharStatsTxtLine",
+        "TXT_MonStats_GetLine",
+        "OverwriteDistanceAndMaxDistance",
+        "STATSEX_GetCurrentStat",
+        "SKILLS_GetManaCostMultiplier",
+        "D2ApplyPercent",
+        "SetVelocities",
+        "PATH_CalculatePath",
+        "FaceTarget",
+        "SKILL_SetFlags",
+        "SKILL_SetParam3",
+        "SKILL_CreateActiveSkillStatList"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2DynamicPathStrc",
+        "D2MonStatsTxt",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2Sounds",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_Unused_Placeholder_2",
+      "address": "004c9d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9d50"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "SKILLS_Unused_Placeholder_2",
+        "SKILL_FindClosestTargetWithStats"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SKILL_GetSequenceEventFrame",
+      "address": "004c9d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9d70"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "SKILL_GetSequenceEventFrame",
+        "MERC_GetSequenceTxt",
+        "GetCounter2"
+      ],
+      "usedTypes": [
+        "D2MonSeqTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Pal_HolyBolt_Melee",
+      "address": "004c9db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c9db0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Pal_HolyBolt_Melee",
+        "GetCurrentSkill",
+        "SKILL_GetFlags",
+        "MERC_GetSequenceTxt",
+        "GetCounter2",
+        "SKILL_GetSequenceEventFrame",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "UNITS_FindClientSideUnit",
+        "IsInMeleeRange",
+        "SKILL_SetFlags",
+        "SetSequenceFrame",
+        "SKILL_GetParam3",
+        "SKILL_SetParam3",
+        "SKILL_FindClosestTargetWithStats",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "TXT_MonStats_GetBaseId",
+        "ValidateClassId",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "PATH_SetDirectionToTarget",
+        "UNITSND_PlayAttackSound"
+      ],
+      "usedTypes": [
+        "D2MonSeqTxt",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_StopAndClearUninterruptable",
+      "address": "004ca000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca000"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "SKILL_StopAndClearUninterruptable",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetFlags",
+        "SKILL_SetFlags",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Pal_RateThrottledBloodParticles",
+      "address": "004ca030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca030"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Pal_RateThrottledBloodParticles",
+        "GetEntryIndex",
+        "MONSTER_SpawnBloodParticles"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_ExecuteItemCast",
+      "address": "004ca060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca060"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "SKILL_ExecuteItemCast",
+        "GetConfirmedTargetUnit",
+        "GetXSP1",
+        "GetYSP1",
+        "SetSP1",
+        "SetTargetUnitForDynamicUnit",
+        "IsActive",
+        "UNIT_GetUnitState",
+        "SetState",
+        "SKILLS_CastSkillClientArgsReversed",
+        "SOUND_PlaySound",
+        "GFX_AddOverlayToUnit",
+        "SKILL_ExecuteClientDoFunc"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitFlags",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_ExecuteItemCastOnUnit",
+      "address": "004ca200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca200"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "SKILL_ExecuteItemCastOnUnit",
+        "SKILL_ExecuteItemCast"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SKILL_ExecuteItemCastAtCoords",
+      "address": "004ca230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca230"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsPal",
+      "calledFunctions": [
+        "SKILL_ExecuteItemCastAtCoords",
+        "SKILL_ExecuteItemCast"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint16_t"
+      ]
+    }
+  ]
+}

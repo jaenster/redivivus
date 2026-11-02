@@ -8,12 +8,12 @@
 #include "D2CMP/SRC/Tilecmp.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -129,8 +129,8 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
       D2TileLibraryHashStrc* pNewHash;
       memset(pTileBuffer, 0, nFileSize);
       D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, szFilename, &pFile, 0);
-      D2FILE_ReadFile(nullptr, pFile, pTileBuffer, nFileSize);
-      D2FILE_CloseFile(nullptr, pFile);
+      D2Hell::D2FILE_ReadFile(nullptr, pFile, pTileBuffer, nFileSize);
+      D2Hell::D2FILE_CloseFile(nullptr, pFile);
       Tilecmp::TILECMP_FixupMinimalPointers(pTileBuffer, &pTileData, szFilename);
       pNewHash = Tilecmp::TILECMP_RegisterTilesForLookup(pTileData);
       pExistingNode = D2_NEW_AT(D2TileProjectStrc, ".\\SRC\\TileProjects.cpp", 0x7b);

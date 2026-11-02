@@ -1,0 +1,804 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Draw/Weather.cpp",
+  "functions": [
+    {
+      "name": "Abs",
+      "address": "004722f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004722f0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "Abs"
+      ]
+    },
+    {
+      "name": "Abs2",
+      "address": "00472310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472310"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "Abs2"
+      ]
+    },
+    {
+      "name": "WEATHER_Init",
+      "address": "00472320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472320"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_Init",
+        "FOG_CreateDataArray",
+        "FOG_CloseDataArray"
+      ]
+    },
+    {
+      "name": "Free",
+      "address": "004723c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004723c0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "Free",
+        "FreeWeatherPointer"
+      ]
+    },
+    {
+      "name": "LoadCustomSettingsPerAreaAct5",
+      "address": "00472400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472400"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "LoadCustomSettingsPerAreaAct5",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetPlayerUnit_Net",
+        "RollBetweenMinAndMax"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "WEATHER_ResetEnvironmentParticles",
+      "address": "00472550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472550"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_ResetEnvironmentParticles",
+        "FOG_InitDataArray",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "WEATHER_SetEnabledState",
+      "address": "00472590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472590"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_SetEnabledState",
+        "FOG_InitDataArray",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WEATHER_InitializeRngParams",
+      "address": "00472610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472610"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_InitializeRngParams",
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "WEATHER_UpdateStateAct5",
+      "address": "004726f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004726f0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_UpdateStateAct5",
+        "GetPlayerUnit_UI",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "WEATHER_InitializeRngParams",
+        "WEATHER_TransitionState",
+        "WEATHER_SetEnabledState",
+        "FOG_InitDataArray",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISC_PrepareWeatherOverlay",
+      "address": "00472890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472890"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "MISC_PrepareWeatherOverlay",
+        "WEATHER_UpdateStateAct5",
+        "WEATHER_InitializeRngParams",
+        "GetActNoFromLevelNumber",
+        "D2GFX_GetColorFromCurrentPallete",
+        "IMAGE_LoadWeatherDC6ToPointer",
+        "IMAGE_GetFramesCount"
+      ],
+      "usedTypes": [
+        "eAct",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WEATHER_FreeDC6Graphics",
+      "address": "00472bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472bd0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_FreeDC6Graphics",
+        "DC6_FreeAndDelete"
+      ],
+      "usedTypes": [
+        "DC6 *"
+      ]
+    },
+    {
+      "name": "WEATHER_ClearParticleArrays",
+      "address": "00472c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472c20"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_ClearParticleArrays",
+        "FOG_InitDataArray",
+        "WEATHER_UpdateStateAct5"
+      ]
+    },
+    {
+      "name": "WEATHER_InitBlizzardState",
+      "address": "00472c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472c50"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_InitBlizzardState"
+      ]
+    },
+    {
+      "name": "WEATHER_UpdateSplashes",
+      "address": "00472c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472c80"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_UpdateSplashes",
+        "D2GFX_IsPerspectiveActive",
+        "FOG_ArrayFreeAtIndex"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WEATHER_UpdateBubbles",
+      "address": "00472d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472d10"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_UpdateBubbles",
+        "D2GFX_IsPerspectiveActive",
+        "FOG_ArrayFreeAtIndex"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WEATHER_SpawnSplash",
+      "address": "00472da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472da0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_SpawnSplash",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FOG_GetMissileField",
+        "D2GFX_IsPerspectiveActive",
+        "RollBetweenMinAndMax"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WEATHER_SpawnBubble",
+      "address": "00472ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472ec0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_SpawnBubble",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FOG_GetMissileField",
+        "D2GFX_IsPerspectiveActive",
+        "RollBetweenMinAndMax"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WEATHER_GetLightingTint",
+      "address": "00472fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472fb0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_GetLightingTint",
+        "D2GFX_GetRendererMode",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "DRLGENV_GetPeriodOfDayFromAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2RendererMode",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WEATHER_SpawnParticle",
+      "address": "00473090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473090"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_SpawnParticle",
+        "FOG_GetMissileField",
+        "RollBetweenMinAndMax",
+        "WEATHER_GetLightingTint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGENV_GetPeriodOfDayFromAct"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2WeatherParticleStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WEATHER_UpdateParticles",
+      "address": "004732c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004732c0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_UpdateParticles",
+        "MATH_sinTable_f32_LookupOffset",
+        "MATH_sinTable_f32_Lookup",
+        "FOG_ArrayFreeAtIndex",
+        "WEATHER_SpawnParticle"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2WeatherParticleStrc"
+      ]
+    },
+    {
+      "name": "WEATHER_DrawParticles",
+      "address": "00473470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473470"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_DrawParticles",
+        "D2GFX_GetLowQuality",
+        "DRAW_GetTypeOfBorder",
+        "MATH_sinTable_f32_LookupOffset",
+        "MATH_sinTable_f32_Lookup",
+        "D2GFX_DrawLine"
+      ],
+      "usedTypes": [
+        "D2WeatherParticleStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WEATHER_GetCurrentLevelWeatherFlags",
+      "address": "00473770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473770"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_GetCurrentLevelWeatherFlags",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "LEVEL_CanHaveRain",
+        "LEVEL_CanHaveMud"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WEATHER_UpdateParticleCount",
+      "address": "004737b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004737b0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_UpdateParticleCount",
+        "WEATHER_SpawnParticle",
+        "RollBetweenMinAndMax"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "DRAW_Overlay_Weather",
+      "address": "00473910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473910"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "DRAW_Overlay_Weather",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "LEVEL_CanHaveRain",
+        "LEVEL_CanHaveMud",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RollBetweenMinAndMax",
+        "SOUND_PlaySound",
+        "SOUND_PlayEnvironmentSound",
+        "DRAW_GetTypeOfBorder",
+        "D2GFX_DrawSolidRectEx",
+        "WEATHER_DrawParticles"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WEATHER_DrawBubbles",
+      "address": "00473a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473a70"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_DrawBubbles",
+        "D2GFX_IsPerspectiveActive",
+        "DRAW_GetTypeOfBorder",
+        "memset",
+        "D2GFX_DrawImage",
+        "D2GFX_IsInPerspectiveBounds",
+        "D2GFX_AdjustPerspectivePosition",
+        "FOG_ArrayFreeAtIndex"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc",
+        "D2GfxDataStrc",
+        "D2WeatherBubbleStrc",
+        "DC6 *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_WORLD_RainEffectOnFloor",
+      "address": "00473c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473c00"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "DRAW_WORLD_RainEffectOnFloor",
+        "WEATHER_DrawBubbles"
+      ]
+    },
+    {
+      "name": "WEATHER_CanHaveRain",
+      "address": "00473c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473c40"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_CanHaveRain",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "LEVEL_CanHaveRain",
+        "LEVEL_CanHaveMud"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WEATHER_FloatPassthrough",
+      "address": "00473c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473c80"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_FloatPassthrough"
+      ]
+    },
+    {
+      "name": "WEATHER_SetGlobalFlag",
+      "address": "00473c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473c90"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_SetGlobalFlag"
+      ]
+    },
+    {
+      "name": "ENV_Rcv0x54_NoOp",
+      "address": "00473ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473ca0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "ENV_Rcv0x54_NoOp"
+      ]
+    },
+    {
+      "name": "ENV_InitClientSide_NoOp",
+      "address": "00473ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473ce0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "ENV_InitClientSide_NoOp"
+      ]
+    },
+    {
+      "name": "ENV_FreeClientSide_NoOp",
+      "address": "00473cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473cf0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "ENV_FreeClientSide_NoOp"
+      ]
+    },
+    {
+      "name": "WEATHER_TransitionState",
+      "address": "00473d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473d00"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_TransitionState",
+        "GetPlayerUnit_UI",
+        "WEATHER_UpdateStateAct5",
+        "RollBetweenMinAndMax",
+        "LoadCustomSettingsPerAreaAct5",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WEATHER_ToggleTransitionLock",
+      "address": "00473dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473dc0"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_UpdateStateAct5",
+        "WEATHER_ToggleTransitionLock",
+        "GetPlayerUnit_UI",
+        "FOG_InitDataArray",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "WEATHER_UpdateTransition",
+      "address": "00473e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473e50"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_UpdateTransition",
+        "RollBetweenMinAndMax",
+        "WEATHER_TransitionState",
+        "GetPlayerUnit_UI",
+        "LoadCustomSettingsPerAreaAct5",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WeatherEffects",
+      "address": "00473f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00473f50"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WeatherEffects",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "LEVEL_CanHaveRain",
+        "LEVEL_CanHaveMud",
+        "FOG_InitDataArray",
+        "gnRecordingIndex",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "WEATHER_UpdateParticles",
+        "WEATHER_UpdateSplashes",
+        "WEATHER_UpdateTransition",
+        "WEATHER_UpdateParticleCount",
+        "WEATHER_UpdateBubbles"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WEATHER_ApproximateDistance",
+      "address": "00474080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474080"
+        }
+      ],
+      "namespace": "D2Client::Draw::Weather",
+      "calledFunctions": [
+        "WEATHER_ApproximateDistance"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    }
+  ]
+}

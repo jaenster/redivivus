@@ -1,0 +1,153 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Utils.cpp",
+  "functions": [
+    {
+      "name": "UTILS_OnUnitModeChange_NoOp",
+      "address": "004e4020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4020"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "UTILS_OnUnitModeChange_NoOp"
+      ]
+    },
+    {
+      "name": "ANIM_OnSkillCastStub",
+      "address": "004e4050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4050"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "ANIM_OnSkillCastStub"
+      ]
+    },
+    {
+      "name": "UTILS_SqrtFloat",
+      "address": "004e4060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4060"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "UTILS_SqrtFloat",
+        "__CIsqrt"
+      ]
+    },
+    {
+      "name": "thunk___CIsqrt",
+      "address": "004e4080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4080"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "thunk___CIsqrt",
+        "__CIsqrt"
+      ]
+    },
+    {
+      "name": "RollRandomNumerUpToArgument",
+      "address": "004e40a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e40a0"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "RollRandomNumerUpToArgument",
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "RollRandomNumber",
+      "address": "004e4100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4100"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "RollRandomNumber",
+        "RollRandomNumerUpToArgument"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RollRandomNumberTimesTwo",
+      "address": "004e4120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4120"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "RollRandomNumberTimesTwo",
+        "RollRandomNumerUpToArgument"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CalculateHypotenuse",
+      "address": "004e4130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4130"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "CalculateHypotenuse",
+        "__CIsqrt"
+      ]
+    },
+    {
+      "name": "CalculateHypotenusePowered",
+      "address": "004e4160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4160"
+        }
+      ],
+      "namespace": "D2Client::_Utils",
+      "calledFunctions": [
+        "CalculateHypotenusePowered"
+      ]
+    }
+  ]
+}

@@ -66,12 +66,12 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(struct D2ObjectOperateFnArg *
 // Operate handler (OperateFn59) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Brain (0x20726271), counting eligible players via Q19_CheckPlayerHasKhalimsBrain. No QuestRecord state transitions.
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(struct D2ObjectOperateFnArg * pOperation);
 // Q19_UpdateOrbCount (Khalim's Will). Adds nParam to the quest's in-memory Khalim-relic/orb counter and flags it dirty. Bookkeeping only; no QuestRecord transitions.
-void __fastcall Q19_UpdateOrbCount(::SGAMEDATA * pGame, int nParam);
+void __fastcall Q19_UpdateOrbCount(::SGAMEDATA * pGame, int nCountDelta);
 // A3Q2 (Khalim's Will) active-dialog filter for Meshif (NPC 0xf5). Returns true if Meshif should offer quest dialog: checks if any Khalim body-part item (eye/brain/heart/flail/assembled flail) is held and the corresponding step-flag has not yet been set, or if all 4 parts are held without Step0x05. Also returns true if quest is in progress (nStateFlag!=0) and Step0x02 is unset. Returns false for all other NPCs.
 bool __fastcall Q19_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 void __fastcall Q19_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A3Q2 (Khalim's Will) quest status-string selector. Writes a status code byte into *nUnknown based on which Khalim body-part items the player carries (eye/brain/heart/flail) and relevant quest-record step states; codes 1–7 map to UI status strings. Returns true once Act3 is reachable (AbleGoToAct3 Completed); always returns true thereafter.
-bool __fastcall Q19_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q19_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
 void __fastcall Q19_InitData(struct D2QuestDataStrc * pQuestData);
 // 1 internal function (defined in .cpp)

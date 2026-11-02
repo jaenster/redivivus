@@ -547,12 +547,12 @@ template<> ::SGAMEDATA * TSGrowableArray<SGAMEDATA>::New() {
 // Grows the capacity to m_count + nCount without rounding.
 // Same code as TSGrowableArray<CELLIST>::ReserveNoRound 00604440; T from its call to ReallocData 00450d90.
 template<> void TSGrowableArray<SGAMEDATA>::ReserveNoRound(uint32_t nCount) {
-    uint32_t uVar1 = this->m_count + nCount;
-    if (uVar1 <= this->m_alloc) {
+    uint32_t nNewCount = this->m_count + nCount;
+    if (nNewCount <= this->m_alloc) {
       return;
     }
 
-    this->ReallocData(uVar1);
+    this->ReallocData(nNewCount);
 }
 
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {

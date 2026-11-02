@@ -1,0 +1,216 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/FieldTbls.cpp",
+  "functions": [
+    {
+      "name": "FIELDTBLS_InitFieldData",
+      "address": "0066a2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a2b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "FIELDTBLS_InitFieldData",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2ExpFieldFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreeFieldData",
+      "address": "0066a420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a420"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "FIELDTBLS_FreeFieldData",
+        "FreeServerMemory"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_GetFieldCenterOffsets",
+      "address": "0066a470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a470"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "FIELDTBLS_GetFieldCenterOffsets"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_AllocPoint",
+      "address": "0066a4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a4b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "FIELDTBLS_AllocPoint",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreePoint",
+      "address": "0066a500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a500"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "FIELDTBLS_FreePoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetXY",
+      "address": "0066a540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a540"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "SetXY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_GetFieldValueAtCoords",
+      "address": "0066a580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a580"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "FIELDTBLS_GetFieldValueAtCoords",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_StepFieldTowardsPoint",
+      "address": "0066a5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a5d0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "FIELDTBLS_StepFieldTowardsPoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "POINT",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_TracePathCheckCollision",
+      "address": "0066a670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a670"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "GetFreeCoordinates",
+        "FIELDTBLS_TracePathCheckCollision",
+        "CheckCollision_BlockPlayerMissile",
+        "FIELDTBLS_StepFieldTowardsPoint"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_LoadExpFieldFile",
+      "address": "0066a700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a700"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::FieldTbls",
+      "calledFunctions": [
+        "FIELDTBLS_LoadExpFieldFile",
+        "D2FILE_AllocAndLoadD2File",
+        "FIELDTBLS_InitFieldData",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ExpFieldFileStrc",
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ]
+    }
+  ]
+}

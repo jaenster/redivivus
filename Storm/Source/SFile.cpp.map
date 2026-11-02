@@ -1,0 +1,3304 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SFile.cpp",
+  "functions": [
+    {
+      "name": "SFILE_SetStreamBuffer4",
+      "address": "00415140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415140"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_SetStreamBuffer4"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CopyStreamBuffer4",
+      "address": "00415160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415160"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CopyStreamBuffer4"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_DecompressLzw_BufferRead",
+      "address": "004151d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004151d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_DecompressLzw_BufferRead",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_DecompressLzw_BufferWrite",
+      "address": "00415210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415210"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_DecompressLzw_BufferWrite",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_DecompressLzw",
+      "address": "00415240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415240"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "PKWARE_explode",
+        "SFILE_DecompressLzw",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_Decrypt",
+      "address": "004152d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004152d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_Decrypt"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_Hash",
+      "address": "00415330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415330"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_Hash",
+        "toupper"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_InitializeHashSource",
+      "address": "00415390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415390"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InitializeHashSource",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_ReadFileChecked",
+      "address": "004154b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004154b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_ReadFileChecked",
+        "SErrSetLastError",
+        "SErrDisplayError"
+      ],
+      "usedTypes": [
+        "LPDWORD",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_SyncReadFile",
+      "address": "00415560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415560"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_SyncReadFile",
+        "SFILE_ReadFileChecked"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_GetBlockTableEntry",
+      "address": "004155b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004155b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetBlockTableEntry"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQBlockEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_SearchHashTable",
+      "address": "004155d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004155d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_SearchHashTable",
+        "SFILE_Hash"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQHashEntryStrc",
+        "int16_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_ShiftSectorTable",
+      "address": "004156a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004156a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_ShiftSectorTable",
+        "memmove"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_GetStreamPosition",
+      "address": "00415760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415760"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetStreamPosition"
+      ],
+      "usedTypes": [
+        "D2StormAudioStreamRec",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_HandleAsyncReadError",
+      "address": "004157c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004157c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_HandleAsyncReadError",
+        "SMemCopy",
+        "SMemFill"
+      ],
+      "usedTypes": [
+        "D2StormAsyncOpStrc",
+        "D2StormAudioStreamRec",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SFILE_BuildDefaultBasePath",
+      "address": "004158e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004158e0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_BuildDefaultBasePath",
+        "SStrChrR",
+        "SStrPack"
+      ]
+    },
+    {
+      "name": "SFILE_CheckArchiveHandle",
+      "address": "00415930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415930"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CheckArchiveHandle"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *"
+      ]
+    },
+    {
+      "name": "SFILE_FileExistsOnDisk",
+      "address": "00415940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415940"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FileExistsOnDisk"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CheckFileHandle",
+      "address": "00415950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415950"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CheckFileHandle"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2MPQFileStrc *"
+      ]
+    },
+    {
+      "name": "SFILE_CheckForCdRom",
+      "address": "00415960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415960"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CheckForCdRom",
+        "SStrCopy",
+        "SMemZero",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "LPDWORD",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_ConvertRelativePathName",
+      "address": "00415a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415a80"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_ConvertRelativePathName",
+        "SFILE_BuildDefaultBasePath",
+        "SStrChrR",
+        "_fullpath",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_FindFileOnDisk",
+      "address": "00415b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415b00"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FindFileOnDisk",
+        "SFILE_ConvertRelativePathName",
+        "SFILE_FileExistsOnDisk",
+        "strstr",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFILE_EnsureHashSource",
+      "address": "00415b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415b90"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_EnsureHashSource",
+        "SFILE_InitializeHashSource"
+      ]
+    },
+    {
+      "name": "SFileAuthenticateArchiveEx",
+      "address": "00415bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415bb0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileAuthenticateArchiveEx",
+        "SFILE_CheckArchiveHandle",
+        "SSignatureVerifyStream_Begin",
+        "SMemAlloc",
+        "SSignatureVerifyStream_GetSignatureLength",
+        "SSignatureVerifyStream_ProvideData",
+        "SMemFree",
+        "SSignatureVerifyStream_Finish"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFILE_ComputeFileHash",
+      "address": "00415d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415d50"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_ComputeFileHash",
+        "SErrSetLastError",
+        "SMemAlloc",
+        "CrcBuffer",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFileRegisterLoadNotifyProc",
+      "address": "00415ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415ec0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileRegisterLoadNotifyProc"
+      ],
+      "usedTypes": [
+        "pfnSFileOpenCallback"
+      ]
+    },
+    {
+      "name": "SFileDdaInitialize",
+      "address": "00415ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415ee0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDdaInitialize",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "IDirectSound"
+      ]
+    },
+    {
+      "name": "SFILE_SetArchivePriority",
+      "address": "00415f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415f10"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_SetArchivePriority",
+        "SFILE_CheckArchiveHandle"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFileEnableDirectAccess",
+      "address": "00415f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415f70"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileSetBasePath",
+        "SFileSetIoErrorMode",
+        "SFileEnableDirectAccess"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFileEnableSeekOptimization",
+      "address": "00415f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415f90"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileEnableSeekOptimization"
+      ]
+    },
+    {
+      "name": "SFileGetArchiveInfo",
+      "address": "00415fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415fa0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileGetArchiveInfo",
+        "SFILE_CheckArchiveHandle"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileGetArchiveName",
+      "address": "00416030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416030"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SStrCopy",
+        "SFileGetArchiveName",
+        "SErrSetLastError",
+        "SFILE_CheckArchiveHandle"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFileGetBasePath",
+      "address": "004160a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004160a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileSetBasePath",
+        "SFileGetBasePath",
+        "SFILE_BuildDefaultBasePath",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_GetFileTime",
+      "address": "004160f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004160f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetFileTime",
+        "SErrSetLastError",
+        "SFILE_CheckFileHandle"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_GetFileLocale",
+      "address": "00416160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416160"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetFileLocale",
+        "SFILE_CheckFileHandle"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_GetFilePlatform",
+      "address": "004161c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004161c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetFilePlatform",
+        "SFILE_CheckFileHandle"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileGetFileName",
+      "address": "00416230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416230"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CopyFileRecordNameOrAlias",
+        "SFileGetFileName",
+        "SErrSetLastError",
+        "SFILE_CheckFileHandle",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CopyFileRecordNameOrAlias",
+      "address": "004162a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004162a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CopyFileRecordNameOrAlias",
+        "SErrSetLastError",
+        "SFILE_CheckFileHandle",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFileGetFileCompressedSize",
+      "address": "00416320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416320"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileGetFileCompressedSize",
+        "SFILE_CheckFileHandle"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "SFileGetFileSize",
+      "address": "00416370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416370"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileGetFileSize",
+        "SFILE_CheckFileHandle"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "LPDWORD"
+      ]
+    },
+    {
+      "name": "SFILE_GetFileTimestamp",
+      "address": "00416400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416400"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetFileTimestamp",
+        "SErrSetLastError",
+        "SFILE_CheckFileHandle"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "LPFILETIME"
+      ]
+    },
+    {
+      "name": "SFileSetAsyncBudget",
+      "address": "004164a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004164a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileSetAsyncBudget"
+      ]
+    },
+    {
+      "name": "SFileSetBasePath",
+      "address": "004164b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004164b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileGetBasePath",
+        "SFileSetBasePath",
+        "SErrSetLastError",
+        "SStrLen",
+        "SStrCopy",
+        "SStrPack"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileSetDataChunkSize",
+      "address": "00416570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416570"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileSetDataChunkSize",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileSetFilePointer",
+      "address": "004165a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004165a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileSetFilePointer",
+        "SErrSetLastError",
+        "SFILE_CheckFileHandle"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFileSetIoErrorMode",
+      "address": "004166b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004166b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileSetIoErrorMode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnSFileReadError"
+      ]
+    },
+    {
+      "name": "SFileSetLocale",
+      "address": "004166d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004166d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileSetLocale"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SFileSetPlatform",
+      "address": "00416700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416700"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileSetPlatform"
+      ]
+    },
+    {
+      "name": "SFileUnloadFile",
+      "address": "00416710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416710"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileUnloadFile",
+        "SErrSetLastError",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileTime1",
+      "address": "00416770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416770"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileTime1"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileTime2",
+      "address": "004168c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004168c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileTime2"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileSize1",
+      "address": "00416930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416930"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileSize1"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileSize2",
+      "address": "00416970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416970"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileSize2"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileName",
+      "address": "004169b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004169b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileName"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_InternalReadAligned",
+      "address": "00416ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416ad0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InternalReadAligned",
+        "SFILE_ReadFileChecked",
+        "SFILE_Decrypt",
+        "SMemAlloc",
+        "SFILE_DecompressLzw",
+        "SCompDecompress",
+        "SErrDisplayError",
+        "SMemCopy",
+        "SMemFree",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_InternalReadAlignedSector",
+      "address": "00416fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00416fb0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InternalReadAlignedSector",
+        "SFILE_InternalReadAligned"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_InternalReadUnaligned",
+      "address": "00417040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417040"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InternalReadUnaligned",
+        "CrcBuffer",
+        "SFILE_InternalReadAlignedSector",
+        "SMemCopy",
+        "SFILE_InternalReadAligned"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileAuthenticateArchive",
+      "address": "004172f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004172f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileAuthenticateArchive",
+        "SFileAuthenticateArchiveEx",
+        "SFILE_CheckArchiveHandle",
+        "SFILE_SearchHashTable",
+        "SMemAlloc",
+        "SFILE_GetBlockTableEntry",
+        "StormGetInstance",
+        "SMemFree",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQBlockEntryStrc",
+        "D2StormCryptApiStrc",
+        "HGLOBAL",
+        "HRSRC",
+        "pfnCryptAcquireContextA",
+        "pfnCryptCreateHash",
+        "pfnCryptDestroyHash",
+        "pfnCryptDestroyKey",
+        "pfnCryptHashData",
+        "pfnCryptImportKey",
+        "pfnCryptReleaseContext",
+        "pfnCryptSignHashA",
+        "pfnCryptVerifySignatureA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_AllocateFileRecord1",
+      "address": "00417a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417a10"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_AllocateFileRecord1"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_FreeFileRecord1",
+      "address": "00417a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417a50"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeFileRecord1"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TSList_FILEREC_LinkNode",
+      "address": "00417a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417a70"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "LinkNode",
+        "TSList_FILEREC_LinkNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileRecord1",
+      "address": "00417b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417b20"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileRecord1"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_FreeFileRecord2",
+      "address": "00417b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417b60"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeFileRecord2"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_InsertFileRecordIntoList2",
+      "address": "00417b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417b80"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InsertFileRecordIntoList2"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_FreeFileRecord3",
+      "address": "00417c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417c50"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeFileRecord3"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_InsertFileRecordIntoList3",
+      "address": "00417c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417c70"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InsertFileRecordIntoList3"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileRecord2",
+      "address": "00417d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417d20"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileRecord2"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_FreeFileRecord4",
+      "address": "00417d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417d60"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeFileRecord4"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_InsertFileRecordIntoList4",
+      "address": "00417d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417d80"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InsertFileRecordIntoList4"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileRecord3",
+      "address": "00417e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417e30"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileRecord3"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_RemoveFileRecordFromList1",
+      "address": "00417e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417e90"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_RemoveFileRecordFromList1"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_SearchFileInArchives",
+      "address": "00417f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00417f10"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_SearchFileInArchives",
+        "SFILE_CheckArchiveHandle",
+        "__security_check_cookie",
+        "SStrCopy",
+        "SFILE_FindFileOnDisk",
+        "SErrSetLastError",
+        "SFILE_SearchHashTable",
+        "SFILE_GetBlockTableEntry"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *",
+        "D2MPQBlockEntryStrc",
+        "D2MPQBlockEntryStrc *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFileDdaGetPos",
+      "address": "00418140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418140"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDdaGetPos",
+        "SFILE_CheckFileHandle",
+        "SErrSetLastError",
+        "SFILE_GetStreamPosition"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileDdaGetVolume",
+      "address": "004181f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004181f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDdaGetVolume",
+        "SFILE_CheckFileHandle",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "D2StormAudioStreamRec",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFileDdaSetVolume",
+      "address": "004182d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004182d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDdaSetVolume",
+        "SFILE_CheckFileHandle",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "D2StormAudioStreamRec",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_OpenFileInternal",
+      "address": "00418390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418390"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_OpenFileInternal",
+        "SErrSetLastError",
+        "SFILE_EnsureHashSource",
+        "SFILE_SearchFileInArchives"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFILE_InsertFileRecordIntoList5",
+      "address": "004184b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004184b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_InsertFileRecordIntoList5"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_RemoveFileRecordFromList2",
+      "address": "00418560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418560"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_RemoveFileRecordFromList2"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileRecord4",
+      "address": "004185d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004185d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileRecord4"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_RemoveFileRecordFromList3",
+      "address": "004185f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004185f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_RemoveFileRecordFromList3"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_RemoveFileRecordFromList4",
+      "address": "00418660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418660"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_RemoveFileRecordFromList4"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileRecord5",
+      "address": "004186d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004186d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileRecord5"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CompareFileRecord6",
+      "address": "004186f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004186f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CompareFileRecord6"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_RemoveFileRecordFromList5",
+      "address": "00418710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418710"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_RemoveFileRecordFromList5"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStreamHandle1",
+      "address": "00418900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418900"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStreamHandle1"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStreamHandle2",
+      "address": "00418940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418940"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStreamHandle2"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStreamHandle3",
+      "address": "00418980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418980"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStreamHandle3"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStreamHandle4",
+      "address": "004189c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004189c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStreamHandle4"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStreamHandle5",
+      "address": "00418a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418a00"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStreamHandle5"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_FreeArchiveRecord",
+      "address": "00418a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418a50"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeArchiveRecord",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_FreeArchiveRecord1",
+      "address": "00418b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418b20"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeArchiveRecord1",
+        "SFILE_FreeArchiveRecord",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFILE_GetOpenFlags",
+      "address": "00418b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418b50"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_GetOpenFlags"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseArchiveByName",
+      "address": "00418b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418b80"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseArchiveByName",
+        "SFILE_GetOpenFlags",
+        "SFILE_OpenFileInternal"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles1",
+      "address": "00418be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418be0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles1"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_CloseAllOpenFiles2",
+      "address": "00418c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418c20"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseAllOpenFiles2"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStream1",
+      "address": "00418c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418c60"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStream1",
+        "SFILE_CloseStreamHandle1"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStream2",
+      "address": "00418cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418cc0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStream2",
+        "SFILE_CloseStreamHandle2"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStream3",
+      "address": "00418d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418d00"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStream3",
+        "SFILE_CloseStreamHandle3"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStream4",
+      "address": "00418d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418d40"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStream4",
+        "SFILE_CloseStreamHandle4"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CloseStream5",
+      "address": "00418da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418da0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CloseStream5",
+        "SFILE_CloseStreamHandle5"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_DestroyFileRecord",
+      "address": "00418e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418e90"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_DestroyFileRecord",
+        "SFILE_FreeArchiveRecord",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_AllocFileRecord1",
+      "address": "00418ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418ec0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_AllocFileRecord1",
+        "SMemAlloc",
+        "SFILE_InsertFileRecordIntoList5"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc *",
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_AllocFileRecord",
+      "address": "00418f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418f20"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_AllocFileRecord",
+        "SMemAlloc",
+        "SFILE_InsertFileRecordIntoList2"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_AllocFileRecord2",
+      "address": "00418f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00418f90"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_AllocFileRecord2",
+        "SMemAlloc",
+        "SFILE_InsertFileRecordIntoList3"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc *",
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_FreeArchiveRecord2",
+      "address": "00419000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419000"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeArchiveRecord2",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFILE_FreeFileRecord",
+      "address": "00419070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419070"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeFileRecord",
+        "SMemFree",
+        "SFILE_FreeArchiveRecord"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "SFILE_FreeArchiveRecord3",
+      "address": "00419150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419150"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FreeArchiveRecord3",
+        "SFILE_FreeFileRecord",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFILE_EnumFilesInternal",
+      "address": "00419180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419180"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_EnumFilesInternal",
+        "SErrSetLastError",
+        "SFILE_EnsureHashSource",
+        "SMemAlloc",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileOpenFileEx",
+      "address": "004192f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004192f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileOpenFileEx",
+        "SFILE_EnsureHashSource",
+        "SFILE_SearchFileInArchives",
+        "SFILE_AllocFileRecord",
+        "SStrCopy",
+        "SStrDup",
+        "SStrChrR",
+        "SFILE_Hash",
+        "SMemAlloc",
+        "SErrSetLastError",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQBlockEntryStrc",
+        "D2MPQFileStrc",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SFILE_AllocFileRecord3",
+      "address": "00419630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419630"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_AllocFileRecord3",
+        "SMemAlloc",
+        "TSList_FILEREC_LinkNode"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc *",
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_RemoveAsyncRequestFromQueue",
+      "address": "00419690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419690"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_RemoveAsyncRequestFromQueue",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_AllocFileRecord4",
+      "address": "00419700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419700"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_AllocFileRecord4",
+        "SMemAlloc",
+        "SFILE_InsertFileRecordIntoList4"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc *",
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_IssueRequest",
+      "address": "00419790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419790"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_IssueRequest",
+        "SErrSetLastError",
+        "SMemAlloc",
+        "GetTickCount",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2StormAsyncCompletionStrc",
+        "D2StormAsyncOpStrc",
+        "D2StormAudioStreamRec",
+        "IDirectSoundBuffer",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileCloseFile",
+      "address": "004198d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004198d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileCloseFile",
+        "SFILE_CheckFileHandle",
+        "SFILE_FreeFileRecord",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileOpenFile",
+      "address": "00419980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419980"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileOpenFile",
+        "SFILE_GetOpenFlags",
+        "SFileOpenFileEx"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AUDIOSTREAM_Destructor",
+      "address": "004199a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004199a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "AUDIOSTREAM_Destructor",
+        "SFILE_FreeFileRecord",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2StormAudioStreamRec",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_DeleteAudioStream",
+      "address": "00419a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419a50"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_DeleteAudioStream",
+        "AUDIOSTREAM_Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2StormAudioStreamRec",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFileCloseArchive",
+      "address": "00419a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419a80"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileCloseArchive",
+        "SFILE_CheckArchiveHandle",
+        "SFILE_FreeArchiveRecord",
+        "SMemFree",
+        "SFILE_CheckFileHandle",
+        "SFileCloseFile"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc"
+      ]
+    },
+    {
+      "name": "SFILE_AudioStreamListDeleteNode",
+      "address": "00419b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419b90"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SMemFree",
+        "SFILE_AudioStreamListDeleteNode",
+        "AUDIOSTREAM_Destructor"
+      ],
+      "usedTypes": [
+        "D2StormAudioStreamRec",
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "SFILE_ReleaseAudioStream",
+      "address": "00419bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419bd0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_ReleaseAudioStream",
+        "AUDIOSTREAM_Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2StormAudioStreamRec",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CheckAudioStreams",
+      "address": "00419c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419c00"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CheckAudioStreams",
+        "SFILE_GetStreamPosition",
+        "SMemFill",
+        "SFILE_IssueRequest"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2StormAudioStreamRec",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileDdaDestroy",
+      "address": "00419f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00419f30"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDdaDestroy",
+        "AUDIOSTREAM_Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2StormAudioStreamRec",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_ReleaseAsyncRequest",
+      "address": "0041a020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a020"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_ReleaseAsyncRequest",
+        "SFILE_FreeFileRecord",
+        "SMemFree",
+        "AUDIOSTREAM_Destructor"
+      ],
+      "usedTypes": [
+        "D2StormAsyncOpStrc",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_DeleteAsyncRequest",
+      "address": "0041a0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a0e0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_DeleteAsyncRequest",
+        "SFILE_ReleaseAsyncRequest",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2StormAsyncOpStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFileDestroy",
+      "address": "0041a110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a110"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDestroy",
+        "SFileDdaDestroy",
+        "SetEvent",
+        "SFILE_ReleaseAsyncRequest",
+        "SMemFree",
+        "SErrReportResourceLeak",
+        "AUDIOSTREAM_Destructor",
+        "SErrReportNamedResourceLeak",
+        "SFILE_FreeFileRecord",
+        "SFILE_FreeArchiveRecord"
+      ],
+      "usedTypes": [
+        "D2StormAsyncOpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_DeleteAsyncRequestGetNext",
+      "address": "0041a2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a2c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_DeleteAsyncRequestGetNext",
+        "SFILE_ReleaseAsyncRequest",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2StormAsyncOpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CancelRequest",
+      "address": "0041a300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a300"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CancelRequest",
+        "SMemAlloc",
+        "SFILE_ReleaseAsyncRequest",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2StormAsyncOpStrc",
+        "StormEventRecStrc",
+        "StormLinkStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_SelectAsyncRequest",
+      "address": "0041a450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a450"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_SelectAsyncRequest",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CdThreadProc",
+      "address": "0041a550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a550"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CdThreadProc",
+        "GetTickCount",
+        "SFILE_RemoveAsyncRequestFromQueue",
+        "SetEvent",
+        "SFILE_CheckAudioStreams",
+        "SFILE_SelectAsyncRequest",
+        "SFILE_InternalReadUnaligned",
+        "CrcBuffer",
+        "SFILE_SyncReadFile",
+        "SFILE_HandleAsyncReadError",
+        "SErrDisplayError",
+        "SFILE_ReleaseAsyncRequest",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2StormAsyncOpStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CreateCdThread",
+      "address": "0041a880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a880"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CreateCdThread"
+      ]
+    },
+    {
+      "name": "SFILE_SetRequestUrgentByBuffer",
+      "address": "0041a8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a8f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_SetRequestUrgentByBuffer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CancelAsyncRequestNoReturn",
+      "address": "0041a930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a930"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CancelAsyncRequestNoReturn",
+        "SErrSetLastError",
+        "SFILE_CancelRequest"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFILE_CancelAsyncRequestWithStatus",
+      "address": "0041a960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a960"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_CancelAsyncRequestWithStatus",
+        "SErrSetLastError",
+        "SFILE_CancelRequest"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SFileDdaEnd",
+      "address": "0041a990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041a990"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDdaEnd",
+        "SFILE_CheckFileHandle",
+        "SFILE_CancelRequest",
+        "AUDIOSTREAM_Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2StormAudioStreamRec",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_SetRequestPriorityByBuffer",
+      "address": "0041aa80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041aa80"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_SetRequestUrgentByBuffer",
+        "SFILE_SetRequestPriorityByBuffer",
+        "SErrSetLastError",
+        "SetEvent"
+      ]
+    },
+    {
+      "name": "SFileReadFileEx2",
+      "address": "0041aad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041aad0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileReadFileEx2",
+        "SErrSetLastError",
+        "SFILE_CheckFileHandle",
+        "SetEvent",
+        "SFILE_SyncReadFile",
+        "SFILE_InternalReadUnaligned",
+        "CrcBuffer",
+        "SFILE_CreateCdThread",
+        "SFILE_IssueRequest",
+        "SFILE_ReleaseAsyncRequest",
+        "SMemFree",
+        "SMemCopy",
+        "SErrDisplayError"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2StormAsyncCompletionStrc",
+        "D2StormAsyncOpStrc",
+        "LPOVERLAPPED",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileLoadFileEx2",
+      "address": "0041af60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041af60"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileLoadFileEx2",
+        "SFileOpenFileEx",
+        "SFileGetFileSize",
+        "SMemAlloc",
+        "SFileReadFileEx2",
+        "SMemFree",
+        "SMemZero",
+        "SFileCloseFile",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "int32_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SFileReadFile",
+      "address": "0041b050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041b050"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileReadFile",
+        "SFileReadFileEx2"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileReadFileEx",
+      "address": "0041b080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041b080"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileReadFileEx",
+        "SFileReadFileEx2"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2StormAsyncCompletionStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_ReadAdditionalAttributes",
+      "address": "0041b0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041b0b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_ReadAdditionalAttributes",
+        "SFileOpenFileEx",
+        "SFileGetFileSize",
+        "SMemAlloc",
+        "SFileReadFile",
+        "SMemFree",
+        "SFileCloseFile"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFILE_FindChunk",
+      "address": "0041b210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041b210"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_FindChunk",
+        "SFileReadFile",
+        "SFileSetFilePointer"
+      ],
+      "usedTypes": [
+        "D2FileChunkHeaderStrc",
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileDdaBeginEx",
+      "address": "0041b280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041b280"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDdaBeginEx",
+        "SErrSetLastError",
+        "SFILE_CheckFileHandle",
+        "SFileDdaEnd",
+        "SMemAlloc",
+        "SFileSetFilePointer",
+        "SFileReadFileEx2",
+        "SFILE_FindChunk",
+        "SMemZero",
+        "SFILE_AllocFileRecord4",
+        "SFILE_CreateCdThread",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2StormAudioStreamRec",
+        "IDirectSoundBuffer",
+        "WAVEFORMATEX",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileLoadFile",
+      "address": "0041b650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041b650"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileLoadFile",
+        "SFileLoadFileEx",
+        "SFileLoadFileEx2",
+        "SFILE_GetOpenFlags"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SFileLoadFileEx",
+      "address": "0041b680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041b680"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileLoadFileEx",
+        "SFileLoadFileEx2"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "int32_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SFILE_s_OpenArchive",
+      "address": "0041b6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041b6b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFILE_s_OpenArchive",
+        "SMemAlloc",
+        "SFILE_FreeArchiveRecord",
+        "SMemFree",
+        "SErrSetLastError",
+        "SMemCopy",
+        "SFILE_ReadFileChecked",
+        "SFILE_Hash",
+        "SFILE_Decrypt",
+        "SFILE_ShiftSectorTable",
+        "SFileCloseArchive",
+        "SFILE_CreateCdThread",
+        "SFILE_ReadAdditionalAttributes"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *",
+        "StormLinkStrc *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SFileDdaBegin",
+      "address": "0041ba30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ba30"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileDdaBegin",
+        "SFileDdaBeginEx"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileOpenArchive",
+      "address": "0041ba60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ba60"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileOpenArchive",
+        "SErrSetLastError",
+        "__security_check_cookie",
+        "SFILE_EnsureHashSource",
+        "SStrCopy",
+        "SFILE_FileExistsOnDisk",
+        "strstr",
+        "SFILE_ConvertRelativePathName",
+        "SFILE_CheckForCdRom",
+        "SMemAlloc",
+        "SFILE_s_OpenArchive"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *",
+        "D2MPQHeaderStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SFileOpenFileAsArchive",
+      "address": "0041bca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041bca0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "SFileOpenFileAsArchive",
+        "SFILE_GetOpenFlags",
+        "SFileOpenFileEx",
+        "__security_check_cookie",
+        "SFILE_CheckFileHandle",
+        "SFileCloseFile",
+        "SFILE_FindFileOnDisk",
+        "SFileOpenArchive",
+        "SMemAlloc",
+        "SStrCopy",
+        "SFILE_s_OpenArchive",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *",
+        "D2MPQFileStrc",
+        "D2MPQFileStrc *",
+        "D2MPQHeaderStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CrcBuffer",
+      "address": "0041d810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d810"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "CrcBuffer"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CRC32_Calculate",
+      "address": "006c99f6",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c99f6"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "CRC32_Calculate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9e98",
+      "address": "006c9e98",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9e98"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9e98",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9ec8",
+      "address": "006c9ec8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9ec8"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9ec8",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca7b0",
+      "address": "006ca7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca7b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticInit_6ca7b0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca7d0",
+      "address": "006ca7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca7d0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticInit_6ca7d0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca7f0",
+      "address": "006ca7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca7f0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticInit_6ca7f0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca810",
+      "address": "006ca810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca810"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticInit_6ca810",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca830",
+      "address": "006ca830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca830"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticInit_6ca830",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca850",
+      "address": "006ca850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca850"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticInit_6ca850",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca870",
+      "address": "006ca870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca870"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticInit_6ca870",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_00779068",
+      "address": "006cb0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb0a0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_00779068"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_00779080",
+      "address": "006cb0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb0b0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_00779080"
+      ]
+    },
+    {
+      "name": "StaticFini_gMpqArchiveList",
+      "address": "006cb0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb0c0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticFini_gMpqArchiveList",
+        "SFILE_CloseStreamHandle1"
+      ]
+    },
+    {
+      "name": "StaticFini_gSFileAsyncReqQueue",
+      "address": "006cb120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb120"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticFini_gSFileAsyncReqQueue",
+        "SFILE_CloseStreamHandle2"
+      ]
+    },
+    {
+      "name": "StaticFini_gSFileOpenFileList",
+      "address": "006cb180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb180"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticFini_gSFileOpenFileList",
+        "SFILE_CloseStreamHandle3"
+      ]
+    },
+    {
+      "name": "StaticFini_gSFileAudioStreamList",
+      "address": "006cb1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb1e0"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticFini_gSFileAudioStreamList",
+        "SFILE_CloseStreamHandle4"
+      ]
+    },
+    {
+      "name": "StaticFini_gSFileStreamRecordList",
+      "address": "006cb240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb240"
+        }
+      ],
+      "namespace": "Storm::Source::SFile",
+      "calledFunctions": [
+        "StaticFini_gSFileStreamRecordList",
+        "SFILE_CloseStreamHandle5"
+      ]
+    }
+  ]
+}

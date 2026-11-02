@@ -79,8 +79,8 @@
 
 namespace D2Game::SKILLS::SkillSor {
 
-int32_t __fastcall GetTxtTableParam6(int32_t nParam) {
-    D2SkillsTxt* pSkillsTxt = nParam >= 0 && nParam < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nParam : nullptr;
+int32_t __fastcall GetTxtTableParam6(int32_t nSkillId) {
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -371,7 +371,7 @@ BOOL __fastcall SKILLSOR_SrvStFn14_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     return (uint32_t)!_bHasTarget;
 }
 
-void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, int32_t nParam) {
+void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, int32_t nMissileIdx) {
     if (!pUnit) {
       return;
     }
@@ -385,7 +385,7 @@ void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, int32_t nParam) {
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     uint32_t nSeedX = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nSeedX + nParam);
+    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nSeedX + nMissileIdx);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 10);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, (uint8_t)nFrameCount);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -1258,7 +1258,7 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
     int32_t nAbsorbPct;
     uint32_t nCurMana;
     uint32_t bIsMerc;
-    int32_t* piVar2;
+    int32_t* pnDamageField;
     int32_t nAbsorbAmt;
     int32_t nManaCap;
     int nDirection;
@@ -1298,8 +1298,8 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
             pAbsorbEntry = (uint32_t*)gnAuraManaAbsorbIndex;
             do {
               if (!pAbsorbEntry[1] || bNotMonsterOnly) {
-                piVar2 = (int32_t*)((uintptr_t)&pDamage->dwHitFlags + *pAbsorbEntry);
-                nValue = *piVar2;
+                pnDamageField = (int32_t*)((uintptr_t)&pDamage->dwHitFlags + *pAbsorbEntry);
+                nValue = *pnDamageField;
                 if (nValue > 0) {
                   nAbsorbAmt = D2Client::Stats::D2ApplyPercent(nValue, nAbsorbPct, 100);
                   nManaCap = D2Client::Stats::D2ApplyPercent(nCurMana, 0x10, nSkillLvl);
@@ -1308,7 +1308,7 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
                   }
 
                   eSkill += nAbsorbAmt;
-                  *piVar2 = nValue - nAbsorbAmt;
+                  *pnDamageField = nValue - nAbsorbAmt;
                   nValue = D2Client::Stats::D2ApplyPercent(nAbsorbAmt, nSkillLvl, 0x10);
                   nCurMana = (int)(nCurMana - nValue) <= 0 ? 0 : nCurMana - nValue;
                 }

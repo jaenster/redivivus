@@ -37,7 +37,7 @@ namespace D2Game::Monster::MonsterMode {
 
 // Function declarations
 struct D2MonsterPathParamStrc * __fastcall GetAiParamFromUnit(struct D2UnitStrc * pUnit);
-void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pnParam1, int * pnParam2, char * szText, int32_t pMonData);
+void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char * szText, int32_t pMonData);
 void __fastcall ResetEngagedCombatAndStats(struct D2UnitStrc * pUnit);
 void __fastcall MONSTERMODE_GetStoredPosition(int32_t pMonData, int32_t * pOutStoredX, int32_t * pOutStoredY, uint8_t * pOutStoredFlags);
 void __fastcall SetCombatAndMonStats(struct D2MonsterPathParamStrc * pPathParam, int32_t nPathType, int32_t nVelocity, uint8_t nSteps);
@@ -48,7 +48,7 @@ void __fastcall MONSTERDATA_FreeMonsterMode(::SGAMEDATA * pGame, struct D2Monste
 void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, BOOL bIsItemFindDrop, struct D2ObjectOperateFnArg * pUnitKill);
 // Dead-code wrapper (marked Unused) that validates the victim unit from pUnitKill->sArg.pVictim, skips units with flag bit 0x11 set (already processed) and classId 0x158 (bonewall), checks COLLISION_ITEMS at the victim's position, then delegates to SERVER_ITEM_DecideDrops. Not called in shipping 1.14d.
 void __fastcall DropItemForVictim_Unused(::SGAMEDATA * pGame, struct D2ObjectOperateFnArg * pUnitKill, uint32_t dwParam);
-void SetAiState(struct D2UnitStrc * pUnit, uint32_t nParam);
+void SetAiState(struct D2UnitStrc * pUnit, uint32_t nNewAiState);
 // Periodic server HP-regen/poison-tick event handler for a unit (reschedules itself each game frame). Computes net HP regen (subtracting the server-side hpregen component when a progressive state applies); unless STATE_preventheal blocks healing, applies the delta to UNITSTAT_hitpoints clamped to TxtMaxHp. Town rooms skip damage so you don't die in town. When the HP% changes by more than the threshold it broadcasts packet 0xAB and updates last_sent_hp_pct. If HP reaches zero (and not already dying), it locates the poison/state attacker via GetStatsByState/owner-GUID lookup and either sets STATE_death_delay (if uninterruptable) or calls SERVER_KillMonster and dispatches death (event 10) and kill-credit (event 9) events.
 void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 // Spawns a burst of missiles from a Sand Maggot (BaseId 0x3f) monster. Temporarily clears the unit's path target, seeds an RNG from the unit GUID, then fires a number of missiles (from MonStats TreasureClass field scaled by difficulty) each at a randomly perturbed ±5-tile offset around the target or saved path SP1 position. Restores the original path target after the loop.
@@ -79,11 +79,11 @@ BOOL __fastcall thunk_FreeCombatAndChangeAnimMode_B(::SGAMEDATA * pGame, struct 
 BOOL __fastcall MONMODE_TryFleeFromTarget(::SGAMEDATA * pGame, struct D2MonsterKillStrc * pMonsterKill);
 BOOL __fastcall MONMODE_CompleteSkillSequence(::SGAMEDATA * pGame, struct D2MonsterKillStrc * pMonsterKill);
 // Looks up the death/drop event-dispatch callback record for a monster. Given a UNIT_MONSTER and an event index nParam (0..0xF), returns a pointer into the global DropHandlerArray. Returns NULL for non-monsters, out-of-range class ids, or nParam>0xF. Most monsters map directly (DropHandlerArray + nParam), but special bosses override specific events by class id: Diablo / DiabloClone / UberDiablo and Baal variants (Throne/Uber) redirect their death/drop events to dedicated handler slots (e.g. +7, +0x10, +0x11), TrappedSoul to +0x12/+0x13, and Warrior/Master act-boss minions event 0xB to +0x14. Used by the monster event dispatcher to pick the correct on-death behavior.
-struct D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(struct D2UnitStrc * pUnit, uint32_t nParam);
+struct D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(struct D2UnitStrc * pUnit, uint32_t nAnimMode);
 void __fastcall MONMODE_DispatchDeathDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 void __fastcall ExecuteDropHandlerFn3(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 // Server-side monster mode/lifecycle transition driver. Given a D2MonsterKillStrc (victim, attacker/target, requested nUnitMode), validates the victim is a monster, halts on a stuck uninterruptable state, then for non-GetHit modes sets the dynamic-path target/SP and recomputes combat stats & UMod-on-spawn. Looks up the per-mode AI drop/death handler (GetDropHandler) and invokes its pFn1; on a 0 result clears the current skill and schedules execution (PlanExecutionOfMonster). Flags MONMODEISCHANGING, re-inits the anim frame, applies velocity%, dispatches UMod-on-death, then re-resolves the handler for the unit's actual anim mode to (re)arm or clear anim timer events. Returns pFn1's result, or 0 (falling through to MONSTER_InitiateDefaultDeath) when no actual-mode handler exists. __stdcall(pGame,pMonsterKill,nParam).
-int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, struct D2MonsterKillStrc * pMonsterKill, int32_t nParam);
+int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, struct D2MonsterKillStrc * pMonsterKill, int32_t bResetSkillOnSameMode);
 void __stdcall SetCurrentSkill(struct D2UnitStrc * pUnit, eD2MonsterAnimMode nUnitMode, struct D2MonsterKillStrc * pMonsterKill);
 // 7 internal functions (defined in .cpp)
 

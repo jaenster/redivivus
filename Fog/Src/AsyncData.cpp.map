@@ -1,0 +1,324 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/AsyncData.cpp",
+  "functions": [
+    {
+      "name": "STRUCT_AllocAsyncData",
+      "address": "0040a390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a390"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "STRUCT_AllocAsyncData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SFileSetAsyncBudget",
+        "SFileSetDataChunkSize",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STRUCT_FreeAsyncData",
+      "address": "0040a440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a440"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "STRUCT_FreeAsyncData",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2AsyncDataStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_CancelAndCleanup",
+      "address": "0040a4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a4c0"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_CancelAndCleanup",
+        "ERRORMANAGER_FCloseFile",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_AllocSlot",
+      "address": "0040a550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a550"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_AllocSlot",
+        "ASYNCDATA_CancelAndCleanup"
+      ],
+      "usedTypes": [
+        "D2AsyncDataSlotStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRUCT_AllocAsyncData_Line0x128",
+      "address": "0040a620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a620"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "STRUCT_AllocAsyncData_Line0x128",
+        "AllocServerMemory",
+        "memset",
+        "ARCHIVE_OpenD2FileWrap",
+        "SFILE_SetFilePointerThunk",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ERRORMANAGER_FGetFileSize",
+        "Alloc",
+        "ERRORMANAGER_FReadFile",
+        "ASYNCDATA_CancelAndCleanup",
+        "ASYNCDATA_AllocSlot",
+        "ERRORMANAGER_FCloseFile",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AsyncDataCallbackStrc",
+        "D2AsyncDataSlotStrc",
+        "D2AsyncData_Line0x128",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_IsComplete",
+      "address": "0040a7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a7f0"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_IsComplete",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ASYNCDATA_CancelAndCleanup"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_SetPriority",
+      "address": "0040a850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a850"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "SFILE_SetRequestPriorityByBuffer",
+        "ASYNCDATA_SetPriority",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ASYNCDATA_HaltSetPriorityAtLine"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_HaltSetPriorityAtLine",
+      "address": "0040a859",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a859"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ERROR_UnrecoverableInternalError_Halt",
+        "GetInstructionPointer",
+        "exit",
+        "ASYNCDATA_HaltSetPriorityAtLine"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_DeferPriorityUpdates",
+      "address": "0040a8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a8e0"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_DeferPriorityUpdates",
+        "SFILE_SetRequestPriorityByBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_WaitForCompletion",
+      "address": "0040a960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a960"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_WaitForCompletion",
+        "ASYNCDATA_IsComplete",
+        "SFILE_SetRequestPriorityByBuffer",
+        "ASYNCDATA_CancelAndCleanup",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_GetResult",
+      "address": "0040a9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a9e0"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_GetResult",
+        "ASYNCDATA_WaitForCompletion",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_GetReadSize",
+      "address": "0040aa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040aa40"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_GetReadSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_SetResult",
+      "address": "0040aa80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040aa80"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_SetResult",
+        "FreeServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ASYNCDATA_Free",
+      "address": "0040ab00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040ab00"
+        }
+      ],
+      "namespace": "Fog::Src::AsyncData",
+      "calledFunctions": [
+        "ASYNCDATA_Free",
+        "ASYNCDATA_IsComplete",
+        "SFILE_CancelAsyncRequestNoReturn",
+        "ASYNCDATA_CancelAndCleanup",
+        "FreeServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "D2AsyncData_Line0x128 *",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

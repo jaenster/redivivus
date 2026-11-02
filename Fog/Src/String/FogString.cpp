@@ -312,8 +312,8 @@ void __fastcall SMemStringToUppercase(char * szText, int32_t nMaxLen) {
 }; D2_STATIC_GUARD(g_SMemUppercaseTable, "Fog::Src::String::FogString::SMemStringToUppercase::g_SMemUppercaseTable");
 
     uint8_t cCurChar = *szText;
-    uint8_t* pbVar1 = (uint8_t*)(szText + nMaxLen);
-    while (cCurChar && szText < (char*)pbVar1) {
+    uint8_t* pEnd = (uint8_t*)(szText + nMaxLen);
+    while (cCurChar && szText < (char*)pEnd) {
       *szText = g_SMemUppercaseTable[*szText];
       szText++;
       cCurChar = *szText;

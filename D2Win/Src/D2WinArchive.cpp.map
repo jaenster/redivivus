@@ -1,0 +1,228 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinArchive.cpp",
+  "functions": [
+    {
+      "name": "IMAGE_LoadDC6",
+      "address": "004fa9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa9b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "IMAGE_LoadDC6",
+        "IMAGE_ReturnImageExtension",
+        "D2FILE_AllocAndLoadD2File",
+        "CELCMP_FixupPointersAndPrepare"
+      ],
+      "usedTypes": [
+        "DC6",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WINARCHIVE_LoadImageFromArchive",
+      "address": "004faa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004faa40"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "D2WINARCHIVE_LoadImageFromArchive",
+        "IMAGE_ReturnImageExtension",
+        "D2FILE_AllocAndLoadD2File",
+        "CELCMP_FixupPointersAndPrepare"
+      ],
+      "usedTypes": [
+        "DC6",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IMAGE_FreeImage",
+      "address": "004faae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004faae0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "IMAGE_FreeImage",
+        "DeleteCellFile",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "DC6"
+      ]
+    },
+    {
+      "name": "MessageBoxA_InsertExpansionDisc",
+      "address": "004fab00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fab00"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "MessageBoxA_InsertExpansionDisc",
+        "GetHwnd"
+      ]
+    },
+    {
+      "name": "MessageBoxA_InsertPlayDisc",
+      "address": "004fab30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fab30"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "MessageBoxA_InsertPlayDisc",
+        "GetHwnd"
+      ]
+    },
+    {
+      "name": "MPQ_LoadAllDataMpqFiles",
+      "address": "004fab90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fab90"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "MPQ_LoadAllDataMpqFiles",
+        "ARCHIVE_LoadMPQ",
+        "GetUseDirectCommand",
+        "D2CheckExpansionGame"
+      ]
+    },
+    {
+      "name": "ReturnZero",
+      "address": "004fac80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fac80"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "ReturnZero"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "D2WINARCHIVE_GetArchiveHandle",
+      "address": "004fac90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fac90"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "D2WINARCHIVE_GetArchiveHandle",
+        "SFILE_GetInstallPath",
+        "SStrPack",
+        "SStrCopy",
+        "GetUseDirectCommand"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MPQ_LoadVideoMpqFiles",
+      "address": "004fad10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fad10"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "MPQ_LoadVideoMpqFiles",
+        "GetUseDirectCommand",
+        "ARCHIVE_LoadMPQ"
+      ],
+      "usedTypes": [
+        "fpRequiredUserAction",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MPQ_UnloadAllMediaMpqFiles",
+      "address": "004fad70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fad70"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "MPQ_UnloadAllMediaMpqFiles",
+        "ARCHIVE_FreeMpqFile"
+      ]
+    },
+    {
+      "name": "MPQ_UnloadAllDataMpqFiles",
+      "address": "004fae00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fae00"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "MPQ_UnloadAllDataMpqFiles",
+        "ARCHIVE_FreeMpqFile",
+        "MPQ_UnloadAllMediaMpqFiles"
+      ]
+    },
+    {
+      "name": "MPQ_LoadAllMediaMpqFiles",
+      "address": "004faec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004faec0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinArchive",
+      "calledFunctions": [
+        "MPQ_LoadAllMediaMpqFiles",
+        "GetUseDirectCommand",
+        "D2CheckExpansionGame",
+        "ARCHIVE_LoadMPQ",
+        "MPQ_UnloadAllMediaMpqFiles"
+      ],
+      "usedTypes": [
+        "D2FogArchiveStrc",
+        "D2IniConfigStrc",
+        "fpRequiredUserAction",
+        "int32_t"
+      ]
+    }
+  ]
+}

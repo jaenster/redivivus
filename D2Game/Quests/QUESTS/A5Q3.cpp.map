@@ -1,0 +1,1129 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A5Q3.cpp",
+  "functions": [
+    {
+      "name": "Q33_NotifyQuestState",
+      "address": "00588eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00588eb0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_NotifyQuestState",
+        "GetPlayerData",
+        "GetQuestState",
+        "QUEST_SendQuestUpdateToPlayer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_UpdateQuestStep",
+      "address": "00588f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00588f10"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_UpdateQuestStep",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetQuestDataByQuestNoInternal",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_Callback02_NpcDeactivate",
+      "address": "00588f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00588f80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_Callback02_NpcDeactivate",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q33_SendQuestStatePacket",
+      "address": "00589070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589070"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_SendQuestStatePacket",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x5D_QuestState"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x5D",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q33_OnFrozenAnyaKilled",
+      "address": "005890b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005890b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_OnFrozenAnyaKilled",
+        "HasAiSub",
+        "ClearAISub",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterKillStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_SequenceFilter",
+      "address": "00589160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589160"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_SequenceFilter",
+        "GetQuestDataByQuestNoInternal",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q33_SpawnAnyaAndPortal",
+      "address": "005891d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005891d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_SpawnAnyaAndPortal",
+        "FindUnitFromTable",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "QUEST_SpawnMonsterNearCoords",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI",
+        "GetCoords",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "CreateUnit",
+        "Q33_SequenceFilter"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2MapAIStrc *",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "A5Q3_KillMonsterInstantly",
+      "address": "00589340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589340"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "A5Q3_KillMonsterInstantly",
+        "HasAiSub",
+        "ClearAISub",
+        "ZeroPathPointsSize",
+        "EVENT_RemoveUnitTimersByType",
+        "STATLIST_SetUnitStat",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA *"
+      ]
+    },
+    {
+      "name": "Q33_CleanupQuestMonsters",
+      "address": "005893e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005893e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_CleanupQuestMonsters",
+        "FindUnitFromTable",
+        "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId",
+        "HasAiSub",
+        "ClearAISub",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "A5Q3_KillMonsterInstantly",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2MonsterKillStrc",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q33_KillAnyaMonsterTimer",
+      "address": "00589540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589540"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_KillAnyaMonsterTimer",
+        "GetQuestDataByQuestNoInternal",
+        "FindUnitFromTable",
+        "A5Q3_KillMonsterInstantly"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_Callback11_ScrollMessage",
+      "address": "00589580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589580"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_Callback11_ScrollMessage",
+        "GetPlayerData",
+        "QUEST_SetStateFlag",
+        "IteratePlayerOrMonsterUnits",
+        "QUEST_SendNpcGossipPacket",
+        "HasQuestItem",
+        "ITEM_RewardItemInInventory",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x5D_QuestState",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SetStateAndBroadcast",
+        "UnsetQuestState",
+        "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId",
+        "Q33_SpawnAnyaAndPortal",
+        "QUEST_SendQuestInfoToUnit",
+        "SERVER_GetUnitStat",
+        "GetQuestControlSeed",
+        "UNIT_GetModuloFromSeed",
+        "GetLevel",
+        "TXT_Items_GetLine",
+        "Q33_CleanupQuestMonsters"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2GSPacketSrv0x5D",
+        "D2ItemsTxt",
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2SeedStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemQuality",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q33_PropagateCompleteToParty",
+      "address": "00589a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589a50"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_PropagateCompleteToParty",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_SetCannotComplete",
+      "address": "00589aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589aa0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_Callback00_NpcActivate",
+      "address": "00589b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589b00"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_Callback00_NpcActivate",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "HasQuestItem",
+        "AddGossipMessageOnMonster",
+        "QUEST_HasPlayerParticipated"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2MonsterKillStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2QuestState",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q33_Callback10_PlayerLeavesGame",
+      "address": "00589d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589d20"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_Callback10_PlayerLeavesGame",
+        "QUESTGUID_RemovePlayerFromList",
+        "HasQuestItem"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q33_Callback03_ChangedLevel",
+      "address": "00589d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589d80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_Callback03_ChangedLevel",
+        "QUEST_SetStateFlag",
+        "QUEST_SetStateAndBroadcast",
+        "IteratePlayerOrMonsterUnits",
+        "Q33_CleanupQuestMonsters",
+        "QUESTGUID_RemovePlayerFromQuest",
+        "GetPlayerData",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_ActiveFilter",
+      "address": "00589f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589f10"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_ActiveFilter",
+        "GetQuestState",
+        "HasQuestItem"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddBonusResistances",
+      "address": "00589ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589ff0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "AddBonusResistances",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx",
+        "SendAttributeUpdate"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CalculateBonusResistances",
+      "address": "0058a0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a0a0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "CalculateBonusResistances",
+        "GetPlayerData",
+        "GetQuestState",
+        "AddBonusResistances"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2QuestState",
+        "eD2Quests",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q33_Callback13_PlayerStartedGame",
+      "address": "0058a110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a110"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_Callback13_PlayerStartedGame",
+        "HasQuestItem",
+        "GetPlayerData",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_Callback14_PlayerJoinedGame",
+      "address": "0058a1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a1e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_Callback14_PlayerJoinedGame",
+        "HasQuestItem",
+        "GetQuestDataByQuestNoInternal",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q33_CheckPlayerHasScrollOfResistance",
+      "address": "0058a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a270"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_CheckPlayerHasScrollOfResistance",
+        "HasQuestItem",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_CheckPartyHasScrollOfResistance",
+      "address": "0058a2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a2a0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_CheckPartyHasScrollOfResistance",
+        "HasQuestItem",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q33_StatusFilter",
+      "address": "0058a300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a300"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_StatusFilter",
+        "GetQuestState",
+        "Q33_CheckPartyHasScrollOfResistance"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q33_InitData",
+      "address": "0058a410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a410"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_InitData",
+        "memset",
+        "AllocServerMemory",
+        "QUESTGUID_SetPlayerCountToZero"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SpawnFrozenAnya",
+      "address": "0058a500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a500"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "SpawnFrozenAnya",
+        "GetQuestDataByQuestNoInternal",
+        "UNITS_GetRoom",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "CreateUnit",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Objects_InitFn67",
+      "address": "0058a5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a5b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Objects_InitFn67",
+        "GetQuestDataByQuestNoInternal",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Objects_InitFn68",
+      "address": "0058a610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a610"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Objects_InitFn68",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_SpawnMonsterNearCoords",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc *",
+        "D2ObjectInitFnArg",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Objects_InitFn69",
+      "address": "0058a6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a6c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Objects_InitFn69",
+        "GetQuestDataByQuestNoInternal",
+        "MONSTERTBLS_GetPresetActValue",
+        "SpawnMonster"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q33_AnyaTimerCallback",
+      "address": "0058a730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a730"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_AnyaTimerCallback",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "SetupUpdateFlag",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "eD2MonsterAnimMode"
+      ]
+    },
+    {
+      "name": "Q33_GetAnyaCoordinates",
+      "address": "0058a7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a7d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_GetAnyaCoordinates",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q33_SpawnPortalNearAnya",
+      "address": "0058a820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a820"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_SpawnPortalNearAnya",
+        "GetQuestDataByQuestNoInternal",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "CreateUnit"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_GetAnyaOrPortalCoords",
+      "address": "0058a8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a8d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_GetAnyaOrPortalCoords",
+        "GetQuestDataByQuestNoInternal",
+        "GetCoords"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_StoreAnyaPosition",
+      "address": "0058a940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a940"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_StoreAnyaPosition",
+        "GetQuestDataByQuestNoInternal",
+        "GetCoords"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_StartAnyaRescuePhase",
+      "address": "0058a980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a980"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_StartAnyaRescuePhase",
+        "GetQuestDataByQuestNoInternal",
+        "Q33_SpawnAnyaAndPortal"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_SetAnyaCanRun",
+      "address": "0058a9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a9b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_SetAnyaCanRun",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_IsAnyaInTown",
+      "address": "0058a9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a9d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_IsAnyaInTown",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q33_IsFrozenAnyaAlive",
+      "address": "0058a9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058a9f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_IsFrozenAnyaAlive",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q33_OnNpcNotifyPlayers",
+      "address": "0058aa10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058aa10"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_OnNpcNotifyPlayers",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Objects_InitFn74",
+      "address": "0058aa50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058aa50"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Objects_InitFn74",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg",
+        "D2QuestDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q33_TransformFrozenAnya",
+      "address": "0058aab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058aab0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_TransformFrozenAnya",
+        "FindUnitFromTable",
+        "SetupUpdateFlag",
+        "RemoveCollision_Vector",
+        "UNITS_GetRoom",
+        "QUEST_SpawnMonsterNearCoords",
+        "AllocDrlgDelete",
+        "RemoveUnitFromRoom",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI",
+        "Q33_SequenceFilter"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc *",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OBJOP_A5Q3_RescueAnyaFromPortal",
+      "address": "0058abc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058abc0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "OBJOP_A5Q3_RescueAnyaFromPortal",
+        "GetQuestDataByQuestNoInternal",
+        "HasQuestItem",
+        "QUEST_SendNpcInfoPacket",
+        "QUEST_SetStateAndBroadcast",
+        "GetPlayerData",
+        "GetQuestState",
+        "QUEST_RemoveQuestItemFromPlayer",
+        "QUEST_SetStateFlag",
+        "SetQuestState",
+        "NotifyPlayersAboutEvent",
+        "IteratePlayerOrMonsterUnits",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "AddQuestTimer",
+        "UNITS_GetRoom",
+        "ToggleHasPortalFlagRoom"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ObjectOperateFnArg",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q33_OnPresetObjectLoad1",
+      "address": "0058ad80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ad80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_OnPresetObjectLoad1",
+        "GetQuestDataByQuestNoInternal",
+        "DRLGPRESET_CopyMapAI",
+        "FindUnitFromTable",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc",
+        "D2MapAIStrc *",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q33_OnPresetObjectLoad2",
+      "address": "0058ae10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ae10"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q3",
+      "calledFunctions": [
+        "Q33_OnPresetObjectLoad2",
+        "GetQuestDataByQuestNoInternal",
+        "DRLGPRESET_CopyMapAI",
+        "FindUnitFromTable",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc",
+        "D2MapAIStrc *",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    }
+  ]
+}

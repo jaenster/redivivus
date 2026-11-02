@@ -1,0 +1,1009 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/Preset.cpp",
+  "functions": [
+    {
+      "name": "ParsePresetsOfDrlgFile",
+      "address": "00665950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665950"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "ParsePresetsOfDrlgFile",
+        "D2FILE_AllocAndLoadD2File",
+        "SSTR_StringLength",
+        "DRLGANIM_GetOrientationFromIndex",
+        "MONSTERTBLS_GetMonPresetRecord",
+        "MONSTERTBLS_ReturnZero",
+        "CheckMonStatId",
+        "strncpy",
+        "tolower",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "AllocPresetUnit",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2DrlgSubstGroupStrc",
+        "D2MapAIStrc",
+        "D2MonPresetTxt",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "AllocDrlgFile",
+      "address": "00665f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665f40"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "AllocDrlgFile",
+        "AllocServerMemory",
+        "memset",
+        "ParsePresetsOfDrlgFile"
+      ],
+      "usedTypes": [
+        "D2DrlgFileCacheNodeStrc",
+        "D2DrlgFileStrc",
+        "D2DrlgFileStrc *",
+        "D2PoolManagerStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_CopyMapAI",
+      "address": "006660b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006660b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_CopyMapAI",
+        "AllocServerMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc",
+        "D2PathPosStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_TransferMapAI",
+      "address": "00666120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666120"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc",
+        "D2MapAIStrc *"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_FreeSpawnPointList",
+      "address": "00666130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666130"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_FreeSpawnPointList",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "CreatePresetObject_Unused",
+      "address": "00666170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666170"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "CreatePresetObject_Unused",
+        "AllocPresetUnit"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateObjectPresets",
+      "address": "006661a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006661a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "CreateObjectPresets",
+        "CoordsRoomToWorld",
+        "AllocPresetUnit"
+      ],
+      "usedTypes": [
+        "D2DrlgMapStrc",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateObjectPresets2",
+      "address": "00666220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666220"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "CreateObjectPresets2",
+        "CoordsRoomToWorld",
+        "AllocPresetUnit",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2DrlgMapStrc",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CreateObjectPresetsForMap",
+      "address": "006663c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006663c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "CreateObjectPresetsForMap",
+        "FillExternalCellFlags",
+        "GetGridFlags",
+        "CreateObjectPresets",
+        "CreateObjectPresets2",
+        "ResetGrid"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgMapStrc",
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CreateMonsterPreset",
+      "address": "006664a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006664a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "CreateMonsterPreset",
+        "CoordsRoomToWorld",
+        "AllocPresetUnit"
+      ],
+      "usedTypes": [
+        "D2DrlgMapStrc",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_FreePresetRoomGrids",
+      "address": "00666520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666520"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_FreePresetRoomGrids",
+        "DRLGGRID_FreeGrid"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_FreeRoomExDataPresetArea",
+      "address": "006665b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006665b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGROOMEX_FreeRoomExDataPresetArea",
+        "DRLGPRESET_FreePresetRoomGrids",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_FreePresetRoomGridsFromRoomEx",
+      "address": "00666610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666610"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_FreePresetRoomGridsFromRoomEx",
+        "DRLGPRESET_FreePresetRoomGrids"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_AllocRoomExDataPresetArea",
+      "address": "00666630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666630"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGROOMEX_AllocRoomExDataPresetArea",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2DrlgPresetRoomStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_AllocRoomExTypePreset",
+      "address": "00666680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666680"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGROOMEX_AllocRoomExTypePreset",
+        "DRLGROOMEX_AllocRoomEx",
+        "AddRoomExToLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgLevelStrc",
+        "D2DrlgMapStrc",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_AddAndSetPresetUnits",
+      "address": "00666710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666710"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_AddAndSetPresetUnits",
+        "CoordsRoomToWorld",
+        "AreXYInsideCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "D2DrlgMapStrc",
+        "D2PresetUnitStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_InitGridsFromDS1File",
+      "address": "006667d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006667d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_InitGridsFromDS1File",
+        "DRLGGRID_InitGridFromTileData",
+        "FlagOperations",
+        "AlterAllGridFlags",
+        "DRLGPRESET_AddAndSetPresetUnits"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgGridTileDataStrc",
+        "D2DrlgMapStrc",
+        "D2RoomExStrc",
+        "void *"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_AllocRoomExData_WorldPointsBurialGrounds",
+      "address": "00666990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666990"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGROOMEX_AllocRoomExData_WorldPointsBurialGrounds",
+        "AllocServerMemory",
+        "GetGridFlags",
+        "CoordsRoomToWorld"
+      ],
+      "usedTypes": [
+        "D2DrlgPresetRoomStrc",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetTombStoneTileCoords",
+      "address": "00666a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666a80"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "GetTombStoneTileCoords"
+      ],
+      "usedTypes": [
+        "D2CoordStrc *",
+        "D2DrlgPresetRoomStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_InitializePresetRoom",
+      "address": "00666ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666ac0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGROOMEX_InitializePresetRoom",
+        "DRLGROOMTILE_AllocRoomTileGrid",
+        "FillGrid",
+        "DRLGROOMTILE_CountTilesFromGrid",
+        "DRLGROOMTILE_CountAnimTilesFromGrid",
+        "DRLGROOMTILE_CountWallTilesFromGrid",
+        "DRLGROOMTILE_AllocTileDataArrays",
+        "InitRoomTiles",
+        "DRLGROOMTILE_AllocAnimTiles",
+        "AllocDrlgCoordList",
+        "DRLGLOGIC_BuildRoomCoordList",
+        "ResetGrid",
+        "DRLGROOMEX_AllocRoomExData_WorldPointsBurialGrounds"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgMapStrc",
+        "D2DrlgPresetRoomStrc",
+        "D2DrlgTileGridStrc",
+        "D2LvlPrestTxt",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_InitDrlgMapPopLocations",
+      "address": "00666e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666e00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_InitDrlgMapPopLocations"
+      ],
+      "usedTypes": [
+        "D2DrlgMapStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_SetPickedFileInDrlgMap",
+      "address": "00666ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666ec0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_SetPickedFileInDrlgMap"
+      ],
+      "usedTypes": [
+        "D2DrlgMapStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_AllocDrlgMap",
+      "address": "00666ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666ed0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_AllocDrlgMap",
+        "AllocServerMemory",
+        "memset",
+        "TXT_LvlPrest_GetLine"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgLevelStrc",
+        "D2DrlgMapStrc",
+        "D2LvlPrestTxt",
+        "D2SeedStrc",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSizeX",
+      "address": "00666fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666fd0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "GetSizeX",
+        "TXT_LvlPrest_GetLine"
+      ],
+      "usedTypes": [
+        "D2LvlPrestTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSizeY",
+      "address": "00666fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00666fe0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "GetSizeY",
+        "TXT_LvlPrest_GetLine"
+      ],
+      "usedTypes": [
+        "D2LvlPrestTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_GetPickedFilePathFromRoomEx",
+      "address": "00667010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667010"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_GetPickedFilePathFromRoomEx"
+      ],
+      "usedTypes": [
+        "D2DrlgMapStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_GetDrlgFileSize",
+      "address": "00667030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667030"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_GetDrlgFileSize"
+      ],
+      "usedTypes": [
+        "D2DrlgPresetRoomStrc",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_UpdatePopTiles",
+      "address": "00667060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667060"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_UpdatePopTiles",
+        "AreXYInsideCoordinates",
+        "GetIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UpdatePops",
+      "address": "006671e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006671e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "UpdatePops",
+        "GetTickCount",
+        "AreXYInsideCoordinates",
+        "DRLGPRESET_UpdatePopTiles"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "D2DrlgMapStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGLEVEL_InitializeWithPresetArea",
+      "address": "00667430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667430"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGLEVEL_InitializeWithPresetArea",
+        "AllocServerMemory",
+        "TXT_LvlPrest_FindLineByLevelId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RANDOM_RandomNumberSelector",
+        "DRLGLEVEL_SetLevelSizeAndAlignVsDependentLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataPresetArea",
+        "D2DrlgLevelStrc",
+        "D2LvlPrestTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_FreePresetLevelData",
+      "address": "006674d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006674d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_FreePresetLevelData",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "CopyPresetUnit",
+      "address": "00667510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667510"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "CopyPresetUnit",
+        "AllocServerMemory",
+        "DRLGPRESET_CopyMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESETUNIT_FreeDrlgPresetUnit",
+      "address": "006675d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006675d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESETUNIT_FreeDrlgPresetUnit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_AddPresetUnitToDrlgMap",
+      "address": "00667620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667620"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_AddPresetUnitToDrlgMap",
+        "CoordsRoomToWorld",
+        "MONSTERTBLS_ReturnZero",
+        "CopyPresetUnit"
+      ],
+      "usedTypes": [
+        "D2DrlgMapStrc",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "int64_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_CreateMonsterPresets",
+      "address": "00667890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667890"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_CreateMonsterPresets",
+        "AllocDrlgFile",
+        "DRLGPRESET_AddPresetUnitToDrlgMap",
+        "CreateMonsterPreset",
+        "CreateObjectPresetsForMap"
+      ],
+      "usedTypes": [
+        "D2DrlgMapStrc",
+        "D2DrlgStrc",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_BuildPresetArea",
+      "address": "00667970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667970"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_BuildPresetArea",
+        "DRLGWARP_GetVisArrayFromLevelId",
+        "DRLGWARP_GetWarpDestinationFromArray",
+        "AlterAllGridFlags",
+        "AllocDrlgFile",
+        "DRLGPRESET_AddPresetUnitToDrlgMap",
+        "AllocServerMemory",
+        "memset",
+        "FillExternalCellFlags",
+        "GetGridFlags",
+        "AlterGridFlag",
+        "ResetGrid",
+        "DRLGPRESET_InitDrlgMapPopLocations",
+        "TXT_Objects_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgFileStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgLevelStrc",
+        "D2DrlgMapStrc",
+        "D2DrlgStrc",
+        "D2LvlPrestTxt",
+        "D2ObjectsTxt",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "BuildArea",
+      "address": "00667ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00667ed0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "BuildArea",
+        "FillGrid",
+        "DRLGPRESET_BuildPresetArea",
+        "GetGridFlags",
+        "DRLGROOMEX_AllocRoomExTypePreset",
+        "ResetGrid",
+        "DRLGROOMEX_AllocRoomEx",
+        "AddRoomExToLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgLevelStrc",
+        "D2DrlgMapStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_InitializeRoomEx",
+      "address": "00668100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00668100"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_InitializeRoomEx",
+        "TXT_LvlPrest_FindLineByLevelId",
+        "DRLGPRESET_AllocDrlgMap",
+        "BuildArea",
+        "DRLGWARP_GetVisArrayFromLevelId",
+        "GetLevelAndAlloc",
+        "InitLevel",
+        "InitRoomEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgMapStrc",
+        "D2LvlPrestTxt",
+        "D2RoomExStrc",
+        "eD2LevelId",
+        "fTownAutoMap"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_FreeDrlgFile",
+      "address": "00668240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00668240"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_FreeDrlgFile",
+        "FreeClientMemory",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2MapAIStrc",
+        "D2PresetUnitStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_ReleaseDrlgFile",
+      "address": "00668300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00668300"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_ReleaseDrlgFile",
+        "DRLGPRESET_FreeDrlgFile",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgFileCacheNodeStrc",
+        "D2DrlgFileStrc *"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_FreeDrlgMapList",
+      "address": "006683d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006683d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_FreeDrlgMapList",
+        "DRLGGRID_FreeGrid",
+        "DRLGVER_FreeVertices",
+        "DRLGPRESET_ReleaseDrlgFile",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgMapStrc",
+        "D2MapAIStrc",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc"
+      ]
+    },
+    {
+      "name": "DRLGPRESET_FindPresetTypeIndex",
+      "address": "0066d960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d960"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "DRLGPRESET_FindPresetTypeIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6cb010",
+      "address": "006cb010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb010"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "StaticInit_6cb010",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_0096d610",
+      "address": "006cb4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb4e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Preset",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_0096d610"
+      ]
+    }
+  ]
+}

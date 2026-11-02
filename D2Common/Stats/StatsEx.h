@@ -59,7 +59,7 @@ int32_t __stdcall thunk_STATLIST_GetMinimalStatValueShifted(struct D2StatListExS
 int32_t __stdcall ITEM_GetMinimalStatValueShifted(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer);
 int __stdcall STATLIST_GetStatBonusFromList(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer);
 int32_t __stdcall STATLIST_GetStatBonusFromLists(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer);
-int32_t __stdcall STATLIST_CalcStatWithPercentBonus(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, eD2UnitStat eStat, int32_t nParam);
+int32_t __stdcall STATLIST_CalcStatWithPercentBonus(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, eD2UnitStat eStat, int32_t bIncludeBonus);
 int32_t __stdcall UNITS_CalcUnitStatWithPercentBonus(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, eD2UnitStat ePercentStat, int32_t nValue);
 int32_t __stdcall STATLIST_GetStatValueByIndex(struct D2StatListExStrc * pStatList, int32_t nIndex);
 struct D2StatListExStrc * __stdcall GetStatListByState(struct D2StatListExStrc * pStatsEx, eD2States eState);
@@ -85,9 +85,9 @@ void __stdcall STATLIST_SetUnitState(struct D2UnitStrc * pUnit, eD2States eState
 eD2States __stdcall GetStateBitFlag(struct D2UnitStrc * pUnit, eD2States eState);
 int * __stdcall GetStateFlags(struct D2UnitStrc * pUnit);
 int * __stdcall STATLIST_GetUnitGfxFlags(struct D2UnitStrc * pUnit);
-int32_t __stdcall STATLIST_CopyStatsToBuffer(struct D2UnitStrc * pUnit, struct D2StatStrc * pStatBuf, int32_t nParam);
+int32_t __stdcall STATLIST_CopyStatsToBuffer(struct D2UnitStrc * pUnit, struct D2StatStrc * pStatBuf, int32_t nMaxCount);
 int32_t __stdcall CopyStatsToBuffer(struct D2StatListExStrc * pStatListEx, struct D2StatStrc * pOutput, int32_t nOutputSize);
-void __stdcall STATLIST_SetExpireFunction(struct D2StatListExStrc * pStatsEx, PFN_StatExpireCallback pParam);
+void __stdcall STATLIST_SetExpireFunction(struct D2StatListExStrc * pStatsEx, PFN_StatExpireCallback pfnExpire);
 int __stdcall STATLIST_GetBaseStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer);
 int32_t __stdcall GetTxtMaxHp(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetTxtMaxMana(struct D2UnitStrc * pUnit);
@@ -105,12 +105,12 @@ void __stdcall SetSkillId(struct D2StatListExStrc * pStatsEx, eD2Skills eSkill);
 eD2Skills __stdcall GetSkillId(struct D2StatListExStrc * pStatList);
 void __stdcall SetSkillLevel(struct D2StatListExStrc * pStatsEx, int32_t nSkillLevel);
 int __stdcall GetSkillLevel(struct D2StatListExStrc * pStatListEx);
-int32_t __stdcall STATSEX_CopyStatPairsFromStatList(struct D2StatListExStrc * nStatListPtr, uint32_t nParam, struct D2StatStrc * pOutStatPairs, int32_t nParam2);
-int32_t __stdcall STATLIST_GetItemStatBonusValues(struct D2UnitStrc * pItem, uint32_t nParam, struct D2StatStrc * pOutStatPairs, int32_t nParam2);
+int32_t __stdcall STATSEX_CopyStatPairsFromStatList(struct D2StatListExStrc * nStatListPtr, uint32_t nStatId, struct D2StatStrc * pOutStatPairs, int32_t nMaxCount);
+int32_t __stdcall STATLIST_GetItemStatBonusValues(struct D2UnitStrc * pItem, uint32_t nStatIndex, struct D2StatStrc * pOutStatPairs, int32_t nMaxCount);
 // Calculates the combined value of a stat for a D2StatListExStrc, including all ItemStatCost formula operations (op types 1-13). Reads base value from CalcFullStatFromChildren, then applies complex stat formulas involving other stats, character class bonuses, and time-of-day modifiers.
 int32_t __fastcall STATLIST_CalcCombinedStatValue(struct D2StatListExStrc * pStatList, int32_t nStatShifted);
 // Recursively computes and stores an item-stat-cost stat value that has dependent/related stats (op formula). pStatList=stat list, nParam=stat id packed in high word, pItemStatCostStat=pointer into the ItemStatCost record for this stat, pUnitOwner=owner. First computes the combined base value; if the stat has no related-stats flag (offset+0x51==0) it just stores and returns. Otherwise it recurses over up to 3 related stats, and per the itemstatcost.txt "op" column (byte at +0x2a, enum eD2ItemStatOp) decides whether the owner/attached unit qualifies; if all related contributions are zero it then propagates the value to a secondary list of up to 0x40 stats. Returns the stat value. Mutates stat-list entries via STATLIST_SetFullStatValue.
-int32_t __fastcall STATLIST_ApplyComplexStatFormula(struct D2StatListExStrc * pStatList, int32_t nParam, uint16_t * pItemStatCostStat, struct D2UnitStrc * pUnitOwner);
+int32_t __fastcall STATLIST_ApplyComplexStatFormula(struct D2StatListExStrc * pStatList, int32_t nStatKey, uint16_t * pItemStatCostStat, struct D2UnitStrc * pUnitOwner);
 // Propagates a stat change delta up the parent chain. For each parent D2StatListExStrc, updates the full stat array via PropagateStatDelta or ApplyComplexStatFormula. Stops propagation at inactive (0x2000) or NOCALCBONUS (0x40000000) boundaries.
 void __fastcall STATLIST_PropagateStatChange(struct D2StatListExStrc * pStatsEx, int32_t nShiftedStat, int32_t nDelta, struct D2UnitStrc * pUnit);
 // Detaches a stat list (e.g. an item's or a state's contribution) from its parent unit's stat tree and rolls back its effect. Unlinks the node from parent active/inactive heads and the sibling prev/next chain, clears its attached unit. Unless the list is flagged ephemeral (0x2000): re-applies any Op4/Op5-dependent complex stat formulas, then propagates the negation of each of its (base or full) stats up to the parent via STATLIST_PropagateStatChange (skipping damage-related stats when the 0x40000000 flag is set), and finally invokes the list's fpExpire callback if it had an attached unit. Pure side-effect on the stat tree; no return.
@@ -153,10 +153,10 @@ int32_t __stdcall UNITS_CalcCombinedStatValue(struct D2UnitStrc * pUnit, eD2Unit
 // Activates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently inactive (NOCALCBONUS flag set), clears the flag and propagates all damage-related stats upward. Otherwise delegates to STATLIST_SetItemStatActive. Returns 1 on success, 0 if already active or not attached.
 void __stdcall STATLIST_ActivateItemStats(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 void __stdcall STATLIST_SetItemStatActive(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t bActive);
-void __stdcall STATLIST_ToggleStateDisabled(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+void __stdcall STATLIST_ToggleStateDisabled(struct D2UnitStrc * pUnit, eD2States eState, int32_t bDisabled);
 // Deactivates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently active (NOCALCBONUS flag clear), sets the flag and propagates all damage-related stats with negated deltas to remove their effect. Otherwise delegates to STATLIST_SetItemStatActive(0). Returns 1 on success, 0 if already inactive or not attached.
 void __stdcall STATLIST_DeactivateItemStats(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
-BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nParam);
+BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nSkillId);
 // Always-zero stub used as the fnSkillCalcMethod callback where a formula context has no
 // stat source.
 // @abi __fastcall int(int32_t nCalcCode @ECX, void *pContext @EDX). Body is XOR EAX,EAX / RET.
@@ -167,9 +167,9 @@ BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nParam);
 // a stub that purges nothing is correct here and why RET 0 does not discriminate. Had the
 // dispatcher been __stdcall(2) it would have pushed 8 bytes that this RET never removes.
 int __fastcall nullsub(int32_t nCalcCode, void * pContext);
-int32_t __fastcall MATH_Min(int32_t nParam1, int32_t nParam2, uint32_t dwParam1, uint32_t dwParam2);
-int32_t __fastcall MATH_Max(int32_t nParam1, int32_t nParam2, uint32_t dwParam1, uint32_t dwParam2);
-int * __fastcall MATH_RandomRange(int * pnParam, int32_t nParam, uint32_t nRangeMax, int * pSeed);
+int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2);
+int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t dwParam1, uint32_t dwParam2);
+int * __fastcall MATH_RandomRange(int * nMin, int32_t nMax, uint32_t nRangeMax, int * pSeed);
 int32_t __fastcall UNITS_GetStatValueByType(eD2UnitStat eUnitStat, int32_t nQueryMode, uint32_t dwContext, struct D2UnitStrc * * ppUnit);
 // 13 internal functions (defined in .cpp)
 

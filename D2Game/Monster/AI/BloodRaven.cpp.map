@@ -1,0 +1,39 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monster/AI/BloodRaven.cpp",
+  "functions": [
+    {
+      "name": "AI_BloodRaven_MoveRandomNearTarget",
+      "address": "005df680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005df680"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::BloodRaven",
+      "calledFunctions": [
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "AI_BloodRaven_MoveRandomNearTarget",
+        "GetXPos",
+        "GetYPos",
+        "RANDOM_RandomNumberSelector",
+        "UNIT_GetUnitState",
+        "ResetEngagedCombatAndStats",
+        "SetStepNum",
+        "SetCurrentSkill"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

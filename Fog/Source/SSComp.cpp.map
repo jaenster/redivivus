@@ -1,0 +1,78 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Source/SSComp.cpp",
+  "functions": [
+    {
+      "name": "COMPRESS_HeapSiftDown",
+      "address": "0040abf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040abf0"
+        }
+      ],
+      "namespace": "Fog::Source::SSComp",
+      "calledFunctions": [
+        "COMPRESS_HeapSiftDown"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_HeapSort",
+      "address": "0040ac60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040ac60"
+        }
+      ],
+      "namespace": "Fog::Source::SSComp",
+      "calledFunctions": [
+        "COMPRESS_HeapSort",
+        "COMPRESS_HeapSiftDown"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_BuildHuffmanTree",
+      "address": "0040aca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040aca0"
+        }
+      ],
+      "namespace": "Fog::Source::SSComp",
+      "calledFunctions": [
+        "COMPRESS_BuildHuffmanTree"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_BuildHuffmanDecodeTable",
+      "address": "0040adb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040adb0"
+        }
+      ],
+      "namespace": "Fog::Source::SSComp",
+      "calledFunctions": [
+        "COMPRESS_BuildHuffmanDecodeTable",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

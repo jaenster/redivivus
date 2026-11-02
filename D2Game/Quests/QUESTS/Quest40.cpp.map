@@ -1,0 +1,156 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/Quest40.cpp",
+  "functions": [
+    {
+      "name": "TXT_SuperUniquesHardcoded_GetSuperUniqueIndex",
+      "address": "00586b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586b30"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest40",
+      "calledFunctions": [
+        "TXT_SuperUniquesHardcoded_GetSuperUniqueIndex"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q40_Callback00_NpcActivate",
+      "address": "00586b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586b50"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest40",
+      "calledFunctions": [
+        "Q40_Callback00_NpcActivate",
+        "PLAYER_CheckIfSpokenWithNPC",
+        "AddGossipMessageOnMonster"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "eD2MonsterClassId"
+      ]
+    },
+    {
+      "name": "Q40_StatusFilter",
+      "address": "00586c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586c40"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest40",
+      "calledFunctions": [
+        "Q40_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q40_ActiveFilter",
+      "address": "00586c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00586c50"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest40",
+      "calledFunctions": [
+        "Q40_ActiveFilter",
+        "PLAYER_CheckIfSpokenWithNPC"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q40_Callback11_ScrollMessage",
+      "address": "0058e990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058e990"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest40",
+      "calledFunctions": [
+        "Q40_Callback11_ScrollMessage",
+        "PLAYER_SetSpokenWithNPC",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "eD2MonsterClassId",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Q40_InitData",
+      "address": "0058ea50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058ea50"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest40",
+      "calledFunctions": [
+        "Q40_InitData",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Objects_InitFn66",
+      "address": "0058eac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058eac0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest40",
+      "calledFunctions": [
+        "Objects_InitFn66",
+        "GetQuestDataByQuestNoInternal",
+        "Q33_SequenceFilter",
+        "QUEST_SpawnMonsterNearCoords",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2MapAIStrc *",
+        "D2ObjectInitFnArg",
+        "D2QuestDataA5Q3Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    }
+  ]
+}

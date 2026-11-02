@@ -86,7 +86,7 @@ void __fastcall Q07_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A1Q7 Q07_StatusFilter: always returns false. This hidden Akara-gossip slot has no quest-log/status-panel entry, so it never reports a displayable status. Trivial stub.
-bool __fastcall Q07_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown) {
+bool __fastcall Q07_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 

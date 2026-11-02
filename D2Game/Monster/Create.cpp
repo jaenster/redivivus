@@ -58,7 +58,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Common/DATATBLS/ItemStats.h"
-#include "D2Common/Unit.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "Fog/Src/Safesock.h"
 
@@ -67,14 +66,14 @@
 
 namespace D2Game::Monster::Create {
 
-int * * __fastcall MONSTER_FindUnitInPartySlot(int * pnParam, int32_t nParam) {
+int * * __fastcall MONSTER_FindUnitInPartySlot(int * pUnit, int32_t nParam) {
     int** pPartyNode;
-    if (!(nParam && pnParam && (!*pnParam || *pnParam == 1) && pnParam[0x34] != 0xb)) {
+    if (!(nParam && pUnit && (!*pUnit || *pUnit == 1) && pUnit[0x34] != 0xb)) {
       return nullptr;
     }
 
-    for (pPartyNode = *(int***)(nParam + 0x10f8 + pnParam[0x34] * 4); pPartyNode; pPartyNode = (int**)pPartyNode[2]) {
-      if (*pPartyNode == pnParam) {
+    for (pPartyNode = *(int***)(nParam + 0x10f8 + pUnit[0x34] * 4); pPartyNode; pPartyNode = (int**)pPartyNode[2]) {
+      if (*pPartyNode == pUnit) {
         return pPartyNode;
       }
     }
@@ -82,12 +81,12 @@ int * * __fastcall MONSTER_FindUnitInPartySlot(int * pnParam, int32_t nParam) {
     return nullptr;
 }
 
-void __fastcall MONSTER_SetClearPartyFlags(int32_t nParam, int * pnParam, uint32_t dwFlagMask, int32_t bSet) {
-    if (!(nParam && pnParam && (!*pnParam || *pnParam == 1))) {
+void __fastcall MONSTER_SetClearPartyFlags(int32_t nParam, int * pUnit, uint32_t dwFlagMask, int32_t bSet) {
+    if (!(nParam && pUnit && (!*pUnit || *pUnit == 1))) {
       return;
     }
 
-    int** pPartySlot = MONSTER_FindUnitInPartySlot(pnParam, nParam);
+    int** pPartySlot = MONSTER_FindUnitInPartySlot(pUnit, nParam);
     if (!pPartySlot) {
       return;
     }
@@ -390,14 +389,16 @@ D2UnitStrc * __fastcall SpawnMonsterAtUnit(::SGAMEDATA * pGame, D2UnitStrc * pUn
     sCreateParams.nSpawnRadius = nSpawnRadius;
     sCreateParams.pGame = pGame;
     sCreateParams.pCoordList = 0;
+    int nXValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sCreateParams.nX = pUnit->pPath.pStaticPath->nPosX;
+      nXValue = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      sCreateParams.nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      sCreateParams.nX = 0;
+      nXValue = 0;
     }
 
+    sCreateParams.nX = nXValue;
     eD2UnitType eUnitTypeCheck = pUnit->eUnitType;
     if (eUnitTypeCheck != UNIT_OBJECT && ((int)eUnitTypeCheck <= 3 || (int)eUnitTypeCheck > 5)) {
       D2UnitStrc* pSpawned;
@@ -430,7 +431,7 @@ D2UnitStrc * __fastcall SpawnMonsterBase(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Spawns nMinionCount minions of nClassId near pUnit, assigning each as a minion owned by pUnit's GUID. Calls SpawnMonster for each slot, then AssignMinionOwner + AddMinionToList. Returns 1 (true) if at least one minion spawned successfully, 0 if pUnit is null or none spawned.
-void __fastcall SpawnMinions_BySlot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t dwParam, int32_t nMinionCount, int16_t wParam) {
+void __fastcall SpawnMinions_BySlot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int32_t nMinionCount, int16_t wFlags) {
     bool bSpawnedAny;
     if (!pUnit) {
       return;
@@ -443,7 +444,7 @@ void __fastcall SpawnMinions_BySlot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
 
     do {
       D2UnitStrc* pMinion;
-      pMinion = SpawnMonsterAtUnit(pGame, pUnit, nClassId, eMode, dwParam, wParam);
+      pMinion = SpawnMonsterAtUnit(pGame, pUnit, nClassId, eMode, nSpawnRadius, wFlags);
       if (pMinion) {
         Ai::AiGeneral::AssignMinionOwner(pGame, pMinion, nUnitGUID, UNIT_MONSTER, 0, 0);
         Ai::AiGeneral::AddMinionToList(pGame, pUnit, pMinion);
@@ -453,7 +454,7 @@ void __fastcall SpawnMinions_BySlot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
     } while (nMinionCount);
 }
 
-BOOL __fastcall SpawnMinions_ByPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nMinionCount, int32_t nSpawnX, int16_t wParam) {
+BOOL __fastcall SpawnMinions_ByPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nMinionCount, int32_t nSpawnX, int16_t wFlags) {
     // Static local variables (originally global data)
     static POINT POINT_ARRAY_006e2cf0[12] = {
     {
@@ -556,7 +557,7 @@ BOOL __fastcall SpawnMinions_ByPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       sCreateMonsterParams.nGUID = 0;
       sCreateMonsterParams.pCoordList = 0;
       sCreateMonsterParams.nSpawnRadius = -1;
-      sCreateMonsterParams.nFlags = wParam;
+      sCreateMonsterParams.nFlags = wFlags;
       sCreateMonsterParams.nClassId = nClassId;
       sCreateMonsterParams.eMode = eMode;
       sCreateMonsterParams.pRoom = pRoom;
@@ -601,7 +602,7 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
     uint32_t nTileWalkFlags;
     D2SeedStrc* pSeed;
     POINT* pDiagOffset;
-    D2DrlgRoomCoordsStrc local_34;
+    D2DrlgRoomCoordsStrc sRoomCoords;
     uint32_t nFloorTileCount;
     uint32_t nSavedSearchIdx;
     int nX;
@@ -624,7 +625,7 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
       nSearchTileIdx = 1;
     }
 
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &local_34);
+    D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
     uint32_t nStopTileIdx = nSearchTileIdx - 1;
     uint32_t nWrapAroundIdx = nStopTileIdx;
     if (nSearchTileIdx == nStopTileIdx) {
@@ -638,8 +639,8 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
         nSavedSearchIdx = nSearchTileIdx;
         nTileWalkFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((int32_t)pFloorTiles[nSearchTileIdx].pTileLibraryEntry);
         if (nTileWalkFlags & 2) {
-          nY = (pFloorTile[nSearchTileIdx].nPosY + local_34.sTileRect.top) * 5 + 3;
-          nX = (pFloorTile[nSearchTileIdx].nPosX + local_34.sTileRect.left) * 5 + 3;
+          nY = (pFloorTile[nSearchTileIdx].nPosY + sRoomCoords.sTileRect.top) * 5 + 3;
+          nX = (pFloorTile[nSearchTileIdx].nPosX + sRoomCoords.sTileRect.left) * 5 + 3;
           eCollision = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, nX, nY, COLLIDE_MONSTER);
           nStopTileIdx = nWrapAroundIdx;
           nSearchTileIdx = nSavedSearchIdx;
@@ -754,7 +755,7 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
     uint32_t nAlignPad;
     int nWalkY;
     bool bRngOdd;
-    D2DrlgRoomCoordsStrc local_98;
+    D2DrlgRoomCoordsStrc sRoomCoords;
     uint32_t nRngCarry1;
     uint32_t nRngCarry2;
     uint32_t nRngCarry3;
@@ -832,11 +833,11 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
     D2RoomStrc* pRoom;
     pRoom = pWorkingRoom;
     if (!pCoordList) {
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pWorkingRoom, &local_98);
-      sSpawnRect.bottom = local_98.dwYSize + local_98.dwYStart;
-      sSpawnRect.right = local_98.dwXSize + local_98.dwXStart;
-      sSpawnRect.left = local_98.dwXStart;
-      sSpawnRect.top = local_98.dwYStart;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pWorkingRoom, &sRoomCoords);
+      sSpawnRect.bottom = sRoomCoords.dwYSize + sRoomCoords.dwYStart;
+      sSpawnRect.right = sRoomCoords.dwXSize + sRoomCoords.dwXStart;
+      sSpawnRect.left = sRoomCoords.dwXStart;
+      sSpawnRect.top = sRoomCoords.dwYStart;
       nGridZoneIdx = 0;
     } else {
       /* RECT * lprcSrc for CopyRect */ /* LPRECT lprcDst for CopyRect */ CopyRect(&sSpawnRect, &pCoordList->pRect);
@@ -1037,18 +1038,18 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
 }
 
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPos(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, uint32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
-    D2UnknownCreateMonsterStrc local_2c;
-    local_2c.pRoom = pRoom;
-    local_2c.pGame = pGame;
-    local_2c.nGUID = 0;
-    local_2c.nClassId = nClassId;
-    local_2c.nSpawnRadius = nSpawnRadius;
-    local_2c.pCoordList = 0;
-    local_2c.nX = nX;
-    local_2c.eMode = eMode;
-    local_2c.nFlags = nFlags;
-    local_2c.nY = nY;
-    D2UnitStrc* pUnit = CreateMonster(&local_2c);
+    D2UnknownCreateMonsterStrc sMonsterSpawnData;
+    sMonsterSpawnData.pRoom = pRoom;
+    sMonsterSpawnData.pGame = pGame;
+    sMonsterSpawnData.nGUID = 0;
+    sMonsterSpawnData.nClassId = nClassId;
+    sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
+    sMonsterSpawnData.pCoordList = 0;
+    sMonsterSpawnData.nX = nX;
+    sMonsterSpawnData.eMode = eMode;
+    sMonsterSpawnData.nFlags = nFlags;
+    sMonsterSpawnData.nY = nY;
+    D2UnitStrc* pUnit = CreateMonster(&sMonsterSpawnData);
     return pUnit;
 }
 
@@ -1064,14 +1065,16 @@ D2UnitStrc * __fastcall SpawnMonsterAtCoordList(::SGAMEDATA * pGame, D2RoomCoord
     sSpawnParams.nSpawnRadius = nSpawnRadius;
     sSpawnParams.pGame = pGame;
     sSpawnParams.pCoordList = pCoordList;
+    int nXValue;
     if (eUnitTypeX == UNIT_OBJECT || (int)eUnitTypeX > 3 && (int)eUnitTypeX <= 5) {
-      sSpawnParams.nX = pUnit->pPath.pStaticPath->nPosX;
+      nXValue = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      sSpawnParams.nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      sSpawnParams.nX = 0;
+      nXValue = 0;
     }
 
+    sSpawnParams.nX = nXValue;
     eD2UnitType eUnitTypeY = pUnit->eUnitType;
     if (eUnitTypeY != UNIT_OBJECT && ((int)eUnitTypeY <= 3 || (int)eUnitTypeY > 5)) {
       if (pUnit->pPath.pDynamicPath) {
@@ -1092,66 +1095,66 @@ D2UnitStrc * __fastcall SpawnMonsterAtCoordList(::SGAMEDATA * pGame, D2RoomCoord
 
 // Thin wrapper: builds a spawn-args struct and tail-calls CreateMonster (already fixed to return D2UnitStrc*), but drops the call's result as a bare statement. Passes it straight through.
 D2UnitStrc * __fastcall SpawnMonsterInRoomCoordList(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2RoomCoordListStrc * pCoordList, int32_t nX, int32_t nY, uint32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
-    D2UnknownCreateMonsterStrc local_2c;
-    local_2c.nClassId = nClassId;
-    local_2c.eMode = eMode;
-    local_2c.pRoom = pRoom;
-    local_2c.pGame = pGame;
-    local_2c.nSpawnRadius = nSpawnRadius;
-    local_2c.pCoordList = pCoordList;
-    local_2c.nFlags = nFlags;
-    local_2c.nGUID = 0;
-    local_2c.nX = nX;
-    local_2c.nY = nY;
-    D2UnitStrc* pMonster = CreateMonster(&local_2c);
+    D2UnknownCreateMonsterStrc sMonsterSpawnData;
+    sMonsterSpawnData.nClassId = nClassId;
+    sMonsterSpawnData.eMode = eMode;
+    sMonsterSpawnData.pRoom = pRoom;
+    sMonsterSpawnData.pGame = pGame;
+    sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
+    sMonsterSpawnData.pCoordList = pCoordList;
+    sMonsterSpawnData.nFlags = nFlags;
+    sMonsterSpawnData.nGUID = 0;
+    sMonsterSpawnData.nX = nX;
+    sMonsterSpawnData.nY = nY;
+    D2UnitStrc* pMonster = CreateMonster(&sMonsterSpawnData);
     return pMonster;
 }
 
 // Thin wrapper: builds a spawn-args struct and tail-calls CreateMonster (already fixed to return D2UnitStrc*), but drops the call's result as a bare statement. Passes it straight through.
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPosSimple(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int16_t nFlags) {
-    D2UnknownCreateMonsterStrc local_2c;
-    local_2c.pGame = pGame;
-    local_2c.nGUID = 0;
-    local_2c.nClassId = nClassId;
-    local_2c.pRoom = pRoom;
-    local_2c.pCoordList = 0;
-    local_2c.nX = nX;
-    local_2c.eMode = eMode;
-    local_2c.nSpawnRadius = -1;
-    local_2c.nFlags = nFlags;
-    local_2c.nY = nY;
-    D2UnitStrc* pDVar1 = CreateMonster(&local_2c);
-    return pDVar1;
+    D2UnknownCreateMonsterStrc sMonsterSpawnData;
+    sMonsterSpawnData.pGame = pGame;
+    sMonsterSpawnData.nGUID = 0;
+    sMonsterSpawnData.nClassId = nClassId;
+    sMonsterSpawnData.pRoom = pRoom;
+    sMonsterSpawnData.pCoordList = 0;
+    sMonsterSpawnData.nX = nX;
+    sMonsterSpawnData.eMode = eMode;
+    sMonsterSpawnData.nSpawnRadius = -1;
+    sMonsterSpawnData.nFlags = nFlags;
+    sMonsterSpawnData.nY = nY;
+    D2UnitStrc* pMonster = CreateMonster(&sMonsterSpawnData);
+    return pMonster;
 }
 
 // Thin wrapper: builds a spawn-args struct and tail-calls CreateMonster (already fixed to return D2UnitStrc*), but drops the call's result as a bare statement. Passes it straight through.
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPosGuid(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nGUID, int32_t nSpawnRadius, int16_t nFlags) {
-    D2UnknownCreateMonsterStrc local_2c;
-    local_2c.nGUID = nGUID;
-    local_2c.nClassId = nClassId;
-    local_2c.pRoom = pRoom;
-    local_2c.pGame = pGame;
-    local_2c.eMode = eMode;
-    local_2c.nSpawnRadius = nSpawnRadius;
-    local_2c.nX = nX;
-    local_2c.pCoordList = 0;
-    local_2c.nFlags = nFlags;
-    local_2c.nY = nY;
-    D2UnitStrc* pDVar1 = CreateMonster(&local_2c);
-    return pDVar1;
+    D2UnknownCreateMonsterStrc sMonsterSpawnData;
+    sMonsterSpawnData.nGUID = nGUID;
+    sMonsterSpawnData.nClassId = nClassId;
+    sMonsterSpawnData.pRoom = pRoom;
+    sMonsterSpawnData.pGame = pGame;
+    sMonsterSpawnData.eMode = eMode;
+    sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
+    sMonsterSpawnData.nX = nX;
+    sMonsterSpawnData.pCoordList = 0;
+    sMonsterSpawnData.nFlags = nFlags;
+    sMonsterSpawnData.nY = nY;
+    D2UnitStrc* pMonster = CreateMonster(&sMonsterSpawnData);
+    return pMonster;
 }
 
-D2UnitStrc * __fastcall SpawnMonsterSetOwnOwner(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nParam, BOOL bTransferBoss, int16_t nParam2) {
+D2UnitStrc * __fastcall SpawnMonsterSetOwnOwner(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, BOOL bTransferBoss, int16_t wFlags) {
     D2UnknownCreateMonsterStrc sCreateParams;
     sCreateParams.pRoom = pRoom;
     sCreateParams.eMode = eMode;
     sCreateParams.nClassId = nClassId;
-    sCreateParams.nSpawnRadius = nParam;
+    sCreateParams.nSpawnRadius = nSpawnRadius;
     sCreateParams.nX = nX;
     sCreateParams.nGUID = 0;
     sCreateParams.pGame = pGame;
     sCreateParams.pCoordList = 0;
-    sCreateParams.nFlags = nParam2;
+    sCreateParams.nFlags = wFlags;
     sCreateParams.nY = nY;
     D2UnitStrc* pUnit = CreateMonster(&sCreateParams);
     if (!pUnit) {
@@ -1163,7 +1166,7 @@ D2UnitStrc * __fastcall SpawnMonsterSetOwnOwner(::SGAMEDATA * pGame, D2RoomStrc 
 }
 
 BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nY, int32_t nX, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int32_t nMinionCount, int16_t nFlags) {
-    D2UnknownCreateMonsterStrc local_38;
+    D2UnknownCreateMonsterStrc sMonsterSpawnData;
     BOOL bAnySpawned = 0;
     if (!pUnit) {
       return 0;
@@ -1177,17 +1180,17 @@ BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
 
     do {
       D2UnitStrc* pSpawnedMinion;
-      local_38.nClassId = nClassId;
-      local_38.nSpawnRadius = nSpawnRadius;
-      local_38.eMode = eMode;
-      local_38.pRoom = pRoom;
-      local_38.nY = nX;
-      local_38.nGUID = 0;
-      local_38.pGame = pGame;
-      local_38.pCoordList = 0;
-      local_38.nFlags = nFlags;
-      local_38.nX = nY;
-      pSpawnedMinion = CreateMonster(&local_38);
+      sMonsterSpawnData.nClassId = nClassId;
+      sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
+      sMonsterSpawnData.eMode = eMode;
+      sMonsterSpawnData.pRoom = pRoom;
+      sMonsterSpawnData.nY = nX;
+      sMonsterSpawnData.nGUID = 0;
+      sMonsterSpawnData.pGame = pGame;
+      sMonsterSpawnData.pCoordList = 0;
+      sMonsterSpawnData.nFlags = nFlags;
+      sMonsterSpawnData.nX = nY;
+      pSpawnedMinion = CreateMonster(&sMonsterSpawnData);
       if (pSpawnedMinion) {
         bAnySpawned = 1;
         Ai::AiGeneral::AssignMinionOwner(pGame, pSpawnedMinion, nOwnerGUID, UNIT_MONSTER, 0, 0);
@@ -1200,7 +1203,7 @@ BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
     return bAnySpawned;
 }
 
-BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nOffsetX, int32_t nOffsetY, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int * pParam, uint16_t nParam) {
+BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nOffsetX, int32_t nOffsetY, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int * pSpawnData, uint16_t wFlags) {
     uint32_t nSpawnType;
     D2UnitStrc* pSpawnedMonster;
     D2UnknownCreateMonsterStrc sCreateMonsterParams;
@@ -1209,19 +1212,19 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
     int nBossSpawnX;
     int nBossSpawnY;
     int* pCurrentEntry;
-    pCurrentEntry = pParam;
+    pCurrentEntry = pSpawnData;
     int32_t nResult;
     nResult = 0;
     D2UnitStrc* pLastBoss;
     pLastBoss = 0;
     uint32_t bIncrementClassIdPerSpawn;
-    bIncrementClassIdPerSpawn = (uint32_t)((*(uint8_t*)(pParam + 2) & 1) != 0);
+    bIncrementClassIdPerSpawn = (uint32_t)((*(uint8_t*)(pSpawnData + 2) & 1) != 0);
     uint32_t bUsePatternEntry;
-    bUsePatternEntry = (uint32_t)((nParam & 1) != 0);
+    bUsePatternEntry = (uint32_t)((wFlags & 1) != 0);
     int nSpawnEntryCount;
-    nSpawnEntryCount = *pParam;
-    int nParam2;
-    nParam2 = 0x0;
+    nSpawnEntryCount = *pSpawnData;
+    int nSpawnData;
+    nSpawnData = 0x0;
     if (nSpawnEntryCount <= 0) {
       return nResult;
     }
@@ -1263,7 +1266,7 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
             }
           break;
           case 0:
-            sCreateMonsterParams.nFlags = nParam;
+            sCreateMonsterParams.nFlags = wFlags;
           sCreateMonsterParams.nX = *pNextSpawnEntry + nOffsetX;
           sCreateMonsterParams.nY = pCurrentEntry[4] + nOffsetY;
           sCreateMonsterParams.nGUID = 0;
@@ -1280,7 +1283,7 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
 
           break;
           default:
-            sCreateMonsterParams.nFlags = nParam;
+            sCreateMonsterParams.nFlags = wFlags;
           sCreateMonsterParams.nX = *pNextSpawnEntry + nOffsetX;
           sCreateMonsterParams.nY = pCurrentEntry[4] + nOffsetY;
           nResult = 1;
@@ -1308,14 +1311,14 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
         nClassId++;
       }
 
-      nParam2++;
+      nSpawnData++;
       pCurrentEntry = pNextSpawnEntry;
-    } while (nParam2 < nSpawnEntryCount);
+    } while (nSpawnData < nSpawnEntryCount);
 
     return nResult;
 }
 
-BOOL __fastcall MONSTER_SpawnPredefinedAtUnit(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nUnused1, int32_t nUnused2, D2UnitStrc * pUnit, int32_t nParam, uint16_t nParam2) {
+BOOL __fastcall MONSTER_SpawnPredefinedAtUnit(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nUnused1, int32_t nUnused2, D2UnitStrc * pUnit, int32_t nClassId, uint16_t wFlags) {
     // Static local variables (originally global data)
     static uint8_t sPredefinedDataUnknown[124] = {
     0x4,
@@ -1447,7 +1450,7 @@ BOOL __fastcall MONSTER_SpawnPredefinedAtUnit(::SGAMEDATA * pGame, D2RoomStrc * 
     int32_t nPosX;
     int32_t nPosY;
     int32_t nResult = 0;
-    if (nParam == 0x154) {
+    if (nClassId == 0x154) {
       if (!pUnit) {
         return nResult;
       }
@@ -1470,7 +1473,7 @@ BOOL __fastcall MONSTER_SpawnPredefinedAtUnit(::SGAMEDATA * pGame, D2RoomStrc * 
         nPosY = 0;
       }
 
-      nResult = SpawnMonsterAtUnitOffset(pGame, pRoom, nPosX, nPosY, nullptr, 0x154, eD2MonsterAnimMode_ns::Skill1, (int*)sPredefinedDataUnknown, nParam2);
+      nResult = SpawnMonsterAtUnitOffset(pGame, pRoom, nPosX, nPosY, nullptr, 0x154, eD2MonsterAnimMode_ns::Skill1, (int*)sPredefinedDataUnknown, wFlags);
     }
 
     return nResult;

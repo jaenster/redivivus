@@ -1,0 +1,139 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinTimer.cpp",
+  "functions": [
+    {
+      "name": "FORMS_DestroyD2WinTimer",
+      "address": "004fd820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd820"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinTimer",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinTimer",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinTimer"
+      ]
+    },
+    {
+      "name": "D2WINTIMER_Start",
+      "address": "004fd830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd830"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinTimer",
+      "calledFunctions": [
+        "D2WINTIMER_Start",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawEx",
+      "address": "004fd860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd860"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinTimer",
+      "calledFunctions": [
+        "DrawEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinTimer",
+        "OnPress",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINTIMER_GetElapsed",
+      "address": "004fd8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd8f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinTimer",
+      "calledFunctions": [
+        "D2WINTIMER_GetElapsed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinTimer",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Key",
+      "address": "004fd970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd970"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinTimer",
+      "calledFunctions": [
+        "Key",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinTimer",
+        "OnPress",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WinTimer",
+      "address": "004fd9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd9d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinTimer",
+      "calledFunctions": [
+        "D2WinTimer",
+        "AllocClientMemory",
+        "memset",
+        "GetTickCount",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinTimer",
+        "OnPress",
+        "int32_t"
+      ]
+    }
+  ]
+}

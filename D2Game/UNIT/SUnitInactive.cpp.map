@@ -1,0 +1,666 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/UNIT/SUnitInactive.cpp",
+  "functions": [
+    {
+      "name": "SUNITINACTIVE_FreeInactiveMonster",
+      "address": "00541890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541890"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_FreeInactiveMonster",
+        "DRLGPRESET_FreeSpawnPointList",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2InventoryToBeUpdatedStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom",
+      "address": "005418c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005418c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "DRLGROOM_GetRoomCoordinates",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2InactiveItemRecordStrc *",
+        "D2InactiveUnitListStrc",
+        "D2InactiveUnitListStrc *",
+        "D2InactiveUnitRecordStrc *",
+        "D2RoomStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_RestoreInactiveItem",
+      "address": "00541990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541990"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_RestoreInactiveItem",
+        "ExtractItemDetails",
+        "ITEM_CreateFromSaveData",
+        "STRUCT_CreatePlayerInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PutItemInInventory",
+        "ITEMMODE_IsItemOnCursor"
+      ],
+      "usedTypes": [
+        "D2InactiveItemRecordStrc",
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_RestoreInactiveItemList",
+      "address": "00541ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541ac0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_RestoreInactiveItemList",
+        "SUNITINACTIVE_RestoreInactiveItem",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2InactiveItemRecordStrc",
+        "D2RoomStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_SerializeAndDeactivateItem",
+      "address": "00541b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541b10"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_SerializeAndDeactivateItem",
+        "ITEM_GetItemData_nPlayerGUID",
+        "SerializeItem",
+        "ITEM_CalculateDespawnTimer",
+        "AllocServerMemory",
+        "memcpy",
+        "ITEM_GetItemsTxt_bHasInv",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ItemBelongsToInventoryOfPlayer",
+        "FreeServerUnit",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2InactiveItemRecordBufferStrc",
+        "D2InactiveItemRecordStrc *",
+        "D2InactiveUnitListStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_RemoveInactiveMonsterByClassId",
+      "address": "00541c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541c50"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_RemoveInactiveMonsterByClassId",
+        "ClearMinionList",
+        "DRLGPRESET_FreeSpawnPointList",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2InactiveMonsterRecordStrc",
+        "D2InactiveMonsterRecordStrc *",
+        "D2InactiveUnitListStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_FreeInactiveMonsterList",
+      "address": "00541cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541cd0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_FreeInactiveMonsterList",
+        "ClearMinionList",
+        "DRLGPRESET_FreeSpawnPointList",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2InactiveMonsterRecordStrc",
+        "D2InactiveUnitListStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_AllocOrFindInactiveList",
+      "address": "00541d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541d20"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_AllocOrFindInactiveList",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2InactiveUnitListStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_AllocInactiveListForRoom",
+      "address": "00541de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541de0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_AllocInactiveListForRoom",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SUNITINACTIVE_AllocOrFindInactiveList"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_RestoreMonsterStateFromInactive",
+      "address": "00541e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541e20"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_RestoreMonsterStateFromInactive",
+        "AI_CreateCmdIfNotExists",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI",
+        "SetAiArgument"
+      ],
+      "usedTypes": [
+        "D2InactiveMonsterRecordStrc",
+        "D2MapAIStrc *",
+        "D2MonStatsTxt",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_SaveMonsterStateToInactive",
+      "address": "00541fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541fe0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_SaveMonsterStateToInactive",
+        "AI_CreateCmdIfNotExists",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI",
+        "GetAiArgument"
+      ],
+      "usedTypes": [
+        "D2InactiveMonsterRecordStrc",
+        "D2MapAIStrc *",
+        "D2MonStatsTxt",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_DeactivateMonster",
+      "address": "005421a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005421a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_DeactivateMonster",
+        "UNITS_GetRoom",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "EVENT_RemoveUnitTimersByType",
+        "AllocServerMemory",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "ReturnFirstArgument",
+        "GetNameSeed",
+        "SUNITINACTIVE_SaveMonsterStateToInactive",
+        "CheckMonsterType",
+        "GetBossNo",
+        "QUEST_OnGoldenBirdCouncilKilled",
+        "GetMonsterFlags",
+        "STATSEX_GetAlignment",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "GetMonsterArea",
+        "GetMonUModList",
+        "GetAndRemoveMinionList",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SUNITINACTIVE_AllocOrFindInactiveList"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2InactiveMonsterRecordStrc",
+        "D2InactiveUnitListStrc",
+        "D2MonsterDataMinionList",
+        "D2RoomStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "eD2States",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_RoomInitMonsters",
+      "address": "005424f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005424f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_RoomInitMonsters",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SUNITINACTIVE_AllocOrFindInactiveList",
+        "Q27_GetAllSealsActivated",
+        "SpawnMonsterAtRoomPosGuid",
+        "SPAWN_FindRandomPositionForMonster",
+        "COLLISION_FindFreeCoordSpiral",
+        "SERVER_SpawnMonster",
+        "MONSTER_SpawnWithUniqueModifiers",
+        "ClearMinionList",
+        "ReplaceMinionList",
+        "STATLIST_SetUnitStat",
+        "AttachCorrectAiFunctionToMonster",
+        "SUNITINACTIVE_RestoreMonsterStateFromInactive",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AddNodeToTable",
+        "GetMonUModList",
+        "InitUmods",
+        "SetAlignment",
+        "UpdateMonsterRegion",
+        "FindUnitFromTable",
+        "UNITS_RelocateUnitToRoom",
+        "DRLGPRESET_FreeSpawnPointList",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2InactiveMonsterRecordStrc",
+        "D2InactiveUnitListStrc",
+        "D2MonStatsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "eD2MonsterAnimMode",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_CheckDeadMonsterAtCoords",
+      "address": "005429b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005429b0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_CheckDeadMonsterAtCoords",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "FindRoomBySubtileCoordinates",
+        "CheckForModeZeroDeath",
+        "SUNITINACTIVE_AllocOrFindInactiveList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InactiveMonsterRecordStrc",
+        "D2InactiveUnitListStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_FreeUnusedItems",
+      "address": "00542ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00542ac0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_FreeUnusedItems",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2InactiveItemRecordStrc",
+        "D2InactiveUnitListStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_RoomInit",
+      "address": "00542b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00542b40"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_RoomInit",
+        "SUNITINACTIVE_RoomInitMonsters",
+        "SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom",
+        "SUNITINACTIVE_RestoreInactiveItemList",
+        "SpawnUnitByType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Objects_GetLine",
+        "IsShrine",
+        "OBJECT_GetDoubledTxtSize",
+        "OBJECT_GetDefaultSize",
+        "SetEvent",
+        "TXT_Shrines_GetLine",
+        "SetShrineTxtRecordInObjectData",
+        "FindUnitFromTable",
+        "UNITS_RelocateUnitToRoom",
+        "SetupUpdateFlag",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2InactiveUnitRecordStrc",
+        "D2ObjectsTxt",
+        "D2RoomStrc",
+        "D2ShrinesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_SaveInactiveUnit",
+      "address": "00542e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00542e10"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_SaveInactiveUnit",
+        "SUNITINACTIVE_DeactivateMonster",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "DRLGROOM_GetRoomCoordinates",
+        "AllocServerMemory",
+        "SUNITINACTIVE_SerializeAndDeactivateItem",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "TXT_Objects_GetLine",
+        "IsShrine",
+        "EVENT_TimerTypeExistsOnUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_FreeAllInactiveLists",
+      "address": "00543080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00543080"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_FreeAllInactiveLists",
+        "FreeServerMemory",
+        "SUNITINACTIVE_FreeInactiveMonsterList"
+      ],
+      "usedTypes": [
+        "D2InactiveItemRecordStrc",
+        "D2InactiveUnitListStrc",
+        "D2InactiveUnitListStrc *",
+        "D2InactiveUnitRecordStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId",
+      "address": "00543140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00543140"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId",
+        "SUNITINACTIVE_RemoveInactiveMonsterByClassId",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2InactiveUnitListStrc",
+        "D2InactiveUnitRecordStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNITS_ProcessDeadOrInactiveMonster",
+      "address": "005431f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005431f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "UNITS_ProcessDeadOrInactiveMonster",
+        "UNITS_GetRoom",
+        "CheckForModeZeroDeath",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_LevelDefs_GetSaveMonsters",
+        "STATES_HasPassiveState",
+        "STATSEX_GetAlignment",
+        "SetAlignment",
+        "MONSTER_FreeUnitNodes",
+        "CheckMonsterType",
+        "GetOwnerUnit",
+        "PETS_HandleDeadPet",
+        "SUNITINACTIVE_SaveInactiveUnit",
+        "DRLGROOM_ClearUnitRoomLink",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVER_GAME_UNIT_method",
+      "address": "005433f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005433f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitInactive",
+      "calledFunctions": [
+        "SERVER_GAME_UNIT_method",
+        "UNITS_GetRoom",
+        "UNITS_ProcessDeadOrInactiveMonster",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_LevelDefs_GetSaveMonsters",
+        "UNIT_GetUnitState",
+        "EVENT_RemoveUnitTimersByType",
+        "SUNITINACTIVE_SaveInactiveUnit",
+        "DRLGROOM_ClearUnitRoomLink",
+        "TXT_Objects_GetLine",
+        "GetSparklyChestFlag",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    }
+  ]
+}

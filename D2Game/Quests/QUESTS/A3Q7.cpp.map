@@ -1,0 +1,285 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A3Q7.cpp",
+  "functions": [
+    {
+      "name": "Objects_InitFn52",
+      "address": "005bce80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bce80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Objects_InitFn52",
+        "QUEST_GetQuestRecordState",
+        "GetQuestDataByQuestNoInternal",
+        "FindUnitFromTable",
+        "SpawnMonsterAtRoomPos",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc *",
+        "D2ObjectInitFnArg",
+        "D2QuestDataA3Q6Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q23_NotifyGuardianStateToPlayers",
+      "address": "005bcf60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bcf60"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Q23_NotifyGuardianStateToPlayers",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q24_HandleKhalimsWillCompletion",
+      "address": "005bcfd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bcfd0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Q24_HandleKhalimsWillCompletion",
+        "GetQuestDataByQuestNoInternal",
+        "FindUnitFromTable",
+        "SetupUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2QuestDataA3Q6Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q24_SetupDarkWandererMapAi",
+      "address": "005bd040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd040"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Q24_SetupDarkWandererMapAi",
+        "GetQuestDataByQuestNoInternal",
+        "FindUnitFromTable",
+        "GetMonsterMapAi",
+        "DRLGPRESET_TransferMapAI"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc *",
+        "D2QuestDataA3Q6Strc",
+        "D2QuestDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q24_StatusFilter",
+      "address": "005bd0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd0b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Q24_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q24_ActiveFilter",
+      "address": "005bd0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd0c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Q24_ActiveFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q24_GetDarkWandererSpawnCoords",
+      "address": "005bd0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd0d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "TestCollisionByCoordinates",
+        "Q24_GetDarkWandererSpawnCoords",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataA3Q7Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Objects_InitFn43",
+      "address": "005bd1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd1f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Objects_InitFn43",
+        "GetQuestDataByQuestNoInternal",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "SpawnMonsterAtRoomPos"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg",
+        "D2QuestDataA3Q7Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q24_Callback13_PlayerStartedGame",
+      "address": "005bd2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd2c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Q24_Callback13_PlayerStartedGame",
+        "GetPlayerData",
+        "GetQuestState",
+        "QUEST_SetQuestRecordState"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q24_InitData",
+      "address": "005bd300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd300"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Q24_InitData",
+        "memset",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2QuestDataA3Q7Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q24_TimerCallback_SpawnPortals",
+      "address": "005bd390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd390"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "Q24_TimerCallback_SpawnPortals",
+        "IteratePlayerOrMonsterUnits",
+        "FindUnitFromTable",
+        "GetQuestControlSeed",
+        "UNITS_GetRoom",
+        "GetCoords",
+        "FindSpawnableLocation",
+        "CreateUnit"
+      ],
+      "usedTypes": [
+        "D2QuestDataA3Q7Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q24_StartDarkWandererPortalTimer",
+      "address": "005bd4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd4a0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q7",
+      "calledFunctions": [
+        "AddQuestTimer",
+        "Q24_StartDarkWandererPortalTimer",
+        "GetQuestDataByQuestNoInternal"
+      ],
+      "usedTypes": [
+        "D2QuestDataA3Q7Strc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

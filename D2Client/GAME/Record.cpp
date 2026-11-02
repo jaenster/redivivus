@@ -7,12 +7,12 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Game/GAME/Server.h"
+#include "D2Hell/D2Hell.h"
 #include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/WindowHandle.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -245,7 +245,7 @@ void __stdcall CallCloseRecordingFunction(uint32_t uMsg, uint32_t wParam, uint32
 
 void __stdcall SetCleanupFunction() {
     SettedUp = 1;
-    CleanUpFn = (RecordCleanupFn)RegisterExitFunction((pfnFaultError)CallCloseRecordingFunction);
+    CleanUpFn = (RecordCleanupFn)D2Hell::RegisterExitFunction((pfnFaultError)CallCloseRecordingFunction);
 }
 
 void __stdcall RECORD_SetPlaybackActive() {

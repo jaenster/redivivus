@@ -51,10 +51,10 @@ struct D2CodecFrameComponentStrc {
 
 struct D2CodecPixelBufferEntryStrc {
     /* 0x00 */ uint8_t * pPrevPixels; // previous-block pixel pointer
-    /* 0x04 */ int field_0x4;
-    /* 0x08 */ int field_0x8;
-    /* 0x0C */ int field_0xc;
-    /* 0x10 */ int field_0x10;
+    /* 0x04 */ int nDstPixelAddress;
+    /* 0x08 */ int nPitch;
+    /* 0x0C */ int nWidth;
+    /* 0x10 */ int nHeight;
 };
 
 struct __attribute__((packed)) D2DccFileHeaderStrc {
@@ -69,14 +69,14 @@ struct __attribute__((packed)) D2DccFileHeaderStrc {
 namespace D2CMP::SRC::Codec {
 
 // Function declarations
-uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, struct D2CodecBitStateStrc * pBitState, int32_t nParam2, int32_t nParam3);
+uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, struct D2CodecBitStateStrc * pBitState, int32_t bSigned, int32_t nBitWidthCode);
 void __stdcall CODEC_BuildInversePalette(uint32_t nPaletteBase, int32_t nPaletteMaskBase, int32_t nInverseMapBase, int32_t nPaletteTableBase);
 void __fastcall CODEC_BuildInversePaletteFromBitmask(uint8_t * pInversePalette, uint32_t * pUsedColourBits, uint8_t * pPaletteData);
 // Decompress frame pixel data from bit streams. Processes frame iterator list, decodes pixels via two bit buffers (one for pixel delta, one for colors). Fills output buffer row-by-row. Returns bits read into pBitsRead and buffer advance into pBitOffsets.
 void __stdcall CODEC_DecompressFrameData(int32_t nCodecState, struct D2CodecPixelBufferEntryStrc * pBitState1, struct D2CodecBitStateStrc * nBits1, struct D2CodecBitStateStrc * pBitState2, struct D2CodecBitStateStrc * nBits2, struct D2CodecBitStateStrc * pBitState3, int * pBitOffsets, uint8_t * * ppOutBuffer, int * pBitsRead);
-BOOL __fastcall CODEC_EncodeRLE(int32_t nParam1, int32_t nParam2, uint8_t * pOutBuf);
+BOOL __fastcall CODEC_EncodeRLE(int32_t pSrcImage, int32_t pFrameHeader, uint8_t * pOutBuf);
 int __fastcall CODEC_LoadPaletteFromFile(char * szText, struct D2CelFileCacheEntryStrc * pCelEntry);
-void * __fastcall CODEC_DecompressAllFrames(uint32_t * pnParam, struct D2PoolManagerStrc * pMemory, int32_t nReadSize, uint8_t * pCelHeader, struct D2CelDecodeStateStrc * pDecodeState, int32_t nStartFrame, int32_t nFrameCount, size_t * pnSize, char * szFileName);
+void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, struct D2PoolManagerStrc * pMemory, int32_t nReadSize, uint8_t * pCelHeader, struct D2CelDecodeStateStrc * pDecodeState, int32_t nStartFrame, int32_t nFrameCount, size_t * pnSize, char * szFileName);
 // 5 internal functions (defined in .cpp)
 
 } // namespace D2CMP::SRC::Codec

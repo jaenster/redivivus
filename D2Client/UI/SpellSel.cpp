@@ -223,8 +223,8 @@ DC6 * __fastcall ARCHIVE_LoadSpellsClassSkillicon(short * pSkillId) {
     return gpSpellSelSkillIconDC6;
 }
 
-void __fastcall SPELLSEL_SetMouseHandFlag(uint32_t dwParam) {
-    gbSpellSelMouseHandFlag = dwParam;
+void __fastcall SPELLSEL_SetMouseHandFlag(uint32_t bLeftHand) {
+    gbSpellSelMouseHandFlag = bLeftHand;
 }
 
 uint32_t __stdcall SPELLSEL_IsMouseInRect(int32_t nWidth, int32_t nHeight, int32_t nRectX, int32_t nRectY) {
@@ -438,7 +438,7 @@ static void __stdcall SPELLSEL_DrawKeyBindingsForRightHand(int32_t nSlotIndex, s
 void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId, int32_t nSkillId, int32_t nQuantity, GLOBALPALLETE nGlobalPaletteShift, int32_t nSkillIdSlot, int32_t nIconX, int32_t bIsLeftHand) {
     D2UnitStrc* pAltWeapon;
     uint32_t bIsWeaponType;
-    int32_t iVar2;
+    int32_t iVar1;
     BOOL bIsStackable;
     D2GfxDataStrc sGfxData;
     D2InventoryStrc* pInventory;
@@ -454,7 +454,7 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
       return;
     }
 
-    uint8_t bVar1 = pSkillDescTxt->iconcel;
+    uint8_t nIconCel = pSkillDescTxt->iconcel;
     nMouseXCheck = ui::GetMouseX();
     int nMouseX = ui::GetMouseY();
     if (nMouseXCheck >= nSkillIdSlot && nMouseXCheck <= nSkillIdSlot + 0x30 && nMouseX >= nIconX - 0x30 && nMouseX <= nIconX) {
@@ -468,7 +468,7 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = pDC6;
     sGfxData.nDirection = 0;
-    sGfxData.nFrameNumber = (uint32_t)bVar1;
+    sGfxData.nFrameNumber = (uint32_t)nIconCel;
     D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nSkillIdSlot, nIconX, -1, DRAW_SOLID, nGlobalPaletteShift);
     if (bIsLeftHand) {
       SPELLSEL_DrawKeyBindingsForLeftHand(nSkillId, pSkillId, nSkillIdSlot, nIconX);
@@ -492,8 +492,8 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
             if (pPlayerUnit_lcl) {
               bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(pPlayerUnit_lcl, ITEMTYPE_Weapon);
               if (bIsWeaponType) {
-                iVar2 = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pPlayerUnit_lcl);
-                if (iVar2) {
+                iVar1 = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pPlayerUnit_lcl);
+                if (iVar1) {
                   bIsStackable = D2Common::ITEMS::Items::IsStackable(pPlayerUnit_lcl);
                   if (bIsStackable) {
                     nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, UNITSTAT_quantity, 0);
@@ -505,8 +505,8 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
         } else {
           pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pInventory);
           if (pPlayerUnit_lcl) {
-            iVar2 = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pPlayerUnit_lcl);
-            if (iVar2) {
+            iVar1 = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pPlayerUnit_lcl);
+            if (iVar1) {
               bIsStackable = D2Common::ITEMS::Items::IsStackable(pPlayerUnit_lcl);
               if (bIsStackable) {
                 nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, UNITSTAT_quantity, 0);
@@ -574,8 +574,8 @@ void __fastcall SPELLSEL_DrawSkillIcon(short * pSkillId, int32_t nSlotIndex, int
     SPELLSEL_DrawSkillLevel(nSkillId, nIconX, nIconY);
 }
 
-static int32_t __stdcall SPELLSEL_RegisterSkillSlot(int32_t nGridX, int32_t nSlotIndex, int32_t bLeftHand, int32_t nGridY, D2SkillStrc * pSkill, int32_t nParam2) {
-    gSpellSelGridRegion.aSkillGrid[gSpellSelGridRegion.sGridIndex[0]] = nParam2;
+static int32_t __stdcall SPELLSEL_RegisterSkillSlot(int32_t nGridX, int32_t nSlotIndex, int32_t bLeftHand, int32_t nGridY, D2SkillStrc * pSkill, int32_t nSlotX) {
+    gSpellSelGridRegion.aSkillGrid[gSpellSelGridRegion.sGridIndex[0]] = nSlotX;
     gSpellSelGridRegion.aSkillGridRow2[gSpellSelGridRegion.sGridIndex[0]] = nSlotIndex;
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UI\\spellsel.cpp", 0x23d);
     gSpellSelGridRegion.aLeftHandSlots[gSpellSelGridRegion.sGridIndex[0]] = eSkillId;
@@ -583,10 +583,10 @@ static int32_t __stdcall SPELLSEL_RegisterSkillSlot(int32_t nGridX, int32_t nSlo
     gSpellSelGridRegion.sGridIndex[0]++;
     *(uint32_t*)((char*)&gSpellSelGridRegion.sGridIndex + 1) = nGridY;
     if (!bLeftHand) {
-      return nParam2 - 0x30;
+      return nSlotX - 0x30;
     }
 
-    return nParam2 + 0x30;
+    return nSlotX + 0x30;
 }
 
 int __fastcall SPELLSEL_FindChargedSkill1(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
@@ -863,29 +863,29 @@ void __fastcall SPELLSEL_ActivateSkillSlot(int32_t nSlot) {
     D2Common::Skills::SelectSkillRight(pUnit, nOwnerGUID, nOwnerGUID_00);
 }
 
-void __fastcall SPELLSEL_SetSkillSlot(int32_t nParam, int32_t nSkillId, int32_t nRightHandBinding, int32_t nOwnerGUID) {
-    gSpellSelectionSkillIDs[nParam] = nSkillId;
-    gSpellSelRightSkillBindings[nParam] = nRightHandBinding;
-    gSpellSelLeftSkillBindings[nParam] = nOwnerGUID;
+void __fastcall SPELLSEL_SetSkillSlot(int32_t nSlotIndex, int32_t nSkillId, int32_t nRightHandBinding, int32_t nOwnerGUID) {
+    gSpellSelectionSkillIDs[nSlotIndex] = nSkillId;
+    gSpellSelRightSkillBindings[nSlotIndex] = nRightHandBinding;
+    gSpellSelLeftSkillBindings[nSlotIndex] = nOwnerGUID;
 }
 
-static void SPELLSEL_AssignSkillToSlot(int32_t nSlotIndex, int32_t nParam1, int32_t nParam2) {
-    if (!(nParam1 < 0x10 && gSpellSelectionSkillIDs[nParam1] == -1)) {
+static void SPELLSEL_AssignSkillToSlot(int32_t nSlotIndex, int32_t nFreeSlot, int32_t nGridIndex) {
+    if (!(nFreeSlot < 0x10 && gSpellSelectionSkillIDs[nFreeSlot] == -1)) {
       return;
     }
 
     bool bIsRightHand = !gbSpellSelMouseHandFlag;
-    int nGridSkillId = gSpellSelGridRegion.aLeftHandSlots[nParam2];
-    gSpellSelectionSkillIDs[nParam1] = nGridSkillId;
+    int nGridSkillId = gSpellSelGridRegion.aLeftHandSlots[nGridIndex];
+    gSpellSelectionSkillIDs[nFreeSlot] = nGridSkillId;
     if (bIsRightHand) {
-      gSpellSelRightSkillBindings[nParam1] = 0;
+      gSpellSelRightSkillBindings[nFreeSlot] = 0;
     } else {
-      gSpellSelRightSkillBindings[nParam1] = 1;
+      gSpellSelRightSkillBindings[nFreeSlot] = 1;
     }
 
-    int32_t nTargetGUID = gSpellSelGridRegion.aRightHandSlots[nParam2];
-    gSpellSelLeftSkillBindings[nParam1] = nTargetGUID;
-    GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, nParam1 * 0x10000 + (gSpellSelRightSkillBindings[nParam1] ? 0x8000 : 0) + nGridSkillId, nTargetGUID);
+    int32_t nTargetGUID = gSpellSelGridRegion.aRightHandSlots[nGridIndex];
+    gSpellSelLeftSkillBindings[nFreeSlot] = nTargetGUID;
+    GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x51, nFreeSlot * 0x10000 + (gSpellSelRightSkillBindings[nFreeSlot] ? 0x8000 : 0) + nGridSkillId, nTargetGUID);
 }
 
 void __stdcall SPELLSEL_AutoBindNonChargedSkills() {
@@ -1102,25 +1102,25 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
     } while (true);
 }
 
-void __fastcall SPELLSEL_CycleRightHandSkills(int32_t nParam) {
+void __fastcall SPELLSEL_CycleRightHandSkills(int32_t nSteps) {
     int bSlotValid;
     uint32_t bPlayerDead = UNIT::Player::IsPlayerDead();
     if (bPlayerDead) {
       return;
     }
 
-    bool bForward = nParam > 0;
-    if (nParam < 0) {
-      nParam = -nParam;
+    bool bForward = nSteps > 0;
+    if (nSteps < 0) {
+      nSteps = -nSteps;
     }
-    if (!nParam) {
+    if (!nSteps) {
       return;
     }
 
     int32_t nFoundSlot = -1;
     int nSearchCount = 0;
     int nCurSlot = gbSpellSelActiveRightSkillSlot;
-    int nStepsLeft = nParam;
+    int nStepsLeft = nSteps;
     do {
       nCurSlot = nCurSlot + (uint32_t)bForward * 2 - 1;
       if (nCurSlot < 0) {
@@ -1224,37 +1224,37 @@ void __stdcall SPELLSEL_FreeSkilltreeGraphic() {
     pSpellsClassSkilltree[nD2PlayerClassID].pD2Archive = 0;
 }
 
-static int32_t SPELLSEL_GetSkillTreeRowOffset(char cParam) {
-    if (cParam == '\x01') {
+static int32_t SPELLSEL_GetSkillTreeRowOffset(char cSkillRow) {
+    if (cSkillRow == '\x01') {
       return gnPanelOffsetY - 0x1a2 + ScreenSizeY;
     }
-    if (cParam == '\x02') {
+    if (cSkillRow == '\x02') {
       return gnPanelOffsetY - 0x15e + ScreenSizeY;
     }
-    if (cParam == '\x03') {
+    if (cSkillRow == '\x03') {
       return gnPanelOffsetY - 0x11a + ScreenSizeY;
     }
-    if (cParam == '\x04') {
+    if (cSkillRow == '\x04') {
       return gnPanelOffsetY - 0xd6 + ScreenSizeY;
     }
-    if (cParam == '\x05') {
+    if (cSkillRow == '\x05') {
       return gnPanelOffsetY - 0x91 + ScreenSizeY;
     }
-    if (cParam == '\x06') {
+    if (cSkillRow == '\x06') {
       return gnPanelOffsetY - 0x4d + ScreenSizeY;
     }
 
     return 0;
 }
 
-static int32_t SPELLSEL_GetSkillTreeColumnOffset(char cParam) {
-    if (cParam == '\x01') {
+static int32_t SPELLSEL_GetSkillTreeColumnOffset(char cSkillColumn) {
+    if (cSkillColumn == '\x01') {
       return ScreenSizeX - gnPanelOffsetX - 0x131;
     }
-    if (cParam == '\x02') {
+    if (cSkillColumn == '\x02') {
       return ScreenSizeX - gnPanelOffsetX - 0xec;
     }
-    if (cParam == '\x03') {
+    if (cSkillColumn == '\x03') {
       return ScreenSizeX - gnPanelOffsetX - 0xa7;
     }
 
@@ -1265,7 +1265,7 @@ void __thiscall SPELLSEL_DrawTabHeader(void * pThis, int32_t nYOffset) {
     ui::UI_DrawTextCentered(WindowSizeX - gnPanelOffsetX - 0x5a, gnPanelOffsetY + ScreenSizeY - 0x1e0 + nYOffset, WindowSizeX - gnPanelOffsetX, (uint16_t*)pThis, 0);
 }
 
-void __stdcall SPELLSEL_DrawSkilltreeBackground(DC6 * pDC6, int32_t nParam) {
+void __stdcall SPELLSEL_DrawSkilltreeBackground(DC6 * pDC6, int32_t nSkillTreeTab) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = pDC6;
@@ -1278,7 +1278,7 @@ void __stdcall SPELLSEL_DrawSkilltreeBackground(DC6 * pDC6, int32_t nParam) {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 3;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x40, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
-    int nBaseFrame = nParam * 4;
+    int nBaseFrame = nSkillTreeTab * 4;
     sGfxData.nFrameNumber = nBaseFrame;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - gnPanelOffsetX - 0x140, gnPanelOffsetY - 0xe0 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = nBaseFrame + 1;
@@ -1380,7 +1380,7 @@ void __stdcall thunk_D2GFX_GetColorFromPalette_C() {
     gnSpellSelTabHighlightColor = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0);
 }
 
-void __stdcall SPELLSEL_DrawTabHighlight(int32_t nParam) {
+void __stdcall SPELLSEL_DrawTabHighlight(int32_t nCurrentTab) {
     int nCurMouseX;
     nCurMouseX = ui::GetMouseX();
     int nCurMouseY;
@@ -1398,7 +1398,7 @@ void __stdcall SPELLSEL_DrawTabHighlight(int32_t nParam) {
     gnSpellSelTabHighlightColor = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0);
     if (!(nCurMouseX < ScreenSizeX - gnPanelOffsetX - 0x59 || nCurMouseX > ScreenSizeX - gnPanelOffsetX + 1)) {
       int nTabBoundY;
-      if (nParam == 1) {
+      if (nCurrentTab == 1) {
         if (nCurMouseY <= gnPanelOffsetY - 0x9c + ScreenSizeY) {
           nCurMouseX = gnPanelOffsetY - 0x108 + ScreenSizeY;
           if (nCurMouseY >= nCurMouseX) {
@@ -1412,8 +1412,8 @@ void __stdcall SPELLSEL_DrawTabHighlight(int32_t nParam) {
           goto draw_highlight;
         }
       } else {
-        if (nParam != 2) {
-          if (nParam == 3) {
+        if (nCurrentTab != 2) {
+          if (nCurrentTab == 3) {
             nCurMouseX = gnPanelOffsetY - 0x9c + ScreenSizeY;
             if (nCurMouseY > nCurMouseX || (nTabBoundY = gnPanelOffsetY - 0x108 + ScreenSizeY , nCurMouseY < nTabBoundY)) {
               if (nCurMouseY <= gnPanelOffsetY - 0x30 + ScreenSizeY && nCurMouseY >= nCurMouseX) {
@@ -1539,10 +1539,10 @@ void __stdcall SKILLTREE_RenderSkillTree() {
     BOOL nScreenY;
     int nScreenX;
     int32_t nTooltipX;
-    int iVar1;
+    int nTooltipY;
     if (gnSkillTreeHighlightIndex == 1) {
       nScreenX = ScreenSizeX - gnPanelOffsetX;
-      iVar1 = gnPanelOffsetY - 0x3f + ScreenSizeY;
+      nTooltipY = gnPanelOffsetY - 0x3f + ScreenSizeY;
       nMouseX = ui::GetMouseX();
       nMouseY = ui::GetMouseY();
       if (nMouseX < nScreenX - 0x95) {
@@ -1551,18 +1551,18 @@ void __stdcall SKILLTREE_RenderSkillTree() {
       if (nMouseX > nScreenX - 0x73) {
         return;
       }
-      if (nMouseY < iVar1 - 0x22) {
+      if (nMouseY < nTooltipY - 0x22) {
         return;
       }
-      if (nMouseY > iVar1) {
+      if (nMouseY > nTooltipY) {
         return;
       }
 
-      iVar1 = gnPanelOffsetY - 0x62 + ScreenSizeY;
+      nTooltipY = gnPanelOffsetY - 0x62 + ScreenSizeY;
       nTooltipX = ScreenSizeX - gnPanelOffsetX - 0x86;
     } else if (gnSkillTreeHighlightIndex == 2) {
       nScreenX = ScreenSizeX - gnPanelOffsetX;
-      iVar1 = gnPanelOffsetY - 0x3f + ScreenSizeY;
+      nTooltipY = gnPanelOffsetY - 0x3f + ScreenSizeY;
       nMouseX = ui::GetMouseX();
       nMouseY = ui::GetMouseY();
       if (nMouseX < nScreenX - 0xdc) {
@@ -1571,14 +1571,14 @@ void __stdcall SKILLTREE_RenderSkillTree() {
       if (nMouseX > nScreenX - 0xba) {
         return;
       }
-      if (nMouseY < iVar1 - 0x22) {
+      if (nMouseY < nTooltipY - 0x22) {
         return;
       }
-      if (nMouseY > iVar1) {
+      if (nMouseY > nTooltipY) {
         return;
       }
 
-      iVar1 = gnPanelOffsetY - 0x62 + ScreenSizeY;
+      nTooltipY = gnPanelOffsetY - 0x62 + ScreenSizeY;
       nTooltipX = ScreenSizeX - gnPanelOffsetX - 0xcd;
     } else {
       if (gnSkillTreeHighlightIndex != 3) {
@@ -1590,14 +1590,14 @@ void __stdcall SKILLTREE_RenderSkillTree() {
         return;
       }
 
-      iVar1 = gnPanelOffsetY - 0x62 + ScreenSizeY;
+      nTooltipY = gnPanelOffsetY - 0x62 + ScreenSizeY;
       nTooltipX = ScreenSizeX - gnPanelOffsetX - 0x122;
     }
 
     int32_t nShowTooltip = 1;
     int32_t bMouseOver = 0;
     uint16_t* pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1030);
-    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwszTabLabel, nTooltipX, iVar1, bMouseOver, nShowTooltip);
+    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwszTabLabel, nTooltipX, nTooltipY, bMouseOver, nShowTooltip);
 }
 
 void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
@@ -1761,12 +1761,17 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
     int32_t nNewSkills;
-    eD2Skills eSkill;
     D2SkillsTxt* pSkillTxt;
     D2SkillDescTxt* pSkillDesc;
+    int32_t iVar1;
     D2SkillStrc* pSkill;
     int iSkillResult;
     int skillIdOfClass;
+    int32_t nSkillCount;
+    int32_t nSkillLevel;
+    int32_t nSkillPointsReq;
+    int32_t nRowY;
+    int32_t nColumnX;
     uint32_t nClickY;
     nClickY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
     uint32_t nClickX;
@@ -1794,7 +1799,7 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
       return;
     }
     if (!gbSpellSelSkillTreeBackground) {
-      int32_t iVar1;
+      eD2Skills eSkill;
       if ((int)nClickX <= ScreenSizeX / 2) {
         pMsg->bHandled = 0;
         return;
@@ -1803,8 +1808,8 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
       nNewSkills = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_newskills, 0);
       if (nNewSkills > 0) {
         skillIdOfClass = 0;
-        iVar1 = D2Common::Skills::AmountOfSkillsByClassId(classId);
-        if (iVar1 > 0) {
+        nSkillCount = D2Common::Skills::AmountOfSkillsByClassId(classId);
+        if (nSkillCount > 0) {
           do {
             /* Most likely where skills get assigned when clicked on */ eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(classId, skillIdOfClass);
             pSkillTxt = GAME::SCmd::TXT_Skills_GetLine(eSkill);
@@ -1812,20 +1817,20 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
               pSkillDesc = DataTbls::GetSkillDescription(eSkill);
               if (pSkillDesc) {
                 if (nSkillTreeActiveTab == pSkillDesc->skillpage) {
-                  iVar1 = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow);
-                  if ((int)nClickY > iVar1 - 0x30 && (int)nClickY < iVar1) {
-                    iVar1 = SPELLSEL_GetSkillTreeColumnOffset(pSkillDesc->skillcolumn);
-                    if ((int)nClickX > iVar1 && (int)nClickX < iVar1 + 0x30 && gaSpellSelSkillTreeState[skillIdOfClass] == 1) {
+                  nRowY = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow);
+                  if ((int)nClickY > nRowY - 0x30 && (int)nClickY < nRowY) {
+                    nColumnX = SPELLSEL_GetSkillTreeColumnOffset(pSkillDesc->skillcolumn);
+                    if ((int)nClickX > nColumnX && (int)nClickX < nColumnX + 0x30 && gaSpellSelSkillTreeState[skillIdOfClass] == 1) {
                       if (pSkillTxt->skpoints != -1) {
                         pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
                         if (pSkill) {
-                          iVar1 = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
+                          nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);
                         } else {
-                          iVar1 = 0;
+                          nSkillLevel = 0;
                         }
 
-                        iVar1 = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->skpoints, eSkill, iVar1);
-                        if (iVar1 > nNewSkills) {
+                        nSkillPointsReq = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->skpoints, eSkill, nSkillLevel);
+                        if (nSkillPointsReq > nNewSkills) {
                           goto release_pressed_node;
                         }
                       }

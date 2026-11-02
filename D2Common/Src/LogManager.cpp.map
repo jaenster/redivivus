@@ -1,0 +1,23 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Src/LogManager.cpp",
+  "functions": [
+    {
+      "name": "LOGGING_EnableLogFile",
+      "address": "00624b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624b50"
+        }
+      ],
+      "namespace": "D2Common::Src::LogManager",
+      "calledFunctions": [
+        "LOGGING_EnableLogFile",
+        "LOGGING_OpenLogFile",
+        "fclose"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,572 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A5Q4.cpp",
+  "functions": [
+    {
+      "name": "Q34_NotifyQuestState",
+      "address": "0058aea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058aea0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_NotifyQuestState",
+        "GetPlayerData",
+        "GetQuestState",
+        "QUEST_SendQuestUpdateToPlayer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_StatusFilter",
+      "address": "0058af00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058af00"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_StatusFilter",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q34_SpawnNihlathakPortal",
+      "address": "0058af90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058af90"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_SpawnNihlathakPortal",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "SERVER_SpawnPortal"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "Q34_Callback02_NpcDeactivate",
+      "address": "0058b050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b050"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_Callback02_NpcDeactivate",
+        "QUEST_SetStateAndBroadcast",
+        "Q34_SpawnNihlathakPortal"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q34_UpdateQuestStep",
+      "address": "0058b0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b0b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_UpdateQuestStep",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetQuestDataByQuestNoInternal",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_SequenceFilter",
+      "address": "0058b140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b140"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_SequenceFilter",
+        "QUEST_SetStateFlag",
+        "GetQuestDataByQuestNoInternal",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q34_Callback11_ScrollMessage",
+      "address": "0058b1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b1c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_Callback11_ScrollMessage",
+        "QUEST_SetStateFlag",
+        "IteratePlayerOrMonsterUnits",
+        "QUEST_SetStateAndBroadcast",
+        "GetPlayerData",
+        "SetQuestState",
+        "GetQuestState",
+        "Q34_SequenceFilter",
+        "GetQuestBitBuffer"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Q34_Callback00_NpcActivate",
+      "address": "0058b2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b2c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_Callback00_NpcActivate",
+        "GetPlayerData",
+        "GetQuestState",
+        "AddGossipMessageOnMonster",
+        "QUEST_HasPlayerParticipated"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q34_Callback10_PlayerLeavesGame",
+      "address": "0058b460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b460"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_Callback10_PlayerLeavesGame",
+        "QUESTGUID_RemovePlayerFromList"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q34_CheckNearNihlathak",
+      "address": "0058b4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b4a0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_CheckNearNihlathak",
+        "GetPlayerData",
+        "UNITS_GetRoom",
+        "GetQuestState",
+        "GetQuestDataByQuestNoInternal",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc *",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q34_PropagateCompleteToParty",
+      "address": "0058b680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b680"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_PropagateCompleteToParty",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_SetCannotComplete",
+      "address": "0058b6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b6d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_PlayCompletionSound",
+      "address": "0058b730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b730"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_PlayCompletionSound",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_OnNihlathakSpeak",
+      "address": "0058b770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b770"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_OnNihlathakSpeak",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q34_Callback08_MonsterKilled",
+      "address": "0058b7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b7a0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_CheckNearNihlathak",
+        "Q34_SetCannotComplete",
+        "Q34_Callback08_MonsterKilled",
+        "UNITS_GetRoom",
+        "IteratePlayerOrMonsterUnits",
+        "QUEST_SetQuestRecordState",
+        "NotifyPlayersAboutEvent",
+        "QUEST_SetStateFlag",
+        "AddQuestTimer"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q34_ActiveFilter",
+      "address": "0058b870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b870"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_ActiveFilter",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q34_SetAnyaTimerEvent",
+      "address": "0058b900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b900"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_SetAnyaTimerEvent",
+        "GetQuestDataByQuestNoInternal",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_SpawnNihlathakPortalTimer",
+      "address": "0058b940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b940"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_SpawnNihlathakPortalTimer",
+        "GetQuestDataByQuestNoInternal",
+        "Q34_SpawnNihlathakPortal"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_Callback13_PlayerStartedGame",
+      "address": "0058b990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b990"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_Callback13_PlayerStartedGame",
+        "GetPlayerData",
+        "FindWaypointIdByLevelId",
+        "CheckWaypoint",
+        "GetQuestState",
+        "QUEST_SetStateAndBroadcast",
+        "QUEST_SetStateFlag"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q34_Callback03_ChangedLevel",
+      "address": "0058bab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058bab0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_Callback03_ChangedLevel",
+        "QUEST_SetStateFlag",
+        "IteratePlayerOrMonsterUnits",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q34_InitData",
+      "address": "0058bb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058bb20"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_InitData",
+        "memset",
+        "AllocServerMemory",
+        "QUESTGUID_SetPlayerCountToZero"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q34_ClaimReward",
+      "address": "0058bc00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058bc00"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_ClaimReward",
+        "GetPlayerData",
+        "SetQuestState",
+        "UnsetQuestState",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_OnNihlathakAI",
+      "address": "0058bc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058bc40"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_OnNihlathakAI",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q34_NpcSpawnPortalInAct5",
+      "address": "0058bc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058bc80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_NpcSpawnPortalInAct5",
+        "GetQuestDataByQuestNoInternal",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetYPos",
+        "GetXPos",
+        "SERVER_SpawnPortal"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q4Strc",
+        "D2QuestDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    }
+  ]
+}

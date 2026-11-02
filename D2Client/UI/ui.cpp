@@ -42,6 +42,7 @@
 #include "D2Client/UI/Party.h"
 #include "D2Client/UI/Path.h"
 #include "D2Client/UI/QuestLog.h"
+#include "D2Client/UI/ShowItems.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/SpellSel.h"
 #include "D2Client/UI/Spinner/SpinnerWrapper.h"
@@ -120,7 +121,6 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Button/ButtonWrapper.h"
 #include "D2Client/UNIT/UnitSnd.h"
@@ -171,11 +171,11 @@ DC6 * __fastcall ARCHIVE_LoadOverlayImageUsedInGame(char * pFilename) {
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFullPath, "%s\\UI\\", "DATA\\GLOBAL");
     uint32_t pszPrefixEnd = Storm::Source::SSTR::SStrLen(szFullPath);
     char cChar = *pFilename;
-    char* pcVar1 = szFullPath + pszPrefixEnd;
-    char* pszDst = pcVar1;
+    char* pszNameDst = szFullPath + pszPrefixEnd;
+    char* pszDst = pszNameDst;
     while (cChar != '\0') {
       *pszDst = cChar;
-      cChar = pszDst[(int)(pFilename + (1 - (int)pcVar1))];
+      cChar = pszDst[(int)(pFilename + (1 - (int)pszNameDst))];
       pszDst++;
     }
 
@@ -217,7 +217,7 @@ void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText) {
     }
 }
 
-uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int cParam) {
+uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int nColor) {
     // Frame slots -2064..-12 are ONE object: &wszBuffer is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     #pragma pack(push, 1)
@@ -249,7 +249,7 @@ uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int cParam) {
     wszDigit[0] = L'\0';
     wszDigit[1] = 0;
     wszDigit[2] = 0;
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(__frame0.szDigit, "%c", (int)(char)((char)cParam + '0'));
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(__frame0.szDigit, "%c", (int)(char)((char)nColor + '0'));
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, __frame0.szDigit, 2);
     D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszDigit);
     D2Lang::Unicode::UNISYS::AppendToBuffer(&__frame0.wszBuffer, wszText);
@@ -257,7 +257,7 @@ uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int cParam) {
     return wszText;
 }
 
-uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char cParam) {
+uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char byColor) {
     uint16_t wszDigit[4];
     char szDigit[4];
     int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
@@ -271,7 +271,7 @@ uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char cParam
     wszDigit[0] = L'\0';
     wszDigit[1] = 0;
     wszDigit[2] = 0;
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(cParam + '0'));
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDigit, "%c", (int)(char)(byColor + '0'));
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDigit, szDigit, 2);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszDigit);
     return wszText;
@@ -279,7 +279,7 @@ uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char cParam
 
 uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText) {
     uint16_t* wszMatch;
-    int32_t iVar1;
+    int32_t nRemainingLength;
     int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     if (!(nLength < 500)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37f);
@@ -292,8 +292,8 @@ uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText) {
       nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszColorCode);
       wszMatch = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)wszColorCode);
       while (wszMatch && wszMatch[nLength] != L'\0') {
-        iVar1 = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszMatch);
-        memmove(wszMatch, wszMatch + nLength + 1, (iVar1 - nLength) * 2);
+        nRemainingLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszMatch);
+        memmove(wszMatch, wszMatch + nLength + 1, (nRemainingLength - nLength) * 2);
         wszMatch = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)wszColorCode);
       }
 
@@ -860,8 +860,8 @@ void __fastcall DRAW_Direct_RectFrame(RECT * pRect) {
     D2GfxDataStrc sGfxData;
     int nPositionX = pRect->left;
     int nRightX = pRect->right - nPositionX + 1 + nPositionX;
-    int iVar1 = pRect->top;
-    int nRightEdge = pRect->bottom - iVar1 + 1 + iVar1;
+    int nRectTop = pRect->top;
+    int nRightEdge = pRect->bottom - nRectTop + 1 + nRectTop;
     int nFrameCounter = 0;
     memset(&sGfxData, 0, 0x48);
     int nLimit = nRightX - 0xd;
@@ -876,7 +876,7 @@ void __fastcall DRAW_Direct_RectFrame(RECT * pRect) {
 
       nFrameCounter++;
       sGfxData.nFrameNumber = nFrameCounter % 6 + 2;
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBottomEdge, iVar1 + 0xc, -1, DRAW_SOLID, nullptr);
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBottomEdge, nRectTop + 0xc, -1, DRAW_SOLID, nullptr);
     }
 
     nBottomEdge = nPositionX + 0xd;
@@ -888,13 +888,13 @@ void __fastcall DRAW_Direct_RectFrame(RECT * pRect) {
     }
 
     nLimit = nRightEdge - 1;
-    for (nBottomEdge = iVar1 + 0x16; nBottomEdge < nLimit; nBottomEdge += 0xc) {
+    for (nBottomEdge = nRectTop + 0x16; nBottomEdge < nLimit; nBottomEdge += 0xc) {
       nFrameCounter++;
       sGfxData.nFrameNumber = nFrameCounter % 3 + 10;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX - 4, nBottomEdge, -1, DRAW_SOLID, nullptr);
     }
 
-    nBottomEdge = iVar1 + 0x18;
+    nBottomEdge = nRectTop + 0x18;
     while (nBottomEdge < nLimit) {
       nFrameCounter++;
       sGfxData.nFrameNumber = nFrameCounter % 3 + 0xd;
@@ -903,9 +903,9 @@ void __fastcall DRAW_Direct_RectFrame(RECT * pRect) {
     }
 
     sGfxData.nFrameNumber = 0;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, iVar1 + 0xc, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nRectTop + 0xc, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 1;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nRightX - 0xc, iVar1 + 0xc, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nRightX - 0xc, nRectTop + 0xc, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 8;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nRightEdge + 1, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 9;
@@ -1141,129 +1141,129 @@ void __stdcall UI_DrawPlayerStateOverlays() {
 }
 
 void __stdcall UI_SetButtonKeyBinding(int32_t pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory) {
-    uint16_t uVar1;
+    uint16_t wKey;
     if (nButtonIndex == -1) {
       return;
     }
 
     uint32_t nResult = CmdTbl::CMD_IsCommandBound(nCmdCategory, nCommandId);
-    if (!nResult || (uVar1 = CmdTbl::CMD_GetKeyForCommand(nCmdCategory, nCommandId) , uVar1 == 0xffff) || uVar1 > 0xdf) {
-      uVar1 = nDefaultKey;
+    if (!nResult || (wKey = CmdTbl::CMD_GetKeyForCommand(nCmdCategory, nCommandId) , wKey == 0xffff) || wKey > 0xdf) {
+      wKey = nDefaultKey;
     }
 
-    *(uint32_t*)(*(int*)(pButtonContainer + 0x20) + 4 + nButtonIndex * 0xc) = (uint32_t)uVar1;
+    *(uint32_t*)(*(int*)(pButtonContainer + 0x20) + 4 + nButtonIndex * 0xc) = (uint32_t)wKey;
 }
 
 static void UI_SetMultipleButtonKeyBindings(D2UIKeyBindingSetStrc * pnButtonIndices) {
-    uint16_t uVar2;
+    uint16_t uVar1;
     uint32_t nBoundKey;
     BOOL bExpansion;
-    int iVar1;
-    iVar1 = pnButtonIndices->nHandlerIdx_Cmd16_Exp;
-    if (iVar1 != -1) {
+    int nHandlerIdx;
+    nHandlerIdx = pnButtonIndices->nHandlerIdx_Cmd16_Exp;
+    if (nHandlerIdx != -1) {
       nBoundKey = CmdTbl::CMD_IsCommandBound(0x16, 1);
       if (nBoundKey) {
-        uVar2 = CmdTbl::CMD_GetKeyForCommand(0x16, 1);
-        if (uVar2 != 0xffff && uVar2 <= 0xdf) {
-          pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = (uint32_t)uVar2;
+        uVar1 = CmdTbl::CMD_GetKeyForCommand(0x16, 1);
+        if (uVar1 != 0xffff && uVar1 <= 0xdf) {
+          pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = (uint32_t)uVar1;
           goto bind_cmd26_slot1;
         }
       }
 
-      pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = 0xc0;
+      pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0xc0;
     }
 
     bind_cmd26_slot1:
-    iVar1 = pnButtonIndices->nHandlerIdx_Cmd26_Exp;
-    if (iVar1 != -1) {
+    nHandlerIdx = pnButtonIndices->nHandlerIdx_Cmd26_Exp;
+    if (nHandlerIdx != -1) {
       nBoundKey = CmdTbl::CMD_IsCommandBound(0x26, 1);
       if (nBoundKey) {
-        uVar2 = CmdTbl::CMD_GetKeyForCommand(0x26, 1);
-        if (uVar2 != 0xffff && uVar2 <= 0xdf) {
-          pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = (uint32_t)uVar2;
+        uVar1 = CmdTbl::CMD_GetKeyForCommand(0x26, 1);
+        if (uVar1 != 0xffff && uVar1 <= 0xdf) {
+          pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = (uint32_t)uVar1;
           goto bind_cmd29_slot1;
         }
       }
 
-      pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = 0x1b;
+      pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0x1b;
     }
 
     bind_cmd29_slot1:
-    iVar1 = pnButtonIndices->nHandlerIdx_Cmd29_Exp;
-    if (iVar1 != -1) {
+    nHandlerIdx = pnButtonIndices->nHandlerIdx_Cmd29_Exp;
+    if (nHandlerIdx != -1) {
       nBoundKey = CmdTbl::CMD_IsCommandBound(0x29, 1);
       if (nBoundKey) {
-        uVar2 = CmdTbl::CMD_GetKeyForCommand(0x29, 1);
-        if (uVar2 != 0xffff && uVar2 <= 0xdf) {
-          pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = (uint32_t)uVar2;
+        uVar1 = CmdTbl::CMD_GetKeyForCommand(0x29, 1);
+        if (uVar1 != 0xffff && uVar1 <= 0xdf) {
+          pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = (uint32_t)uVar1;
           goto bind_cmd2c_slot1;
         }
       }
 
-      pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = 0x4e;
+      pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0x4e;
     }
 
     bind_cmd2c_slot1:
     bExpansion = Fog::D2CheckExpansionGame();
     if (bExpansion) {
-      iVar1 = pnButtonIndices->nHandlerIdx_Cmd2C_Exp;
-      if (iVar1 != -1) {
+      nHandlerIdx = pnButtonIndices->nHandlerIdx_Cmd2C_Exp;
+      if (nHandlerIdx != -1) {
         nBoundKey = CmdTbl::CMD_IsCommandBound(0x2c, 1);
         if (nBoundKey) {
-          uVar2 = CmdTbl::CMD_GetKeyForCommand(0x2c, 1);
-          if (uVar2 != 0xffff && uVar2 <= 0xdf) {
-            pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = (uint32_t)uVar2;
+          uVar1 = CmdTbl::CMD_GetKeyForCommand(0x2c, 1);
+          if (uVar1 != 0xffff && uVar1 <= 0xdf) {
+            pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = (uint32_t)uVar1;
             goto bind_cmd16_slot0;
           }
         }
 
-        pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = 0x57;
+        pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0x57;
       }
     }
 
     bind_cmd16_slot0:
-    iVar1 = pnButtonIndices->nHandlerIdx_Cmd16_Classic;
-    if (iVar1 != -1) {
+    nHandlerIdx = pnButtonIndices->nHandlerIdx_Cmd16_Classic;
+    if (nHandlerIdx != -1) {
       nBoundKey = CmdTbl::CMD_IsCommandBound(0x16, 0);
       if (nBoundKey) {
-        uVar2 = CmdTbl::CMD_GetKeyForCommand(0x16, 0);
-        if (uVar2 != 0xffff && uVar2 <= 0xdf) {
-          pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = (uint32_t)uVar2;
+        uVar1 = CmdTbl::CMD_GetKeyForCommand(0x16, 0);
+        if (uVar1 != 0xffff && uVar1 <= 0xdf) {
+          pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = (uint32_t)uVar1;
           goto bind_cmd26_slot0;
         }
       }
 
-      pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = 0xc0;
+      pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0xc0;
     }
 
     bind_cmd26_slot0:
-    iVar1 = pnButtonIndices->nHandlerIdx_Cmd26_Classic;
-    if (iVar1 != -1) {
+    nHandlerIdx = pnButtonIndices->nHandlerIdx_Cmd26_Classic;
+    if (nHandlerIdx != -1) {
       nBoundKey = CmdTbl::CMD_IsCommandBound(0x26, 0);
       if (nBoundKey) {
-        uVar2 = CmdTbl::CMD_GetKeyForCommand(0x26, 0);
-        if (uVar2 != 0xffff && uVar2 <= 0xdf) {
-          pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = (uint32_t)uVar2;
+        uVar1 = CmdTbl::CMD_GetKeyForCommand(0x26, 0);
+        if (uVar1 != 0xffff && uVar1 <= 0xdf) {
+          pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = (uint32_t)uVar1;
           goto bind_cmd29_slot0;
         }
       }
 
-      pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = 0x1b;
+      pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0x1b;
     }
 
     bind_cmd29_slot0:
-    iVar1 = pnButtonIndices->nHandlerIdx_Cmd29_Classic;
-    if (iVar1 != -1) {
+    nHandlerIdx = pnButtonIndices->nHandlerIdx_Cmd29_Classic;
+    if (nHandlerIdx != -1) {
       nBoundKey = CmdTbl::CMD_IsCommandBound(0x29, 0);
       if (nBoundKey) {
-        uVar2 = CmdTbl::CMD_GetKeyForCommand(0x29, 0);
-        if (uVar2 != 0xffff && uVar2 <= 0xdf) {
-          pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = (uint32_t)uVar2;
+        uVar1 = CmdTbl::CMD_GetKeyForCommand(0x29, 0);
+        if (uVar1 != 0xffff && uVar1 <= 0xdf) {
+          pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = (uint32_t)uVar1;
           goto bind_cmd2c_slot0;
         }
       }
 
-      pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = 0x4e;
+      pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0x4e;
     }
 
     bind_cmd2c_slot0:
@@ -1272,21 +1272,21 @@ static void UI_SetMultipleButtonKeyBindings(D2UIKeyBindingSetStrc * pnButtonIndi
       return;
     }
 
-    iVar1 = pnButtonIndices->nHandlerIdx_Cmd2C_Classic;
-    if (iVar1 == -1) {
+    nHandlerIdx = pnButtonIndices->nHandlerIdx_Cmd2C_Classic;
+    if (nHandlerIdx == -1) {
       return;
     }
 
     nBoundKey = CmdTbl::CMD_IsCommandBound(0x2c, 0);
     if (nBoundKey) {
-      uVar2 = CmdTbl::CMD_GetKeyForCommand(0x2c, 0);
-      if (uVar2 != 0xffff && uVar2 <= 0xdf) {
-        pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = (uint32_t)uVar2;
+      uVar1 = CmdTbl::CMD_GetKeyForCommand(0x2c, 0);
+      if (uVar1 != 0xffff && uVar1 <= 0xdf) {
+        pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = (uint32_t)uVar1;
         return;
       }
     }
 
-    pnButtonIndices->pHandlers[iVar1].nMessageOrKeyCode = 0x57;
+    pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0x57;
 }
 
 BOOL __fastcall GetUIFlag(eD2UIvars eUI) {
@@ -1477,7 +1477,7 @@ void __stdcall UI_DrawPartyRoster() {
     Engine::Gfx::D2GFX_DrawSolidRectExBySize(0x78, 0x1e, 400, 0x15e, 0, DRAW_VERYTRANSPARENT);
     D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xfa4), 0x96, 0x37, 4, 0);
-    int iVar1 = gnPartyRosterRowHeight * 2 + 0x1e;
+    int nRowBaseY = gnPartyRosterRowHeight * 2 + 0x1e;
     do {
       uint16_t nPartyId;
       if (!pRoster) {
@@ -1487,7 +1487,7 @@ void __stdcall UI_DrawPartyRoster() {
       pszRosterName = GAME::Roster::GetRosterName(pRoster);
       memset(wszRosterName, 0, 16 * sizeof(wszRosterName[0]));
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszRosterName, pszRosterName, 0x10);
-      nRowY = iVar1 + 0x19;
+      nRowY = nRowBaseY + 0x19;
       *(uint32_t*)((char*)&wszRosterName + 28) &= 0xffff;
       D2Win::Src::D2WinFont::DRAW_text(wszRosterName, 0x96, nRowY, 0, 0);
       for (int iFill = 0; iFill < 20; iFill++) {
@@ -1522,8 +1522,8 @@ void __stdcall UI_DrawPartyRoster() {
       }
 
       pRoster = GAME::Roster::GetNextRosterPlayer(pRoster);
-      iVar1 += gnPartyRosterRowHeight;
-    } while (iVar1 <= 0x145 - gnPartyRosterRowHeight);
+      nRowBaseY += gnPartyRosterRowHeight;
+    } while (nRowBaseY <= 0x145 - gnPartyRosterRowHeight);
 }
 
 void __stdcall UI_LoadAllPanelAssets() {
@@ -1990,8 +1990,8 @@ void __stdcall PALETTE_LoadLoadingScreenPalette() {
     D2Win::Src::D2WinPalette::LoadPalette(acStack_20c, szPalPl2Path);
 }
 
-void __fastcall SetActNo(int32_t nParam) {
-    nLoadedActNo = nParam;
+void __fastcall SetActNo(int32_t nActNo) {
+    nLoadedActNo = nActNo;
 }
 
 void __stdcall CleanupAfterLoadingAct() {
@@ -2314,7 +2314,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       uint16_t wszWarpName;
-      uint8_t local_41e[142];
+      uint8_t aWarpNameBuf[142];
       uint8_t wszObjBuf[256];
       uint16_t wszObjectName;
       uint8_t aObjectNameBuf[254];
@@ -2527,7 +2527,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
           nClassId = ((uint32_t)pShadow->SelectDX >> 1) + pShadow->SelectX + nHealthBarScreenX;
           nWarpTooltipY = ((uint32_t)pShadow->SelectDY >> 1) + pShadow->SelectY + gnMercenaryHealthBarScreenY;
           __frame0.wszWarpName = L'\0';
-          Fog::File::CONTAINER_InitializeBuffer(__frame0.local_41e, 2, 199, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          Fog::File::CONTAINER_InitializeBuffer(__frame0.aWarpNameBuf, 2, 199, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
           pwszTemp = __frame0.pLevelTxtResult->wszLevelWarp;
           if (eCurrentRoomLevel == LEVEL_DenOfEvil) {
             nResult = GetQuestAvailabilityByIndex(0, 1);
@@ -3313,7 +3313,7 @@ BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse
     0x1
 }; D2_STATIC_GUARD(gnUICloseActivePanelsFlag, "D2Client::UI::ui::UI_CloseActivePanels::gnUICloseActivePanelsFlag");
 
-    int iVar1;
+    int nCursorX;
     int nMouseY;
     uint32_t eOverlayMode;
     BOOL bClosedAny;
@@ -3334,7 +3334,7 @@ BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse
             UNIT::Player::GetPlayerUnit_UI();
             (&GFX_bShowUIFlag.Game)[eUI] = 0;
             UI_UnregisterHandlersForPanel(eUI);
-            iVar1 = GetMouseX();
+            nCursorX = GetMouseX();
             nMouseY = GetMouseY();
             if (!false) {
               switch (eUI) {
@@ -3363,8 +3363,8 @@ BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse
                 case UI_SKILLTREE:
                   if (!GFX_bShowUIFlag.CharStat && !GFX_bShowUIFlag.WaypointMenu && !GFX_bShowUIFlag.Quest && !GFX_bShowUIFlag.PartyPane && !GFX_bShowUIFlag.MercMenu && !GFX_bShowUIFlag.UnusedScroll && !GFX_bShowUIFlag.PartyMenu) {
                     Path::TypeOfUiOverlayOverWorld(0);
-                    if (bAdjustMouse && iVar1 < ScreenSizeX / 2) {
-                      SetMouseXY(ScreenSizeX / 4 + iVar1, nMouseY);
+                    if (bAdjustMouse && nCursorX < ScreenSizeX / 2) {
+                      SetMouseXY(ScreenSizeX / 4 + nCursorX, nMouseY);
                     }
                   } else {
                     eOverlayMode = 2;
@@ -3390,8 +3390,8 @@ BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse
                     goto apply_overlay_mode;
                   }
                 Path::TypeOfUiOverlayOverWorld(0);
-                if (bAdjustMouse && iVar1 > ScreenSizeX / 2) {
-                  SetMouseXY(iVar1 - ScreenSizeX / 4, nMouseY);
+                if (bAdjustMouse && nCursorX > ScreenSizeX / 2) {
+                  SetMouseXY(nCursorX - ScreenSizeX / 4, nMouseY);
                 }
 
                 break;
@@ -4480,7 +4480,7 @@ void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps) {
     gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * nNewSelectedRow / (int)lRowCount + 0x2f + nCount / 2;
 }
 
-static int32_t UI_GetControlConfigRowAtY(int32_t nParam) {
+static int32_t UI_GetControlConfigRowAtY(int32_t nMouseY) {
     int nCurRow;
     int i = 0;
     if (gnUICtrlConfigScrollOffset < gnUICtrlConfigTotalRows) {
@@ -4495,7 +4495,7 @@ static int32_t UI_GetControlConfigRowAtY(int32_t nParam) {
 
           break;
         }
-        if (nParam <= nCurrentRowY) {
+        if (nMouseY <= nCurrentRowY) {
           return nCurRow;
         }
 
@@ -4514,9 +4514,9 @@ static int32_t UI_GetControlConfigRowAtY(int32_t nParam) {
     return i;
 }
 
-uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nParam) {
+uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nMouseX) {
     int nScreenLeftMargin = (ScreenSizeX - 0x26c) / 2;
-    return (uint32_t)(nParam < nScreenLeftMargin + 0x12 + (ScreenSizeX + nScreenLeftMargin * -2 - 0x31) / 3 * 2);
+    return (uint32_t)(nMouseX < nScreenLeftMargin + 0x12 + (ScreenSizeX + nScreenLeftMargin * -2 - 0x31) / 3 * 2);
 }
 
 // Returns the index (0-2) of the control-config tab whose bounds contain
@@ -4603,8 +4603,8 @@ static int UI_IsMouseBelowScrollThumb(int32_t nMouseX, int32_t nMouseY) {
 // Returns TRUE when (nMouseX, nMouseY) is over one of the control-config tabs: UI_GetControlConfigTabIndex(nMouseX@ESI, nMouseY@EDX) != 3 (SETNZ at 004a4a0a).
 // Was code outside any function; no direct reference reaches it in 1.14d.
 BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY) {
-    int32_t iVar1 = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
-    return (uint32_t)(iVar1 != 3);
+    int32_t nTabIndex = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
+    return (uint32_t)(nTabIndex != 3);
 }
 
 static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosY, int32_t nMousePosX) {
@@ -4629,13 +4629,13 @@ static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosY, int32_t nMou
 // Returns TRUE when gnUICtrlConfigActiveButton is not 3 (none) and the tab under (nMouseX@ESI, nMouseY@EDX) is that button (004a4a87, 004a4a91); the same test UI_ConfigHandleMouseClick makes inline at 004a5ead.
 // Was code outside any function; no direct reference reaches it in 1.14d.
 BOOL UI_IsMouseOverActiveControlConfigButton(int32_t nMouseX, int32_t nMouseY) {
-    int iVar1 = gnUICtrlConfigActiveButton;
+    int nActiveButton = gnUICtrlConfigActiveButton;
     if (gnUICtrlConfigActiveButton == 3) {
       return 0;
     }
 
-    int32_t iVar2 = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
-    if (iVar2 == iVar1) {
+    int32_t nTabIndex = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
+    if (nTabIndex == nActiveButton) {
       return 1;
     }
 
@@ -4649,7 +4649,7 @@ void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouse
     static int gbUICtrlConfigNeedRefresh; D2_STATIC_GUARD_BSS(gbUICtrlConfigNeedRefresh, "D2Client::UI::ui::UI_UpdateConfigControlsState::gbUICtrlConfigNeedRefresh");
     static int gbUICtrlConfigPendingKey; D2_STATIC_GUARD_BSS(gbUICtrlConfigPendingKey, "D2Client::UI::ui::UI_UpdateConfigControlsState::gbUICtrlConfigPendingKey");
 
-    uint32_t* piVar1;
+    uint32_t* pdwRegionState;
     uint32_t dwNowTick;
     DWORD dwTickCount;
     int64_t nMaxScrollRows;
@@ -4690,14 +4690,14 @@ void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouse
     }
 
     handle_list_area:
-    piVar1 = (uint32_t*)gaControlConfigRegionMouseState;
+    pdwRegionState = (uint32_t*)gaControlConfigRegionMouseState;
     do {
-      if (*piVar1 && piVar1 != (uint32_t*)gaControlConfigRegionMouseState) {
+      if (*pdwRegionState && pdwRegionState != (uint32_t*)gaControlConfigRegionMouseState) {
         goto handle_up_arrow;
       }
 
-      piVar1++;
-    } while ((int)piVar1 < (intptr_t)((char*)&gaControlConfigRegionMouseState + sizeof(gaControlConfigRegionMouseState)));
+      pdwRegionState++;
+    } while ((int)pdwRegionState < (intptr_t)((char*)&gaControlConfigRegionMouseState + sizeof(gaControlConfigRegionMouseState)));
 
     if (nMouseInTopScroll || gaControlConfigRegionMouseState[0]) {
       int32_t nRowAtY;
@@ -4999,7 +4999,7 @@ void __stdcall DRAW_ConfigControlsMenu() {
     uint32_t nColByteOff;
     int nLeftEdge2;
     D2GfxDataStrc sGfxData;
-    RECT local_34;
+    RECT rcFrame;
     int nRowYOff;
     int nLoopIter;
     int nRowIndex;
@@ -5025,14 +5025,14 @@ void __stdcall DRAW_ConfigControlsMenu() {
     nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
     nTmpY = (ScreenSizeX - 0x26c) / 2;
     Engine::Gfx::D2GFX_DrawSolidRectExBySize(nTmpY, (WindowSizeY - 0x1a4) / 2, ScreenSizeX + nTmpY * -2, 0x171, 0, DRAW_TRANSPARENT);
-    local_34.left = (ScreenSizeX - 0x26c) / 2;
-    local_34.bottom = (WindowSizeY - 0x1a4) / 2;
-    local_34.right = ScreenSizeX - local_34.left - 3;
-    local_34.top = local_34.bottom + 3;
-    local_34.bottom += 0x170;
-    DRAW_Direct_RectFrame(&local_34);
-    local_34.top = (WindowSizeY - 0x1a4) / 2 + 0x143;
-    DRAW_Direct_RectFrame(&local_34);
+    rcFrame.left = (ScreenSizeX - 0x26c) / 2;
+    rcFrame.bottom = (WindowSizeY - 0x1a4) / 2;
+    rcFrame.right = ScreenSizeX - rcFrame.left - 3;
+    rcFrame.top = rcFrame.bottom + 3;
+    rcFrame.bottom += 0x170;
+    DRAW_Direct_RectFrame(&rcFrame);
+    rcFrame.top = (WindowSizeY - 0x1a4) / 2 + 0x143;
+    DRAW_Direct_RectFrame(&rcFrame);
     nTmpY = (WindowSizeY - 0x1a4) / 2 + 0x1e;
     bBold = 0;
     nColor_lcl = 4;
@@ -5380,11 +5380,11 @@ static void UI_ConfigHandleMouseClick(int32_t nMouseX, int32_t nMouseY) {
       }
     }
 
-    int iVar1 = gnUICtrlConfigActiveButton;
+    int nActiveButton = gnUICtrlConfigActiveButton;
     if (gaControlConfigRegionMouseState[6] && gnUICtrlConfigActiveButton != 3) {
       nTabIndex = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
-      if (nTabIndex == iVar1) {
-        g_UIConfigTabTable[iVar1].pfnAction();
+      if (nTabIndex == nActiveButton) {
+        g_UIConfigTabTable[nActiveButton].pfnAction();
         Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
       }
     }
@@ -5595,11 +5595,11 @@ void __stdcall INPUT_ConfigMouseWheelScroll(D2UIMouseMsgStrc * pMsg) {
     }
 
     int nScrollTicks = (int)*(short int*)((uintptr_t)&pMsg->nWParam + 2);
-    int iVar1 = nScrollTicks >> 0x1f;
-    nScrollTicks = nScrollTicks / 0x78 + iVar1;
-    if (nScrollTicks != iVar1) {
+    int nSignMask = nScrollTicks >> 0x1f;
+    nScrollTicks = nScrollTicks / 0x78 + nSignMask;
+    if (nScrollTicks != nSignMask) {
       pMsg = 0;
-      bExitFlag = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, nScrollTicks - iVar1 < 0 ? 0x104 : 0x103, (uint16_t*)&pMsg);
+      bExitFlag = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, nScrollTicks - nSignMask < 0 ? 0x104 : 0x103, (uint16_t*)&pMsg);
       if (bExitFlag) {
         UI_ConfigKeyBindModeDisable(1);
       } else {
@@ -5830,10 +5830,10 @@ void __stdcall INPUT_StatScreenButtonUp(D2UIMouseMsgStrc * pMsg) {
         }
       }
     } else {
-      int iVar1;
+      int nNewStatPoints;
       if (gbUIStatButtonHovered) {
-        iVar1 = UI_GetNewStatPointsCount();
-        if (iVar1) {
+        nNewStatPoints = UI_GetNewStatPointsCount();
+        if (nNewStatPoints) {
           gbUIStatButtonHovered = 0;
           SetUIFlag(UI_STATSCREEN, UI_SET, 0);
           pMsg->bHandled = 1;
@@ -5878,10 +5878,10 @@ void __stdcall INPUT_SkillTreeButtonUp(D2UIMouseMsgStrc * pMsg) {
         }
       }
     } else {
-      int iVar1;
+      int nNewSkillPoints;
       if (gbUISkillButtonHovered) {
-        iVar1 = UI_GetNewSkillPointsCount();
-        if (iVar1) {
+        nNewSkillPoints = UI_GetNewSkillPointsCount();
+        if (nNewSkillPoints) {
           gbUISkillButtonHovered = 0;
           SetUIFlag(UI_SKILLTREE, UI_SET, 0);
           pMsg->bHandled = 1;
@@ -5896,8 +5896,8 @@ void __stdcall INPUT_SkillTreeButtonUp(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
-bool __stdcall UI_CanAllocateStatPoint(int32_t nParam) {
-    if (nParam == 3) {
+bool __stdcall UI_CanAllocateStatPoint(int32_t nBorderType) {
+    if (nBorderType == 3) {
       return true;
     }
 
@@ -6300,8 +6300,8 @@ static int32_t __stdcall CHAR_AddClassToHitFactor(D2UnitStrc * pUnit, int32_t nV
       return nValue;
     }
 
-    int iVar1 = pUnit->nClassId;
-    D2CharStatsTxt* pCharStatsTxt = iVar1 >= 0 && iVar1 < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + iVar1 : nullptr;
+    int nCharClassId = pUnit->nClassId;
+    D2CharStatsTxt* pCharStatsTxt = nCharClassId >= 0 && nCharClassId < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nCharClassId : nullptr;
     if (!pCharStatsTxt) {
       return nValue;
     }
@@ -6313,81 +6313,81 @@ static int32_t __stdcall CHAR_AddClassToHitFactor(D2UnitStrc * pUnit, int32_t nV
 // Body continues at 004a7354, the JNZ target of 004a734a - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'UI_FormatStatTooltip'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'UI_FormatStatTooltip':
 int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit) {
-    BOOL BVar4;
-    D2MonStatsTxt* pDVar7;
-    int32_t iVar8;
-    D2MonStatsInitStrc aiStack_44;
+    BOOL bIsExpansion;
+    D2MonStatsTxt* pMonStatsTxt;
+    int32_t iVar3;
+    D2MonStatsInitStrc stMonStatsInit;
     if (!nUnit) {
       return 0;
     }
 
-    D2UnitStrc* pDStack_8;
-    pDStack_8 = UNIT::Player::GetPlayerUnit_UI();
-    int iStack_c;
-    iStack_c = 100;
-    uint8_t bVar1;
-    bVar1 = GAME::Game::GetDificulity();
-    uint32_t uVar6;
-    uVar6 = (uint32_t)bVar1;
-    if (2 < (int32_t)uVar6) {
+    D2UnitStrc* pPlayer;
+    pPlayer = UNIT::Player::GetPlayerUnit_UI();
+    int nMaxHitChance;
+    nMaxHitChance = 100;
+    uint8_t byDifficultyRaw;
+    byDifficultyRaw = GAME::Game::GetDificulity();
+    uint32_t nDifficulty;
+    nDifficulty = (uint32_t)byDifficultyRaw;
+    if (2 < (int32_t)nDifficulty) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18e);
       exit(-1);
     }
 
-    int iVar3;
-    iVar3 = GAME::Select::SELECT_GetConstant13_X();
-    if (iVar3 < 0 || iVar3 >= sgptDataTable->nTxtMonStatsSize || (pDVar7 = sgptDataTable->pTxtMonStats + iVar3 , !pDVar7)) {
+    int iVar1;
+    iVar1 = GAME::Select::SELECT_GetConstant13_X();
+    if (iVar1 < 0 || iVar1 >= sgptDataTable->nTxtMonStatsSize || (pMonStatsTxt = sgptDataTable->pTxtMonStats + iVar1 , !pMonStatsTxt)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x193);
       exit(-1);
     }
 
-    memset(&aiStack_44, 0, 0x38);
-    int iVar5;
-    iVar5 = (int)pDVar7->aLevel[uVar6];
+    memset(&stMonStatsInit, 0, 0x38);
+    int iVar2;
+    iVar2 = (int)pMonStatsTxt->aLevel[nDifficulty];
     D2MonStatsInitStrc* pOutStats;
-    pOutStats = &aiStack_44;
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(iVar3, GAME::Game::GAMEDATA_GetLadderOrGameType(), uVar6, iVar5, 2, pOutStats);
-    if (pDVar7->Align != '\x01') {
-      uint8_t uVar2;
-      BVar4 = GAME::Game::CLIENT_CheckExpansion();
-      if (!BVar4) {
-        uVar2 = GAME::Game::GetDificulity();
-        if (uVar2 != '\0') {
-          aiStack_44.nAC = aiStack_44.nAC * 10 / 0xc;
+    pOutStats = &stMonStatsInit;
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(iVar1, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficulty, iVar2, 2, pOutStats);
+    if (pMonStatsTxt->Align != '\x01') {
+      uint8_t byDifficulty;
+      bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
+      if (!bIsExpansion) {
+        byDifficulty = GAME::Game::GetDificulity();
+        if (byDifficulty != '\0') {
+          stMonStatsInit.nAC = stMonStatsInit.nAC * 10 / 0xc;
         }
       }
     }
 
-    iVar3 = CHAR_AddClassToHitFactor(pDStack_8, nUnit);
-    if (aiStack_44.nAC < 0) {
-      iVar3 -= aiStack_44.nAC;
-      aiStack_44.nAC = 0;
+    iVar1 = CHAR_AddClassToHitFactor(pPlayer, nUnit);
+    if (stMonStatsInit.nAC < 0) {
+      iVar1 -= stMonStatsInit.nAC;
+      stMonStatsInit.nAC = 0;
     }
-    if (iVar3 < 0) {
-      aiStack_44.nAC -= iVar3;
-      iVar3 = 0;
+    if (iVar1 < 0) {
+      stMonStatsInit.nAC -= iVar1;
+      iVar1 = 0;
       check_zero_divisor:
-      iVar5 = iStack_c;
-      if (!aiStack_44.nAC) {
+      iVar2 = nMaxHitChance;
+      if (!stMonStatsInit.nAC) {
         goto apply_level_factor;
       }
-    } else if (!iVar3) {
+    } else if (!iVar1) {
       goto check_zero_divisor;
     }
 
-    iVar5 = iVar3 * 100 / (aiStack_44.nAC + iVar3);
+    iVar2 = iVar1 * 100 / (stMonStatsInit.nAC + iVar1);
     apply_level_factor:
-    iVar3 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pDStack_8, UNITSTAT_level, 0);
-    iVar8 = iVar3 * iVar5 * 2 / (pDVar7->aLevel[uVar6] + iVar3);
-    if (iVar8 < 5) {
+    iVar1 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0);
+    iVar3 = iVar1 * iVar2 * 2 / (pMonStatsTxt->aLevel[nDifficulty] + iVar1);
+    if (iVar3 < 5) {
       return 5;
     }
-    if (iVar8 <= 0x5f) {
-      return iVar8;
+    if (iVar3 <= 0x5f) {
+      return iVar3;
     }
 
-    iVar8 = 0x5f;
-    return iVar8;
+    iVar3 = 0x5f;
+    return iVar3;
 }
 
 int32_t __stdcall UI_BuildStatWindowDescriptions() {
@@ -6403,9 +6403,9 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
     nBlockRatio = nTmp2 + nBlockRatio;
     uint8_t bVar1;
     bVar1 = GAME::Game::GetDificulity();
-    uint32_t uVar3;
-    uVar3 = (uint32_t)bVar1;
-    if (2 < (int32_t)uVar3) {
+    uint32_t nDifficultyIndex;
+    nDifficultyIndex = (uint32_t)bVar1;
+    if (2 < (int32_t)nDifficultyIndex) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d6);
       exit(-1);
     }
@@ -6420,22 +6420,22 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
 
     memset(&sMonStats, 0, 0x38);
     int nMonLevel;
-    nMonLevel = (int)pMonStatsTxt->aLevel[uVar3];
+    nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
     D2MonStatsInitStrc* pMonScaledStats;
     pMonScaledStats = &sMonStats;
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), uVar3, nMonLevel, 8, pMonScaledStats);
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 8, pMonScaledStats);
     nMonLevel = sMonStats.nTH;
     if (!sMonStats.nTH) {
       memset(&sMonStats, 0, 0x38);
-      nMonLevel = (int)pMonStatsTxt->aLevel[uVar3];
+      nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
       pMonScaledStats = &sMonStats;
-      D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), uVar3, nMonLevel, 0x10, pMonScaledStats);
+      D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 0x10, pMonScaledStats);
       nMonLevel = sMonStats.nTH;
       if (!sMonStats.nTH) {
         memset(&sMonStats, 0, 0x38);
-        nMonLevel = (int)pMonStatsTxt->aLevel[uVar3];
+        nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
         pMonScaledStats = &sMonStats;
-        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), uVar3, nMonLevel, 0x20, pMonScaledStats);
+        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 0x20, pMonScaledStats);
         nMonLevel = sMonStats.nTH;
       }
     }
@@ -6467,7 +6467,7 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
 
     nBlockRatio = nMonLevel * 100 / (nMonLevel + nBlockRatio);
     apply_level_factor:
-    wMonStatVal = pMonStatsTxt->aLevel[uVar3];
+    wMonStatVal = pMonStatsTxt->aLevel[nDifficultyIndex];
     nMonIdx = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     return wMonStatVal * nBlockRatio * 2 / (nMonIdx + wMonStatVal);
 }
@@ -6508,9 +6508,9 @@ static int INPUT_HighResLeftPanelClick(D2UIMouseMsgStrc * pMsg) {
 
     BOOL nBeltSlot = Panel::PANEL_CalculateBeltSlotIndex(pMsg);
     if (!nBeltSlot && (int)(uint32_t)pMsg->uLParam.sMousePos.nMouseX <= ScreenSizeX / 2 && (int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY < ScreenSizeY - 0x2f) {
-      int iVar1;
-      iVar1 = GetItemType();
-      if (iVar1 == 6) {
+      int nItemType;
+      nItemType = GetItemType();
+      if (nItemType == 6) {
         UI_DropCursorItemOnGround();
       }
 
@@ -6862,8 +6862,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
     }
 }; D2_STATIC_GUARD(gaStatPanelRows, "D2Client::UI::ui::DRAW_UI_StatWindow_I::gaStatPanelRows");
 
-    char cVar1;
-    uint8_t bVar2;
+    uint8_t bVar1;
     uint8_t byDifficulty;
     uint16_t* nStatPts2;
     int32_t iVar8;
@@ -6871,14 +6870,14 @@ void __stdcall DRAW_UI_StatWindow_I() {
     int nDrawY;
     uint32_t nStatVal;
     D2UnitStrc* pUnit;
-    D2DifficultyLevelsTxt* pDVar4;
+    D2DifficultyLevelsTxt* pDifficultyLevelsTxt;
     uint32_t nResistClamped;
     eD2States eShieldState;
     uint32_t nLangCode;
     uint16_t* pWszLine;
     uint32_t nDisplayVal;
     uint32_t* pBtnEntry;
-    int iVar5;
+    int iVar3;
     uint16_t wszStatDescBuf[100];
     uint16_t wszTextBuf[128];
     char szValueAscii[128];
@@ -6890,12 +6889,13 @@ void __stdcall DRAW_UI_StatWindow_I() {
     uint32_t nStatEntryIdx;
     uint32_t nColorIdx;
     bool bResistAtCap;
+    char cNameChar;
     eD2UnitStat eMaxResStat;
     int32_t nDrawX;
     uint16_t* pWszNext;
     uint16_t wCurChar;
-    D2UnitStrc* pUnit_00;
-    pUnit_00 = UNIT::Player::GetPlayerUnit_UI();
+    D2UnitStrc* pPlayer;
+    pPlayer = UNIT::Player::GetPlayerUnit_UI();
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = Panel::InvChar;
     sGfxData.nDirection = 0;
@@ -6909,17 +6909,17 @@ void __stdcall DRAW_UI_StatWindow_I() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x100, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     int nMouseXCast;
     nMouseXCast = GetMouseX();
-    int iVar3;
-    iVar3 = GetMouseY();
-    if (nMouseXCast >= gnPanelOffsetX + 0x80 && nMouseXCast <= gnPanelOffsetX + 0xa0 && iVar3 >= gnPanelOffsetY - 0x5c + ScreenSizeY && iVar3 <= gnPanelOffsetY - 0x3c + ScreenSizeY) {
+    int iVar2;
+    iVar2 = GetMouseY();
+    if (nMouseXCast >= gnPanelOffsetX + 0x80 && nMouseXCast <= gnPanelOffsetX + 0xa0 && iVar2 >= gnPanelOffsetY - 0x5c + ScreenSizeY && iVar2 <= gnPanelOffsetY - 0x3c + ScreenSizeY) {
       nDrawX = 1;
-      iVar5 = gnPanelOffsetY - 0x5f + ScreenSizeY;
+      iVar3 = gnPanelOffsetY - 0x5f + ScreenSizeY;
       iVar8 = 0;
       nDrawY = gnPanelOffsetX + 0x8f;
-      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), nDrawY, iVar5, iVar8, nDrawX);
+      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), nDrawY, iVar3, iVar8, nDrawX);
     }
 
-    iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_statpts, 0);
+    iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_statpts, 0);
     if (iVar8) {
       sGfxData.pDC6 = Panel::skillpoints;
       sGfxData.nFrameNumber = 0;
@@ -6927,7 +6927,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
       memset(wszStatPts, 0, 10 * sizeof(wszStatPts[0]));
       D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
       nStatPts2 = D2Lang::StrTable::strtable::GetLocaleString(0xfeb);
-      iVar5 = gnPanelOffsetY - 0x7d + ScreenSizeY;
+      iVar3 = gnPanelOffsetY - 0x7d + ScreenSizeY;
       nDrawY = gnPanelOffsetX + 0xb;
       nWidth = gnPanelOffsetX - nDrawY + 0x59;
       iVar8 = D2Win::Src::D2WinFont::DRAW_text0(nStatPts2);
@@ -6935,9 +6935,9 @@ void __stdcall DRAW_UI_StatWindow_I() {
         nDrawY += nWidth - iVar8 >> 1;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text(nStatPts2, nDrawY, iVar5, 1, 0);
+      D2Win::Src::D2WinFont::DRAW_text(nStatPts2, nDrawY, iVar3, 1, 0);
       nStatPts2 = D2Lang::StrTable::strtable::GetLocaleString(0xfec);
-      iVar5 = gnPanelOffsetY - 0x75 + ScreenSizeY;
+      iVar3 = gnPanelOffsetY - 0x75 + ScreenSizeY;
       nDrawY = gnPanelOffsetX + 0xb;
       nWidth = gnPanelOffsetX - nDrawY + 0x59;
       iVar8 = D2Win::Src::D2WinFont::DRAW_text0(nStatPts2);
@@ -6945,12 +6945,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
         nDrawY += nWidth - iVar8 >> 1;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text(nStatPts2, nDrawY, iVar5, 1, 0);
-      iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_statpts, 0);
+      D2Win::Src::D2WinFont::DRAW_text(nStatPts2, nDrawY, iVar3, 1, 0);
+      iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_statpts, 0);
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szStatPtsAscii, "%i", iVar8);
       D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize((uint16_t*)wszStatPts, szStatPtsAscii, 9);
-      iVar5 = gnPanelOffsetY - 0x78 + ScreenSizeY;
+      iVar3 = gnPanelOffsetY - 0x78 + ScreenSizeY;
       nDrawY = gnPanelOffsetX + 0x5c;
       nWidth = gnPanelOffsetX - nDrawY + 0x80;
       iVar8 = D2Win::Src::D2WinFont::DRAW_text0((uint16_t*)wszStatPts);
@@ -6958,21 +6958,21 @@ void __stdcall DRAW_UI_StatWindow_I() {
         nDrawY += nWidth - iVar8 >> 1;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text((uint16_t*)wszStatPts, nDrawY, iVar5, 0, 0);
+      D2Win::Src::D2WinFont::DRAW_text((uint16_t*)wszStatPts, nDrawY, iVar3, 0, 0);
     }
 
-    iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_statpts, 0);
+    iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_statpts, 0);
     if (iVar8) {
       pBtnEntry = (uint32_t*)&gaStatScreenButtons[0].nY;
       do {
-        iVar5 = pBtnEntry[-1] + gnPanelOffsetX;
+        iVar3 = pBtnEntry[-1] + gnPanelOffsetX;
         nDrawY = *pBtnEntry + gnPanelOffsetY - 0x1e0 + ScreenSizeY;
         sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
         sGfxData.nFrameNumber = 0;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar5 + 5, nDrawY + 5, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar3 + 5, nDrawY + 5, -1, DRAW_SOLID, nullptr);
         sGfxData.nFrameNumber = (int)(pBtnEntry[1] != 0);
         sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar5 + 8, nDrawY + 1, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar3 + 8, nDrawY + 1, -1, DRAW_SOLID, nullptr);
         pBtnEntry = (uint32_t*)((int)pBtnEntry + 0xe);
       } while ((int)pBtnEntry < (intptr_t)((char*)&gaStatScreenButtons + sizeof(gaStatScreenButtons) + 4));
     }
@@ -6992,21 +6992,21 @@ void __stdcall DRAW_UI_StatWindow_I() {
       nStatPts2 = wszStatDescBuf;
       wszStatDescBuf[99] = L'\0';
       iVar8 = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(nStatPts2);
-      iVar5 = 0;
+      iVar3 = 0;
       wCurChar = wszStatDescBuf[0];
       while (wCurChar != L'\0') {
         if (wCurChar == L'\n') {
-          wszStatDescBuf[iVar5] = L'\0';
-          if (iVar5 < iVar8) {
+          wszStatDescBuf[iVar3] = L'\0';
+          if (iVar3 < iVar8) {
             pWszLine = nStatPts2 + 1;
             nWidth = nWidth - nDrawX + 1;
             iVar8 = D2Win::Src::D2WinFont::DRAW_text0(wszStatDescBuf);
-            iVar5 = nDrawX;
+            iVar3 = nDrawX;
             if (iVar8 < nWidth) {
-              iVar5 = (nWidth - iVar8 >> 1) + nDrawX;
+              iVar3 = (nWidth - iVar8 >> 1) + nDrawX;
             }
 
-            D2Win::Src::D2WinFont::DRAW_text(wszStatDescBuf, iVar5, nDrawY - 4, 0, 0);
+            D2Win::Src::D2WinFont::DRAW_text(wszStatDescBuf, iVar3, nDrawY - 4, 0, 0);
             iVar8 = D2Win::Src::D2WinFont::DRAW_text0(pWszLine);
             if (iVar8 < nWidth) {
               nDrawX = (nWidth - iVar8 >> 1) + nDrawX;
@@ -7021,14 +7021,14 @@ void __stdcall DRAW_UI_StatWindow_I() {
 
         pWszNext = nStatPts2 + 1;
         nStatPts2++;
-        iVar5++;
+        iVar3++;
         wCurChar = *pWszNext;
       }
 
-      iVar5 = nWidth - nDrawX + 1;
+      iVar3 = nWidth - nDrawX + 1;
       iVar8 = D2Win::Src::D2WinFont::DRAW_text0(wszStatDescBuf);
-      if (iVar8 < iVar5) {
-        nDrawX = (iVar5 - iVar8 >> 1) + nDrawX;
+      if (iVar8 < iVar3) {
+        nDrawX = (iVar3 - iVar8 >> 1) + nDrawX;
       }
 
       pWszLine = wszStatDescBuf;
@@ -7037,17 +7037,17 @@ void __stdcall DRAW_UI_StatWindow_I() {
       pCharStatsTxtOrFont = (D2CharStatsTxt*)((int)pCharStatsTxtOrFont + 0x12);
     } while ((uintptr_t)pCharStatsTxtOrFont < 0x10e);
 
-    SkillDesc::DRAW_UI_STAT_Damage(pUnit_00);
+    SkillDesc::DRAW_UI_STAT_Damage(pPlayer);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
     BOOL bExpansion;
-    bExpansion = SkillDesc::SKILLDESC_GetSkillBonusText(pUnit_00, 1);
+    bExpansion = SkillDesc::SKILLDESC_GetSkillBonusText(pPlayer, 1);
     iVar8 = UI_GetStatValueForDisplay(bExpansion);
-    bExpansion = SkillDesc::SKILLDESC_GetSkillBonusText(pUnit_00, 0);
+    bExpansion = SkillDesc::SKILLDESC_GetSkillBonusText(pPlayer, 0);
     nDrawX = UI_GetStatValueForDisplay(bExpansion);
     int32_t pExpTxtNextLevel;
     pExpTxtNextLevel = UI_BuildStatWindowDescriptions();
-    DRAW_UI_StatWindow_II(iVar8, nDrawX, nMouseXCast, iVar3);
-    DRAW_UI_StatWindow_III(nMouseXCast, iVar3, pExpTxtNextLevel);
+    DRAW_UI_StatWindow_II(iVar8, nDrawX, nMouseXCast, iVar2);
+    DRAW_UI_StatWindow_III(nMouseXCast, iVar2, pExpTxtNextLevel);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     sGfxData.pDC6 = GetBuySellBtnDC6();
     sGfxData.nFrameNumber = gbUIStatScreenMouseDown != 0 ? 11 : 10;
@@ -7056,16 +7056,16 @@ void __stdcall DRAW_UI_StatWindow_I() {
       wszTextBuf[nMouseXCast] = L'\0';
     }
 
-    if (pUnit_00 && pUnit_00->eUnitType == UNIT_PLAYER) {
+    if (pPlayer && pPlayer->eUnitType == UNIT_PLAYER) {
       char* pRosterName;
-      nMouseXCast = pUnit_00->nClassId;
+      nMouseXCast = pPlayer->nClassId;
       if (nMouseXCast < 0 || nMouseXCast >= sgptDataTable->nTxtCharStatsSize) {
         pCharStatsTxtOrFont = 0;
       } else {
         pCharStatsTxtOrFont = sgptDataTable->pTxtCharStats + nMouseXCast;
       }
 
-      iVar3 = gnPanelOffsetY - 0x1c7 + ScreenSizeY;
+      iVar2 = gnPanelOffsetY - 0x1c7 + ScreenSizeY;
       nMouseXCast = gnPanelOffsetX + 0xc1;
       nDrawY = gnPanelOffsetX - nMouseXCast + 0x137;
       iVar8 = D2Win::Src::D2WinFont::DRAW_text0(pCharStatsTxtOrFont->wszClass);
@@ -7073,8 +7073,8 @@ void __stdcall DRAW_UI_StatWindow_I() {
         nMouseXCast += nDrawY - iVar8 >> 1;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text(pCharStatsTxtOrFont->wszClass, nMouseXCast, iVar3, 0, 0);
-      pRosterName = GAME::Roster::GetPlayerRosterName(pUnit_00);
+      D2Win::Src::D2WinFont::DRAW_text(pCharStatsTxtOrFont->wszClass, nMouseXCast, iVar2, 0, 0);
+      pRosterName = GAME::Roster::GetPlayerRosterName(pPlayer);
       int nLen = (int)strlen(pRosterName);
       iVar8 = D2Lang::UTF8_GetStringLength(pRosterName, nLen);
       if (iVar8 + 1U > 0xb) {
@@ -7088,7 +7088,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
       }
 
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTextBuf, pRosterName, 0x80);
-      iVar3 = gnPanelOffsetY - 0x1c7 + ScreenSizeY;
+      iVar2 = gnPanelOffsetY - 0x1c7 + ScreenSizeY;
       nMouseXCast = gnPanelOffsetX + 0xd;
       nDrawY = gnPanelOffsetX - nMouseXCast + 0xa1;
       iVar8 = D2Win::Src::D2WinFont::DRAW_text0(wszTextBuf);
@@ -7096,15 +7096,15 @@ void __stdcall DRAW_UI_StatWindow_I() {
         nMouseXCast += nDrawY - iVar8 >> 1;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text(wszTextBuf, nMouseXCast, iVar3, 0, 0);
+      D2Win::Src::D2WinFont::DRAW_text(wszTextBuf, nMouseXCast, iVar2, 0, 0);
       D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     }
 
     for (nStatEntryIdx = 0; nStatEntryIdx < 0x12; nStatEntryIdx++) {
       nColorIdx = 0;
       bResistAtCap = false;
-      nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, gaStatPanelRows[nStatEntryIdx].nStatId, 0);
-      iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, gaStatPanelRows[nStatEntryIdx].nStatId, 0);
+      nStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, gaStatPanelRows[nStatEntryIdx].nStatId, 0);
+      iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, gaStatPanelRows[nStatEntryIdx].nStatId, 0);
       if (gaStatPanelRows[nStatEntryIdx].nStatId - 6U <= 0x27) {
         nDisplayVal = (int)nStatVal >> 8;
         switch (gaStatPanelRows[nStatEntryIdx].nStatId) {
@@ -7160,8 +7160,8 @@ void __stdcall DRAW_UI_StatWindow_I() {
           case 0x2b:
 
           case 0x2d:
-            bVar2 = GAME::Game::GetDificulity();
-          pDVar4 = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)bVar2);
+            bVar1 = GAME::Game::GetDificulity();
+          pDifficultyLevelsTxt = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)bVar1);
           nMouseXCast = 0;
           switch (gaStatPanelRows[nStatEntryIdx].nStatId) {
             case 0x25:
@@ -7170,12 +7170,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
             default:
               goto apply_resist_penalty;
             case 0x27:
-              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasLifeState(pUnit_00);
+              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasLifeState(pPlayer);
             if (bExpansion) {
               nColorIdx = 3;
             }
 
-            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasGoldState(pUnit_00);
+            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasGoldState(pPlayer);
             if (bExpansion) {
               nColorIdx = 1;
             }
@@ -7183,12 +7183,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
             eMaxResStat = UNITSTAT_maxfireresist;
             break;
             case 0x29:
-              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasStaminaState(pUnit_00);
+              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasStaminaState(pPlayer);
             if (bExpansion) {
               nColorIdx = 3;
             }
 
-            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasSkillState(pUnit_00);
+            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasSkillState(pPlayer);
             if (bExpansion) {
               nColorIdx = 1;
             }
@@ -7196,12 +7196,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
             eMaxResStat = UNITSTAT_maxlightresist;
             break;
             case 0x2b:
-              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasManaState(pUnit_00);
+              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasManaState(pPlayer);
             if (bExpansion) {
               nColorIdx = 3;
             }
 
-            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasMagicFindState(pUnit_00);
+            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasMagicFindState(pPlayer);
             if (bExpansion) {
               nColorIdx = 1;
             }
@@ -7209,12 +7209,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
             eMaxResStat = UNITSTAT_maxcoldresist;
             break;
             case 0x2d:
-              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasDefenseState(pUnit_00);
+              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasDefenseState(pPlayer);
             if (bExpansion) {
               nColorIdx = 3;
             }
 
-            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasAbsorbState(pUnit_00);
+            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasAbsorbState(pPlayer);
             if (bExpansion) {
               nColorIdx = 1;
             }
@@ -7222,11 +7222,11 @@ void __stdcall DRAW_UI_StatWindow_I() {
             eMaxResStat = UNITSTAT_maxpoisonresist;
           }
 
-          nMouseXCast = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, eMaxResStat, 0);
+          nMouseXCast = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, eMaxResStat, 0);
           apply_resist_penalty:
           bExpansion = GAME::Game::CLIENT_CheckExpansion();
           if (bExpansion) {
-            nStatVal += pDVar4->ResistPenalty;
+            nStatVal += pDifficultyLevelsTxt->ResistPenalty;
           } else {
             byDifficulty = GAME::Game::GetDificulity();
             switch (byDifficulty) {
@@ -7279,22 +7279,22 @@ void __stdcall DRAW_UI_StatWindow_I() {
           bResistAtCap = false;
           break;
           case 0x1f:
-            nDisplayVal = D2Common::Units::GetDefense(pUnit_00);
-          bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasFireState(pUnit_00);
+            nDisplayVal = D2Common::Units::GetDefense(pPlayer);
+          bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasFireState(pPlayer);
           if (bExpansion) {
             nColorIdx = 3;
           }
-          if (pUnit_00->pInventory) {
-            bExpansion = D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnit_00->pInventory, nullptr);
+          if (pPlayer->pInventory) {
+            bExpansion = D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pPlayer->pInventory, nullptr);
             if (bExpansion) {
-              eShieldState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_holyshield);
+              eShieldState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayer, STATE_holyshield);
               if (eShieldState != STATE_none) {
                 nColorIdx = 3;
               }
             }
           }
 
-          bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasExpState(pUnit_00);
+          bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasExpState(pPlayer);
           if (bExpansion) {
             nColorIdx = 1;
           }
@@ -7306,15 +7306,15 @@ void __stdcall DRAW_UI_StatWindow_I() {
 
           break;
           case 0x1e:
-            iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_level, 0);
-          nDrawX = UNIT::GetClassId(pUnit_00);
+            iVar8 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_level, 0);
+          nDrawX = UNIT::GetClassId(pPlayer);
           pExpTxtNextLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(nDrawX);
           if (iVar8 != pExpTxtNextLevel) {
             nStatVal = D2Common::DATATBLS::DataTbls::TXT_Experience_GetLineLevel(nDrawX, iVar8);
           }
 
           D2Lang::StrTable::strtable::STRTABLE_FormatNumber(wszTextBuf, nStatVal, 0x80);
-          iVar3 = gaStatPanelRows[nStatEntryIdx].nY + gnPanelOffsetY - 0x1e0 + ScreenSizeY;
+          iVar2 = gaStatPanelRows[nStatEntryIdx].nY + gnPanelOffsetY - 0x1e0 + ScreenSizeY;
           iVar8 = gaStatPanelRows[nStatEntryIdx].nX1 + gnPanelOffsetX;
           nMouseXCast = gaStatPanelRows[nStatEntryIdx].nX2 - iVar8 + 1 + gnPanelOffsetX;
           draw_exp_number:
@@ -7323,11 +7323,11 @@ void __stdcall DRAW_UI_StatWindow_I() {
             iVar8 += nMouseXCast - nDrawX >> 1;
           }
 
-          D2Win::Src::D2WinFont::DRAW_text(wszTextBuf, iVar8, iVar3, 0, 0);
+          D2Win::Src::D2WinFont::DRAW_text(wszTextBuf, iVar8, iVar2, 0, 0);
           continue;
           case 0xd:
             D2Lang::StrTable::strtable::STRTABLE_FormatNumber(wszTextBuf, nStatVal, 0x80);
-          iVar3 = gaStatPanelRows[nStatEntryIdx].nY + gnPanelOffsetY - 0x1e0 + ScreenSizeY;
+          iVar2 = gaStatPanelRows[nStatEntryIdx].nY + gnPanelOffsetY - 0x1e0 + ScreenSizeY;
           iVar8 = gaStatPanelRows[nStatEntryIdx].nX1 + gnPanelOffsetX;
           nMouseXCast = gaStatPanelRows[nStatEntryIdx].nX2 - iVar8 + 1 + gnPanelOffsetX;
           goto draw_exp_number;
@@ -7350,7 +7350,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
         pCharStatsTxtOrFont = (D2CharStatsTxt*)D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
       }
 
-      iVar3 = gaStatPanelRows[nStatEntryIdx].nY + gnPanelOffsetY - 0x1e0 + ScreenSizeY;
+      iVar2 = gaStatPanelRows[nStatEntryIdx].nY + gnPanelOffsetY - 0x1e0 + ScreenSizeY;
       nDrawX = gaStatPanelRows[nStatEntryIdx].nX1 + gnPanelOffsetX;
       nMouseXCast = gaStatPanelRows[nStatEntryIdx].nX2 - nDrawX + 1 + gnPanelOffsetX;
       iVar8 = D2Win::Src::D2WinFont::DRAW_text0(wszTextBuf);
@@ -7358,7 +7358,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
         nDrawX += nMouseXCast - iVar8 >> 1;
       }
 
-      D2Win::Src::D2WinFont::DRAW_text(wszTextBuf, nDrawX, iVar3, nColorIdx, 0);
+      D2Win::Src::D2WinFont::DRAW_text(wszTextBuf, nDrawX, iVar2, nColorIdx, 0);
       if (pCharStatsTxtOrFont != (D2CharStatsTxt*)0xe) {
         D2Win::Src::D2WinFont::SetAndReturnLastFont((int32_t)pCharStatsTxtOrFont);
       }
@@ -7367,7 +7367,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
 
 void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType) {
     short int nMessage;
-    bool bVar1;
+    bool bIsSideNpc;
     D2GSPacketSrv0x27_TextStrc* pOverheadTextPtr;
     BOOL bMonInteractFlag;
     D2UnitStrc* pPlayerUnit_lcl;
@@ -7476,8 +7476,8 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
       return;
     }
 
-    bVar1 = npcmenu::inline_NPC_IsInteractableSideNpc(nLine);
-    if (bVar1) {
+    bIsSideNpc = npcmenu::inline_NPC_IsInteractableSideNpc(nLine);
+    if (bIsSideNpc) {
       _Interaction::bInteractingWithNpc = 1;
       _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;
       _Interaction::nCurrentInteractedNpcClassId = pNpcUnit->nClassId;
@@ -8004,10 +8004,10 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(EHExceptionRecord * pException
 }
 
 void StaticInit_6caa10() {
-    int iVar1;
-    uint16_t* pWVar2;
-    for (iVar1 = 0; iVar1 < 0x50; iVar1++) {
-      UNICODE_007a2c80[iVar1] = L'\0';
+    int nCount;
+    uint16_t* pwszBuf;
+    for (nCount = 0; nCount < 0x50; nCount++) {
+      UNICODE_007a2c80[nCount] = L'\0';
     }
 }
 
@@ -8033,6 +8033,14 @@ void StaticInit_6caa70() {
     for (nWordsRemaining = 0; nWordsRemaining < 0x100; nWordsRemaining++) {
       gnMonsterHealthBarValue[nWordsRemaining] = 0;
     }
+}
+
+void StaticInit_6caa90() {
+    WindowSizeX = ScreenSizeX;
+}
+
+void StaticInit_6caaa0() {
+    WindowSizeY = ScreenSizeY - 0x28;
 }
 
 void StaticInit_6cace0() {

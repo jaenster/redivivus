@@ -73,8 +73,8 @@ void __fastcall Q13_AICallback_Summoner(::SGAMEDATA * pGame) {
     if (!(pQuestData && pQuestData->bIsNotIntroduction == '\x01')) {
       return;
     }
-    if (!pQuestData->pQuestSpecificData.pA2Q5->field_0x1) {
-      pQuestData->pQuestSpecificData.pA2Q5->field_0x1 = 1;
+    if (!pQuestData->pQuestSpecificData.pA2Q5->bSummonerAiActivated) {
+      pQuestData->pQuestSpecificData.pA2Q5->bSummonerAiActivated = 1;
     }
     if (!pQuestData->nStateFlag) {
       QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q5.cpp", 0x238);
@@ -291,9 +291,9 @@ void __fastcall Q14_PlayCompletionSoundAll(::SGAMEDATA * pGame) {
 // A2Q6 "The Seven Tombs" — talk callback for state 2 (slot fpQuestStateHandler[2]). On talking to Cain(0xfb): if bCainSaved, broadcasts quest state 4 then clears the slot. On talking to Jerhyn(0xc9): if field_0x08 set, broadcasts state 1; else if field_0x0A set, broadcasts state 6; then clears the slot and re-syncs every player's quest record via Q14_UpdateQuestRecordStep. Drives the post-Duriel Jerhyn/Cain dialogue that gates the reward & Act3 travel. (eFlags zeroed before each broadcast.)
 void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame;
-    short int sVar1 = !pQuestArgs->pTarget ? -1 : (short int)pQuestArgs->pTarget->nClassId;
+    short int nNpcClassId = !pQuestArgs->pTarget ? -1 : (short int)pQuestArgs->pTarget->nClassId;
     D2QuestDataA2Q6Strc* pDVar1 = pQuestData->pQuestSpecificData.pA2Q6;
-    if (sVar1 == 0xfb) {
+    if (nNpcClassId == 0xfb) {
       if (pDVar1->bTyraelPortalFlag == 1) {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, true);
@@ -301,7 +301,7 @@ void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
         pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
         return;
       }
-    } else if (sVar1 == 0xc9) {
+    } else if (nNpcClassId == 0xc9) {
       if (pDVar1->bJerhynSpokeFlag == 1) {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q14_NotifySevenTombsComplete, true);
@@ -450,18 +450,18 @@ BOOL __fastcall Q14_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A2Q6 "The Seven Tombs" — fpStatusFilter: computes the journal status code (*nUnknown) shown for this quest. Gated on QUEST_AbleGoToAct2 Completed. If Jerhyn's gate already opened, uses cached code; else derives from TheSevenTombs record: Step0x03 -> 5, Step0x04 -> 6, Step0x05 -> nStateFlagPrev, nStateFlag<3 -> nStateFlagPrev, else 0xc. Read-only on quest state.
-bool __fastcall Q14_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown) {
+bool __fastcall Q14_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_AbleGoToAct2, QUESTSTATE_Completed);
     if (!BVar1) {
-      *nUnknown = '\0';
+      *pbyStatusCode = '\0';
       return true;
     }
     if (pQuestData->pQuestSpecificData.pA2Q6->bIzualLocationSet) {
-      *nUnknown = (uint8_t)pQuestData->pQuestSpecificData.pA2Q6->nStatusCode;
+      *pbyStatusCode = (uint8_t)pQuestData->pQuestSpecificData.pA2Q6->nStatusCode;
       return true;
     }
 
-    *nUnknown = '\0';
+    *pbyStatusCode = '\0';
     /* GetQuestState(TheSevenTombs, 0=Completed) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheSevenTombs, QUESTSTATE_Completed);
     if (BVar1) {
       return true;
@@ -469,13 +469,13 @@ bool __fastcall Q14_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
     /* GetQuestState(TheSevenTombs, 3=Step0x03) -> status code 5 */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheSevenTombs, QUESTSTATE_Step0x03);
     if (BVar1 == 1) {
-      *nUnknown = '\x05';
+      *pbyStatusCode = '\x05';
       return true;
     }
 
     /* GetQuestState(TheSevenTombs, 4=Step0x04) -> status code 6 */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
     if (BVar1 == 1) {
-      *nUnknown = '\x06';
+      *pbyStatusCode = '\x06';
       return true;
     }
     if (pQuestData->bIsNotIntroduction == '\0') {
@@ -485,15 +485,15 @@ bool __fastcall Q14_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     /* GetQuestState(TheSevenTombs, 5=Step0x05=tomb-entered) -> status code =
                          nStateFlagPrev */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheSevenTombs, QUESTSTATE_Step0x05);
     if (BVar1 == 1) {
-      *nUnknown = pQuestData->nStateFlagPrev;
+      *pbyStatusCode = pQuestData->nStateFlagPrev;
       return true;
     }
     if (pQuestData->nStateFlag < 3) {
-      *nUnknown = pQuestData->nStateFlagPrev;
+      *pbyStatusCode = pQuestData->nStateFlagPrev;
       return true;
     }
 
-    *nUnknown = '\f';
+    *pbyStatusCode = '\f';
     return true;
 }
 
@@ -991,22 +991,22 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
 
 // A2Q6 "The Seven Tombs" — fpSequenceFilter: if quest not yet started (nStateFlag==0) and introduced, sets nStateFlag 1 (quest visible/started). Then chains into TheTaintedSun's sequence filter (the two Act2 quests are linked). No bitbuffer record changes.
 bool __fastcall Q14_SequenceFilter(D2QuestDataStrc * pQuestData) {
-    BOOL BVar2;
+    BOOL BVar1;
     if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
       QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q6.cpp", 0x3e9);
     }
 
     D2QuestDataStrc* pQuestData_00 = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheTaintedSun);
     if (pQuestData_00) {
-      bool bVar1;
-      /* FARPROC lpfn for IsBadCodePtr */ BVar2 = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-      if (BVar2) {
+      bool bResult;
+      /* FARPROC lpfn for IsBadCodePtr */ BVar1 = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
+      if (BVar1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ee);
         exit(-1);
       }
 
-      bVar1 = pQuestData_00->fpSequenceFilter(pQuestData_00);
-      return bVar1;
+      bResult = pQuestData_00->fpSequenceFilter(pQuestData_00);
+      return bResult;
     }
 
     return true;

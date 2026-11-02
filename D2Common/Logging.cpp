@@ -74,9 +74,9 @@ void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLo
 // "Game:%02d\tFrame:%d\tClient:%02d\t" plus Type:System/Type:Game and Size:%d. 00624780 is the generic
 // time/thread/level logger. Two different loggers, one name.
 // @caveat zero xrefs - called through a pointer or dead. Name derived from its format strings.
-void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nParam1, int32_t nLogTypeArg, int32_t nParam2, ...) {
+void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLogType, int32_t nLogTypeArg, int32_t szFormat, ...) {
     va_list __va;
-    va_start(__va, nParam2);
+    va_start(__va, szFormat);
     char* pszScan;
     size_t nPrefixLen;
     char* pszBody;
@@ -87,7 +87,7 @@ void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nPa
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0096ca30);
       Storm::Source::SSTR::SStrPrintf(szLogLine, 500, "Game:%02d\tFrame:%d\tClient:%02d\t", nGame, nFrame, (int)pClient);
       pszScan = (char*)((uint8_t*)&szLogLine - 1);
-      if (nParam1 == 1) {
+      if (nLogType == 1) {
         do {
           pszBody = pszScan;
           pszScan = pszBody + 1;
@@ -108,7 +108,7 @@ void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nPa
       pszBody = szLogLine + ((int)pszScan - (int)(szLogLine + 1));
       nSize = 500 - ((int)pszScan - (int)(szLogLine + 1));
       nPrefixLen = Storm::Source::SSTR::SStrPrintf(pszBody, nSize, "Size:%d\n", nLogTypeArg);
-      Storm::Source::SSTR::SStrVPrintf(pszBody + nPrefixLen, nSize - nPrefixLen, (char*)nParam2, __va);
+      Storm::Source::SSTR::SStrVPrintf(pszBody + nPrefixLen, nSize - nPrefixLen, (char*)szFormat, __va);
       pszScan = pszBody + nPrefixLen - 1;
       do {
         pszBody = pszScan;
@@ -152,9 +152,9 @@ void __stdcall CloseLogging() {
 }
 
 // Binary search for a stat entry by ID in a sorted stat array. Takes stat ID in EDI and pointer to stat array descriptor in EAX. Returns index on success, -1 if not found.
-long STATLIST_BinarySearchStatById(int32_t nStatKey, int * pnParam) {
+long STATLIST_BinarySearchStatById(int32_t nStatKey, int * pStatInfo) {
     int nMid;
-    int nCount = (int)(short int)pnParam[1];
+    int nCount = (int)(short int)pStatInfo[1];
     int nLo = 0;
     if (nCount <= 0) {
       return -1;
@@ -163,7 +163,7 @@ long STATLIST_BinarySearchStatById(int32_t nStatKey, int * pnParam) {
     do {
       int nEntryKey;
       nMid = (nCount - nLo) / 2 + nLo;
-      nEntryKey = *(int*)(*pnParam + nMid * 8);
+      nEntryKey = *(int*)(*pStatInfo + nMid * 8);
       if (nStatKey > nEntryKey) {
         nLo = nMid + 1;
         nMid = nCount;

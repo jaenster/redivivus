@@ -1,0 +1,189 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Sound/Sound.cpp",
+  "functions": [
+    {
+      "name": "SOUND_ReleaseEAXInterfaces",
+      "address": "00513af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513af0"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "Release",
+        "SOUND_ReleaseEAXInterfaces"
+      ]
+    },
+    {
+      "name": "SOUND_ApplyEAXEnvironment",
+      "address": "00513c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513c50"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "SOUND_ApplyEAXEnvironment",
+        "SOUNDSMP_ClampAttenuation"
+      ],
+      "usedTypes": [
+        "D2FloatIntUnion",
+        "D2SoundEaxEnvironStrc"
+      ]
+    },
+    {
+      "name": "SOUND_ShutdownDirectSound",
+      "address": "00514060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514060"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "SOUND_ShutdownDirectSound",
+        "SOUNDSMP_SetGlobalVolume",
+        "SOUND_FreeMusicBuffer",
+        "SOUND_StopSoundThread",
+        "SOUND_ReleaseEAXInterfaces"
+      ]
+    },
+    {
+      "name": "SOUND_InitDirectSound",
+      "address": "005140d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005140d0"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "SOUND_InitDirectSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_GetDirectSoundErrorString",
+        "LOGFILE_WriteStringToFile",
+        "SOUND_ShutdownDirectSound",
+        "GetHwnd",
+        "SOUNDSMP_InitWaveFormat",
+        "SOUND_ToggleEAXEnvironmentPreset",
+        "SOUND_ReleaseEAXInterfaces",
+        "SOUNDSMP_ClearBuffer",
+        "SOUNDSMP_CreateSoundThread",
+        "SOUND_InitMusicBuffer",
+        "SOUND_LoadRegistrySettings",
+        "SOUNDSMP_SetGlobalVolume"
+      ],
+      "usedTypes": [
+        "DSBCAPS",
+        "DSBUFFERDESC",
+        "WAVEFORMATEX",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SOUND_Initialize",
+      "address": "00514530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514530"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "SOUND_Initialize",
+        "SOUNDUTIL_GetFileVersionInfo",
+        "SOUND_InitDirectSound",
+        "LOGFILE_WriteStringToFile"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetAmbientSoundEntry",
+      "address": "00514710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514710"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "SOUND_GetAmbientSoundEntry",
+        "SOUND_GetLanguageCode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_InitMusicBuffer",
+      "address": "00514780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514780"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "SOUND_InitMusicBuffer",
+        "SOUND_GetSpeakerConfigFlag",
+        "SFileDdaInitialize",
+        "CallSounds"
+      ],
+      "usedTypes": [
+        "IDirectSound",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_FreeMusicBuffer",
+      "address": "005147b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005147b0"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "SOUND_FreeMusicBuffer",
+        "SOUNDSMP_Destroy",
+        "SFileDdaDestroy"
+      ]
+    },
+    {
+      "name": "SOUND_StopSoundThread",
+      "address": "00515120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515120"
+        }
+      ],
+      "namespace": "D2Sound::Sound",
+      "calledFunctions": [
+        "SOUND_StopSoundThread",
+        "SetEvent"
+      ]
+    }
+  ]
+}

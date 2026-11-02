@@ -1,0 +1,281 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Button/ButtonWrapper.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "004badd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004badd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "PFN_CrtExceptionFilter",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004bae30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bae30"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnMouseWheel",
+      "address": "004bae60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bae60"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnMouseWheel"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnMouseDown",
+      "address": "004bae70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bae70"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnMouseDown"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnMouseUp",
+      "address": "004bae80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bae80"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnMouseUp"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnMouseMove",
+      "address": "004bae90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bae90"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnMouseMove"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004baea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baea0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "Draw"
+      ],
+      "usedTypes": [
+        "ButtonWrapper"
+      ]
+    },
+    {
+      "name": "OnChar",
+      "address": "004baeb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baeb0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnChar"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnDownArrow",
+      "address": "004baec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baec0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnDownArrow"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnUpArrow",
+      "address": "004baed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baed0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnUpArrow"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnRightArrow",
+      "address": "004baee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baee0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnRightArrow"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnLeftArrow",
+      "address": "004baef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baef0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "OnLeftArrow"
+      ],
+      "usedTypes": [
+        "ButtonWrapper",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "GetValue",
+      "address": "004baf00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baf00"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "GetValue"
+      ],
+      "usedTypes": [
+        "ButtonWrapper"
+      ]
+    },
+    {
+      "name": "SetAccelerator",
+      "address": "004baf10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baf10"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "SetAccelerator"
+      ],
+      "usedTypes": [
+        "ButtonWrapper"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004bb0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb0f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonWrapper",
+      "calledFunctions": [
+        "Constructor",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "ButtonWrapper",
+        "fpButtonOnActivate",
+        "int32_t",
+        "pfnEHHandlerRoutine"
+      ]
+    }
+  ]
+}

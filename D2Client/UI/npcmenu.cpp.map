@@ -1,0 +1,2588 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/npcmenu.cpp",
+  "functions": [
+    {
+      "name": "NPCMENU_ConvertQuestId",
+      "address": "004b15f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b15f0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ConvertQuestId"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetInteractedUnit",
+      "address": "004b1620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1620"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "GetInteractedUnit",
+        "UNITS_FindClientSideUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetInteractedUnitInfo",
+      "address": "004b1640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1640"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "SetInteractedUnitInfo"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetInteractedUnitClassId",
+      "address": "004b1670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1670"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "GetInteractedUnitClassId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_SelectRandomDialogOption",
+      "address": "004b1680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1680"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_SelectRandomDialogOption",
+        "GetPlayerUnit_UI",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2NPCSpeechStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_RandomizeAllNpcDialogs",
+      "address": "004b17a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b17a0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_RandomizeAllNpcDialogs",
+        "NPCMENU_SelectRandomDialogOption"
+      ],
+      "usedTypes": [
+        "D2NPCSpeechStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_FindNextUnhandledMessage",
+      "address": "004b1830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1830"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_FindNextUnhandledMessage",
+        "TEXT_GetOverheadGlobalPointer",
+        "OVERHEAD_GetMessageType0"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_TextStrc",
+        "int16_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ScrollCompleteShowNextMessage",
+      "address": "004b18c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b18c0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ScrollCompleteShowNextMessage",
+        "NPCMENU_FindNextUnhandledMessage",
+        "UNITS_FindClientSideUnit",
+        "TEXT_ShowNpcDialog",
+        "TEXT_SetScrollCompleteCallback",
+        "NPCMENU_ReopenTalkDialog"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_AddHandledMessageId",
+      "address": "004b1980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1980"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_AddHandledMessageId"
+      ]
+    },
+    {
+      "name": "NPCMENU_CheckQuestDependentCallbacks",
+      "address": "004b19a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b19a0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "GetQuestState",
+        "NPCMENU_CheckQuestDependentCallbacks"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2NpcQuestCallbackEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "inline_NPC_IsInteractableSideNpc",
+      "address": "004b1a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1a10"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "inline_NPC_IsInteractableSideNpc"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowSelectedDialogOption",
+      "address": "004b1a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1a80"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowSelectedDialogOption",
+        "DIALOG_GetSelectedIndex",
+        "UNITS_FindClientSideUnit",
+        "TEXT_GetOverheadGlobalPointer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TEXT_GetMessageByIndex",
+        "TEXT_ShowNpcDialog",
+        "TEXT_SetScrollCompleteCallback",
+        "FreeDialogStrc"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_TextStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowGossipDialog",
+      "address": "004b1b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1b80"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowGossipDialog",
+        "UNITS_FindClientSideUnit",
+        "TEXT_ShowNpcDialog",
+        "TEXT_SetScrollCompleteCallback",
+        "FreeDialogStrc"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowIntroduceDialog",
+      "address": "004b1c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1c00"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowIntroduceDialog",
+        "UNITS_FindClientSideUnit",
+        "TEXT_ShowNpcDialog",
+        "TEXT_SetScrollCompleteCallback",
+        "FreeDialogStrc"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_CalculateDialogPosition",
+      "address": "004b1c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1c80"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CalculateDialogPosition",
+        "UNITS_FindClientSideUnit",
+        "GetTargetCoords",
+        "VIEW_GetViewRect",
+        "GetCenterXY"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "POINT",
+        "tagRECT"
+      ]
+    },
+    {
+      "name": "CheckSpeachVersusInteractedUnit",
+      "address": "004b1d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1d70"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "CheckSpeachVersusInteractedUnit"
+      ],
+      "usedTypes": [
+        "D2NPCSpeechStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_EmptyDialogDrawHandler",
+      "address": "004b1dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1dc0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EmptyDialogDrawHandler"
+      ]
+    },
+    {
+      "name": "NPCMENU_OpenTradeWithNpc",
+      "address": "004b1dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1dd0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OpenTradeWithNpc",
+        "FreeDialogStrc",
+        "NET_D2GS_CLIENT_Send_INT",
+        "NPCMENU_CalculateDialogPosition",
+        "AllocDialogStrc",
+        "GetTickCount",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData"
+      ],
+      "usedTypes": [
+        "POINT",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_HireMerc",
+      "address": "004b1e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1e80"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_HireMerc",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "FreeDialogStrc",
+        "NPCMENU_CalculateDialogPosition",
+        "AllocDialogStrc",
+        "GetTickCount",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData"
+      ],
+      "usedTypes": [
+        "POINT",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_IsItemIdentified",
+      "address": "004b1f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1f60"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_IsItemIdentified",
+        "CheckItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_CanItemBeRepaired",
+      "address": "004b1f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b1f80"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CanItemBeRepaired",
+        "ITEM_GetItemData_wType",
+        "ITEM_CanBeRepaired",
+        "ITEM_CheckIfItemHasDurability",
+        "GetTxtMaxDurability",
+        "STATSEX_GetCurrentStat",
+        "IsStackable",
+        "ITEM_GetMaxStack",
+        "ITEMS_CheckChargedSkillFullyCharged"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_CainIdentifyOptionCallback",
+      "address": "004b2020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2020"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CainIdentifyOptionCallback",
+        "FreeDialogStrc",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NPCMENU_CalculateDialogPosition",
+        "AllocDialogStrc",
+        "GetTickCount",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "NET_D2GS_CLIENT_Send_INT"
+      ],
+      "usedTypes": [
+        "POINT",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_CloseAllDialogs",
+      "address": "004b2110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2110"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CloseAllDialogs",
+        "FreeDialogStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_RemoveRowOptionSlot2",
+      "address": "004b21c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b21c0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_RemoveRowOptionSlot2"
+      ]
+    },
+    {
+      "name": "NPCMENU_RemoveRowOptionSlot3",
+      "address": "004b21e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b21e0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_RemoveRowOptionSlot3"
+      ]
+    },
+    {
+      "name": "NPCMENU_RemoveRowOptionSlot4",
+      "address": "004b2200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2200"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_RemoveRowOptionSlot4"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableCainIdentifyOption",
+      "address": "004b2220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2220"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableCainIdentifyOption"
+      ]
+    },
+    {
+      "name": "NPCMENU_InitializeMenuOptions",
+      "address": "004b2250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2250"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_InitializeMenuOptions"
+      ]
+    },
+    {
+      "name": "SubmitItem",
+      "address": "004b2370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2370"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "SubmitItem",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT"
+      ]
+    },
+    {
+      "name": "NPCMENU_ValidateNpcForShop",
+      "address": "004b2390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2390"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ValidateNpcForShop",
+        "GFX_RemoveOverlayById"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_Initialize",
+      "address": "004b23e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b23e0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_Initialize",
+        "GetTickCount",
+        "memset",
+        "CreateBitBuffer",
+        "sprintf",
+        "IMAGE_LoadDC6Ex"
+      ]
+    },
+    {
+      "name": "NPCMENU_Cleanup",
+      "address": "004b24a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b24a0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_Cleanup",
+        "FreeQuestRecordPool",
+        "DC6_FreeAndDelete",
+        "FreeDialogStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_SetTransactionMode",
+      "address": "004b25c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b25c0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_SetTransactionMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_FindClientSideUnit"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x50",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QuestHandeling",
+      "address": "004b2620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2620"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "QuestHandeling",
+        "ReadQuestRecordFromBuffer"
+      ]
+    },
+    {
+      "name": "NPCMENU_ExecuteShopTransaction",
+      "address": "004b2650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2650"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ExecuteShopTransaction",
+        "INV_ReturnToShopFromRepair",
+        "SOUND_PlaySound",
+        "INV_GetGambleFlag",
+        "UNITS_FindClientSideUnit",
+        "INV_HandleGambleMessage",
+        "GetTickCount",
+        "INVENTORY_GetHandItem",
+        "INV_SetRepairMode",
+        "INV_TrySetRepairMode",
+        "TXT_Items_GetLine",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT_INT",
+        "SOUND_GetIdFromUnit",
+        "STATSEX_GetCurrentStat",
+        "NPCMENU_CalculateDialogPosition",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "POINT",
+        "WCHAR",
+        "eCollisionFlags",
+        "fpDialogFunc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_CancelShopTransaction",
+      "address": "004b2900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2900"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CancelShopTransaction",
+        "FreeDialogStrc",
+        "INV_SelectDefaultNpcButton",
+        "INV_HandleShopReturnAction",
+        "ClearSelectedUnit"
+      ]
+    },
+    {
+      "name": "NPCMENU_HandleTransactionComplete",
+      "address": "004b2940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2940"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_HandleTransactionComplete",
+        "GetTickCount",
+        "CLIENT_GetD2GSGameType",
+        "FreeDialogStrc",
+        "INV_SelectDefaultNpcButton",
+        "INV_HandleShopReturnAction",
+        "ClearSelectedUnit"
+      ],
+      "usedTypes": [
+        "eD2GSGameType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OnCursorItemRemoved",
+      "address": "004b29e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b29e0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OnCursorItemRemoved",
+        "NPCMENU_HandleTransactionComplete"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OnItemRemovedFromContainer",
+      "address": "004b2a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2a00"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OnItemRemovedFromContainer",
+        "NPCMENU_HandleTransactionComplete"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OnItemUnequip",
+      "address": "004b2a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2a20"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OnItemUnequip",
+        "NPCMENU_HandleTransactionComplete"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OnItemPutInContainer",
+      "address": "004b2a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2a40"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OnItemPutInContainer",
+        "NPCMENU_HandleTransactionComplete"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OnItemPutInBelt",
+      "address": "004b2a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2a60"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OnItemPutInBelt",
+        "NPCMENU_HandleTransactionComplete"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OnItemInShop",
+      "address": "004b2a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2a80"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OnItemInShop",
+        "GetSelectedUnit",
+        "UNITS_FindClientSideUnit",
+        "ClearSelectedUnit",
+        "INV_ResetHoverAndContextState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_CalculateItemTransactionCost",
+      "address": "004b2ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2ad0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CalculateItemTransactionCost",
+        "ITEM_GetItemData_wType",
+        "UNITS_FindClientSideUnit",
+        "GetDificulity",
+        "GetPlayerUnit_Net",
+        "CalculateTransactionCost_Thunk",
+        "GetInteractedUnit",
+        "TXT_Items_GetLine",
+        "CheckItemFlag",
+        "GetQuestState",
+        "INV_IsRepairMode",
+        "GetLocaleString",
+        "AppendToBuffer",
+        "AppendAsWideChar",
+        "NPCMENU_CanItemBeRepaired",
+        "ITEM_CheckItemData_eD2ItemFlag_Monster",
+        "STRING_GetWideStringLength",
+        "STRING_CopyWideString",
+        "CONTAINER_InitializeBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitStrc",
+        "WCHAR",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_IsShopActive",
+      "address": "004b2e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2e20"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_IsShopActive"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_FindMenuIndexByNpcId",
+      "address": "004b2e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2e30"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_FindMenuIndexByNpcId"
+      ],
+      "usedTypes": [
+        "D2NpcMenuOptions",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ConfirmTransactionCallback",
+      "address": "004b2e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2e70"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ConfirmTransactionCallback",
+        "FreeDialogStrc",
+        "NPCMENU_HireMerc",
+        "NPCMENU_ExecuteShopTransaction",
+        "ClearSelectedUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowTransactionConfirmDialog",
+      "address": "004b2f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b2f50"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowTransactionConfirmDialog",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetMouseY",
+        "GetMouseX",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "UNITS_FindClientSideUnit",
+        "CONTAINER_InitializeBuffer",
+        "GetItemName",
+        "STRING_GetWideStringLength",
+        "NPCMENU_CalculateItemTransactionCost",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "GetInteractedUnitGuid",
+      "address": "004b3230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3230"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "GetInteractedUnitGuid"
+      ]
+    },
+    {
+      "name": "GetQuestInfo",
+      "address": "004b32d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b32d0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "GetQuestInfo"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc"
+      ]
+    },
+    {
+      "name": "ResetNPCSpeeches",
+      "address": "004b32f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b32f0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "ResetNPCSpeeches",
+        "NPCMENU_Cleanup",
+        "NPCMENU_Initialize"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_IsNpcMenuStateActive",
+      "address": "004b3470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3470"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_IsNpcMenuStateActive",
+        "UNITS_FindClientSideUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_IsAnyNpcDialogOpen",
+      "address": "004b34a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b34a0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_IsAnyNpcDialogOpen"
+      ]
+    },
+    {
+      "name": "NPCMENU_GetCurrentShopMode",
+      "address": "004b3500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3500"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_GetCurrentShopMode"
+      ]
+    },
+    {
+      "name": "NPCMENU_MarkNpcSpeechesUpdated",
+      "address": "004b3510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3510"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_MarkNpcSpeechesUpdated"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x91",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ItemServiceOptionCallback",
+      "address": "004b35b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b35b0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "UI_OpenHoradricCubeWithNpcInteraction",
+        "NPCMENU_ItemServiceOptionCallback",
+        "FreeDialogStrc",
+        "SetUIFlag",
+        "UI_UpdateCursorAnimationTimer",
+        "INV_ResetHoverAndContextState"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableCharsiImbueOption",
+      "address": "004b3700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3700"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableCharsiImbueOption"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableLarzukSocketOption",
+      "address": "004b3730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3730"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableLarzukSocketOption"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableAnyaPersonalizeOption",
+      "address": "004b3760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3760"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableAnyaPersonalizeOption"
+      ]
+    },
+    {
+      "name": "NPCMENU_ClearHireListAndStopNpcSound",
+      "address": "004b3830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3830"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ClearHireListAndStopNpcSound",
+        "UNITS_FindClientSideUnit",
+        "MERC_ClearHireInventory",
+        "SOUND_StopById"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ShopAction",
+      "address": "004b3870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3870"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "ShopAction",
+        "UNITS_FindClientSideUnit",
+        "INV_GetGambleFlag",
+        "GetDificulity",
+        "ITEMS_CalculateRepairAllCost",
+        "SELECT_UpdateUnitSelection",
+        "NPCMENU_ExecuteShopTransaction",
+        "ITEM_GetItemData_wType",
+        "GetTickCount",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetHandItem",
+        "GetPlayerUnit_Net",
+        "CalculateTransactionCost_Thunk",
+        "INV_IsRepairMode",
+        "NPCMENU_CanItemBeRepaired",
+        "CheckItemFlag",
+        "ITEM_CheckItemData_eD2ItemFlag_Monster",
+        "SOUND_PlaySound",
+        "NPCMENU_ShowTransactionConfirmDialog"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "pfnItemTransactionCb",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OnItemEquip",
+      "address": "004b3c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3c00"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OnItemEquip",
+        "NPCMENU_HandleTransactionComplete"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_CloseNpcInteraction",
+      "address": "004b3c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3c20"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CloseNpcInteraction",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "MERC_ClearHireInventory",
+        "SOUND_StopById",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "TEXT_CloseNpcDialog",
+        "SetUIFlag",
+        "UNITMODE_SetAnimMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_CloseScrollAndInteraction",
+      "address": "004b3d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3d10"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CloseScrollAndInteraction",
+        "NPCMENU_CloseNpcInteraction",
+        "UNITS_FindClientSideUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OpenNpcShop",
+      "address": "004b3d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3d40"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OpenNpcShop",
+        "FreeDialogStrc",
+        "UNITS_FindClientSideUnit",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT",
+        "GetPlayerUnit_UI",
+        "NPCMENU_CloseNpcInteraction"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_CloseAndResetAll",
+      "address": "004b3de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3de0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CloseAndResetAll",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_HandlePlayerInteractionEnd",
+      "address": "004b3e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3e10"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_HandlePlayerInteractionEnd",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NPCMENU_SelectRandomDialogOption",
+        "UNITS_FindClientSideUnit",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_CloseShopUI",
+      "address": "004b3ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3ed0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CloseShopUI",
+        "SetUIFlag",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction"
+      ]
+    },
+    {
+      "name": "CloseNPCInteract",
+      "address": "004b3f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3f10"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "CloseNPCInteract",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "NPCMENU_CloseAllDialogs",
+        "NPCMENU_CloseShopUI",
+        "INV_ResetShopState",
+        "thunk_NPCSHOP_IsRepairTabActive",
+        "NPCMENU_CloseAndResetAll"
+      ]
+    },
+    {
+      "name": "NPCMENU_CloseCubeUI",
+      "address": "004b3fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3fb0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CloseCubeUI",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_CloseStashUI",
+      "address": "004b3fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b3fe0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CloseStashUI",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_EmptyDrawCallback1",
+      "address": "004b4010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4010"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EmptyDrawCallback1",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_CloseConfirmDialogAndInteraction",
+      "address": "004b4070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4070"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CloseConfirmDialogAndInteraction",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_SendCainIdentifyItems",
+      "address": "004b40d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b40d0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_SendCainIdentifyItems",
+        "UNITS_FindClientSideUnit",
+        "TEXT_SetScrollCompleteCallback",
+        "FreeDialogStrc",
+        "NPCMENU_RandomizeAllNpcDialogs",
+        "TEXT_ShowNpcDialog",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowCurrentGossipCallback",
+      "address": "004b41c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b41c0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_SendCainIdentifyItems",
+        "NPCMENU_ShowCurrentGossipCallback"
+      ]
+    },
+    {
+      "name": "NPCMENU_CainIdentifyCallback",
+      "address": "004b41e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b41e0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_CainIdentifyCallback",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "NPCMENU_SendCainIdentifyItems"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_ConfirmDialogOkCallback",
+      "address": "004b4290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4290"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ConfirmDialogOkCallback",
+        "NPCMENU_CloseConfirmDialogAndInteraction",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT"
+      ]
+    },
+    {
+      "name": "NPCMENU_TradeOptionCallback",
+      "address": "004b42b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b42b0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_TradeOptionCallback",
+        "SOUND_StopById",
+        "FreeDialogStrc",
+        "UNITS_FindClientSideUnit",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT",
+        "GetPlayerUnit_UI",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "DRAW_UI_NPC_INTERACTION",
+      "address": "004b4380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4380"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "DRAW_UI_NPC_INTERACTION",
+        "IsPlayerDead",
+        "UNITS_FindClientSideUnit",
+        "NPCMENU_CloseAllDialogs",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "DIALOG_DrawBackground",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetHandItem",
+        "GetCursorItem",
+        "INV_HandleGambleMessage",
+        "GetTickCount",
+        "FreeDialogStrc",
+        "GetInteractedUnit",
+        "RANDOM_RandomNumberSelector",
+        "SOUND_PlaySound",
+        "CLIENT_GetD2GSGameType",
+        "NPCMENU_CancelShopTransaction",
+        "NET_D2GS_CLIENT_Send_0x69",
+        "D2CLIENT_SetExitVar1",
+        "D2CLIENT_SetExitVar2",
+        "D2CLIENT_SetExitVar3ToTrue",
+        "UI_ResetInputState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2GSGameType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_GambleDrawCallback",
+      "address": "004b45d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b45d0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_GambleDrawCallback",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_GambleMouseCallback",
+      "address": "004b4620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4620"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_GambleMouseCallback",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_RepairDrawCallback",
+      "address": "004b4670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4670"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_RepairDrawCallback",
+        "FreeDialogStrc",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_RepairMouseCallback",
+      "address": "004b46d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b46d0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_RepairMouseCallback",
+        "FreeDialogStrc",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "NPCMENU_TradeDrawCallback",
+      "address": "004b4730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4730"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_TradeDrawCallback",
+        "FreeDialogStrc",
+        "UNITS_FindClientSideUnit",
+        "TEXT_ShowNpcDialog",
+        "TEXT_SetScrollCompleteCallback",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_OpenInteractionDialog",
+      "address": "004b4830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4830"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OpenInteractionDialog",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_FindClientSideUnit",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "GetPlayerUnit_UI",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT",
+        "NPCMENU_CalculateDialogPosition",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetName",
+        "STRING_CopyWideString",
+        "STRING_GetWideStringLength",
+        "AddStringData",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "GetQuestState",
+        "PLAYER_GetUnidentifiedItemsCount",
+        "CONTAINER_InitializeBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "AppendToBuffer",
+        "GetDificulity",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "CalcRecoveryPriority"
+      ],
+      "usedTypes": [
+        "D2NpcMenuOptionFunc *",
+        "D2NpcMenuOptions",
+        "D2UnitStrc",
+        "WCHAR",
+        "eD2UnitStat",
+        "fpDialogFunc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowMainMenuDialog",
+      "address": "004b4db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4db0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowMainMenuDialog",
+        "UNITS_FindClientSideUnit",
+        "NPCMENU_CalculateDialogPosition",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetName",
+        "STRING_CopyWideString",
+        "STRING_GetWideStringLength",
+        "AddStringData",
+        "GetPlayerUnit_UI",
+        "GetLocaleString",
+        "DIALOG_SetSelectedLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "POINT",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_OpenInteraction",
+      "address": "004b4fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b4fd0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OpenInteraction",
+        "UI_ResetInputState",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "UNITS_FindClientSideUnit",
+        "GetPlayerUnit_UI",
+        "STATSEX_GetCurrentStat",
+        "UI_CloseActivePanels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetInteractedUnitInfo",
+        "NPCMENU_CloseAndResetAll",
+        "NPCMENU_ShowMainMenuDialog",
+        "CheckSpeachVersusInteractedUnit",
+        "GetInteractedUnit",
+        "SOUND_SelectNpcGreetingSound",
+        "UNITSND_StopAllSkillSounds",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Sounds",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_WarrivGoEastOptionCallback",
+      "address": "004b5140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5140"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_WarrivGoEastOptionCallback",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT"
+      ]
+    },
+    {
+      "name": "NPCMENU_MeshifSailEastOptionCallback",
+      "address": "004b51a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b51a0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_MeshifSailEastOptionCallback",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT"
+      ]
+    },
+    {
+      "name": "NPCMENU_TyraelTravelToHarrogathOptionCallback",
+      "address": "004b5200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5200"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_TyraelTravelToHarrogathOptionCallback",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT"
+      ]
+    },
+    {
+      "name": "NPCMENU_MeshifSailWestOptionCallback",
+      "address": "004b5260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5260"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_MeshifSailWestOptionCallback",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT"
+      ]
+    },
+    {
+      "name": "NPCMENU_WarrivGoWestOptionCallback",
+      "address": "004b52c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b52c0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_WarrivGoWestOptionCallback",
+        "FreeDialogStrc",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT"
+      ]
+    },
+    {
+      "name": "NPCMENU_HandleQuestItemPacket",
+      "address": "004b5320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5320"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_HandleQuestItemPacket",
+        "UNITS_FindClientSideUnit",
+        "UI_CloseActivePanels",
+        "NPCMENU_CloseShopUI",
+        "INV_ResetShopState",
+        "NPCMENU_CloseAllDialogs",
+        "thunk_NPCSHOP_IsRepairTabActive",
+        "NPCMENU_CloseAndResetAll"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_HandleTradeAccepted",
+      "address": "004b53f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b53f0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_HandleTradeAccepted",
+        "GetPlayerUnit_UI",
+        "SOUND_PlaySound",
+        "UNITS_FindClientSideUnit",
+        "UI_InitializeHirelingIconsUI",
+        "FreeDialogStrc",
+        "ClearSelectedUnit",
+        "INV_SelectDefaultNpcButton",
+        "INV_HandleShopReturnAction",
+        "INV_SetIdentifyMode",
+        "INVENTORY_GetHandItem",
+        "GetCursorItem",
+        "ITEM_SetItemOnHand",
+        "GetMouseY",
+        "GetMouseX",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_HandleTradeRejected",
+      "address": "004b5640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5640"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_HandleTradeRejected",
+        "FreeDialogStrc",
+        "UI_InitializeHirelingIconsUI",
+        "GetMouseY",
+        "GetMouseX",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_FindClientSideUnit",
+        "NPCMENU_OpenInteractionDialog"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_MercDrawCallback1",
+      "address": "004b5810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5810"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_MercDrawCallback1",
+        "FreeDialogStrc",
+        "SOUND_PlaySound",
+        "NPCMENU_OpenInteractionDialog"
+      ]
+    },
+    {
+      "name": "NPCMENU_ConfirmDialogCancelCallback",
+      "address": "004b5850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5850"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ConfirmDialogCancelCallback",
+        "FreeDialogStrc",
+        "SOUND_PlaySound",
+        "NPCMENU_OpenInteractionDialog"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowTalkDialog",
+      "address": "004b5890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5890"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowTalkDialog",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NPCMENU_CalculateDialogPosition",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "TEXT_GetOverheadGlobalPointer",
+        "TEXT_CountMessagesOfType2",
+        "TEXT_GetMessageByIndex",
+        "TEXT_LookupSoundStringIndex",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_GetItemsTxt_szCode"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_TextStrc",
+        "D2UnitStrc",
+        "POINT",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowNpcActionConfirmDialog",
+      "address": "004b5ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5ad0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowNpcActionConfirmDialog",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NPCMENU_CalculateDialogPosition",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData"
+      ],
+      "usedTypes": [
+        "POINT",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_ReopenTalkDialog",
+      "address": "004b5bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5bc0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ReopenTalkDialog",
+        "CheckSpeachVersusInteractedUnit",
+        "NPCMENU_ShowTalkDialog"
+      ]
+    },
+    {
+      "name": "NPCMENU_ShowAkaraRespecConfirm_Unused",
+      "address": "004b5c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5c00"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "CheckSpeachVersusInteractedUnit",
+        "NPCMENU_ShowAkaraRespecConfirm_Unused",
+        "NPCMENU_ShowNpcActionConfirmDialog"
+      ]
+    },
+    {
+      "name": "NPCMENU_MercListDrawCallback",
+      "address": "004b5c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5c20"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_MercListDrawCallback",
+        "FreeDialogStrc",
+        "NPCMENU_OpenInteractionDialog"
+      ]
+    },
+    {
+      "name": "NPCMENU_BuildMercHireMenu",
+      "address": "004b5c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b5c60"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_BuildMercHireMenu",
+        "FreeDialogStrc",
+        "NPCMENU_OpenInteractionDialog",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetPlayerUnit_UI",
+        "STATSEX_GetCurrentStat",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "AddStringData",
+        "SMemAlloc",
+        "Constructor",
+        "NPCMENU_MercListDrawCallback",
+        "AllocDialogSub",
+        "CLIENT_CheckExpansion",
+        "GetMercAct",
+        "GetDificulity",
+        "RollMercStats",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "WSTRING_PutWideCharIntoBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "GetMercTypeString",
+        "CONTAINER_InitializeBuffer",
+        "wsprintf",
+        "DIALOG_SetSelectedLine"
+      ],
+      "usedTypes": [
+        "D2HirelingHireData",
+        "D2MercForHire",
+        "D2UnitStrc",
+        "ListBoxWrapper",
+        "ListBoxWrapperVtable",
+        "WCHAR",
+        "eD2UnitStat",
+        "fpDialogFunc",
+        "int32_t",
+        "pfnEHHandlerRoutine",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_HandleTradePacket",
+      "address": "004b6390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6390"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_HandleTradePacket",
+        "GetPlayerUnit_UI",
+        "STATSEX_GetCurrentStat",
+        "NPCMENU_HandleTradeAccepted",
+        "NPCMENU_HandleTradeRejected",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x2A",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableKashyaHireOption",
+      "address": "004b6410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6410"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_BuildMercHireMenu",
+        "NPCMENU_EnableKashyaHireOption"
+      ]
+    },
+    {
+      "name": "NPCMENU_ConfigureMenuOption",
+      "address": "004b6440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6440"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ConfigureMenuOption",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion"
+      ],
+      "usedTypes": [
+        "D2NpcMenuOptionFunc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableWarrivGoEastOption",
+      "address": "004b65f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b65f0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableWarrivGoEastOption"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableMeshifSailEastOption",
+      "address": "004b6620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6620"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableMeshifSailEastOption"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableQualKehkHireOption",
+      "address": "004b6650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6650"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableQualKehkHireOption"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableTyraelTravelToHarrogathOption",
+      "address": "004b6680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6680"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableTyraelTravelToHarrogathOption",
+        "CLIENT_CheckExpansion"
+      ]
+    },
+    {
+      "name": "NPCMENU_HandleMenuSelection",
+      "address": "004b66b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b66b0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_HandleMenuSelection",
+        "UI_ResetInputState",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "GetPlayerUnit_UI",
+        "STATSEX_GetCurrentStat",
+        "UI_CloseActivePanels",
+        "UNITS_FindClientSideUnit",
+        "NPCMENU_CloseAndResetAll",
+        "NPCMENU_CheckQuestDependentCallbacks",
+        "SOUND_StopById",
+        "NPCMENU_EnableKashyaHireOption",
+        "NPCMENU_ConfigureMenuOption",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "NPCMENU_ClearHireListAndStopNpcSound",
+        "NPCMENU_OpenInteractionDialog",
+        "SOUND_SelectNpcGreetingSound",
+        "UNITSND_StopAllSkillSounds",
+        "SOUND_PlaySound",
+        "NET_D2GS_CLIENT_Send_SHORT"
+      ],
+      "usedTypes": [
+        "D2NPCSpeechStrc",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetPlayersMercInfo",
+      "address": "004b6980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6980"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "SetPlayersMercInfo",
+        "NPCMENU_ConfigureMenuOption"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_RefreshMenuDialog",
+      "address": "004b69e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b69e0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_RefreshMenuDialog",
+        "FreeDialogStrc",
+        "NPCMENU_OpenInteractionDialog"
+      ]
+    },
+    {
+      "name": "NPCMENU_OnScrollComplete",
+      "address": "004b6a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6a30"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_OnScrollComplete",
+        "NPCMENU_FindNextUnhandledMessage",
+        "SOUND_PlaySound",
+        "UNITS_FindClientSideUnit",
+        "TEXT_ShowNpcDialog",
+        "TEXT_SetScrollCompleteCallback",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "NPCMENU_FindMenuIndexByNpcId",
+        "inline_NPC_IsInteractableSideNpc",
+        "GetInteractedUnit",
+        "NPCMENU_HandleMenuSelection",
+        "NPCMENU_CloseAndResetAll",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag",
+        "NPCMENU_ShowMainMenuDialog"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NPCMENU_TalkOptionCallback",
+      "address": "004b6c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6c70"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowTalkDialog",
+        "NPCMENU_TalkOptionCallback",
+        "UNITS_FindClientSideUnit",
+        "FreeDialogStrc",
+        "CheckSpeachVersusInteractedUnit",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_AkaraRespecOptionCallback",
+      "address": "004b6d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6d10"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_ShowNpcActionConfirmDialog",
+        "NPCMENU_AkaraRespecOptionCallback",
+        "UNITS_FindClientSideUnit",
+        "FreeDialogStrc",
+        "CheckSpeachVersusInteractedUnit",
+        "INV_ResetHoverAndContextState",
+        "NPCMENU_CloseNpcInteraction",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "NPCMENU_EnableAkaraRespecOption",
+      "address": "004b6da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b6da0"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "NPCMENU_EnableAkaraRespecOption"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca09b",
+      "address": "006ca09b",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca09b"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca09b"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "StaticInit_6cad10",
+      "address": "006cad10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cad10"
+        }
+      ],
+      "namespace": "D2Client::UI::npcmenu",
+      "calledFunctions": [
+        "StaticInit_6cad10"
+      ]
+    }
+  ]
+}

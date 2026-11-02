@@ -1,0 +1,22 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Net/SRP.cpp",
+  "functions": [
+    {
+      "name": "SRP_AtexitCleanup",
+      "address": "006cb480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb480"
+        }
+      ],
+      "namespace": "D2Client::Net::SRP",
+      "calledFunctions": [
+        "SRP_AtexitCleanup",
+        "SRP_DestroyContext"
+      ]
+    }
+  ]
+}

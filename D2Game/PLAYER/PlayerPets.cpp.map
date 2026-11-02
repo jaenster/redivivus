@@ -1,0 +1,1030 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/PLAYER/PlayerPets.cpp",
+  "functions": [
+    {
+      "name": "Send0x7aSummonLog",
+      "address": "00574410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574410"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "Send0x7aSummonLog",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x7A_UPDATEPET"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PetArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "KillHandlerPet",
+      "address": "00574450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574450"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "KillHandlerPet",
+        "FindUnitFromTable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetCurrentSkill",
+        "GetOwnerUnit",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "SERVER_KillMonster",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2PetArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPetListFromId",
+      "address": "00574540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574540"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "GetPetListFromId"
+      ],
+      "usedTypes": [
+        "D2PetListStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PETS_FreeOrKillPetList",
+      "address": "00574570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574570"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "KillHandlerPet",
+        "PETS_FreeOrKillPetList",
+        "FindUnitFromTable",
+        "IterateAllUnits",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "SetCurrentSkill",
+        "GetOwnerUnit",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "GetReviveCost",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x9B_MercReviveCost",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2MonsterKillStrc",
+        "D2PetArgStrc",
+        "D2PetListStrc",
+        "D2PetStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreePets",
+      "address": "005746d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005746d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "FreePets",
+        "GetPlayerData",
+        "PETS_FreeOrKillPetList",
+        "FreeServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PetListStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPetUidByIndex",
+      "address": "005747b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005747b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "GetPetUidByIndex",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PetStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "KillingPets",
+      "address": "00574850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574850"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "KillingPets",
+        "IterateAllUnits",
+        "FindUnitFromTable",
+        "KillHandlerPet",
+        "FreeServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PetListStrc",
+        "D2PetStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SummonAndAssign",
+      "address": "00574930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574930"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "SummonAndAssign",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x7A_UPDATEPET",
+        "NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PetArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PETS_UpdatePetData",
+      "address": "005749b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005749b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_UpdatePetData",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2PetDataStrc",
+        "D2PetStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "ePetType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetOwnersPetType",
+      "address": "00574a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574a20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "GetOwnersPetType",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PetStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PETS_ResummonPetByUnit",
+      "address": "00574ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574ab0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_ResummonPetByUnit",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetGUID",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2PetArgStrc",
+        "D2PetStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPlayersPetData",
+      "address": "00574bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574bd0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "GetPlayersPetData",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PetDataStrc",
+        "D2PetListStrc",
+        "D2PetStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYERPETS_FreeAllPetsInList",
+      "address": "00574c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574c60"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PLAYERPETS_FreeAllPetsInList",
+        "KillHandlerPet",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PetListStrc",
+        "D2PetStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PETS_TeleportToRoom",
+      "address": "00574cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574cc0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_TeleportToRoom",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "PATH_GetCollisionMaskAt",
+        "ChangeAnimMode",
+        "UNITS_UpdateRoomClientVisibility",
+        "ROOM_LinkUnitToUpdateList",
+        "MONSTERAI_TriggerMageThink",
+        "CheckIfMonsterIsDead",
+        "PATH_ChangeCollisionType"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ROOM_SpawnPetsFromSaveData",
+      "address": "00574d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574d90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "ROOM_SpawnPetsFromSaveData",
+        "FindUnitFromTable",
+        "PETS_TeleportToRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint8_t",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "PetsForEach",
+      "address": "00574de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574de0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PetsForEach",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "pfnPetForEachCallback",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVER_GetUnitPetByTypeId",
+      "address": "00574ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574ec0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "SERVER_GetUnitPetByTypeId",
+        "GetPlayerData",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2PetStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "ePetType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PETS_GetTotalPetCount",
+      "address": "00574f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574f40"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_GetTotalPetCount",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYERPETS_SendPetListToClient",
+      "address": "00574f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574f80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PLAYERPETS_SendPetListToClient",
+        "GetPlayerData",
+        "GetGamePointer",
+        "FindUnitFromTable",
+        "NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS",
+        "NET_D2GS_SERVER_Send_0x7A_UPDATEPET"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PetStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PETS_HasMercenary",
+      "address": "00575070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575070"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_HasMercenary",
+        "GetPlayerData",
+        "SUNIT_GetClient",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2PetListStrc",
+        "D2PetStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "RemovePetByGuidAndNotify",
+      "address": "005750e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005750e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "RemovePetByGuidAndNotify",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetOwnersPetType",
+        "KillHandlerPet",
+        "KillingPets",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVERUNIT_RemovePetFromUnit",
+      "address": "005751a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005751a0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "SERVERUNIT_RemovePetFromUnit",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetOwnersPetType",
+        "RemovePetByGuidAndNotify",
+        "GetReviveCost",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x9B_MercReviveCost",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PetStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PETS_HandleDeadPet",
+      "address": "005752b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005752b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "RemovePetByGuidAndNotify",
+        "PETS_HandleDeadPet",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetOwnersPetType"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2PetListStrc",
+        "D2PetStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PETS_RemoveDistantPets",
+      "address": "00575380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575380"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_RemoveDistantPets",
+        "FindUnitFromTable",
+        "GetYPos",
+        "GetXPos",
+        "GetDistanceSquaredXY",
+        "RemovePetByGuidAndNotify"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint8_t",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "PETS_ManagePetsByType",
+      "address": "005754b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005754b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_ManagePetsByType",
+        "GetPlayerData",
+        "UNITS_GetRoom",
+        "PLAYERPETS_FreeAllPetsInList",
+        "PETS_RemoveDistantPets",
+        "ROOM_SpawnPetsFromSaveData"
+      ],
+      "usedTypes": [
+        "D2PetListStrc",
+        "D2RoomStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "PETS_RemoveDeadPets",
+      "address": "00575590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575590"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_RemoveDeadPets",
+        "FindUnitFromTable",
+        "CheckForModeZeroDeath",
+        "RemovePetByGuidAndNotify"
+      ],
+      "usedTypes": [
+        "D2PetStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SendAllyInfo",
+      "address": "00575630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575630"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "SendAllyInfo",
+        "GetPlayerData",
+        "PETS_RemoveDeadPets",
+        "SUNIT_GetClient",
+        "FindUnitFromTable",
+        "NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DataTableTxtStrc",
+        "D2PetStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYERPETS_RemoveConflictingPetsByGroup",
+      "address": "00575720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575720"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PLAYERPETS_RemoveConflictingPetsByGroup",
+        "SERVER_GetUnitPetByTypeId",
+        "RemovePetByGuidAndNotify",
+        "GetPlayerData",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "ePetType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PETS_SetMaxAndTrimExcess",
+      "address": "00575850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575850"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_SetMaxAndTrimExcess",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetPetUidByIndex",
+        "RemovePetByGuidAndNotify"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PETS_RecalculateAllPetLimits",
+      "address": "00575900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575900"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_RecalculateAllPetLimits",
+        "GetPlayerData",
+        "memset",
+        "GetFirstSkill",
+        "GetNext",
+        "GetSkillId",
+        "GetSkillLevel",
+        "D2GetSkillCalc",
+        "PETS_SetMaxAndTrimExcess",
+        "GetPetTypeTxtById"
+      ],
+      "usedTypes": [
+        "D2PetTypeTxt",
+        "D2SkillListStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PETS_ResetAllPetLimitsToBase",
+      "address": "00575a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575a80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_ResetAllPetLimitsToBase",
+        "PETS_SetMaxAndTrimExcess"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2PetTypeTxt",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "AllocPets",
+      "address": "00575af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575af0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "AllocPets",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreePets",
+        "AllocServerMemory",
+        "memset",
+        "PETS_ResetAllPetLimitsToBase"
+      ],
+      "usedTypes": [
+        "D2PetListStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PETS_FreeAllPetsByType",
+      "address": "00575bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575bc0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "PETS_FreeAllPetsByType",
+        "GetPlayerData",
+        "PETS_FreeOrKillPetList",
+        "PETS_RecalculateAllPetLimits",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PetListStrc",
+        "D2UnitDataPlayerPetsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "KillPetOnRecast",
+      "address": "00575c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575c70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "KillPetOnRecast",
+        "PETS_RecalculateAllPetLimits",
+        "KillHandlerPet",
+        "KillingPets",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PetArguments",
+        "D2PetListStrc",
+        "D2PetStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_ResummonPet",
+      "address": "00575d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575d90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "SKILL_ResummonPet",
+        "PLAYERPETS_RemoveConflictingPetsByGroup",
+        "PETS_SetMaxAndTrimExcess",
+        "GetPlayerData",
+        "GetPetListFromId",
+        "KillPetOnRecast",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2PetArgStrc",
+        "D2PetArguments",
+        "D2PetListStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RecastPetAndAssign",
+      "address": "00575e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575e90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "RecastPetAndAssign",
+        "GetPlayerData",
+        "KillPetOnRecast",
+        "IterateAllUnits",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PetArgStrc",
+        "D2PetDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetCarry1FlagOfitem",
+      "address": "00575fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575fa0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "GetCarry1FlagOfitem",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex",
+        "INV_GetUniqueItemsTxtLine"
+      ],
+      "usedTypes": [
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetHirelingNamesAndSize",
+      "address": "00575ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00575ff0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerPets",
+      "calledFunctions": [
+        "GetHirelingNamesAndSize",
+        "GetHirelingEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2HirelingTxt",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -22,13 +22,13 @@ namespace D2Game::Quests::QUESTS::A3Q7 {
 // A3Q7 (a3q7.cpp) = Act3 internal quest slot #20 QUESTINT_TheGuardian (= ext QUEST_TheGuardian, Mephisto/Durance). Act3 has 6 player quests; this "Q7" file is the engine's slot-20 logic + the Mephisto->Act4 transition (Dark Wanderer + red town portals). Objects_InitFn52: object init-fn for The Guardian. Lazily spawns/keeps a guardian-type monster (classId 0x129) and copies its DRLG map AI into quest-specific data. Guarded by: only runs while the quest is NOT already JustCompleted.
 void __fastcall Objects_InitFn52(struct D2ObjectInitFnArg * pInitArg);
 // A3Q7 / slot QUESTINT_TheGuardian (Mephisto). Q23_NotifyGuardianStateToPlayers(pGame, cParam): drives/broadcasts the quest's state-flag machine. While quest is active (bIsNotIntroduction) and nStateFlag<6: if cParam==0 it saves the current prev-flag and advances state to 6 (or 7 in multiplayer); else it restores the saved prev-flag. Calls QUEST_SetStateAndBroadcast with A3Q6::Q23_PlayerNotifyCompleted as the per-player notify cb. No GetQuestState/SetQuestState calls here (uses the broadcast helper instead).
-void __fastcall Q23_NotifyGuardianStateToPlayers(::SGAMEDATA * pGame, char cParam);
+void __fastcall Q23_NotifyGuardianStateToPlayers(::SGAMEDATA * pGame, char bRestorePrevState);
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_HandleKhalimsWillCompletion(pGame): on the Guardian quest data, force Khalim's-Eye and Khalim's-Flail counts to 2 (mark Khalim's Will assembled), then if the orb unit exists flag it for client update (SetupUpdateFlag 1, and mode-2 update for the secondary orb ref). Cross-quest helper: pokes the Khalim's-Will item bookkeeping that gates the Mephisto fight. No quest-state transitions.
 void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, uint32_t nEventCode);
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_SetupDarkWandererMapAi(pGame, pDrlgMap): stores the passed DRLG map pointer into quest data, then if the tracked "wanderer" monster exists, its map is valid, and the map hasn't been taken yet -> transfers (DRLGPRESET_TakeFileFromDrlgMap) the monster's map-AI DRLG file into quest data and marks bDrlgMapTaken. Binds the Mephisto/Act4-transition actor's generated map into the quest. No quest-state transitions.
-void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, int32_t nParam);
+void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, int32_t pMapAI);
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_StatusFilter: quest status-string filter callback (installed by Q24_InitData into fpStatusFilter). Stub - always returns false (no special status-bit suppression for this slot).
-bool __fastcall Q24_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q24_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_ActiveFilter: quest active/monster filter callback (installed by Q24_InitData into fpActiveFilter). Stub - always returns false.
 bool __fastcall Q24_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 // Uses the A3Q7 data of quest slot QUESTINT_UnknownDuplicate1 (D2QuestDataA3Q7Strc).
@@ -37,7 +37,7 @@ bool __fastcall Q24_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nT
 // probes TestCollisionByCoordinates(mask 0x3C01) at (X, Y-0x14), then (X, Y-0xB), (X+2, Y-0xB),
 // (X-2, Y-0xB), then (X, Y-8); it takes the first free point, and if (X, Y-8) is blocked stores
 // (X, Y-3) without probing it. The chosen point is stored back in nDarkWandererX/Y. Returns 1. Only caller: AITHINK_Fn1_DarkWanderer.
-BOOL __fastcall Q24_GetDarkWandererSpawnCoords(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int * pnParam);
+BOOL __fastcall Q24_GetDarkWandererSpawnCoords(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int * pnCoords);
 // Object init function that works on the A3Q7 data of quest slot
 // QUESTINT_UnknownDuplicate1. If bQuestCompleted (+1) is set, it stores (nX+7, nY) in
 // nDarkWandererX/Y (+4/+8), picks a room with DRLGROOM_FindBetterNearbyRoom and spawns monster

@@ -1,0 +1,47 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/CelCmp/stpl_TCELENTRY.cpp",
+  "functions": [
+    {
+      "name": "Clear",
+      "address": "00602bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602bf0"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "Clear",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DeleteNode",
+      "address": "00602c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602c40"
+        }
+      ],
+      "namespace": "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+      "calledFunctions": [
+        "DeleteNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TCELENTRY",
+        "TSLink<TCELENTRY>",
+        "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
+        "uint32_t"
+      ]
+    }
+  ]
+}

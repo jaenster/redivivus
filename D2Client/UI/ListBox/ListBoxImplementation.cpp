@@ -78,8 +78,8 @@ void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
     int nFirstVisible = pThis->nFirstVisibleIndex;
     uint32_t nItemCount = (uint32_t)pThis->nItemCount;
     int nVisibleCount = 0;
-    pThis->field_0x180752 = 0;
-    pThis->field_0x180756 = 0;
+    pThis->nThumbStartSegment = 0;
+    pThis->nThumbEndSegment = 0;
     pThis->nVisibleRows = 0;
     if (nFirstVisible < (int)nItemCount) {
       uint16_t (*pItemEntry)[1024];
@@ -123,9 +123,9 @@ void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
     nVisibleCount = pThis->nFirstVisibleIndex;
     if (!nVisibleCount) {
       nItemCount = 0;
-      nScrollStart = pThis->field_0x180718 * nThumbRatio >> 7;
+      nScrollStart = pThis->nScrollTrackSegments * nThumbRatio >> 7;
     } else {
-      nScrollStart = pThis->field_0x180718;
+      nScrollStart = pThis->nScrollTrackSegments;
       if (!(nVisibleCount < (int)(nItemCount - nFirstVisible))) {
         nItemCount = nScrollStart - (nScrollStart * nThumbRatio >> 7);
         if ((int)nScrollStart < (int)nItemCount) {
@@ -163,8 +163,8 @@ void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
 
     sGfxData.nFrameNumber = 0xf;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nVisibleCount, nFirstVisible + (nThumbEnd * 3 + 3) * 4, -1, DRAW_SOLID, nullptr);
-    pThis->field_0x180752 = nItemCount;
-    pThis->field_0x180756 = nScrollStart;
+    pThis->nThumbStartSegment = nItemCount;
+    pThis->nThumbEndSegment = nScrollStart;
 }
 
 int __thiscall GetVisibleItemCount(::ListBoxImplementation * pThis) {
@@ -255,32 +255,32 @@ void __thiscall AddItem(::ListBoxImplementation * pThis, uint16_t * wszLine0, ui
     if (wszLine0) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)(pThis->aItems + pThis->nItemCount), wszLine0, 0x3ff);
       pThis->aItems[pThis->nItemCount].wszText[0][0x3ff] = L'\0';
-      pThis->field_0x18073c++;
+      pThis->nTotalLineCount++;
     }
     if (wszLine1) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pThis->aItems[pThis->nItemCount].wszText[1], wszLine1, 0x3ff);
       pThis->aItems[pThis->nItemCount].wszText[1][0x3ff] = L'\0';
-      pThis->field_0x18073c++;
+      pThis->nTotalLineCount++;
     }
     if (wszLine2) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pThis->aItems[pThis->nItemCount].wszText[2], wszLine2, 0x3ff);
       pThis->aItems[pThis->nItemCount].wszText[2][0x3ff] = L'\0';
-      pThis->field_0x18073c++;
+      pThis->nTotalLineCount++;
     }
     if (wszLine3) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pThis->aItems[pThis->nItemCount].wszText[3], wszLine3, 0x3ff);
       pThis->aItems[pThis->nItemCount].wszText[3][0x3ff] = L'\0';
-      pThis->field_0x18073c++;
+      pThis->nTotalLineCount++;
     }
     if (wszLine4) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pThis->aItems[pThis->nItemCount].wszText[4], wszLine4, 0x3ff);
       pThis->aItems[pThis->nItemCount].wszText[4][0x3ff] = L'\0';
-      pThis->field_0x18073c++;
+      pThis->nTotalLineCount++;
     }
     if (wszLine5) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pThis->aItems[pThis->nItemCount].wszText[5], wszLine5, 0x3ff);
       pThis->aItems[pThis->nItemCount].wszText[5][0x3ff] = L'\0';
-      pThis->field_0x18073c++;
+      pThis->nTotalLineCount++;
     }
     if (bUseDefaultColor) {
       pThis->aItems[pThis->nItemCount].dwValue = pThis->nDefaultTextColor;
@@ -307,7 +307,7 @@ BOOL __thiscall IsMouseOnScrollDown(::ListBoxImplementation * pThis, D2UIMouseMs
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     if (nMouseX > pThis->nScrollBarX && nMouseX < pThis->nScrollBarX + 0x10) {
       int nScrollDownBtnBottom;
-      nScrollDownBtnBottom = pThis->nScrollBarY + pThis->field_0x180762 * 0xc;
+      nScrollDownBtnBottom = pThis->nScrollBarY + pThis->nScrollBarTileCount * 0xc;
       if (nMouseY > nScrollDownBtnBottom - 0xc && nMouseY < nScrollDownBtnBottom) {
         return 1;
       }
@@ -319,7 +319,7 @@ BOOL __thiscall IsMouseOnScrollDown(::ListBoxImplementation * pThis, D2UIMouseMs
 BOOL __thiscall IsMouseOnScrollTrack(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if (nMouseX > pThis->nScrollBarX && nMouseX < pThis->nScrollBarX + 0x10 && nMouseY < (int)(pThis->nScrollBarY - 0xc + pThis->field_0x180762 * 0xc) && nMouseY > pThis->nScrollBarY) {
+    if (nMouseX > pThis->nScrollBarX && nMouseX < pThis->nScrollBarX + 0x10 && nMouseY < (int)(pThis->nScrollBarY - 0xc + pThis->nScrollBarTileCount * 0xc) && nMouseY > pThis->nScrollBarY) {
       return 1;
     }
 
@@ -327,9 +327,9 @@ BOOL __thiscall IsMouseOnScrollTrack(::ListBoxImplementation * pThis, D2UIMouseM
 }
 
 BOOL __thiscall IsMouseInBounds(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
-    uint32_t uVar2 = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if ((int)uVar1 > pThis->nPosX && (int)uVar1 < pThis->nWidth + pThis->nPosX && (int)uVar2 > pThis->nPosY && (int)uVar2 < pThis->nHeight + pThis->nPosY) {
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
+    if ((int)nMouseX > pThis->nPosX && (int)nMouseX < pThis->nWidth + pThis->nPosX && (int)nMouseY > pThis->nPosY && (int)nMouseY < pThis->nHeight + pThis->nPosY) {
       return 1;
     }
 
@@ -427,7 +427,7 @@ int __thiscall HitTestItem(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
       return -1;
     }
 
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
+    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
     int i = pThis->nFirstVisibleIndex;
     int nRowTop = 0;
     if (i < (int)(uint32_t)pThis->nItemCount) {
@@ -453,7 +453,7 @@ int __thiscall HitTestItem(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
         if (pItemCols[4][0] != L'\0') {
           nRowBottom += pThis->nLineHeight;
         }
-        if ((int)uVar1 > pThis->nPosY + 0xc + nRowTop && (int)uVar1 < pThis->nPosY + 0xc + nRowBottom) {
+        if ((int)nMouseY > pThis->nPosY + 0xc + nRowTop && (int)nMouseY < pThis->nPosY + 0xc + nRowBottom) {
           pThis->nSelectedIndex = i;
           return i;
         }
@@ -528,15 +528,15 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
     ListBoxImplementation_OnUpArrow pfnScroll;
     D2UIMouseMsgStrc aMouseMsgBuf;
     D2GfxDataStrc sGfxData;
-    RECT local_28;
+    RECT rcFrame;
     uint32_t nTextColor;
     PD2ListBoxItemAuxData pItemEntry;
     uint32_t* pnRepeatCount;
-    local_28.left = pThis->nPosX;
-    local_28.top = pThis->nPosY;
-    local_28.right = pThis->nWidth - 1 + local_28.left;
-    local_28.bottom = pThis->nHeight - 1 + local_28.top;
-    ui::DRAW_Direct_RectFrame(&local_28);
+    rcFrame.left = pThis->nPosX;
+    rcFrame.top = pThis->nPosY;
+    rcFrame.right = pThis->nWidth - 1 + rcFrame.left;
+    rcFrame.bottom = pThis->nHeight - 1 + rcFrame.top;
+    ui::DRAW_Direct_RectFrame(&rcFrame);
     int32_t nPrevFontId;
     nPrevFontId = D2Win::Src::D2WinFont::SetAndReturnLastFont(pThis->nDefaultFont);
     int nScrollOffset;
@@ -548,13 +548,13 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pThis->nScrollBarX, pThis->nScrollBarY, -1, DRAW_SOLID, nullptr);
     int nVisibleLineCount;
     nVisibleLineCount = 0;
-    if ((int)pThis->field_0x180762 > 0) {
+    if ((int)pThis->nScrollBarTileCount > 0) {
       do {
         sGfxData.nFrameNumber = 0xd;
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pThis->nScrollBarX, nScrollOffset + 0xc + pThis->nScrollBarY, -1, DRAW_SOLID, nullptr);
         nVisibleLineCount++;
         nScrollOffset += 0xc;
-      } while (nVisibleLineCount < (int)pThis->field_0x180762);
+      } while (nVisibleLineCount < (int)pThis->nScrollBarTileCount);
     }
 
     sGfxData.nFrameNumber = pThis->bScrollDownPressed != 0 ? 0xaU : 0x8U;
@@ -566,7 +566,7 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
     nItemIdx = pThis->nFirstVisibleIndex;
     nScrollOffset = 0;
     if (nItemIdx < nItemIdx + nVisibleItemCount) {
-      uint16_t (*pawVar1)[1024];
+      uint16_t (*pwszLine)[1024];
       pItemEntry = &pThis->aItems[nItemIdx].dwAuxData;
       do {
         if (nItemIdx >= 0x80) {
@@ -589,33 +589,33 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
           nVisibleLineCount++;
         }
 
-        pawVar1 = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 1;
-        if ((*pawVar1)[0] != L'\0') {
-          DrawTruncatedText(pThis, *pawVar1, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
+        pwszLine = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 1;
+        if ((*pwszLine)[0] != L'\0') {
+          DrawTruncatedText(pThis, *pwszLine, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
           nVisibleLineCount++;
         }
 
-        pawVar1 = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 2;
-        if ((*pawVar1)[0] != L'\0') {
-          DrawTruncatedText(pThis, *pawVar1, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
+        pwszLine = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 2;
+        if ((*pwszLine)[0] != L'\0') {
+          DrawTruncatedText(pThis, *pwszLine, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
           nVisibleLineCount++;
         }
 
-        pawVar1 = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 3;
-        if ((*pawVar1)[0] != L'\0') {
-          DrawTruncatedText(pThis, *pawVar1, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
+        pwszLine = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 3;
+        if ((*pwszLine)[0] != L'\0') {
+          DrawTruncatedText(pThis, *pwszLine, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
           nVisibleLineCount++;
         }
 
-        pawVar1 = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 4;
-        if ((*pawVar1)[0] != L'\0') {
-          DrawTruncatedText(pThis, *pawVar1, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
+        pwszLine = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 4;
+        if ((*pwszLine)[0] != L'\0') {
+          DrawTruncatedText(pThis, *pwszLine, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
           nVisibleLineCount++;
         }
 
-        pawVar1 = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 5;
-        if ((*pawVar1)[0] != L'\0') {
-          DrawTruncatedText(pThis, *pawVar1, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
+        pwszLine = ((D2ListBoxItemStrc*)((char*)pItemEntry - 0x300a))->wszText + 5;
+        if ((*pwszLine)[0] != L'\0') {
+          DrawTruncatedText(pThis, *pwszLine, pThis->nPosX + 0x20, pThis->nItemSpacing * nScrollOffset + pThis->nLineHeight * nVisibleLineCount + 0x19 + pThis->nPosY, nTextColor);
           nVisibleLineCount++;
         }
 
@@ -644,7 +644,7 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
 
         pfnScroll = pThis->pVtable->OnUpArrow;
       } else {
-        if ((int)nFontId <= nScrollOffset || (int)nFontId >= nScrollOffset + 0x10 || (nScrollOffset = pThis->nScrollBarY + pThis->field_0x180762 * 0xc , (int)uMouseY <= nScrollOffset - 0xc || (int)uMouseY >= nScrollOffset || pThis->bScrollDownPressed != 1)) {
+        if ((int)nFontId <= nScrollOffset || (int)nFontId >= nScrollOffset + 0x10 || (nScrollOffset = pThis->nScrollBarY + pThis->nScrollBarTileCount * 0xc , (int)uMouseY <= nScrollOffset - 0xc || (int)uMouseY >= nScrollOffset || pThis->bScrollDownPressed != 1)) {
           goto restore_font;
         }
 
@@ -673,14 +673,14 @@ int __thiscall HandleScrollTrackClick(::ListBoxImplementation * pThis, D2UIMouse
       uint32_t uScrollTop;
       nPageSize = pThis->nVisibleRows;
       if (nPageSize <= (int)uVisibleCount && uMouseY != nNewScrollPos && -1 < uMouseY - nNewScrollPos) {
-        if (pThis->field_0x180752 == pThis->field_0x180756) {
+        if (pThis->nThumbStartSegment == pThis->nThumbEndSegment) {
           return 0;
         }
-        if (uMouseY < (int)(nNewScrollPos + 0xd + pThis->field_0x180752 * 0xc)) {
+        if (uMouseY < (int)(nNewScrollPos + 0xd + pThis->nThumbStartSegment * 0xc)) {
           uScrollTop = pThis->nSelectedIndex - nPageSize;
           pThis->nSelectedIndex = (int)uScrollTop <= 0 ? 0 : uScrollTop;
         } else {
-          if (uMouseY <= (int)(pThis->nScrollBarY + 0xd + pThis->field_0x180756 * 0xc)) {
+          if (uMouseY <= (int)(pThis->nScrollBarY + 0xd + pThis->nThumbEndSegment * 0xc)) {
             return 0;
           }
 
@@ -720,9 +720,9 @@ int __thiscall OnMouseDown(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
     }
 
     pThis->bMouseDown = 1;
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
-    uint32_t uVar2 = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if ((int)uVar1 > pThis->nScrollBarX && (int)uVar1 < pThis->nScrollBarX + 0x10 && (int)uVar2 > pThis->nScrollBarY - 0xc && (int)uVar2 < pThis->nScrollBarY) {
+    uint32_t nClickX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nClickY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
+    if ((int)nClickX > pThis->nScrollBarX && (int)nClickX < pThis->nScrollBarX + 0x10 && (int)nClickY > pThis->nScrollBarY - 0xc && (int)nClickY < pThis->nScrollBarY) {
       pThis->bScrollUpPressed = 1;
       pThis->nScrollRepeatCount = 0;
       return 1;
@@ -740,7 +740,7 @@ int __thiscall OnMouseDown(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
       uint16_t uMouseY;
       uMouseY = pMsg->uLParam.sMousePos.nMouseY;
       pThis->bScrollTrackPressed = 1;
-      pThis->field_0x18072c = (uint32_t)uMouseY;
+      pThis->nTrackPressMouseY = (uint32_t)uMouseY;
       return 1;
     }
     if (!pThis->pfnOnItemActivated) {
@@ -864,20 +864,20 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
     pThis->nScrollBarY = pThis->nPosY + 0x10;
     pThis->nLineHeight = 0xe;
     if (pThis->nHeight < 0x20) {
-      pThis->field_0x180762 = 1;
+      pThis->nScrollBarTileCount = 1;
     } else {
-      pThis->field_0x180762 = (pThis->nHeight - 0x10) / 0xc - 1;
+      pThis->nScrollBarTileCount = (pThis->nHeight - 0x10) / 0xc - 1;
     }
 
     pThis->nVisibleRows = 1;
     DWORD dwResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (dwResMode == 2) {
-      pThis->field_0x180718 = bTallRows ? 0x1c : 0x12;
+      pThis->nScrollTrackSegments = bTallRows ? 0x1c : 0x12;
       ExceptionList = pPrevExceptionList;
       return pThis;
     }
 
-    pThis->field_0x180718 = 0x12;
+    pThis->nScrollTrackSegments = 0x12;
     ExceptionList = pPrevExceptionList;
     return pThis;
 }

@@ -1,0 +1,79 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/D2Net.cpp",
+  "functions": [
+    {
+      "name": "NET_SERVER_SentPacketLog_Clear",
+      "address": "0040b0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b0c0"
+        }
+      ],
+      "namespace": "Fog::Src::D2Net",
+      "calledFunctions": [
+        "NET_SERVER_SentPacketLog_Clear",
+        "COMPRESS_BuildHuffmanDecodeTable"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_LogSentPacket",
+      "address": "0040b130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b130"
+        }
+      ],
+      "namespace": "Fog::Src::D2Net",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_LogSentPacket"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_CompressPacket",
+      "address": "0040b1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b1b0"
+        }
+      ],
+      "namespace": "Fog::Src::D2Net",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_CompressPacket"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_DecompressPacket",
+      "address": "0040b260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b260"
+        }
+      ],
+      "namespace": "Fog::Src::D2Net",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_DecompressPacket"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

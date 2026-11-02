@@ -1,0 +1,26 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat/stpl_HASHKEY_STRI.cpp",
+  "functions": [
+    {
+      "name": "Assign",
+      "address": "0060e130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e130"
+        }
+      ],
+      "namespace": "HASHKEY_STRI",
+      "calledFunctions": [
+        "Assign",
+        "SMemFree",
+        "SStrDup"
+      ],
+      "usedTypes": [
+        "HASHKEY_STRI"
+      ]
+    }
+  ]
+}

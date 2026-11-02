@@ -1,0 +1,21 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/SRC/CelCmp.cpp",
+  "functions": [
+    {
+      "name": "GFX_Noop",
+      "address": "0046f360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f360"
+        }
+      ],
+      "namespace": "D2Client::SRC::CelCmp",
+      "calledFunctions": [
+        "GFX_Noop"
+      ]
+    }
+  ]
+}

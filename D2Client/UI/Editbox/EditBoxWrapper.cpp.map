@@ -1,0 +1,400 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Editbox/EditBoxWrapper.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "004bb9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb9f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004bba50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bba50"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnMouseWheel",
+      "address": "004bba80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bba80"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnMouseWheel"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseDown",
+      "address": "004bba90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bba90"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnMouseDown"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseUp",
+      "address": "004bbaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbaa0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnMouseUp"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseMove",
+      "address": "004bbab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbab0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnMouseMove"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004bbac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbac0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "Draw"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnChar",
+      "address": "004bbad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbad0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnChar"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnDownArrow",
+      "address": "004bbae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbae0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnDownArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnUpArrow",
+      "address": "004bbaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbaf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnUpArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnRightArrow",
+      "address": "004bbb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb00"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnRightArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnLeftArrow",
+      "address": "004bbb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb10"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "OnLeftArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "GetValue",
+      "address": "004bbb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb20"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "GetValue"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "GetRepeatDelta",
+      "address": "004bbb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb30"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "GetRepeatDelta"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "SetNumber",
+      "address": "004bbb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb40"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "SetNumber"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "SetText",
+      "address": "004bbb50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb50"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "SetText"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "GetText",
+      "address": "004bbb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb60"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "GetText"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "SetCharFilter",
+      "address": "004bbb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb70"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "SetCharFilter"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper",
+        "fpUIWidgetCharFilter"
+      ]
+    },
+    {
+      "name": "SetWidth",
+      "address": "004bbb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb80"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "SetWidth"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "SetKeyRepeat",
+      "address": "004bbb90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbb90"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "SetKeyRepeat"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "SetNumericOnly",
+      "address": "004bbba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbba0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "SetNumericOnly"
+      ],
+      "usedTypes": [
+        "EditBoxWrapper"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004bbd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbd80"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxWrapper",
+      "calledFunctions": [
+        "Constructor",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation",
+        "EditBoxWrapper",
+        "fpEditBoxOnEnter",
+        "pfnEHHandlerRoutine",
+        "uint16_t"
+      ]
+    }
+  ]
+}

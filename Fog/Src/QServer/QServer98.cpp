@@ -26,8 +26,8 @@ void __fastcall QSERVER_CloseAllConnections(D2QServerStrc * pQServer) {
 
 BOOL __fastcall SendToClientOnline(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pQServerClient, char * pBytes, int nSize) {
     /* int flags for send */ /* int len for send */ /* char * buf for send */ /* SOCKET s for send */ unsigned int socket = pQServerClient->socket;
-    int iVar1 = send(socket, pBytes, nSize, 0);
-    if (iVar1 == -1) {
+    int nBytesSent = send(socket, pBytes, nSize, 0);
+    if (nBytesSent == -1) {
       WSAGetLastError();
       return 0;
     }
@@ -36,8 +36,8 @@ BOOL __fastcall SendToClientOnline(D2QServerStrc * pQServer, D2QServerClientConn
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pQServerStrc (ESI): D2QServerStrc*
-void * __fastcall QSERVER_AllocateConnectionStruct(int nSocket, uint32_t nParam, D2QServerStrc * pQServerStrc) {
-    D2QServerClientContainerStrc* pClientContainer = AddClient(pQServerStrc, nSocket, nParam);
+void * __fastcall QSERVER_AllocateConnectionStruct(int nSocket, uint32_t nIpAddress, D2QServerStrc * pQServerStrc) {
+    D2QServerClientContainerStrc* pClientContainer = AddClient(pQServerStrc, nSocket, nIpAddress);
     if (!pQServerStrc->pfnOnClientAcceptedHook) {
       return pClientContainer;
     }

@@ -1,0 +1,185 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinSmack.cpp",
+  "functions": [
+    {
+      "name": "D2WINSMACK_GetTitlePrefixIndexFromClass",
+      "address": "005068a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005068a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "D2COMP_GetTitlePrefix"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WINSMACK_LoadAndDecodeSmacker",
+      "address": "00506910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506910"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "D2WINSMACK_LoadAndDecodeSmacker",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "strncpy",
+        "D2GFX_CloseSmacker",
+        "D2GFX_DecodeSmacker"
+      ],
+      "usedTypes": [
+        "D2WinSmack",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSMACK_CloseAndDeleteFile",
+      "address": "00506990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506990"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "D2WINSMACK_CloseAndDeleteFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_CloseSmacker"
+      ],
+      "usedTypes": [
+        "D2WinSmack",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSMACK_SetBounds",
+      "address": "005069f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005069f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "D2WINSMACK_SetBounds",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinSmack",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyD2WinSmack",
+      "address": "00506a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506a40"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinSmack",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINSMACK_CloseAndDeleteFile",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinSmack",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "00506a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506a90"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "Draw",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINSMACK_LoadAndDecodeSmacker",
+        "D2GFX_PlayerSmacker"
+      ],
+      "usedTypes": [
+        "D2WinSmack",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Push",
+      "address": "00506b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506b10"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "Push",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinSmack",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WinSmack",
+      "address": "00506b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506b70"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinSmack",
+      "calledFunctions": [
+        "D2WinSmack",
+        "AllocClientMemory",
+        "memset",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinSmack",
+        "OnPress",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

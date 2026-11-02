@@ -1,0 +1,47 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Button.cpp",
+  "functions": [
+    {
+      "name": "__GSHandlerCheck_EH_6ca0d8",
+      "address": "006ca0d8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca0d8"
+        }
+      ],
+      "namespace": "D2Client::UI::Button",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca0d8"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca103",
+      "address": "006ca103",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca103"
+        }
+      ],
+      "namespace": "D2Client::UI::Button",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca103"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

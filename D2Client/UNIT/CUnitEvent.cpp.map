@@ -1,0 +1,89 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/CUnitEvent.cpp",
+  "functions": [
+    {
+      "name": "GetMemPool",
+      "address": "004dc0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc0b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnitEvent",
+      "calledFunctions": [
+        "GetMemPool"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FreeEventList",
+      "address": "004dc0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc0c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnitEvent",
+      "calledFunctions": [
+        "FreeEventList",
+        "GetMemPool",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CUnitEventStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUNITEVENT_Alloc",
+      "address": "004dc110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc110"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnitEvent",
+      "calledFunctions": [
+        "CUNITEVENT_Alloc",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2CUnitEventStrc",
+        "D2UnitStrc",
+        "fnCUnitEventCallback"
+      ]
+    },
+    {
+      "name": "CUNITEVENT_RemoveByTypeAndState",
+      "address": "004dc190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc190"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnitEvent",
+      "calledFunctions": [
+        "CUNITEVENT_RemoveByTypeAndState",
+        "GetMemPool",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CUnitEventStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

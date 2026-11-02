@@ -1,0 +1,1545 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/SKILLS/SkillNec.cpp",
+  "functions": [
+    {
+      "name": "SKILLNEC_ApplyBloodCost",
+      "address": "005c2ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2ff0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ApplyBloodCost",
+        "GetTxtMaxHp",
+        "memset",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvStFunc_15_IsConsumableCorpseOutsideTown",
+      "address": "005c3070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3070"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvStFunc_15_IsConsumableCorpseOutsideTown",
+        "GetTargetEx",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "D2CheckIfCorpseIsConsumable"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvStFunc_16_ApplyHitAndDamage",
+      "address": "005c30a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c30a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvStFunc_16_ApplyHitAndDamage",
+        "GetTargetEx",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvStFunc_17_IsSelectableCorpseOutsideTown",
+      "address": "005c31c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c31c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvStFunc_17_IsSelectableCorpseOutsideTown",
+        "GetTargetEx",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SKILLS_IsSelectableCorpse2"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ValidateCorpseTarget",
+      "address": "005c31f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c31f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ValidateCorpseTarget",
+        "STATSEX_GetAlignment",
+        "D2CheckCorpseConsumed",
+        "CheckForModeZeroDeath",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "UNITS_CheckIfCanAttackTarget"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvStFunc_18_AlwaysAllow",
+      "address": "005c3260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3260"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvStFunc_18_AlwaysAllow"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "Skills_SrvStFunc_19_IsTargetOutsideTown",
+      "address": "005c3270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3270"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvStFunc_19_IsTargetOutsideTown",
+        "GetTargetEx",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvStFunc_20_IsGroundItemForIronGolem",
+      "address": "005c32a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c32a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvStFunc_20_IsGroundItemForIronGolem",
+        "GetTargetEx",
+        "TXT_Items_GetBitFieldAnd0x02",
+        "CheckItemFlag",
+        "SEVER_ITEM_GetOwner"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CorpseConsumedCheck",
+      "address": "005c3300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3300"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "CorpseConsumedCheck",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "CheckForModeZeroDeath",
+        "D2CheckIfCorpseIsConsumable",
+        "D2CheckCorpseConsumed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvStFunc_21_IsRevivableCorpse",
+      "address": "005c3350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3350"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvStFunc_21_IsRevivableCorpse",
+        "GetTargetEx",
+        "CorpseConsumedCheck"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_OnCurseExpire",
+      "address": "005c3370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3370"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_OnCurseExpire",
+        "GetGamePointer",
+        "SUNITEVENT_RemoveEventsByQueueAndOwner",
+        "AttachCorrectAiFunctionToMonster",
+        "DefaultExpireFunction"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_IsReviveOrRaiseSkeleton",
+      "address": "005c3400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3400"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_IsReviveOrRaiseSkeleton"
+      ],
+      "usedTypes": [
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ValidateAttackableTarget",
+      "address": "005c3420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3420"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ValidateAttackableTarget",
+        "GetSomeMonsterStatFlag",
+        "CheckMonsterType",
+        "CheckForModeZeroDeath",
+        "UNITS_CheckIfCanAttackTarget"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitFlags",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_AssignCurseAiBehavior",
+      "address": "005c34b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c34b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_AssignCurseAiBehavior",
+        "AttachCorrectAiFunctionToMonster"
+      ],
+      "usedTypes": [
+        "D2NecroSkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ClampResistPenalty",
+      "address": "005c3540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3540"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ClampResistPenalty",
+        "MONSTER_GetMercType",
+        "SERVER_GetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ApplyCurseToUnit",
+      "address": "005c35c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c35c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ApplyCurseToUnit",
+        "STATSEX_GetAlignment",
+        "D2CheckCorpseConsumed",
+        "SKILLNEC_ClampResistPenalty",
+        "SKILLNEC_ValidateAttackableTarget",
+        "SetStateWithExpiryTime",
+        "SKILLNEC_AssignCurseAiBehavior",
+        "D2AddStatToStatsListEx",
+        "UpdateAnimSpeed",
+        "SUNITEVENT_RemoveEventsByQueueAndOwner",
+        "D2SetAuraEvent"
+      ],
+      "usedTypes": [
+        "D2NecroSkillArgStrc",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ApplyCurseDifficultyDivisor",
+      "address": "005c37a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c37a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ApplyCurseDifficultyDivisor",
+        "GetDifficultyLevels"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_030_CastCurseAoE",
+      "address": "005c37c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c37c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_030_CastCurseAoE",
+        "SKILLNEC_IsReviveOrRaiseSkeleton",
+        "D2GetSkillCalc",
+        "SKILLNEC_ApplyCurseDifficultyDivisor",
+        "memset",
+        "TXT_ItemStatCost_GetLine",
+        "SKILLS_ApplyEffectToUnitsInRange"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2NecroSkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ApplyDimVision",
+      "address": "005c39c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c39c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ApplyDimVision",
+        "D2GetSkillCalc",
+        "GetDifficultyLevels",
+        "memset",
+        "SKILLNEC_ApplyCurseToUnit"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2NecroSkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitStat",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_NecroShredAlignmentCallback",
+      "address": "005c3b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3b00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_OnCurseExpire",
+        "SKILLNEC_OnConvertExpire",
+        "SKILLS_NecroShredAlignmentCallback",
+        "SetAlignment",
+        "SetState",
+        "GetGamePointer",
+        "MONSTER_FreeUnitNodes"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_059_CastCorpseSkill",
+      "address": "005c3b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3b90"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_059_CastCorpseSkill",
+        "GetTargetEx",
+        "SKILLNEC_ValidateCorpseTarget",
+        "SetAlignment",
+        "AddNodeToTable",
+        "SKILLS_FreeMonsterMinions",
+        "D2GetSkillCalc",
+        "SKILLNEC_ApplyCurseDifficultyDivisor",
+        "SKILLS_ApplyEffectToUnitsInRange",
+        "SetStateWithExpiryTime"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ValidateReviveTarget",
+      "address": "005c3d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3d50"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ValidateReviveTarget",
+        "STATSEX_GetAlignment",
+        "UNITS_CheckIfCanAttackTarget",
+        "CheckForModeZeroDeath",
+        "D2CheckCorpseConsumed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_OnConvertExpire",
+      "address": "005c3db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3db0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_OnConvertExpire",
+        "SetAlignment",
+        "SetState",
+        "GetGamePointer",
+        "MONSTER_FreeUnitNodes"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ApplyConvertToUnit",
+      "address": "005c3de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3de0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ApplyConvertToUnit",
+        "SKILLNEC_ValidateReviveTarget",
+        "SKILLNEC_ClampResistPenalty",
+        "SetStateWithExpiryTime",
+        "D2AddStatToStatsListEx",
+        "UpdateAnimSpeed",
+        "SetAlignment",
+        "AddNodeToTable",
+        "AI_SetSwitchAiTargetParams",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2SkillAuraCtxStrc",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_061_CastConvertAoE",
+      "address": "005c3f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3f20"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_061_CastConvertAoE",
+        "D2GetSkillCalc",
+        "SKILLNEC_ApplyCurseDifficultyDivisor",
+        "memset",
+        "TXT_ItemStatCost_GetLine",
+        "SKILLS_ApplyEffectToUnitsInRange"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2SkillAuraCtxStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ApplySummonResistPassive",
+      "address": "005c40d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c40d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ApplySummonResistPassive",
+        "STATSEX_GetCurrentStat",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "SKILLNEC_SetSkeletonComponentsByMasteryLvl",
+      "address": "005c4180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c4180"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_SetSkeletonComponentsByMasteryLvl",
+        "SetDwArgsIfNotNeg0x29a"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_RollSkeletonMastery",
+      "address": "005c4300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c4300"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_RollSkeletonMastery",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "SKILLNEC_SetSkeletonComponentsByMasteryLvl"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_SpawnSkeletonsForRevive",
+      "address": "005c43d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c43d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_SpawnSkeletonsForRevive",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "SKILLNEC_SetSkeletonComponentsByMasteryLvl"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "SKILLNEC_DispatchSummonMastery",
+      "address": "005c4430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c4430"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_DispatchSummonMastery",
+        "SKILLNEC_RollSkeletonMastery",
+        "SKILLNEC_SpawnSkeletonsForRevive"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ApplySummonBuffs",
+      "address": "005c4470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c4470"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ApplySummonBuffs",
+        "D2GetSkillCalc",
+        "STATLIST_AddUnitStat",
+        "GetGUID",
+        "UNITEVENT_FindByCallbackParams",
+        "D2SetAuraEvent",
+        "GetType",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx",
+        "SetState",
+        "GetTxtMaxHp",
+        "_alldiv",
+        "STATLIST_SetUnitStat",
+        "SetSkill",
+        "Server_SelectSkill",
+        "SUNITEVENT_RemoveEventsByQueueAndOwner",
+        "InitUmods",
+        "SetOverlay",
+        "STATSEX_GetCurrentStat",
+        "SKILLASS_EquipSummonItems"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2ItemStatCostTxt",
+        "D2SUnitEventStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitStat",
+        "eD2UnitType",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ReviveCorpseAsMinion",
+      "address": "005c49e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c49e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ReviveCorpseAsMinion",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse",
+      "address": "005c4b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c4b00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse",
+        "GetTargetEx",
+        "D2CheckIfCorpseIsConsumable",
+        "SKILLNEC_ApplyBloodCost",
+        "SKILLS_GetSummonMonsterClassId",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "D2GetSkillCalc",
+        "SKILL_CreateSummon",
+        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLNEC_DispatchSummonMastery",
+        "SKILLNEC_ApplySummonBuffs",
+        "SKILLNEC_ApplySummonResistPassive",
+        "CreateUnitNode"
+      ],
+      "usedTypes": [
+        "D2MonsterCastPetStrc",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_032_ApplyDirectDamage",
+      "address": "005c4cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c4cd0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_032_ApplyDirectDamage",
+        "GetTargetEx",
+        "DAMAGE_ProcessCombatQueueEntry"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ApplyCorpseExplosionToUnit",
+      "address": "005c4d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c4d10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_055_CorpseExplosion",
+        "SKILLNEC_ApplyCorpseExplosionToUnit",
+        "GetYPos",
+        "GetXPos",
+        "GetDistanceSquaredXY",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2CorpseExplosionArgStrc",
+        "D2DamageStrc",
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_055_CorpseExplosion",
+      "address": "005c4df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c4df0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_055_CorpseExplosion",
+        "GetTargetEx",
+        "SKILLS_IsSelectableCorpse2",
+        "SetState",
+        "ROOM_LinkUnitToUpdateList",
+        "SERVER_GetUnitStat",
+        "memset",
+        "STATSEX_GetCurrentStat",
+        "MONSTER_CalculateLevelScaledStats",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "D2ApplyPercent",
+        "RANDOM_RandomNumberSelector",
+        "SKILLS_GetElementalLength",
+        "SERVER_AppendDamageToUnitEvent",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2CorpseExplosionArgStrc",
+        "D2DamageStrc",
+        "D2MonStatsInitStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_InitializeSummon",
+      "address": "005c50c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c50c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_InitializeSummon",
+        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLNEC_ApplySummonBuffs",
+        "SKILLNEC_ApplySummonResistPassive"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_056_SummonGolem",
+      "address": "005c5100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c5100"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_056_SummonGolem",
+        "D2GetSkillCalc",
+        "SKILL_CreateSummon",
+        "SKILLNEC_InitializeSummon",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo",
+        "CreateUnitNode"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2MonsterCastPetHeadStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_057_IronGolem",
+      "address": "005c5250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c5250"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_057_IronGolem",
+        "Skills_SrvStFunc_20_IsGroundItemForIronGolem",
+        "SKILLS_GetSummonMonsterClassId",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "GetTargetEx",
+        "SKILL_CreateSummon",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2",
+        "SetupUpdateFlag",
+        "SERVER_EquipItemToBodyLoc",
+        "SKILLNEC_InitializeSummon",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo",
+        "CreateUnitNode"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2MonsterCastPetStrc",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ReviveCorpse",
+      "address": "005c5430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c5430"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ReviveCorpse",
+        "GetYPos",
+        "GetXPos",
+        "GetUnitWidth",
+        "UNITS_GetRoom",
+        "RemoveCollision_Type",
+        "GetUnitSizeX",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "MONSTERAI_TriggerMageThink",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "SKILLS_FreeMonsterMinions",
+        "EVENT_RemoveUnitTimersByType",
+        "GetRightSkill",
+        "SelectSkillRight",
+        "SUNIT_RelocateUnit"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2CollisionShapeType",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_ApplyReviveToCorpse",
+      "address": "005c55c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c55c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_ApplyReviveToCorpse",
+        "AssignMinionOwner",
+        "MONSTERAI_SetTargetUnit",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SetAlignment",
+        "AI_ClearSwitchAiTargetParams",
+        "SetState",
+        "D2GetSkillCalc",
+        "InitUmods"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_058_ReviveCorpseCheck",
+      "address": "005c56c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c56c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_058_ReviveCorpseCheck",
+        "GetTargetEx",
+        "CorpseConsumedCheck"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_060_SummonBoneWall",
+      "address": "005c58b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c58b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_060_SummonBoneWall",
+        "SKILLS_GetTargetOrCursorPos",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SKILLS_GetSummonMonsterClassId",
+        "D2GetSkillCalc",
+        "SKILL_CreateSummon",
+        "AssignMinionOwner",
+        "InitUmods",
+        "SKILLNEC_ApplySummonBuffs",
+        "AddNodeToTable",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "CreatingMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MonsterCastPetStrc",
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_CreateSummonAtPosition",
+      "address": "005c5bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c5bc0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_CreateSummonAtPosition",
+        "SKILLS_GetSummonMonsterClassId",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown",
+        "D2GetSkillCalc",
+        "SKILL_CreateSummon",
+        "SKILLNEC_ApplySummonBuffs",
+        "InitUmods",
+        "AddNodeToTable"
+      ],
+      "usedTypes": [
+        "D2MonsterCastPetStrc",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_062_BonePrison",
+      "address": "005c5d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c5d00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_062_BonePrison",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLNEC_CreateSummonAtPosition",
+        "GetType",
+        "GetGUID",
+        "AssignMinionOwner",
+        "AddMinionToList",
+        "StoreOwner",
+        "GetYPos",
+        "GetXPos",
+        "DRLGPATH_GetDirectionFromCoords",
+        "SetDirectionAndNewDirection"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_063_PoisonExplosion",
+      "address": "005c5e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c5e60"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_063_PoisonExplosion",
+        "GetTargetEx",
+        "SKILLS_IsSelectableCorpse2",
+        "SetState",
+        "ROOM_LinkUnitToUpdateList",
+        "MISSILES_SpawnRadialPattern"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLNEC_AddHitpoints",
+      "address": "005c5f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c5f10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_AddHitpoints",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMEVENT_AuraThornsWithLifeSteal",
+      "address": "005c5f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c5f50"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "ITEMEVENT_AuraThornsWithLifeSteal",
+        "CheckForModeZeroDeath",
+        "TXT_Skills_GetLine",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "GetOwnerGUID",
+        "GetOwnerType",
+        "FindUnitFromTable",
+        "MONSTER_GetMercType",
+        "D2GetSkillCalc",
+        "memset",
+        "D2ApplyPercent",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation",
+        "GetMonsterData",
+        "STATSEX_GetAlignment",
+        "GetOwnerUnit",
+        "SKILLNEC_AddHitpoints",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStatsTxt",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMEVENT_AuraHealTarget",
+      "address": "005c61e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c61e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "ITEMEVENT_AuraHealTarget",
+        "CheckForModeZeroDeath",
+        "TXT_Skills_GetLine",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "GetOwnerGUID",
+        "GetOwnerType",
+        "FindUnitFromTable",
+        "D2GetSkillCalc",
+        "D2ApplyPercent",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMEVENT_NecroAuraStatDrain",
+      "address": "005c6370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c6370"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "ITEMEVENT_NecroAuraStatDrain",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "D2AddStatToStatsListEx",
+        "SetState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "D2ApplyPercent",
+        "D2StatesTogglegfx"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMEVENT_LifeTap",
+      "address": "005c6530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c6530"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "ITEMEVENT_LifeTap",
+        "GetMonsterData",
+        "STATSEX_GetAlignment",
+        "D2ApplyPercent",
+        "STATSEX_GetCurrentStat",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "SKILLS_GetParam01WithDiminishing",
+        "GetSkilParam2",
+        "SKILLNEC_AddHitpoints",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMEVENT_NecroReviveLeech",
+      "address": "005c6690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c6690"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "ITEMEVENT_NecroReviveLeech",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "STATSEX_GetCurrentStat",
+        "TXT_MonStats_GetLine",
+        "GetSkillParam4",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ItemSlowTarget",
+      "address": "005c6760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c6760"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SetStateWithExpiryTime",
+        "ITEMEVENT_ItemSlowTarget",
+        "ITEM_GetMinimalStatValueShifted",
+        "CheckMonsterType",
+        "STATLIST_SetStatValue",
+        "UpdateAnimSpeed"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BloodGolemLifeLeech",
+      "address": "005c6870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c6870"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "BloodGolemLifeLeech",
+        "SERVER_GetUnitPetByTypeId",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat",
+        "TXT_MonStats_GetLine",
+        "GetTxtSkillParam5",
+        "SKILLNEC_AddHitpoints"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    }
+  ]
+}

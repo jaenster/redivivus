@@ -68,13 +68,13 @@ void __fastcall AllocObjectData(struct D2UnitStrc * pUnit, struct D2RoomStrc * p
 void __fastcall OBJECT_AddVisualOverlay(struct D2UnitStrc * pUnit);
 void __fastcall FreeObjectData(struct D2UnitStrc * pUnit);
 // Gloaming shrine (nCode=16) server callback: reverses the activating player's character name string as an Easter egg effect
-void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t dwParam);
+void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t pShrinesTxt);
 // Spawns a 5×5 grid of Fireball missiles (MISSILE_Fireball) centred on pUnit's position, toggling X/Y offsets from ±5 to ±20 in steps of 5. Missile level is clamped to 1–8 based on pPlayer's level/5. Called server-side for trap objects (e.g. fire towers).
-void __fastcall OBJECT_SpawnFireballGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t dwParam);
+void __fastcall OBJECT_SpawnFireballGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t pShrinesTxt);
 // Spawns a 6-missile ring of MISSILE_Explosivepotion around pUnit's position in a fixed ±6-tile grid pattern. pPlayer is the owner; skill level (nToHit) is clamped to [1,8] from pPlayer's level/5. Called when an explosive potion object triggers.
-void __fastcall OBJECT_SpawnExplosivePotionGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t dwParam);
+void __fastcall OBJECT_SpawnExplosivePotionGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t pShrinesTxt);
 // Identical structure to OBJECT_SpawnExplosivePotionGrid but fires MISSILE_Chokinggaspoition. Spawns 6 choking-gas missiles in a ±6-tile ring around pUnit; pPlayer owns them with level-scaled nToHit [1,8]. Called when a choking-gas potion object triggers.
-void __fastcall OBJECT_SpawnChokingGasGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t dwParam);
+void __fastcall OBJECT_SpawnChokingGasGrid(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer, uint32_t pShrinesTxt);
 void __fastcall OBJECT_UpdateShrineOverlay(struct D2UnitStrc * pUnit, struct D2ShrinesTxt * pShrinesTxt);
 void __fastcall SetShrineTextInfo(struct D2UnitStrc * pUnit);
 void __fastcall ObjectMessage(int32_t eMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage);

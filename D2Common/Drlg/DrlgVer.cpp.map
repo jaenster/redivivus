@@ -1,0 +1,129 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/DrlgVer.cpp",
+  "functions": [
+    {
+      "name": "DRLGVER_AllocVertex",
+      "address": "0067cdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067cdd0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgVer",
+      "calledFunctions": [
+        "DRLGVER_AllocVertex",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgVertexStrc",
+        "D2PoolManagerStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGVER_SetVertexFlags",
+      "address": "0067ce00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ce00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgVer",
+      "calledFunctions": [
+        "DRLGVER_SetVertexFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgVertexStrc"
+      ]
+    },
+    {
+      "name": "DRLGVER_CreateVerticesFromEdges",
+      "address": "0067ce20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ce20"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgVer",
+      "calledFunctions": [
+        "DRLGVER_CreateVerticesFromEdges",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgVertexStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGVER_CreateRoomVertices",
+      "address": "0067d050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067d050"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgVer",
+      "calledFunctions": [
+        "DRLGVER_CreateRoomVertices",
+        "AllocServerMemory",
+        "DRLGVER_CreateVerticesFromEdges"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgVertexStrc",
+        "D2DrlgVertexStrc *",
+        "D2PoolManagerStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGVER_FreeVertices",
+      "address": "0067d1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067d1e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgVer",
+      "calledFunctions": [
+        "DRLGVER_FreeVertices",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgVertexStrc",
+        "D2DrlgVertexStrc *",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "GetCoordDiff",
+      "address": "0067d280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067d280"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgVer",
+      "calledFunctions": [
+        "GetCoordDiff"
+      ],
+      "usedTypes": [
+        "D2DrlgVertexStrc"
+      ]
+    }
+  ]
+}

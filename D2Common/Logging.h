@@ -19,11 +19,11 @@ void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLo
 // "Game:%02d\tFrame:%d\tClient:%02d\t" plus Type:System/Type:Game and Size:%d. 00624780 is the generic
 // time/thread/level logger. Two different loggers, one name.
 // @caveat zero xrefs - called through a pointer or dead. Name derived from its format strings.
-void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nParam1, int32_t nLogTypeArg, int32_t nParam2, ...);
+void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLogType, int32_t nLogTypeArg, int32_t szFormat, ...);
 bool __fastcall LOGGING_OpenLogFile(char * szLogFileName);
 void __stdcall CloseLogging();
 // Binary search for a stat entry by ID in a sorted stat array. Takes stat ID in EDI and pointer to stat array descriptor in EAX. Returns index on success, -1 if not found.
-long STATLIST_BinarySearchStatById(int32_t nStatKey, int * pnParam);
+long STATLIST_BinarySearchStatById(int32_t nStatKey, int * pStatInfo);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Common::Logging

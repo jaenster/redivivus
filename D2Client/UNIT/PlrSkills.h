@@ -75,7 +75,7 @@ void __fastcall STATES_SetStateOnUnit(struct D2UnitStrc * pUnit, eD2States eStat
 // @sourcefile .\UNIT\PlrSkills.cpp
 void __fastcall PLRSKILLS_RemoveStateFromUnit(struct D2UnitStrc * pUnit, eD2States eState);
 // @sourcefile .\UNIT\PlrSkills.cpp
-struct D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, D2UnitDataUnion * param_1, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nParam);
+struct D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(struct D2UnitStrc * pUnit, struct D2StatListExStrc * pStatList, D2UnitDataUnion * eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer);
 // Invokes the state's setfunc dispatch table entry (STATESSETFUNC[]) and attaches a client state event handler with modifier skill/level stats. Guards: pUnit non-null, eState in bounds, notondead check vs unit type/mode.
 void __fastcall STATES_DispatchSetFunc(struct D2UnitStrc * pUnit, eD2States eState);
 // Dispatches the removal function for a state being stripped from pUnit. Looks up the state's remfunc index in D2StatesTxt, bounds-checks against STATESREMFUNC table (max 0x1e entries), calls the matching removal callback if non-null, then removes any unit-event of type 1 tied to the state if a matching stat-list exists. Validates pUnit non-null and eState in-range before any action.

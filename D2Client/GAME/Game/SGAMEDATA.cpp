@@ -68,11 +68,11 @@ namespace D2Client::GAME::Game {
     *(uint32_t*)(pThis->szGamePassword + 8) = *(uint32_t*)(pSource->szGamePassword + 8);
     *(uint32_t*)(pThis->szGamePassword + 0xc) = *(uint32_t*)(pSource->szGamePassword + 0xc);
     char* pSrcDesc = pSource->szGameDescription;
-    char* pcVar1 = pThis->szGameDescription;
+    char* pDstDesc = pThis->szGameDescription;
     for (nWordsLeft = 8; nWordsLeft; nWordsLeft--) {
-      *(uint32_t*)pcVar1 = *(uint32_t*)pSrcDesc;
+      *(uint32_t*)pDstDesc = *(uint32_t*)pSrcDesc;
       pSrcDesc += 4;
-      pcVar1 += 4;
+      pDstDesc += 4;
     }
 
     pThis->nGameType = pSource->nGameType;

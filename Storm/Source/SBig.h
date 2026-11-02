@@ -29,7 +29,7 @@ namespace Storm::Source::SBig {
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @caution THE TAIL IS ACTIVELY MISLEADING and pass 6 deliberately did NOT rename it, because what it should be called is not established. There is no multiply-and-add here: the __allmul(lo, hi, 0, 1) call is a multiply by 2^32, i.e. a 32-bit word shift. No oracle counterpart exists. Read the body before trusting or reusing this name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
-void __stdcall SBIG_Accumulator_MulAndAdd(uint32_t * pnParam, uint32_t nAddend);
+void __stdcall SBIG_Accumulator_MulAndAdd(uint32_t * pnAccumulator, uint32_t nAddend);
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @caution THE TAIL IS ACTIVELY MISLEADING and pass 6 deliberately did NOT rename it. It computes no offset; it assembles a 64-bit value from a high and a low word, MAKE64(hi, lo). No oracle counterpart exists. Read the body before trusting this name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
@@ -411,7 +411,7 @@ void __stdcall SBigPow(struct BigData * pResult, struct BigData * pBigBase, uint
 // @renamed-from SBIG_MontgomeryMulWrapper2 (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigRand -> 10099470, single bl .Rand__FR9BigBufferRC9BigBufferR9BigBufferR8BigStack (4 args -> 3-arg C API). 1.14d: 3-arg forwarder onto BigBuffer_Rand 00424700, whose callee set {Mul, Shr, Add, Shl, Div} is exactly .Rand's. Was SBIG_MontgomeryMulWrapper2.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigRand(struct BigData * pnParam1, struct BigData * pnParam2, struct BigData * pnParam3);
+void __stdcall SBigRand(struct BigData * pResult, struct BigData * pModulus, struct BigData * pInput);
 // @renamed-from SBIG_ModSquareWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigSquare -> 100992e0, single bl .Square__FR9BigBufferRC9BigBufferR8BigStack (3 args -> 2-arg C API). 1.14d: 2-arg forwarder onto BigBuffer_Square 00424b00, which like .Square calls no other bignum routine.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
@@ -419,7 +419,7 @@ void __stdcall SBigSquare(struct BigData * pResult, struct BigData * pBigSrc);
 // @renamed-from SBIG_ModInverseWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigInvMod -> 10099b20, single bl .InvMod__FR9BigBufferRC9BigBufferRC9BigBufferR8BigStack. 1.14d: 3-arg forwarder onto BigBuffer_InvMod 00424fb0, whose callee set {SetOne, SetZero, Div, Mul, Add, IsZero, Sub} matches .InvMod exactly.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigInvMod(struct BigData * pnParam1, struct BigData * pnParam2, struct BigData * pnParam3);
+void __stdcall SBigInvMod(struct BigData * pResult, struct BigData * pInput, struct BigData * pModulus);
 // @renamed-from SBIG_RSA_ModPow (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigPowMod -> 100994b0, single bl .PowMod__FR9BigBufferRC9BigBufferRC9BigBufferRC9BigBufferR8BigStackR (5 args -> 4-arg C API). 1.14d: 4-arg forwarder onto BigBuffer_PowMod 00425150, whose callee set {SetOne, MulMod, Square, Div} matches .PowMod's {SetOne, Mul, Div, Square}.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
@@ -431,7 +431,7 @@ void __stdcall SBigIsPrime(struct BigData * pBigNum);
 // @renamed-from SBIG_GeneratePrimeWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigFindPrime -> 10099d20, single bl .FindPrime__FR9BigBufferUiRC9BigBufferRC9BigBufferR8BigStack (5 args -> 4-arg C API). 1.14d: 4-arg forwarder onto BigBuffer_FindPrime 004255e0, whose callee set matches .FindPrime's nine callees one for one.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-void __stdcall SBigFindPrime(struct BigData * pResult, int32_t nBitLength, struct BigData * pnParam1, struct BigData * pnParam2);
+void __stdcall SBigFindPrime(struct BigData * pResult, int32_t nBitLength, struct BigData * pLowerBound, struct BigData * pCoprimeWith);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9f88(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9fc1(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ff0(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);

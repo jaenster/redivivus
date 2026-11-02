@@ -1,0 +1,221 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/PLAYER/PlayerIntro.cpp",
+  "functions": [
+    {
+      "name": "PLAYER_SetSpokenWithNPC",
+      "address": "00572360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572360"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "PLAYER_SetSpokenWithNPC",
+        "GetPlayerData",
+        "SetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_CheckIfSpokenWithNPC",
+      "address": "005723c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005723c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "PLAYER_CheckIfSpokenWithNPC",
+        "GetPlayerData",
+        "CheckBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INTRONPC_SetSpokenWithNPC_Intro2",
+      "address": "00572420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572420"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "INTRONPC_SetSpokenWithNPC_Intro2",
+        "SetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerInteractedNPCStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INTRONPC_CheckIfSpokenWithNPC_Intro2",
+      "address": "00572470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572470"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "INTRONPC_CheckIfSpokenWithNPC_Intro2",
+        "CheckBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerInteractedNPCStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_UnsetSpokenWithNPC_Intro2",
+      "address": "005724c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005724c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "PLAYER_UnsetSpokenWithNPC_Intro2",
+        "GetPlayerData",
+        "UnsetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CopyBufferToPointer",
+      "address": "00572520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572520"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "CopyBufferToPointer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopySizeAndPosToBuffer",
+      "address": "00572530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572530"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "CopySizeAndPosToBuffer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYERINTRO_CopyIntroData8Bytes",
+      "address": "00572540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572540"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "PLAYERINTRO_CopyIntroData8Bytes"
+      ]
+    },
+    {
+      "name": "PLAYERINTRO_CopyIntroDataIndirect",
+      "address": "00572550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572550"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "PLAYERINTRO_CopyIntroDataIndirect"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRUCT_AllocPlayerInteractedNPC",
+      "address": "00572560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572560"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "STRUCT_AllocPlayerInteractedNPC",
+        "AllocServerMemory",
+        "InitBitBuffer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2UnitDataPlayerInteractedNPCStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYERDATA_FreeInteractedNPCs",
+      "address": "00572620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00572620"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerIntro",
+      "calledFunctions": [
+        "PLAYERDATA_FreeInteractedNPCs",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerInteractedNPCStrc",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

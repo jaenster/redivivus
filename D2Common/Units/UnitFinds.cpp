@@ -468,7 +468,7 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
 // Searches the room containing pUnitFindData->pRoom and all adjacent rooms for units passing a caller-supplied filter. If the source room is out of the search range only the source room is checked; otherwise DRLGROOM_GetAdjacentRoomsList is used. For each in-range room iterates the room's unit linked-list, calling fpUnitTest (or TestUnit if NULL), accumulating matching units in pUnitFindData->pUnitsArray (auto-expanded via ExpandUnitFinds). Returns and stores the total found count. Aborts with an unrecoverable error if pUnitFindData is NULL or fpUnitTest fails IsBadCodePtr.
 // @blizzard UnitFindCullRange
 int32_t __stdcall UNITFINDS_FindCullRange(D2UnitFindDataStrc * pUnitFindData) {
-    int iVar1;
+    int bMatches;
     uint32_t nRoomIdx;
     DWORD nRoomCount;
     D2UnitStrc* pNextUnit;
@@ -520,13 +520,13 @@ int32_t __stdcall UNITFINDS_FindCullRange(D2UnitFindDataStrc * pUnitFindData) {
                   exit(-1);
                 }
 
-                iVar1 = pFindData->fpUnitTest(pUnit, pFindData->pUnitFindArg);
+                bMatches = pFindData->fpUnitTest(pUnit, pFindData->pUnitFindArg);
               } else {
-                iVar1 = TestUnit(pUnit, pFindData->pUnitFindArg);
+                bMatches = TestUnit(pUnit, pFindData->pUnitFindArg);
               }
 
               nRoomIdx = nRoomIdxInner;
-              if (iVar1) {
+              if (bMatches) {
                 pFindData->pUnitsArray->aFoundUnitsList[nIndex] = pUnit;
                 nIndex++;
                 if (nIndex == pFindData->nUnitFindsSize) {

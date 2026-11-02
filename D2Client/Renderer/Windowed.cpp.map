@@ -1,0 +1,21 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Renderer/Windowed.cpp",
+  "functions": [
+    {
+      "name": "Initialize",
+      "address": "006c7a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7a60"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Windowed",
+      "calledFunctions": [
+        "Initialize"
+      ]
+    }
+  ]
+}

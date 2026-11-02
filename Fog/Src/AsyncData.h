@@ -55,7 +55,7 @@ void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved);
 void __stdcall STRUCT_FreeAsyncData();
 void __fastcall ASYNCDATA_CancelAndCleanup(struct D2AsyncData_Line0x128 * pAsyncData);
 struct D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot();
-struct D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(struct D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, size_t nReadSize, void * pReadBuffer, struct D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nParam);
+struct D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(struct D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, size_t nReadSize, void * pReadBuffer, struct D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine);
 uint32_t __fastcall ASYNCDATA_IsComplete(struct D2AsyncData_Line0x128 * pAsyncData);
 // Sets pAsyncData->nPriority (+0x44). Halts (AsyncData.cpp lines 0x1da/0x1db/0x1dc) on NULL, a bad 0x41737960 tag in nFlags, or nPriority > 0.
 // While gnAsyncDataPriorityDeferDepth > 0 the change is queued: the first time it saves the old value in nPriorityBeforeDefer, sets nFlags |= 8 and pushes the entry on

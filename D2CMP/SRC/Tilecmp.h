@@ -116,7 +116,7 @@ void __stdcall TILECMP_ProcessAllTilePixels(int32_t pTileCmpHdr, void * pNodeByt
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_DeepCopyWithRecompression(struct D2TileLibraryHeaderStrc * pSrcTileCmpHdr, struct D2TileLibraryHeaderStrc * * ppDstTileCmpHdr, void * pPaletteContext);
 // @sourcefile .\SRC\Tilecmp.cpp
-void __stdcall TILECMP_ShallowCopyZeroPointers(void * pParam, void * * pParam2, size_t * pnSize);
+void __stdcall TILECMP_ShallowCopyZeroPointers(void * pSrcDt1, void * * ppDt1Copy, size_t * pnSize);
 // 10 internal functions (defined in .cpp)
 
 } // namespace D2CMP::SRC::Tilecmp

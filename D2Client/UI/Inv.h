@@ -120,7 +120,7 @@ int32_t __stdcall ClickItemRight(struct D2UnitStrc * pItem, struct D2InventorySt
 // Resets the shop/inventory panel UI state. Fifty-six bytes whose only writes are stores to globals through EAX, so it preserves ECX. Typed __stdcall, the decompiler treated ECX as killed by the call, and INV_HandleShopLeftClick carries its button-loop stride there across two calls to this function - the stride became an unassigned local and the shop button scan advanced by garbage.
 void INV_ResetHoverAndContextState();
 void __fastcall INV_ClearItemDescription(struct D2UnitStrc * pUnit);
-void __stdcall INV_SetShopPageFromNpc(uint8_t bParam);
+void __stdcall INV_SetShopPageFromNpc(uint8_t byPage);
 void __stdcall INV_ResetInventoryState();
 void __stdcall INV_SetRefreshFlag();
 void __stdcall INV_SetMercInventoryMode();
@@ -152,7 +152,7 @@ BOOL __fastcall INV_HandleInventoryLeftDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_LoadShopTabImages();
 void __stdcall INV_FreeShopTabImages();
 // Initializes trade mode UI. Clears gbInventoryDragInProgress flag, sets up trade window inventory grids, loads partner inventory data. Called when trade UI opens.
-void __fastcall INV_InitTradeMode(int32_t nParam);
+void __fastcall INV_InitTradeMode(int32_t nTradeMode);
 void __stdcall INV_HandleTradeMouseMove(struct D2UIMouseMsgStrc * pMsg);
 // Handles left-click in trade window. Sets/clears gbInventoryDragInProgress based on cursor state. Picks up item from trade grid or places item, sends trade update packet to partner.
 void __stdcall INV_HandleTradeLeftClick(struct D2UIMouseMsgStrc * pMsg);
@@ -164,7 +164,7 @@ uint32_t __stdcall INV_IsRepairMode();
 BOOL __stdcall INV_GetGambleFlag();
 void __stdcall INV_StashOpened();
 void __stdcall INV_StashOpenedWithGold();
-void __fastcall INV_SetInventoryActive(int32_t nParam);
+void __fastcall INV_SetInventoryActive(int32_t bActive);
 void __stdcall INV_HandleStashMouseMove(struct D2UIMouseMsgStrc * pMsg);
 // Handles left-click in stash window. Sets/clears gbInventoryDragInProgress based on cursor state. Picks up item from stash grid or places item, sends stash update packet to server.
 void __stdcall INV_HandleStashLeftClick(struct D2UIMouseMsgStrc * pMsg);

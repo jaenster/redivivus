@@ -1,0 +1,603 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SBMP.cpp",
+  "functions": [
+    {
+      "name": "SBMP_ValidateTGAHeader",
+      "address": "006c50d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c50d0"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_ValidateTGAHeader"
+      ],
+      "usedTypes": [
+        "TGAHeaderStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_DecodeTGAPalette",
+      "address": "006c5150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5150"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_DecodeTGAPalette",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "D2TgaHeaderStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SBMP_DecodeTGAPixels",
+      "address": "006c5210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5210"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_DecodeTGAPixels",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_DecodeTgaFile",
+      "address": "006c54d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c54d0"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_DecodeTgaFile",
+        "SFileReadFile",
+        "SBMP_ValidateTGAHeader",
+        "SFileGetFileSize",
+        "SFileSetFilePointer",
+        "SBMP_DecodeTGAPalette",
+        "SMemAlloc",
+        "SBMP_DecodeTGAPixels",
+        "SMemFree",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2TgaHeaderStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_LoadFromMemory",
+      "address": "006c5730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5730"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_LoadFromMemory",
+        "SBMP_ValidateTGAHeader",
+        "SBMP_DecodeTGAPalette",
+        "SBMP_DecodeTGAPixels"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_WriteTGA",
+      "address": "006c5830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5830"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_WriteTGA",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_FlipImage",
+      "address": "006c59c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c59c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_FlipImage",
+        "SErrSetLastError",
+        "SMemCopy"
+      ]
+    },
+    {
+      "name": "SBMP_FlushPacket",
+      "address": "006c5a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5a60"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_FlushPacket",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "D2GifLzwEncoderStrc",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "SBMP_Output",
+      "address": "006c5a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5a90"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_Output",
+        "SBMP_FlushPacket"
+      ],
+      "usedTypes": [
+        "D2GifLzwEncoderStrc",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "SBMP_CompressPcxRow",
+      "address": "006c5b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5b10"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_CompressPcxRow"
+      ],
+      "usedTypes": [
+        "uint8_t",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "SBMP_EncodePcx256File",
+      "address": "006c5b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5b60"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_EncodePcx256File",
+        "SMemZero",
+        "SMemAlloc",
+        "SBMP_CompressPcxRow",
+        "SMemFree",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2PcxHeaderStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_UncompressPcxImage",
+      "address": "006c5cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5cf0"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_UncompressPcxImage",
+        "memset"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_FindExtension",
+      "address": "006c5ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5ee0"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_FindExtension",
+        "SStrChr"
+      ]
+    },
+    {
+      "name": "SBMP_DetermineImageType",
+      "address": "006c5f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5f40"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_DetermineImageType"
+      ]
+    },
+    {
+      "name": "SBMP_DecodeBmpFile",
+      "address": "006c5f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c5f70"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_DecodeBmpFile",
+        "SFileReadFile",
+        "SFileSetFilePointer",
+        "SMemAlloc",
+        "SBMP_FlipImage",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "BITMAPFILEHEADER",
+        "BITMAPINFOHEADER",
+        "D2MPQFileStrc",
+        "tagRGBQUAD",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SBMP_DecodeBmpMem",
+      "address": "006c60f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c60f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_DecodeBmpMem",
+        "SBMP_FlipImage"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_EncodeBmp256File",
+      "address": "006c61c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c61c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_EncodeBmp256File",
+        "SMemZero",
+        "SMemAlloc",
+        "SBMP_FlipImage",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "BITMAPFILEHEADER",
+        "BITMAPINFOHEADER",
+        "RGBQUAD",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_ClearBlock",
+      "address": "006c6330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6330"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_ClearBlock",
+        "SMemZero",
+        "SBMP_Output"
+      ],
+      "usedTypes": [
+        "D2GifLzwEncoderStrc",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "SBMP_CompressGifByte",
+      "address": "006c6370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6370"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_CompressGifByte",
+        "SBMP_Output",
+        "SBMP_ClearBlock"
+      ],
+      "usedTypes": [
+        "D2GifLzwEncoderStrc",
+        "uint32_t",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "SBMP_CompressGifImage",
+      "address": "006c6470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6470"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_CompressGifImage",
+        "SMemZero",
+        "SMemAlloc",
+        "SBMP_Output",
+        "SBMP_CompressGifByte",
+        "SBMP_FlushPacket",
+        "SMemFree",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2GifLzwEncoderStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_EncodeGif256File",
+      "address": "006c6620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6620"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_EncodeGif256File",
+        "SMemAlloc",
+        "SBMP_CompressGifImage",
+        "SMemFree",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_DecodePcxFile",
+      "address": "006c6790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6790"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_DecodePcxFile",
+        "SFileReadFile",
+        "__security_check_cookie",
+        "SFileSetFilePointer",
+        "SFileGetFileSize",
+        "SMemAlloc",
+        "SBMP_UncompressPcxImage",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2PcxHeaderStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBMP_DecodePcxMem",
+      "address": "006c6990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6990"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_DecodePcxMem",
+        "SBMP_UncompressPcxImage"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBmpDecodeImage",
+      "address": "006c6a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6a80"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBMP_LoadFromMemory",
+        "SBmpDecodeImage",
+        "SErrSetLastError",
+        "SBMP_DetermineImageType",
+        "SBMP_DecodeBmpMem",
+        "SBMP_DecodePcxMem"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBmpLoadImage",
+      "address": "006c6b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6b70"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBmpLoadImage",
+        "SErrSetLastError",
+        "SFileOpenFile",
+        "SFileReadFile",
+        "SFileSetFilePointer",
+        "SBMP_DetermineImageType",
+        "SBMP_DecodeBmpFile",
+        "SBMP_DecodePcxFile",
+        "SFileCloseFile",
+        "SBMP_DecodeTgaFile"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SBmpSaveImageEx",
+      "address": "006c6cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6cb0"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBmpSaveImageEx",
+        "SErrSetLastError",
+        "SBMP_FindExtension",
+        "_stricmp",
+        "SBMP_EncodePcx256File",
+        "SBMP_EncodeGif256File",
+        "SBMP_WriteTGA",
+        "SBMP_EncodeBmp256File"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SBmpAllocLoadImage",
+      "address": "006c6e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c6e70"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBmpAllocLoadImage",
+        "SErrSetLastError",
+        "SFileOpenFile",
+        "SFileGetFileSize",
+        "SMemAlloc",
+        "SFileReadFile",
+        "SFileCloseFile",
+        "SBmpDecodeImage",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t",
+        "pfnSBmpAllocCallback",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SBmpSaveImage",
+      "address": "006c7000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7000"
+        }
+      ],
+      "namespace": "Storm::Source::SBMP",
+      "calledFunctions": [
+        "SBmpSaveImage",
+        "SBmpSaveImageEx"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

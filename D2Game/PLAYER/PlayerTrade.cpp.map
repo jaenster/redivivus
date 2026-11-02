@@ -1,0 +1,1190 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/PLAYER/PlayerTrade.cpp",
+  "functions": [
+    {
+      "name": "Objects_OperateFn32_OpenStash",
+      "address": "00564cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564cd0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "Objects_OperateFn32_OpenStash",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SetInteractInfo",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "ITEMMODE_CheckItemLevel"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ObjectOperateFnArg",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GOLD_HandleStashGoldTransaction",
+      "address": "00564d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564d50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "GOLD_HandleStashGoldTransaction",
+        "FindUnitFromTable",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetInteractInfo",
+        "ClearInteractInfo",
+        "ITEMMODE_CheckItemLevel",
+        "STATSEX_GetCurrentStat",
+        "GetInventoryGoldLimit",
+        "ITEM_GiveGoldOrDrop",
+        "ChangeGoldForPlayer",
+        "SetupUpdateEvent_AttachEventSound",
+        "GetStashGoldLimit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYERTRADE_CompareUint32",
+      "address": "00564f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564f00"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLAYERTRADE_CompareUint32"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CUBE_RemoveAllCubeItems",
+      "address": "00564f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564f30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_RemoveAllCubeItems",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetContainingInventoryPage",
+        "ITEM_SetServerSideFlag",
+        "ITEM_SetItemData_ePreviousPage",
+        "Send0x9DRemoveItemFromContainer",
+        "ITEMMODE_DeleteItemFromInventory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eInventoryPage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUBE_CountCubeItems",
+      "address": "00564fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564fd0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_CountCubeItems",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetContainingInventoryPage"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUBE_MatchInputDescriptorToCubeItems",
+      "address": "00565010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00565010"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_MatchInputDescriptorToCubeItems",
+        "TXT_Items_GetLine",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetContainingInventoryPage",
+        "ITEM_GetItemsTxt_szCode",
+        "ITEMS_IsA",
+        "GetItemQuality",
+        "STATLIST_GetUnitTotalStats",
+        "ITEM_GetItemData_nFileIndex",
+        "ITEM_GetSocketsCount",
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxSockCount",
+        "TXT_ItemStatCost_GetLine",
+        "SERVER_GetUnitStat",
+        "STATLIST_GetStatBonusFromLists",
+        "ITEM_GetItemData_nItemLevel",
+        "GetClassId",
+        "GetClassIdFromName",
+        "IsStackable"
+      ],
+      "usedTypes": [
+        "D2CubeMainTxt",
+        "D2CubeSetupStrc",
+        "D2InventoryStrc",
+        "D2ItemStatCostTxt",
+        "D2ItemsTxt",
+        "D2TxtLinkStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eD2UnitStat",
+        "eInventoryPage",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CUBE_ValidateRecipeInputs",
+      "address": "005658c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005658c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_ValidateRecipeInputs",
+        "memset",
+        "CUBE_MatchInputDescriptorToCubeItems"
+      ],
+      "usedTypes": [
+        "D2CubeMainTxt",
+        "D2CubeSetupStrc",
+        "D2InventoryStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ITEM_SelectRandomItemClassByType",
+      "address": "00565930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00565930"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "ITEM_SelectRandomItemClassByType",
+        "TXT_Items_GetSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RANDOM_RandomNumberSelector",
+        "TXT_ItemTypes_CheckEquivalence",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemsTableStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CUBE_GenerateOutput",
+      "address": "00565ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00565ab0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_GenerateOutput",
+        "STATSEX_GetCurrentStat",
+        "_alldiv",
+        "TXT_Experience_GetMaxLevel",
+        "ITEM_SetItemData_ePage",
+        "SetupUpdateFlag",
+        "ITEM_CloneFromSerializedData",
+        "ITEMMOD_SelectMagicAffixVersioned",
+        "SetItemQuality",
+        "SetRarePrefix",
+        "SetRareSuffix",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex",
+        "ITEM_GetItemData_nItemLevel",
+        "ITEM_SelectRandomItemClassByType",
+        "memset",
+        "ITEM_CreateItemInstance",
+        "ITEM_InitItemBaseStats",
+        "ITEM_RemoveRuneword",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEMMOD_ApplyRunewordProperties",
+        "IsStackable",
+        "ITEM_GetMaxStack",
+        "STATLIST_SetUnitStat",
+        "CheckItemFlag",
+        "SERVER_GetUnitStat",
+        "ITEMMODE_ProcessItemFlags",
+        "ITEMMODE_HandleCursorItem",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "ITEM_GetMaxSockCount",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_RollSocketCount",
+        "__security_check_cookie",
+        "SUNIT_GetClient",
+        "CUBE_RemoveAllCubeItems",
+        "SetupUpdateEvent_AttachEventSound",
+        "SERVER_ItemToInventory",
+        "FreeServerUnit",
+        "TXT_Items_GetLine",
+        "Q10_OnStaffAssembledViaCube",
+        "Q19_OnPlayerCubeKhalimsWill"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2CubeMainTxt",
+        "D2CubeOutputStrc",
+        "D2CubeSetupStrc",
+        "D2InventoryStrc",
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eD2ItemQuality",
+        "int32_t",
+        "int64_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetDateUnused",
+      "address": "005665b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005665b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "GetDateUnused"
+      ],
+      "usedTypes": [
+        "_SYSTEMTIME"
+      ]
+    },
+    {
+      "name": "CUBE_MatchAndExecuteRecipe",
+      "address": "005665f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005665f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_MatchAndExecuteRecipe",
+        "CUBE_GetRecipeCount",
+        "CUBE_CountCubeItems",
+        "CUBE_GetRecipeByIndex",
+        "GetClassId",
+        "TXT_ItemStatCost_GetLine",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "STATLIST_GetStatBonusFromLists",
+        "CUBE_ValidateRecipeInputs",
+        "CUBE_GenerateOutput"
+      ],
+      "usedTypes": [
+        "D2CubeMainTxt",
+        "D2CubeSetupStrc",
+        "D2ItemStatCostTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "_SYSTEMTIME",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CUBE_HandleTransmuteButtonClick",
+      "address": "00566ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00566ae0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_HandleTransmuteButtonClick",
+        "GetInteractInfo",
+        "ClearInteractInfo",
+        "ITEMMODE_CheckItemLevel",
+        "CUBE_MatchAndExecuteRecipe"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InitCopyInventoryForTrade",
+      "address": "00566b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00566b30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "InitCopyInventoryForTrade",
+        "GetPlayerData",
+        "AllocServerMemory",
+        "GetCopyInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRTRADE_FreeTradeCopyInventory",
+      "address": "00566bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00566bf0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLRTRADE_FreeTradeCopyInventory",
+        "GetPlayerData",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18",
+        "D2UnknownStructure0xc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SendRemoveItemDisplayPacket0x92",
+      "address": "00566c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00566c80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "SendRemoveItemDisplayPacket0x92",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_CMD_BYTE_INT"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRADE_RestoreInventoryFromBackup",
+      "address": "00566cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00566cc0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "TRADE_RestoreInventoryFromBackup",
+        "GetPlayerData",
+        "NullSub_2Arg",
+        "EVENT_RemoveUnitTimersByType",
+        "PLRSAVE_DispatchItemLoadByFormat",
+        "STATSEX_GetCurrentStat",
+        "ChangeGoldForPlayer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendEventMsg",
+      "address": "00566d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00566d90"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "SendEventMsg",
+        "SStrCopy",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2Packet0x5aEventStructure",
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CUBE_HasAnyItemsInCube",
+      "address": "00566e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00566e20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_HasAnyItemsInCube",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_GetContainingInventoryPage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eInventoryPage"
+      ]
+    },
+    {
+      "name": "CheckIfCanStartTradeWithPlayer",
+      "address": "00566e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00566e60"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CheckIfCanStartTradeWithPlayer",
+        "GetPlayerTradeTickOrBusy",
+        "Q27_IsClassicGameCompleted",
+        "GetTickCount",
+        "GetPlayerData",
+        "SendEventMsg",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "IsTownLevelId",
+        "SetInteractInfo",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "ClearInteractInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TRADE_SendTradeCompleteToPlayers",
+      "address": "00567020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567020"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "TRADE_SendTradeCompleteToPlayers",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetStatsOnEar",
+      "address": "00567070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567070"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "SetStatsOnEar",
+        "ITEM_GetItemData_wType",
+        "ITEM_GetItemData_szPlayerName",
+        "ITEM_GetPlayerNameAkaNamedString",
+        "ITEM_GetItemData_nEarLevel",
+        "ITEM_SetItemData_nEarLevel",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LoopsOverAllItemsAndPutInInventory",
+      "address": "005670e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005670e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "LoopsOverAllItemsAndPutInInventory",
+        "SUNIT_GetClient",
+        "CLIENT_TestFileFlags",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetContainingInventoryPage",
+        "ITEM_CloneFromSerializedData",
+        "SetStatsOnEar",
+        "SetupUpdateFlag",
+        "ITEM_SetItemData_ePage",
+        "SERVER_ItemToInventory",
+        "ITEMMODE_HasSocketedItems",
+        "ITEMMODE_ProcessCorpsePickup",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "ITEMMODE_SetItemFlags",
+        "ITEM_SetServerSideFlag",
+        "ITEM_SetItemData_ePreviousPage",
+        "Send0x9DRemoveItemFromContainer",
+        "ITEMMODE_DeleteItemFromInventory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "HasMercItems",
+      "address": "005672d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005672d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "HasMercItems",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetContainingInventoryPage",
+        "SERVER_CheckIfPickable"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage"
+      ]
+    },
+    {
+      "name": "CUBE_OnCubeInteractionEnd",
+      "address": "00567330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567330"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CUBE_OnCubeInteractionEnd",
+        "ClearInteractInfo",
+        "ITEMMODE_CheckItemLevel"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "CreateStructure0xc",
+      "address": "00567350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567350"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CreateStructure0xc",
+        "GetPlayerData",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18",
+        "D2UnknownStructure0xc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetUidOther",
+      "address": "005673c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005673c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "SetUidOther",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SERVER_TradeTransferItemToCursor",
+      "address": "00567400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567400"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "SERVER_TradeTransferItemToCursor",
+        "GetInteractInfo",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "FindUnitFromTable",
+        "SetUidOther",
+        "SERVER_TakeItemToCursor",
+        "GetPlayerData",
+        "GetTickCount",
+        "NET_D2GS_SERVER_Send_0x79_TRADEGOLD",
+        "TRADE_SendTradeCompleteToPlayers"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CopyInventory",
+      "address": "005675e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005675e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "CopyInventory",
+        "GetPlayerData",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLRTRADE_ValidateAndInitiateTrade",
+      "address": "00567620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567620"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLRTRADE_ValidateAndInitiateTrade",
+        "GetPlayerData",
+        "GetInteractInfo",
+        "FindUnitFromTable",
+        "Q27_IsClassicGameCompleted",
+        "CheckFlagWithMask",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Items_GetLine",
+        "CheckItemFlag",
+        "GetItemQuality",
+        "CUBE_HasAnyItemsInCube",
+        "SendEventMsg",
+        "HasQuestItem",
+        "SetEvent",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ItemsTxt",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYERTRADE_CheckNoEquippedTradeItems",
+      "address": "00567840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567840"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLAYERTRADE_CheckNoEquippedTradeItems",
+        "GetInteractInfo",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetItemData_eD2InventoryGridType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsInteractingWithPlayer",
+      "address": "005678a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005678a0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "IsInteractingWithPlayer",
+        "GetInteractInfo",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RemoveTradeItemMabye",
+      "address": "005678f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005678f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "RemoveTradeItemMabye",
+        "GetPlayerData",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_CMD_BYTE_INT",
+        "IterateAllUnits",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEMMODE_SetItemFlags",
+        "UpsertToUpdateList",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "INVENTORY_GetHandItem",
+        "ITEMMODE_ProcessItemDropLogic",
+        "TRADE_RestoreInventoryFromBackup"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLRTRADE_CancelTradeAndCleanup",
+      "address": "005679e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005679e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLRTRADE_CancelTradeAndCleanup",
+        "RefreshInventory",
+        "ClearInteractInfo",
+        "RemoveTradeItemMabye",
+        "PLRTRADE_FreeTradeCopyInventory",
+        "ITEMMODE_CheckItemLevel",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRTRADE_ResetTradeState",
+      "address": "00567b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567b00"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLRTRADE_ResetTradeState",
+        "ITEMMODE_CheckItemLevel",
+        "RefreshInventory",
+        "RemoveTradeItemMabye",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x79_TRADEGOLD",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLRTRADE_ExecuteTrade",
+      "address": "00567c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00567c70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLRTRADE_ExecuteTrade",
+        "STATSEX_GetCurrentStat",
+        "PLRTRADE_ResetTradeState",
+        "GetInventoryGoldLimit",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "CreateCopyOfInventoryForTrading",
+        "HasMercItems",
+        "SetEvent",
+        "LoopsOverAllItemsAndPutInInventory",
+        "ChangeGoldForPlayer",
+        "ITEM_GiveGoldOrDrop",
+        "ClearInteractInfo",
+        "PLRTRADE_FreeTradeCopyInventory",
+        "ITEMMODE_CheckItemLevel"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18",
+        "SGAMEDATA",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ClickButton",
+      "address": "00568060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568060"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "ClickButton",
+        "__security_check_cookie",
+        "GetInteractInfo",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "GOLD_HandleStashGoldTransaction",
+        "CUBE_HandleTransmuteButtonClick",
+        "FindUnitFromTable",
+        "ITEM_HasPendingInventoryUpdates",
+        "GetPlayerData",
+        "PLRTRADE_CancelTradeAndCleanup",
+        "GetTickCount",
+        "Q27_IsClassicGameCompleted",
+        "TRADE_SendTradeCompleteToPlayers",
+        "InitCopyInventoryForTrade",
+        "GetCharName",
+        "NET_D2GS_SERVER_Send_0x78_TRADENAME",
+        "PLRTRADE_FreeTradeCopyInventory",
+        "INVENTORY_GetHandItem",
+        "PLRTRADE_ExecuteTrade",
+        "STATSEX_GetCurrentStat",
+        "GetInventoryGoldLimit",
+        "NET_D2GS_SERVER_Send_0x79_TRADEGOLD"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ServerIncomingStatus",
+        "eD2UnitType",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRADE_CompleteTrade",
+      "address": "00568640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568640"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "TRADE_CompleteTrade",
+        "GetInteractInfo",
+        "FindUnitFromTable",
+        "ClearInteractInfo",
+        "GetPlayerData",
+        "SetEvent",
+        "RemoveTradeItemMabye",
+        "PLRTRADE_FreeTradeCopyInventory",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRTRADE_AddItemToTrade",
+      "address": "00568770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568770"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLRTRADE_AddItemToTrade",
+        "GetInteractInfo",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "FindUnitFromTable",
+        "ITEM_CloneFromSerializedData",
+        "GetXPos",
+        "GetYPos",
+        "SetupUpdateFlag",
+        "ITEM_SetItemData_ePage",
+        "SERVER_ItemToInventory",
+        "ITEMMODE_HasSocketedItems",
+        "ITEMMODE_ProcessCorpsePickup",
+        "CreateStructure0xc",
+        "GetPlayerData",
+        "NET_D2GS_SERVER_Send_0x79_TRADEGOLD",
+        "TRADE_SendTradeCompleteToPlayers",
+        "ITEM_DeleteItemAndFreeUnit",
+        "PLRTRADE_CancelTradeAndCleanup"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLRTRADE_ProcessTradeStateTick",
+      "address": "005689d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005689d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerTrade",
+      "calledFunctions": [
+        "PLRTRADE_ProcessTradeStateTick",
+        "GetPlayerData",
+        "SetEvent",
+        "GetInteractInfo",
+        "FindUnitFromTable",
+        "ITEM_HasPendingInventoryUpdates",
+        "PLRTRADE_CancelTradeAndCleanup",
+        "GetTickCount",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18",
+        "SGAMEDATA",
+        "eD2TradeState",
+        "eD2UnitType"
+      ]
+    }
+  ]
+}

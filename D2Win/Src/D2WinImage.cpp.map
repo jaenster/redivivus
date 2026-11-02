@@ -1,0 +1,339 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinImage.cpp",
+  "functions": [
+    {
+      "name": "D2WINTEXTBOX_SetTextFromAnsiSimple",
+      "address": "004fcf80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fcf80"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINTEXTBOX_SetTextFromAnsi",
+      "address": "004fcff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fcff0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRING_ConvertCharToWchar",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINTEXTBOX_SetTextW",
+      "address": "004fd060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd060"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WINTEXTBOX_SetTextW",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "D2WINIMAGE_SetCellFileAndHitAreas",
+      "address": "004fd070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd070"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WINIMAGE_SetCellFileAndHitAreas",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinImage",
+        "D2WinImageHitArea",
+        "DC6",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINIMAGE_SetPosition",
+      "address": "004fd0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd0b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WINIMAGE_SetPosition",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinImage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyD2WinImage",
+      "address": "004fd0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd0f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinImage",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinImage"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyD2WinImageEx",
+      "address": "004fd100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd100"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinImageEx",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinImageEx"
+      ]
+    },
+    {
+      "name": "D2WINIMAGE_SetFrame",
+      "address": "004fd110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd110"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "IMAGE_GetFramesCount",
+        "D2WINIMAGE_SetFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinImage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINIMAGE_SetDrawModeSolid",
+      "address": "004fd170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd170"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WINIMAGE_SetDrawModeSolid",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinImage",
+        "DRAWMODE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINIMAGE_StopAnimation",
+      "address": "004fd1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd1b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WINIMAGE_StopAnimation",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "IMAGE_GetFramesCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004fd1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd1f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "Draw",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2WinImage"
+      ]
+    },
+    {
+      "name": "D2WinImage_Draw",
+      "address": "004fd340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd340"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WinImage_Draw",
+        "D2GFX_DrawSprite6"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2GfxTileRectStrc"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004fd470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd470"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "Draw",
+        "memset",
+        "D2WinImage_Draw",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2GfxNinePatchCoordsStrc",
+        "D2GfxTileRectStrc",
+        "D2WinImageEx",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Push",
+      "address": "004fd5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd5d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "Push",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinImage",
+        "D2WinImageHitArea",
+        "ImageHitArea",
+        "OnPress",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WinImage",
+      "address": "004fd6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd6c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WinImage",
+        "AllocClientMemory",
+        "memset",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinImage",
+        "D2WinImageHitArea",
+        "DC6",
+        "Key",
+        "OnPress",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

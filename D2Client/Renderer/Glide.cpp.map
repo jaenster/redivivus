@@ -1,0 +1,88 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Renderer/Glide.cpp",
+  "functions": [
+    {
+      "name": "RENDERER_GLIDE_LoadLibrarySymbols",
+      "address": "00508970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508970"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_LoadLibrarySymbols",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_GLIDE_LoadLibrarySymbols_HaltTail"
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_LoadLibrarySymbols_HaltTail",
+      "address": "005089a2",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005089a2"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_LoadLibrarySymbols_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "Initialize",
+      "address": "00508f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508f60"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Glide",
+      "calledFunctions": [
+        "Initialize",
+        "RENDERER_GLIDE_LoadLibrarySymbols"
+      ]
+    },
+    {
+      "name": "CheckCutScene",
+      "address": "00508fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508fd0"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Glide",
+      "calledFunctions": [
+        "CheckCutScene"
+      ]
+    },
+    {
+      "name": "UpdateScaleFactor",
+      "address": "005090a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005090a0"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Glide",
+      "calledFunctions": [
+        "UpdateScaleFactor"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

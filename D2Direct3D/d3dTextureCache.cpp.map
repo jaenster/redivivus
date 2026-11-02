@@ -1,0 +1,168 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Direct3D/d3dTextureCache.cpp",
+  "functions": [
+    {
+      "name": "D3DTEXCACHE_SetPalette",
+      "address": "006ba550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba550"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "D3DTEXCACHE_SetPalette",
+        "DIRECTD3D_LogError",
+        "SetPalette"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheStrc",
+        "IDirectDrawSurface7"
+      ]
+    },
+    {
+      "name": "D3DTEXCACHE_InsertNodeAtTail",
+      "address": "006ba5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba5c0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "D3DTEXCACHE_InsertNodeAtTail"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheNodeStrc",
+        "D3DTextureCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DTEXCACHE_RemoveNodeByIndex",
+      "address": "006ba660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba660"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "D3DTEXCACHE_RemoveNodeByIndex"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheNodeStrc",
+        "D3DTextureCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DTEXCACHE_AllocateNodeFromFreeList",
+      "address": "006ba6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba6d0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "D3DTEXCACHE_AllocateNodeFromFreeList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheNodeStrc",
+        "D3DTextureCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DTEXCACHE_InvalidateByIndex",
+      "address": "006ba760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba760"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "D3DTEXCACHE_InvalidateByIndex",
+        "D3DTEXCACHE_RemoveNodeByIndex",
+        "D3DTEXCACHE_InsertNodeAtTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DTEXCACHE_InvalidateByTilePtr",
+      "address": "006ba7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba7c0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "D3DTEXCACHE_InvalidateByTilePtr"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheNodeStrc",
+        "D3DTextureCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DTEXCACHE_Free",
+      "address": "006ba830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba830"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "D3DTEXCACHE_Free",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D3DTEXCACHE_InvalidateByTilePtr",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheNodeStrc",
+        "D3DTextureCacheStrc",
+        "IUnknown"
+      ]
+    },
+    {
+      "name": "D3DTEXCACHE_EnsureAvailableNode",
+      "address": "006ba920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba920"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "D3DTEXCACHE_EnsureAvailableNode",
+        "D3DTEXCACHE_AllocateNodeFromFreeList"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheNodeStrc",
+        "D3DTextureCacheStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

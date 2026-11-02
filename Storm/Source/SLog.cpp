@@ -3,8 +3,8 @@
 #include "Storm/Source/SLog.h"
 #include "Fog/SMem.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -86,7 +86,7 @@ static void SLOG_OutputIndent(D2SLogStrc * pLog) {
 
 // @blizzard OutputReturn (SLOG.CPP)
 static void SLOG_OutputReturn(D2SLogStrc * pLog) {
-    SSystem::SMemCopy(pLog->acBuffer + pLog->nUsed, (void*)"\r\n", 3);
+    SMem::SMemCopy(pLog->acBuffer + pLog->nUsed, (void*)"\r\n", 3);
     pLog->nUsed += 2;
 }
 
@@ -110,13 +110,13 @@ static void __stdcall SLOG_OutputTime(int32_t bHasData, D2SLogStrc * pLog) {
       gnSLogTimeStrLen = SSTR::SStrLen(gszSLogTimeStr);
     }
     if (bHasData) {
-      SSystem::SMemCopy(pLog->acBuffer + pLog->nUsed, gszSLogTimeStr, gnSLogTimeStrLen + 1);
+      SMem::SMemCopy(pLog->acBuffer + pLog->nUsed, gszSLogTimeStr, gnSLogTimeStrLen + 1);
       pLog->nUsed += gnSLogTimeStrLen;
       SLOG_OutputIndent(pLog);
       return;
     }
 
-    SSystem::SMemFill(pLog->acBuffer + pLog->nUsed, gnSLogTimeStrLen, 0x20);
+    SMem::SMemFill(pLog->acBuffer + pLog->nUsed, gnSLogTimeStrLen, 0x20);
     uint32_t nTimestampPrefixLen = gnSLogTimeStrLen;
     pLog->acBuffer[pLog->nUsed + gnSLogTimeStrLen] = '\0';
     pLog->nUsed += nTimestampPrefixLen;
@@ -145,8 +145,8 @@ static void SLOG_UnlockDeleteLog(LPVOID pTarget, int32_t nSlot) {
 }
 
 // @blizzard UnlockLog (SLOG.CPP)
-static void SLOG_UnlockLog(int32_t nParam) {
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(gaSLogCritSect + nParam);
+static void SLOG_UnlockLog(int32_t nSlot) {
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(gaSLogCritSect + nSlot);
 }
 
 // @blizzard SLogClose (SLOG.CPP)

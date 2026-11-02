@@ -46,8 +46,8 @@ void __stdcall STRUCT_FreeTxtLink(struct D2TxtLinkStrc * pTxtLink);
 int32_t __stdcall GetClassIdFromName(struct D2TxtLinkStrc * pTxtLink, uint32_t pItemsTxt, uint32_t dwParam3);
 BOOL __stdcall FOG_GetTxtLinkRecord(struct D2TxtLinkStrc * pTxtLink, int nRecordId, void * pResult);
 uint32_t __stdcall FillUpTxtLinkSub0x08(struct D2TxtLinkStrc * pTxtLink, char * nItemCode);
-int __fastcall FOG_GetRecordField(struct D2TxtLinkNodeStrc * pClientSideData, int nParam);
-int __stdcall FOG_ParseIntField(int * pnParam, int nParam1, int nParam2);
+int __fastcall FOG_GetRecordField(struct D2TxtLinkNodeStrc * pClientSideData, int nLinkIndex);
+int __stdcall FOG_ParseIntField(int * pTxtLink, int nLinkIndex, int nParam2);
 int32_t __stdcall GetLinkNodeIndex(struct D2TxtLinkStrc * pLink, char * szItemCode, uint32_t dwParam3);
 // @sourcefile .\Src\Excel\Excel.cpp
 int __stdcall FOG_ParseStringField(struct D2TxtLinkStrc * pTxtLink, char * szText);

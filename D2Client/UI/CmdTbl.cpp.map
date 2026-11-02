@@ -1,0 +1,812 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/CmdTbl.cpp",
+  "functions": [
+    {
+      "name": "CMD_ToggleRunMode",
+      "address": "00469000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469000"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_ToggleRunMode",
+        "SetRunKeyDown",
+        "GetPlayerUnit_UI",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "STATSEX_GetCurrentStat",
+        "UNITMODE_SetAnimMode",
+        "NET_D2GS_CLIENT_Send_CMD"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_ToggleAlwaysRun",
+      "address": "00469060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469060"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_ToggleAlwaysRun",
+        "GetGlobalAlwaysRun",
+        "SetGlobalAlwaysRun"
+      ]
+    },
+    {
+      "name": "CMD_SetClickModifier",
+      "address": "00469080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469080"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_SetClickModifier",
+        "GAMEDATA_SetClickModifier"
+      ]
+    },
+    {
+      "name": "CMD_ShowEscMenu",
+      "address": "004690b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004690b0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_ShowEscMenu",
+        "NPCMENU_IsAnyNpcDialogOpen",
+        "TEXT_IsScrollingTextActive",
+        "GetUIFlag",
+        "ESCMENU_RestoreUIState",
+        "UI_CloseActivePanels",
+        "ESCMENU_ShowMenu"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_CyclePrevSkill",
+      "address": "00469100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469100"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_CyclePrevSkill",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "SPELLSEL_CycleRightHandSkills"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_CycleNextSkill",
+      "address": "00469120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469120"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_CycleNextSkill",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "SPELLSEL_CycleRightHandSkills"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_SwapWeaponSet",
+      "address": "00469140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469140"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_SwapWeaponSet",
+        "GetUIFlag",
+        "INV_SwapWeaponSet"
+      ]
+    },
+    {
+      "name": "CMD_ToggleMercInventory",
+      "address": "00469170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469170"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_ToggleMercInventory",
+        "CLIENT_CheckExpansion",
+        "GetPlayerUnit_UI",
+        "GetRosterPetGUID",
+        "D2CheckExpansionGame",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMDTBL_InvokeMouseLeftButtonHandler",
+      "address": "00469230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469230"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMDTBL_InvokeMouseLeftButtonHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_InvokeCallback_0x1144",
+      "address": "00469270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469270"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_InvokeCallback_0x1144",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_InvokeCallback_0x1152",
+      "address": "004692b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004692b0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_InvokeCallback_0x1152",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMDTBL_InvokeMouseRightButtonHandler",
+      "address": "004692f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004692f0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMDTBL_InvokeMouseRightButtonHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_InvokeCallback_0x1148",
+      "address": "00469330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469330"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_InvokeCallback_0x1148",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMDTBL_InvokeMouseMiddleButtonHandler",
+      "address": "00469370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469370"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMDTBL_InvokeMouseMiddleButtonHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_InvokeCallbackByParam",
+      "address": "004693b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004693b0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_InvokeCallbackByParam",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_ValidateMouseButtonBinding",
+      "address": "00469420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469420"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_ValidateMouseButtonBinding"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SORT_CompareInts",
+      "address": "00469450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469450"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "SORT_CompareInts"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_RebuildDerivedBindings",
+      "address": "004694a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004694a0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_RebuildDerivedBindings"
+      ],
+      "usedTypes": [
+        "D2KeyBindStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetKeyFileHandle",
+      "address": "00469650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469650"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "GetKeyFileHandle",
+        "memset",
+        "GetAndCreateSavePath",
+        "SStrPrintf",
+        "SafeCreateDirectoryTree",
+        "thunk_CreateFileA"
+      ]
+    },
+    {
+      "name": "CMD_WriteKeyFile",
+      "address": "00469780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469780"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_WriteKeyFile",
+        "GetKeyFileHandle",
+        "memset",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle",
+        "SFILE_GetInstallPath",
+        "thunk_CreateFileA"
+      ],
+      "usedTypes": [
+        "D2KeyBindStrc",
+        "D2KeyFileHeaderStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_LoadDefaultKeyBindings",
+      "address": "004698d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004698d0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_LoadDefaultKeyBindings",
+        "TABLES_GetLangAbbreviation",
+        "SFILE_GetInstallPath",
+        "thunk_CreateFileA",
+        "thunk_ReadFile",
+        "SFILE_Win32CloseHandle",
+        "AllocServerMemory",
+        "sprintf",
+        "ReturnZero",
+        "D2FILE_AllocAndLoadD2File",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2CmdTbl_Line0x50f",
+        "D2KeyBindStrc",
+        "D2PoolManagerStrc",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CMD_ResetKeyBindingsToDefaults",
+      "address": "00469a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469a60"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_ResetKeyBindingsToDefaults",
+        "CMD_LoadDefaultKeyBindings",
+        "CMD_RebuildDerivedBindings"
+      ],
+      "usedTypes": [
+        "D2KeyBindStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CMD_GetKeyForCommand",
+      "address": "00469aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469aa0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_GetKeyForCommand"
+      ],
+      "usedTypes": [
+        "PD2KeyBindSlot",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CMD_IsBindableKey",
+      "address": "00469ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469ae0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_IsBindableKey",
+        "isalpha",
+        "isdigit"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_SetKeyBinding",
+      "address": "00469c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469c20"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_SetKeyBinding",
+        "CMD_IsBindableKey",
+        "CMD_ValidateMouseButtonBinding"
+      ],
+      "usedTypes": [
+        "PD2KeyBindSlot",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_AcceptKeyBindings",
+      "address": "00469d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469d20"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_AcceptKeyBindings",
+        "CMD_RebuildDerivedBindings"
+      ],
+      "usedTypes": [
+        "D2KeyBindStrc"
+      ]
+    },
+    {
+      "name": "CMD_SaveKeyBindings",
+      "address": "00469d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469d40"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_SaveKeyBindings",
+        "CMD_WriteKeyFile",
+        "CMD_RebuildDerivedBindings"
+      ]
+    },
+    {
+      "name": "CMD_RevertKeyBindings",
+      "address": "00469d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469d50"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_RevertKeyBindings",
+        "CMD_RebuildDerivedBindings"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_UnbindCommand",
+      "address": "00469d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469d70"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_UnbindCommand"
+      ],
+      "usedTypes": [
+        "PD2KeyBindSlot",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_IsCommandBound",
+      "address": "00469d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469d90"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_IsCommandBound"
+      ],
+      "usedTypes": [
+        "PD2KeyBindSlot",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_GetKeyNameForCommand",
+      "address": "00469de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00469de0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_GetKeyNameForCommand",
+        "GetLocaleString"
+      ],
+      "usedTypes": [
+        "PD2KeyBindSlot",
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CMD_GetKeyDescForCommand",
+      "address": "0046a530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046a530"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_GetKeyDescForCommand",
+        "GetLocaleString",
+        "CMD_GetKeyNameForCommand"
+      ],
+      "usedTypes": [
+        "PD2KeyBindSlot",
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "WindowsKeyPressedEvent",
+      "address": "0046a840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046a840"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "WindowsKeyPressedEvent",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2KeyBindStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DispatchKeyCommand",
+      "address": "0046a940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046a940"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "INPUT_DispatchKeyCommand",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2KeyBindStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_ToggleKeyConfigMode",
+      "address": "0046aa20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046aa20"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_ToggleKeyConfigMode",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "MESSAGE_RegisterEventHandlerBatch"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_LoadUserKeyBindings",
+      "address": "0046aae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046aae0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_LoadUserKeyBindings",
+        "GetKeyFileHandle",
+        "memset",
+        "thunk_ReadFile",
+        "SFILE_Win32CloseHandle",
+        "CMD_RebuildDerivedBindings",
+        "CMD_LoadDefaultKeyBindings",
+        "CMD_WriteKeyFile"
+      ],
+      "usedTypes": [
+        "D2KeyBindStrc",
+        "D2KeyFileStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CMD_InitKeyBindings",
+      "address": "0046ac70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ac70"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_InitKeyBindings",
+        "CMD_LoadUserKeyBindings",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_ExitKeyConfigMode",
+      "address": "0046acb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046acb0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_ExitKeyConfigMode",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CMD_InitKeyConfigUI",
+      "address": "0046ae50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046ae50"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "CMD_InitKeyConfigUI",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6caad0",
+      "address": "006caad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006caad0"
+        }
+      ],
+      "namespace": "D2Client::UI::CmdTbl",
+      "calledFunctions": [
+        "StaticInit_6caad0"
+      ]
+    }
+  ]
+}

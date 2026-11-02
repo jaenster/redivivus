@@ -1,0 +1,389 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Draw.cpp",
+  "functions": [
+    {
+      "name": "LoadingsScreen",
+      "address": "00456550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00456550"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "LoadingsScreen",
+        "CleanupAfterLoadingAct",
+        "PALETTE_LoadLoadingScreenPalette",
+        "MISC_GetLanguageCode",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "LOADING_SetProgressRatio"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Draw_UI_LoadGame",
+      "address": "004565e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004565e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "Draw_UI_LoadGame",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_ClearScreen",
+        "CLIENT_GetD2GSGameType",
+        "GAMEDATA_SendPeriodicPing",
+        "DRAW_SetOrReloadPalleteMain",
+        "D2GFX_BeginScene",
+        "LoadingsScreen",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_GetColorFromCurrentPallete",
+        "D2GFX_DrawSolidRectEx",
+        "LOADING_GetProgressRatio",
+        "D2GFX_DrawSolidRectExBySize",
+        "IMAGE_GetFramesCount",
+        "D2GFX_DrawImage",
+        "D2GFX_EndScene",
+        "UI_ResetInputState",
+        "GAMEDATA_ClearQueuedClicks"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "eD2GSGameType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_ToggleMiniPanel",
+      "address": "004567f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004567f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "UI_ToggleMiniPanel",
+        "SRegLoadValue",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TEXT_IsScrollingTextActive",
+        "SetUIFlag",
+        "GetInteractedUnitGuid",
+        "NPCMENU_CloseNpcInteraction",
+        "GetPlayerUnit_UI",
+        "IsActive",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "GetMouseX",
+        "GetMouseY",
+        "MESSAGE_UnregisterEventHandlerBatch"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UIvars",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InitializeUI",
+      "address": "00456970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00456970"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "InitializeUI",
+        "LoadPanelImages",
+        "MINIPANEL_Init",
+        "TEXT_InitTextDisplaySettings",
+        "UI_LoadLevelUpPanelImages",
+        "LoadClassIcons",
+        "NPCMENU_Initialize",
+        "AUTOMAP_Init",
+        "InitializeWaypoints",
+        "UI_ResetTradeGlobals",
+        "INV_LoadBodySlotImages",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "TEXT_IsScrollingTextActive",
+        "SetUIFlag",
+        "GetInteractedUnitGuid",
+        "NPCMENU_CloseNpcInteraction",
+        "GetPlayerUnit_UI",
+        "IsActive",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "GetMouseX",
+        "GetMouseY",
+        "UI_ToggleMiniPanel",
+        "IMAGE_LoadDC6Ex",
+        "TEXT_InitializeTextSystem",
+        "DIALOG_InitializeSystem",
+        "INV_LoadShopTabImages",
+        "TEXT_InitializeMessageLog",
+        "GameOverWtf",
+        "CMD_InitKeyBindings",
+        "ESCMENU_Initialize",
+        "CONTROLCONFIG_Initialize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UIvars",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeDraw",
+      "address": "00456d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00456d80"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "FreeDraw",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetPlayerUnit_UI",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "GetMouseX",
+        "GetMouseY",
+        "FreePanelImages",
+        "SPELLSEL_Cleanup",
+        "SPELLSEL_FreeSkilltreeGraphic",
+        "D2WINFONT_FreeFontCache",
+        "TEXT_FreeEverything",
+        "MINIPANEL_Shutdown",
+        "FreeHelpBorder",
+        "UI_FreeLevelUpPanelImages",
+        "FreeHireablesList",
+        "NPCMENU_Cleanup",
+        "AUTOMAP_Free",
+        "WAYPOINT_Shutdown",
+        "SHOP_CleanupAssets",
+        "UI_CloseCurrentDialog",
+        "INV_FreeBodySlotImages",
+        "UI_FreeHoradricCubeAssets",
+        "QUESTLOG_FreeQuestImages_Thunk",
+        "INV_FreeShopTabImages",
+        "DIALOG_CleanupSystem",
+        "TEXT_CleanupMessageLog",
+        "DC6_FreeAndDelete",
+        "CMD_ExitKeyConfigMode",
+        "ESCMENU_Shutdown",
+        "CONTROLCONFIG_Cleanup"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI",
+      "address": "00456ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00456ee0"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "DRAW_UI",
+        "D2GFX_GetResolutionMode",
+        "TEXT_TooltipSetAttributes",
+        "DRAW_EscMenu",
+        "DRAW_ConfigControlsMenu",
+        "GetSelectedUnit",
+        "DRAW_UnitUnderMouse",
+        "UI_DrawMercenaryHealthBar",
+        "Draw_EquipmentNeedToRepairBody",
+        "DRAW_EquipmentNeedArrows",
+        "DRAW_GetTypeOfBorder",
+        "AUTOMAP_Draw",
+        "DRAW_Overlay_EnteringAreaX",
+        "DRAW_Overlay_PetsAndPartyMembers",
+        "UI_DrawHireableIcons",
+        "DrawMercInventory",
+        "INV_DrawRecipeScroll",
+        "DRAW_UI_Quest",
+        "DRAW_UI_Inventory",
+        "DRAW_UI_TradePrompt",
+        "UI_DrawPlayerStateOverlays",
+        "DRAW_UI_SkillWindow",
+        "DRAW_UI_StatWindow_I",
+        "DRAW_UI_PartyWindow",
+        "DIALOG_DrawBackground",
+        "TEXT_DrawQuestScrollUI",
+        "DRAW_UI_Waypoint",
+        "LoadBorder",
+        "HELP_DrawDarkOverlay",
+        "DRAW_UI_BordersAndOrbsAndFillers",
+        "SPELLSEL_RenderAllSkillGrids",
+        "PANEL_SetBottomPanelGlobals2",
+        "UI_UpdateNewStatSkillIcons",
+        "HELP_DrawHelpButton",
+        "UI_DrawLevelUpButtonLeft",
+        "DRAW_UI_NewStatPoints_II",
+        "UI_DrawLevelUpButtonRight",
+        "Draw_UI_NewStatPoints",
+        "QUESTLOG_DrawQuestLogButton",
+        "PANEL_DrawPanelLayout",
+        "DRAW_UI_MiniPanel",
+        "DRAW_UI_ChatInput",
+        "UI_CloseActivePanels",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TEXT_IsScrollingTextActive",
+        "SetUIFlag",
+        "GetInteractedUnitGuid",
+        "NPCMENU_CloseNpcInteraction",
+        "GetPlayerUnit_UI",
+        "IsActive",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "HELP_HideMiniPanel",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "GetMouseX",
+        "GetMouseY",
+        "DrawBackgroundHelpMenu",
+        "DRAW_AltItems",
+        "CLIENT_GetD2GSGameType",
+        "CUNIT_IterateServerUnitsWithCallback",
+        "DRAW_UI_NPC_INTERACTION",
+        "DRAW_UI_CASH",
+        "PANEL_DrawHostileIndicator",
+        "TEXT_DrawMessageLogAndOverhead",
+        "Draw_UnitNameUnderCursor",
+        "DRAW_MonsterUnderCursorImmunites",
+        "UI_DrawStoredTooltip",
+        "DRAW_UnitUModsUnderCursor",
+        "UI_DrawArenaKillCount",
+        "DRAW_UI_DeathMessage",
+        "thunk_DRAW_Overlay_SecondsLeftToGame"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "D2UnitStrc",
+        "eD2GSGameType",
+        "eD2UIvars",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_AdjustMemoryBudget",
+      "address": "00457300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457300"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "CLIENT_AdjustMemoryBudget",
+        "SFILE_GetGlobalPointer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "LOGFILE_WriteStringToFile",
+        "SOUNDHDR_SetGlobal4",
+        "GFX_InitLRUCache",
+        "GFX_InitCelDataCache",
+        "GFX_InitCofSystem"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_ShutdownSpriteCacheAndCofSystem",
+      "address": "00457420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457420"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "GFX_ShutdownSpriteCacheAndCofSystem",
+        "SPRITECACHE_Init",
+        "SPRITECACHE_Shutdown",
+        "GFX_ShutdownCofSystem"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_NoOp",
+      "address": "00457440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00457440"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "DRAW_NoOp"
+      ]
+    },
+    {
+      "name": "DRAW_PfHandlerCallback_CloseActivePanels",
+      "address": "00498c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498c00"
+        }
+      ],
+      "namespace": "D2Client::UI::Draw",
+      "calledFunctions": [
+        "DRAW_PfHandlerCallback_CloseActivePanels",
+        "UI_CloseActivePanels"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    }
+  ]
+}

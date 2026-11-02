@@ -9,12 +9,12 @@
 
 namespace D2Client::BNGatewayAccess {
 
-int32_t __stdcall NumGateways(int32_t nParam) {
-    /* 0x2e680  14  ?NumGateways@BNGatewayAccess@@QAGHXZ */ return *(int32_t*)(nParam + 8);
+int32_t __stdcall NumGateways(int32_t pGatewayAccess) {
+    /* 0x2e680  14  ?NumGateways@BNGatewayAccess@@QAGHXZ */ return *(int32_t*)(pGatewayAccess + 8);
 }
 
-int32_t __stdcall CurGateway(int32_t nParam) {
-    /* 0x2e690  2  ?CurGateway@BNGatewayAccess@@QAGHXZ */ return *(int32_t*)(nParam + 0xc);
+int32_t __stdcall CurGateway(int32_t pGatewayAccess) {
+    /* 0x2e690  2  ?CurGateway@BNGatewayAccess@@QAGHXZ */ return *(int32_t*)(pGatewayAccess + 0xc);
 }
 
 D2BNetGatewayAccessStr * __thiscall operator_(D2BNetGatewayAccessStr * pDst, D2BNetGatewayAccessStr * pSrc) {

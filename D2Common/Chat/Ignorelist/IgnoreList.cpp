@@ -10,7 +10,6 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 #include "D2Common/Chat.h"
 #include "D2Common/Chat/Ignorelist/ChatIgnoreList.h"
@@ -27,8 +26,8 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 namespace D2Common::Chat::Ignorelist::IgnoreList {
 
 int32_t __thiscall CloseAppendFile(::IgnoreList * pThis) {
-    int iVar1 = fclose(pThis->pAppendFile);
-    return iVar1;
+    int nResult = fclose(pThis->pAppendFile);
+    return nResult;
 }
 
 int32_t __thiscall GetPersistentSetting(::IgnoreList * pThis) {
@@ -43,24 +42,24 @@ void __thiscall SavePersistentSetting(::IgnoreList * pThis, int32_t nPersistent)
 int32_t __thiscall AppendLineToFile(::IgnoreList * pThis, char * szLine) {
     int32_t bIsEnabled;
     FILE* _File;
-    int iVar1;
-    uint32_t uVar2;
+    int nCloseResult;
+    uint32_t bSuccess;
     char szPath[256];
     if (szLine && *szLine != '\0') {
       bIsEnabled = pThis->_vfptr->GetPersistentSetting(pThis);
       if (bIsEnabled) {
-        uVar2 = 0;
+        bSuccess = 0;
         Storm::Source::SSTR::SStrCopy(szPath, szLine, 0x100);
         Storm::Source::SSTR::SStrPack(szPath, "\n", 0x100);
         _File = fopen(pThis->szIgnoreFilePath, "at+");
         pThis->pAppendFile = _File;
         if (_File) {
           fwrite(szPath, Storm::Source::SSTR::SStrLen(szPath), 1, _File);
-          iVar1 = fclose(pThis->pAppendFile);
-          uVar2 = (uint32_t)!iVar1;
+          nCloseResult = fclose(pThis->pAppendFile);
+          bSuccess = (uint32_t)!nCloseResult;
         }
 
-        return uVar2;
+        return bSuccess;
       }
     }
 
@@ -327,7 +326,7 @@ int32_t __thiscall AddByAccountName(::IgnoreList * pThis, char * szAccountName) 
 }
 
 void __thiscall LoadFromFile(::IgnoreList * pThis) {
-    uint32_t uVar1;
+    uint32_t nLineLen;
     TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pHashTable;
     uint32_t pszIter;
     char szLineBuf[256];
@@ -339,16 +338,16 @@ void __thiscall LoadFromFile(::IgnoreList * pThis) {
       pszLine = fgets(szLineBuf, 0x100, pFile);
       while (pszLine) {
         pszIter = 0;
-        uVar1 = Storm::Source::SSTR::SStrLen(szLineBuf);
-        if (uVar1 > 0) {
+        nLineLen = Storm::Source::SSTR::SStrLen(szLineBuf);
+        if (nLineLen > 0) {
           do {
             if (szLineBuf[pszIter] == '\r' || szLineBuf[pszIter] == '\n') {
               szLineBuf[pszIter] = '\0';
             }
 
             pszIter++;
-            uVar1 = Storm::Source::SSTR::SStrLen(szLineBuf);
-          } while (pszIter < uVar1);
+            nLineLen = Storm::Source::SSTR::SStrLen(szLineBuf);
+          } while (pszIter < nLineLen);
         }
         if (szLineBuf[0] == '!' && szLineBuf[1] != '\0') {
           pszLine = szLineBuf + 1;
@@ -389,7 +388,7 @@ void __thiscall LoadFromFile(::IgnoreList * pThis) {
     pThis->pAppendFile = 0;
     pThis->nPersistentIgnore = 1;
     Fog::Source::SFile::SFILE_GetExecutableDirectory(__frame0.szExePath, 0x104);
-    Storm::Source::SSystem::SMemZero(pThis->szIgnoreFilePath, 0x104);
+    Storm::Source::SMem::SMemZero(pThis->szIgnoreFilePath, 0x104);
     char* pszLastBackslash = Storm::Source::SSTR::SStrChrR(__frame0.szExePath, '\\');
     if (pszLastBackslash) {
       pszLastBackslash[1] = '\0';
@@ -418,18 +417,18 @@ void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nR
     if (szRaw && *szRaw != '\0') {
       bIsOnline = pThis->_vfptr->GetPersistentSetting(pThis);
       if (bIsOnline) {
-        Storm::Source::SSystem::SMemZero(szCharName, 0x100);
-        Storm::Source::SSystem::SMemZero(szAccountName, 0x100);
+        Storm::Source::SMem::SMemZero(szCharName, 0x100);
+        Storm::Source::SMem::SMemZero(szAccountName, 0x100);
         nOpenParenIdx = 0;
         nCharIdx = 0;
         if (*szRaw != '\0') {
           while (nCharIdx < nRawLen - 1U) {
             if (szRaw[nCharIdx + 1] == '(') {
               nOpenParenIdx = nCharIdx + 1;
-              Storm::Source::SSystem::SMemCopy(szAccountName, szRaw, nOpenParenIdx);
+              Storm::Source::SMem::SMemCopy(szAccountName, szRaw, nOpenParenIdx);
             }
             if (szRaw[nCharIdx + 1] == ')') {
-              Storm::Source::SSystem::SMemCopy(szCharName, szRaw + nOpenParenIdx + 1, nCharIdx - nOpenParenIdx);
+              Storm::Source::SMem::SMemCopy(szCharName, szRaw + nOpenParenIdx + 1, nCharIdx - nOpenParenIdx);
             }
             if (szAccountName[0] != '\0' && szCharName[0] != '\0') {
               break;

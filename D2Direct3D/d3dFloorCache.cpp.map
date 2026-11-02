@@ -1,0 +1,365 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Direct3D/d3dFloorCache.cpp",
+  "functions": [
+    {
+      "name": "D3DFLOOR_Initialize",
+      "address": "006bafc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bafc0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3DFLOOR_Initialize",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "RENDERER_D3D_CreateSurfaceWithTexture"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheNodeStrc",
+        "D3DFloorCacheStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_SetPalette",
+      "address": "006bb0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb0e0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3DFLOOR_SetPalette",
+        "DIRECTD3D_LogError",
+        "SetPalette"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheStrc",
+        "IDirectDrawSurface7"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_InsertNodeAtTail",
+      "address": "006bb150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb150"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3DFLOOR_InsertNodeAtTail"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheNodeStrc",
+        "D3DFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_RemoveNodeByIndex",
+      "address": "006bb1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb1f0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3DFLOOR_RemoveNodeByIndex"
+      ],
+      "usedTypes": [
+        "D2InventoryGridStrc",
+        "D2UnitStrc",
+        "D3DFloorCacheNodeStrc",
+        "D3DFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_AllocateNodeFromFreeList",
+      "address": "006bb270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb270"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3DFLOOR_AllocateNodeFromFreeList"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheNodeStrc",
+        "D3DFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_PromoteNodeToMRU",
+      "address": "006bb2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb2d0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3DFLOOR_RemoveNodeByIndex",
+        "GLFLOOR_PromoteNodeToMRU",
+        "D3DFLOOR_PromoteNodeToMRU",
+        "D3DFLOOR_InsertNodeAtTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_EvictLRU",
+      "address": "006bb330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb330"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_EvictLRU",
+        "D3DFLOOR_EvictLRU"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheNodeStrc",
+        "D3DFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_InvalidateByIndex",
+      "address": "006bb390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb390"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "GLFLOOR_InvalidateByIndex",
+        "D3DFLOOR_InvalidateByIndex",
+        "D3DFLOOR_RemoveNodeByIndex"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_Free",
+      "address": "006bb3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb3e0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3DFLOOR_Free",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheNodeStrc",
+        "D3DFloorCacheStrc",
+        "IUnknown"
+      ]
+    },
+    {
+      "name": "D3DFLOOR_EnsureAvailableNode",
+      "address": "006bb520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb520"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3DFLOOR_EnsureAvailableNode",
+        "D3DFLOOR_AllocateNodeFromFreeList"
+      ],
+      "usedTypes": [
+        "D3DFloorCacheNodeStrc",
+        "D3DFloorCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D3D_CreateSystemMemoryTexturesForTiles",
+      "address": "006bb5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb5e0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_CreateSystemMemoryTexturesForTiles",
+        "RENDERER_D3D_CreateSystemMemoryTexture",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D3D_FreeSystemMemoryTexturesForTiles",
+      "address": "006bb640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb640"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_FreeSystemMemoryTexturesForTiles"
+      ]
+    },
+    {
+      "name": "D3D_DecompressRLESubtileToBuffer",
+      "address": "006bb6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb6b0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_DecompressRLESubtileToBuffer",
+        "memset"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D3D_RenderTileComponentsToPixelBuffer",
+      "address": "006bb720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb720"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_RenderTileComponentsToPixelBuffer",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D3D_RenderFloorTileToTexture",
+      "address": "006bb870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb870"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_RenderFloorTileToTexture",
+        "SPRITECACHE_AllocEntry",
+        "D3DFLOOR_EnsureAvailableNode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "DIRECTD3D_LogError",
+        "D3D_RenderTileComponentsToPixelBuffer",
+        "RENDERER_D3D_CopySurfacePixels",
+        "D3DFLOOR_PromoteNodeToMRU"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "D3DFloorCacheNodeStrc",
+        "DDSURFACEDESC",
+        "IDirect3DTexture2",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D3D_RenderSubtileToTexture",
+      "address": "006bba00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bba00"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_RenderSubtileToTexture",
+        "D3DSUBTILE_PromoteNodeToMRU",
+        "D3D_DecompressRLESubtileToBuffer",
+        "D3DSUBTILE_EnsureAvailableNode",
+        "memset",
+        "DIRECTD3D_LogError",
+        "RENDERER_D3D_ConvertPalettedTo16Bit",
+        "RENDERER_D3D_CopySurfacePixels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "D3DSubtileCacheNodeStrc",
+        "DDSURFACEDESC",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D3D_InvalidateTileCachesForEntry",
+      "address": "006bbb90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bbb90"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_InvalidateTileCachesForEntry",
+        "D3DFLOOR_InvalidateByIndex",
+        "D3DSUBTILE_InvalidateByIndex"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc"
+      ]
+    }
+  ]
+}

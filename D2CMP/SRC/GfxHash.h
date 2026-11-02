@@ -20,10 +20,10 @@ namespace D2CMP::SRC::GfxHash {
 // async frame buffer (+0x20 -> tDecode) and the entry itself. The entry node struct (+0 hash, +0x20 cache block, +0x28/+0x2c links) is untyped.
 // @sourcefile .\SRC\GfxHash.cpp
 void __thiscall GFXHASH_UnlinkCacheEntry(int32_t pHashTable, struct D2PoolManagerStrc * pMemory, int * pEntry);
-void __fastcall GFXHASH_InitHashTable(void * pParam);
+void __fastcall GFXHASH_InitHashTable(void * pHashTable);
 void __fastcall GFX_UnlinkCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, int * pEntry);
-uint32_t __fastcall GFXHASH_CalcDirectionIndex(int32_t nParam, uint32_t * pnParam, struct D2CelFileCacheEntryStrc * pCelEntry);
-int32_t __fastcall GFXHASH_FindEntryByGfxData(void * pHashTable, struct D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnParam, struct D2CelFileCacheEntryStrc * pCelEntry);
+uint32_t __fastcall GFXHASH_CalcDirectionIndex(int32_t pGfxData, uint32_t * pnDirectionDivisor, struct D2CelFileCacheEntryStrc * pCelEntry);
+int32_t __fastcall GFXHASH_FindEntryByGfxData(void * pHashTable, struct D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, struct D2CelFileCacheEntryStrc * pCelEntry);
 // @sourcefile .\SRC\GfxHash.cpp
 uint32_t * __fastcall GFX_AllocCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, uint32_t nDirIdxOut, struct D2GfxDataStrc * pGfxData, struct D2CelFileCacheEntryStrc * pCelEntry);
 // 1 internal function (defined in .cpp)

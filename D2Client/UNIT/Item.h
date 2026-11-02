@@ -331,7 +331,7 @@ namespace D2Client::UNIT {
 void __fastcall ITEM_RemoveItemStatsFromOwner(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t bRecalc, int32_t bUpdateResources);
 int32_t __fastcall ITEM_CheckItemEquipRequirements(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Sets an item unit's animation mode and places it in the world. For mode Run (on-ground targetable), initialises a static path, blocks collision, and adds the unit to pRoom. For mode TownNeutral (dropped item), does the same and also plays the drop sound. Modes Death/Neutral/Walk/TownWalk/GetHit clear the targetable flag. When nParam is non-zero, marks the item identified, allocates a fresh stat list, and creates an inventory struct if the item type supports one.
-void __fastcall ITEM_SetAnimModeAndPlace(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nAnimMode, int32_t nParam);
+void __fastcall ITEM_SetAnimModeAndPlace(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nAnimMode, int32_t bInitItemData);
 void __fastcall ITEM_FreeItemUnit(struct D2UnitStrc * pUnit);
 // Updates a ground-item unit's animation state and targetability flag each frame. Death/Neutral/Walk/GetHit/TownWalk modes clear UNITFLAG_TARGETABLE. Run mode sets UNITFLAG_TARGETABLE and adds OVERLAY_itemgleam if not already present. TownNeutral advances the frame and transitions to Run when the cycle ends. Halts on unexpected anim mode or null unit.
 void __fastcall ITEM_UpdateItemAnimation(struct D2UnitStrc * pUnit);
@@ -348,13 +348,13 @@ int32_t __fastcall SOUND_GetIdFromUnit(struct D2UnitStrc * pUnit);
 int32_t __fastcall ITEM_PlayItemUseSound(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_ResetWeaponHandClassIds();
 // Finds the UNITSTAT_item_charged_skill stat matching nParam/nStatLevel on pUnit or any item in its inventory (recursive), then resets the charge count to min(level, nMaxCharge). Used when charged skill charges are restored (e.g. town portal refresh). Returns 1 if the stat was found and updated, 0 otherwise.
-BOOL __fastcall ITEM_UpdateChargedSkillStat(struct D2UnitStrc * pUnit, int32_t nParam, uint32_t nStatLevel, uint32_t nMaxCharge);
+BOOL __fastcall ITEM_UpdateChargedSkillStat(struct D2UnitStrc * pUnit, int32_t nSkillId, uint32_t nStatLevel, uint32_t nMaxCharge);
 // Client-side handler for an item stat-update network message: applies a stat change to a client-side item (located by GUID) and re-evaluates which equipped/charm items remain valid. For UNITSTAT_item_charged_skill it forwards to ITEM_UpdateChargedSkillStat. Otherwise, if bSetStat it writes the stat (STATLIST_SetUnitStat), then (unless the stat is quantity) re-runs equip validation over the player: re-enables active charms whose requirements are now met, disables/removes equipped body-loc items that no longer meet requirements (iterating body locs 0-0xA, looping up to 100 passes until stable), handles weapon-swap and gfx mode flags, reapplies socketable/equip stats, and for set items recalculates owner stats. Saves/restores skill selections around the pass and, if anything changed (bNeedsGfxReload), reloads the unit's mode COF (player) or sends MonsterMessage 7. For quantity>0 it just clears the item's cursor/disabled flags. No return.
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall ITEM_HandleStatUpdatePacket(DWORD nUnitGUID, char bSetStat, eD2UnitStat eUnitStat, uint32_t nValue, uint16_t nStatParam);
 void __fastcall ITEM_HandleItemFlagEditPacket(struct D2GSPacketSrv0x40 * pbPacket);
 void __fastcall ITEM_HandleCursorItemRemoval(int32_t pbPacket);
-void __fastcall HandleItemToCursor(uint8_t * pbParam);
+void __fastcall HandleItemToCursor(uint8_t * pBytes);
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall ITEM_RemoveUninterruptableState(struct D2UnitStrc * pUnit);
 void __fastcall ITEM_ClearUnitState(struct D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam);
@@ -363,21 +363,21 @@ void __fastcall ITEM_RemoveClientSide(struct D2UnitStrc * pUnit);
 BOOL __fastcall PlayerIsUnInterruptable(struct D2UnitStrc * pUnit);
 // Handles an item break/repair state-change packet (pPacket carries item GUID at +6, owner unit type/id at +1/+2, action code at +10, broken flag at +0xe). Action 0x100 = item broke: sets ITEMFLAG_BROKEN, removes the item from the body and recalculates equipped stats, then iterates the owner's body slots disabling items whose equip requirements no longer hold and re-enabling charms; loops (up to 100 passes) to settle dependent gear, restores skill selections, and reloads the unit's GFX/COF. Action 0x200 = item repaired: clears ITEMFLAG_BROKEN, re-equips it on the body, and recalculates all equipped items. No-op if item or owner unit can't be found.
 void __fastcall ITEM_HandleItemRepairBreak(struct D2GSPacketSrv0x7D * pPacket);
-void __fastcall ITEM_HandleItemCopyToCursor(uint8_t * pbParam);
+void __fastcall ITEM_HandleItemCopyToCursor(uint8_t * pBytes);
 // Re-validates and re-applies all socketed/equipped item effects for a unit's inventory. For each item carrying a socket-filler, re-enables charms whose owner is empty and whose equip requirements are met, then iterates the 11 body-location slots: disables items failing equip requirements (removing them from body), repeatedly re-equips items now meeting requirements (up to 100 passes), and re-applies set-item (quality==5) bonus stats. Saves/restores skill selections around the recalc and triggers a GFX mode-COF reload (player) or MonsterMessage(7) if anything changed. Finally frees the recursive child inventories. Halts via Fog ErrorManager on inventory-consistency failures.
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall ITEM_HandleUnsocketItems(struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall HandleItemAddToGround(uint8_t * pBytes);
-void __fastcall HandleItemPickedFromGround(uint8_t * pbParam);
+void __fastcall HandleItemPickedFromGround(uint8_t * pBytes);
 // Client-side handler for a server packet indicating an item was dropped to the ground. Extracts item details from the packet; if the item already exists client-side and is the cursor item, clears the cursor. For ITEMFLAG_RELOAD items, removes the old unit and recreates it via ITEM_CreateItemFromGroundPacket. Places the resulting item unit in the world at the packet-specified tile coordinates via ITEM_SetAnimModeAndPlace.
-void __fastcall HandleItemDroppedToGround(uint8_t * pbParam);
+void __fastcall HandleItemDroppedToGround(uint8_t * pBytes);
 // Client-side handler that drops an item to the ground from a packet. Extracts item details from the packet body via ExtractItemDetails, then locates the existing item unit. If the item was equipped on the local player it is unequipped: swaps the primary weapon, clears GFX mode flags for its body location, and runs the full equip-requirement recalc loop over the 11 body slots (disable items failing requirements, re-equip qualifying ones up to 100 passes, re-apply set-item bonuses), reloading the unit mode COF. Removes the old item from the server object table, then creates the ground item from the packet (ITEM_CreateItemFromGroundPacket) and clears its uninterruptable state. Halts via Fog ErrorManager on inconsistent state.
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall HandleItemOnGround(uint8_t * pBuffer);
 // Client-side handler for a server "item placed in container" packet. Extracts item details from pbParam, locates or creates the client-side item unit, updates its position/flags, places it in the appropriate inventory grid slot via ITEM_PlaceItemInContainer, applies charm stats if active, and notifies the NPC-menu UI. On RELOAD flag, also removes the old entry and recalculates owner stats.
 // @sourcefile .\UNIT\Item.cpp
-void __fastcall HandleItemPutInContainer(uint8_t * pbParam);
+void __fastcall HandleItemPutInContainer(uint8_t * pBytes);
 // Client-side handler that processes a server packet removing an item from a container/inventory. Parses item details (ExtractItemDetails), resolves the owner unit and the item by GUID; verifies the item belongs to the owner's inventory (halts with ERROR_UnrecoverableInternalError on mismatch). Removes the item's stat list (unless broken), then either drops it to the ground, or on RELOAD recreates it from the body packet and places it on the cursor (ITEM_SetItemOnHand); on REMOVED it deletes the server-object-table entry and clears the cursor/plays a sound for corpse/merc pages. Notifies the NPC menu when the owner is the local player.
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall HandleItemRemoveFromContainer(uint8_t * pBytes);
@@ -390,20 +390,20 @@ void __fastcall HandleItemIndirectSwapBodyItem(uint8_t * pBytes);
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall HandleItemUnequip(uint8_t * pBytes);
 // Client-side handler that equips/swaps an item into a player body location from a body-equip packet. Resolves the owner unit (must be UNIT_PLAYER); for a non-RELOAD item it locates the existing item, sets its anim mode/page; for a RELOAD item it removes the old server object and recreates the item from the packet. Sets the target body location, places the item in the inventory (slot 3, or 4 for body-loc 0xb/0xc), binds it to the body location, updates the primary weapon and GFX flags, applies socketable/equip stats, then runs the full equip-requirement recalc loop (disable failing, re-equip qualifying up to 100 passes, re-apply set bonuses) and reloads the unit mode COF. Halts via Fog ErrorManager on invalid state.
-void __stdcall ITEM_HandleSwapBodyEquipItem(int32_t nParam1, struct D2UnitDataItemDetailsStrc * pItemDetails);
+void __stdcall ITEM_HandleSwapBodyEquipItem(int32_t pPacket, struct D2UnitDataItemDetailsStrc * pItemDetails);
 void __fastcall HandleItemSwapBodyItem(uint8_t * pBytes);
-void __fastcall HandleItemWeaponSwitch(uint8_t * pbParam);
+void __fastcall HandleItemWeaponSwitch(uint8_t * pPacket);
 // Client handler for a server packet that updates an existing item's quantity/stats (e.g. after stacking gold/potions). Locates the item by GUID, reloads its save data from the packet; on failure removes the item. If the item is not ITEMFLAG_IGNORE, clears the player's cursor inventory and refreshes the on-hand item display via ITEM_SetItemOnHand. Halts if the player or inventory is null.
-void __fastcall NET_D2GS_CLIENT_HandleItemAddQuantity(uint8_t * pbParam);
+void __fastcall NET_D2GS_CLIENT_HandleItemAddQuantity(uint8_t * pPacket);
 // Client-side handler for a shop/NPC item packet (pbParam = packet bytes; pbParam[1]=sub-action, pbParam[4..]=item GUID). Parses item details, resolves the interacted NPC unit and its inventory. Sub-action 0xc removes an item from the shop view (resets shop UI, removes the item from the client object table). Otherwise it creates/locates the client-side item, sets its inventory page, and if INVENTORY_CheckGridCollisions says it fits, places it into the NPC's shop container at the parsed (x,y) and flags the inventory for refresh. No-op if NPC, inventory, or item is missing/invalid page (0xff).
 // @sourcefile .\UNIT\Item.cpp
-void __fastcall HandleItemInShop(uint8_t * pbParam);
-void __fastcall HandleItemSwapInContainer(uint8_t * pbParam);
+void __fastcall HandleItemInShop(uint8_t * pPacket);
+void __fastcall HandleItemSwapInContainer(uint8_t * pPacket);
 // Client packet handler that places an item into the player's belt inventory. Extracts item details from the raw packet buffer, locates or creates the item unit, sets its anim/page, positions it in the inventory grid via PutItemInInventory, validates belt slot placement, applies charm stats if active, marks the item as sorted, refreshes the cursor item, sets the belt-slot hover flag, and notifies the NPC-menu system.
-void __fastcall HandleItemPutInBelt(uint8_t * pbParam);
+void __fastcall HandleItemPutInBelt(uint8_t * pPacket);
 // Client-side packet handler that removes an item from the player's belt. Extracts item details from the raw packet bytes, looks up the player and item units, validates belt membership, clears the belt slot hover UI, removes the item's stat contributions from the player, and either drops the item to ground (if not flagged REMOVED) or removes it from the server object table. Calls ERROR_Halt on missing player/inventory.
 // @sourcefile .\UNIT\Item.cpp
-void __fastcall HandleItemRemoveFromBelt(uint8_t * pbParam);
+void __fastcall HandleItemRemoveFromBelt(uint8_t * pPacket);
 // Client handler for the outgoing item in a belt swap. Locates the old belt item by GUID, verifies it belongs to the player's inventory, removes its stat contributions via STATLIST_RemoveFromOwnerAndRecalc (unless broken), drops it to the ground via ITEM_DropItemToGroundWithMode, then sets the swapped-in item as the cursor item via CopyInventoryOfPlayerOrFree + ITEM_SetItemOnHand. Halts on inventory/ownership assertion failures.
 // @sourcefile .\UNIT\Item.cpp
 void __stdcall ITEM_HandleSwapBeltOldItem(uint8_t * pBytes, struct D2UnitDataItemDetailsStrc * itemDetails);
@@ -414,14 +414,14 @@ void __fastcall ITEM_HandleItemCursorAssign(struct D2GSPacketSrv0x3F * pPacket);
 // @sourcefile .\UNIT\Item.cpp
 void __fastcall HandleItemAutoUnequip(uint8_t * pPacketData);
 // Client handler for a packet placing a socketable item into an owner unit's socket. Extracts item details, finds the owner unit (any type) and socket item by GUID; creates the socket item if it doesn't exist. Sets the item's position/page, inserts it into the owner's inventory, applies socketable+equip stats via ITEM_ApplySocketableAndEquipStats. If not ITEMFLAG_IGNORE, refreshes the local player's cursor. Halts on missing inventory.
-void __fastcall HandleItemInSocket(uint8_t * pbParam);
+void __fastcall HandleItemInSocket(uint8_t * pPacket);
 // Client-side handler for the server packet that equips/moves an item to a body location. Extracts item details from the packet (ExtractItemDetails), resolves the target unit and (for the local player) the moved item, then either reuses the existing item, recreates it on RELOAD, or builds a fresh item from the body packet. Places the item into the equipped inventory slot (PutItemInInventory + ITEM_SetItemInBodyLocation), updates the primary weapon, reloads the unit's COF gfx, and applies equip/socketable stats. Then runs the full equipped-item recalculation pass: enabling active charms, disabling items whose requirements are no longer met, re-enabling now-valid items (iterating up to 100 passes until stable), and re-applying set-item (quality 5) bonuses, saving/restoring skill selections around it. Halts on inventory/item invariants. No return value.
 // @sourcefile .\UNIT\Item.cpp
-void __fastcall ITEM_HandleItemMoveToBodyLoc(uint8_t * pbParam);
+void __fastcall ITEM_HandleItemMoveToBodyLoc(uint8_t * pPacket);
 // Client-side handler for a server item-update packet. Parses item details (ExtractItemDetails) then dispatches on the action code: place item into inventory grid (creates the item, applies socketable/equip stats, charm activation), equip-on-body / remove-from-body (mode 1: swaps primary weapon, clears CelCmp mode flags, runs the full re-equip pass that disables/enables items by ITEM_CheckItemEquipRequirements, recalcs equipped items and reloads the unit COF), put-in-belt (mode 2), or set-on-cursor (mode 4). Resolves the owning unit via UNITS_FindClientSideUnit, updates the local player's hand/weapon class ids and UI. Returns the affected item unit (or NULL); calls the unrecoverable-error halt on consistency failures. __fastcall(pbPacket).
 // @sourcefile .\UNIT\Item.cpp
 struct D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket);
-void __fastcall ITEM_HandleServerItemAction(int32_t nParam);
+void __fastcall ITEM_HandleServerItemAction(int32_t pPacket);
 // 20 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT

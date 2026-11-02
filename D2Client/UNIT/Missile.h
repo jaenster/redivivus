@@ -51,7 +51,7 @@ namespace D2Client::UNIT::Missile {
 int32_t __fastcall SEED_RollRangeInclusive(struct D2SeedStrc * pSeed, int32_t nMinValue, int32_t nMaxValue);
 int32_t __fastcall MISSILE_GetBoltSpeed(int32_t nSkillId, int32_t nSkillLevel);
 bool __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, struct D2RoomStrc * pRoom, int32_t nMaxDistSq, int32_t nSourceX, int32_t nSourceY, int32_t nDeltaY);
-void __fastcall MISSILE_InitializeVisual(struct D2UnitStrc * pUnit, int32_t nParam);
+void __fastcall MISSILE_InitializeVisual(struct D2UnitStrc * pUnit, int32_t pSourceUnit);
 int32_t __fastcall MISSILE_CltHitFn10_ProgOverlay(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 // Client-side hit function for missile type 013 (homing/seeking). Returns 1 (no-hit) if owner is missing/active, missile is in a town room, or targeting flags are ambiguous. If target-lock flag (bit 1) is set and the colliding target differs from the locked target, returns 0 (miss). If retarget flag (bit 1 of nTargetFlags) is set and no frames remain, calls MISSILE_RetargetClosest and returns result. Used as CltHitFunc dispatch entry.
 int32_t __fastcall MISSILE_CltHitFn13_Homing(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
@@ -61,7 +61,7 @@ void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(struct D2U
 int32_t __fastcall MISSILE_CltHitFn46_CatapultChargedBall(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 int32_t __fastcall MISSILE_CltHitFn51_LightTrailJavelin(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 int32_t __fastcall MISSILE_CltHitFn61_WorldStoneShake(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
-void __fastcall LIGHTMAP_SetQualityLevel(uint32_t dwParam);
+void __fastcall LIGHTMAP_SetQualityLevel(uint32_t nQualityLastCheck);
 int __stdcall LIGHTMAP_GetQualityLevel();
 int32_t __fastcall Missiles_SrvDoFuncData_02(struct D2UnitStrc * pUnit, struct D2MissileCltCollideCtxStrc * pCtx);
 int32_t __fastcall Missiles_SrvDoFuncData_01(struct D2UnitStrc * pUnit, struct D2MissileCltCollideCtxStrc * pCtx);
@@ -159,7 +159,7 @@ int32_t __fastcall MISSILE_CltHitFn57_BaalSpawnMonsters(struct D2UnitStrc * pUni
 int32_t __fastcall MISSILE_CltHitFn60_Nihlithak(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 // Client hit handler for ice-break missiles (031). Only fires when pTarget is NULL (terrain hit). Selects a melt sub-missile (Icebreaksmallmelt or Icebreaklargemelt) based on the missile's class ID (0x110/0x111/0x112/0x1a1), spawns it via CastAttack at the impact position, then copies the parent's direction and sets animation speed 0x80.
 int32_t __fastcall MISSILE_CltHitFn31_IceBreak(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
-struct D2UnitStrc * __fastcall MISSILE_CreateFootprint(struct D2UnitStrc * pUnit, int32_t nParam);
+struct D2UnitStrc * __fastcall MISSILE_CreateFootprint(struct D2UnitStrc * pUnit, int32_t nStartFrame);
 // Creates a client-side tracking missile (MISSILE_Hfspirit1) aimed from pUnit toward a world object looked up by nObjectId. Resolves both units' positions (static or dynamic path), computes the offset vector, allocates a particle, and sets its velocity direction. Called for Holy Freeze/spirit visual effects.
 void __thiscall MISSILE_CreateTowardObject(int32_t nObjectId, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 int32_t __fastcall MISSILE_CltHitFn42_HfFragment1(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);

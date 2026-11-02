@@ -1,0 +1,334 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Spinner/SpinnerImplementation.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "004bbe10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbe10"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "Destructor",
+        "DC6_FreeAndDelete"
+      ],
+      "usedTypes": [
+        "SpinnerImplementation",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004bbe70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbe70"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "Draw",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "IsMouseOnUpButton",
+      "address": "004bbef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbef0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "IsMouseOnUpButton"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsMouseOnDownButton",
+      "address": "004bbf40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbf40"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "IsMouseOnDownButton"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetValue",
+      "address": "004bbf90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbf90"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "GetValue"
+      ],
+      "usedTypes": [
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "GetRepeatDelta",
+      "address": "004bbfb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbfb0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "GetRepeatDelta",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "SpinnerImplementation",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnMouseWheel",
+      "address": "004bc050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc050"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnMouseWheel",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "OnMouseDown",
+      "address": "004bc0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc0a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnMouseDown",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnMouseUp",
+      "address": "004bc160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc160"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnMouseUp"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "OnChar",
+      "address": "004bc190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc190"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnChar"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "OnMouseMove",
+      "address": "004bc1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc1a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnMouseMove"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "OnUpArrow",
+      "address": "004bc1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc1b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnUpArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "OnDownArrow",
+      "address": "004bc1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc1c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnDownArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "OnRightArrow",
+      "address": "004bc1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc1d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnRightArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "OnLeftArrow",
+      "address": "004bc1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc1e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "OnLeftArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerImplementation"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004bc340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc340"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "Constructor",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "memset",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "GetDC6Height",
+        "GetDC6Width"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6Block",
+        "SpinnerImplementation",
+        "fpSpinnerRepeatAction",
+        "int32_t",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004bc450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc450"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerImplementation",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "SpinnerImplementation",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -173,8 +173,8 @@ void __fastcall SOUNDSMP_WriteToBuffer(D2SoundSmpStrc * ppSoundSmp, int nWritePo
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    uint32_t uVar1;
     uint32_t pChunkSize;
+    uint32_t nMinBufSize;
     uint32_t pBufEnd;
     __frame0.pLockedBuf1 = 0;
     if (!ppSoundSmp || !ppSoundSmp->pDSBuffer || !ppSoundSmp->pPcmData || !nBytesToWrite) {
@@ -194,8 +194,8 @@ void __fastcall SOUNDSMP_WriteToBuffer(D2SoundSmpStrc * ppSoundSmp, int nWritePo
     while (true) {
       pBufEnd = ppSoundSmp->nPcmSize;
       if ((uint32_t)nWritePos >= pBufEnd) {
-        uVar1 = ppSoundSmp->nMinBufSize;
-        nWritePos = (nWritePos - uVar1) % (pBufEnd - uVar1) + uVar1;
+        nMinBufSize = ppSoundSmp->nMinBufSize;
+        nWritePos = (nWritePos - nMinBufSize) % (pBufEnd - nMinBufSize) + nMinBufSize;
       }
 
       pChunkSize = nBytesToWrite;

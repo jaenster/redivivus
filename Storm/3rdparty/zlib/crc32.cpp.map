@@ -1,0 +1,173 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/3rdparty/zlib/crc32.cpp",
+  "functions": [
+    {
+      "name": "get_crc_table",
+      "address": "0042d450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d450"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "get_crc_table"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "crc32_little",
+      "address": "0042d460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d460"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_little"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "crc32_big",
+      "address": "0042d700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d700"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_big"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "gf2_matrix_times",
+      "address": "0042d9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d9f0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "gf2_matrix_times"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "gf2_matrix_square",
+      "address": "0042da10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042da10"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "gf2_matrix_square"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "crc32_combine_",
+      "address": "0042da50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042da50"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_combine_",
+        "gf2_matrix_square",
+        "_allshr"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "crc32_combine",
+      "address": "0042dbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dbc0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_combine",
+        "crc32_combine_"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "crc32_combine64",
+      "address": "0042dbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dbe0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_combine64",
+        "crc32_combine_"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "crc32",
+      "address": "0042dc00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc00"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32",
+        "crc32_little"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

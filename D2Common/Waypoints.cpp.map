@@ -1,0 +1,202 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Waypoints.cpp",
+  "functions": [
+    {
+      "name": "FindLevelIdByWaypointId",
+      "address": "00660d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660d90"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "FindLevelIdByWaypointId",
+        "TXT_Levels_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "eD2LevelId",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "FindWaypointIdByLevelId",
+      "address": "00660e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660e00"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "FindWaypointIdByLevelId",
+        "TXT_Levels_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "eD2LevelId",
+        "int16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CheckWaypoint",
+      "address": "00660e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660e50"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "CheckWaypoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EnableWaypoint",
+      "address": "00660ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660ec0"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "EnableWaypoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Alloc",
+      "address": "00660f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660f30"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "Alloc",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2WaypointStrc"
+      ]
+    },
+    {
+      "name": "WAYPOINT_UpgradeSignature",
+      "address": "00660f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660f80"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "WAYPOINT_UpgradeSignature",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Free",
+      "address": "00660fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660fd0"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "Free",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CopyWaypointBits",
+      "address": "00661030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661030"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "CopyWaypointBits",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CopyWaypoint",
+      "address": "006610b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006610b0"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "CopyWaypoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    }
+  ]
+}

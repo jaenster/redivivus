@@ -111,21 +111,21 @@ int __stdcall ITEMMOD_RollRandomInRange(int nRangeStart, int nRangeEnd, D2UnitSt
       return nRangeEnd;
     }
 
-    int iVar2 = nRangeStart;
+    int nRangeMax = nRangeStart;
     if (nRangeStart < nRangeEnd) {
-      iVar2 = nRangeEnd;
+      nRangeMax = nRangeEnd;
       nRangeEnd = nRangeStart;
     }
 
     uint16_t uVar1 = ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
-    uint32_t uVar3 = iVar2 - nRangeEnd;
+    uint32_t uVar2 = nRangeMax - nRangeEnd;
     if (uVar1 >= 1) {
-      uVar3++;
+      uVar2++;
     }
 
     D2SeedStrc* pSeed = ITEMS::Items::GetItemSeed(pUnit);
-    uVar3 = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, uVar3);
-    return uVar3 + nRangeEnd;
+    uVar2 = D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, uVar2);
+    return uVar2 + nRangeEnd;
 }
 
 // DRLGPRESET_GetObjectTableActCount

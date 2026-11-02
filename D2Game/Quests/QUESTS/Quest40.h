@@ -21,7 +21,7 @@ namespace D2Game::Quests::QUESTS::Quest40 {
 uint32_t __fastcall TXT_SuperUniquesHardcoded_GetSuperUniqueIndex(uint32_t nHardcodedIndex);
 // Quest 40 (Act V Nihlathak/Anya rescue) gossip handler [0]. Dispatches NPC gossip lines for Drehya, Malah, Nihlathak Town NPC, and Qualkehk based on the NPC's monster class ID. Checks whether the player has already spoken with each NPC via PLAYER_CheckIfSpokenWithNPC and selects the appropriate gossip variant (0=default, 1=alt, 2=idx) via AddGossipMessageOnMonster. Silent for unrecognised NPCs.
 void __fastcall Q40_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
-bool __fastcall Q40_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q40_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 bool __fastcall Q40_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 // Quest 40 (Siege on Harrogath) NPC-gossip callback. Dispatches on monster-class ID and dialog message index. For Drehya, Malah, Town (Korlic?), Qualkehk, and Deckard Cain: if the matching message index is spoken, calls PLAYER_SetSpokenWithNPC. Special Malah path also fetches the SiegeOnHaggorath quest data and sets nStateFlag=1 on first introduction (gate: bIsNotIntroduction && nStateFlag==0).
 void __fastcall Q40_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);

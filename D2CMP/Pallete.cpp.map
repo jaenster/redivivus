@@ -1,0 +1,142 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/Pallete.cpp",
+  "functions": [
+    {
+      "name": "TILEPROJECT_ForEachTileEntry",
+      "address": "006008d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006008d0"
+        }
+      ],
+      "namespace": "D2CMP::Pallete",
+      "calledFunctions": [
+        "TILEPROJECT_ForEachTileEntry"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHeaderStrc",
+        "D2TileProjectStrc",
+        "int32_t",
+        "pfnTileEntryEnum"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_FindLibraryOfTile",
+      "address": "00600960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600960"
+        }
+      ],
+      "namespace": "D2CMP::Pallete",
+      "calledFunctions": [
+        "TILEPROJECT_FindLibraryOfTile"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "D2TileLibraryHeaderStrc",
+        "D2TileProjectStrc"
+      ]
+    },
+    {
+      "name": "PALETTE_LoadFromFile",
+      "address": "006009c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006009c0"
+        }
+      ],
+      "namespace": "D2CMP::Pallete",
+      "calledFunctions": [
+        "PALETTE_LoadFromFile",
+        "CheckIfFileExists",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PALETTE_InitItemPalettes",
+      "address": "00600b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600b80"
+        }
+      ],
+      "namespace": "D2CMP::Pallete",
+      "calledFunctions": [
+        "PALETTE_InitItemPalettes",
+        "PALETTE_LoadFromFile"
+      ]
+    },
+    {
+      "name": "PALETTE_SetAct",
+      "address": "00600c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600c00"
+        }
+      ],
+      "namespace": "D2CMP::Pallete",
+      "calledFunctions": [
+        "PALETTE_SetAct"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PALETTE_GetItemPalette",
+      "address": "00600c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600c20"
+        }
+      ],
+      "namespace": "D2CMP::Pallete",
+      "calledFunctions": [
+        "PALETTE_GetItemPalette"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PALETTE_GetColorShiftIndex",
+      "address": "00600c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600c70"
+        }
+      ],
+      "namespace": "D2CMP::Pallete",
+      "calledFunctions": [
+        "PALETTE_GetColorShiftIndex",
+        "D2MEM_FindLowestSetBit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

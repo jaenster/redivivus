@@ -45,41 +45,41 @@ namespace D2Client::Engine::GfxUtil {
 uint8_t __fastcall GFXUTIL_GetCompositePaletteIndex(struct D2UnitStrc * pUnit, uint8_t byComponent);
 void __stdcall InitializeModeTokens();
 // @sourcefile .\ENGINE\GfxUtil.cpp
-void __fastcall AllocGfxUtil(void * * pParam, uint32_t dwParam, uint32_t dwValue1, uint32_t dwValue2, int * pnParam1, int * pnParam2);
+void __fastcall AllocGfxUtil(void * * ppListHead, uint32_t dwParam, uint32_t dwValue1, uint32_t dwValue2, int * pnNodeCount, int * pnBytesAllocated);
 int32_t __fastcall GFXUTIL_FindGfxNodeByTypeAndId(int32_t pNode, int32_t nType, int32_t nId);
 // @sourcefile .\ENGINE\GfxUtil.cpp
-void __fastcall GFXUTIL_FreeGfxNodeList(void * * pParam, int * pnParam);
+void __fastcall GFXUTIL_FreeGfxNodeList(void * * ppListHead, int * pnBytesAllocated);
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, eUnitType (EDX): eD2UnitType
 int32_t __fastcall GFXUTIL_GetUnitToken(struct D2UnitStrc * pUnitStrc, eD2UnitType eUnitType, uint32_t nId);
 // Register params: pUnitStrc (ECX): D2UnitStrc *, pnMode (EDX): uint32_t *
 void __fastcall GFXUTIL_NormalizeItemMode(struct D2UnitStrc * pUnitStrc, uint32_t * pnMode);
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, pInventory (EDX): D2InventoryStrc *
 void __fastcall GFXUTIL_GetArmorAppearanceFromTorso(struct D2UnitStrc * pUnitStrc, struct D2InventoryStrc * pInventory, BOOL bCheckBroken, uint32_t * pOutAppearance);
-uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(struct DC6Block * pDC6Block, int32_t nParam, int32_t nScreenY, BOOL bFlipped);
+uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(struct DC6Block * pDC6Block, int32_t nDrawX, int32_t nScreenY, BOOL bFlipped);
 // Returns 1 if the unit supports animation mode nMode (0–15), 0 otherwise. Accounts for shape-shift/transform GFX overrides via SKILLS_GetStateTransformGfx. For players, always accepts modes 0–4, 8, 9. For monsters, checks the MonStats2 bitmask (HD/TR/LG/RA/LA/RH/LH/SH flags). For objects, checks ObjectsTxt->Mode[nMode+0x12]. Items accept mode 1 only.
 // @sourcefile .\ENGINE\GfxUtil.cpp
 BOOL __fastcall GFXUTIL_UnitHasAnimMode(struct D2UnitStrc * pUnit, uint32_t nMode);
 void * __fastcall GFXUTIL_Identity(void * dwParam);
-uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbParam, uint32_t nParam);
-uint32_t __fastcall GFXUTIL_GetCofAnimSpeed(uint8_t * pbParam, uint32_t nParam);
-uint32_t __fastcall GFXUTIL_GetCofDirection(uint8_t * pbParam, uint32_t nParam);
-uint8_t * __fastcall GFXUTIL_GetCofLayerData(uint8_t * pbParam, int32_t nParam, int32_t nLayerOffset);
-uint32_t __fastcall GFXUTIL_GetCofDrawOrder(uint8_t * pbParam, uint32_t nParam);
-int __fastcall GFXUTIL_IsValidUnitType(struct D2UnitStrc * pnParam);
-uint8_t __fastcall GFXUTIL_GetGfxInfoComponent(struct D2UnitStrc * pUnit, int32_t nParam);
+uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbCof, uint32_t nComponent);
+uint32_t __fastcall GFXUTIL_GetCofAnimSpeed(uint8_t * pbCof, uint32_t nComponent);
+uint32_t __fastcall GFXUTIL_GetCofDirection(uint8_t * pbCof, uint32_t nComponent);
+uint8_t * __fastcall GFXUTIL_GetCofLayerData(uint8_t * pbCof, int32_t nDirection, int32_t nLayerOffset);
+uint32_t __fastcall GFXUTIL_GetCofDrawOrder(uint8_t * pbCof, uint32_t nComponent);
+int __fastcall GFXUTIL_IsValidUnitType(struct D2UnitStrc * pUnit);
+uint8_t __fastcall GFXUTIL_GetGfxInfoComponent(struct D2UnitStrc * pUnit, int32_t nComponent);
 void __fastcall GFXUTIL_SetGfxInfoComponent(struct D2UnitStrc * pUnit, int32_t nComponentIndex, uint8_t byComponentVal);
-void __fastcall GFXUTIL_CalcDirectionAndFrame(struct D2UnitStrc * pUnit, int32_t nAnimDir, int32_t nTypeId, int32_t nCofComponent, uint32_t * pnParam, uint32_t * pnFrameHandler, int * pnParam2, uint32_t nNumDirs, int32_t nAnimMode);
+void __fastcall GFXUTIL_CalcDirectionAndFrame(struct D2UnitStrc * pUnit, int32_t nAnimDir, int32_t nTypeId, int32_t nCofComponent, uint32_t * pnDirection, uint32_t * pnFrameHandler, int * pnNumDirections, uint32_t nNumDirs, int32_t nAnimMode);
 // @sourcefile .\ENGINE\GfxUtil.cpp
-BOOL __fastcall GFXUTIL_GetEtherealTransparency(struct D2UnitStrc * pUnit, int32_t nParam, uint32_t * pOutTransTable, uint32_t nItemClassId);
+BOOL __fastcall GFXUTIL_GetEtherealTransparency(struct D2UnitStrc * pUnit, int32_t nComponent, uint32_t * pOutTransTable, uint32_t nItemClassId);
 // @sourcefile .\ENGINE\GfxUtil.cpp
-uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(struct D2UnitStrc * pUnit, int32_t nParam, uint8_t * pDefaultColor);
-uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(struct D2UnitStrc * pUnit, uint32_t nParam);
+uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(struct D2UnitStrc * pUnit, int32_t nBodyLoc, uint8_t * pDefaultColor);
+uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(struct D2UnitStrc * pUnit, uint32_t nUnitDirection);
 int32_t __fastcall DC6_AssignParams(struct D2GfxDataStrc * pGfxData, struct D2UnitStrc * pUnit, struct DC6 * pDC6, int32_t nDirection, int32_t nFrameNumber, int * pnOutItemClassId, uint8_t nComponentType, struct D2UnitStrc * pEquipContext);
 int32_t __fastcall GFXUTIL_InitAndBuildMonsterCofParams(struct D2GfxDataStrc * pGfxData, int32_t nDirection, int32_t nFrameNumber, uint8_t nComponentType, int32_t nAnimMode, int32_t nWeaponClass, void * pCofFile, short * pComponentTable, struct D2MonStatsTxt * pMonStatsTxt, int32_t nComponentRow);
-int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(struct D2UnitStrc * pUnit, uint8_t * pbParam, uint8_t * pLayerArray, int * pOutMaxY, int32_t nPaletteShift, uint32_t nParam);
+int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(struct D2UnitStrc * pUnit, uint8_t * pbyLayerCount, uint8_t * pLayerArray, int * pOutMaxY, int32_t nPaletteShift, uint32_t nFrame);
 int32_t __fastcall GFXUTIL_GetOverlayFrameDelay(struct D2UnitStrc * pUnit, int32_t pOverlayEntry);
-void __fastcall GFXUTIL_GetOverlayDimensions(struct D2UnitStrc * pUnit, int nPaletteShift, uint32_t nAnimMode, uint32_t * pOutWidth, uint32_t * pdwParam);
-uint32_t __fastcall GFXUTIL_IsUnitSpriteOnScreen(struct D2UnitStrc * pUnit, int32_t nParam, int32_t nWorldY);
+void __fastcall GFXUTIL_GetOverlayDimensions(struct D2UnitStrc * pUnit, int nPaletteShift, uint32_t nAnimMode, uint32_t * pOutWidth, uint32_t * pOutHeight);
+uint32_t __fastcall GFXUTIL_IsUnitSpriteOnScreen(struct D2UnitStrc * pUnit, int32_t nWorldX, int32_t nWorldY);
 // 10 internal functions (defined in .cpp)
 
 } // namespace D2Client::Engine::GfxUtil

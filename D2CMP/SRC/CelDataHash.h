@@ -15,10 +15,10 @@ namespace D2CMP::SRC::CelDataHash {
 
 // Function declarations
 // @sourcefile .\SRC\CelDataHash.cpp
-void __fastcall CELDATAHASH_UnlinkEntry(int32_t nParam, int * pnParam, struct D2PoolManagerStrc * pMemory);
-void __fastcall CELDATAHASH_InitHashTable(void * pParam);
+void __fastcall CELDATAHASH_UnlinkEntry(int32_t pHashTable, int * pEntry, struct D2PoolManagerStrc * pMemory);
+void __fastcall CELDATAHASH_InitHashTable(void * pHashTable);
 // @sourcefile .\SRC\CelDataHash.cpp
-void __fastcall GFX_FreeAllCacheEntries(struct D2PoolManagerStrc * pMemory, int32_t nParam);
+void __fastcall GFX_FreeAllCacheEntries(struct D2PoolManagerStrc * pMemory, int32_t pHashTable);
 int32_t __fastcall CELDATAHASH_FindByFilename(void * pHashTable, char * szFileName);
 // @sourcefile .\SRC\CelDataHash.cpp
 uint32_t * __fastcall CELDATAHASH_AllocEntry(struct D2PoolManagerStrc * pPoolManager, void * pHashTable, uint32_t nRefCount, char * szFileName);

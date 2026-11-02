@@ -1,0 +1,539 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Engine/Particle.cpp",
+  "functions": [
+    {
+      "name": "AllocParticle",
+      "address": "004da000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da000"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "AllocParticle",
+        "GetParticleFromUnit",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "SetParticle"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeParticle",
+      "address": "004da080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da080"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "FreeParticle",
+        "GetParticleFromUnit",
+        "FreeClientMemory",
+        "SetParticle"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetX",
+      "address": "004da0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da0b0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetX",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetY",
+      "address": "004da0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da0d0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetY",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetScreenZ",
+      "address": "004da0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da0f0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetScreenZ",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetPosXShifted",
+      "address": "004da110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da110"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetPosXShifted",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetPosYShifted",
+      "address": "004da130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da130"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetPosYShifted",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetPosZShifted",
+      "address": "004da150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da150"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetPosZShifted",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetPosXRaw",
+      "address": "004da170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da170"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetPosXRaw",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetPosYRaw",
+      "address": "004da190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da190"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetPosYRaw",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetPosZRaw",
+      "address": "004da1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da1b0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetPosZRaw",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetPosVectorShifted",
+      "address": "004da1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da1d0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "SetPosVectorShifted",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetOffsetVector",
+      "address": "004da200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da200"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "SetOffsetVector",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_SetVelocityOffset",
+      "address": "004da250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da250"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_SetVelocityOffset",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_SetBoundsOffset",
+      "address": "004da2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da2a0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_SetBoundsOffset",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_SetBounceParams",
+      "address": "004da2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da2f0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_SetBounceParams",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_GetBounceCount",
+      "address": "004da320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da320"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_GetBounceCount",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_ClearLifetimeFlag",
+      "address": "004da340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da340"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_ClearLifetimeFlag",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PARTICLE_UpdatePosition",
+      "address": "004da350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da350"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_UpdatePosition",
+        "GetParticleFromUnit",
+        "MISSILE_GetOwnerUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_GetUnitSpriteOffset",
+        "PARTICLE_GetX",
+        "PARTICLE_GetScreenZ",
+        "DRLG_WorldToScreenShift5",
+        "DRLG_MapWorldToScreenCoords"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_InitProjectile",
+      "address": "004da5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da5b0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_InitProjectile",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTICLE_SetAttachedToOwner",
+      "address": "004da620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da620"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_SetAttachedToOwner",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PARTICLE_SetStopped",
+      "address": "004da640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da640"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_SetStopped",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PARTICLE_IsStopped",
+      "address": "004da660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da660"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_IsStopped",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PARTICLE_SetStoppedWithFade",
+      "address": "004da690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da690"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_SetStoppedWithFade",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PARTICLE_IsStoppedOrFading",
+      "address": "004da6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da6b0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_IsStoppedOrFading",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PARTICLE_SetReverseDirection",
+      "address": "004da6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004da6e0"
+        }
+      ],
+      "namespace": "D2Client::Engine::Particle",
+      "calledFunctions": [
+        "PARTICLE_SetReverseDirection",
+        "GetParticleFromUnit"
+      ],
+      "usedTypes": [
+        "D2ParticleStrc",
+        "D2UnitStrc"
+      ]
+    }
+  ]
+}

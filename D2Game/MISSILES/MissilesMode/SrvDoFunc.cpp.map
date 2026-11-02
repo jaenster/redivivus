@@ -1,0 +1,112 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/MISSILES/MissilesMode/SrvDoFunc.cpp",
+  "functions": [
+    {
+      "name": "fpMissileDoSrvFuncHandler",
+      "address": "005a8730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8730"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode::SrvDoFunc",
+      "calledFunctions": [
+        "fpMissileDoSrvFuncHandler",
+        "UNIT_GetUnitState",
+        "CheckUnitIfOwner",
+        "UNITS_CheckIfCanAttackTarget"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "fpMissileSrvDoFuncData_MonsterOnly",
+      "address": "005a87b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a87b0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode::SrvDoFunc",
+      "calledFunctions": [
+        "fpMissileSrvDoFuncData_MonsterOnly",
+        "fpMissileDoSrvFuncHandler"
+      ],
+      "usedTypes": [
+        "D2MissileSrvCollideCtxStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "fpMissileSrvDoFuncData_PlayerOrAllyMonster",
+      "address": "005a87f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a87f0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode::SrvDoFunc",
+      "calledFunctions": [
+        "fpMissileSrvDoFuncData_PlayerOrAllyMonster",
+        "fpMissileDoSrvFuncHandler",
+        "STATSEX_GetAlignment"
+      ],
+      "usedTypes": [
+        "D2MissileSrvCollideCtxStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "fpMissileSrvDoFuncData_PlayerOrMonster",
+      "address": "005a8850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8850"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode::SrvDoFunc",
+      "calledFunctions": [
+        "fpMissileSrvDoFuncData_PlayerOrMonster",
+        "fpMissileDoSrvFuncHandler"
+      ],
+      "usedTypes": [
+        "D2MissileSrvCollideCtxStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "fpMissileSrvDoFuncData_MissileFlagCheck",
+      "address": "005a8890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8890"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode::SrvDoFunc",
+      "calledFunctions": [
+        "fpMissileSrvDoFuncData_MissileFlagCheck"
+      ],
+      "usedTypes": [
+        "D2MissileSrvCollideCtxStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

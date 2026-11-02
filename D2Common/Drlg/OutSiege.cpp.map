@@ -1,0 +1,325 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/OutSiege.cpp",
+  "functions": [
+    {
+      "name": "DRLGOUTROOM_PlaceAct5SpecialPresets",
+      "address": "0067da70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067da70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTROOM_PlaceAct5SpecialPresets",
+        "TXT_LvlPrest_GetLine",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_SpawnPresetIfGridFlagged",
+      "address": "0067db00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067db00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTROOM_SpawnPresetIfGridFlagged",
+        "GetGridFlags",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_PlaceAct5BorderPresets",
+      "address": "0067db50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067db50"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTROOM_PlaceAct5BorderPresets",
+        "GetGridFlags",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_GetGridDivisionSize",
+      "address": "0067dce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067dce0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTROOM_GetGridDivisionSize"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_PlaceAct5RoadPath",
+      "address": "0067dcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067dcf0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTROOM_PlaceAct5RoadPath",
+        "GetCoordDiff",
+        "DRLGOUTPLACE_GetRoadPresetId",
+        "SpawnOutdoorLevelPresetEx",
+        "AlterGridFlag",
+        "DRLGOUTPLACE_GetAdjacentRoadPresetId"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2DrlgVertexStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_PlaceAct5OuterWalls",
+      "address": "0067def0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067def0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTROOM_PlaceAct5OuterWalls",
+        "GetGridFlags",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub",
+      "address": "0067e000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e000"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_ValidateSecondaryBorderCell",
+      "address": "0067e080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e080"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTDOOR_ValidateSecondaryBorderCell",
+        "DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub",
+        "DRLGOUTDOOR_IsGridCellPresetFree"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_PlaceAct5SecondaryBorder",
+      "address": "0067e0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e0e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTROOM_PlaceAct5SecondaryBorder",
+        "memset",
+        "AddSecondaryBorder"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2UnkOutdoorStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_PlaceAct5SceneryPresets",
+      "address": "0067e160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e160"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTROOM_PlaceAct5SceneryPresets",
+        "SpawnOutdoorLevelPreset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets",
+      "address": "0067e240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e240"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets",
+        "UNIT_GetModuloFromSeed",
+        "DRLGOUTDOOR_GetPresetCoordFromGrid",
+        "SpawnOutdoorLevelPresetEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTPLACE_PlaceAct5SiegePresets",
+      "address": "0067e4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e4b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTPLACE_PlaceAct5SiegePresets",
+        "TXT_LvlPrest_GetLine",
+        "SpawnOutdoorLevelPresetEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2LvlPrestTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTPLACE_PlaceAct5WallPresets",
+      "address": "0067e560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e560"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "DRLGOUTPLACE_PlaceAct5WallPresets",
+        "TXT_LvlPrest_GetLine",
+        "SpawnOutdoorLevelPresetEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2LvlPrestTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "InitAct5OutdoorLevel",
+      "address": "0067e600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e600"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutSiege",
+      "calledFunctions": [
+        "InitAct5OutdoorLevel",
+        "DRLGOUTPLACE_PlaceAct5WallPresets",
+        "SetOutGridLinkFlags",
+        "DRLGOUTROOM_PlaceAct5RoadPath",
+        "DRLGOUTROOM_PlaceAct5OuterWalls",
+        "DRLGOUTROOM_PlaceAct5BorderPresets",
+        "DRLGOUTROOM_PlaceAct5SpecialPresets",
+        "DRLGOUTPLACE_PlaceAct5SiegePresets",
+        "DRLGOUTROOM_PlaceAct5SecondaryBorder",
+        "DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets",
+        "DRLGOUTROOM_PlaceAct5SceneryPresets"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    }
+  ]
+}

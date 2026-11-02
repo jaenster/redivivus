@@ -1,0 +1,668 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/SKILLS/SkillAma.cpp",
+  "functions": [
+    {
+      "name": "SKILLAMA_SrvStFn04_ArrowAttack",
+      "address": "005da8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da8b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLAMA_SrvStFn04_ArrowAttack",
+        "SKILLS_CheckThrowableAmmo",
+        "PLRMODES_CheckWeaponQuantityAndDurability",
+        "PLRMODES_BreakZeroDurabilityWeapons"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMA_SrvStFn05_Jab",
+      "address": "005da8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da8f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLAMA_SrvStFn05_Jab",
+        "GetTargetEx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMA_SrvStFn06_PowerStrike",
+      "address": "005da940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da940"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLAMA_SrvStFn06_PowerStrike",
+        "GetTargetEx",
+        "memset",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UseQuanityAndDurability",
+      "address": "005daa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005daa40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "ITEMMODE_SendItemUpdate",
+        "UseQuanityAndDurability",
+        "ITEMS_IsA",
+        "IsStackable",
+        "ITEM_CheckIfItemHasDurability",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "RemoveQuanityOnUse"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMA_SrvStFn07_Impale",
+      "address": "005dab40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dab40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLAMA_SrvStFn07_Impale",
+        "GetTargetEx",
+        "UNITS_CheckIfCanAttackTarget",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "DAMAGE_CalculatePhysicalDamage",
+        "SetDamageOnEvent",
+        "PLAYER_GetActiveWeaponForSkill",
+        "ITEM_CheckIfItemHasDurability",
+        "UseQuanityAndDurability",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMA_SrvStFn08_Strafe",
+      "address": "005dacd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dacd0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLAMA_SrvStFn08_Strafe",
+        "GetCurrentSkill",
+        "SKILLS_CheckThrowableAmmo",
+        "D2GetSkillCalc",
+        "GetTargetEx",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "SKILLS_ApplyAreaHitAtPos",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "RemoveQuanityOnUse",
+        "PLRMODES_CheckWeaponQuantityAndDurability",
+        "PLRMODES_BreakZeroDurabilityWeapons"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMA_SrvStFn09_Fend",
+      "address": "005dae30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dae30"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLAMA_SrvStFn09_Fend",
+        "GetCurrentSkill",
+        "GetMeleeRangePlusFour",
+        "GetTargetEx",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "SKILL_SetParam1",
+        "SKILLS_ApplyAreaHitAtPos",
+        "D2GetSkillCalc",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMA_SrvStFn37_MultiStrike",
+      "address": "005daf40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005daf40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLAMA_SrvStFn37_MultiStrike",
+        "GetCurrentSkill",
+        "GetMeleeRangePlusFour",
+        "GetTargetEx",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "SKILL_SetParam1",
+        "D2GetSkillCalc",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMA_SrvStFn10_LightningStrike",
+      "address": "005db020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005db020"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLAMA_SrvStFn10_LightningStrike",
+        "GetCurrentSkill",
+        "GetTargetEx",
+        "memset",
+        "DAMAGE_CalculateHitCheck",
+        "SERVER_MinDamage",
+        "SERVER_MaxDamage",
+        "RANDOM_RandomNumberSelector",
+        "D2GetSkillCalc",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetPhoenixBoltCount",
+      "address": "005db150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005db150"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILL_GetPhoenixBoltCount",
+        "SetStateWithExpiryTime"
+      ],
+      "usedTypes": [
+        "D2SkillCallbackContextStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt",
+      "address": "005db1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005db1c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt",
+        "D2GetSkillCalc",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2SkillAuraTargetArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_007_Jab",
+      "address": "005db2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005db2d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_007_Jab",
+        "GetTargetEx",
+        "memset",
+        "SKILLS_CalcToHit",
+        "MONSTER_RecalculateCombatStats",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_ProcessCombatQueueEntry"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_008_MultipleShot",
+      "address": "005db410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005db410"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_008_MultipleShot",
+        "SKILLS_GetTargetOrCursorPos",
+        "D2GetSkillCalc",
+        "GetXPos",
+        "GetYPos",
+        "SKILLS_NormalizeDirectionMin",
+        "SKILLS_NormalizeDirectionPerp",
+        "GetWeaponClass",
+        "memset",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_AmazonDamagePercentCallback",
+      "address": "005db6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005db6a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLS_AmazonDamagePercentCallback",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_010_GuidedArrowLaunch",
+      "address": "005db6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005db6d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_010_GuidedArrowLaunch",
+        "GetTargetEx",
+        "SKILLS_GetTargetOrCursorPos",
+        "D2GetSkillCalc",
+        "GetWeaponClass",
+        "memset",
+        "CreatingMissile",
+        "SetTargetX",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_011_ChargedStrike",
+      "address": "005db850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005db850"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_011_ChargedStrike",
+        "GetTargetEx",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "D2GetSkillCalc",
+        "GetXPos",
+        "GetYPos",
+        "SKILLASS_GetChargeUpMissile",
+        "memset",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_012_StrafeContinue",
+      "address": "005dba40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dba40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_012_StrafeContinue",
+        "GetCurrentSkill",
+        "D2GetSkillCalc",
+        "SKILL_GetParam1",
+        "SKILL_GetParam3",
+        "SKILL_GetParam2",
+        "FindUnitFromTable",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "SetTargetUnitForDynamicUnit",
+        "SKILLS_GetTargetOrCursorPos",
+        "GetWeaponClass",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CreatingMissile",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "GetTxtSkillParam5",
+        "SKILLS_SetupAnimTimerPercent"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_013_MultiHitAttack",
+      "address": "005dbc60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dbc60"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_013_MultiHitAttack",
+        "GetCurrentSkill",
+        "GetMeleeRangePlusFour",
+        "SKILL_GetParam3",
+        "SKILL_GetParam2",
+        "FindUnitFromTable",
+        "IsInMeleeRange",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "SKILL_GetParam1",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "GetSkilParam1",
+        "SKILLS_SetupAnimTimerPercent"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_014_LightningStrike",
+      "address": "005dbe50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dbe50"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "SKILLASS_GetChargeUpMissile",
+        "SetTargetX",
+        "Skills_SrvDoFunc_014_LightningStrike",
+        "GetTargetEx",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "D2GetSkillCalc",
+        "GetYPos",
+        "GetXPos",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_015_SummonDecoy",
+      "address": "005dc000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dc000"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_015_SummonDecoy",
+        "SKILLS_GetSummonMonsterClassId",
+        "D2GetSkillCalc",
+        "SKILL_CreateSummon",
+        "StoreOwner",
+        "GetTxtMaxHp",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat",
+        "STATSEX_GetCurrentStat",
+        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLNEC_ApplySummonBuffs",
+        "SetEvent",
+        "InitUmods",
+        "SetOverlay",
+        "CreateUnitNode"
+      ],
+      "usedTypes": [
+        "D2MonsterCastPetStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_016_SummonValkyrie",
+      "address": "005dc1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005dc1e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAma",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_016_SummonValkyrie",
+        "SKILLS_GetSummonMonsterClassId",
+        "D2GetSkillCalc",
+        "SKILL_CreateSummon",
+        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLNEC_ApplySummonBuffs",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SetState",
+        "StoreOwner",
+        "CreateUnitNode"
+      ],
+      "usedTypes": [
+        "D2MonsterCastPetStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

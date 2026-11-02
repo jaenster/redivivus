@@ -526,7 +526,7 @@ BOOL __fastcall SKILLEMONST_SrvStFn61_SelfResurrect(::SGAMEDATA * pGame, D2UnitS
     return 1;
 }
 
-static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId pParam, eD2Skills eSkill, int32_t nSkillLvl, ::SGAMEDATA * pGame, int32_t nCount, D2UnitStrc * pUnit) {
+static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId eMissileId, eD2Skills eSkill, int32_t nSkillLvl, ::SGAMEDATA * pGame, int32_t nCount, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gnSkillOffset_Sorceress_Fireball[4] = { 0x0, 0x0, 0x1, -0x1 }; D2_STATIC_GUARD(gnSkillOffset_Sorceress_Fireball, "D2Game::SKILLS::SkillEMonst::SKILLSOR_GetMeteorSubMissileCount::gnSkillOffset_Sorceress_Fireball");
     static int gnSkillOffset_Sorceress_Meteor[4] = { 0x1, -0x1, 0x0, 0x0 }; D2_STATIC_GUARD(gnSkillOffset_Sorceress_Meteor, "D2Game::SKILLS::SkillEMonst::SKILLSOR_GetMeteorSubMissileCount::gnSkillOffset_Sorceress_Meteor");
@@ -540,7 +540,7 @@ static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId pParam, eD2Sk
     sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nFlags = 3;
     sSkillArg.pOwner = pUnit;
-    sSkillArg.nMissileTxtNo = pParam;
+    sSkillArg.nMissileTxtNo = eMissileId;
     sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
     _bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nX, (uint32_t*)&sSkillArg.nY);
     if (!_bGotTargetPos) {
@@ -606,17 +606,17 @@ static void __stdcall SKILLEMONST_ApplyAuraBuff(D2UnitStrc * pUnit, D2UnitStrc *
 }
 
 // Transforms a target monster into a new class derived from the skill's summon monster class (difficulty-scaled). Calls MONSTER_TransformMonsterClass, reattaches AI, fires lifecycle transition, applies STATE_changeclass, attaches a stat list (UNITSTAT_shortparam1 = new class id), and initialises sumumod umod slots on the target.
-static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWORD dwParam, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, int32_t nParam) {
+static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWORD dwParam, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, int32_t nSkillId) {
     D2AiGeneralStrc* pMonsterAiGeneral;
     eD2UnitType eUnitType;
     D2MonsterKillStrc sMonsterKill;
     int32_t nDifficulty;
-    D2SkillsTxt* pSkillRecord = nParam >= 0 && nParam < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nParam : nullptr;
+    D2SkillsTxt* pSkillRecord = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillRecord) {
       return;
     }
 
-    int32_t nNewClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, nParam, dwParam, (int*)&dwParam, nullptr, nullptr);
+    int32_t nNewClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, nSkillId, dwParam, (int*)&dwParam, nullptr, nullptr);
     if (!(nNewClassId >= 0 && pUnit2 && pUnit2->eUnitType == UNIT_MONSTER)) {
       return;
     }
@@ -862,8 +862,8 @@ BOOL __fastcall SKILLEMONST_SrvStFn62_MinionSpawner(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    int32_t nParam1 = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 1, eSkill, nSkillLvl, &eSpawnAnimMode, &nSpawnY, &nSpawnX);
-    D2Common::Skills::SKILL_SetParam1(pSkill, nParam1);
+    int32_t nMonClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 1, eSkill, nSkillLvl, &eSpawnAnimMode, &nSpawnY, &nSpawnX);
+    D2Common::Skills::SKILL_SetParam1(pSkill, nMonClassId);
     D2Common::Skills::SKILL_SetParam2(pSkill, nSpawnY);
     D2Common::Skills::SKILL_SetParam3(pSkill, nSpawnX);
     D2Common::Skills::SKILL_SetParam4(pSkill, eSpawnAnimMode);
@@ -1150,14 +1150,14 @@ BOOL __fastcall Skills_SrvDoFunc_147_ReturnToOwner(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Applies a Blood Mana HP cost of nParam to pUnit. If HP is sufficient, deducts it and removes the STATE_blood_mana stat list when remaining HP falls below the skill's Param[4] threshold (in fixed-point). If HP is insufficient, forces HP to 0x100 (minimum alive) and removes the stat list.
-void __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nParam) {
+void __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nHpCost) {
     D2SkillsTxt* pSkillRecord;
     D2StatListExStrc* pBloodManaStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_blood_mana);
     int32_t nSkillId = D2Common::Stats::StatsEx::GetSkillId(pBloodManaStatList);
     int32_t nCurrentHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    if (nCurrentHp >= nParam) {
+    if (nCurrentHp >= nHpCost) {
       int nCurrentHpAfter;
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_hitpoints, -nParam, 0);
+      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_hitpoints, -nHpCost, 0);
       if (nSkillId < 0 || nSkillId >= sgptDataTable->nTxtSkillsCount) {
         pSkillRecord = 0;
       } else {
@@ -1299,32 +1299,38 @@ BOOL __fastcall Skills_SrvDoFunc_141_BaalCorpseExplosionWave(::SGAMEDATA * pGame
     D2BaalWaveParamStrc sBaalWaveParam = {0};
     eD2UnitType ePosUnitType = pUnit->eUnitType;
     sBaalWaveParam.nUnitFindFlags = 12290;
+    int nXValue;
     if (ePosUnitType == UNIT_OBJECT || (int)ePosUnitType > 3 && (int)ePosUnitType <= 5) {
-      sBaalWaveParam.nX = pUnit->pPath.pStaticPath->nPosX;
+      nXValue = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      sBaalWaveParam.nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      sBaalWaveParam.nX = 0;
+      nXValue = 0;
     }
 
+    sBaalWaveParam.nX = nXValue;
     ePosUnitType = pUnit->eUnitType;
+    int nYValue;
     if (ePosUnitType == UNIT_OBJECT || (int)ePosUnitType > 3 && (int)ePosUnitType <= 5) {
-      sBaalWaveParam.nY = pUnit->pPath.pStaticPath->nPosY;
+      nYValue = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      sBaalWaveParam.nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
-      sBaalWaveParam.nY = 0;
+      nYValue = 0;
     }
 
+    sBaalWaveParam.nY = nYValue;
     sBaalWaveParam.eSkillId = SKILL_BaalCorpseExplode;
     sBaalWaveParam.nSkillLevel = nSkillLvl;
     sBaalWaveParam.fpFunction = fpBaalWaveFunction;
+    int nDistanceValue;
     if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount || (pSkillRecord = sgptDataTable->pTxtSkills + eSkill , !pSkillRecord) || nSkillLvl <= 0) {
-      sBaalWaveParam.nDistance = 0;
+      nDistanceValue = 0;
     } else {
-      sBaalWaveParam.nDistance = (nSkillLvl - 1) * pSkillRecord->Param[5] + pSkillRecord->Param[4];
+      nDistanceValue = (nSkillLvl - 1) * pSkillRecord->Param[5] + pSkillRecord->Param[4];
     }
 
+    sBaalWaveParam.nDistance = nDistanceValue;
     sBaalWaveParam.pAttacker = pUnit;
     SkillsServer::SKILLS_ForEachUnitBaalWave(pGame, &sBaalWaveParam);
     return 1;
@@ -1352,14 +1358,16 @@ D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, D2Unit
     }
 
     eUnitType = pUnit->eUnitType;
+    int nYValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sUnitFindArg.nY = pUnit->pPath.pStaticPath->nPosY;
+      nYValue = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      sUnitFindArg.nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
-      sUnitFindArg.nY = 0;
+      nYValue = 0;
     }
 
+    sUnitFindArg.nY = nYValue;
     memset(&sUnitFindArg, 0, 0x38);
     sUnitFindArg.nDistance = nSearchRadius;
     sUnitFindArg.nFlags = 0x1002;

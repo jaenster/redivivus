@@ -1,0 +1,1092 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Sound/Sound.cpp",
+  "functions": [
+    {
+      "name": "SOUND_FileExists",
+      "address": "00482e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00482e00"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_FileExists",
+        "SFileOpenFileEx",
+        "SFileCloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "SOUND_LocalizeSoundPath",
+      "address": "00482e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00482e30"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_LocalizeSoundPath",
+        "TABLES_GetLangAbbreviation",
+        "sprintf",
+        "SFileOpenFileEx",
+        "SFileCloseFile",
+        "MISC_GetLanguageCode"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_CalculateAngle1",
+      "address": "004b9340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9340"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_CalculateAngle1"
+      ]
+    },
+    {
+      "name": "SOUND_CalculateAngle2",
+      "address": "004b9370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9370"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_CalculateAngle2"
+      ]
+    },
+    {
+      "name": "SOUND_CalculatePanning",
+      "address": "004b93a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b93a0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_CalculatePanning"
+      ]
+    },
+    {
+      "name": "SOUND_GetChannelArray",
+      "address": "004b93f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b93f0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_GetChannelArray",
+        "memset",
+        "SOUND_sD2SoundSmp_Alloc"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc"
+      ]
+    },
+    {
+      "name": "SOUNDINST_StopChannel",
+      "address": "004b94a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b94a0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUNDINST_StopChannel",
+        "SOUND_StopAndDetach",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "SOUND_ReleaseChannel",
+      "address": "004b94e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b94e0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_ReleaseChannel",
+        "SOUND_sD2SoundSmp_Free",
+        "FreeSfxData",
+        "SOUNDUTIL_FreeLinkedList",
+        "SOUND_StopAndDetach",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetSoundId",
+      "address": "004b9590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9590"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_GetSoundId"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetSoundByIndex",
+      "address": "004b95c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b95c0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_GetSoundByIndex",
+        "SOUND_GetSoundId",
+        "SOUND_GetPlaybackStatus"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_StopSound",
+      "address": "004b9610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9610"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_StopSound"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_IsChannelPlaying",
+      "address": "004b9640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9640"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsChannelPlaying",
+        "TXT_sounds_GetLineBySoundId"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetChannelProperties",
+      "address": "004b9690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9690"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_SetChannelProperties",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDUTIL_FindInLinkedList"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_FindActiveStreamChannel",
+      "address": "004b9700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9700"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_FindActiveStreamChannel",
+        "SOUNDUTIL_FindInLinkedList"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_CalculateDistance",
+      "address": "004b9760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9760"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_CalculateDistance",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDHDR_GetSoundField0x60",
+        "SOUNDHDR_GetGlobal3"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_CalculateUnitDirection",
+      "address": "004b97d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b97d0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_CalculateUnitDirection",
+        "GetPlayerUnit_UI",
+        "GetTargetCoords"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_CalculateUnitDistance",
+      "address": "004b9890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9890"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_CalculateUnitDistance",
+        "TXT_sounds_GetLineBySoundId",
+        "GetSoundEnv",
+        "GetSoundEnvironLine",
+        "GetPlayerUnit_UI",
+        "TestCollisionWithUnit"
+      ],
+      "usedTypes": [
+        "D2SoundEnvironTxt",
+        "D2SoundsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_Calculate3DPosition",
+      "address": "004b98f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b98f0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_Calculate3DPosition",
+        "SOUND_CalculatePanning",
+        "CalculateHypotenusePowered",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_PlayEnvironmentSound",
+      "address": "004b99a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b99a0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_PlayEnvironmentSound",
+        "SOUND_Calculate3DPosition"
+      ],
+      "usedTypes": [
+        "D2SoundChannelNodeStrc",
+        "D2SoundChannelNodeStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_PlaySound",
+      "address": "004b9a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9a00"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_PlaySound",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDHDR_GetGlobal3",
+        "SOUND_CalculateDistance",
+        "SOUND_GetChannelArray",
+        "SOUND_Calculate3DPosition",
+        "SOUND_CalculateUnitDirection",
+        "SOUND_CalculateUnitDistance",
+        "GetPlayerUnit_UI",
+        "SOUND_sD2SoundSmp_Alloc",
+        "AllocUnitSfxData"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetMasterVolume",
+      "address": "004b9b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9b20"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_SetMasterVolume"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetChannelPriority",
+      "address": "004b9b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9b50"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_SetChannelPriority"
+      ],
+      "usedTypes": [
+        "D2SoundChannelNodeStrc",
+        "D2SoundChannelNodeStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_PlayItemSound",
+      "address": "004b9b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9b80"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_PlayItemSound"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetSoundChannel",
+      "address": "004b9be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9be0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_GetSoundChannel"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_IsMusicPlaying",
+      "address": "004b9c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9c20"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsMusicPlaying"
+      ]
+    },
+    {
+      "name": "SOUND_GetAmbientMusicState",
+      "address": "004b9c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9c60"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_GetAmbientMusicState"
+      ]
+    },
+    {
+      "name": "SOUND_StopChannelById",
+      "address": "004b9ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9ca0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_StopChannelById"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_PauseAll",
+      "address": "004b9d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9d00"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_PauseAll",
+        "SOUND_TogglePauseAll"
+      ]
+    },
+    {
+      "name": "SOUND_ResumeAll",
+      "address": "004b9d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9d20"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_ResumeAll",
+        "SOUND_TogglePauseAll",
+        "SOUND_ReleaseChannel"
+      ]
+    },
+    {
+      "name": "SOUND_GetCurrentMusic",
+      "address": "004b9d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9d50"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_GetCurrentMusic",
+        "SOUND_GetStreamProgress",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_IsChannelAvailable",
+      "address": "004b9da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9da0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsChannelAvailable"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_FindChannelForSound",
+      "address": "004b9e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9e90"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_FindChannelForSound",
+        "SOUND_FindActiveStreamChannel"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_StopChannelGracefully",
+      "address": "004b9ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9ef0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_StopChannelGracefully",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDHDR_GetGlobal3",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_SetChannelPriority"
+      ],
+      "usedTypes": [
+        "D2SoundChannelNodeStrc",
+        "D2SoundChannelNodeStrc *",
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SOUND_UpdateAllChannels",
+      "address": "004ba020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ba020"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_UpdateAllChannels",
+        "SOUNDHDR_GetGlobal3",
+        "RollRandomNumber",
+        "SOUND_PlaySound",
+        "SOUND_StopAndDetach",
+        "SOUND_GetMasterVolume",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDHDR_GetGlobal0",
+        "SOUNDHDR_GetGlobal1",
+        "SOUND_GetMusicVolume",
+        "SOUND_sD2SoundSmp_Alloc",
+        "SOUND_CalculateUnitDirection",
+        "CalculateHypotenusePowered",
+        "GetPlayerUnit_UI",
+        "TestCollisionWithUnit",
+        "GetSoundEnv",
+        "GetSoundEnvironLine",
+        "SOUND_Calculate3DPosition",
+        "SOUNDHDR_GetFalloffMax",
+        "SOUND_SetChannelProperties",
+        "SOUND_FindActiveStreamChannel",
+        "SOUND_PlaySoundWithPanning",
+        "SOUND_UpdateChannelParams",
+        "SOUNDHDR_UpdateLRUTimestamp",
+        "SOUND_ReleaseChannel",
+        "SOUNDUTIL_FreeLinkedList",
+        "CLIENT_GetD2GSGameType",
+        "UI_GetFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientSoundChannelStrc",
+        "D2FloatIntUnion",
+        "D2SoundChannelNodeStrc",
+        "D2SoundChannelStrc",
+        "D2SoundEnvironTxt",
+        "D2SoundsTxt",
+        "D2UnitStrc",
+        "eD2GSGameType",
+        "eD2Sounds",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_StopUnitSound",
+      "address": "004ba760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ba760"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_StopUnitSound",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_StopChannelGracefully"
+      ],
+      "usedTypes": [
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_StopUnitSoundByIndex",
+      "address": "004ba790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ba790"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_StopUnitSoundByIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeSfxData",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_sD2SoundSmp_Free",
+        "SOUND_StopUnitSound"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_StopById",
+      "address": "004ba840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ba840"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_StopById",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_StopChannelGracefully"
+      ],
+      "usedTypes": [
+        "D2SoundChannelNodeStrc",
+        "D2SoundChannelNodeStrc *",
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_FadeOutMusic",
+      "address": "004ba890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ba890"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_FadeOutMusic",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_StopChannelGracefully"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_StopMusic",
+      "address": "004ba8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ba8f0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_StopMusic",
+        "SOUNDHDR_GetGlobal0",
+        "SOUNDHDR_GetGlobal1",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_StopChannelGracefully"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt"
+      ]
+    },
+    {
+      "name": "SOUND_SetLeftVolume",
+      "address": "004ba950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ba950"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_SetLeftVolume",
+        "SOUNDHDR_GetSoundField0x60",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_StopChannelGracefully"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetRightVolume",
+      "address": "004ba9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ba9d0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_SetRightVolume",
+        "SOUNDHDR_GetSoundField0x60",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_StopChannelGracefully"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_DebugPrintChannels",
+      "address": "004baa50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baa50"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_DebugPrintChannels",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_StopChannelGracefully"
+      ],
+      "usedTypes": [
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_ShutdownSystem",
+      "address": "004baab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baab0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_ShutdownSystem",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUNDHDR_GetGlobal3",
+        "SOUND_SetChannelPriority"
+      ],
+      "usedTypes": [
+        "D2SoundChannelNodeStrc",
+        "D2SoundChannelNodeStrc *",
+        "D2SoundChannelStrc",
+        "D2SoundsTxt",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SoundChaosDebug",
+      "address": "004babc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004babc0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SoundChaosDebug",
+        "SOUND_DebugPrintChannels"
+      ]
+    },
+    {
+      "name": "SOUND_IsDirectSoundAvailable",
+      "address": "004df940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df940"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsDirectSoundAvailable",
+        "SOUND_GetDirectSoundInitializedFlag"
+      ]
+    },
+    {
+      "name": "SOUND_IsEaxAvailable",
+      "address": "004df960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df960"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsEaxAvailable",
+        "SOUND_GetSound3DFlag"
+      ]
+    },
+    {
+      "name": "SOUND_ToggleSoundMixerBinary",
+      "address": "004e00d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e00d0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_ToggleSoundMixerBinary",
+        "SOUND_GetSoundMixer",
+        "CleanupSoundBuffer",
+        "SOUND_SetSoundMixer",
+        "SOUNDSMP_SetGlobalVolume"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "SOUND_CycleSoundMixerMode",
+      "address": "004e0140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e0140"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_CycleSoundMixerMode",
+        "SOUND_GetSoundMixer",
+        "CleanupSoundBuffer",
+        "SOUND_SetSoundMixer",
+        "SOUNDSMP_SetGlobalVolume"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "SOUND_PlayFootstepSound",
+      "address": "004e4180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4180"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_PlayFootstepSound"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUND_SetVolumeForChannel",
+      "address": "004e4240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4240"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_SetVolumeForChannel",
+        "SOUNDHDR_AdjustReferenceCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_TogglePauseAll",
+      "address": "004e4280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e4280"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_TogglePauseAll",
+        "SOUND_StopById"
+      ]
+    },
+    {
+      "name": "SOUND_UpdateEnvironmentAmbience",
+      "address": "004e42e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e42e0"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_UpdateEnvironmentAmbience",
+        "SOUND_IsInitialized",
+        "SOUND_GetCurrentLevelId",
+        "DRLGENV_GetCycleIndexFromAct",
+        "GetSoundEnv",
+        "GetSoundEnvironLine",
+        "WEATHER_CanHaveRain",
+        "WEATHER_FloatPassthrough",
+        "SOUND_StopChannelGracefully",
+        "SOUND_SetLeftVolume",
+        "SOUND_SetRightVolume",
+        "SOUND_PlaySound",
+        "SOUND_SetChannelPriority",
+        "SOUND_StopById",
+        "SOUND_SetMasterVolume",
+        "SOUND_SetEaxEnvironment",
+        "RollRandomNumberTimesTwo",
+        "RollRandomNumerUpToArgument",
+        "RollRandomNumber",
+        "SOUND_PlayEnvironmentSound",
+        "SOUNDHDR_ClearReferenceCounts",
+        "SOUND_SetVolumeForChannel"
+      ],
+      "usedTypes": [
+        "D2SoundEnvironTxt",
+        "eD2LevelId",
+        "eD2Sounds",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

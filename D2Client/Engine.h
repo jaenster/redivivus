@@ -19,9 +19,9 @@ namespace D2Client::Engine {
 
 // Function declarations
 BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight);
-void __stdcall DrawPopupOk(int32_t nParam);
+void __stdcall DrawPopupOk(int32_t bDiscPrompt);
 void __stdcall LOADER_CheckForInsertedDiscs();
-void __stdcall DrawOkCancel(int32_t nParam);
+void __stdcall DrawOkCancel(int32_t nFrameNumber);
 void __stdcall LOADER_DrawInsertDiscMessage();
 void __fastcall LOADER_DrawInsertDiscScreen(int32_t nUnused);
 void __stdcall INPUT_CharScreenOkDown(struct D2UIMouseMsgStrc * pMsg);

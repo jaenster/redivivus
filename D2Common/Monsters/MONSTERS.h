@@ -24,7 +24,7 @@ namespace D2Common::Monsters::MONSTERS {
 // Returns the missile id that a monster should fire at its current animation event frame. If pCurrentFrame is nonzero, scans forward through GetEventFrameInfo to find a throw/shoot event (type 1 or 2) within the delta since the last frame; returns ~MISSILE_Arrow (-1) if none found. Then indexes aMonstatsIndexUnknown by anim mode and monster class to get the missile id.
 eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(struct D2UnitStrc * pUnit, int32_t pCurrentFrame);
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable1(uint8_t bParam);
-uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t bParam);
+uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t byDirection);
 // Returns the byte value at index bParam in gaMonsterGfxOffsetTable1 (the third monster graphics direction-offset table). Used to map an animation direction index to a table-specific graphics offset byte.
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable3(uint8_t bParam);
 void __stdcall MONSTERS_GetCompositeDimensions(uint8_t bParam, int * pnParam1, int * pnParam2);
@@ -37,18 +37,18 @@ uint32_t __stdcall UnitIsMarkedBoss(struct D2MonStatsTxt * pMonStatsTxt, struct 
 // 2022.01.09 - dzik
 BOOL __stdcall CheckIfMonsterIsDead(struct D2UnitStrc * pUnit);
 // Resolves the monster class ID, world position, and animation mode to use when summoning or spawning a unit. If pUnit is a live monster and nParam1 is set, reads spawn data (spawn/spawnx/spawny/spawnmode) from MonStats.txt. Otherwise reads summon/summode from Skills.txt for skill nParam2. Writes results to pnMode, pnParam1 (X), pnParam2 (Y); returns the monster class ID or -1 if not found.
-int32_t __stdcall SummonOrSpawnMode(struct D2UnitStrc * pUnit, int32_t nParam1, int32_t nParam2, int32_t nMode, int * pnMode, int * pnParam1, int * pnParam2);
-void __stdcall MONSTERS_OnInitMonster_NoOp(struct D2UnitStrc * dwParam1, uint32_t dwParam2);
+int32_t __stdcall SummonOrSpawnMode(struct D2UnitStrc * pUnit, int32_t bUseMonStatsSpawn, int32_t nSkillId, int32_t nMode, int * pnMode, int * pnSpawnX, int * pnSpawnY);
+void __stdcall MONSTERS_OnInitMonster_NoOp(struct D2UnitStrc * pUnit, uint32_t dwParam2);
 // Iterates the 16 component overlay slots of a monster unit (which may carry equipment like a SuperUnique), looks up each component's item code in items.txt, and returns the maximum bLightRadius value found across all equipped components. Returns 0 for non-monster units or monsters without component data.
 uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(struct D2UnitStrc * pUnit);
 // Resolves which monster class ID should actually spawn in a room for a given nMonsterId, accounting for level-specific monster tables and difficulty upgrades. Looks up the base class ID via D2MonStatsTxt.BaseId, scans the level's valid monster array (LevelsTxt.mon) for a match, and if not found walks the NextInClass chain up to nUpgradeCount steps as long as the upgraded monster's level does not exceed the level cap. Returns the best matching class ID, or the original nMonsterId if no suitable upgrade is found.
 int32_t __stdcall GetMonsterBaseId(struct D2RoomStrc * pRoom, int32_t nMonsterId);
-uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(struct D2UnitStrc * pnParam);
+uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(struct D2UnitStrc * pUnit);
 // Retrieves the animation flags and valid-flags for a monster's upgrade tier by looking up its class id in the MonStats upgrade table. Writes the flags from gdwMonStatAnimFlagsTable into pdwAnimFlags and pdwValidFlags. Halts with a fatal error if the unit is not a monster or the upgrade index is out of range.
 void __stdcall MONSTERS_GetUpgradeSkillsAndCount(struct D2UnitStrc * pUnit, uint32_t * pdwAnimFlags, uint32_t * pdwValidFlags);
 uint32_t __stdcall MONSTER_GetMercType(struct D2UnitStrc * pUnit);
 // Scales a non-champion (Align != 1) monster's core combat stats (up to 3 entries from gaDifficultyScalingTable_MonsterApply) by a difficulty-specific percent/divisor pair selected by bParam (1 = first difficulty tier, else second). Also raises the monster's level by bParam*25. Only acts when nParam==0 and bParam!=0.
-void __stdcall MONSTER_ApplyDifficultyScaling(struct D2UnitStrc * pUnit, int32_t nParam, uint8_t bParam);
+void __stdcall MONSTER_ApplyDifficultyScaling(struct D2UnitStrc * pUnit, int32_t bExpansion, uint8_t byDifficulty);
 // Computes the monster class id, spawn X/Y position and spawn-mode for a unit that spawns/generates other monsters (super-uniques and generator-type monsters such as nests, spawners, statues, Blood Raven, Maggot Queen, Izual, etc.). Outputs via pnMonId/pnPosX/pnPosY/pdwSpawnMode. Resolves the unit's MonStats BaseId, then switches on it: each generator case picks the spawned monster (via GetMonsterClassByDifficulty/upgrade data, clamped to MonStats table size) and an offset position relative to the parent's path coords, using the unit seed for randomized cases. pfnCallback supplies the class id for hut/NPC cases. Default/unknown returns monId 0, pos (0,0), mode 1. Uses nRandSeed for seeded variants.
 void __stdcall MONSTER_GetSpawnParameters(struct D2UnitStrc * pUnit, int * pnMonId, uint32_t * pnPosX, uint32_t * pnPosY, uint32_t * pdwSpawnMode, int32_t nRandSeed, pfnMonsterSpawnClassIdCb pfnCallback);
 

@@ -69,7 +69,7 @@ BOOL __stdcall D2WINPOPUP_IsActiveAndVisible() {
 }
 
 // Adds a message entry to the popup. Validates message count (max 8), copies 132-byte message data into next slot, calculates text width using font 1, updates popup width/height. Returns TRUE on success.
-uint32_t __stdcall D2WINPOPUP_AddMessage(D2WinPopupEntry * pnParam) {
+uint32_t __stdcall D2WINPOPUP_AddMessage(D2WinPopupEntry * pEntry) {
     int nCopyCount;
     int32_t nLine;
     ::D2WinPopup* pPopup = gpD2WinPopupControl;
@@ -81,7 +81,7 @@ uint32_t __stdcall D2WINPOPUP_AddMessage(D2WinPopupEntry * pnParam) {
       return 0;
     }
 
-    D2WinPopupEntry* pMsgSrc = pnParam;
+    D2WinPopupEntry* pMsgSrc = pEntry;
     D2WinPopupEntry* pMsgDst = gpD2WinPopupControl->wszMessages + gpD2WinPopupControl->nMessageCount;
     for (nCopyCount = 0x21; nCopyCount; nCopyCount--) {
       *(uint32_t*)pMsgDst->wszText = *(uint32_t*)pMsgSrc->wszText;
@@ -90,7 +90,7 @@ uint32_t __stdcall D2WINPOPUP_AddMessage(D2WinPopupEntry * pnParam) {
     }
 
     D2WinFont::SetAndReturnLastFont(1);
-    nLine = D2WinFont::DRAW_text0(pnParam->wszText);
+    nLine = D2WinFont::DRAW_text0(pEntry->wszText);
     nCopyCount = pPopup->sControl.dwSizeX;
     if (nCopyCount > nLine) {
       nLine = nCopyCount;
@@ -123,7 +123,7 @@ BOOL __stdcall D2WINPOPUP_HandleClick(D2UIMouseMsgStrc * pMsg) {
 }
 
 BOOL __fastcall DrawEx(::D2WinPopup * pPopup) {
-    int iVar2;
+    int nRelMouseX;
     int nRelX;
     int nSizeY;
     if (pPopup->sControl.neD2FormType != FORM_Popup) {
@@ -135,9 +135,9 @@ BOOL __fastcall DrawEx(::D2WinPopup * pPopup) {
     if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
       nSizeY = pPopup->sControl.dwSizeY;
       pPopup->bCentered = -1;
-      iVar2 = D2Client::Mouse::nPosX - pPopup->sControl.dwPosX;
+      nRelMouseX = D2Client::Mouse::nPosX - pPopup->sControl.dwPosX;
       nRelX = nSizeY - pPopup->sControl.dwPosY + D2Client::Mouse::nPosY;
-      if (!(iVar2 >= 0 && iVar2 <= pPopup->sControl.dwSizeX && nRelX >= 0 && nRelX <= nSizeY)) {
+      if (!(nRelMouseX >= 0 && nRelMouseX <= pPopup->sControl.dwSizeX && nRelX >= 0 && nRelX <= nSizeY)) {
         return 1;
       }
 

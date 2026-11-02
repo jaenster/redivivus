@@ -4,12 +4,12 @@
 #include "Bnclient/BnMessQueue.h"
 #include "Bnclient/net_sid.h"
 #include "D2Client/D2IniConfigStrc.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/Engine/Application.h"
 #include "Fog/Memory.h"
 #include "Storm/D2Srp.h"
 #include "Storm/Source/SLog.h"
 #include "Storm/Source/SMem.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Bnclient/Bnet.h"
 
@@ -28,22 +28,22 @@ char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
     static LPCSTR gnFileSignatureResult = (LPCSTR)s_Blizzard_Entertainment__Inc__006deb80; D2_STATIC_GUARD(gnFileSignatureResult, "Bnclient::D2FILE_VerifyFileSignature::gnFileSignatureResult");
 
     bool bVar1;
-    char cVar2;
-    int iVar3;
+    char bIsSigned;
+    int nOrgCmp;
     char szSignerOrg[512];
     int32_t dwWinTrustResult = D2FILE_VerifySignatureWinTrust(szText);
     if (dwWinTrustResult) {
-      cVar2 = '\0';
+      bIsSigned = '\0';
     } else {
       bVar1 = D2FILE_GetSignerOrganization(szText, szSignerOrg, 0x200);
-      cVar2 = '\0';
+      bIsSigned = '\0';
       if (bVar1) {
-        iVar3 = _strnicmp(szSignerOrg, gnFileSignatureResult, 0x200);
-        cVar2 = iVar3 != 0 ? 0 : 1;
+        nOrgCmp = _strnicmp(szSignerOrg, gnFileSignatureResult, 0x200);
+        bIsSigned = nOrgCmp != 0 ? 0 : 1;
       }
     }
 
-    return cVar2;
+    return bIsSigned;
 }
 
 int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {

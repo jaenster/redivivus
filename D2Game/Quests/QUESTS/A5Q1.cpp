@@ -126,19 +126,19 @@ void __fastcall Q31_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
       return;
     }
 
-    D2QuestDataA5Q1Strc* pvVar1 = pQuestData->pQuestSpecificData.pA5Q1;
-    if (pvVar1->bLarzukTalked == 1) {
+    D2QuestDataA5Q1Strc* pA5Q1Data = pQuestData->pQuestSpecificData.pA5Q1;
+    if (pA5Q1Data->bLarzukTalked == 1) {
       pQuestData->nQuestPacketFlags = '\0';
       QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
-      pvVar1->bLarzukTalked = 0;
+      pA5Q1Data->bLarzukTalked = 0;
     }
-    if (pvVar1->bRewardAccepted != 1) {
+    if (pA5Q1Data->bRewardAccepted != 1) {
       return;
     }
 
     pQuestData->nQuestPacketFlags = '\0';
     QUEST_SetStateAndBroadcast(pQuestData, 4, nullptr, (::fpExecuteOnUnitFunction)Q31_NpcGossipHandler, true);
-    pvVar1->bRewardAccepted = 0;
+    pA5Q1Data->bRewardAccepted = 0;
 }
 
 // A5Q1: overlapping/mid-instruction entry of the state handler at 0x586d80 (Larzuk class 0x1ff): broadcasts state 1 if bLarzukTalked, state 4 if bRewardAccepted, then clears the flags. Same logic as Q31_Callback_02.

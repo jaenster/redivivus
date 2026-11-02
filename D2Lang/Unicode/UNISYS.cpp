@@ -114,7 +114,7 @@ uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint
 
     uint16_t wChar2Mapped = (uint16_t)uChar2Mapped;
     while (true) {
-      uint16_t uVar1;
+      uint16_t wChar2Raw;
       if (wChar1Raw == L'\0') {
         break;
       }
@@ -136,10 +136,10 @@ uint32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint
         wChar1Mapped = D2Client::UI::ui::CharacterLookupTable[(uint16_t)wChar1Mapped];
       }
 
-      uVar1 = *pwszText2;
+      wChar2Raw = *pwszText2;
       pwszText2++;
-      uChar2Mapped = (uint32_t)uVar1;
-      if (uVar1 < 0x100) {
+      uChar2Mapped = (uint32_t)wChar2Raw;
+      if (wChar2Raw < 0x100) {
         uChar2Mapped = (uint32_t)(uint16_t)D2Client::UI::ui::CharacterLookupTable[uChar2Mapped];
       }
 
@@ -177,7 +177,7 @@ short * __thiscall UNICODE_FindWideChar(void * pThis, int16_t wCharToFind) {
 }
 
 uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2) {
-    uint16_t* pwVar1 = wszText1;
+    uint16_t* pwszResult = wszText1;
     uint16_t wCurChar = *wszText1;
     while (wCurChar != L'\0') {
       wszText1++;
@@ -191,7 +191,7 @@ uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2) {
       wszText2++;
     } while (wCurChar != L'\0');
 
-    return pwVar1;
+    return pwszResult;
 }
 
 void __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars) {
@@ -652,7 +652,7 @@ uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestinati
 }
 
 char * __fastcall UNICODE_WideToMultiByte(char * pszDst, uint16_t * pwszSrc, int32_t nSize) {
-    char* pcVar1 = pszDst;
+    char* pszResult = pszDst;
     for (; nSize > 1 && *pwszSrc; pwszSrc++) {
       *pszDst = (char)*pwszSrc;
       nSize--;
@@ -660,7 +660,7 @@ char * __fastcall UNICODE_WideToMultiByte(char * pszDst, uint16_t * pwszSrc, int
     }
 
     *pszDst = '\0';
-    return pcVar1;
+    return pszResult;
 }
 
 bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t * pwChar) {
@@ -785,7 +785,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
     static int gnUIMinWidth = 0x7a73; D2_STATIC_GUARD(gnUIMinWidth, "D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName::gnUIMinWidth");
 
     char* pszSuffix;
-    int iVar1;
+    int nCharIdx;
     uint16_t* pWszSuffix;
     uint16_t* pwszText;
     uint16_t wszScratch[14];
@@ -809,60 +809,60 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         wszScratch[0] = L'\0';
         wszScratch[1] = L'\0';
         wszScratch[2] = L'(';
-        iVar1 = 0;
+        nCharIdx = 0;
         do {
-          bTmp = *(uint8_t*)((int)wszScratch + iVar1 + 4);
+          bTmp = *(uint8_t*)((int)wszScratch + nCharIdx + 4);
           if (!bTmp) {
             break;
           }
 
-          wszScratch[iVar1] = (uint16_t)bTmp;
-          iVar1++;
-        } while (iVar1 < 2);
+          wszScratch[nCharIdx] = (uint16_t)bTmp;
+          nCharIdx++;
+        } while (nCharIdx < 2);
 
-        if (*(char*)((int)wszScratch + iVar1 + 4) != '\0') {
-          wszScratch[iVar1 - 1] = L'\0';
+        if (*(char*)((int)wszScratch + nCharIdx + 4) != '\0') {
+          wszScratch[nCharIdx - 1] = L'\0';
         } else {
-          wszScratch[iVar1] = L'\0';
+          wszScratch[nCharIdx] = L'\0';
         }
 
         STRING_CopyWideString(wszText1, wszScratch);
         AppendToBuffer(wszText1, wszText2);
         wszScratch[2] = L')';
-        iVar1 = 0;
+        nCharIdx = 0;
         do {
-          bTmp = *(uint8_t*)((int)wszScratch + iVar1 + 4);
+          bTmp = *(uint8_t*)((int)wszScratch + nCharIdx + 4);
           if (!bTmp) {
             break;
           }
 
-          wszScratch[iVar1] = (uint16_t)bTmp;
-          iVar1++;
-        } while (iVar1 < 2);
+          wszScratch[nCharIdx] = (uint16_t)bTmp;
+          nCharIdx++;
+        } while (nCharIdx < 2);
 
-        if (*(char*)((int)wszScratch + iVar1 + 4) != '\0') {
-          wszScratch[iVar1 - 1] = L'\0';
+        if (*(char*)((int)wszScratch + nCharIdx + 4) != '\0') {
+          wszScratch[nCharIdx - 1] = L'\0';
         } else {
-          wszScratch[iVar1] = L'\0';
+          wszScratch[nCharIdx] = L'\0';
         }
 
         AppendToBuffer(wszText1, wszScratch);
         wszScratch[2] = L' ';
-        iVar1 = 0;
+        nCharIdx = 0;
         do {
-          bTmp = *(uint8_t*)((int)wszScratch + iVar1 + 4);
+          bTmp = *(uint8_t*)((int)wszScratch + nCharIdx + 4);
           if (!bTmp) {
             break;
           }
 
-          wszScratch[iVar1] = (uint16_t)bTmp;
-          iVar1++;
-        } while (iVar1 < 2);
+          wszScratch[nCharIdx] = (uint16_t)bTmp;
+          nCharIdx++;
+        } while (nCharIdx < 2);
 
-        if (*(char*)((int)wszScratch + iVar1 + 4) != '\0') {
-          wszScratch[iVar1 - 1] = L'\0';
+        if (*(char*)((int)wszScratch + nCharIdx + 4) != '\0') {
+          wszScratch[nCharIdx - 1] = L'\0';
         } else {
-          wszScratch[iVar1] = L'\0';
+          wszScratch[nCharIdx] = L'\0';
         }
 
         pWszSuffix = wszScratch;
@@ -957,12 +957,12 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
     }
 }
 
-void UNICODE_FreeBuffer(void * pParam) {
-    if (!pParam) {
+void UNICODE_FreeBuffer(void * pBuffer) {
+    if (!pBuffer) {
       return;
     }
 
-    Storm::Source::SMem::SMemFree(pParam, "delete[]", -1, 0);
+    Storm::Source::SMem::SMemFree(pBuffer, "delete[]", -1, 0);
 }
 
 void UNICODE_AllocBuffer(uint32_t nSize) {
@@ -1158,8 +1158,8 @@ static uint32_t __fastcall UNICODE_MapCharacterToCode(uint16_t wChar) {
     return (uint32_t)*(uint16_t*)((int)gpUnicodeKamapToCodeTable + (uint32_t)gpUnicodeCodeToMapTable[nMid] * 4 + 2);
 }
 
-int UNICODE_CompareKamapEntry(LPCVOID pParam1, LPCVOID pParam2) {
-    return (uint32_t)*(uint16_t*)((int)pParam1 + 2) - (uint32_t)*(uint16_t*)((int)pParam2 + 2);
+int UNICODE_CompareKamapEntry(LPCVOID pKey, LPCVOID pEntry) {
+    return (uint32_t)*(uint16_t*)((int)pKey + 2) - (uint32_t)*(uint16_t*)((int)pEntry + 2);
 }
 
 // The 4-byte search key sits in the slot the prologue's PUSH ECX reserves; only its high word (wChar) is
@@ -1180,20 +1180,20 @@ uint32_t UNICODE_BinarySearchKamap(uint16_t wChar) {
     return (uint32_t)*pFoundEntry;
 }
 
-uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t * pbParam, int32_t nSize) {
+uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t * szSource, int32_t nSize) {
     uint16_t* pFallbackResult;
     int32_t nIsControl;
     uint32_t nMappedCode;
     uint16_t wChar;
     if (!gpUnicodeCodeToMapTable) {
-      pFallbackResult = STRING_CopyCharToWCharWithSetMaxSize(wszText, (char*)pbParam, nSize);
+      pFallbackResult = STRING_CopyCharToWCharWithSetMaxSize(wszText, (char*)szSource, nSize);
       return pFallbackResult;
     }
 
     int i;
     i = 0;
     uint8_t* pbCur;
-    pbCur = pbParam;
+    pbCur = szSource;
     if (nSize > 0) {
       uint8_t byChar;
       do {
@@ -1204,11 +1204,11 @@ uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t
 
         nIsControl = UNICODE_IsControlChar(byChar);
         if (nIsControl) {
-          pbParam = pbCur + 2;
+          szSource = pbCur + 2;
           wChar = (uint16_t)((uint16_t)(uint8_t)byChar << 8 | (uint16_t)(uint8_t)pbCur[1]);
         } else {
           wChar = (uint16_t)byChar;
-          pbParam = pbCur + 1;
+          szSource = pbCur + 1;
         }
 
         nMappedCode = UNICODE_MapCharacterToCode(wChar);
@@ -1219,10 +1219,10 @@ uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t
         }
 
         i++;
-        pbCur = pbParam;
+        pbCur = szSource;
       } while (i < nSize);
     }
-    if (*pbParam) {
+    if (*szSource) {
       return wszText;
     }
 
@@ -1233,14 +1233,14 @@ uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t
     return wszText;
 }
 
-uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t * wszSource, int32_t nSize) {
+uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * szDest, uint16_t * wszSource, int32_t nSize) {
     uint16_t* pFoundEntry;
     int32_t nIsControl;
     uint16_t awSearchKey[2];
     uint16_t wChar;
     if (!gpUnicodeKamapToCodeTable) {
       char* pFallbackResult;
-      pFallbackResult = UNICODE_WideToMultiByte((char*)pParam, wszSource, nSize);
+      pFallbackResult = UNICODE_WideToMultiByte((char*)szDest, wszSource, nSize);
       return (uint8_t*)pFallbackResult;
     }
 
@@ -1263,11 +1263,11 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t *
           store_multibyte_char:
           {
             if (wChar & 0xff00 || (nIsControl = UNICODE_IsControlChar((uint8_t)wChar) , nIsControl != 0)) {
-              pParam[i] = (char)(wChar >> 8);
+              szDest[i] = (char)(wChar >> 8);
               i++;
             }
 
-            pParam[i] = (uint8_t)wChar;
+            szDest[i] = (uint8_t)wChar;
             i++;
           }
         }
@@ -1276,17 +1276,17 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t *
       } while (i < nSize);
     }
     if (*wszSource) {
-      return pParam;
+      return szDest;
     }
 
     terminate_output:
     if (i < nSize) {
-      pParam[i] = 0;
+      szDest[i] = 0;
     }
-    return pParam;
+    return szDest;
 }
 
-int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam) {
+int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nMaxChars) {
     int32_t nByteLen;
     uint16_t* pFoundEntry;
     int32_t nIsControl;
@@ -1298,7 +1298,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam
     }
 
     nByteLen = 0;
-    for (i = 0; i < nParam; i++) {
+    for (i = 0; i < nMaxChars; i++) {
       uint16_t awSearchKey[2];
       wChar = wszText[i];
       if (wChar == L'\0') {
@@ -1327,13 +1327,12 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam
 }
 
 int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile) {
-    int32_t nIsControl;
     char cTmp;
+    char* pcLenBase;
     if (!gpUnicodeCodeToMapTable) {
-      char* pcVar1;
-      pcVar1 = szText + 1;
+      pcLenBase = szText + 1;
       szText = szText + strlen(szText) + 1;
-      return (int)szText - (int)pcVar1;
+      return (int)szText - (int)pcLenBase;
     }
 
     int pszCount = 0;
@@ -1343,6 +1342,7 @@ int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile)
     }
 
     do {
+      int32_t nIsControl;
       if (!szText[i]) {
         return pszCount;
       }

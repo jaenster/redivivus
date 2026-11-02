@@ -1,0 +1,1639 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/UNIT/SUNITNPC.cpp",
+  "functions": [
+    {
+      "name": "SUNITNPC_InitNpcInventory",
+      "address": "00576070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576070"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_InitNpcInventory",
+        "AllocServerMemory",
+        "memset",
+        "SUNITPROXY_GetNpcControl",
+        "GetHirelingNamesAndSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_UpdateNpcInventory",
+      "address": "005761c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005761c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_UpdateNpcInventory",
+        "ITEM_CanBeRepaired",
+        "ITEM_GetTxtItemTypes_throwable",
+        "IsStackable",
+        "ITEM_GetMaxStack",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEMMODE_HandleCursorItem",
+        "CheckItemFlag",
+        "ITEMMODE_ProcessItemFlags",
+        "GetTxtMaxDurability"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ReturnZero",
+      "address": "005762b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005762b0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ReturnZero",
+        "SUNITNPC_UpdateNpcInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITNPC_SetItemForNpc",
+      "address": "005762c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005762c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_SetItemForNpc",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMMODE_HasSocketedItems",
+        "RefreshInventory",
+        "UpsertToUpdateList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_GenerateNpcItems",
+      "address": "00576330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576330"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SERVER_ItemToInventory",
+        "SUNITNPC_GenerateNpcItems",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "SUNITPROXY_GetNpcControl",
+        "RANDOM_RandomNumberSelector",
+        "ITEM_CreateFromTemplate",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex",
+        "TXT_LowQualityItems_GetLine",
+        "_stricmp",
+        "ITEM_DeleteItemAndFreeUnit",
+        "ITEM_GetItemsTxt_szCode",
+        "ITEM_GetTxtItemTypes_storepage",
+        "ITEM_SetItemData_ePage",
+        "SUNITNPC_UpdateNpcInventory",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SUNITPROXY_AddItemToNpcProxy",
+        "SUNITNPC_SetItemForNpc",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2LowQualityItemsTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemQuality",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_RefreshNpcItem",
+      "address": "00576650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576650"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_RefreshNpcItem",
+        "SUNITPROXY_GetPlayerProxyInventory",
+        "SERVER_TakeItemToCursor",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEM_DeleteItemAndFreeUnit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_FillNpcInventory",
+      "address": "005766d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005766d0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_FillNpcInventory",
+        "SERVER_TakeItemToCursor",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEM_DeleteItemAndFreeUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SendMercForHireList",
+      "address": "00576770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576770"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SendMercForHireList",
+        "NET_D2GS_SERVER_SendStateCommand",
+        "CLIENT_GetGame",
+        "GetGameNpcByUnit",
+        "SUNITNPC_InitNpcInventory",
+        "GetHirelingEntry",
+        "NET_D2GS_SERVER_Send_0x4E_ADDTOMERCENARYLIST",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x4E",
+        "D2GameNpcStrc",
+        "D2HirelingTxt",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_GetActCappedLevel",
+      "address": "00576890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576890"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_GetActCappedLevel",
+        "GetGameNpcByUnit"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_RollStoreItemQuality",
+      "address": "00576900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576900"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_RollStoreItemQuality"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "eD2ItemQuality",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_FillNpcStore",
+      "address": "00576980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576980"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_FillNpcStore",
+        "SUNITPROXY_GetNpcControl",
+        "GetTickCount",
+        "GetGameNpcByUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATSEX_GetCurrentStat",
+        "SUNITNPC_GetActCappedLevel",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "SEED_RollRange",
+        "SUNITNPC_RollStoreItemQuality",
+        "SUNITNPC_GenerateNpcItems",
+        "TXT_Items_GetBitFieldAnd0x01",
+        "ITEM_GetMaxStack",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2ItemsTxt",
+        "D2NpcTradeStateStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemQuality",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_RepairAllItems",
+      "address": "00576c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576c30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_RepairAllItems",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_EditItemData_eItemFlag",
+        "UpsertToUpdateList"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SUNITNPC_RollTradeListItemCode",
+      "address": "00576c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576c90"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "RANDOM_RandomNumberSelector",
+        "SUNITNPC_RollTradeListItemCode",
+        "GetGameNpcByUnit",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "TXT_Items_GetBitFieldAnd0x01",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckIfPlayerCanAffordCost",
+      "address": "00576d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576d90"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "CheckIfPlayerCanAffordCost",
+        "STATSEX_GetCurrentStat",
+        "ChangeGoldForPlayer",
+        "STATLIST_SetUnitStat",
+        "GetStashGoldLimit",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ApplyScrollSkill",
+      "address": "00576e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576e40"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ApplyScrollSkill",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetQuantity",
+        "GetRightSkill",
+        "Server_SelectSkill",
+        "SKILL_SetQuantity",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x22_UpdateItemSkill"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_CheckNpcCanSellItem",
+      "address": "00576ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576ed0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_CheckNpcCanSellItem",
+        "GetGameNpcByUnit",
+        "ITEM_GetItemsTxt_szCode"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_GiveGoldOrDrop",
+      "address": "00576f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576f40"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_GiveGoldOrDrop",
+        "ITEM_GiveGoldOrDrop"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_DeductGoldForPurchase",
+      "address": "00576f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00576f50"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_DeductGoldForPurchase",
+        "GetGameNpcByUnit",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "SUNITNPC_RefreshNpcItem",
+        "SUNITNPC_CheckNpcCanSellItem",
+        "SUNITNPC_FillNpcInventory"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ResetNpcHireListIfEmpty",
+      "address": "00577010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00577010"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "ResetNpcHireListIfEmpty",
+        "GetHirelingEntry",
+        "FreeServerMemory",
+        "SUNITNPC_InitNpcInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2HirelingTxt",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NPC_ProcessMercHire",
+      "address": "005770e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005770e0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "NPC_ProcessMercHire",
+        "STATSEX_GetCurrentStat",
+        "SUNITNPC_GetActCappedLevel",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetGameNpcByUnit",
+        "GetHirelingNamesAndSize",
+        "GetMercAct",
+        "RollMercStats",
+        "CheckIfPlayerCanAffordCost",
+        "SpawnMonsterAtUnit",
+        "MERC_HireAndReplaceMerc",
+        "GetMonsterAI",
+        "CountMonstersByAi",
+        "SUNIT_GetClient",
+        "SendMercForHireList",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
+        "ResetNpcHireListIfEmpty"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GameNpcStrc",
+        "D2HirelingHireData",
+        "D2MercForHire",
+        "D2MonsterAiStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ValidateGambleItem",
+      "address": "005773d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005773d0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ValidateGambleItem",
+        "SERVER_GetUnitPetByTypeId",
+        "GetYPos",
+        "GetXPos",
+        "PETS_ManagePetsByType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ProcessGambleResult",
+      "address": "00577470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00577470"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ProcessGambleResult",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "SEVER_ITEM_GetOwner",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "STATLIST_SetItemStatActive"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CreateMerc",
+      "address": "005774f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005774f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "CreateMerc",
+        "GetMercAct",
+        "SUNIT_GetClient",
+        "GetAct",
+        "GetHirelingDataTable",
+        "GetHirelingText",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetGameNpcbyClassId",
+        "CreateUnit",
+        "MERC_HireAndReplaceMerc"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GameNpcStrc",
+        "D2HirelingTxt",
+        "D2MercForHire",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_GetBuyableStackSize",
+      "address": "00577670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00577670"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_GetBuyableStackSize",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ReturnZero2",
+      "address": "005776e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005776e0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ReturnZero2",
+        "ITEM_CloneFromSerializedData"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITNPC_FindExistingStackInInventory",
+      "address": "00577700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00577700"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_FindExistingStackInInventory",
+        "IsStackable",
+        "ITEM_GetTxtItemTypes_autostack",
+        "ITEM_GetMaxStack",
+        "INVENTORY_FindSocketableItemInMain",
+        "IsItemSocketable",
+        "STATSEX_GetCurrentStat",
+        "INVENTORY_FindSocketableItemInStash"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_BuyItem",
+      "address": "00577830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00577830"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_BuyItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "STATSEX_GetCurrentStat",
+        "AlreadyHoldingItem",
+        "SUNITPROXY_GetPlayerProxyInventory",
+        "GetPlayerData",
+        "CalculateTransactionCost_Thunk",
+        "INVENTORY_GetHandItem",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
+        "SUNITNPC_CheckNpcCanSellItem",
+        "ITEMS_IsA",
+        "ITEMMODE_ValidateSocketedItems",
+        "ITEM_GetTxtItemTypes_autostack",
+        "STATLIST_SetUnitStat",
+        "GetQuestBitBuffer",
+        "SUNITNPC_FindExistingStackInInventory",
+        "CheckIfPlayerCanAffordCost",
+        "SUNITNPC_DeductGoldForPurchase",
+        "STATLIST_AddUnitStat",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "INVENTORY_CheckIfItemCanBeAutoBelted",
+        "ITEM_CloneFromSerializedData",
+        "IsStackable",
+        "SetupUpdateFlag",
+        "GetEquipedWeapon",
+        "GetWeaponClass",
+        "ITEMMODE_TryPutItemInInventory",
+        "ITEM_SetItemData_ePage",
+        "SERVER_ItemToInventory",
+        "ITEM_TryPlaceInBelt",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMMODE_CheckItemEthereal",
+        "ChangeGoldForPlayer",
+        "ITEM_DeleteItemAndFreeUnit"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_HandleBuyConfirmation",
+      "address": "00577f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00577f30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_HandleBuyConfirmation",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetInteractedNpc",
+        "FindUnitFromTable",
+        "SUNITNPC_BuyItem",
+        "STATSEX_GetCurrentStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NPC_ValidateAndProcessMercHire",
+      "address": "00577fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00577fe0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "NPC_ValidateAndProcessMercHire",
+        "GetInteractedNpc",
+        "FindUnitFromTable",
+        "NPC_ProcessMercHire",
+        "STATSEX_GetCurrentStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ProcessGamble",
+      "address": "00578050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578050"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ProcessGamble",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetInteractedNpc",
+        "FindUnitFromTable",
+        "STATSEX_GetCurrentStat",
+        "GetPlayerData",
+        "ITEMS_CalculateRepairAllCost",
+        "CheckIfPlayerCanAffordCost",
+        "GetQuestBitBuffer",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
+        "AlreadyHoldingItem",
+        "GetTxtMaxDurability",
+        "ITEM_CanBeRepaired",
+        "IsStackable",
+        "ITEMS_CheckChargedSkillFullyCharged",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
+        "ITEM_GetMaxStack",
+        "CalculateTransactionCost_Thunk",
+        "CheckItemFlag",
+        "STATLIST_SetUnitStat",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "SUNITNPC_UpdateNpcInventory"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_HandleIdentify",
+      "address": "00578460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578460"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_HandleIdentify",
+        "GetInteractedNpc",
+        "FindUnitFromTable",
+        "STATSEX_GetCurrentStat",
+        "PLAYER_GetUnidentifiedItemsCount",
+        "GetPlayerData",
+        "GetQuestState",
+        "CheckIfPlayerCanAffordCost",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "GetCarriedItem",
+        "ITEM_GetContainingInventoryPage",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
+        "CheckItemFlag",
+        "ITEMMODE_ProcessItemSell"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UnitHasItemInInventory",
+      "address": "00578610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578610"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "UnitHasItemInInventory",
+        "INVENTORY_GetHandItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_CheckCanIdentify",
+      "address": "00578640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578640"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_CheckCanIdentify",
+        "GetPlayerData",
+        "FindUnitFromTable",
+        "CheckItemFlag",
+        "ITEMMODE_ProcessItemSell"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITNPC_RepairAndRecharge",
+      "address": "005786a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005786a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_RepairAndRecharge",
+        "TXT_Items_GetLine",
+        "SUNITPROXY_GetNpcControl",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAMBLE_GenerateGambleInventory",
+      "address": "00578790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578790"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "GAMBLE_GenerateGambleInventory",
+        "GetGambleTableSize",
+        "GetDifficultyLevels",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "AllocServerMemory",
+        "STRUCT_CreatePlayerInventory",
+        "STATSEX_GetCurrentStat",
+        "SUNITPROXY_GetNpcControl",
+        "TXT_Items_GetLine",
+        "SUNITNPC_RepairAndRecharge",
+        "ITEM_CreateFromTemplate",
+        "ITEM_SetItemData_ePage",
+        "SUNITNPC_UpdateNpcInventory",
+        "ITEM_EditItemData_eItemFlag",
+        "GetYPos",
+        "GetXPos",
+        "SERVER_ItemToInventory",
+        "ITEM_DeleteItemAndFreeUnit"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2GambleTableStrc",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemQuality",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ValidateNpcInteraction",
+      "address": "00578ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578ae0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ValidateNpcInteraction",
+        "GAMBLE_GenerateGambleInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ProcessNpcAction",
+      "address": "00578b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578b30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ProcessNpcAction",
+        "GetGameNpcByUnit",
+        "SUNITPROXY_AddPlayerInteraction",
+        "SUNITNPC_FillNpcStore",
+        "SUNITNPC_InitNpcInventory",
+        "SUNITNPC_ValidateNpcInteraction"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2NpcPlayerInteractionStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_HandleHireableAction",
+      "address": "00578c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578c20"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_HandleHireableAction",
+        "UNIT_GetUnitState",
+        "ITEMSTATS_CheckStateFlagArray12",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HealByPlayerPetsByNPC",
+      "address": "00578ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578ca0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "HealByPlayerPetsByNPC",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat",
+        "SUNITNPC_HandleHireableAction",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "HealByPlayerByNPC",
+      "address": "00578d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578d30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "HealByPlayerByNPC",
+        "GetInteractedNpc",
+        "GetTxtMaxHp",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SendAttributeUpdate",
+        "GetTxtMaxMana",
+        "GetTxtMaxStamina",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "SUNITNPC_HandleHireableAction",
+        "PetsForEach",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Init",
+      "address": "00578e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578e70"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "Init",
+        "HealByPlayerByNPC"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ExecutePrayUnused",
+      "address": "00578ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00578ed0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "ExecutePrayUnused",
+        "FindUnitFromTable",
+        "GetInteractedNpc",
+        "GetTxtMaxHp",
+        "STATSEX_GetCurrentStat",
+        "CalcRecoveryPriority",
+        "GetTxtMaxMana",
+        "GetTxtMaxStamina",
+        "CheckIfPlayerCanAffordCost",
+        "HealByPlayerByNPC",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_DiscardTradeListRolls",
+      "address": "00579030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579030"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_GetActCappedLevel",
+        "SUNITNPC_DiscardTradeListRolls",
+        "SUNITPROXY_GetNpcControl",
+        "SUNITNPC_RollTradeListItemCode"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_HandleResurrect",
+      "address": "00579090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579090"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_HandleResurrect",
+        "FindUnitFromTable",
+        "HasAiSub",
+        "GetGameNpcByUnit",
+        "INVENTORY_RemoveAllItems",
+        "NullSub",
+        "SUNITNPC_FillNpcStore"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2InventoryStrc",
+        "D2MonsterAiStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITNPC_CloseNpcInteraction",
+      "address": "00579130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579130"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_CloseNpcInteraction",
+        "ClearInteractInfo",
+        "FreeSpecificAiForUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "HireMercFromNpc",
+      "address": "00579180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579180"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "HireMercFromNpc",
+        "GetGameNpcbyClassId",
+        "SERVER_GetUnitPetByTypeId",
+        "GetHirelingEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x50_QuestSpecial",
+        "SpawnMonsterAtUnit",
+        "MERC_HireAndReplaceMerc",
+        "ResetNpcHireListIfEmpty",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x",
+        "D2GameNpcStrc",
+        "D2HirelingTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_OpenTradeScreen",
+      "address": "00579360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579360"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_OpenTradeScreen",
+        "GetGameNpcByUnit",
+        "SUNITPROXY_AddPlayerInteraction",
+        "CheckItemFlag",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2NpcPlayerInteractionStrc",
+        "D2NpcProxyInventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_HandleTradeAction",
+      "address": "00579430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579430"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_HandleTradeAction",
+        "GetGameNpcByUnit",
+        "SUNITNPC_ProcessNpcAction",
+        "SUNITPROXY_ResetNpcProxy",
+        "SUNITNPC_FillNpcStore",
+        "RefreshInventory",
+        "SUNITNPC_RepairAllItems",
+        "SUNITPROXY_GetPlayerProxyInventory"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_SellItem",
+      "address": "00579510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579510"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_SellItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetInteractedNpc",
+        "FindUnitFromTable",
+        "STATSEX_GetCurrentStat",
+        "AlreadyHoldingItem",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
+        "ITEM_CheckItemData_eD2ItemFlag_Monster",
+        "GetQuestBitBuffer",
+        "CalculateTransactionCost_Thunk",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex",
+        "TXT_LowQualityItems_GetLine",
+        "_stricmp",
+        "CheckItemFlag",
+        "ITEM_GetItemData_wType",
+        "ITEMMODE_HasSocketedItems",
+        "GetCarry1FlagOfitem",
+        "GetGameNpcByUnit",
+        "SUNITPROXY_AddPlayerInteraction",
+        "SUNITNPC_CheckNpcCanSellItem",
+        "ITEM_CloneFromSerializedData",
+        "SetupUpdateFlag",
+        "ITEM_GetTxtItemTypes_storepage",
+        "ITEM_DeleteItemAndFreeUnit",
+        "ITEM_SetItemData_ePage",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SERVER_ItemToInventory",
+        "SUNITNPC_SetItemForNpc",
+        "GetTxtMaxDurability",
+        "STATLIST_SetUnitStat",
+        "ITEM_GetMaxStack",
+        "ToCursorItem",
+        "GetBodyLocation",
+        "EquipItem",
+        "ITEMS_IsA",
+        "GetMagicSuffix",
+        "TXT_Books_GetLine",
+        "SUNITNPC_ApplyScrollSkill",
+        "ITEM_SetServerSideFlag",
+        "ITEM_GetContainingInventoryPage",
+        "ITEM_SetItemData_ePreviousPage",
+        "Send0x9DRemoveItemFromContainer",
+        "ITEMMODE_DeleteItemFromInventory",
+        "ITEM_GiveGoldOrDrop"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2BooksTxt",
+        "D2ClientStrc",
+        "D2GameNpcStrc",
+        "D2InventoryStrc",
+        "D2LowQualityItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2ItemTypes",
+        "eD2ServerIncomingStatus",
+        "eD2Skills",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_ProcessSellConfirmation",
+      "address": "00579aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579aa0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_ProcessSellConfirmation",
+        "SERVER_GetUnitPetByTypeId",
+        "AssignMinionOwner",
+        "RemovePetByGuidAndNotify",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "SetupUpdateFlag",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat",
+        "PETS_ResummonPetByUnit",
+        "CreateUnitNode",
+        "SetState",
+        "SUNITNPC_ProcessGambleResult",
+        "GetYPos",
+        "GetXPos",
+        "PETS_ManagePetsByType",
+        "SendMercPackets"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SUNITNPC_HandleSellAction",
+      "address": "00579c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579c00"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "SUNITNPC_HandleSellAction",
+        "GetInteractedNpc",
+        "FindUnitFromTable",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitPetByTypeId",
+        "GetReviveCost",
+        "CheckIfPlayerCanAffordCost",
+        "SetupUpdateFlag",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat",
+        "SUNITNPC_ProcessSellConfirmation",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x9B_MercReviveCost",
+        "NET_D2GS_SERVER_Send_0x2A_NpcTransaction"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UseMenu",
+      "address": "00579d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00579d60"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUNITNPC",
+      "calledFunctions": [
+        "UseMenu",
+        "FindUnitFromTable",
+        "CountMonstersByAi",
+        "NpcState_MoveState1To2",
+        "SUNITNPC_HandleTradeAction",
+        "GetMonsterAI",
+        "SUNIT_GetClient",
+        "SendMercForHireList",
+        "UnitHasItemInInventory",
+        "GetQuestBitBuffer",
+        "GetQuestState",
+        "IsValidImbumeItem",
+        "NET_D2GS_SERVER_Send_0x58_ITEMACCEPT",
+        "SERVER_DropItemFromPlayer",
+        "ITEMS_FillItemGenerationData",
+        "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_GetItemData_szPlayerName",
+        "ToCursorItem",
+        "GetLevel",
+        "ITEM_CreateItemInstance",
+        "SUNITNPC_UpdateNpcInventory",
+        "ITEMMODE_GetItemCursorMode",
+        "ITEM_SetItemData_ePage",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_GetPlayerNameAkaNamedString",
+        "SERVER_ItemToInventory",
+        "SetupUpdateFlag",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "DropItem",
+        "DeactivateToolsOfTrade",
+        "RESPEC_GrantRespecReward",
+        "ClearSkills",
+        "ClearStats",
+        "SetupUpdateEvent_AttachEventSound",
+        "DeactivateRespecQuest",
+        "LoadAreaOrSpawnPortal",
+        "QUEST_ProcessActTransition",
+        "FindWaypointIdByLevelId",
+        "GetWaypointsForCurrentDifficulty",
+        "EnableWaypoint",
+        "ITEM_CheckIfItemCanBeNamed",
+        "ITEM_CloneFromSerializedData",
+        "GetPlayerData",
+        "Q34_ClaimReward",
+        "__security_check_cookie",
+        "ITEM_CheckIfItemCanHaveSockets",
+        "ITEM_GetMaxSockCount",
+        "GetItemQuality",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "ITEM_RollSocketCount",
+        "Q31_ClaimReward"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2ItemGenContextStrc",
+        "D2MonsterAiStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UseMenuTmp",
+        "D2WaypointStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eD2LevelId",
+        "eD2QuestState",
+        "eD2Quests",
+        "int16_t",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

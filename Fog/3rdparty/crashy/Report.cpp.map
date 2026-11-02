@@ -1,0 +1,167 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/3rdparty/crashy/Report.cpp",
+  "functions": [
+    {
+      "name": "Constructor",
+      "address": "00401070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401070"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy::Report",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "Report"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00401090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401090"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy::Report",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "fclose",
+        "MISC_OperatorDeleteShim"
+      ],
+      "usedTypes": [
+        "Report",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "004010d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004010d0"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy::Report",
+      "calledFunctions": [
+        "Destructor",
+        "fclose"
+      ],
+      "usedTypes": [
+        "Report"
+      ]
+    },
+    {
+      "name": "Open",
+      "address": "00401100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401100"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy::Report",
+      "calledFunctions": [
+        "Open",
+        "_time64",
+        "_localtime64_s",
+        "FILETOOLS_GetTempPath_UTF8",
+        "STRING_AppendBlizzardErrorSubfolderToPath",
+        "STRING_FormatVarArgs",
+        "FILETOOLS_CreateFolder_UTF8",
+        "FILETOOLS_OpenFile_WriteMode_UTF8"
+      ],
+      "usedTypes": [
+        "FILE",
+        "Report",
+        "__time64_t",
+        "int8_t"
+      ]
+    },
+    {
+      "name": "Close",
+      "address": "004011f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004011f0"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy::Report",
+      "calledFunctions": [
+        "Close",
+        "fclose"
+      ],
+      "usedTypes": [
+        "Report",
+        "int8_t"
+      ]
+    },
+    {
+      "name": "IsOpen",
+      "address": "00401210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401210"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy::Report",
+      "calledFunctions": [
+        "IsOpen"
+      ],
+      "usedTypes": [
+        "Report"
+      ]
+    },
+    {
+      "name": "AddAttachment",
+      "address": "00401220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401220"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy::Report",
+      "calledFunctions": [
+        "AddAttachment",
+        "__security_check_cookie",
+        "FILETOOLS_ExtractFilename",
+        "FILETOOLS_CopyFile_UTF8"
+      ],
+      "usedTypes": [
+        "Report",
+        "char[1024]",
+        "int8_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Printf",
+      "address": "00401380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401380"
+        }
+      ],
+      "namespace": "Fog::_3rdparty::crashy::Report",
+      "calledFunctions": [
+        "Printf",
+        "vfprintf"
+      ],
+      "usedTypes": [
+        "Report",
+        "int32_t"
+      ]
+    }
+  ]
+}

@@ -65,9 +65,9 @@ void __fastcall SOUND_ParseStreamWavHeader(D2SoundsTxt * pSoundStream) {
     uint32_t nBufSize = pSoundStream->nSoundDataBytes;
     int* pWavData = D2Sound::Src::D2SoundSmp::SOUNDSMP_ParseWavHeader((int*)pSoundStream->pSoundDataBuffer, &nBufSize, &sWaveFormat);
     if (pWavData && sWaveFormat.wBitsPerSample == 0x10 && sWaveFormat.nSamplesPerSec == 0x5622) {
-      pSoundStream->field_0x74[0] = (int32_t)pWavData;
+      pSoundStream->aWavDataPtrAndSize[0] = (int32_t)pWavData;
       pSoundStream->Stereo = sWaveFormat.nChannels == 2;
-      pSoundStream->field_0x74[1] = nBufSize;
+      pSoundStream->aWavDataPtrAndSize[1] = nBufSize;
       return;
     }
 
@@ -141,7 +141,7 @@ void __fastcall SOUND_StopAndDetach(D2ClientSoundChannelStrc * ppnParam) {
     }
 
     ppnParam->pActiveSound->nPlayMode = 2;
-    ppnParam->pActiveSound->undefined_0x2c = 0;
+    ppnParam->pActiveSound->pClientChannel = 0;
     ppnParam->pActiveSound = 0;
 }
 
@@ -211,9 +211,9 @@ void __stdcall SOUND_UpdateNonLoopingStreams() {
     } while ((int)pChannelEntry < (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 8));
 }
 
-uint32_t __fastcall SOUND_GetStreamProgress(D2ClientSoundChannelStrc * pnParam) {
-    uint32_t uVar1 = D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStreamProgress(pnParam->pSoundSmp);
-    return uVar1;
+uint32_t __fastcall SOUND_GetStreamProgress(D2ClientSoundChannelStrc * pChannel) {
+    uint32_t nProgress = D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStreamProgress(pChannel->pSoundSmp);
+    return nProgress;
 }
 
 BOOL __stdcall SOUND_Is3DMixerActive() {
@@ -246,22 +246,22 @@ D2ClientSoundChannelStrc * __fastcall SOUND_FindPlayingByIdSafe(int32_t nId) {
       return nullptr;
     }
 
-    D2ClientSoundChannelStrc* pDVar4 = 0;
-    D2SoundChannelStrc** ppDVar3 = &gaSoundChannels[0].pActiveSound;
+    D2ClientSoundChannelStrc* pDVar3 = 0;
+    D2SoundChannelStrc** ppDVar2 = &gaSoundChannels[0].pActiveSound;
     do {
-      int32_t iVar2;
-      iVar2 = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(((D2ClientSoundChannelStrc*)(ppDVar3 - 2))->pSoundSmp);
-      if (iVar2) {
-        pDVar1 = *ppDVar3;
-        if (pDVar1 && pDVar1->nSoundId == nId && (!pDVar4 || pDVar1->nScheduledTime < pDVar4->pActiveSound->nScheduledTime)) {
-          pDVar4 = (D2ClientSoundChannelStrc*)(ppDVar3 - 2);
+      int32_t bIsPlaying;
+      bIsPlaying = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(((D2ClientSoundChannelStrc*)(ppDVar2 - 2))->pSoundSmp);
+      if (bIsPlaying) {
+        pDVar1 = *ppDVar2;
+        if (pDVar1 && pDVar1->nSoundId == nId && (!pDVar3 || pDVar1->nScheduledTime < pDVar3->pActiveSound->nScheduledTime)) {
+          pDVar3 = (D2ClientSoundChannelStrc*)(ppDVar2 - 2);
         }
       }
 
-      ppDVar3 += 8;
-    } while ((int)ppDVar3 < (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 8));
+      ppDVar2 += 8;
+    } while ((int)ppDVar2 < (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 8));
 
-    return pDVar4;
+    return pDVar3;
 }
 
 uint32_t __fastcall SOUND_GetPlaybackStatus(int * * ppnParam) {
@@ -291,7 +291,7 @@ void __stdcall SOUND_ShutdownAudio() {
 }
 
 // Initialises the audio mixer's streaming sample channels. Returns 0 immediately if the speaker config is unset, or halts if a mixer is already active. Allocates up to 8 channel slots: the first 4 are always type 1 (music), slots 4+ are type 2 (stereo) if nParam==1, type 6 (surround) if nParam==2, or type 0 otherwise. On success initialises EAX to environment 0 and sets pAudioMixerInterface; on failure calls SOUND_ShutdownAudio and returns 0.
-static BOOL SOUND_InitStreamChannels(int32_t nParam) {
+static BOOL SOUND_InitStreamChannels(int32_t nMixerMode) {
     D2SoundSmpStrc* pNewSampleInst;
     IDirectSound* dwSpeakerConfig = D2Sound::SOUND_GetSpeakerConfigFlag();
     if (!dwSpeakerConfig) {
@@ -307,10 +307,10 @@ static BOOL SOUND_InitStreamChannels(int32_t nParam) {
       gaSoundChannels[nChannelIdx].nChannelType = 0;
       if (nChannelIdx < 4) {
         gaSoundChannels[nChannelIdx].nChannelType = 1;
-      } else if (nParam == 1) {
+      } else if (nMixerMode == 1) {
         gaSoundChannels[nChannelIdx].nChannelType = 2;
       } else {
-        gaSoundChannels[nChannelIdx].nChannelType = nParam != 2 ? 0 : 0x6;
+        gaSoundChannels[nChannelIdx].nChannelType = nMixerMode != 2 ? 0 : 0x6;
       }
 
       pNewSampleInst = D2Sound::Src::D2SoundSmp::CallSounds(gaSoundChannels[nChannelIdx].nChannelType, BackgroundSoundsActive);
@@ -332,14 +332,14 @@ static BOOL SOUND_InitStreamChannels(int32_t nParam) {
 }
 
 // Finds a free or preemptable sound channel for playback. First scans the global sound instance pool for a channel matching pnParam (sound type/category) that is not currently playing and has no active sound. If none found, scans for the best occupied channel that can be preempted via SOUND_IsChannelAvailable; if preemptable, stops the current sample, saves its stream progress, marks the channel free, and returns it. Returns NULL if no channel is available.
-static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundChannelStrc * nParam, int pnParam) {
+static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundChannelStrc * pSound, int nChannelType) {
     int32_t bIsPlaying;
     BOOL BVar1;
     uint32_t nStreamProgress;
     D2ClientSoundChannelStrc* pBestChannel;
     pBestChannel = gaSoundChannels;
     do {
-      if (!pBestChannel->pActiveSound && pBestChannel->nChannelType == pnParam) {
+      if (!pBestChannel->pActiveSound && pBestChannel->nChannelType == nChannelType) {
         bIsPlaying = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(pBestChannel->pSoundSmp);
         if (!bIsPlaying) {
           return pBestChannel;
@@ -353,7 +353,7 @@ static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundCh
     D2SoundChannelStrc** pChannelEntry;
     pChannelEntry = &gaSoundChannels[0].pActiveSound;
     do {
-      if (pChannelEntry[-1] == (D2SoundChannelStrc*)pnParam && *pChannelEntry) {
+      if (pChannelEntry[-1] == (D2SoundChannelStrc*)nChannelType && *pChannelEntry) {
         if (pBestChannel) {
           BVar1 = D2Client::Sound::SOUND_IsChannelAvailable(pBestChannel->pActiveSound, *pChannelEntry, 1, 1);
           if (!BVar1) {
@@ -371,7 +371,7 @@ static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundCh
           return nullptr;
         }
 
-        BVar1 = D2Client::Sound::SOUND_IsChannelAvailable(nParam, pBestChannel->pActiveSound, 0, 0);
+        BVar1 = D2Client::Sound::SOUND_IsChannelAvailable(pSound, pBestChannel->pActiveSound, 0, 0);
         if (!BVar1) {
           return nullptr;
         }
@@ -388,7 +388,7 @@ static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundCh
         }
 
         pBestChannel->pActiveSound->nPlayMode = 2;
-        pBestChannel->pActiveSound->undefined_0x2c = 0;
+        pBestChannel->pActiveSound->pClientChannel = 0;
         pBestChannel->pActiveSound = 0;
         return pBestChannel;
       }
@@ -539,29 +539,29 @@ int __fastcall SOUND_UpdateChannelParams(int * pSoundChannel) {
     return nSoundDescSaved;
 }
 
-BOOL __fastcall SOUND_SetSoundMixer(int32_t nParam) {
+BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer) {
     DWORD dwInitFlag;
-    if (nParam == 1) {
+    if (nMixer == 1) {
       dwInitFlag = D2Sound::SOUND_GetDirectSoundInitializedFlag();
       if (!dwInitFlag) {
         return 0;
       }
-    } else if (nParam == 2 && (dwInitFlag = D2Sound::SOUND_GetSound3DFlag() , !dwInitFlag)) {
+    } else if (nMixer == 2 && (dwInitFlag = D2Sound::SOUND_GetSound3DFlag() , !dwInitFlag)) {
       return 0;
     }
 
     SOUND_ShutdownAudio();
-    BOOL nCurMixer = SOUND_InitStreamChannels(nParam);
+    BOOL nCurMixer = SOUND_InitStreamChannels(nMixer);
     if (!nCurMixer) {
       return 0;
     }
 
-    int iVar1 = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-    if (iVar1 == nParam) {
+    int nActiveMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
+    if (nActiveMixer == nMixer) {
       return 1;
     }
 
-    D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer(nParam);
+    D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer(nMixer);
     return 1;
 }
 
@@ -586,9 +586,9 @@ void __fastcall SOUND_SetBackgroundSoundsActive(uint32_t bActive) {
     BOOL nInitResult;
     nInitResult = SOUND_InitStreamChannels(nMixerMode);
     if (nInitResult) {
-      int iVar1;
-      iVar1 = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-      if (iVar1 == nMixerMode) {
+      int nActiveMixer;
+      nActiveMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
+      if (nActiveMixer == nMixerMode) {
         return;
       }
 
@@ -647,20 +647,20 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
     }
 
     bool bStereo = pSoundTxt->Stereo != 0;
-    uint32_t pnParam = (uint32_t)bStereo;
+    uint32_t nChannelType = (uint32_t)bStereo;
     if (!bStereo) {
       nResult = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
       if (nResult == 1) {
-        pnParam = 2;
+        nChannelType = 2;
       }
 
       nResult = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
       if (nResult == 2) {
-        pnParam |= 6;
+        nChannelType |= 6;
       }
     }
 
-    pPlayingChannel = SOUND_FindAvailableChannel(pMemory, pnParam);
+    pPlayingChannel = SOUND_FindAvailableChannel(pMemory, nChannelType);
     if (!pPlayingChannel) {
       return nullptr;
     }
@@ -679,7 +679,7 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
     }
 
     pPlayingChannel->pActiveSound = pSoundDesc;
-    if (pnParam & 4) {
+    if (nChannelType & 4) {
       if (pSoundTxt->Reverb) {
         fReverbLevel = 1.0;
       } else {
@@ -689,11 +689,11 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
       D2Sound::Src::D2SoundSmp::SOUNDSMP_SetEaxRoomLevel(pPlayingChannel->pSoundSmp, fReverbLevel);
     }
 
-    pPlayingChannel->field_0x1c = 0;
-    pPlayingChannel->field_0x18 = -1;
-    pPlayingChannel->field_0x0c = 0;
-    pPlayingChannel->field_0x10 = 0;
-    pPlayingChannel->field_0x14 = 0;
+    pPlayingChannel->dwLastEaxObstruction = 0;
+    pPlayingChannel->nLastVolume = -1;
+    pPlayingChannel->dwLastPosX = 0;
+    pPlayingChannel->dwLastPosY = 0;
+    pPlayingChannel->dwLastPosZ = 0;
     SOUND_UpdateChannelParams((int*)pPlayingChannel);
     D2SoundChannelStrc* pSoundDescBackup = pSoundDesc;
     if (!pSoundTxt->Stream) {

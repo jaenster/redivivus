@@ -1,0 +1,197 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinAccountList.cpp",
+  "functions": [
+    {
+      "name": "D2WINACCOUNTLIST_FreeAllEntries",
+      "address": "00507850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507850"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinAccountList",
+      "calledFunctions": [
+        "D2WINACCOUNTLIST_FreeAllEntries",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2WinAccountList",
+        "D2WinAccountListEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINACCOUNTLIST_AddAccount",
+      "address": "005078a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005078a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinAccountList",
+      "calledFunctions": [
+        "D2WINACCOUNTLIST_AddAccount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory",
+        "strncpy"
+      ],
+      "usedTypes": [
+        "D2WinAccountList",
+        "D2WinAccountListEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINACCOUNTLIST_RemoveAccount",
+      "address": "00507900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507900"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinAccountList",
+      "calledFunctions": [
+        "D2WINACCOUNTLIST_RemoveAccount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2WinAccountList",
+        "D2WinAccountListEntry",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2WINACCOUNTLIST_GetSelectedAccountName",
+      "address": "005079c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005079c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinAccountList",
+      "calledFunctions": [
+        "D2WINACCOUNTLIST_GetSelectedAccountName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinAccountList"
+      ]
+    },
+    {
+      "name": "Push",
+      "address": "00507a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507a10"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinAccountList",
+      "calledFunctions": [
+        "Push",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinAccountList",
+        "D2WinAccountListEntry",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyD2WinAccountList",
+      "address": "00507af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507af0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinAccountList",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinAccountList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINACCOUNTLIST_FreeAllEntries",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinAccountList",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "00507b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507b30"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinAccountList",
+      "calledFunctions": [
+        "Draw",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetAndReturnLastFont",
+        "CONTAINER_InitializeBuffer",
+        "D2WINFONT_GetCurrentFontHeight",
+        "D2GFX_DrawSolidRectEx",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "D2WinAccountList",
+        "D2WinAccountListEntry",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WinAccountList",
+      "address": "00507ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507ca0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinAccountList",
+      "calledFunctions": [
+        "D2WinAccountList",
+        "AllocClientMemory",
+        "memset",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinAccountList",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

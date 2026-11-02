@@ -1,0 +1,62 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat/Ignorelist/MappingEntryNode.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "0060ed30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ed30"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::MappingEntryNode",
+      "calledFunctions": [
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "MappingEntryNode"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "0060edf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060edf0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::MappingEntryNode",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "SMemFree",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "MappingEntryNode",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "00610610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610610"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::MappingEntryNode",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "MappingEntryNode"
+      ]
+    }
+  ]
+}

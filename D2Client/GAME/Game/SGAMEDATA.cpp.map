@@ -1,0 +1,49 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Game/SGAMEDATA.cpp",
+  "functions": [
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "0044fbb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fbb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game::SGAMEDATA",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopyConstructor",
+      "address": "00450950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450950"
+        }
+      ],
+      "namespace": "D2Client::GAME::Game::SGAMEDATA",
+      "calledFunctions": [
+        "CopyConstructor",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2UnitNodeStrc *",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

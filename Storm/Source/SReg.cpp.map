@@ -1,0 +1,242 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SReg.cpp",
+  "functions": [
+    {
+      "name": "SRegGetBaseKey",
+      "address": "00414930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414930"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SRegGetBaseKey",
+        "SErrSetLastError",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SREG_InternalDeleteEntry",
+      "address": "00414990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414990"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SREG_InternalDeleteEntry",
+        "SRegGetBaseKey",
+        "SStrPack",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "HKEY",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SREG_InternalLoadEntry",
+      "address": "00414b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414b00"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SREG_InternalLoadEntry",
+        "SRegGetBaseKey",
+        "SStrPack",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "HKEY",
+        "LPBYTE",
+        "LPDWORD",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SREG_InternalSaveEntry",
+      "address": "00414c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414c70"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SREG_InternalSaveEntry",
+        "SRegGetBaseKey",
+        "SStrPack",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "HKEY",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRegDeleteValue",
+      "address": "00414d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414d90"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SRegDeleteValue",
+        "SErrSetLastError",
+        "SREG_InternalDeleteEntry"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRegLoadData",
+      "address": "00414de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414de0"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SRegLoadData",
+        "SErrSetLastError",
+        "SREG_InternalLoadEntry"
+      ],
+      "usedTypes": [
+        "LPBYTE",
+        "int32_t",
+        "uint32_t",
+        "uint32_t *"
+      ]
+    },
+    {
+      "name": "SRegLoadString",
+      "address": "00414e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414e50"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SRegLoadString",
+        "SErrSetLastError",
+        "SREG_InternalLoadEntry"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SRegLoadValue",
+      "address": "00414f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414f10"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SRegLoadValue",
+        "SErrSetLastError",
+        "SREG_InternalLoadEntry",
+        "strtoul",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SRegSaveData",
+      "address": "00415000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415000"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SRegSaveString",
+        "SRegSaveValue",
+        "SRegSaveData",
+        "SErrSetLastError",
+        "SREG_InternalSaveEntry"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRegSaveString",
+      "address": "00415070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00415070"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "strlen",
+        "SRegSaveString",
+        "SErrSetLastError",
+        "SStrLen",
+        "SREG_InternalSaveEntry"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SRegSaveValue",
+      "address": "004150e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004150e0"
+        }
+      ],
+      "namespace": "Storm::Source::SReg",
+      "calledFunctions": [
+        "SRegSaveValue",
+        "SErrSetLastError",
+        "SREG_InternalSaveEntry"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

@@ -8,7 +8,7 @@
 #include "Fog/Src/String/FogString.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
-#include "Storm/_unnamespaced.h"
+#include "D2Hell/D2Hell.h"
 #include "support/d2_trace.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -42,15 +42,15 @@ void OutOfMemoryHandler(char * format, ...) {
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "");
 }
 
-static int32_t ComputeSizeClassIndex(int32_t nParam) {
-    if (nParam <= 0x10) {
+static int32_t ComputeSizeClassIndex(int32_t nSize) {
+    if (nSize <= 0x10) {
       return 0;
     }
-    if (nParam < 3) {
+    if (nSize < 3) {
       return -3;
     }
 
-    uint32_t nValue = nParam - 1;
+    uint32_t nValue = nSize - 1;
     if (!nValue) {
       return -4;
     }
@@ -204,26 +204,26 @@ static void __stdcall InsertBlockIntoSortedArray(D2PoolBlockStrc * pBlock, D2Poo
     nManager->dwMemory = nManager->dwMemory + pBlock->pPool->nSize + 0x18 + ((int)(pBlock->pPool->nBlocks + 0x1f) >> 5) * 4;
     nHi = nManager->nBlocks;
     pSortedArray = nManager->pBlocks;
-    int iVar1 = 0;
+    int nLow = 0;
     if ((int)nHi > 0) {
       do {
-        nMidIdx = ((int)(nHi - iVar1) >> 1) + iVar1;
+        nMidIdx = ((int)(nHi - nLow) >> 1) + nLow;
         if (pBlock->pCommit > (unsigned char*)pSortedArray[nMidIdx].pCommit) {
-          iVar1 = nMidIdx + 1;
+          nLow = nMidIdx + 1;
           nMidIdx = nHi;
         }
 
         nHi = nMidIdx;
-      } while (iVar1 < (int)nMidIdx);
+      } while (nLow < (int)nMidIdx);
 
       nHi = nManager->nBlocks;
     }
-    if (iVar1 < (int)nHi) {
-      memmove(pSortedArray + iVar1 + 1, pSortedArray + iVar1, (nHi - iVar1) * 8);
+    if (nLow < (int)nHi) {
+      memmove(pSortedArray + nLow + 1, pSortedArray + nLow, (nHi - nLow) * 8);
     }
 
-    pSortedArray[iVar1].pBlock = pBlock;
-    pSortedArray[iVar1].pCommit = pBlock->pCommit;
+    pSortedArray[nLow].pBlock = pBlock;
+    pSortedArray[nLow].pCommit = pBlock->pCommit;
     nManager->nBlocks++;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&nManager->pSync);
 }
@@ -648,7 +648,7 @@ void FreeMemoryPool(D2PoolManagerStrc * pMemory) {
     DeleteCriticalSection(&pGlobalPoolSystem.pSync);
 }
 
-void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int32_t nParam, int nUnused) {
+void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int32_t nMaxBlockSize, int nUnused) {
     int nSizeClass;
     size_t nBlocksPerRegion;
     uint32_t nRegionSize;
@@ -691,13 +691,13 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
       Storm::Source::SSTR::SStrCopy(pGlobalPoolSystem.pManagers[nManagerIndex].szName, szName, 0x20);
       pGlobalPoolSystem.pManagers[nManagerIndex].szName[0x1f] = '\0';
     }
-    if (nParam <= 0x10) {
+    if (nMaxBlockSize <= 0x10) {
       nSizeClass = 0;
     } else {
-      if (nParam < 3) {
+      if (nMaxBlockSize < 3) {
         nSizeClass = 1;
       } else {
-        nRegionSize = nParam - 1;
+        nRegionSize = nMaxBlockSize - 1;
         if (!nRegionSize) {
           nSizeClass = 0;
         } else {

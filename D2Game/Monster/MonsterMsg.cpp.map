@@ -1,0 +1,95 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monster/MonsterMsg.cpp",
+  "functions": [
+    {
+      "name": "SendCastSkillMsg",
+      "address": "00597d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597d70"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterMsg",
+      "calledFunctions": [
+        "SendCastSkillMsg",
+        "GetCurrentSkill",
+        "GetSkillId",
+        "GetSkillLevel",
+        "IsUnitNearClient",
+        "NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY",
+        "GetYSP1",
+        "GetXSP1",
+        "NET_D2GS_SERVER_Send_0x4D_SKILL_XY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SendUpdateToClient",
+      "address": "00597e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597e20"
+        }
+      ],
+      "namespace": "D2Game::Monster::MonsterMsg",
+      "calledFunctions": [
+        "MONSTER_SendUpdateToClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTargetEx",
+        "IsUnitNearClient",
+        "GetCurrentSkill",
+        "SendCastSkillMsg",
+        "GetXPos",
+        "GetYPos",
+        "GetLastPathPointX",
+        "GetLastPathPointY",
+        "GetPathType",
+        "GetStepNum",
+        "MONSTER_GetHpPercent128",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "NET_D2GS_SERVER_Send_0x6D_UNITCHANGE_MONSTERNEUTRAL",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH_Ex",
+        "NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex",
+        "GetDirection",
+        "CheckMonsterType",
+        "GetDistance",
+        "NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH",
+        "NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH",
+        "NET_D2GS_SERVER_Send_0x69_UNITCHANGE_MONSTERXYNOPATH",
+        "NET_D2GS_SERVER_Send_0x6A_UNITCHANGE_MONSTERIDNOPATH",
+        "NET_D2GS_SERVER_Send_0x6B_UNITCHANGE_MONSTERXYPOSITION",
+        "NET_D2GS_SERVER_Send_0x6C_UNITCHANGE_MONSTERIDPOSITION"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DynamicPathStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

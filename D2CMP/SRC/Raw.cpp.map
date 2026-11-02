@@ -1,0 +1,28 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/Raw.cpp",
+  "functions": [
+    {
+      "name": "RAW_CreateCelFrames",
+      "address": "0060d190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d190"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Raw",
+      "calledFunctions": [
+        "RAW_CreateCelFrames",
+        "AllocClientMemory",
+        "memcpy",
+        "CELCMP_GetDirectionFrameTableIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/ShowItems.cpp",
+  "functions": [
+    {
+      "name": "DRAW_AltItems",
+      "address": "004c0810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0810"
+        }
+      ],
+      "namespace": "D2Client::UI::ShowItems",
+      "calledFunctions": [
+        "DRAW_AltItems",
+        "D2GFX_IsPerspectiveActive",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "GetSelectedUnit",
+        "GetMouseX",
+        "GetMouseY",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "D2GFX_GetColorFromCurrentPallete",
+        "GetTargetX",
+        "DRAW_GetWorldOffsetX",
+        "DRAW_GetWorldOffsetY",
+        "GetTargetY",
+        "GetPrecisionX",
+        "GetPrecisionY",
+        "D2GFX_IsInPerspectiveBounds",
+        "D2GFX_AdjustPerspectivePosition",
+        "DRAW_GetTypeOfBorder",
+        "UI_FormatItemNameWithQuality",
+        "TEXT_CalcTextDimensions",
+        "UI_DrawGroundItemTooltip",
+        "TEXT_TooltipSetAttributes",
+        "ClearSelectedUnit",
+        "SELECT_UpdateUnitSelection",
+        "GetItemQuality",
+        "CheckItemFlag",
+        "ITEM_GetItemsTxt_bHasInv",
+        "ITEM_GetMaxSockCount",
+        "TXT_Items_GetLine",
+        "D2WINFONT_DrawTextWithBackgroundRect"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6cadb0",
+      "address": "006cadb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cadb0"
+        }
+      ],
+      "namespace": "D2Client::UI::ShowItems",
+      "calledFunctions": [
+        "StaticInit_6cadb0",
+        "CONTAINER_InitializeBuffer"
+      ]
+    },
+    {
+      "name": "StaticInit_6cade0",
+      "address": "006cade0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cade0"
+        }
+      ],
+      "namespace": "D2Client::UI::ShowItems",
+      "calledFunctions": [
+        "StaticInit_6cade0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_Empty_6cb400",
+      "address": "006cb400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb400"
+        }
+      ],
+      "namespace": "D2Client::UI::ShowItems",
+      "calledFunctions": [
+        "StaticFini_Empty_6cb400"
+      ]
+    }
+  ]
+}

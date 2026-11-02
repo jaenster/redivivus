@@ -1,0 +1,665 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/Tilecmp.cpp",
+  "functions": [
+    {
+      "name": "TILECMP_AllocTileNode",
+      "address": "006094b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006094b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_AllocTileNode",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileNodeStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_FreeTileNode",
+      "address": "00609500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609500"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_FreeTileNode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileNodeStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_AllocTileSet",
+      "address": "00609550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609550"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_AllocTileSet",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileSetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_FreeTileSet",
+      "address": "006095a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006095a0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_FreeTileSet",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileNodeStrc",
+        "D2TileCmpTileSetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_AllocTileLink",
+      "address": "00609620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609620"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_AllocTileLink",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_FreeTileSetChain",
+      "address": "00609670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609670"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_FreeTileSetChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TILECMP_FreeTileSet",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileSetListStrc",
+        "D2TileCmpTileSetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_AddTileToSet",
+      "address": "006096d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006096d0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_AddTileToSet",
+        "TILECMP_AllocTileSet",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileSetListStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_ValidateTilePixels",
+      "address": "00609770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609770"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_ValidateTilePixels"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_CacheTileData",
+      "address": "00609810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609810"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_CacheTileData",
+        "TILECMP_ValidateTilePixels",
+        "TILECMP_AllocTileNode",
+        "AllocClientMemory",
+        "memset",
+        "D2MEM_CopyRows",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileNodeStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_CheckTilePatternRLE",
+      "address": "00609940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609940"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_CheckTilePatternRLE"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_ExtractIsometricSubTile",
+      "address": "00609980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609980"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_ExtractIsometricSubTile",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "memcpy",
+        "TILECMP_CheckTilePatternRLE",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_Generate25SubTiles",
+      "address": "00609aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609aa0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_Generate25SubTiles",
+        "TILECMP_ExtractIsometricSubTile",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileSetStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_InitTileSetFromDT1",
+      "address": "00609b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609b90"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_InitTileSetFromDT1",
+        "TILECMP_Generate25SubTiles",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileSetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_SerializeTileSet",
+      "address": "00609c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609c30"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_SerializeTileSet",
+        "AllocClientMemory",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "D2TileCmpTileNodeStrc",
+        "D2TileCmpTileSetStrc",
+        "D2TileLibraryEntryStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "TILECMP_ExportCacheToBuffer",
+      "address": "00609d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609d60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_ExportCacheToBuffer",
+        "AllocClientMemory",
+        "memset",
+        "TILECMP_SerializeTileSet",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileCmpTileSetListStrc",
+        "D2TileCmpTileSetStrc",
+        "D2TileLibraryHeaderStrc *"
+      ]
+    },
+    {
+      "name": "TILECMP_FreeTileCache",
+      "address": "00609e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609e90"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_FreeTileCache",
+        "SPRITECACHE_TouchEntry",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHeaderStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_CalculateCacheSize",
+      "address": "00609fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609fd0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_CalculateCacheSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHeaderStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_CopyTileNodes",
+      "address": "0060a050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a050"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_CopyTileNodes",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_DeserializeAndFixup",
+      "address": "0060a0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a0f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_DeserializeAndFixup",
+        "TILECMP_CalculateCacheSize",
+        "AllocClientMemory",
+        "memset",
+        "memcpy",
+        "TILECMP_CopyTileNodes",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "TILECMP_FixupPointersInPlace",
+      "address": "0060a290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a290"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_FixupPointersInPlace",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHeaderStrc",
+        "D2TileLibraryHeaderStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_FixupMinimalPointers",
+      "address": "0060a390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a390"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_FixupMinimalPointers",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TILECMP_FixupMinimalPointers_HaltTail"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHeaderStrc",
+        "D2TileLibraryHeaderStrc *"
+      ]
+    },
+    {
+      "name": "TILECMP_FixupMinimalPointers_HaltTail",
+      "address": "0060a3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a3a0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_FixupMinimalPointers_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "TILECMP_RegisterTilesForLookup",
+      "address": "0060a440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a440"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_RegisterTilesForLookup",
+        "FINDTILE_AllocHashTable",
+        "FINDTILE_Register",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHashStrc",
+        "D2TileLibraryHeaderStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_RelocateSubTilePixelData",
+      "address": "0060a4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a4c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_RelocateSubTilePixelData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_ApplyFunctionToPixels",
+      "address": "0060a520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a520"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_ApplyFunctionToPixels"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnTilecmpPixelCallback",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TILECMP_ProcessAllTilePixels",
+      "address": "0060a570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a570"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_ProcessAllTilePixels",
+        "TILECMP_ApplyFunctionToPixels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_CompressSubTile",
+      "address": "0060a650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a650"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_CompressSubTile",
+        "SUBTILE_ConvertToIndexed",
+        "SUBTILE_RecompressExisting",
+        "SUBTILE_CompressToRLE",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnRGBToPaletteIndex",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_DeepCopyWithRecompression",
+      "address": "0060a750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a750"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_DeepCopyWithRecompression",
+        "AllocClientMemory",
+        "memset",
+        "TILECMP_CompressSubTile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "D2TileLibraryHeaderStrc",
+        "D2TileLibraryHeaderStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILECMP_ShallowCopyZeroPointers",
+      "address": "0060a910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a910"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Tilecmp",
+      "calledFunctions": [
+        "TILECMP_ShallowCopyZeroPointers",
+        "AllocClientMemory",
+        "memset",
+        "memcpy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "void *"
+      ]
+    }
+  ]
+}

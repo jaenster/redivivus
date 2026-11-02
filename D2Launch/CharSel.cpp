@@ -36,7 +36,6 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 #include "Bnclient/net_sid.h"
 #include "D2Client/UI/EscMenu.h"
@@ -330,14 +329,14 @@ static uint32_t CHARSEL_GetDaysUntilExpiry(uint32_t nExpiryTime) {
 void __stdcall DRAW_LocalCharsInSelectionScreen() {
     uint32_t nLanguageCode;
     uint16_t* pwszLocaleStr;
-    D2CharSelStrc* pDVar2;
+    D2CharSelStrc* pDVar1;
     uint32_t dwCompFlags;
     char* pcSrc;
     char* pcDst;
     uint16_t wExpireStrIndex;
     uint32_t nCopyDwords;
     uint32_t nDaysUntilExpire;
-    uint16_t* pwVar3;
+    uint16_t* pwLineBufCursor;
     uint16_t wszLineBuf[100];
     char szNameBuf[100];
     __time32_t tTimeBuf[2];
@@ -347,7 +346,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
     int nTextArg0;
     int32_t nTextLine;
     uint16_t wCharFlags;
-    D2CharSelStrc* pDVar1 = D2Client::CharScreen::D2CharSelStrcFirst;
+    D2CharSelStrc* pCharSel = D2Client::CharScreen::D2CharSelStrcFirst;
     int nSlotBoxY = gnCharSlotYPositions[0] - 0xd;
     int nCharacterIndex = 0;
     int nSlotBoxX = 0x25;
@@ -381,15 +380,15 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
       return;
     }
 
-    for (; pDVar1; pDVar1 = pDVar1->pNext) {
+    for (; pCharSel; pCharSel = pCharSel->pNext) {
       uint16_t wszClassName[100];
       if (nNavigationIndex < g_nCharSelNavigationIndex || nNavigationIndex >= g_nCharSelNavigationIndex + gnCharSelScreenSlotCount) {
-        D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pDVar1->pCharSelCompStrc, 0);
+        D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharSel->pCharSelCompStrc, 0);
       } else {
         nCharacterIndex = nNavigationIndex - g_nCharSelNavigationIndex;
-        D2Win::Src::D2Comp::D2COMP_SetScreenX(pDVar1->pCharSelCompStrc, nSlotBoxX + 0x1e);
-        D2Win::Src::D2Comp::D2COMP_SetScreenY(pDVar1->pCharSelCompStrc, nSlotBoxY);
-        wCharFlags = pDVar1->nCharacterFlags;
+        D2Win::Src::D2Comp::D2COMP_SetScreenX(pCharSel->pCharSelCompStrc, nSlotBoxX + 0x1e);
+        D2Win::Src::D2Comp::D2COMP_SetScreenY(pCharSel->pCharSelCompStrc, nSlotBoxY);
+        wCharFlags = pCharSel->nCharacterFlags;
         if (wCharFlags & 8) {
           dwCompFlags = gadwBitMasks[4] | 1;
         } else {
@@ -401,11 +400,11 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
           nLanguageCode = dwCompFlags & gadwInvBitMasks[5];
         }
 
-        D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pDVar1->pCharSelCompStrc, nLanguageCode);
-        if (pDVar1->nEntryType == 2) {
+        D2Win::Src::D2Comp::D2COMP_SetFlags((D2CharSelStrc*)pCharSel->pCharSelCompStrc, nLanguageCode);
+        if (pCharSel->nEntryType == 2) {
           D2Win::Src::D2WinTextBox::SetText(gaCharSelScreenSlotControls[nCharacterIndex], D2Lang::StrTable::strtable::GetLocaleString(0x2b3b), 1, false, 0);
-        } else if (!pDVar1->nEntryType) {
-          ePlayerClass = pDVar1->ePlayerClassID;
+        } else if (!pCharSel->nEntryType) {
+          ePlayerClass = pCharSel->ePlayerClassID;
           szNameBuf[0] = '\0';
           pwszLocaleStr = wszClassName;
           for (nTextArg0 = 0x32; nTextArg0; nTextArg0--) {
@@ -414,44 +413,44 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
             pwszLocaleStr += 2;
           }
 
-          pcSrc = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)ePlayerClass, pDVar1->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pDVar1->nCharacterFlags & 0x20);
-          pDVar2 = pDVar1;
+          pcSrc = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)ePlayerClass, pCharSel->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pCharSel->nCharacterFlags & 0x20);
+          pDVar1 = pCharSel;
           if (pcSrc) {
             D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], pcSrc, (wCharFlags & 4 ? -3 : 0) + 4);
           }
 
-          strcat(szNameBuf, pDVar1->szCharname);
-          pcSrc = pDVar1->szGuildTag;
+          strcat(szNameBuf, pCharSel->szCharname);
+          pcSrc = pCharSel->szGuildTag;
           pcSrc = pcSrc + strlen(pcSrc) + 1;
-          if (pcSrc != pDVar1->szGuildTag + 1) {
+          if (pcSrc != pCharSel->szGuildTag + 1) {
             pcSrc = szNameBuf;
             pcDst = pcSrc + strlen(pcSrc);
             pcSrc = pcDst + 1;
-            sprintf(pcDst, " {%s}", pDVar1->szGuildTag);
+            sprintf(pcDst, " {%s}", pCharSel->szGuildTag);
           }
 
           D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], szNameBuf, (wCharFlags & 4 ? -3 : 0) + 4);
-          CHARSEL_GetClassNameString((uint32_t)pDVar1->ePlayerClassID, wszClassName);
+          CHARSEL_GetClassNameString((uint32_t)pCharSel->ePlayerClassID, wszClassName);
           for (nTextArg0 = 0; nTextArg0 < 0x64; nTextArg0++) {
             wszLineBuf[nTextArg0] = L'\0';
           }
 
           memset(wszLevelStr, 0, 10 * sizeof(wszLevelStr[0]));
-          sprintf(szNameBuf, " %d ", (uint32_t)pDVar1->nLevel);
+          sprintf(szNameBuf, " %d ", (uint32_t)pCharSel->nLevel);
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLevelStr, szNameBuf, 9);
           pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfd9);
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLineBuf, pwszLocaleStr);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszLineBuf, wszLevelStr);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszLineBuf, wszClassName);
           D2Win::Src::D2WinTextBox::SetText(gaCharSelScreenSlotControls[nCharacterIndex], wszLineBuf, 0, false, 0);
-          if (pDVar1->nCharacterFlags & 0x20) {
+          if (pCharSel->nCharacterFlags & 0x20) {
             D2Win::Src::D2WinTextBox::SetText(gaCharSelScreenSlotControls[nCharacterIndex], D2Lang::StrTable::strtable::GetLocaleString(0x58cb), 2, false, 0);
           }
-          if (pDVar1->bAct) {
+          if (pCharSel->bAct) {
             D2Win::Src::D2WinTextBox::SetText(gaCharSelScreenSlotControls[nCharacterIndex], D2Lang::StrTable::strtable::GetLocaleString(0x2aaf), 4, false, 0);
           }
 
-          dwCompFlags = pDVar1->dwRealmParam;
+          dwCompFlags = pCharSel->dwRealmParam;
           nCopyDwords = _time32(tTimeBuf);
           if (!(dwCompFlags > nCopyDwords)) {
             nDaysUntilExpire = 0;
@@ -495,7 +494,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
     uint32_t nCopyDwords;
     char* pcCopySrc;
     D2CharSelStrc* pCharNameSrc;
-    D2CharSelLineBufStrc* pDVar1;
+    D2CharSelLineBufStrc* pLineBufCursor;
     char szRetrievingMsg[256];
     D2CharSelLineBufStrc sLineBuf;
     uint16_t wszLevelStr[10];
@@ -660,11 +659,11 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
 
             D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharIndex], sLineBuf.szNameBuf, (wCharFlags & 4 ? -3 : 0) + 4);
             CHARSEL_GetClassNameString((uint32_t)pCharEntry->ePlayerClassID, wszClassName);
-            pDVar1 = &sLineBuf;
+            pLineBufCursor = &sLineBuf;
             for (nLoopIdx = 0x32; pCharEntry = pCharSelIter , nLoopIdx != 0; nLoopIdx--) {
-              pDVar1->wszLineBuf[0] = L'\0';
-              pDVar1->wszLineBuf[1] = L'\0';
-              pDVar1 = (D2CharSelLineBufStrc*)(pDVar1->wszLineBuf + 2);
+              pLineBufCursor->wszLineBuf[0] = L'\0';
+              pLineBufCursor->wszLineBuf[1] = L'\0';
+              pLineBufCursor = (D2CharSelLineBufStrc*)(pLineBufCursor->wszLineBuf + 2);
             }
 
             memset(wszLevelStr, 0, 10 * sizeof(wszLevelStr[0]));
@@ -718,10 +717,10 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
 static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharacterName, char * aSaveData, uint32_t dwRealmParam, FILETIME ftLastWriteTime) {
     int nEquipIndexPrev;
     D2CharSelCompStrc* pCharSelComp;
-    BOOL BVar6;
+    BOOL bIsExpansion;
     uint8_t* pbCur;
     D2CharSelStrc* pListCur;
-    char local_104[256];
+    char szRealmNameAnsi[256];
     D2CharSelStrc* pNewCharSel;
     pNewCharSel = D2_NEW_AT(D2CharSelStrc, ".\\Src\\CharSel.cpp", 0x414);
     pNewCharSel->ftLastWriteTimeLow = ftLastWriteTime.dwLowDateTime;
@@ -743,8 +742,8 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
     uint32_t nTmp;
     nTmp = CHARSEL_IsBetaRealm((uint16_t*)pDestination);
     if (nTmp) {
-      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(local_104, (uint16_t*)pDestination, 0xff);
-      Launcher::LAUNCHER_DeleteCharacterFiles(pNewCharSel, local_104);
+      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szRealmNameAnsi, (uint16_t*)pDestination, 0xff);
+      Launcher::LAUNCHER_DeleteCharacterFiles(pNewCharSel, szRealmNameAnsi);
       return 0;
     }
 
@@ -827,8 +826,8 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
 
         ePlayerClassID = 9;
       } else {
-        BVar6 = Fog::D2CheckExpansionGame();
-        if (BVar6 || pNewCharSel->ePlayerClassID < CLASS_DRUID) {
+        bIsExpansion = Fog::D2CheckExpansionGame();
+        if (bIsExpansion || pNewCharSel->ePlayerClassID < CLASS_DRUID) {
           nClassicOrExpansionMode = 1;
         }
       }
@@ -865,8 +864,8 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
     D2CharSelStrc* pListIter;
     pListIter = D2Client::CharScreen::D2CharSelStrcFirst;
     if (D2Client::CharScreen::D2CharSelStrcFirst) {
-      BVar6 = Fog::D2CheckExpansionGame();
-      if (BVar6) {
+      bIsExpansion = Fog::D2CheckExpansionGame();
+      if (bIsExpansion) {
         if (pListIter) {
           while (true) {
             pListCur = pListIter;
@@ -1128,7 +1127,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
     }
 
     gpCharSelPendingEntry = D2_NEW_AT(D2CharSelStrc, ".\\Src\\CharSel.cpp", 0x5e2);
-    Storm::Source::SSystem::SMemCopy(gpCharSelPendingEntry, pSelectedChar, 0x350);
+    Storm::Source::SMem::SMemCopy(gpCharSelPendingEntry, pSelectedChar, 0x350);
     D2CharSelStrc* pCharSelCopy = gpCharSelPendingEntry;
     gpCharSelPendingEntry->pNext = 0;
     if (pSelectedChar->nEntryType == 1) {
@@ -1485,12 +1484,12 @@ BOOL __stdcall CHARSEL_OnPressScrollCharListDown(D2ControlMsg * pControlMsg) {
 }
 
 BOOL __stdcall MAINMENU_CharSelScrollbarCallback(D2ControlStrc * pControl) {
-    int iVar1 = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar);
-    if (gpCharSelScrollbar == iVar1) {
+    int nScrollPos = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar);
+    if (gpCharSelScrollbar == nScrollPos) {
       return 0;
     }
 
-    g_nCharSelNavigationIndex += (iVar1 - gpCharSelScrollbar) * 2;
+    g_nCharSelNavigationIndex += (nScrollPos - gpCharSelScrollbar) * 2;
     if (g_nCharSelNavigationIndex < 0) {
       g_nCharSelNavigationIndex = 0;
     }
@@ -1498,7 +1497,7 @@ BOOL __stdcall MAINMENU_CharSelScrollbarCallback(D2ControlStrc * pControl) {
       g_nCharSelNavigationIndex = D2Client::CharScreen::TotalCurrentChars - 1;
     }
 
-    gpCharSelScrollbar = iVar1;
+    gpCharSelScrollbar = nScrollPos;
     DRAW_LocalCharsInSelectionScreen0();
     CHARSEL_UpdateSelectedCharDisplay();
     return 1;
@@ -1945,7 +1944,7 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
     uint16_t* szText;
     int nRealmCount;
     char* szRealmName;
-    bool nArg2;
+    bool bIndent;
     int32_t nNameCmpResult;
     int nRealmIndex;
     if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
@@ -1970,10 +1969,10 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
       }
 
       nRealmIndex = 0;
-      nArg2 = false;
+      bIndent = false;
       nNameCmpResult = 0;
       szText = D2Lang::StrTable::strtable::GetLocaleString(0x2b31);
-      D2Win::Src::D2WinTextBox::SetText(gpCtlRealmSelectionLabel, szText, nNameCmpResult, nArg2, nRealmIndex);
+      D2Win::Src::D2WinTextBox::SetText(gpCtlRealmSelectionLabel, szText, nNameCmpResult, bIndent, nRealmIndex);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLinePadding(gpControlRealmSelect, -6, 0);
       nRealmIndex = 0;
       while (true) {
@@ -2145,9 +2144,9 @@ void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int
 BOOL __stdcall CHARSEL_OnPressPumpRealmCharListLoad(D2ControlMsg * pControlMsg) {
     char* szText;
     uint32_t nMcpThreadStatus;
-    int iVar1;
+    int nSendResult;
     int32_t nStatusCode;
-    bool bVar2;
+    bool bShowStatus;
     switch (gnCharSelBNetLoadState) {
       case 1:
         {
@@ -2166,14 +2165,14 @@ BOOL __stdcall CHARSEL_OnPressPumpRealmCharListLoad(D2ControlMsg * pControlMsg) 
           CHARSEL_ShowWaitTimeout();
           nMcpThreadStatus = MainMenus::MAINMENU_PollMCPThreadStatus();
           if (nMcpThreadStatus) {
-            bVar2 = nMcpThreadStatus == 2;
+            bShowStatus = nMcpThreadStatus == 2;
           } else {
             D2MCPClient::McpConnect::CopyCharListToGlobal(nullptr, 0);
             gnCharSelBNetLoadState = 3;
-            iVar1 = D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x19_CharList2();
-            bVar2 = !iVar1;
+            nSendResult = D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x19_CharList2();
+            bShowStatus = !nSendResult;
           }
-          if (bVar2) {
+          if (bShowStatus) {
             nStatusCode = D2MCPClient::McpConnect::GetD2GSJoinResult();
             CHARSEL_SetStatusMessage(nStatusCode);
           }
@@ -2474,12 +2473,12 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
 }
 
 void StaticInit_6ca940() {
-    int iVar1 = 0x380;
-    uint16_t* pWVar2 = pBetaRealmNames[0];
-    for (; iVar1; iVar1--) {
-      pWVar2[0] = L'\0';
-      pWVar2[1] = L'\0';
-      pWVar2 += 2;
+    int nCount = 0x380;
+    uint16_t* pwCursor = pBetaRealmNames[0];
+    for (; nCount; nCount--) {
+      pwCursor[0] = L'\0';
+      pwCursor[1] = L'\0';
+      pwCursor += 2;
     }
 }
 

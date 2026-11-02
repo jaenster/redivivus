@@ -1,0 +1,157 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Logging.cpp",
+  "functions": [
+    {
+      "name": "MISC_SafeStrncpy",
+      "address": "00624740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624740"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "MISC_SafeStrncpy",
+        "SStrPrintf"
+      ],
+      "usedTypes": [
+        "_SYSTEMTIME"
+      ]
+    },
+    {
+      "name": "StoreLogging",
+      "address": "00624780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624780"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "StoreLogging",
+        "SStrPrintf",
+        "SStrVPrintf",
+        "fwrite",
+        "fflush",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "FILE",
+        "SYSTEMTIME",
+        "uint32_t",
+        "va_list"
+      ]
+    },
+    {
+      "name": "LOGGING_FilePrintf",
+      "address": "006248b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006248b0"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "LOGGING_FilePrintf",
+        "StoreLogging"
+      ],
+      "usedTypes": [
+        "FILE",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LOGGING_LogLine",
+      "address": "006248e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006248e0"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "LOGGING_LogLine",
+        "StoreLogging"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StoreGameLogging",
+      "address": "00624930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624930"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "StoreGameLogging",
+        "SStrPrintf",
+        "SStrVPrintf",
+        "fwrite",
+        "fflush",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LOGGING_OpenLogFile",
+      "address": "00624ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624ac0"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "LOGGING_OpenLogFile",
+        "fopen",
+        "LOGGING_LogLine"
+      ]
+    },
+    {
+      "name": "CloseLogging",
+      "address": "00624b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624b20"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "CloseLogging",
+        "fclose"
+      ]
+    },
+    {
+      "name": "STATLIST_BinarySearchStatById",
+      "address": "00624b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624b90"
+        }
+      ],
+      "namespace": "D2Common::Logging::Logging",
+      "calledFunctions": [
+        "STATLIST_BinarySearchStatById"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

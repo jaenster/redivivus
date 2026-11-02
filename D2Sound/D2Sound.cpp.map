@@ -1,0 +1,226 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Sound/D2Sound.cpp",
+  "functions": [
+    {
+      "name": "SOUND_DetectLegacySoundDrivers",
+      "address": "00513a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513a20"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_DetectLegacySoundDrivers"
+      ]
+    },
+    {
+      "name": "SOUND_GetLanguageCode",
+      "address": "00513ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513ae0"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_GetLanguageCode"
+      ]
+    },
+    {
+      "name": "SOUND_GetSpeakerConfigFlag",
+      "address": "00513b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513b50"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_GetSpeakerConfigFlag"
+      ],
+      "usedTypes": [
+        "IDirectSound"
+      ]
+    },
+    {
+      "name": "SOUND_GetDirectSoundInitializedFlag",
+      "address": "00513b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513b60"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_GetDirectSoundInitializedFlag"
+      ]
+    },
+    {
+      "name": "SOUND_GetSound3DFlag",
+      "address": "00513b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513b70"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_GetSound3DFlag"
+      ]
+    },
+    {
+      "name": "SOUND_GetSoundQualityFlag",
+      "address": "00513b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513b90"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_GetSoundQualityFlag"
+      ]
+    },
+    {
+      "name": "SOUND_GetEAXEnabledFlag",
+      "address": "00513ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513ba0"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_GetEAXEnabledFlag"
+      ]
+    },
+    {
+      "name": "SOUND_GetHardwareAccelerationFlag",
+      "address": "00513bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513bb0"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_GetHardwareAccelerationFlag"
+      ]
+    },
+    {
+      "name": "SOUND_ToggleEAXEnvironmentPreset",
+      "address": "00513bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513bc0"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_ToggleEAXEnvironmentPreset"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SOUND_GetDirectSoundErrorString",
+      "address": "00513ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00513ed0"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUND_GetDirectSoundErrorString"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_WriteToBuffer",
+      "address": "00515180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515180"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUNDSMP_WriteToBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_ClearBuffer",
+      "address": "00515300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515300"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUNDSMP_ClearBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "IDirectSoundBuffer",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_CreateSoundBuffer",
+      "address": "005153c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005153c0"
+        }
+      ],
+      "namespace": "D2Sound",
+      "calledFunctions": [
+        "SOUNDSMP_CreateSoundBuffer",
+        "SOUNDSMP_InitWaveFormat",
+        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetSound3DFlag",
+        "SOUND_GetSoundQualityFlag"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "DSBUFFERDESC",
+        "IDirectSound",
+        "IKsPropertySet *",
+        "WAVEFORMATEX",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

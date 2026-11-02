@@ -215,9 +215,9 @@ uint8_t __stdcall CHAT_CheckIMELanguage() {
     return 1;
 }
 
-void __stdcall CHAT_ResetIMEState(int32_t nParam) {
-    *(uint32_t*)(nParam + 0x18) = 1;
-    *(uint32_t*)(nParam + 0x1c) = 0;
+void __stdcall CHAT_ResetIMEState(int32_t pMsg) {
+    *(uint32_t*)(pMsg + 0x18) = 1;
+    *(uint32_t*)(pMsg + 0x1c) = 0;
 }
 
 void __stdcall CHAT_InitIME() {
@@ -661,8 +661,8 @@ void __stdcall DRAW_UI_ChatInput() {
 
 void __stdcall CHAT_RestoreFromHistory() {
     int i;
-    int iVar1 = gnChatHistoryScrollIndex * 0x202;
-    uint16_t* pwSrc = (uint16_t*)(gaChatHistoryBuffer + iVar1);
+    int nHistoryOffset = gnChatHistoryScrollIndex * 0x202;
+    uint16_t* pwSrc = (uint16_t*)(gaChatHistoryBuffer + nHistoryOffset);
     uint16_t* ppwDst = gwszChatInputText;
     for (i = 0x80; i; i--) {
       *(uint32_t*)ppwDst = *(uint32_t*)pwSrc;
@@ -671,7 +671,7 @@ void __stdcall CHAT_RestoreFromHistory() {
     }
 
     *ppwDst = *pwSrc;
-    gnChatInputTextCursorPosition = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)(gaChatHistoryBuffer + iVar1));
+    gnChatInputTextCursorPosition = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)(gaChatHistoryBuffer + nHistoryOffset));
 }
 
 static void __fastcall CHAT_AddToHistory(uint16_t * pwSrc) {
@@ -804,8 +804,8 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
     } while (true);
 }
 
-void __stdcall CHAT_CheckChatboxBounds(int32_t nParam) {
-    if (!((int)(uint32_t)*(uint16_t*)(nParam + 0xe) > ScreenSizeY - 0x31)) {
+void __stdcall CHAT_CheckChatboxBounds(int32_t pMsg) {
+    if (!((int)(uint32_t)*(uint16_t*)(pMsg + 0xe) > ScreenSizeY - 0x31)) {
       return;
     }
 
@@ -911,7 +911,7 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     uint16_t wszMessageW[340];
     uint16_t wszPrefixW[340];
     char aHeaderBuffer[14];
-    int iStack_8;
+    int nMessageType;
     char cScanChar;
     uint16_t* pwszSenderLine;
     D2BNetClientCallbacksStrc* pCallbacks;
@@ -921,11 +921,11 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     }
 
     int nResult;
-    nResult = pCallbacks->pfnDequeueMessage(&iStack_8, aMessageBuffer);
+    nResult = pCallbacks->pfnDequeueMessage(&nMessageType, aMessageBuffer);
     if (!nResult) {
       return;
     }
-    if (iStack_8) {
+    if (nMessageType) {
       return;
     }
 

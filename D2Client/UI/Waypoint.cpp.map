@@ -1,0 +1,368 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Waypoint.cpp",
+  "functions": [
+    {
+      "name": "WAYPOINT_GetActIndexFromMouse",
+      "address": "0049c490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c490"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "WAYPOINT_GetActIndexFromMouse",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WAYPOINT_GetWaypointIndexFromMouse",
+      "address": "0049c510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c510"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "WAYPOINT_GetWaypointIndexFromMouse"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_WaypointGFXLoad",
+      "address": "0049c580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c580"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "DRAW_UI_WaypointGFXLoad",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion"
+      ]
+    },
+    {
+      "name": "FreeUiImages",
+      "address": "0049c650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c650"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "FreeUiImages",
+        "DC6_FreeAndDelete"
+      ]
+    },
+    {
+      "name": "InitializeWaypoints",
+      "address": "0049c6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c6a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "InitializeWaypoints",
+        "Alloc"
+      ]
+    },
+    {
+      "name": "WAYPOINT_SendClosePacket",
+      "address": "0049c6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c6c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "WAYPOINT_SendClosePacket",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "NET_D2GS_CLIENT_Send_INT_INT"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "WAYPOINT_Shutdown",
+      "address": "0049c700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c700"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "WAYPOINT_Shutdown",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "Free",
+        "FreeUiImages"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Waypoint_SetWaypointArea",
+      "address": "0049c760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c760"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "Waypoint_SetWaypointArea",
+        "GetQuestInfo",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WAYPOINT_PopulateList",
+      "address": "0049c7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c7f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "WAYPOINT_PopulateList",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "FindWaypointIdByLevelId",
+        "CheckWaypoint",
+        "FindLevelIdByWaypointId"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_Waypoint",
+      "address": "0049c9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049c9c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "DRAW_UI_Waypoint",
+        "DRAW_UI_WaypointGFXLoad",
+        "IsPlayerDead",
+        "SetUIFlag",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "SetAndReturnLastFont",
+        "memset",
+        "D2GFX_DrawImage",
+        "GetMouseX",
+        "GetMouseY",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "GetQuestInfo",
+        "GetQuestState",
+        "GetBuySellBtnDC6",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "CLIENT_GetLevelNameByLevelId",
+        "DRAW_text",
+        "GetLocaleString",
+        "DRAW_text0",
+        "D2GFX_DrawSolidRectEx"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GfxDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2WaypointListEntryStrc",
+        "WCHAR",
+        "eD2LevelId",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_WaypointTravel",
+      "address": "0049cec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049cec0"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "INPUT_WaypointTravel",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "SetUIFlag",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "WAYPOINT_SendOpenPacket",
+      "address": "0049cf50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049cf50"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "WAYPOINT_SendOpenPacket",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "NET_D2GS_CLIENT_Send_INT_INT"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "WAYPOINT_Init",
+      "address": "0049cf90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049cf90"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "WAYPOINT_Init",
+        "SetUIFlag",
+        "UI_ResetInputState",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "Waypoint_SetWaypointArea",
+        "WAYPOINT_PopulateList",
+        "CopyWaypointBits"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INPUT_WaypointMouseUp",
+      "address": "0049d010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d010"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "INPUT_WaypointMouseUp",
+        "WAYPOINT_IsMouseInMiniPanel",
+        "WAYPOINT_GetWaypointIndexFromMouse",
+        "SMsgBreakHandlerChain",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "WAYPOINT_SendClosePacket",
+        "SetUIFlag",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_WaypointMouseDown",
+      "address": "0049d160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d160"
+        }
+      ],
+      "namespace": "D2Client::UI::Waypoint",
+      "calledFunctions": [
+        "INPUT_WaypointMouseDown",
+        "WAYPOINT_IsMouseInMiniPanel",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "SetUIFlag",
+        "WAYPOINT_GetActIndexFromMouse",
+        "SOUND_PlaySound",
+        "Waypoint_SetWaypointArea",
+        "WAYPOINT_PopulateList",
+        "SMsgBreakHandlerChain",
+        "WAYPOINT_GetWaypointIndexFromMouse"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

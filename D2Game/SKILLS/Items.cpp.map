@@ -1,0 +1,769 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/SKILLS/Items.cpp",
+  "functions": [
+    {
+      "name": "SKILLITEMS_SetDispatchTableEntry",
+      "address": "005c0d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0d00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "SKILLITEMS_SetDispatchTableEntry"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLITEMS_GetDispatchTableRange",
+      "address": "005c0d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0d20"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "SKILLITEMS_GetDispatchTableRange"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLITEMS_ApplyPercentWithMinimum",
+      "address": "005c0d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0d40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "SKILLITEMS_ApplyPercentWithMinimum"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollStaffModSkills",
+      "address": "005c0d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0d70"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "STATLIST_AddStatValue",
+        "ITEMMOD_RollStaffModSkills",
+        "GetItemSeed",
+        "GetStatList",
+        "GetGUID",
+        "GetMemPool",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SeedStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STAFFMOD_RollStaffModSkills",
+      "address": "005c0f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0f90"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "STAFFMOD_RollStaffModSkills",
+        "GetItemSeed",
+        "ITEM_GetItemData_wItemVersion",
+        "GetItemQuality",
+        "ITEMS_IsA",
+        "GetStatList",
+        "GetGUID",
+        "GetMemPool",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SeedStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StaffMod",
+      "address": "005c1260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c1260"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "StaffMod",
+        "ITEM_GetTxtItemTypes_staffmods",
+        "AmountOfSkillsByClassId",
+        "SKILLS_GetClassSkillByIndex",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_RollStaffModSkills",
+        "STAFFMOD_RollStaffModSkills"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollMagicAffixLegacy",
+      "address": "005c12f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c12f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_RollMagicAffixLegacy",
+        "TXT_MagicAffixes_GetTableInfo",
+        "GetItemSeed",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEM_GetItemData_nItemLevel",
+        "ITEMMOD_CanApplyAutomod",
+        "RollBetweenMinAndMax",
+        "ApplyRuneAndGemStats"
+      ],
+      "usedTypes": [
+        "D2MagicAffixTableStrc",
+        "D2MagicAffixTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HasSufixOrPrefix",
+      "address": "005c1500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c1500"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "HasSufixOrPrefix",
+        "GetMagicPrefix",
+        "TXT_magicaffixes_GetLine",
+        "GetMagicSuffix"
+      ],
+      "usedTypes": [
+        "D2MagicAffixTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollMagicAffix",
+      "address": "005c1560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c1560"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_RollMagicAffix",
+        "TXT_MagicAffixes_GetTableInfo",
+        "GetItemSeed",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEM_GetItemsTxt_nLevel",
+        "ITEM_GetItemData_nItemLevel",
+        "TXT_Items_GetLine",
+        "GetItemQuality",
+        "ITEMMOD_CanApplyAutomod",
+        "TXT_ItemTypes_GetClass",
+        "HasSufixOrPrefix",
+        "SKILLITEMS_SetDispatchTableEntry",
+        "RollBetweenMinAndMax",
+        "ApplyRuneAndGemStats"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2MagicAffixTableStrc",
+        "D2MagicAffixTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollMagicAffixVersioned",
+      "address": "005c18e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c18e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_RollMagicAffixLegacy",
+        "ITEMMOD_RollMagicAffix",
+        "ITEMMOD_RollMagicAffixVersioned",
+        "ITEM_GetItemData_wItemVersion"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollMagicAffixVersionedEx",
+      "address": "005c1940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c1940"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_RollMagicAffix",
+        "ITEMMOD_RollMagicAffixLegacy",
+        "ITEMMOD_RollMagicAffixVersionedEx",
+        "ITEM_GetItemData_wItemVersion"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GetMaxAffixGroupClassic",
+      "address": "005c19a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c19a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_GetMaxAffixGroupClassic",
+        "TXT_RareAffixes_GetTableInfo",
+        "ITEMMOD_CanApplyAffix",
+        "GetItemSeed",
+        "RollBetweenMinAndMax"
+      ],
+      "usedTypes": [
+        "D2RareAffixTableStrc",
+        "D2RareAffixTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetMaxToRoll",
+      "address": "005c1ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c1ab0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "GetMaxToRoll",
+        "TXT_RareAffixes_GetTableInfo",
+        "ITEMMOD_CanApplyAffix",
+        "GetItemSeed",
+        "RollBetweenMinAndMax"
+      ],
+      "usedTypes": [
+        "D2RareAffixTableStrc",
+        "D2RareAffixTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_SelectMagicAffixVersioned",
+      "address": "005c1bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c1bc0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_SelectMagicAffixVersioned",
+        "ITEM_GetItemData_wItemVersion",
+        "GetMaxToRoll",
+        "ITEMMOD_GetMaxAffixGroupClassic"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GenerateRareAffixes",
+      "address": "005c1bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c1bf0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_GenerateRareAffixes",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_GetMaxAffixGroupClassic",
+        "GetMaxToRoll",
+        "SetRarePrefix",
+        "SetRareSuffix",
+        "GetItemSeed",
+        "ITEM_GetItemData_wType",
+        "RollBetweenMinAndMax",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEMMOD_RollMagicAffix",
+        "SetMagicSuffix",
+        "SetMagixPrefix",
+        "ITEM_EditItemData_eItemFlag",
+        "GetMagicPrefix",
+        "TXT_magicaffixes_GetLine",
+        "ApplyRuneAndGemStats",
+        "GetMagicSuffix",
+        "StaffMod"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2MagicAffixTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RollPrefixes",
+      "address": "005c1e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c1e80"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "RollPrefixes",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_GetMaxAffixGroupClassic",
+        "GetMaxToRoll",
+        "SetRarePrefix",
+        "SetRareSuffix",
+        "GetItemSeed",
+        "ITEM_GetItemData_wType",
+        "RollBetweenMinAndMax",
+        "ITEMMOD_RollMagicAffixLegacy",
+        "ITEMMOD_RollMagicAffix",
+        "GetMagicSuffix",
+        "TXT_magicaffixes_GetLine",
+        "SetMagicSuffix",
+        "GetMagicPrefix",
+        "SetMagixPrefix",
+        "ITEM_EditItemData_eItemFlag",
+        "ApplyRuneAndGemStats",
+        "StaffMod"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2MagicAffixTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RollingItem",
+      "address": "005c21a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c21a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "RollingItem",
+        "ITEM_GetTxtItemTypes_rare",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_GenerateRareAffixes",
+        "RollPrefixes"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollRareAffixes",
+      "address": "005c21d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c21d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_RollRareAffixes",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_GetMaxAffixGroupClassic",
+        "GetMaxToRoll",
+        "SetRarePrefix",
+        "SetRareSuffix",
+        "GetItemSeed",
+        "ITEM_EditItemData_eItemFlag",
+        "GetMagicPrefix",
+        "TXT_magicaffixes_GetLine",
+        "ApplyRuneAndGemStats",
+        "GetMagicSuffix",
+        "StaffMod",
+        "ITEMMOD_RollMagicAffixLegacy",
+        "ITEMMOD_RollMagicAffix",
+        "SetMagicSuffix",
+        "SetMagixPrefix"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2MagicAffixTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GetScrollBookIndex",
+      "address": "005c2540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2540"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_GetScrollBookIndex",
+        "TXT_Books_GetTableInfo",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2BooksTableStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GenerateSetItem",
+      "address": "005c25c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c25c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ApplyRuneAndGemStats",
+        "ITEMMOD_GenerateSetItem",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEM_GetItemData_nItemLevel",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEM_EditItemData_eItemFlag",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GenerateUniqueItem",
+      "address": "005c2740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2740"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_GenerateUniqueItem",
+        "TXT_Items_GetLine",
+        "GetItemSeed",
+        "GetSeed_nSeedLow",
+        "ITEM_GetItemData_wItemVersion",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEM_EditItemData_eItemFlag",
+        "ApplyRuneAndGemStats",
+        "InitSeed_Param_666"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GenerateSetOrUniqueVersioned",
+      "address": "005c2940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2940"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_GenerateSetOrUniqueVersioned",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_GenerateSetItem",
+        "ITEMMOD_GenerateUniqueItem"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_GenerateQualityItem",
+      "address": "005c2970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2970"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "StaffMod",
+        "ITEMMOD_GenerateQualityItem",
+        "TXT_QualityItems_GetTableInfo",
+        "TXT_Items_GetLine",
+        "ITEM_GetTxtItemTypes_throwable",
+        "GetItemSeed",
+        "TXT_QualityItems_GetLine",
+        "ITEMMOD_MatchesRepairType",
+        "ITEM_SetItemData_nFileIndex",
+        "ApplyRuneAndGemStats",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2MagicAffixTxt",
+        "D2QualityItemsTableStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_RollSuperiorQualityMods",
+      "address": "005c2ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2ad0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_GenerateQualityItem",
+        "ITEMMOD_RollSuperiorQualityMods",
+        "ITEM_GetItemData_wItemVersion"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyCrudeQuality",
+      "address": "005c2af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2af0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_ApplyCrudeQuality",
+        "TXT_LowQualityItems_GetTableInfo",
+        "TXT_Items_GetLine",
+        "GetItemSeed",
+        "UNIT_GetModuloFromSeed",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEM_CheckIfItemHasDurability",
+        "RANDOM_RandomNumberSelector",
+        "STATLIST_SetUnitStat",
+        "ITEMS_IsA",
+        "SERVER_GetUnitStat",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetMinimalStatValueShifted",
+        "SKILLITEMS_ApplyPercentWithMinimum"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2LowQualityItemsTableStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyCrudeQualityClassic",
+      "address": "005c2d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2d40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_ApplyCrudeQualityClassic",
+        "TXT_LowQualityItems_GetTableInfo",
+        "TXT_Items_GetLine",
+        "GetItemSeed",
+        "UNIT_GetModuloFromSeed",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEM_CheckIfItemHasDurability",
+        "RANDOM_RandomNumberSelector",
+        "STATLIST_SetUnitStat",
+        "ITEMS_IsA",
+        "SERVER_GetUnitStat",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetMinimalStatValueShifted",
+        "SKILLITEMS_ApplyPercentWithMinimum",
+        "StaffMod"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2LowQualityItemsTableStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMOD_ApplyCrudeQualityVersioned",
+      "address": "005c2fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c2fb0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::Items",
+      "calledFunctions": [
+        "ITEMMOD_ApplyCrudeQualityVersioned",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMMOD_ApplyCrudeQualityClassic",
+        "ITEMMOD_ApplyCrudeQuality"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    }
+  ]
+}

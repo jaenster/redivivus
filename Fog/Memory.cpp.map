@@ -1,0 +1,591 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Memory.cpp",
+  "functions": [
+    {
+      "name": "OutOfMemoryHandler",
+      "address": "00409020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409020"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "OutOfMemoryHandler",
+        "vsprintf",
+        "LOGMANAGER_TraceToModuleLog",
+        "SMemFormat64BitWithSeparators",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "_MEMORYSTATUS",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ComputeSizeClassIndex",
+      "address": "004091b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004091b0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "ComputeSizeClassIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FindFirstFreeBit",
+      "address": "00409220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409220"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "FindFirstFreeBit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FindFreeSlotInBitmap",
+      "address": "00409240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409240"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "FindFreeSlotInBitmap",
+        "FindFirstFreeBit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InsertBlockIntoSortedArray",
+      "address": "00409370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409370"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "InsertBlockIntoSortedArray",
+        "realloc",
+        "OutOfMemoryHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memmove"
+      ],
+      "usedTypes": [
+        "D2PoolBlockEntryStrc",
+        "D2PoolBlockStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveBlockFromSortedArray",
+      "address": "00409490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409490"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "RemoveBlockFromSortedArray",
+        "memmove",
+        "realloc",
+        "OutOfMemoryHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2PoolBlockEntryStrc",
+        "D2PoolBlockStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AllocatePoolBlock",
+      "address": "004095e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004095e0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "AllocatePoolBlock",
+        "realloc",
+        "OutOfMemoryHandler",
+        "malloc",
+        "memset",
+        "InsertBlockIntoSortedArray",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolBlockEntryStrc",
+        "D2PoolBlockStrc",
+        "D2PoolManagerStrc",
+        "D2PoolStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindOrCreateBlockWithFreeSlots",
+      "address": "00409700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409700"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "FindOrCreateBlockWithFreeSlots",
+        "AllocatePoolBlock",
+        "FindFreeSlotInBitmap"
+      ],
+      "usedTypes": [
+        "D2PoolBlockStrc",
+        "D2PoolBlockStrc *",
+        "D2PoolManagerStrc",
+        "D2PoolStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "POOL_AllocOverflowBlock",
+      "address": "00409770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409770"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "POOL_AllocOverflowBlock",
+        "malloc",
+        "OutOfMemoryHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeTrackedAllocation",
+      "address": "00409810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409810"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "FreeTrackedAllocation",
+        "free"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ReallocTrackedAllocation",
+      "address": "004098b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004098b0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "ReallocTrackedAllocation",
+        "realloc",
+        "OutOfMemoryHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindBlockContainingAddress",
+      "address": "004099d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004099d0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "FindBlockContainingAddress"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2PoolBlockEntryStrc",
+        "D2PoolBlockStrc",
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PromoteBlockToFreeListHead",
+      "address": "00409a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409a60"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "PromoteBlockToFreeListHead"
+      ],
+      "usedTypes": [
+        "D2PoolBlockStrc",
+        "D2PoolStrc"
+      ]
+    },
+    {
+      "name": "Free",
+      "address": "00409ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409ab0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "Free",
+        "FindBlockContainingAddress",
+        "FreeTrackedAllocation",
+        "PromoteBlockToFreeListHead"
+      ],
+      "usedTypes": [
+        "D2PoolBlockStrc",
+        "D2PoolManagerStrc",
+        "D2PoolStrc",
+        "int32_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "InitializeMemoryManagers",
+      "address": "00409b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409b80"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "InitializeMemoryManagers",
+        "RemoveBlockFromSortedArray",
+        "free"
+      ],
+      "usedTypes": [
+        "D2PoolBlockStrc",
+        "D2PoolManagerStrc",
+        "D2PoolStrc"
+      ]
+    },
+    {
+      "name": "FreeMemoryPool",
+      "address": "00409c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409c80"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "FreeMemoryPool",
+        "free",
+        "memset"
+      ],
+      "usedTypes": [
+        "BYTE *",
+        "D2PoolBlockStrc",
+        "D2PoolManagerStrc",
+        "D2PoolStrc"
+      ]
+    },
+    {
+      "name": "InitializePoolSystem",
+      "address": "00409dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409dd0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "InitializePoolSystem",
+        "memset",
+        "OutOfMemoryHandler",
+        "memcpy",
+        "SStrCopy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2PoolManagerStrc",
+        "D2PoolManagerStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetPoolIdForMemoryManager",
+      "address": "00409ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00409ff0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "SetPoolIdForMemoryManager"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "getDwMemory",
+      "address": "0040a040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a040"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "getDwMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "Alloc",
+      "address": "0040a080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a080"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "Alloc",
+        "InitializePoolSystem",
+        "POOL_AllocOverflowBlock",
+        "ComputeSizeClassIndex",
+        "FindOrCreateBlockWithFreeSlots",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolBlockStrc",
+        "D2PoolManagerStrc",
+        "D2PoolStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReAlloc",
+      "address": "0040a1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040a1f0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "ReAlloc",
+        "Alloc",
+        "FindBlockContainingAddress",
+        "ReallocTrackedAllocation",
+        "memcpy",
+        "Free",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocClientMemory",
+      "address": "0040b380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b380"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "AllocClientMemory",
+        "Alloc",
+        "FOG_ErrorHandler"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeClientMemory",
+      "address": "0040b3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b3c0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "FreeClientMemory",
+        "Free"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ReAllocClientMemory",
+      "address": "0040b3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b3f0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "ReAllocClientMemory",
+        "ReAlloc",
+        "FOG_ErrorHandler"
+      ]
+    },
+    {
+      "name": "AllocServerMemory",
+      "address": "0040b430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b430"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "AllocServerMemory",
+        "Alloc",
+        "FOG_ErrorHandler"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeServerMemory",
+      "address": "0040b480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b480"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "FreeServerMemory",
+        "Free"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ReAllocServerMemory",
+      "address": "0040b4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b4b0"
+        }
+      ],
+      "namespace": "Fog::Memory",
+      "calledFunctions": [
+        "ReAllocServerMemory",
+        "ReAlloc",
+        "FOG_ErrorHandler"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc"
+      ]
+    }
+  ]
+}

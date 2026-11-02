@@ -41,7 +41,7 @@ void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pL
       exit(-1);
     }
 
-    int iStack_10 = 0;
+    int nWallLayer = 0;
     if (pDrlgFile->nWallLayers > 0) {
       pDStack_8 = pLvlSubTxtRecord->pTileTypeGrid;
       nWallLayerIdx = 0x1c;
@@ -50,9 +50,9 @@ void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pL
         DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, pDStack_8, *(eD2GridCellFlags**)((int)(*ppDrlgFile)->pTileTypeLayer + nWallLayerIdx - 0x1c), &gridInitCtx, nGridWidth);
         pDrlgFile = *ppDrlgFile;
         pDStack_8++;
-        iStack_10++;
+        nWallLayer++;
         nWallLayerIdx += 4;
-      } while (iStack_10 < pDrlgFile->nWallLayers);
+      } while (nWallLayer < pDrlgFile->nWallLayers);
     }
 
     nWallLayerIdx = 1;
@@ -74,20 +74,20 @@ void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pL
     DrlgGrid::DRLGGRID_InitGridFromTileData(nullptr, &pLvlSubTxtRecord->pShadowGrid, (eD2GridCellFlags*)(*ppDrlgFile)->pShadowLayer, &gridInitCtx, nGridWidth);
 }
 
-void __fastcall AddSecondaryBorder(D2UnkOutdoorStrc * pUnkOutdoor) {
+void __fastcall AddSecondaryBorder(D2UnkOutdoorStrc * pOutdoorCtx) {
     D2LvlSubTxt* pDVar1;
-    D2LvlSubTxt* pLvlSubTxtRecord = DATATBLS::LvlTbls::TXT_LvlSub_GetLineFromSubType(pUnkOutdoor->nLvlSubId);
-    if (pLvlSubTxtRecord->Type != pUnkOutdoor->nLvlSubId) {
+    D2LvlSubTxt* pLvlSubTxtRecord = DATATBLS::LvlTbls::TXT_LvlSub_GetLineFromSubType(pOutdoorCtx->nLvlSubId);
+    if (pLvlSubTxtRecord->Type != pOutdoorCtx->nLvlSubId) {
       return;
     }
 
     do {
-      D2PoolManagerStrc* pMemory = pUnkOutdoor->pLevel->pDrlg->pDS1MemPool;
+      D2PoolManagerStrc* pMemory = pOutdoorCtx->pLevel->pDrlg->pDS1MemPool;
       InitializeDrlgFile(pMemory, pLvlSubTxtRecord);
-      DRLGOUTDOOR_ApplySubstitutionGroup(pUnkOutdoor, pLvlSubTxtRecord);
+      DRLGOUTDOOR_ApplySubstitutionGroup(pOutdoorCtx, pLvlSubTxtRecord);
       pDVar1 = pLvlSubTxtRecord + 1;
       pLvlSubTxtRecord++;
-    } while (pDVar1->Type == pUnkOutdoor->nLvlSubId);
+    } while (pDVar1->Type == pOutdoorCtx->nLvlSubId);
 }
 
 } // namespace D2Common::Drlg::TileSub

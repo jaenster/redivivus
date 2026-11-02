@@ -1,0 +1,2453 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/INVENTORY/Inventory.cpp",
+  "functions": [
+    {
+      "name": "INVENTORY_GetItemInventoryNode",
+      "address": "0063a7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a7e0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetItemInventoryNode"
+      ],
+      "usedTypes": [
+        "D2ItemInventoryNodeStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_UnlinkItemFromList",
+      "address": "0063a810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a810"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_UnlinkItemFromList"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *"
+      ]
+    },
+    {
+      "name": "INVENTORY_IsGridRectEmpty",
+      "address": "0063a8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a8a0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_IsGridRectEmpty"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FillGridRect",
+      "address": "0063a910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a910"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FillGridRect"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2UnitStrc *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_RemoveItemFromGrid",
+      "address": "0063a970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063a970"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_RemoveItemFromGrid",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "ITEM_GetItemsTxt_nWidthAndHeight"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_RemoveItemFromInventory",
+      "address": "0063aaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063aaf0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_RemoveItemFromInventory",
+        "INVENTORY_RemoveItemFromGrid",
+        "INVENTORY_UnlinkItemFromList",
+        "ITEM_SetItemData_nPlayerGUID",
+        "STATLIST_RemoveFromOwnerAndRecalc"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemInventoryNodeStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2InventoryGrid"
+      ]
+    },
+    {
+      "name": "STRUCT_CreatePlayerInventory",
+      "address": "0063abd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063abd0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "STRUCT_CreatePlayerInventory",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STRUCT_FreeInventory",
+      "address": "0063ac40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ac40"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "STRUCT_FreeInventory",
+        "INVENTORY_RemoveItemFromInventory",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2InventoryGridStrc",
+        "D2InventoryStrc",
+        "D2InventoryToBeUpdatedStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_CheckDoItemBelongToInventory",
+      "address": "0063ad50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ad50"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CheckDoItemBelongToInventory"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18 *"
+      ]
+    },
+    {
+      "name": "ItemBelongsToInventoryOfPlayer",
+      "address": "0063ad90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ad90"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_CheckDoItemBelongToInventory",
+        "INVENTORY_RemoveItemFromInventory"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ReinitializeInventoryGrid",
+      "address": "0063add0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063add0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "ReinitializeInventoryGrid",
+        "AllocServerMemory",
+        "memset",
+        "ReAllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventorySizesStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc *",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_AppendItemToList",
+      "address": "0063af20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063af20"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_AppendItemToList"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_InsertItemInPageList",
+      "address": "0063af70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063af70"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_InsertItemInPageList"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_PlaceItemInGrid",
+      "address": "0063afd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063afd0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_PlaceItemInGrid",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "INVENTORY_IsGridRectEmpty",
+        "UNITS_GetRoom",
+        "CheckFlagWithMask",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "INVENTORY_RemoveItemFromInventory",
+        "INVENTORY_InsertItemInPageList",
+        "INVENTORY_FillGridRect",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "ITEM_SetItemData_nPlayerGUID",
+        "ITEM_SetItemData_ePage"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventorySizesStrc",
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18 *",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PutItemInInventory",
+      "address": "0063b210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b210"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "PutItemInInventory",
+        "INVENTORY_GetItemInventoryNode",
+        "INVENTORY_RemoveItemFromInventory",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "ITEM_SetItemData_nPlayerGUID"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemInventoryNodeStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetFirstItem",
+      "address": "0063b2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b2c0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetFirstItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetLastItem",
+      "address": "0063b2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b2e0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetLastItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_CheckItemFitsInGrid",
+      "address": "0063b300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b300"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CheckItemFitsInGrid",
+        "INVENTORY_IsGridRectEmpty"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CalcGridPlacementScore",
+      "address": "0063b340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b340"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CalcGridPlacementScore"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2UnitStrc *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindBestPlacementWithScore",
+      "address": "0063b490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b490"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindBestGridPosition",
+        "INVENTORY_FindBestPlacementWithScore",
+        "INVENTORY_IsGridRectEmpty",
+        "INVENTORY_CalcGridPlacementScore"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "int *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindFirstEmptySlot",
+      "address": "0063b540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b540"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindFirstEmptySlot",
+        "INVENTORY_IsGridRectEmpty"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindPlacementSlot",
+      "address": "0063b5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b5e0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindPlacementSlot",
+        "INVENTORY_FindBestPlacementWithScore",
+        "INVENTORY_FindFirstEmptySlot"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "int *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindBestGridPosition",
+      "address": "0063b620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b620"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindBestGridPosition",
+        "INVENTORY_IsGridRectEmpty",
+        "INVENTORY_CalcGridPlacementScore"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "int *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindBestGridPositionNonPlayer",
+      "address": "0063b6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b6e0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindBestGridPositionNonPlayer",
+        "INVENTORY_IsGridRectEmpty"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2UnitStrc *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindGridPositionByOwner",
+      "address": "0063b790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b790"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindGridPositionByOwner",
+        "INVENTORY_FindBestGridPosition",
+        "INVENTORY_FindBestGridPositionNonPlayer"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "int *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindGridPositionByOwner2",
+      "address": "0063b7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b7d0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindGridPositionByOwner2",
+        "INVENTORY_FindBestGridPosition",
+        "INVENTORY_FindBestGridPositionNonPlayer"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "int *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindGridPositionByOwner3",
+      "address": "0063b810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b810"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindGridPositionByOwner3",
+        "INVENTORY_FindBestGridPosition",
+        "INVENTORY_FindBestGridPositionNonPlayer"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "int *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindItemGridPosition",
+      "address": "0063b850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b850"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindItemGridPosition",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "INVENTORY_FindPlacementSlot",
+        "INVENTORY_FindGridPositionByOwner",
+        "INVENTORY_FindGridPositionByOwner2",
+        "INVENTORY_FindGridPositionByOwner3"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_AutoPlaceItemInGrid",
+      "address": "0063b950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b950"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_AutoPlaceItemInGrid",
+        "INVENTORY_FindItemGridPosition",
+        "INVENTORY_PlaceItemInGrid"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CheckGridCollisions",
+      "address": "0063b9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063b9d0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CheckGridCollisions",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CheckGridOccupancy",
+      "address": "0063bb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bb20"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CheckGridOccupancy",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_PlaceItemAtCoords",
+      "address": "0063bcc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bcc0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_PlaceItemAtCoords",
+        "INVENTORY_PlaceItemInGrid"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UnusedDebug",
+      "address": "0063bcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bcf0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "UnusedDebug"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NullSub",
+      "address": "0063bd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bd00"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "NullSub"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc"
+      ]
+    },
+    {
+      "name": "GetUnitAndXAndY",
+      "address": "0063bd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bd10"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "GetUnitAndXAndY",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetItemAtBodyLoc",
+      "address": "0063bdb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bdb0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetItemAtBodyLoc",
+        "INVENTORY_PlaceItemInGrid"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetItemByGridOffset",
+      "address": "0063bde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bde0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetItemByGridOffset",
+        "ReinitializeInventoryGrid"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryGridStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NullSub_2Arg",
+      "address": "0063be30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063be30"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "NullSub_2Arg"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_HasEquippedWeaponClass",
+      "address": "0063be40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063be40"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_HasEquippedWeaponClass",
+        "ReinitializeInventoryGrid",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "HasWeaponClass"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetEquipedWeapon",
+      "address": "0063bef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bef0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "GetEquipedWeapon",
+        "ReinitializeInventoryGrid",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetPrimaryWeapon",
+      "address": "0063bf90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063bf90"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "GetPrimaryWeapon",
+        "ReinitializeInventoryGrid",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindWornItemByType",
+      "address": "0063c050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c050"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindWornItemByType",
+        "ReinitializeInventoryGrid",
+        "GetEquipedWeapon",
+        "ITEM_GetWeaponAnimClass",
+        "ITEM_GetItemsTxt_bComponent"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_IsItemLocationValid",
+      "address": "0063c110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c110"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_IsItemLocationValid",
+        "GetXPosFromDynamicPathUnit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetItemXPosition",
+      "address": "0063c150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c150"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetItemXPosition",
+        "GetXPosFromDynamicPathUnit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CopyInventoryOfPlayerOrFree",
+      "address": "0063c180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c180"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_RemoveItemFromInventory"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemInventoryNodeStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetHandItem",
+      "address": "0063c1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c1e0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetHandItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindSocketableItemInStash",
+      "address": "0063c200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c200"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindSocketableItemInStash",
+        "GetInventoryPage",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "IsItemSocketable",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxStack"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindSocketableItemInMain",
+      "address": "0063c2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c2f0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindSocketableItemInMain",
+        "ReinitializeInventoryGrid",
+        "IsItemSocketable",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxStack"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindMatchingScrollBook",
+      "address": "0063c3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c3b0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindMatchingScrollBook",
+        "GetInventoryPage",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "ITEM_GetItemData_wType",
+        "GetMagicSuffix",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxStack"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_PlaceItemInBeltSlot",
+      "address": "0063c4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c4c0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_PlaceItemInBeltSlot",
+        "INVENTORY_PlaceItemInGrid"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CanPlaceItemInBelt",
+      "address": "0063c4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c4f0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CanPlaceItemInBelt",
+        "ITEM_GetTxtItemTypes_beltable",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "INVENTORY_PlaceItemInBeltSlot"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_OnBeltChanged_NoOp",
+      "address": "0063c550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c550"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_OnBeltChanged_NoOp"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_CanAutoBeltItem",
+      "address": "0063c560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c560"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CanAutoBeltItem",
+        "TXT_Items_GetLine",
+        "ReinitializeInventoryGrid",
+        "ITEM_CheckIfBothItemsAreSameTypeOfPotions"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindBeltSlotForPotion",
+      "address": "0063c600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c600"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindBeltSlotForPotion",
+        "ITEM_GetTxtItemTypes_beltable",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "INVENTORY_GetItemByGridOffset",
+        "GetBeltType",
+        "GetBeltsLine",
+        "ReinitializeInventoryGrid",
+        "ITEM_CheckIfBothItemsAreSameTypeOfPotions",
+        "TXT_Items_GetLine",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BeltsTxt",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_PlacePotionInBelt",
+      "address": "0063c790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c790"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_PlacePotionInBelt",
+        "INVENTORY_FindBeltSlotForPotion",
+        "INVENTORY_PlaceItemInGrid"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetItemInBeltSlot",
+      "address": "0063c7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c7f0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetItemInBeltSlot",
+        "ReinitializeInventoryGrid"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CheckBeltSlotAndGetItem",
+      "address": "0063c830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c830"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CheckBeltSlotAndGetItem",
+        "ReinitializeInventoryGrid",
+        "ITEM_GetTxtItemTypes_beltable",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "TXT_Items_GetLine",
+        "INVENTORY_GetItemInBeltSlot"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetEquippedShield",
+      "address": "0063c8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c8f0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetEquippedShield",
+        "ReinitializeInventoryGrid",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetEquippedWeaponInfo",
+      "address": "0063c9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063c9b0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetEquippedWeaponInfo",
+        "GetEquipedWeapon",
+        "ReinitializeInventoryGrid",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CheckHasArmorEquipped",
+      "address": "0063cab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cab0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CheckHasArmorEquipped",
+        "ReinitializeInventoryGrid",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CanMoveEquippedToPage",
+      "address": "0063cb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cb00"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CanMoveEquippedToPage",
+        "ReinitializeInventoryGrid",
+        "INVENTORY_FindItemGridPosition"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_RemoveAllItems",
+      "address": "0063cb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cb70"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_RemoveAllItems",
+        "INVENTORY_RemoveItemFromInventory"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetUpdates",
+      "address": "0063cbb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cbb0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "GetUpdates"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2InventoryToBeUpdatedStrc"
+      ]
+    },
+    {
+      "name": "FreeUpdatesFromInventory",
+      "address": "0063cbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cbd0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "FreeUpdatesFromInventory",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2InventoryToBeUpdatedStrc"
+      ]
+    },
+    {
+      "name": "SERVER_IsInToBeUpdatedList",
+      "address": "0063cc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cc30"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "SERVER_IsInToBeUpdatedList"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2InventoryToBeUpdatedStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpsertToUpdateList",
+      "address": "0063cc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cc70"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "UpsertToUpdateList",
+        "SERVER_IsInToBeUpdatedList",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2InventoryToBeUpdatedStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetNextUpdate",
+      "address": "0063cd20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cd20"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "GetNextUpdate"
+      ],
+      "usedTypes": [
+        "D2InventoryToBeUpdatedStrc"
+      ]
+    },
+    {
+      "name": "GetUpdatesUUid",
+      "address": "0063cd40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cd40"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "GetUpdatesUUid"
+      ],
+      "usedTypes": [
+        "D2InventoryToBeUpdatedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ItemsInItem",
+      "address": "0063cd60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cd60"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "ITEM_ItemsInItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindItemByType",
+      "address": "0063cd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cd80"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindItemByType",
+        "GetInventoryPage",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "INVENTORY_GetItemInventoryNode",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2ItemInventoryNodeStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindItemOfTypeInMain",
+      "address": "0063ce60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ce60"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindItemOfTypeInMain",
+        "ReinitializeInventoryGrid",
+        "ITEMS_IsA",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindItemByCodeInMain",
+      "address": "0063cf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063cf30"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindItemByCodeInMain",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "ReinitializeInventoryGrid",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_FindItemByCodeInStash",
+      "address": "0063d010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d010"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FindItemByCodeInStash",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "ReinitializeInventoryGrid",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CountSetItemsInMain",
+      "address": "0063d0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d0f0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CountSetItemsInMain",
+        "ReinitializeInventoryGrid",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitDataItemStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_SetOrClearCursorItem",
+      "address": "0063d190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d190"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_SetOrClearCursorItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_UpdatePrimaryWeapon",
+      "address": "0063d1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d1d0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEMS_IsA",
+        "GetBodyLocation",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "GetEquipedWeapon"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_SwapPrimaryWeaponOnRemoval",
+      "address": "0063d2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d2b0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "ITEMS_IsA",
+        "GetBodyLocation",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetWeaponHandedness",
+      "address": "0063d340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d340"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetWeaponHandedness",
+        "ReinitializeInventoryGrid",
+        "IsTwoHanded",
+        "BARBARIAN_CheckItemData_b1or2Handed_isTrue"
+      ],
+      "usedTypes": [
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_SetOwnerGUID",
+      "address": "0063d430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d430"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_SetOwnerGUID"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetCursorItemGUID",
+      "address": "0063d450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d450"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetCursorItemGUID"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_AddCorpse",
+      "address": "0063d470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d470"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_AddCorpse",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2InventoryStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_RemoveCorpse",
+      "address": "0063d4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d4e0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_RemoveCorpse",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2InventoryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetCorpse",
+      "address": "0063d570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d570"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetCorpse"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2InventoryStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_FreeNotifications",
+      "address": "0063d590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d590"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_FreeNotifications",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2InventoryStrc"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetCorpseCount",
+      "address": "0063d5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d5f0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetCorpseCount"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetNextCorpse",
+      "address": "0063d610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d610"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetNextCorpse"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc"
+      ]
+    },
+    {
+      "name": "ROOMCORPSE_GetGUID",
+      "address": "0063d630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d630"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "ROOMCORPSE_GetGUID"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CORPSE_GetMercClassId",
+      "address": "0063d650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d650"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "CORPSE_GetMercClassId"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CORPSE_GetData",
+      "address": "0063d670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d670"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "CORPSE_GetData"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2RoomStrc *"
+      ]
+    },
+    {
+      "name": "ITEM_GetBodyComponents",
+      "address": "0063d690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d690"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "ITEM_GetBodyComponents",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_InitializeItemTypeTable",
+      "address": "0063d710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d710"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_InitializeItemTypeTable",
+        "memset",
+        "TXT_Items_GetSize",
+        "ITEMS_CheckItemTypeEquivalence"
+      ],
+      "usedTypes": [
+        "D2ItemsTableStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetAlternateGfxIndex",
+      "address": "0063d900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d900"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetAlternateGfxIndex",
+        "INVENTORY_InitializeItemTypeTable"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_UpdateCompositeWeaponGfx",
+      "address": "0063d930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063d930"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_UpdateCompositeWeaponGfx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetBodyLocation",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "ITEM_GetItemsTxt_bComponent",
+        "INVENTORY_FindWornItemByType",
+        "TXT_Items_GetLine",
+        "INVENTORY_GetAlternateGfxIndex",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_SetEquippedItemAppearance",
+      "address": "0063da70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063da70"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_SetEquippedItemAppearance",
+        "INVENTORY_FindWornItemByType",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_GetItemsTxt_bComponent",
+        "INVENTORY_GetAlternateGfxIndex",
+        "INVENTORY_UpdateCompositeWeaponGfx",
+        "GetItemColor"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CalculateSwapActionCode",
+      "address": "0063db90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063db90"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CalculateSwapActionCode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CanDualWieldItems",
+      "address": "0063dbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063dbc0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CanDualWieldItems",
+        "ITEM_GetTxtItemTypes_shoots",
+        "ITEMS_IsA",
+        "ITEM_GetTxtItemTypes_quiver",
+        "IsTwoHanded",
+        "BARBARIAN_CheckItemData_b1or2Handed_isTrue",
+        "ValidateClassId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetEquipSwapAction",
+      "address": "0063dd90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063dd90"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetEquipSwapAction",
+        "IsTwoHanded",
+        "INVENTORY_CanDualWieldItems",
+        "IsItemSocketable",
+        "GetInventoryPage",
+        "INVENTORY_CanMoveEquippedToPage"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetEquipActionForBodySlot",
+      "address": "0063de60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063de60"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetEquipActionForBodySlot",
+        "ITEMS_CheckBodyLocationFit",
+        "ITEM_CheckEquipRequirements",
+        "INVENTORY_GetItemByGridOffset",
+        "INVENTORY_GetEquipSwapAction"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "eD2BodyLocDWORD",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_GetNextItem",
+      "address": "0063dfa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063dfa0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetCarriedItem",
+      "address": "0063dfd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063dfd0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "GetCarriedItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEM_GetGUID",
+      "address": "0063e000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e000"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "ITEM_GetGUID"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GetItemData_eD2InventoryGridType",
+      "address": "0063e020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e020"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "ITEM_GetItemData_eD2InventoryGridType"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_IsItemOwnedBy",
+      "address": "0063e070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e070"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_IsItemOwnedBy"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "D2UnknownStructure0x18 *"
+      ]
+    },
+    {
+      "name": "FreeRecursiveInventorysWithChilds",
+      "address": "0063e0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e0b0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "FreeRecursiveInventorysWithChilds",
+        "INVENTORY_RemoveItemFromInventory"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CopyInventory",
+      "address": "0063e100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e100"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "CopyInventory",
+        "GetInventoryPage",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_ReserveGridCells",
+      "address": "0063e1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e1c0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_ReserveGridCells",
+        "GetInventoryPage",
+        "GetGridDimensions",
+        "ReinitializeInventoryGrid",
+        "INVENTORY_FindItemGridPosition",
+        "ITEM_GetItemsTxt_nWidthAndHeight"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryGridInfoStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INVENTORY_CanTransferMercItems",
+      "address": "0063e2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e2e0"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "INVENTORY_CanTransferMercItems",
+        "ITEM_GetContainingInventoryPage",
+        "INVENTORY_ReserveGridCells"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateCopyOfInventoryForTrading",
+      "address": "0063e370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e370"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "CreateCopyOfInventoryForTrading",
+        "AllocServerMemory",
+        "memset",
+        "CopyInventory",
+        "INVENTORY_CanTransferMercItems",
+        "STRUCT_FreeInventory"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetCurrentItemOnBodyLocation",
+      "address": "0063e490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e490"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "GetCurrentItemOnBodyLocation",
+        "INVENTORY_GetWeaponHandedness",
+        "ReinitializeInventoryGrid"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SaveCharAppearance",
+      "address": "0063e510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e510"
+        }
+      ],
+      "namespace": "D2Common::INVENTORY::Inventory",
+      "calledFunctions": [
+        "SaveCharAppearance",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetBodyLocation",
+        "ITEMS_CheckItemTypeEquivalence",
+        "INVENTORY_SetEquippedItemAppearance",
+        "ITEM_GetBodyComponents",
+        "DoesBodyHaveAppearanceColors",
+        "COMPOSIT_GetBodyPartTransform",
+        "TxtGetArmTypeLine",
+        "GetClassId",
+        "INVENTORY_GetAlternateGfxIndex",
+        "GetItemColor"
+      ],
+      "usedTypes": [
+        "D2ArmTypeTxt",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

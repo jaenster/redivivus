@@ -1,0 +1,1695 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/CUnit.cpp",
+  "functions": [
+    {
+      "name": "CLIENT_ClearChangedStatFlags_Thunk",
+      "address": "00463d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463d80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CLIENT_ClearChangedStatFlags_Thunk",
+        "STATLIST_ClearChangedStatFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetGfxInfo",
+      "address": "00463e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463e10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GetGfxInfo"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetGfxSequenceData",
+      "address": "00463e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463e20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SetGfxSequenceData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_SetCofDataFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetGfxSequenceData",
+      "address": "00463e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463e50"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GetGfxSequenceData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_GetCofDataFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetPalShiftIndex",
+      "address": "00463e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463e80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SetPalShiftIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_SetPalShiftIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPalShiftIndex",
+      "address": "00463eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463eb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GetPalShiftIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_GetPalShiftIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WARP_IsPointInClickArea",
+      "address": "00463ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463ee0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "WARP_IsPointInClickArea",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_GetRoom",
+        "DUNGEON_GetLvlWarpTxtForWarpUnit",
+        "GetXPos",
+        "GetYPos",
+        "CoordsMapToScreen"
+      ],
+      "usedTypes": [
+        "D2LvlWarpTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_IsClickInSpriteBounds",
+      "address": "00463fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463fe0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IsClickInSpriteBounds",
+        "GetXPos",
+        "GetYPos",
+        "CoordsMapToScreen"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_CalculateSpriteBounds",
+      "address": "004640a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004640a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_CalculateSpriteBounds",
+        "GFXUTIL_UnitHasAnimMode",
+        "memset",
+        "GetDirection",
+        "DC6_AssignParams",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetDC6OffsetX",
+        "GetTargetX",
+        "GetDC6Width",
+        "GetDC6OffsetY",
+        "GetTargetY",
+        "GetDC6Height",
+        "PARTICLE_GetX",
+        "PARTICLE_GetY",
+        "PARTICLE_GetScreenZ"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2UnitStrc",
+        "DC6Block",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILL_ExecuteSelectProc",
+      "address": "004642b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004642b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SKILL_ExecuteSelectProc"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILL_CheckActiveSkillSelectProc",
+      "address": "00464310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464310"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SKILL_CheckActiveSkillSelectProc",
+        "GetLeftSkill",
+        "GetSkillId",
+        "SKILL_ExecuteSelectProc",
+        "GetRightSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsSelected",
+      "address": "00464370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464370"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "IsSelected",
+        "GetSelectedUnit",
+        "TXT_Objects_GetLine"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_IsPlayerOrMonster",
+      "address": "004643b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004643b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IsPlayerOrMonster",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetTargetByTypeAndGUID",
+      "address": "004643f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004643f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SetTargetByTypeAndGUID",
+        "FindUnit",
+        "SetTargetUnitForDynamicUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FacePlayer",
+      "address": "00464420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464420"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "FacePlayer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetupUpdateFlag",
+        "GetYPos",
+        "GetXPos",
+        "PATH_SetDirectionToTarget"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_TurnPlayerToFaceUnit",
+      "address": "004644e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004644e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CLIENT_TurnPlayerToFaceUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetYPos",
+        "GetXPos",
+        "PATH_SetDirectionToTarget"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_IsSequenceInputReady",
+      "address": "004645b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004645b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SKILL_IsSequenceInputReady",
+        "GetCurrentSkill",
+        "GetSkillsTxt"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PlayerCanBeInterrupted",
+      "address": "00464600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464600"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "PlayerCanBeInterrupted",
+        "INVENTORY_GetHandItem",
+        "SKILL_IsSequenceInputReady"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetCurrentRoom",
+      "address": "004646a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004646a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GetCurrentRoom",
+        "UNITS_GetRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "UpdateObjectAutoLightOnPeriodChange",
+      "address": "004646c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004646c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "UpdateObjectAutoLightOnPeriodChange",
+        "DRLGENV_GetPeriodOfDayFromAct",
+        "OBJECT_CheckAutoLight",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetServerCmd",
+      "address": "00464770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464770"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GetServerCmd",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ServerCmdStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetServerCmd",
+      "address": "004647a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004647a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SetServerCmd",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ServerCmdStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsAttackable",
+      "address": "004647d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004647d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "IsAttackable",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitFlags"
+      ]
+    },
+    {
+      "name": "SetDeadFlag",
+      "address": "00464810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464810"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SetDeadFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "IsActive",
+      "address": "00464820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464820"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "IsActive"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode"
+      ]
+    },
+    {
+      "name": "IsAlive",
+      "address": "00464860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464860"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "IsAlive",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "TXT_Objects_GetLine"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "eD2ObjectAnimMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetConfirmedTargetUnit",
+      "address": "004648f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004648f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GetConfirmedTargetUnit",
+        "ConfirmTarget",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTargetUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeLightMap",
+      "address": "00464930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464930"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "FreeLightMap"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "CUNIT_IterateServerUnitsWithCallback",
+      "address": "00464950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464950"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IterateServerUnitsWithCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CUNIT_IterateHashTableWithCallback"
+      ],
+      "usedTypes": [
+        "fnUnitIterCallback",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_IterateMissilesWithCallback",
+      "address": "00464990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464990"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IterateMissilesWithCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CUNIT_IterateHashTableWithCallback"
+      ],
+      "usedTypes": [
+        "fnUnitIterCallback",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_IterateItemsWithCallback",
+      "address": "004649d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004649d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IterateItemsWithCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CUNIT_IterateHashTableWithCallback"
+      ],
+      "usedTypes": [
+        "fnUnitIterCallback",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_IterateUntilWarp",
+      "address": "00464a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464a10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IterateUntilWarp"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ROOM_GetWarpDestinationName",
+      "address": "00464a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464a30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "ROOM_GetWarpDestinationName",
+        "GetWarpDestinationLevel",
+        "TXT_Levels_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "WCHAR",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "GetName",
+      "address": "00464a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464a60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GetName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PLAYER_GetMonsterOwnerId",
+        "STRING_GetWideStringLength",
+        "TXT_MonStats_GetLine",
+        "GetLocaleString",
+        "UNITS_GetRoom",
+        "CUNIT_IterateUntilWarp",
+        "ROOM_GetWarpDestinationName",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "IsShrine",
+        "TXT_Items_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2MonStatsTxt",
+        "D2ObjectsTxt",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "WCHAR",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DecrementGfxTimer",
+      "address": "00464c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464c40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "DecrementGfxTimer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_SetUnitFlag3",
+      "address": "00464c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464c90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_SetUnitFlag3",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_GetStartLight",
+      "address": "00464cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464cc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_GetStartLight",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetLightRadius",
+      "address": "00464cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464cf0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SetLightRadius",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_IsItemInUnitInventory",
+      "address": "00464d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464d20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IsItemInUnitInventory",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CUNIT_IsItemInAnyInventory",
+      "address": "00464d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464d90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IsItemInAnyInventory",
+        "CUNIT_IsItemInUnitInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *[128]",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnitDoOverlay",
+      "address": "00464e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464e50"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GFX_AddOverlayToUnit",
+        "NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay",
+        "UnitDoOverlay",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eOverlayId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_IsTargetOwnedPet",
+      "address": "00464ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464ec0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SKILL_IsTargetOwnedPet",
+        "GetLeftSkill",
+        "GetSkillId",
+        "TXT_Skills_GetLine",
+        "GetRightSkill",
+        "GetRosterOwnerGUID"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_IsTargetAlliedUnit",
+      "address": "00464f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464f70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "SKILL_IsTargetAlliedUnit",
+        "GetLeftSkill",
+        "GetSkillId",
+        "GetRightSkill",
+        "GetRosterOwnerGUID",
+        "ROSTER_CheckPlayersInSameParty"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SyncPathFromServer",
+      "address": "00465070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465070"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CLIENT_SyncPathFromServer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "QSERVER_FindUnitInFirstActiveGame",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "PATH_GetCollisionTypeAt",
+        "memcpy",
+        "PATH_GetFlags0x20",
+        "SetUnsetFlags0x20",
+        "GetCurrentSkill",
+        "SKILL_GetFlags",
+        "SKILL_SetFlags",
+        "PATH_SetOrClearFlag0x2000",
+        "DRLGROOM_IsRoomInTown",
+        "SetupUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetPlayerUnitPartyId",
+      "address": "00465400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465400"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "GetPlayerUnitPartyId",
+        "GetUnitPartyId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "FindRoom",
+      "address": "00465420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465420"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "FindRoom",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "FindRoomBySubtileCoordinates",
+        "SStrPrintf",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_TeleportUnitToPosition",
+      "address": "004654c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004654c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CLIENT_TeleportUnitToPosition",
+        "ClearSelectedUnit",
+        "FindRoom",
+        "UNITS_GetRoom",
+        "GetCurrentSkill",
+        "GetSkillsTxt",
+        "DRAW_WORLD_SetWarpFadeTimer",
+        "UpdatePops",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "LVLTBLS_GetNoPer",
+        "D2GFX_SetPerspectiveCapable",
+        "TXT_Levels_GetLine",
+        "D2WINPAL_LoadActPalette",
+        "PALETTE_SetAct",
+        "PATH_GetCollisionMaskAt",
+        "GetUnitSizeX",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "PATH_GetCollisionTypeAt",
+        "AUTOMAP_SetRefreshDelay",
+        "WEATHER_ClearParticleArrays",
+        "CLIENT_SendIdlePlayerMessage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2LevelsTxt",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "POINT",
+        "eD2LevelId",
+        "eD2PlayerAnimMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_PlaySkillVisualEffect",
+      "address": "004656c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004656c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CLIENT_PlaySkillVisualEffect",
+        "GFX_AddOverlayToUnit",
+        "AllocParticle",
+        "SetPosVectorShifted",
+        "CLIENT_SpawnWorldstoneShakeParticle",
+        "SetOffsetVector",
+        "PARTICLE_SetBoundsOffset",
+        "PARTICLE_SetReverseDirection"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeAny",
+      "address": "00465870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465870"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "FreeAny",
+        "FreeLightMap",
+        "SwapLightMap",
+        "FreeParticle",
+        "IterateUnitSfxData",
+        "MuteOrUnmuteUnitSounds",
+        "TEXT_FreeHoverText",
+        "CLIENT_FreePlayerUnit",
+        "FreeMonster",
+        "FreeObjectData",
+        "FreeStaticPath",
+        "MISSILE_FreeClientMissile",
+        "ITEM_FreeItemUnit",
+        "ITEMDATA_Free",
+        "RemoveUnitFromRoom",
+        "FreeEventList",
+        "FreeServerCmd",
+        "UI_FreeAllPanelAssets",
+        "Free"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FreeAllUnits",
+      "address": "004659c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004659c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "FreeAllUnits",
+        "FreeAny"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "CLIENT_UpdateUnitGfxState",
+      "address": "00465aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465aa0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CLIENT_UpdateUnitGfxState",
+        "CUNIT_IterateHashTableWithCallback",
+        "CUNIT_UpdateClientFramesAndAI"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *"
+      ]
+    },
+    {
+      "name": "FaceTarget",
+      "address": "00465bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465bf0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "FaceTarget",
+        "ConfirmTarget",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTargetUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "PATH_SetDirectionToTarget"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CanInteractWith",
+      "address": "00465c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465c60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "IsAllyOf",
+        "CanInteractWith",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetRosterOwnerGUID",
+        "IsActive",
+        "ROSTER_CheckPlayerCanLoot",
+        "GetFlag",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "SKILL_IsTargetOwnedPet"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RemoveObject",
+      "address": "00465e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465e80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "RemoveObject",
+        "INV_ClearItemDescription",
+        "FreeAny"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveObjectFromServerObjectTable",
+      "address": "00465ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465ee0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "RemoveObjectFromServerObjectTable",
+        "RemoveObject"
+      ],
+      "usedTypes": [
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITS_RemoveFromClientHashTable",
+      "address": "00465f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465f00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "UNITS_RemoveFromClientHashTable",
+        "RemoveObject"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FinalizeCreation",
+      "address": "00465f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465f20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "FinalizeCreation",
+        "InsertIntoHashTable",
+        "FindUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RemoveObject",
+        "FreeAny"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InitCommonData",
+      "address": "00465fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00465fd0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "InitCommonData",
+        "CLIENT_CheckExpansion",
+        "FindRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SEED_InitDefault",
+        "STRUCT_CreateDataItem",
+        "ResetItemSeed",
+        "InitSeed_Param_666",
+        "JoinRoomSetup",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocStaticPath",
+        "AllocObjectData",
+        "MISSILE_InitMissileUnit",
+        "ITEM_SetAnimModeAndPlace",
+        "InitializeStaticPath",
+        "BlockCollisionPath",
+        "DRLGROOM_AddUnitToRoom",
+        "WALL2_InitUnitGfx",
+        "UpdateAnimSpeed",
+        "FinalizeCreation",
+        "OBJECT_AddVisualOverlay"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNIT_CreateWarp",
+      "address": "004661c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004661c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "UNIT_CreateWarp",
+        "AllocUnit",
+        "InitCommonData"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNIT_CreatePlayer",
+      "address": "00466200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466200"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "UNIT_CreatePlayer",
+        "AllocUnit",
+        "CLIENT_CheckExpansion",
+        "FindRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "JoinRoomSetup",
+        "WALL2_InitUnitGfx",
+        "UpdateAnimSpeed",
+        "FinalizeCreation",
+        "SetNameInPlayerData"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CreateObject",
+      "address": "00466300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466300"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CreateObject",
+        "AllocUnit",
+        "InitCommonData",
+        "IsShrine",
+        "SetShrineTextInfo"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNIT_CreateMonster",
+      "address": "00466360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466360"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "UNIT_CreateMonster",
+        "GetRosterPetGUID",
+        "FindUnit",
+        "FreeGfxInfo",
+        "WALL2_InitUnitGfx",
+        "SetupUpdateFlag",
+        "AllocUnit",
+        "FindRoom",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "MONSTER_SetMonStatsTxtAndType",
+        "SetUnsetMonsterType",
+        "CheckMonTypeForMonster",
+        "SetBossId",
+        "SetOwnerGUID",
+        "GetLocaleString",
+        "SetSuperUniqueName",
+        "SetNameSeed",
+        "GetMonUModList",
+        "MONSTER_InitMonsterUnit",
+        "SetStepNum",
+        "CLIENT_PlaySkillVisualEffect",
+        "IsMonsterUnique",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "PALSHIFT_GenerateShiftDuration",
+        "GetDificulity",
+        "ROSTER_IsUnitHostileToPlayer",
+        "GetBossId",
+        "TXT_SuperUniques_GetLine",
+        "GFX_SetCofDataFlags",
+        "GFX_SetPalShiftIndex",
+        "FinalizeCreation",
+        "GetSkillId",
+        "GetSeed",
+        "MERC_InitializeFromPacket",
+        "MONSTER_GetMercType",
+        "STRUCT_CreatePlayerInventory",
+        "PlayUnitInitSound"
+      ],
+      "usedTypes": [
+        "D2CreateMonsterUnitStrc",
+        "D2MercInitArgStrc",
+        "D2MonStats2Txt",
+        "D2RoomStrc",
+        "D2RosterPetSeedStrc",
+        "D2SeedStrc",
+        "D2SuperUniquesTxt",
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "WCHAR",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CreateMissileOrMonster",
+      "address": "00466730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466730"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CreateMissileOrMonster",
+        "UNIT_CreateMonster",
+        "AllocUnit",
+        "InitCommonData"
+      ],
+      "usedTypes": [
+        "D2CreateMonsterUnitStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROOM_SpawnPresetUnitAtCoords",
+      "address": "004667f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004667f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "ROOM_SpawnPresetUnitAtCoords",
+        "DRLGROOM_GetRoomCoordinates",
+        "CreateMissileOrMonster"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "CreateUnitsForMissiles",
+      "address": "00466820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466820"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CreateUnitsForMissiles",
+        "GetPresetUnitsFromRoom",
+        "DRLGROOM_GetRoomCoordinates",
+        "CreateMissileOrMonster"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2PresetUnitStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "HitTestScreen",
+      "address": "00466870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466870"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "HitTestScreen",
+        "GetMouseX",
+        "DRAW_GetTypeOfBorder",
+        "CanInteractWith",
+        "SKILL_IsTargetOwnedPet",
+        "SKILL_IsTargetAlliedUnit",
+        "SKILL_CheckActiveSkillSelectProc",
+        "IsActive",
+        "CheckFlags",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx",
+        "GetTargetX",
+        "GetTargetY",
+        "TXT_MonStats_GetMonStats2",
+        "GFX_IsUnitInsideBounds",
+        "TXT_Objects_GetLine",
+        "GetUIFlag",
+        "WARP_IsPointInClickArea",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CUNIT_IsClickInSpriteBounds",
+        "GetShiftedFrameMetrics",
+        "CUNIT_CalculateSpriteBounds",
+        "GFXUTIL_GetUnitCofDirectionOnScreen"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "RECT",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CleanupInventory",
+      "address": "00466cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00466cb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CleanupInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetGUID",
+        "CUNIT_IsItemInAnyInventory",
+        "ITEM_RemoveItemStatsFromOwner",
+        "ItemBelongsToInventoryOfPlayer",
+        "RemoveObject"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

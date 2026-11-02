@@ -10,9 +10,9 @@
 namespace D2Client::Seed {
 
 uint32_t __fastcall RNG_GetRandomInRange(uint32_t * pSeed, int32_t nMax) {
-    int64_t lVar1 = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
-    *(int64_t*)pSeed = lVar1;
-    return nMax - 1U & (uint32_t)lVar1;
+    int64_t lSeedNext = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
+    *(int64_t*)pSeed = lSeedNext;
+    return nMax - 1U & (uint32_t)lSeedNext;
 }
 
 int32_t __fastcall RollBetweenMinAndMax(D2SeedStrc * pSeed, int32_t nMin, uint32_t nMax) {

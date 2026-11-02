@@ -1,0 +1,330 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/QServer/QServerNT.cpp",
+  "functions": [
+    {
+      "name": "AwaitAndClose",
+      "address": "006c2110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2110"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "AwaitAndClose"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "BeginAsyncReadForClient",
+      "address": "006c2280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2280"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "BeginAsyncReadForClient",
+        "CloseRemoteConnection",
+        "RemoveClientAndClearLog",
+        "IncrementClientRefCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "NET_QServerClientPacket_CreateStructAndCopyBytesThere",
+      "address": "006c23b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c23b0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "NET_QServerClientPacket_CreateStructAndCopyBytesThere",
+        "AllocClientMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerClientPacketStrc"
+      ]
+    },
+    {
+      "name": "AcceptConnection",
+      "address": "006c2420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2420"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "AcceptConnection",
+        "memset",
+        "WSAGetLastError",
+        "HACKL_CheckAndResetHacklistEntry",
+        "IsPerIpLimitReached",
+        "CheckIfPlayerIsBannedByAddress",
+        "CheckIpConnectionRate",
+        "MatchesGameTokenFilter",
+        "BanIpAddress",
+        "LOGMANAGER_TraceToModuleLog",
+        "closeSocket",
+        "AddClient",
+        "SMemZero",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "BeginAsyncReadForClient"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "LPCRITICAL_SECTION",
+        "int32_t",
+        "sockaddr",
+        "u_long"
+      ]
+    },
+    {
+      "name": "BeginAsyncWriteForClient",
+      "address": "006c2760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2760"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "BeginAsyncWriteForClient",
+        "IncrementClientRefCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RemoveClientAndClearLog",
+        "CloseRemoteConnection"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "PopAndFreeCompletedSendPacket",
+      "address": "006c2810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2810"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "PopAndFreeCompletedSendPacket",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc"
+      ]
+    },
+    {
+      "name": "AcceptThreadMain",
+      "address": "006c2860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2860"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "AcceptConnection",
+        "AcceptThreadMain",
+        "FreeClientMemory",
+        "GetTickCount",
+        "SweepExpiredHackEntries",
+        "_NullSub",
+        "StubHook2",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2QServerWorkerTelemetryStrc",
+        "LARGE_INTEGER",
+        "fd_set",
+        "sockaddr",
+        "timeval",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendToClientLocal",
+      "address": "006c2c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2c70"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "SendToClientLocal",
+        "LOGMGR_GetHighResolutionTime",
+        "CloseRemoteConnection",
+        "RemoveClientAndClearLog",
+        "WSAGetLastError",
+        "NET_QServerClientPacket_CreateStructAndCopyBytesThere",
+        "BeginAsyncWriteForClient"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PumpIoCompletionQueueForWorker",
+      "address": "006c2d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2d70"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "PumpIoCompletionQueueForWorker",
+        "GetTickCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "QSERVER_LOG",
+        "CloseRemoteConnection",
+        "FreeClientMemory",
+        "BeginAsyncWriteForClient",
+        "LOGMGR_GetHighResolutionTime",
+        "RecvForClient",
+        "BeginAsyncReadForClient",
+        "RemoveClientAndClearLog",
+        "FindClientByClientId",
+        "_NullSubTrace"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "LPOVERLAPPED",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "IoWorkerThreadMain",
+      "address": "006c3030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3030"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "IoWorkerThreadMain",
+        "FreeClientMemory",
+        "PumpIoCompletionQueueForWorker",
+        "StubHook2",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "PumpIoCompletionQueues",
+      "address": "006c30d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c30d0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "PumpIoCompletionQueues",
+        "PumpIoCompletionQueueForWorker"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StartListening",
+      "address": "006c3120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3120"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "StartListening",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "WSAGetLastError",
+        "LOGFILE_WriteStringToFile",
+        "__security_check_cookie",
+        "AllocClientMemory",
+        "StubHook1",
+        "closeSocket"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "SOCKET",
+        "int32_t",
+        "sockaddr",
+        "u_long",
+        "u_short",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CreateSocketLocal",
+      "address": "006c3360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3360"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServerNT",
+      "calledFunctions": [
+        "CreateSocketLocal",
+        "__security_check_cookie",
+        "StartListening"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "SOCKET",
+        "WSADATA",
+        "uint32_t"
+      ]
+    }
+  ]
+}

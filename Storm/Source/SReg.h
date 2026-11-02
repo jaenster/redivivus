@@ -23,7 +23,9 @@ int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSiz
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int __fastcall SREG_DeleteValueInternal(uint8_t byFlags, char * pszSubKey, LPCSTR szValueName);
+// Worker for SRegDeleteValue: deletes one registry value.
+// Name from the PowerPC 1.13c Storm traceback table (static InternalDeleteEntry @10037640).
+int __fastcall SREG_InternalDeleteEntry(uint8_t byFlags, char * pszSubKey, LPCSTR szValueName);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegDeleteValue"
 // @wasnamed SSTR_RegistryDeleteKey
 // @basis behaviour-confirmed. Public 3-arg entry (keyname, valuename, flags): validates args, SetLastError(0x57), then calls the internal worker at 00414990 which does RegDeleteValueA on HKCU and/or HKLM. It deletes a VALUE, not a key. SRegDeleteKey is in the real API but is not linked into 1.14d: no RegDeleteKeyA call site exists.

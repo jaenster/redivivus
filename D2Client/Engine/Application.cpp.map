@@ -1,0 +1,58 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Engine/Application.cpp",
+  "functions": [
+    {
+      "name": "ApplicationMain",
+      "address": "00405c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00405c30"
+        }
+      ],
+      "namespace": "D2Client::Engine::Application",
+      "calledFunctions": [
+        "ApplicationMain",
+        "CrashGame",
+        "SFILE_InitializeFileSystem",
+        "STRUCT_AllocAsyncData",
+        "Return",
+        "NET_SERVER_SentPacketLog_Clear",
+        "MPQ_LoadAllDataMpqFiles",
+        "MPQ_LoadAllMediaMpqFiles",
+        "MPQ_UnloadAllDataMpqFiles",
+        "D2CheckExpansionGame",
+        "SystemSurvey_WriteProductLanugageToLocaleFile",
+        "MISC_GetLanguageCode",
+        "D2GFX_PreSetupBeforeCreatingWindow",
+        "D2GFX_SetPerspective",
+        "CreateWindowWithChecks",
+        "D2GFX_Release",
+        "GetHwnd",
+        "D2GFX_ToggleLowQuality",
+        "D2GFX_SetGamma",
+        "D2GFX_EnableVSync",
+        "SRegLoadValue",
+        "D2GFX_DisableFixAspect",
+        "SRegSaveValue",
+        "SOUND_Initialize",
+        "SOUND_ShutdownDirectSound",
+        "D2GFX_CheckVideoMode",
+        "ApplicationRunCurrentMode",
+        "STRUCT_FreeAsyncData",
+        "FreeMCP",
+        "IGNORELIST_Shutdown",
+        "FreeMemoryPool"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "FARPROC",
+        "eD2RendererMode",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

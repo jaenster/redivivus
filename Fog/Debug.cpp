@@ -12,9 +12,9 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
 #include "Fog/Src/String/FogString.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Game/Objects/ObjectsRgn.h"
@@ -346,7 +346,7 @@ bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModul
 bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement) {
     bool bVar1;
     BOOL bApiOk;
-    uint32_t local_ac0[2];
+    uint32_t adwDisplacement[2];
     IMAGEHLP_MODULE64 moduleInfo;
     D2ImagehlpSymbol64BufStrc sSymbol;
     uint32_t nSehState;
@@ -373,17 +373,17 @@ bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, u
         sSymbol.SizeOfStruct = 0x20;
         *(uint32_t*)((char*)&sSymbol.Address + 4) = 0;
         sSymbol.MaxNameLength = 0x400;
-        local_ac0[0] = 0;
-        local_ac0[1] = 0;
+        adwDisplacement[0] = 0;
+        adwDisplacement[1] = 0;
         *(uint32_t*)(char*)&sSymbol.Address = dwQueryAddr;
-        bApiOk = (*pSymGetSymFromAddr64)(ghCurrentProcessHandle, dwQueryAddr, 0, local_ac0, &sSymbol);
+        bApiOk = (*pSymGetSymFromAddr64)(ghCurrentProcessHandle, dwQueryAddr, 0, adwDisplacement, &sSymbol);
         if (bApiOk && pSymGetModuleInfo64) {
           memset(&moduleInfo, 0, 0x680);
           moduleInfo.SizeOfStruct = 0x680;
           bApiOk = (*pSymGetModuleInfo64)(ghCurrentProcessHandle, dwQueryAddr, 0, &moduleInfo);
           if (bApiOk && moduleInfo.SymType && moduleInfo.SymType != 4 && moduleInfo.SymType != 5) {
             strncpy_s(szSymbolName, 0x200, sSymbol.Name, -1);
-            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ *pdwSymDisplacement = local_ac0[0];
+            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ *pdwSymDisplacement = adwDisplacement[0];
             LeaveCriticalSection(&lpCriticalSection_0098a6f0);
             bVar1 = true;
             ExceptionList = pPrevSehFrame;
@@ -761,11 +761,11 @@ DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam) {
 }
 
 bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * pExceptionPtrs, _EXCEPTION_POINTERS * nEventHandle, DWORD dwThreadId) {
-    uint8_t bVar1;
     uint32_t bLoadOk;
     HANDLE hResult;
     D2CrashDumpRequestStrc sDumpRequest;
     uint16_t wszDumpPath[260];
+    uint8_t bSuccess;
     if (bEnableCrashDumps == '\0') {
       return false;
     }
@@ -800,8 +800,8 @@ bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * pExceptionPtrs, 
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pCrashDumpInfo = 0;
         LeaveCriticalSection(&lpCriticalSection_0098a6c4);
         /* HANDLE hObject for CloseHandle */ CloseHandle(hResult);
-        bVar1 = sDumpRequest.bSuccess;
-        return (bool)bVar1;
+        bSuccess = sDumpRequest.bSuccess;
+        return (bool)bSuccess;
       }
     }
 
@@ -931,12 +931,12 @@ void __fastcall SKILLSTXT_ZeroOutFields(D2SkillsTxt * pSkillsTxt) {
     *(uint8_t*)&pSkillsTxt->tgtoverlay = 0;
 }
 
-int CompareUintDescending(LPCVOID pParam1, LPCVOID pParam2) {
-    if (*(uint32_t*)pParam1 > *(uint32_t*)pParam2) {
+int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight) {
+    if (*(uint32_t*)pLeft > *(uint32_t*)pRight) {
       return 1;
     }
 
-    return -(uint32_t)(*(uint32_t*)pParam2 > *(uint32_t*)pParam1);
+    return -(uint32_t)(*(uint32_t*)pRight > *(uint32_t*)pLeft);
 }
 
 static void FormatModuleDebugString(char * szText, D2FogDebugModuleEntryStrc * pModule) {
@@ -949,7 +949,7 @@ static void FormatModuleDebugString(char * szText, D2FogDebugModuleEntryStrc * p
     }
 
     __snprintf_s(szGuidStr, 0x28, -1, "{%08x-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x}", pModule->guidPdb.Data1, (uint32_t)pModule->guidPdb.Data2, (uint32_t)pModule->guidPdb.Data3, (uint32_t)pModule->guidPdb.Data4[0], (uint32_t)pModule->guidPdb.Data4[1], (uint32_t)pModule->guidPdb.Data4[2], (uint32_t)pModule->guidPdb.Data4[3], (uint32_t)pModule->guidPdb.Data4[4], (uint32_t)pModule->guidPdb.Data4[5], (uint32_t)pModule->guidPdb.Data4[6], (uint32_t)pModule->guidPdb.Data4[7]);
-    __snprintf_s(szText, 0x400, -1, "DBG-MODULE<%p %08x \"%s\" \"%s\" %u %s %u %u%s>", pModule->pImageBase, pModule->nImageSize, pModule->szModuleName, pModule->szImagePath, pModule->dwUnknown208, szGuidStr, pModule->dwUnknown21c, pModule->dwUnknown220, szTimeStampSuffix);
+    __snprintf_s(szText, 0x400, -1, "DBG-MODULE<%p %08x \"%s\" \"%s\" %u %s %u %u%s>", pModule->pImageBase, pModule->nImageSize, pModule->szModuleName, pModule->szImagePath, pModule->dwPdbSignature, szGuidStr, pModule->dwPdbAge, pModule->dwImageTimeDateStamp, szTimeStampSuffix);
 }
 
 void __fastcall FormatAddressDebugString(uint32_t * pAddrInfo, char * pSymInfo, char * szOutput) {
@@ -1979,7 +1979,7 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
     FPO_DATA_WORD* pFVar1;
     uint32_t nFpoRegCount;
     char* pszSlash;
-    uint32_t uVar2;
+    uint32_t nSymbolNameLen;
     int iVar6;
     STACKFRAME tStackFrame;
     int nImplodeOutLen;
@@ -2137,8 +2137,8 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
           pszText = pszSlash + 1;
         }
 
-        uVar2 = Storm::Source::SSTR::SStrLen(__frame0.pszSymbolName);
-        iVar6 = 0x18 - uVar2;
+        nSymbolNameLen = Storm::Source::SSTR::SStrLen(__frame0.pszSymbolName);
+        iVar6 = 0x18 - nSymbolNameLen;
         if (iVar6 < 1) {
           iVar6 = 1;
         }
@@ -2169,7 +2169,7 @@ void __fastcall WriteCrashDump(uint32_t dwHeader0, uint32_t dwHeader1, uint32_t 
       sRecord.dwRecordType = dwRecordType;
       sRecord.dwHeader0 = dwHeader0;
       sRecord.nDwordCount = nDwordCount;
-      Storm::Source::SSystem::SMemCopy(sRecord.aData, pData, nDwordCount * 4);
+      Storm::Source::SMem::SMemCopy(sRecord.aData, pData, nDwordCount * 4);
       fwrite(&sRecord, nDwordCount * 4 + 0x10, 1, _File);
       fclose(_File);
     }
@@ -2177,7 +2177,7 @@ void __fastcall WriteCrashDump(uint32_t dwHeader0, uint32_t dwHeader1, uint32_t 
 
 // @sourcefile .\Src\Exceptions.cpp
 BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) {
-    int iVar2;
+    int nResult;
     size_t nFileSize;
     D2CharSelCompStrc* pRecordCur;
     short int* pOutEntry;
@@ -2203,8 +2203,8 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
     uint32_t nRecDwordCount = *pnBufferSize;
     FILE* pFile = fopen(szDumpPath, "rb");
     if (pFile) {
-      iVar2 = fseek(pFile, 0, 2);
-      if (!iVar2) {
+      nResult = fseek(pFile, 0, 2);
+      if (!nResult) {
         nFileSize = ftell(pFile);
         fseek(pFile, 0, 0);
         pRecordCur = (D2CharSelCompStrc*)D2_ALLOC_AT(nFileSize, ".\\Src\\Exceptions.cpp", 0x75b);
@@ -2223,15 +2223,15 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
             nDwordCount = pRecordCur->nNumFrames;
             nFileSize = nDwordCount * 4;
             nRecDwordCount = nDwordCount;
-            Storm::Source::SSystem::SMemCopy(recDataScratch, &pRecordCur->nFrameIncrement, nFileSize);
+            Storm::Source::SMem::SMemCopy(recDataScratch, &pRecordCur->nFrameIncrement, nFileSize);
             pRecordCur = (D2CharSelCompStrc*)(&pRecordCur->nFrameIncrement + nDwordCount);
             pOutEntry = (short int*)(pOutBufferLocal + 1);
             nMatchIndex = 0;
             if (nUniqueCount > 0) {
               do {
                 if (*(D2CharSelCompFlags*)(pOutEntry + 1) == recHeader0 && *(int*)(pOutEntry + 3) == recHeader1 && *(uint32_t*)(pOutEntry + 5) == recHeader2 && (char)pOutEntry[7] == (char)nRecDwordCount) {
-                  iVar2 = Storm::Source::SSystem::SSYSTEM_MemCompare((uint8_t*)((int)pOutEntry + 0xf), recDataScratch, nFileSize);
-                  if (!iVar2) {
+                  nResult = Storm::Source::SMem::SMemCmp((uint8_t*)((int)pOutEntry + 0xf), recDataScratch, nFileSize);
+                  if (!nResult) {
                     (*pOutEntry)++;
                     break;
                   }
@@ -2251,7 +2251,7 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
               *pOutEntry = 1;
               *(uint32_t*)(pOutEntry + 5) = recHeader2;
               *(char*)(pOutEntry + 7) = (char)nRecDwordCount;
-              Storm::Source::SSystem::SMemCopy((void*)((int)pOutEntry + 0xf), recDataScratch, nFileSize);
+              Storm::Source::SMem::SMemCopy((void*)((int)pOutEntry + 0xf), recDataScratch, nFileSize);
               nUniqueCount++;
               *pnBufferSizeLocal = *pnBufferSizeLocal + nFileSize + 0xf;
             }

@@ -1,0 +1,559 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monster/Monster.cpp",
+  "functions": [
+    {
+      "name": "MONSTER_GetMonPropTxtRecord",
+      "address": "00573470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573470"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_GetMonPropTxtRecord"
+      ],
+      "usedTypes": [
+        "D2MonPropTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetAiState",
+      "address": "005734c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005734c0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "SetAiState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetAiState",
+      "address": "005734e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005734e0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "GetAiState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetLevelId",
+      "address": "00573500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573500"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "SetLevelId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "GetMonsterArea",
+      "address": "00573520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573520"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "GetMonsterArea"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "GetMonsterFlags",
+      "address": "00573540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573540"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "GetMonsterFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetUnsetSummonerFlags",
+      "address": "00573570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573570"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "SetUnsetSummonerFlags"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SetVelocityAndTransition",
+      "address": "005735a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005735a0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_SetVelocityAndTransition",
+        "SetVelocities",
+        "UpdateAnimSpeed",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeMonsters",
+      "address": "00573640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573640"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "FreeMonsters",
+        "GetNextUnit",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_FreeAllResources",
+      "address": "005736a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005736a0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_FreeAllResources",
+        "FreeCombat",
+        "UNITS_FreeInventoryItems",
+        "STRUCT_FreeInventory",
+        "Free",
+        "FreeMonsterAi",
+        "MONSTERDATA_FreeMonsterMode",
+        "EVENT_FreeAllTimersForUnit"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_ClearTargetIfMatch",
+      "address": "00573750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573750"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_ClearTargetIfMatch",
+        "GetTargetEx",
+        "SetTargetUnitForDynamicUnit",
+        "SetTarget"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTERAI_TriggerMageThink",
+      "address": "00573780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573780"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTERAI_TriggerMageThink",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "TXT_MonStats_GetBaseId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2MonsterClassId"
+      ]
+    },
+    {
+      "name": "MONSTER_StartAiAndRegenTimers",
+      "address": "005738d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005738d0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_StartAiAndRegenTimers",
+        "EVENT_RemoveUnitTimersByType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PlayerMultiplyer",
+      "address": "005738f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005738f0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "PlayerMultiplyer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PlayerMultiplyer2",
+      "address": "00573910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573910"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "PlayerMultiplyer2"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_InitLevelDifficultyScaling",
+      "address": "00573930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573930"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_InitLevelDifficultyScaling",
+        "SERVER_GAME_CountPlayers",
+        "PlayerMultiplyer",
+        "PlayerMultiplyer2",
+        "GetDifficultyLevels"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2MonStatsTxt",
+        "D2MonsterLevelDataStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_RollComponentAppearance",
+      "address": "005739d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005739d0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_RollComponentAppearance",
+        "GetComponentsData",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint64_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CheckComponents",
+      "address": "00573ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573ae0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "CheckComponents"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MONSTER_CreateAndEquipItem",
+      "address": "00573b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573b20"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_CreateAndEquipItem",
+        "STRUCT_CreatePlayerInventory",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "ITEM_CreateFromTemplate",
+        "ITEM_EditItemData_eItemFlag",
+        "SetBodyLoc",
+        "GetBodyLocation",
+        "SERVER_EquipItemToBodyLoc",
+        "FreeServerUnit",
+        "GetTxtMaxDurability",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2MonEquipEntryStrc",
+        "D2MonEquipEntryStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2ItemQuality",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_KillAllInLevel",
+      "address": "00573c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573c00"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_KillAllInLevel",
+        "GetActNoFromLevelNumber",
+        "DRLGROOM_GetRoomFromAct",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "CheckForModeZeroDeath",
+        "STATSEX_GetAlignment",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_InitStats",
+      "address": "00573cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00573cb0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_InitStats",
+        "MONSTER_RollComponentAppearance",
+        "UNIT_GetModuloFromSeed",
+        "MONSTER_InitLevelDifficultyScaling",
+        "MONSTER_GetMercType",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "AllocStatListEx",
+        "STATLIST_SetUnitStat",
+        "memset",
+        "MONSTER_CalculateLevelScaledStats",
+        "RANDOM_RandomNumberSelector",
+        "D2ApplyPercent",
+        "MONSTER_ApplyDifficultyScaling",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "STRUCT_CreatePlayerInventory",
+        "ValidateClassId",
+        "SUNITPROXY_GetNpcInventory",
+        "STRUCT_CreateSkillsList",
+        "SetSkill",
+        "SKILLS_GetSkillByEnum",
+        "SetSkillMode",
+        "MONSTERS_OnInitMonster_NoOp",
+        "MONSTER_GetMonPropTxtRecord",
+        "ITEMMOD_ApplyPropertyToUnitStatsExpansion",
+        "SKILLASS_EquipSummonItems",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2MonStatsExTxtSlot",
+        "D2MonStatsInitStrc",
+        "D2MonStatsTxt",
+        "D2MonsterLevelDataStrc",
+        "D2RoomStrc",
+        "D2SkillListStrc",
+        "D2SkillStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STRUCT_FillDataMonster",
+      "address": "00574250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574250"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "STRUCT_FillDataMonster",
+        "EVENT_ClearTimerList",
+        "AllocAiGeneral",
+        "AllocAiParam",
+        "AllocMonsterAI",
+        "InitializeSpawnCount",
+        "MONSTER_InitStats",
+        "AttachCorrectAiFunctionToMonster",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "AttachToUnit",
+        "InitAnimFrame",
+        "FreeCombatAndChangeAnimMode"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonStatsTxt",
+        "D2MonsterAiStrc",
+        "D2MonsterPathParamStrc",
+        "D2RoomStrc",
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2MonsterAnimMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_TransformMonsterClass",
+      "address": "00574370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00574370"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster",
+      "calledFunctions": [
+        "MONSTER_TransformMonsterClass",
+        "UNITS_GetRoom",
+        "MONSTER_FreeAllResources",
+        "STRUCT_FillDataMonster",
+        "SetupUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    }
+  ]
+}

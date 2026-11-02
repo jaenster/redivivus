@@ -144,9 +144,9 @@ int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoo
     int nWallMainIndex;
     int nWorldX = pCoords->nPosX + nOffset;
     int nWorldY = pCoords->nPosY;
-    int iVar1 = pLvlSub->GridSize;
+    int nGridSize = pLvlSub->GridSize;
     nOffset = 0;
-    int nResult = nBaseY / iVar1;
+    int nResult = nBaseY / nGridSize;
     if (pCoords->nHeight <= 0) {
       return nResult;
     }
@@ -165,8 +165,8 @@ int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoo
           uFloorFlags = 0;
         }
 
-        nResult = pLvlSub->GridSize * nOffset + (nBaseY - nBaseY % iVar1);
-        nX = pLvlSub->GridSize * nCol + (nBaseX - nBaseX % iVar1);
+        nResult = pLvlSub->GridSize * nOffset + (nBaseY - nBaseY % nGridSize);
+        nX = pLvlSub->GridSize * nCol + (nBaseX - nBaseX % nGridSize);
         if (uWallFlags & 1) {
           uFloorFlags = uWallFlags >> 8 & 0xff;
           nWallMainIndex = uFloorFlags - 1;
@@ -355,18 +355,18 @@ void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32_t room
 }
 
 // Checks that applying the LvlSub patch doesn’t conflict with existing floor/wall/shadow cells; returns false if any flagged tiles overlap and existing grids already set the same flags.
-BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nParam1, int32_t nParam2, D2DrlgWallLayerGridsStrc * pDrlgUnkn, int * pnParam, D2LvlSubTxt * pLvlSubTxt) {
+BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D2DrlgWallLayerGridsStrc * pDrlgUnkn, int * pnGroupEntry, D2LvlSubTxt * pLvlSubTxt) {
     uint32_t uFlags;
     int nWallLayerIter;
     int dy;
     int dx;
     D2DrlgGridStrc** ppWallGrid;
-    for (dy = 0; dy < pnParam[3]; dy++) {
+    for (dy = 0; dy < pnGroupEntry[3]; dy++) {
       int nWallLayerCount = pDrlgUnkn->nWallLayerCount;
-      for (dx = 0; dx < pnParam[2]; dx++) {
-        uFlags = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnParam + dx, pnParam[1] + dy);
-        if (uFlags & 2 || pLvlSubTxt->pWallGrid[0].nWidth && (uFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnParam + dx, pnParam[1] + dy) , (uFlags & 1) != 0)) {
-          uFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, dx + nParam1, dy + nParam2);
+      for (dx = 0; dx < pnGroupEntry[2]; dx++) {
+        uFlags = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnGroupEntry + dx, pnGroupEntry[1] + dy);
+        if (uFlags & 2 || pLvlSubTxt->pWallGrid[0].nWidth && (uFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnGroupEntry + dx, pnGroupEntry[1] + dy) , (uFlags & 1) != 0)) {
+          uFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, dx + nRoomX, dy + nRoomY);
           if (uFlags & 0x3f0ff00 || !(uFlags & 2)) {
             return 0;
           }
@@ -376,7 +376,7 @@ BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nParam1, int32_t nParam2,
             ppWallGrid = pDrlgUnkn->apWallGrids;
             do {
               if (*ppWallGrid) {
-                uFlags = DrlgGrid::GetGridFlags(*ppWallGrid, dx + nParam1, dy + nParam2);
+                uFlags = DrlgGrid::GetGridFlags(*ppWallGrid, dx + nRoomX, dy + nRoomY);
                 if (uFlags & 1) {
                   return 0;
                 }
@@ -394,7 +394,7 @@ BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nParam1, int32_t nParam2,
 }
 
 // Checks whether a DS1 sub-tile strip can be placed at a given offset in an outdoor level room. For each cell in the strip, compares tile-type flags from the sub-tile grid against those of the destination room grids; if floor or wall special bits differ the function returns 0 (no match), otherwise 1. Called during outdoor level generation to validate sub-tile placement before objects are applied.
-BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nParam1, int32_t nParam2, D2DrlgWallLayerGridsStrc * pDrlgUnkn, D2LvlSubTxt * pLvlSubTxt, int * pnParam) {
+BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nRoomX, int32_t nRoomY, D2DrlgWallLayerGridsStrc * pDrlgUnkn, D2LvlSubTxt * pLvlSubTxt, int * pnGroupEntry) {
     int nSubTileType;
     int nRoomTileType;
     uint32_t uSubFlags;
@@ -402,24 +402,24 @@ BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nParam1, int32_t nParam2, D
     uint32_t floorFlag;
     int row;
     int nY;
-    for (row = 0; row < pnParam[3]; row++) {
+    for (row = 0; row < pnGroupEntry[3]; row++) {
       int nCol;
       nCol = 0;
-      if (pnParam[2] > 0) {
-        nY = row + nParam2;
+      if (pnGroupEntry[2] > 0) {
+        nY = row + nRoomY;
         do {
-          nSubTileType = DrlgGrid::GetGridFlags(pLvlSubTxt->pTileTypeGrid, *pnParam + nCol, pnParam[1] + row);
-          nRoomTileType = DrlgGrid::GetGridFlags(pDrlgUnkn->apTileTypeGrids[0], nParam1 + nCol, nY);
+          nSubTileType = DrlgGrid::GetGridFlags(pLvlSubTxt->pTileTypeGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
+          nRoomTileType = DrlgGrid::GetGridFlags(pDrlgUnkn->apTileTypeGrids[0], nRoomX + nCol, nY);
           if (nSubTileType != nRoomTileType) {
             return 0;
           }
           if (pLvlSubTxt->pDrlgFile->nFloorLayers) {
-            floorFlag = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnParam + nCol, pnParam[1] + row);
+            floorFlag = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
           } else {
             floorFlag = 0;
           }
           if (floorFlag & 2) {
-            uSubFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, nCol + nParam1, nY);
+            uSubFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, nCol + nRoomX, nY);
             if (!(uSubFlags & 2)) {
               return 0;
             }
@@ -428,12 +428,12 @@ BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nParam1, int32_t nParam2, D
             }
           }
           if (pLvlSubTxt->pDrlgFile->nWallLayers) {
-            uSubFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnParam + nCol, pnParam[1] + row);
+            uSubFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
           } else {
             uSubFlags = 0;
           }
           if (uSubFlags & 1) {
-            uRoomFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->apWallGrids[0], nCol + nParam1, nY);
+            uRoomFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->apWallGrids[0], nCol + nRoomX, nY);
             if (!(uRoomFlags & 1)) {
               return 0;
             }
@@ -443,7 +443,7 @@ BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nParam1, int32_t nParam2, D
           }
 
           nCol++;
-        } while (nCol < pnParam[2]);
+        } while (nCol < pnGroupEntry[2]);
       }
     }
 
@@ -626,7 +626,7 @@ BOOL __fastcall TestOutdoorLevelPreset(D2DrlgLevelStrc * pLevel, int32_t nX, int
 // @sourcefile .\DRLG\Outdoors.cpp
 static int32_t DRLGOUTDOOR_AllocPresetFileTracker(int32_t nLevelPrestId, D2DrlgLevelStrc * pLevel) {
     D2DrlgLevelLinkNodeStrc* pNode;
-    int iVar1;
+    int nNextIndex;
     D2PoolManagerStrc* pMemory;
     pMemory = pLevel->pDrlg->pMemoryPool;
     for (pNode = pLevel->pLevelLinkNodeFirst; pNode; pNode = pNode->pNext) {
@@ -650,9 +650,9 @@ static int32_t DRLGOUTDOOR_AllocPresetFileTracker(int32_t nLevelPrestId, D2DrlgL
     pNode->pNext = pLevel->pLevelLinkNodeFirst;
     pLevel->pLevelLinkNodeFirst = pNode;
     next_file:
-    iVar1 = (pNode->dwData2 + 1) % pNode->dwData1;
-    pNode->dwData2 = iVar1;
-    return iVar1;
+    nNextIndex = (pNode->dwData2 + 1) % pNode->dwData1;
+    pNode->dwData2 = nNextIndex;
+    return nNextIndex;
 }
 
 // Spawns an outdoor level preset at the given grid coordinates with specified preset ID and file index.
@@ -1042,7 +1042,6 @@ BOOL __fastcall SpawnRandomOutdoorDS1(D2DrlgLevelStrc * pLevel, int32_t nLvlPres
 
 // Places the waypoint marker tile on an outdoor DRLG level. For the Cold Plains level (id 3) it first looks for the visited-warp direction toward the level and scans the outdoor grid for a cell matching that warp-direction bit and the walkable flag (0x400), nudging the chosen cell off the edges, then stamps the waypoint via AlterGridFlag (sets 0x20000 in the layout grid and 0x800 in the collision grid). Otherwise it builds a list of interior cells, seed-shuffles them (Fisher-Yates using the level seed LCG), and picks the first cell whose collision flags clear mask 0x1b81, marking it as the waypoint (0x10000 / 0x800). Pure side effect on the level's DRLG grid data; advances the level seed.
 void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
-    D2SeedStrc DVar2;
     int* pVisArray;
     uint32_t nGridHeight;
     int nSwapY;
@@ -1059,6 +1058,7 @@ void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
     int nGridWidth;
     uint32_t nGridHeightCopy;
     uint32_t nRemaining;
+    int64_t nSeedProduct;
     D2DrlgLevelDataWildernessLevel* pOutdoorsData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     D2DrlgLevelDataWildernessLevel* pOutdoorsDataConst = pOutdoorsData;
     if (pLevel->eD2LevelId == 3) {
@@ -1123,7 +1123,7 @@ void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
 
     int nCellIdx = 0;
     if ((int)nGridHeight > 0) {
-      int64_t lVar1;
+      D2SeedStrc DVar1;
       do {
         nSwapY = nCellIdx / nVisIdx;
         nSwapX = nCellIdx % nVisIdx;
@@ -1139,18 +1139,18 @@ void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
           if ((int)nGridHeight <= 0) {
             nShuffleIdxA = 0;
           } else {
-            lVar1 = (uint64_t)pLevel->sSeed.nSeedLow * 0x6ac690c5;
+            nSeedProduct = (uint64_t)pLevel->sSeed.nSeedLow * 0x6ac690c5;
             nShuffleIdxA = pLevel->sSeed.nSeedHigh;
             if (nGridHeight & nGridHeight - 1) {
-              DVar2 = (D2SeedStrc)(lVar1 + (uint64_t)nShuffleIdxA);
-              pLevel->sSeed.nSeedHigh = DVar2.nSeedHigh;
-              pLevel->sSeed.nSeedLow = DVar2.nSeedLow;
-              nShuffleIdxA = (uint32_t)(DVar2.nSeedLow % nGridHeight);
+              DVar1 = (D2SeedStrc)(nSeedProduct + (uint64_t)nShuffleIdxA);
+              pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
+              pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+              nShuffleIdxA = (uint32_t)(DVar1.nSeedLow % nGridHeight);
             } else {
-              DVar2 = (D2SeedStrc)(lVar1 + (uint64_t)nShuffleIdxA);
-              pLevel->sSeed.nSeedHigh = DVar2.nSeedHigh;
-              pLevel->sSeed.nSeedLow = DVar2.nSeedLow;
-              nShuffleIdxA = nGridHeight - 1 & DVar2.nSeedLow;
+              DVar1 = (D2SeedStrc)(nSeedProduct + (uint64_t)nShuffleIdxA);
+              pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
+              pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+              nShuffleIdxA = nGridHeight - 1 & DVar1.nSeedLow;
             }
           }
           if ((int)nGridHeight <= 0) {
@@ -1158,19 +1158,19 @@ void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
           } else {
             nShuffleIdxB = pLevel->sSeed.nSeedLow;
             if (nGridHeight & nGridHeight - 1) {
-              lVar1 = (uint64_t)nShuffleIdxB * 0x6ac690c5;
-              dwOutdoorGridFlags = (int)((uint64_t)lVar1 >> 0x20);
-              DVar2 = (D2SeedStrc)(lVar1 + (uint64_t)pLevel->sSeed.nSeedHigh);
-              pLevel->sSeed.nSeedHigh = DVar2.nSeedHigh;
-              pLevel->sSeed.nSeedLow = DVar2.nSeedLow;
-              nShuffleIdxB = DVar2.nSeedLow % nGridHeight;
+              nSeedProduct = (uint64_t)nShuffleIdxB * 0x6ac690c5;
+              dwOutdoorGridFlags = (int)((uint64_t)nSeedProduct >> 0x20);
+              DVar1 = (D2SeedStrc)(nSeedProduct + (uint64_t)pLevel->sSeed.nSeedHigh);
+              pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
+              pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+              nShuffleIdxB = DVar1.nSeedLow % nGridHeight;
             } else {
-              lVar1 = (uint64_t)nShuffleIdxB * 0x6ac690c5;
-              dwWaypointDirMask = (uint32_t)((uint64_t)lVar1 >> 0x20);
-              DVar2 = (D2SeedStrc)(lVar1 + (uint64_t)pLevel->sSeed.nSeedHigh);
-              pLevel->sSeed.nSeedHigh = DVar2.nSeedHigh;
-              pLevel->sSeed.nSeedLow = DVar2.nSeedLow;
-              nShuffleIdxB = nGridHeight - 1 & DVar2.nSeedLow;
+              nSeedProduct = (uint64_t)nShuffleIdxB * 0x6ac690c5;
+              dwWaypointDirMask = (uint32_t)((uint64_t)nSeedProduct >> 0x20);
+              DVar1 = (D2SeedStrc)(nSeedProduct + (uint64_t)pLevel->sSeed.nSeedHigh);
+              pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
+              pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+              nShuffleIdxB = nGridHeight - 1 & DVar1.nSeedLow;
             }
           }
 
@@ -1214,7 +1214,6 @@ void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
 
 // DRLG outdoor decorator that scatters up to nShrines special tiles into a wilderness level grid. Builds a list of all interior (x,y) cells, Fisher-Yates shuffles it using the level seed, then walks the shuffled cells placing a shrine/decoration where the collision grid is clear (flags & 0x1b81 == 0): writes a per-style grid value (gnOutdoorsGridWidthByLevel[style]) into one grid and sets flag 0x1000 in the collision grid, cycling the 0..3 style index each placement. Stops once nShrines are placed or cells exhausted. Mutates pLevel grids and seed; no return.
 void __fastcall SpawnAct12Shrines(D2DrlgLevelStrc * pLevel, int32_t nShrines) {
-    int nCellY;
     uint32_t nRandIdxA;
     int nCellX;
     uint32_t nRandIdxB;
@@ -1225,6 +1224,7 @@ void __fastcall SpawnAct12Shrines(D2DrlgLevelStrc * pLevel, int32_t nShrines) {
     int32_t nGridY;
     uint32_t nShuffleIdx;
     uint32_t nRemaining;
+    int64_t nSeedProduct;
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     int32_t nShrinesLeft = nShrines;
     D2SeedStrc sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
@@ -1238,7 +1238,7 @@ void __fastcall SpawnAct12Shrines(D2DrlgLevelStrc * pLevel, int32_t nShrines) {
 
     int i = 0;
     if ((int)nTotalCells > 0) {
-      int64_t lVar1;
+      int nCellY;
       do {
         nCellY = i / nGridWidth;
         nCellX = i % nGridWidth;
@@ -1271,16 +1271,16 @@ void __fastcall SpawnAct12Shrines(D2DrlgLevelStrc * pLevel, int32_t nShrines) {
           } else {
             nRandIdxB = pLevel->sSeed.nSeedLow;
             if (nTotalCells & nTotalCells - 1) {
-              lVar1 = (uint64_t)nRandIdxB * 0x6ac690c5;
-              nGridY = (int32_t)((uint64_t)lVar1 >> 0x20);
-              sNewSeed = (D2SeedStrc)(lVar1 + (uint64_t)pLevel->sSeed.nSeedHigh);
+              nSeedProduct = (uint64_t)nRandIdxB * 0x6ac690c5;
+              nGridY = (int32_t)((uint64_t)nSeedProduct >> 0x20);
+              sNewSeed = (D2SeedStrc)(nSeedProduct + (uint64_t)pLevel->sSeed.nSeedHigh);
               pLevel->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
               pLevel->sSeed.nSeedLow = sNewSeed.nSeedLow;
               nRandIdxB = sNewSeed.nSeedLow % nTotalCells;
             } else {
-              lVar1 = (uint64_t)nRandIdxB * 0x6ac690c5;
-              nSeedHighSpill = (int32_t)((uint64_t)lVar1 >> 0x20);
-              sNewSeed = (D2SeedStrc)(lVar1 + (uint64_t)pLevel->sSeed.nSeedHigh);
+              nSeedProduct = (uint64_t)nRandIdxB * 0x6ac690c5;
+              nSeedHighSpill = (int32_t)((uint64_t)nSeedProduct >> 0x20);
+              sNewSeed = (D2SeedStrc)(nSeedProduct + (uint64_t)pLevel->sSeed.nSeedHigh);
               pLevel->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
               pLevel->sSeed.nSeedLow = sNewSeed.nSeedLow;
               nRandIdxB = nTotalCells - 1 & sNewSeed.nSeedLow;

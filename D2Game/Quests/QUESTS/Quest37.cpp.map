@@ -1,0 +1,110 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/Quest37.cpp",
+  "functions": [
+    {
+      "name": "Q37_Callback11_ScrollMessage",
+      "address": "0058f870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f870"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest37",
+      "calledFunctions": [
+        "Q37_Callback11_ScrollMessage",
+        "PLAYER_SetSpokenWithNPC"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Q37_Callback00_NpcActivate",
+      "address": "0058f8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f8f0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest37",
+      "calledFunctions": [
+        "Q37_Callback00_NpcActivate",
+        "PLAYER_CheckIfSpokenWithNPC",
+        "AddGossipMessageOnMonster"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q37_StatusFilter",
+      "address": "0058f9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f9b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest37",
+      "calledFunctions": [
+        "Q37_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q37_ActiveFilter",
+      "address": "0058f9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058f9c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest37",
+      "calledFunctions": [
+        "Q37_ActiveFilter",
+        "GetPlayerData",
+        "GetQuestState",
+        "PLAYER_CheckIfSpokenWithNPC"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q37_InitData",
+      "address": "0058fa20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058fa20"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest37",
+      "calledFunctions": [
+        "Q37_InitData",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc"
+      ]
+    }
+  ]
+}

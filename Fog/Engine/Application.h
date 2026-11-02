@@ -92,9 +92,9 @@ namespace Fog::Engine::Application {
 bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext);
 bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize);
 uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, struct D2FogDebugModuleEntryStrc * pModuleInfoOut);
-bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pnParam);
+bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pModuleList);
 bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList);
-bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pnParam);
+bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList);
 // Enumerates loaded modules into pModuleList: tries DEBUG_EnumerateModulesViaPsapi, then ...ViaToolhelp32, then tail-jumps to ...ViaPEB; returns the first success in AL.
 // Provenance: asm 00404f20..00404f3f; unreferenced in 1.14d (EnumerateAndDumpAllFunctions inlines the same chain at 00402f1f).
 bool __stdcall DEBUG_EnumerateModules(int * pModuleList);

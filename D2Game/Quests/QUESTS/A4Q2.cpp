@@ -93,25 +93,25 @@ void __fastcall Q26_NotifyIzualKilledToPlayers(::SGAMEDATA * pGame) {
 }
 
 // [A4Q1 Izual helper] Per-unit IterateAllUnits callback: if this unit is within collision-distance 5 of the tracked target (Izual), set the "near" flag in the iteration context.
-void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nParam) {
-    int32_t nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, *(D2UnitStrc**)(nParam + 0x14));
+void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t pQuestSpecificData) {
+    int32_t nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, *(D2UnitStrc**)(pQuestSpecificData + 0x14));
     if (nCollisionDist >= 5) {
       return;
     }
 
-    *(uint8_t*)(nParam + 0x18) = 1;
+    *(uint8_t*)(pQuestSpecificData + 0x18) = 1;
 }
 
 // [A4Q1 Izual helper] Returns true if NO player is near Izual: looks up The Fallen Angel quest data, then iterates all units via Q26_CheckIzualProximity to test proximity.
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
-BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, int32_t nParam) {
+BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, int32_t pTargetUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheFallenAngel);
     if (pQuestData) {
       D2QuestDataA3Q3Strc* pQuestSpecificData;
       pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q3;
       if (*(char*)((uintptr_t)&pQuestSpecificData->nSerpentSpawnY + 2) != '\0') {
         pQuestSpecificData->bSerpentLocationValid = false;
-        pQuestSpecificData->nSerpentObjectY = nParam;
+        pQuestSpecificData->nSerpentObjectY = pTargetUnit;
         UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)Q26_CheckIzualProximity, pQuestSpecificData);
         return (uint32_t)!pQuestSpecificData->bSerpentLocationValid;
       }
@@ -1031,9 +1031,9 @@ void __fastcall Q27_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // [A4Q3 Terror's End] Object init-fn (seal object): records which seal/lever was touched into the A4Q2 struct; if all 5 seals + 3 bosses are accounted for, triggers Q27_ActivateAllSealsKillChaos and arms the spawn-Diablo timer (QuitGameAfterDia).
-void __fastcall Objects_InitFn55(D2ObjectInitFnArg * pdwParam) {
+void __fastcall Objects_InitFn55(D2ObjectInitFnArg * pInitArg) {
     int nSealObjectId;
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pdwParam->pGame, QUESTINT_TerrorsEnd);
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TerrorsEnd);
     if (!pQuestData) {
       return;
     }
@@ -1044,10 +1044,10 @@ void __fastcall Objects_InitFn55(D2ObjectInitFnArg * pdwParam) {
     }
 
     pQuestSpecificData->bWaitingForSealSpawn = 1;
-    if (!pdwParam->pObject) {
+    if (!pInitArg->pObject) {
       nSealObjectId = -1;
     } else {
-      nSealObjectId = pdwParam->pObject->nUnitGUID;
+      nSealObjectId = pInitArg->pObject->nUnitGUID;
     }
 
     pQuestSpecificData->nSealObjectGUID = nSealObjectId;
@@ -1064,7 +1064,7 @@ void __fastcall Objects_InitFn55(D2ObjectInitFnArg * pdwParam) {
       return;
     }
 
-    Q27_ActivateAllSealsKillChaos((int*)pQuestSpecificData, pdwParam->pGame);
+    Q27_ActivateAllSealsKillChaos((int*)pQuestSpecificData, pInitArg->pGame);
     if (pQuestSpecificData->bDiabloSpawnStarted) {
       return;
     }

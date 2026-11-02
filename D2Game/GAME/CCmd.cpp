@@ -135,7 +135,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
       case 'g':
         /* D2GS_GAMELOGON_SP */ bFindMeCheckResult = Server::SetupGameChecks(nClientId, &pPacket->uMsg.sGameLogonSP);
       if (bFindMeCheckResult) {
-        Server::GAME_CreateSingleplayerGame(nClientId, pPacket->uMsg.sGameLogonSP.szGameName, pPacket->uMsg.sGameLogonSP.eHostGameType, pPacket->uMsg.sGameLogonSP.ePlayerClass, pPacket->uMsg.sGameLogonSP.szCharName, (uint32_t)(uint16_t)pPacket->uMsg.sGameLogonSP.field_0x25, pPacket->uMsg.sGameLogonSP.eArenaFlags, pPacket->uMsg.sGameLogonSP.nTemplate, pPacket->uMsg.sGameLogonSP.field_0x2b, pPacket->uMsg.sGameLogonSP.field_0x2c, pPacket->uMsg.sGameLogonSP.nDifficulty, pPacket->uMsg.sGameLogonSP.nLanguageCode, 0, 0);
+        Server::GAME_CreateSingleplayerGame(nClientId, pPacket->uMsg.sGameLogonSP.szGameName, pPacket->uMsg.sGameLogonSP.eHostGameType, pPacket->uMsg.sGameLogonSP.ePlayerClass, pPacket->uMsg.sGameLogonSP.szCharName, (uint32_t)(uint16_t)pPacket->uMsg.sGameLogonSP.nArena, pPacket->uMsg.sGameLogonSP.eArenaFlags, pPacket->uMsg.sGameLogonSP.nTemplate, pPacket->uMsg.sGameLogonSP.field_0x2b, pPacket->uMsg.sGameLogonSP.field_0x2c, pPacket->uMsg.sGameLogonSP.nDifficulty, pPacket->uMsg.sGameLogonSP.nLanguageCode, 0, 0);
         return;
       }
 
@@ -148,7 +148,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
       __frame0.dwJoinParam1 = 0;
       Server::SRVLog(6, "[JOIN 1] %d clientid - Begin", nClientId);
       if (!BattleNetServerService) {
-        nReason = IsTokenFirstGame((uint32_t)pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.field_0x8, pPacket->uMsg.sGameLogonMulti.szCharName);
+        nReason = IsTokenFirstGame((uint32_t)pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.dwClientVersion, pPacket->uMsg.sGameLogonMulti.szCharName);
         if (nReason) {
           Server::ServerCmd::NET_D2GS_SERVER_Send_0xB4_ConnectionRefused(nClientId, nReason);
           D2Net::Game::Server::NET_HACK_AddClientToHackList(nClientId, ".\\GAME\\CCmd.cpp", 0x14b);
@@ -157,9 +157,9 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
 
       pPlayerName = pPacket->uMsg.sGameLogonMulti.szCharName;
       szCharName[0] = '\0';
-      bServerValidRequest = Server::NET_D2GS_SERVER_IsValidChecks(nClientId, pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.nCharClass, pPlayerName, pPacket->uMsg.sGameLogonMulti.dwGameHash, (uint32_t)szCharName, (uint32_t)&__frame0.nValidCheckResult, pPacket->uMsg.sGameLogonMulti.nLanguage, (uint32_t)&__frame0.dwJoinParam3, (uint32_t)&__frame0.dwJoinParam2, (uint32_t)&__frame0.dwJoinParam0, (uint32_t)&__frame0.dwJoinParam1, pPacket->uMsg.sGameLogonMulti.field_0x8);
+      bServerValidRequest = Server::NET_D2GS_SERVER_IsValidChecks(nClientId, pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.nCharClass, pPlayerName, pPacket->uMsg.sGameLogonMulti.dwGameHash, (uint32_t)szCharName, (uint32_t)&__frame0.nValidCheckResult, pPacket->uMsg.sGameLogonMulti.nLanguage, (uint32_t)&__frame0.dwJoinParam3, (uint32_t)&__frame0.dwJoinParam2, (uint32_t)&__frame0.dwJoinParam0, (uint32_t)&__frame0.dwJoinParam1, pPacket->uMsg.sGameLogonMulti.dwClientVersion);
       if (bServerValidRequest) {
-        Server::NET_D2GS_SERVER_SrvJoinGame(nClientId, pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.nCharClass, pPlayerName, pPacket->uMsg.sGameLogonMulti.dwGameHash, szCharName, __frame0.nValidCheckResult, pPacket->uMsg.sGameLogonMulti.nLanguage, __frame0.dwJoinParam3, __frame0.dwJoinParam2, __frame0.dwJoinParam0, __frame0.dwJoinParam1, pPacket->uMsg.sGameLogonMulti.field_0x8);
+        Server::NET_D2GS_SERVER_SrvJoinGame(nClientId, pPacket->uMsg.sGameLogonMulti.nGameToken, pPacket->uMsg.sGameLogonMulti.nCharClass, pPlayerName, pPacket->uMsg.sGameLogonMulti.dwGameHash, szCharName, __frame0.nValidCheckResult, pPacket->uMsg.sGameLogonMulti.nLanguage, __frame0.dwJoinParam3, __frame0.dwJoinParam2, __frame0.dwJoinParam0, __frame0.dwJoinParam1, pPacket->uMsg.sGameLogonMulti.dwClientVersion);
       }
 
       break;

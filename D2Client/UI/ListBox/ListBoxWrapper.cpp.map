@@ -1,0 +1,333 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/ListBox/ListBoxWrapper.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "004becc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004becc0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004bed10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bed10"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnDownArrow",
+      "address": "004bed40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bed40"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnDownArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnUpArrow",
+      "address": "004bed50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bed50"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnUpArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnRightArrow",
+      "address": "004bed60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bed60"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnRightArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnLeftArrow",
+      "address": "004bed70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bed70"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnLeftArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseDown",
+      "address": "004bed80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bed80"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnMouseDown"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseUp",
+      "address": "004bed90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bed90"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnMouseUp"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseMove",
+      "address": "004beda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004beda0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnMouseMove"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnChar",
+      "address": "004bedb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bedb0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnChar"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "GetValue",
+      "address": "004bedc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bedc0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "GetValue"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004bedd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bedd0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "Draw"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "AddItem",
+      "address": "004bede0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bede0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "AddItem"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetItemUserData",
+      "address": "004bedf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bedf0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "GetItemUserData"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetItemCount",
+      "address": "004bee00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bee00"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "GetItemCount"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "004bee10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bee10"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "Clear"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseWheel",
+      "address": "004bee20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bee20"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "OnMouseWheel"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxWrapper"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004bf8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bf8f0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxWrapper",
+      "calledFunctions": [
+        "Constructor",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation",
+        "ListBoxWrapper",
+        "fpListBoxItemActivated",
+        "pfnEHHandlerRoutine"
+      ]
+    }
+  ]
+}

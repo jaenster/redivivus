@@ -69,10 +69,10 @@ struct __attribute__((packed)) D2FogDebugModuleEntryStrc {
     /* 0x004 */ uint32_t nImageSize; // %08x
     /* 0x008 */ char szModuleName[256]; // "%s"
     /* 0x108 */ char szImagePath[256]; // "%s" at +0x108
-    /* 0x208 */ uint32_t dwUnknown208; // %u
+    /* 0x208 */ uint32_t dwPdbSignature; // %u
     /* 0x20C */ GUID guidPdb; // +0x20c dword, +0x210/+0x212 words, +0x214..+0x21b bytes; manual placement, no padding
-    /* 0x21C */ uint32_t dwUnknown21c; // %u
-    /* 0x220 */ uint32_t dwUnknown220; // %u
+    /* 0x21C */ uint32_t dwPdbAge; // %u
+    /* 0x220 */ uint32_t dwImageTimeDateStamp; // %u
     /* 0x224 */ uint32_t dwTimestamp; // printed as ' %8x' when nonzero
 };
 
@@ -279,7 +279,7 @@ void __fastcall ZeroStruct36Bytes(uint32_t * pStruct);
 void __stdcall ZeroStruct16Bytes(void * pStruct);
 void __stdcall ZeroStruct16BytesDuplicate(void * pStruct);
 void __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);
-int CompareUintDescending(LPCVOID pParam1, LPCVOID pParam2);
+int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight);
 void __fastcall FormatAddressDebugString(uint32_t * pAddrInfo, char * pSymInfo, char * szOutput);
 void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, ::Report * pReport);
 int __stdcall DEBUG_UnloadStackCrawlDbgHelp();

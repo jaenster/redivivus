@@ -15,17 +15,8 @@ namespace Storm {
 
 // @blizzard SMsgBreakHandlerChain (SMSG.CPP)
 int __stdcall SMsgBreakHandlerChain(void * pUnderMouse) {
-    int iVar1 = Source::SEVT::SEvtBreakHandlerChain(pUnderMouse);
-    return iVar1;
-}
-
-void StaticFini_Empty_6cb400() {
-
-}
-
-void StaticFini_gFaultHandlerList() {
-    Source::SSystem::LINKEDLIST_FreeNode(&gFaultHandlerList);
-    Source::SSystem::LINKEDLIST_UnlinkNodeSelf(&gFaultHandlerList.head);
+    int nResult = Source::SEVT::SEvtBreakHandlerChain(pUnderMouse);
+    return nResult;
 }
 
 } // namespace Storm

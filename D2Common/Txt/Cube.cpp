@@ -365,7 +365,7 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
     int32_t nItemTypeClassId;
     int32_t nLinkIndex;
     long int nAtol;
-    char* pcVar2;
+    char* pszScan;
     bool bTokenMatch;
     char* pszPadded;
     D2CubeOutputStrc* pOutputCopy;
@@ -491,15 +491,15 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
         pszCursor = szPaddedCode;
         nSpanLen = strcspn(szPaddedCode, "=,");
         pDVar1 = pOutput;
-        pcVar2 = pszCursor + nSpanLen;
-        if (*pcVar2 != '\0') {
-          *pcVar2 = '\0';
-          szPaddedCode = pcVar2 + 1;
+        pszScan = pszCursor + nSpanLen;
+        if (*pszScan != '\0') {
+          *pszScan = '\0';
+          szPaddedCode = pszScan + 1;
         } else {
           szPaddedCode = 0;
         }
 
-        pcVar2 = szPaddedCode;
+        pszScan = szPaddedCode;
         if (!pszCursor) {
           return;
         }
@@ -507,22 +507,22 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
         bTokenMatch = !strcmp(pszCursor, "qty");
         if (bTokenMatch) {
           nSpanLen = strcspn(szPaddedCode, ",");
-          pszCursor = pcVar2 + nSpanLen;
+          pszCursor = pszScan + nSpanLen;
           if (*pszCursor != '\0') {
             *pszCursor = '\0';
             szPaddedCode = pszCursor + 1;
-            nAtol = atoi(pcVar2);
+            nAtol = atoi(pszScan);
             pOutput->nQuantity = (uint8_t)nAtol;
           } else {
             szPaddedCode = 0;
-            nAtol = atoi(pcVar2);
+            nAtol = atoi(pszScan);
             pOutput->nQuantity = (uint8_t)nAtol;
           }
         } else {
           bTokenMatch = !strcmp(pszCursor, "pre");
           if (bTokenMatch) {
             nSpanLen = strcspn(szPaddedCode, ",");
-            pszCursor = pcVar2 + nSpanLen;
+            pszCursor = pszScan + nSpanLen;
             if (*pszCursor != '\0') {
               *pszCursor = '\0';
               szPaddedCode = pszCursor + 1;
@@ -530,14 +530,14 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
               szPaddedCode = 0;
             }
 
-            nAtol = atoi(pcVar2);
+            nAtol = atoi(pszScan);
             *(short int*)pszItemCodeField = (short int)nAtol;
             pszItemCodeField += 2;
           } else {
             bTokenMatch = !strcmp(pszCursor, "suf");
             if (bTokenMatch) {
               nSpanLen = strcspn(szPaddedCode, ",");
-              pszCursor = pcVar2 + nSpanLen;
+              pszCursor = pszScan + nSpanLen;
               if (*pszCursor != '\0') {
                 *pszCursor = '\0';
                 szPaddedCode = pszCursor + 1;
@@ -545,7 +545,7 @@ static void __stdcall CUBE_ParseOutputItem(D2CubeOutputStrc * pOutput, char * ps
                 szPaddedCode = 0;
               }
 
-              nAtol = atoi(pcVar2);
+              nAtol = atoi(pszScan);
               *(short int*)pszPadded = (short int)nAtol;
               pszPadded += 2;
             } else {
@@ -856,7 +856,7 @@ int32_t __stdcall CUBE_GetRecipeCount() {
     return nTxtCubeMainSize;
 }
 
-void __stdcall nullsub(D2UnitStrc * dwParam1, uint32_t dwParam2) {
+void __stdcall nullsub(D2UnitStrc * pUnit, uint32_t dwParam2) {
 
 }
 

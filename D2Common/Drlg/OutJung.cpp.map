@@ -1,0 +1,59 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/OutJung.cpp",
+  "functions": [
+    {
+      "name": "BuildJungle",
+      "address": "0067e910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e910"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutJung",
+      "calledFunctions": [
+        "BuildJungle",
+        "TXT_LevelDefs_GetLine",
+        "UNIT_GetModuloFromSeed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LevelDefsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnRandomPreset",
+      "address": "0067eed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067eed0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutJung",
+      "calledFunctions": [
+        "SpawnRandomPreset",
+        "AllocServerMemory",
+        "TestOutdoorLevelPreset",
+        "SpawnOutdoorLevelPresetEx",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2PoolManagerStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

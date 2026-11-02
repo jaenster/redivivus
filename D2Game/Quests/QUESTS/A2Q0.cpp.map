@@ -1,0 +1,162 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A2Q0.cpp",
+  "functions": [
+    {
+      "name": "Q08_Callback11_ScrollMessage",
+      "address": "00598640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00598640"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q0",
+      "calledFunctions": [
+        "Q08_Callback11_ScrollMessage",
+        "GetPlayerData",
+        "SetQuestState",
+        "QUEST_SetQuestRecordState",
+        "QUESTGUID_AddPlayerToList"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Q08_Callback00_NpcActivate",
+      "address": "005986b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005986b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q0",
+      "calledFunctions": [
+        "Q08_Callback00_NpcActivate",
+        "GetPlayerData",
+        "GetQuestState",
+        "AddGossipMessageOnMonster",
+        "QUESTGUID_SearchForValueInIntArray32",
+        "Q04_RemovePlayerFromList"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA2Q0Strc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q08_StatusFilter",
+      "address": "00598770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00598770"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q0",
+      "calledFunctions": [
+        "Q08_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q08_ActiveFilter",
+      "address": "00598780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00598780"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q0",
+      "calledFunctions": [
+        "Q08_ActiveFilter",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q08_Callback10_PlayerLeavesGame",
+      "address": "005987b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005987b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q0",
+      "calledFunctions": [
+        "Q08_Callback10_PlayerLeavesGame",
+        "QUESTGUID_RemovePlayerFromList"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q08_Callback13_PlayerStartedGame",
+      "address": "005987d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005987d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q0",
+      "calledFunctions": [
+        "Q08_Callback13_PlayerStartedGame",
+        "GetPlayerData",
+        "GetQuestState",
+        "QUEST_SetQuestRecordState"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q08_InitData",
+      "address": "00598810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00598810"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q0",
+      "calledFunctions": [
+        "Q08_InitData",
+        "memset",
+        "AllocServerMemory",
+        "QUESTGUID_SetPlayerCountToZero"
+      ],
+      "usedTypes": [
+        "D2QuestDataA2Q0Strc",
+        "D2QuestDataStrc"
+      ]
+    }
+  ]
+}

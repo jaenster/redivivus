@@ -61,8 +61,8 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
     uint32_t dwBinkOpenFlags;
     tagMSG sMsg;
     HANDLE hVideoFile;
-    bool bVar1;
-    bVar1 = false;
+    bool bSkipRequested;
+    bSkipRequested = false;
     gbBinkVideoShouldStop = 0;
     if (!(!gpBinkVideoD3D && !gnRenderState)) {
       return;
@@ -72,9 +72,9 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
     BinkSetSoundSystem(BinkOpenDirectSound, 0);
     uint32_t nOpenFlags;
     nOpenFlags = 4;
-    BOOL BVar2;
-    BVar2 = Source::SFile::GetUseDirectCommand();
-    if (BVar2) {
+    BOOL BVar1;
+    BVar1 = Source::SFile::GetUseDirectCommand();
+    if (BVar1) {
       nOpenFlags = 5;
     }
 
@@ -111,7 +111,7 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
         dwTickStart = GetTickCount();
         do {
           while (true) {
-            if (gbBinkVideoShouldStop && (dwTickNow = GetTickCount() , dwTickNow >= dwTickStart + 500) || gnRenderState || bVar1) {
+            if (gbBinkVideoShouldStop && (dwTickNow = GetTickCount() , dwTickNow >= dwTickStart + 500) || gnRenderState || bSkipRequested) {
               if (gpBinkVideoD3D) {
                 D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0);
                 BinkClose(gpBinkVideoD3D);
@@ -129,8 +129,8 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
               (*pfnCallback)();
             }
 
-            /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ BVar2 = PeekMessageA(&sMsg, (HWND)0x0, 0, 0, 1);
-            if (BVar2) {
+            /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ BVar1 = PeekMessageA(&sMsg, (HWND)0x0, 0, 0, 1);
+            if (BVar1) {
               break;
             }
 
@@ -157,7 +157,7 @@ void __fastcall D3D_PlayBinkVideo(char * szVideoPath, int nAudioMode, fnBinkFram
           } else {
             if (!(sMsg.message != 0x204 && sMsg.message != 0x207)) {
               request_skip:
-              bVar1 = true;
+              bSkipRequested = true;
               gdwBinkVideoClickTime = GetTickCount();
             }
           }

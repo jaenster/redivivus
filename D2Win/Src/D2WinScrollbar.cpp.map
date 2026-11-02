@@ -1,0 +1,316 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinScrollbar.cpp",
+  "functions": [
+    {
+      "name": "FORMS_DestroyD2WinScrollbar",
+      "address": "00507ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507ee0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinScrollbar",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_GetMaxValue",
+      "address": "00507ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507ef0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_GetMaxValue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_SetMaxValue",
+      "address": "00507f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507f20"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_SetMaxValue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_SetPosition",
+      "address": "00507f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507f60"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_SetPosition",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_GetPosition",
+      "address": "00507fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507fa0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_GetPosition",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_SetLinkedTextBox",
+      "address": "00507fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507fd0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_SetLinkedTextBox",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "D2WinTextBox",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_SetChangeCallback",
+      "address": "00508000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508000"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_SetChangeCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "fpD2WinScrollbarOnChange",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_HandleMouseWheel",
+      "address": "00508030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508030"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_HandleMouseWheel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINTEXTBOX_ScrollToLine"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "D2WinScrollbar",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_SetStyle",
+      "address": "005080c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005080c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_SetStyle",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINSCROLLBAR_GetStyle",
+      "address": "005080f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005080f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WINSCROLLBAR_GetStyle",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Push",
+      "address": "00508120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508120"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "Push",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINTEXTBOX_ScrollToLine"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinScrollbar",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Mouse",
+      "address": "00508310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508310"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "Mouse",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "00508370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508370"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "Draw",
+        "D2WINMAIN_GetWinMainState",
+        "Push",
+        "memset",
+        "D2GFX_DrawImage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2GfxDataStrc",
+        "D2WinScrollbar",
+        "DC6",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WinScrollbar",
+      "address": "005084f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005084f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinScrollbar",
+      "calledFunctions": [
+        "D2WinScrollbar",
+        "AllocClientMemory",
+        "memset",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinScrollbar",
+        "DC6",
+        "OnPress",
+        "int32_t"
+      ]
+    }
+  ]
+}

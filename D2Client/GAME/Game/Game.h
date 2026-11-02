@@ -94,7 +94,7 @@ namespace D2Client::GAME::Game {
 void __thiscall GAMEDATA_TimerInitWithTickCount(uint32_t * pTimerStruct, uint32_t dwDurationMs);
 void __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint8_t byteValue);
 // Setter for gRunKeyDown (run modifier).
-void __fastcall SetRunKeyDown(BOOL dwParam);
+void __fastcall SetRunKeyDown(BOOL bRunKeyDown);
 void __fastcall SetGlobalAlwaysRun(int32_t nValue);
 BOOL __stdcall GetGlobalAlwaysRun();
 void __fastcall GAMEDATA_SetClickModifier(int32_t bModifierDown);
@@ -151,7 +151,7 @@ int __stdcall GAMEDATA_GetCurrentLevelBlankScreen();
 // Main render entry point. Called per-frame from CLIENT_GameLoopFrame.
 // Flow: BeginScene -> Draw world (floor/units/roofs) -> Draw UI -> EndScene -> Present.
 // Viewport centered on player, supports shake, perspective, isometric transform.
-void __fastcall InGameDraw(int32_t nParam);
+void __fastcall InGameDraw(int32_t bSkipCursor);
 // Draw localized loading message (single or multi-line) centered on screen.
 void __stdcall DrawLoadingMessage();
 // Compute frame-skip level based on elapsed ticks and fps_drawn.
@@ -182,7 +182,7 @@ void __stdcall GAMEDATA_DrawLoadingScreenText();
 void __stdcall SetExitCutscenePlayed();
 void __stdcall D2CLIENT_SetExitVar3ToTrue();
 // Set pending exit cutscene id (quest/cutscene).
-void __fastcall SetPendingExitCutsceneId(int32_t nParam);
+void __fastcall SetPendingExitCutsceneId(int32_t nCutsceneId);
 struct D2BNetClientCallbacksStrc * __stdcall GetGameVersionInfo();
 // pfModes_ExitGame: cleanup view/UI/record/rosters, then return APPMODE_CONTINUE.
 eD2ClientAppMode __stdcall pfModes_ExitGame();

@@ -1,0 +1,189 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/DataArrays.cpp",
+  "functions": [
+    {
+      "name": "FOG_CreateDataArray",
+      "address": "006bca10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bca10"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FOG_CreateDataArray",
+        "AllocClientMemory",
+        "memset",
+        "strncpy"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc"
+      ]
+    },
+    {
+      "name": "FreeWeatherPointer",
+      "address": "006bca90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bca90"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FreeWeatherPointer",
+        "memset",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "FOG_InitDataArray",
+      "address": "006bcac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bcac0"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FOG_InitDataArray",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc"
+      ]
+    },
+    {
+      "name": "FOG_GetMissileField",
+      "address": "006bcb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bcb40"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FOG_GetMissileField",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FOG_GetDataArrayEntry",
+      "address": "006bcc10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bcc10"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FOG_GetDataArrayEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FOG_GetDataArrayEntryOrHalt",
+      "address": "006bcc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bcc90"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FOG_GetDataArrayEntry",
+        "FOG_GetDataArrayEntryOrHalt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc"
+      ]
+    },
+    {
+      "name": "FOG_CloseDataArray",
+      "address": "006bccc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bccc0"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FOG_CloseDataArray",
+        "FOG_InitDataArray"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc"
+      ]
+    },
+    {
+      "name": "FOG_ArrayFreeAtIndex",
+      "address": "006bccd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bccd0"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FOG_ArrayFreeAtIndex",
+        "FOG_GetDataArrayEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DataArrayStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FOG_FillArrayWithRandomInts",
+      "address": "006be190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be190"
+        }
+      ],
+      "namespace": "Fog::Src::DataArrays",
+      "calledFunctions": [
+        "FOG_FillArrayWithRandomInts",
+        "CRT_CIPow",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    }
+  ]
+}

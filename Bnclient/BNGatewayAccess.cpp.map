@@ -1,0 +1,793 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/BNGatewayAccess.cpp",
+  "functions": [
+    {
+      "name": "GetSystemTimeZone",
+      "address": "00517e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517e60"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "GetSystemTimeZone",
+        "SMemZero",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "LANGID",
+        "_TIME_ZONE_INFORMATION",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SaveAndUnload",
+      "address": "00517ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517ed0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "SaveAndUnload",
+        "BnetLog_WriteLine",
+        "SStrLen",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SRegSaveData",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Nth",
+      "address": "00517fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517fd0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "Nth",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DNS",
+      "address": "00518040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518040"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "DNS",
+        "Nth"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr"
+      ]
+    },
+    {
+      "name": "GMT",
+      "address": "00518060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518060"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "GMT",
+        "Nth",
+        "SStrLen",
+        "strtol"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Name",
+      "address": "005180a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005180a0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "Name",
+        "Nth",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Realm",
+      "address": "005180e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005180e0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "Realm",
+        "Nth",
+        "SStrCmpI",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetCurGateway",
+      "address": "00518150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518150"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "SetCurGateway"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetGatewayList",
+      "address": "00518190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518190"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "GetGatewayList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SRegLoadData",
+        "SMemAlloc",
+        "SMemFree",
+        "strtoul"
+      ],
+      "usedTypes": [
+        "LPBYTE",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetBattlenetGatewayList",
+      "address": "00518270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518270"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "GetBattlenetGatewayList",
+        "GetGatewayList"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetBattlenetRealmsList",
+      "address": "005182b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005182b0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "GetBattlenetRealmsList",
+        "SFileLoadFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WritingDefaultGatewayList",
+      "address": "00518300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518300"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "WritingDefaultGatewayList",
+        "SFileLoadFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WriteDefaultGatewayList",
+      "address": "00518360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518360"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "WriteDefaultGatewayList",
+        "BnetLog_WriteLine",
+        "WritingDefaultGatewayList",
+        "UpdateGatewaysFromIni"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SkipToEOL",
+      "address": "00518390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518390"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "SkipToEOL"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr"
+      ]
+    },
+    {
+      "name": "SkipEOL",
+      "address": "005183c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005183c0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "SkipEOL"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr"
+      ]
+    },
+    {
+      "name": "FindSection",
+      "address": "005183f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005183f0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "FindSection",
+        "_strnicmp",
+        "SkipToEOL",
+        "SkipEOL",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindKey",
+      "address": "005184c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005184c0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "FindKey",
+        "_strnicmp"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr"
+      ]
+    },
+    {
+      "name": "PickClosestZone",
+      "address": "00518580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518580"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "PickClosestZone",
+        "BNET_LogIndent",
+        "BnetLog_WriteLine",
+        "Nth",
+        "SStrLen",
+        "strtol"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Load",
+      "address": "005186d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005186d0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "Load",
+        "GetBattlenetRealmsList",
+        "GetGatewayList",
+        "BnetLog_WriteLine",
+        "SaveAndUnload",
+        "SRegDeleteValue",
+        "WritingDefaultGatewayList",
+        "UpdateGatewaysFromIni",
+        "SStrLen",
+        "strtoul",
+        "GetSystemTimeZone",
+        "PickClosestZone",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UpdateGatewaysFromIni",
+      "address": "00518850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518850"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "UpdateGatewaysFromIni",
+        "FindSection",
+        "FindKey",
+        "strtoul",
+        "__security_check_cookie",
+        "BnetLog_WriteLine",
+        "GetSystemTimeZone",
+        "GMT",
+        "SaveAndUnload",
+        "SMemAlloc",
+        "sprintf",
+        "SStrLen",
+        "SkipToEOL",
+        "SStrCopy",
+        "PickClosestZone",
+        "Load",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_ComputeCRC32",
+      "address": "00518de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518de0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_ComputeCRC32",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CACHE_DecryptBlock",
+      "address": "00518e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518e60"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_DecryptBlock"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_EncryptBlock",
+      "address": "00518ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518ec0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_EncryptBlock"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_GetFileTime",
+      "address": "00518f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518f30"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_GetFileTime",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "LPFILETIME",
+        "_SYSTEMTIME",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_HashString",
+      "address": "00518fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518fa0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_HashString",
+        "toupper"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_InitCryptTable",
+      "address": "00519000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00519000"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_InitCryptTable"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_FindHashEntry",
+      "address": "00519110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00519110"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_FindHashEntry",
+        "CACHE_HashString"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_RemoveEntry",
+      "address": "005191d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005191d0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_RemoveEntry",
+        "CACHE_FindHashEntry"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_BuildFilePath",
+      "address": "00519220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00519220"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_BuildFilePath",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SStrPack"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CACHE_DeleteFile",
+      "address": "005192a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005192a0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_DeleteFile",
+        "CACHE_BuildFilePath",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_FreeAll",
+      "address": "00519300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00519300"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_FreeAll",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "CACHE_FreeMem",
+      "address": "005193c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005193c0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_FreeMem",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_Open",
+      "address": "005193e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005193e0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_Open",
+        "CACHE_FreeAll",
+        "CACHE_BuildFilePath",
+        "__security_check_cookie",
+        "SMemAlloc",
+        "CACHE_InitCryptTable",
+        "SMemFree",
+        "CACHE_DeleteFile",
+        "memset",
+        "BnetLog_WriteLine",
+        "CACHE_ComputeCRC32",
+        "CACHE_HashString",
+        "CACHE_DecryptBlock"
+      ],
+      "usedTypes": [
+        "D2BnCacheFileHeaderStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CACHE_Rebuild",
+      "address": "005198c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005198c0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_Rebuild",
+        "CACHE_FreeAll",
+        "CACHE_DeleteFile",
+        "CACHE_BuildFilePath",
+        "CACHE_Open",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CACHE_ReadData",
+      "address": "00519920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00519920"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_ReadData",
+        "CACHE_FindHashEntry",
+        "memset",
+        "_stricmp",
+        "BnetLog_WriteLine",
+        "CACHE_RemoveEntry",
+        "CACHE_GetFileTime",
+        "SMemAlloc",
+        "CACHE_ComputeCRC32",
+        "CACHE_Rebuild",
+        "SMemFree",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BnCacheEntryHeaderStrc",
+        "FILETIME",
+        "LPDWORD",
+        "LPFILETIME",
+        "uint32_t",
+        "uint32_t *"
+      ]
+    },
+    {
+      "name": "CACHE_WriteData",
+      "address": "00519db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00519db0"
+        }
+      ],
+      "namespace": "Bnclient::BNGatewayAccess",
+      "calledFunctions": [
+        "CACHE_WriteData",
+        "__security_check_cookie",
+        "CACHE_RemoveEntry",
+        "memset",
+        "CACHE_GetFileTime",
+        "CACHE_HashString",
+        "CACHE_ComputeCRC32",
+        "SMemAlloc",
+        "memcpy",
+        "CACHE_EncryptBlock",
+        "SMemFree",
+        "BnetLog_WriteLine",
+        "CACHE_Rebuild"
+      ],
+      "usedTypes": [
+        "D2BnCacheEntryHeaderStrc",
+        "D2BnCacheFileHeaderStrc",
+        "FILETIME",
+        "LPFILETIME",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,997 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/Maze.cpp",
+  "functions": [
+    {
+      "name": "ReplaceRoomWithNewRoom",
+      "address": "00670880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670880"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "ReplaceRoomWithNewRoom",
+        "ComputeRectanglesManhattanDistance",
+        "DRLGROOM_CoordsWithinDistance"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "D2DrlgOrthStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_SetRoomPresetDirect",
+      "address": "00670970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670970"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_SetRoomPresetDirect"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_PickRoomPreset",
+      "address": "006709b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006709b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_PickRoomPreset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGMAZE_IsPresetSingleFile"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgOrthStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_FindAndReplacePreset",
+      "address": "00670c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670c10"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_FindAndReplacePreset"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_PickRoomPresets",
+      "address": "00670c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670c70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_PickRoomPresets",
+        "DRLGCOORDS_IsWithinDistance",
+        "GetDirectionFromCoordinates",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgOrthStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "eDrlgDirection"
+      ]
+    },
+    {
+      "name": "AllocateRoomEx",
+      "address": "00670d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670d70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "AllocateRoomEx",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGMAZE_PickRoomPresets",
+        "AddRoomExToLevel"
+      ],
+      "usedTypes": [
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "eDrlgDirection"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_AllocRoomExAndPickPreset",
+      "address": "00670de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670de0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_AllocRoomExAndPickPreset",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "eDrlgDirection",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_AllocRoomAndPickPreset",
+      "address": "00670e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670e70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_AllocRoomAndPickPreset",
+        "AllocateRoomEx",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "eDrlgDirection"
+      ]
+    },
+    {
+      "name": "ReplaceRoomWith",
+      "address": "00670eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670eb0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "ReplaceRoomWith",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_BuildRoomGrid",
+      "address": "00670f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670f60"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_BuildRoomGrid",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGMAZE_PickRoomPresets",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRandomRoomExFromLevel",
+      "address": "006711a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006711a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "GetRandomRoomExFromLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "ActualLevelGeneration",
+      "address": "00671210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00671210"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "ActualLevelGeneration",
+        "GetRandomRoomExFromLevel",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGMAZE_PickRoomPresets",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_ExpandRoomsWithPresets",
+      "address": "00671320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00671320"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_ExpandRoomsWithPresets",
+        "AllocServerMemory",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "AddRoomExToLevel",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgPresetRoomStrc",
+        "D2LvlMazeTxt",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "D2RoomExStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetupBaalChamber",
+      "address": "00671430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00671430"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "SetupBaalChamber",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGMAZE_AllocRoomExAndPickPreset",
+        "DRLGMAZE_ExpandRoomsWithPresets"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_ExpandCatacombsLevel",
+      "address": "006714d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006714d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_ExpandCatacombsLevel",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGMAZE_PickRoomPresets",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgPresetRoomStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GenerateWolrdstoneAndTombs",
+      "address": "006718c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006718c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "GenerateWolrdstoneAndTombs",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGMAZE_PickRoomPresets",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RollArcaneTypePath",
+      "address": "006719f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006719f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "RollArcaneTypePath",
+        "memset",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGMAZE_PickRoomPresets",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "D2RoomExStrc *",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_CanPlaceRoomInDirection",
+      "address": "00672340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672340"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_CanPlaceRoomInDirection",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset"
+      ],
+      "usedTypes": [
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "eDrlgDirection"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_FindTopMostRoom",
+      "address": "006723e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006723e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_FindTopMostRoom",
+        "DRLGMAZE_CanPlaceRoomInDirection"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_FindLeftMostRoom",
+      "address": "00672420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672420"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_FindLeftMostRoom",
+        "DRLGMAZE_CanPlaceRoomInDirection"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_FindRightMostRoom",
+      "address": "00672460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672460"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_FindRightMostRoom",
+        "DRLGMAZE_CanPlaceRoomInDirection"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_FindBottomMostRoom",
+      "address": "006724a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006724a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_FindBottomMostRoom",
+        "DRLGMAZE_CanPlaceRoomInDirection"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "ReplaceRoom",
+      "address": "006724e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006724e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "ReplaceRoom",
+        "ReplaceRoomWith"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgReplaceRoomStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Caves",
+      "address": "00672550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672550"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "Caves",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgReplaceRoomStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Crypt",
+      "address": "00672610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672610"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "Crypt",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RollRooms",
+      "address": "006726d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006726d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "RollRooms",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_ReplaceCatacombsRooms",
+      "address": "006727a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006727a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_ReplaceCatacombsRooms",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_GenerateSewerLevel",
+      "address": "00672810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672810"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_GenerateSewerLevel",
+        "DRLGMAZE_FindTopMostRoom",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGMAZE_PickRoomPresets",
+        "AddRoomExToLevel",
+        "DRLGMAZE_PickRoomPreset",
+        "DRLGMAZE_AllocRoomExAndPickPreset",
+        "DRLGMAZE_FindRightMostRoom",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReplaceAreas",
+      "address": "00672be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672be0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "ReplaceAreas",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgPresetRoomStrc",
+        "D2RoomExStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Lair",
+      "address": "00672dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672dc0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "Lair",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgReplaceRoomStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PickSummonerLocation",
+      "address": "00672e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672e50"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "PickSummonerLocation",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DungeonRoll",
+      "address": "00672ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672ea0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DungeonRoll",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_ReplaceSewerRooms",
+      "address": "00672f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672f00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_ReplaceSewerRooms",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PutRedNextLevelAreasInPlace",
+      "address": "006730b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006730b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "PutRedNextLevelAreasInPlace",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_GenerateBarracksLayout",
+      "address": "00673120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673120"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_GenerateBarracksLayout",
+        "GetLevelAndAlloc",
+        "DRLGMAZE_AllocRoomExAndPickPreset",
+        "AllocDrlgOrth",
+        "ReplaceRoom",
+        "GetMinAndMaxCoordinatesFromLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgReplaceRoomStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_GenerateRiverOfFlames",
+      "address": "00673320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673320"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_GenerateRiverOfFlames",
+        "GetLevelAndAlloc",
+        "DRLGMAZE_FindBottomMostRoom",
+        "DRLGMAZE_AllocRoomExAndPickPreset",
+        "DRLGMAZE_FindTopMostRoom",
+        "DRLGROOMEX_AllocRoomEx",
+        "ReplaceRoomWithNewRoom",
+        "DRLGROOMEX_FreeDrlgRoomEx",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "AddRoomExToLevel",
+        "AllocDrlgOrth",
+        "ReplaceRoom",
+        "DRLGMAZE_ExpandRoomsWithPresets",
+        "GetMinAndMaxCoordinatesFromLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgPresetRoomStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "ForAllButDenOfEvil",
+      "address": "006735f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006735f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "ForAllButDenOfEvil"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_SelectRandomPresetFile",
+      "address": "006738c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006738c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_SelectRandomPresetFile",
+        "AllocServerMemory",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelLinkNodeStrc",
+        "D2DrlgLevelStrc",
+        "eLvlTypes",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InitAllRoomsEx",
+      "address": "00673a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673a60"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "InitAllRoomsEx",
+        "DRLGPRESET_AllocDrlgMap",
+        "DRLGMAZE_SelectRandomPresetFile",
+        "BuildArea",
+        "DRLGROOMEX_AllocNodesForBothRoomEx",
+        "DRLGROOMEX_FreeDrlgRoomEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgMapStrc",
+        "D2DrlgOrthStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_InitializeLevel",
+      "address": "00673b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673b10"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_InitializeLevel",
+        "TXT_LvlMaze_FindLineByLevelId",
+        "DRLGLEVEL_SetLevelSizeAndAlignVsDependentLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2LvlMazeTxt"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_GenerateLevel",
+      "address": "00673b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673b30"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_GenerateLevel",
+        "DRLGROOMEX_AllocRoomEx",
+        "AddRoomExToLevel",
+        "ActualLevelGeneration",
+        "Caves",
+        "Crypt",
+        "DRLGMAZE_BuildRoomGrid",
+        "RollRooms",
+        "DRLGMAZE_ExpandCatacombsLevel",
+        "DRLGMAZE_ReplaceCatacombsRooms",
+        "DRLGMAZE_GenerateSewerLevel",
+        "GenerateWolrdstoneAndTombs",
+        "ReplaceAreas",
+        "Lair",
+        "RollArcaneTypePath",
+        "PickSummonerLocation",
+        "ReplaceRooms",
+        "DungeonRoll",
+        "DRLGMAZE_ReplaceSewerRooms",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNIT_GetModuloFromSeed",
+        "PutRedNextLevelAreasInPlace",
+        "SetupBaalChamber",
+        "DRLGMAZE_GenerateBarracksLayout",
+        "DRLGMAZE_GenerateRiverOfFlames",
+        "DRLGLEVEL_AdjustRoomCoordinates",
+        "ForAllButDenOfEvil",
+        "InitAllRoomsEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgPresetRoomStrc",
+        "D2LvlMazeTxt",
+        "D2RoomExStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_ResetMazeRecord",
+      "address": "00673fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673fe0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_ResetMazeRecord"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    }
+  ]
+}

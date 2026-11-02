@@ -66,8 +66,8 @@ char * __thiscall Nth(void * pThis, int nIndex);
 char * __stdcall DNS(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
 int32_t __stdcall GMT(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
 char * __stdcall Name(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
-char * __stdcall Realm(struct D2BNetGatewayAccessStr * pGatewayAccess, int32_t nParam);
-void __stdcall SetCurGateway(int32_t nParam1, int32_t nParam2);
+char * __stdcall Realm(struct D2BNetGatewayAccessStr * pGatewayAccess, int32_t nIndex);
+void __stdcall SetCurGateway(int32_t pGatewayAccess, int32_t nGatewayIdx);
 // GetGatewayList(this=ECX, szValueName on stack) __thiscall, ret 4. Reads the gateway
 // REG_MULTI_SZ via Storm SSTR_RegistryReadValueEx(key="Configuration", value=szValueName)
 // into this+0x10 (pGatewayData), this+0x14 (size), this+0x18 (version=strtoul of 1st string).
@@ -105,7 +105,7 @@ void __stdcall CACHE_DeleteFile();
 void __stdcall CACHE_FreeAll();
 // @sourcefile .\CACHE.CPP
 // EDX dwSize: callers pass the cached block's size; not read here.
-int __fastcall CACHE_FreeMem(void * pParam, uint32_t dwSize);
+int __fastcall CACHE_FreeMem(void * pMem, uint32_t dwSize);
 // Opens the Fog cache file for reading/writing. Creates %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat if missing, reads hash table header, validates magic/version, allocates hash table memory. Sets ghCacheFileHandle to opened file handle or INVALID_HANDLE_VALUE on error.
 // @sourcefile .\CACHE.CPP
 int32_t __stdcall CACHE_Open();

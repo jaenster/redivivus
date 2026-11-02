@@ -1,0 +1,2071 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/ITEMS/Items/Drop.cpp",
+  "functions": [
+    {
+      "name": "ItemTypes_GetLine",
+      "address": "00555c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555c90"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ItemTypes_GetLine"
+      ],
+      "usedTypes": [
+        "D2ItemTypesTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMDROP_AddToDropList",
+      "address": "00555cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555cd0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMDROP_AddToDropList"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMDROP_GetDropListEntry",
+      "address": "00555d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555d00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMDROP_GetDropListEntry"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_InitializeDroppedItem",
+      "address": "00555d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555d20"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_InitializeDroppedItem",
+        "ITEM_EditItemData_eItemFlag",
+        "AllocStatListEx",
+        "TXT_Items_GetLine",
+        "QUEST_AttachToUnitByQuestId",
+        "EVENT_ClearTimerList"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FindBestSpotToSpawnItem",
+      "address": "00555da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555da0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "FindBestSpotToSpawnItem",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetFreeCoordinates_WithFieldCoords"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMDROP_IsItemClassEligible",
+      "address": "00555e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555e00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "RANDOM_RandomNumberSelector",
+        "ITEMDROP_IsItemClassEligible",
+        "GetActNoFromLevelNumber"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "eAct",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMDROP_RollExceptionalItemClass",
+      "address": "00555e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555e70"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMDROP_RollExceptionalItemClass",
+        "TXT_Items_GetSize",
+        "ITEMDROP_IsItemClassEligible"
+      ],
+      "usedTypes": [
+        "D2ItemsTableStrc",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMDROP_RollNormalItemClass",
+      "address": "00555fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00555fb0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMDROP_RollNormalItemClass",
+        "TXT_Items_GetSize",
+        "ITEMDROP_IsItemClassEligible"
+      ],
+      "usedTypes": [
+        "D2ItemsTableStrc",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMDROP_RollEliteItemClass",
+      "address": "005560f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005560f0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMDROP_RollEliteItemClass",
+        "TXT_Items_GetSize",
+        "ITEMDROP_IsItemClassEligible"
+      ],
+      "usedTypes": [
+        "D2ItemsTableStrc",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMDROP_RollItemClassByLevel",
+      "address": "00556240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556240"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMDROP_RollItemClassByLevel",
+        "TXT_Items_ConvertItemCodeToItemClassId",
+        "RollBetweenMinAndMax",
+        "ITEMDROP_RollExceptionalItemClass",
+        "ITEMDROP_RollNormalItemClass",
+        "ITEMDROP_RollEliteItemClass",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_RollBaseArmorClass",
+      "address": "00556360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556360"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RollBaseArmorClass",
+        "TXT_Items_GetLine",
+        "RollBetweenMinAndMax",
+        "STATLIST_SetUnitStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetBaseDamageStats",
+      "address": "005563d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005563d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_SetBaseDamageStats",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CheckUniqueBitmask",
+      "address": "005564a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005564a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_CheckUniqueBitmask"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_IsUniqueAlreadyDropped",
+      "address": "005564d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005564d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_IsUniqueAlreadyDropped",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_MarkUniqueAsDropped",
+      "address": "00556530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556530"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_MarkUniqueAsDropped",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemData_nFileIndex",
+        "ITEM_IsUniqueAlreadyDropped"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_RollMagicPrefixSuffix",
+      "address": "005565e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005565e0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RollMagicPrefixSuffix",
+        "ITEMMOD_RollMagicAffixVersioned",
+        "SetMagixPrefix",
+        "SetMagicSuffix",
+        "ITEM_EditItemData_eItemFlag",
+        "StaffMod"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc *",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "ITEM_RollUniqueItem",
+      "address": "005566b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005566b0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RollUniqueItem",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEM_CheckIfItemHasDurability",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "ITEM_GetItemData_nItemLevel",
+        "GetItemSeed",
+        "RollBetweenMinAndMax",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEM_MarkUniqueAsDropped",
+        "ITEM_EditItemData_eItemFlag",
+        "ApplyRuneAndGemStats",
+        "IsUnique",
+        "ITEM_CheckUniqueBitmask"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_RollForcedMagicAffix",
+      "address": "00556a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556a60"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RollForcedMagicAffix",
+        "ITEMMOD_RollMagicAffixVersioned",
+        "SetMagixPrefix",
+        "SetMagicSuffix",
+        "ITEM_GetItemsTxt_szCode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_EditItemData_eItemFlag"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_RollSocketCount",
+      "address": "00556b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556b60"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "UNIT_GetModuloFromSeed",
+        "ITEM_RollSocketCount",
+        "GetItemQuality",
+        "ITEM_GetItemsTxt_bHasInv",
+        "IsStackable",
+        "ITEM_GetMaxSockCount",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMS_IsA",
+        "GetItemSeed",
+        "ITEM_EditItemData_eItemFlag",
+        "GetModSeed"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_ApplyEthereal",
+      "address": "00556ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556ca0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_ApplyEthereal",
+        "ITEMS_IsA",
+        "ITEM_CheckIfItemHasDurability",
+        "GetItemQuality",
+        "IsQuestItem",
+        "GetItemSeed",
+        "UNIT_GetModuloFromSeed",
+        "ITEMMOD_ApplyEtherealBonus",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ApplySpecialTypeProperties",
+      "address": "00556d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556d80"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_ApplySpecialTypeProperties",
+        "ITEM_GetItemData_wType",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_RollForcedMagicAffix",
+        "ITEMMOD_GetScrollBookIndex",
+        "SetMagicSuffix",
+        "StaffMod",
+        "ITEM_RollSocketCount"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ApplySpecialTypePropertiesExp",
+      "address": "00556e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556e80"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_ApplySpecialTypePropertiesExp",
+        "ITEMS_IsA",
+        "ITEM_RollForcedMagicAffix",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMMOD_GetScrollBookIndex",
+        "SetMagicSuffix",
+        "StaffMod"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ApplyNormalTypeProperties",
+      "address": "00556f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556f30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_ApplyNormalTypeProperties",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEM_ApplySpecialTypeProperties",
+        "ITEM_ApplySpecialTypePropertiesExp"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ITEM_RollItemQuality",
+      "address": "00556f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00556f60"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RollItemQuality",
+        "ITEM_GetItemData_wItemVersion",
+        "GetGamePointer",
+        "TXT_QualityRatio_GetLine",
+        "TXT_Items_GetLine",
+        "ITEMS_IsA",
+        "GetItemSeed",
+        "RANDOM_RandomNumberSelector",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2ItemRatioTxt",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ClearAllMagicAffixes",
+      "address": "00557250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557250"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_ClearAllMagicAffixes",
+        "SetMagixPrefix",
+        "SetMagicSuffix",
+        "SetRarePrefix",
+        "SetRareSuffix",
+        "ITEM_SetItemData_nFileIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc *"
+      ]
+    },
+    {
+      "name": "ITEM_FallbackToNormalQuality",
+      "address": "005572a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005572a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_FallbackToNormalQuality",
+        "ITEM_ClearAllMagicAffixes",
+        "SetModSeed",
+        "GetItemSeed",
+        "InitSeed_Param_666",
+        "ITEM_RollItemQuality",
+        "SetItemQuality",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEM_ApplySpecialTypeProperties",
+        "ITEM_ApplySpecialTypePropertiesExp"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_FallbackToSuperiorQuality",
+      "address": "00557320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557320"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_FallbackToSuperiorQuality",
+        "ITEM_ClearAllMagicAffixes",
+        "SetModSeed",
+        "GetItemSeed",
+        "InitSeed_Param_666",
+        "ITEM_RollItemQuality",
+        "SetItemQuality",
+        "GetSeed_nSeedLow",
+        "ITEMMOD_RollSuperiorQualityMods"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2SeedStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_FallbackToMagicQuality",
+      "address": "00557380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557380"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RollMagicPrefixSuffix",
+        "ITEM_FallbackToMagicQuality",
+        "ITEM_ClearAllMagicAffixes",
+        "SetModSeed",
+        "GetItemSeed",
+        "InitSeed_Param_666",
+        "ITEM_RollItemQuality",
+        "SetItemQuality",
+        "GetSeed_nSeedLow"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2SeedStrc",
+        "D2UnitStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_FallbackToRareQuality",
+      "address": "005573f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005573f0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_FallbackToRareQuality",
+        "ITEM_ClearAllMagicAffixes",
+        "SetModSeed",
+        "GetItemSeed",
+        "InitSeed_Param_666",
+        "ITEM_RollItemQuality",
+        "SetItemQuality",
+        "GetSeed_nSeedLow",
+        "RollingItem"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2SeedStrc",
+        "D2UnitStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ApplyQualityAndAffixes",
+      "address": "00557450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557450"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_ApplyQualityAndAffixes",
+        "TXT_Items_GetLine",
+        "SetAutoMagic",
+        "SetMagixPrefix",
+        "SetMagicSuffix",
+        "SetRarePrefix",
+        "SetRareSuffix",
+        "ITEM_RollItemQuality",
+        "SetItemQuality",
+        "ITEM_GetTxtItemTypes_magic",
+        "IsQuestItem",
+        "ITEM_CheckItemData_ItemQualityIsMagicOrBetter",
+        "ITEM_GetTxtItemTypes_rare",
+        "GetItemQuality",
+        "IsUnique",
+        "ITEM_GetTxtItemTypes_normal",
+        "GetItemSeed",
+        "GetSeed_nSeedLow",
+        "ITEMMOD_ApplyCrudeQualityVersioned",
+        "ITEM_FallbackToNormalQuality",
+        "ITEM_ApplyNormalTypeProperties",
+        "ITEM_SetItemData_nFileIndex",
+        "ITEMMOD_RollSuperiorQualityMods",
+        "ITEM_RollMagicPrefixSuffix",
+        "ITEM_FallbackToSuperiorQuality",
+        "ITEMMOD_GenerateSetOrUniqueVersioned",
+        "ITEM_CheckIfItemHasDurability",
+        "ITEM_GetItemData_wItemVersion",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "ITEM_FallbackToMagicQuality",
+        "RollingItem",
+        "ITEM_RollUniqueItem",
+        "ITEM_FallbackToRareQuality",
+        "ITEMMOD_RollRareAffixes",
+        "ITEMMOD_SelectMagicAffixVersioned",
+        "ITEM_ApplyEthereal",
+        "ITEM_RollSocketCount",
+        "ITEMMOD_RollMagicAffixVersionedEx",
+        "TXT_magicaffixes_GetLine",
+        "ApplyRuneAndGemStats"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2MagicAffixTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2ItemQuality",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_RollVariantGraphic",
+      "address": "00557a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557a70"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RollVariantGraphic",
+        "ITEM_GetTxtItemTypes_varinvgfx",
+        "RollBetweenMinAndMax",
+        "ITEM_SetItemData_bVariant"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_InitItemBaseStats",
+      "address": "00557ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557ab0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_InitItemBaseStats",
+        "ITEM_GetItemData_wType",
+        "UNIT_GetModuloFromSeed",
+        "STATLIST_SetUnitStat",
+        "GetInventoryGoldLimit",
+        "ITEM_GetTxtItemTypes_quiver",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEMS_IsA",
+        "IsStackable",
+        "ITEM_GetItemsTxt_dwMinStack",
+        "ITEM_GetMaxStack",
+        "ITEM_GetItemsTxt_dwSpawnStack",
+        "RANDOM_RandomNumberSelector",
+        "ITEM_CheckItemData_ItemQualityIsMagicOrBetter",
+        "ITEMMOD_RollGemRuneType",
+        "ITEM_SetBaseDamageStats",
+        "ITEM_RollBaseArmorClass",
+        "ITEM_GetTxtItemTypes_varinvgfx",
+        "RollBetweenMinAndMax",
+        "ITEM_SetItemData_bVariant",
+        "ITEM_ApplyQualityAndAffixes",
+        "GetStatListByStateOrFlagsIfNotExists",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx",
+        "ITEM_EditItemData_eItemFlag"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2PoolManagerStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_FreeItemInventoryAndTimers",
+      "address": "00557ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557ee0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_FreeItemInventoryAndTimers",
+        "ITEM_GetItemsTxt_bHasInv",
+        "UNITS_FreeInventoryItems",
+        "STRUCT_FreeInventory",
+        "EVENT_FreeAllTimersForUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "INVENTORY_RemoveItemFromOwner",
+      "address": "00557f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557f50"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "INVENTORY_RemoveItemFromOwner",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetHandItem",
+        "CopyInventoryOfPlayerOrFree",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ItemBelongsToInventoryOfPlayer"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ITEM_RemoveFromOwnerInventory",
+      "address": "00557fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557fa0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RemoveFromOwnerInventory",
+        "INVENTORY_RemoveItemFromOwner"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "thunk_IterateAllUnits",
+      "address": "00557fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557fc0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "thunk_IterateAllUnits",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_DeleteItemAndFreeUnit",
+      "address": "00557fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557fd0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_DeleteItemAndFreeUnit",
+        "IterateAllUnits",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "AlreadyHoldingItem",
+      "address": "00557ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557ff0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "AlreadyHoldingItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_GetHandItem",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "HasQuestItem",
+      "address": "00558110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558110"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "HasQuestItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_GetItemsTxt_szCode",
+        "TXT_Items_GetLine",
+        "STATSEX_GetCurrentStat",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "ITEM_GetContainingInventoryPage",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetLevel",
+      "address": "00558200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558200"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "GetLevel",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetGamePointer",
+        "TXT_Levels_GetMonLvlForDifficulty"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_FillItemGenerationData",
+      "address": "00558270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558270"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMS_FillItemGenerationData",
+        "memset",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEM_GetItemData_nItemLevel",
+        "GetItemQuality",
+        "GetXPos",
+        "GetYPos",
+        "ITEM_GetItemData_wType",
+        "STATSEX_GetCurrentStat",
+        "IsStackable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetModSeed",
+        "ITEM_GetItemData_nFileIndex",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "SERVER_GetUnitStat",
+        "ITEM_GetItemData_szPlayerName",
+        "ITEM_GetItemData_nEarLevel",
+        "CheckItemFlag"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eD2ItemQuality",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "int32_t",
+        "uD2UnitMode",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNIT_GetMaxAvailableHPCharCode",
+      "address": "00558450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558450"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "UNIT_GetMaxAvailableHPCharCode",
+        "UNITS_GetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetGamePointer"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNIT_GetMaxAvailableMPCharCode",
+      "address": "005584c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005584c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "UNIT_GetMaxAvailableMPCharCode",
+        "UNITS_GetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetGamePointer"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RefreshDurability",
+      "address": "00558530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558530"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "RefreshDurability",
+        "STATSEX_GetCurrentStat",
+        "EVENT_TimerTypeExistsOnUnit",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "RefreshQuantity",
+      "address": "00558580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558580"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "RefreshQuantity",
+        "STATSEX_GetCurrentStat",
+        "EVENT_TimerTypeExistsOnUnit",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ITEM_GetTotalMagicFind",
+      "address": "005585d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005585d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_GetTotalMagicFind",
+        "ITEM_GetMinimalStatValueShifted",
+        "GetOwnerUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMDROP_AdjustDrop",
+      "address": "00558610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558610"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMDROP_AdjustDrop"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAME_GetItemQuality",
+      "address": "00558640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558640"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "GAME_GetItemQuality",
+        "TXT_Items_GetLine",
+        "TXT_Items_GetType",
+        "TXT_QualityRatio_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_GetTotalMagicFind",
+        "ITEMDROP_AdjustDrop",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2ItemRatioTxt",
+        "D2ItemTypesTxt",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ApplyGoldBonus",
+      "address": "005589a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005589a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_ApplyGoldBonus",
+        "ITEM_GetItemData_wType",
+        "ITEM_GetMinimalStatValueShifted",
+        "GetOwnerUnit",
+        "STATSEX_GetCurrentStat",
+        "SetStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CalculateDespawnTimer",
+      "address": "00558a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558a10"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_CalculateDespawnTimer",
+        "IsQuestItem",
+        "GetItemQuality",
+        "ITEM_GetItemData_wType",
+        "STATSEX_GetCurrentStat",
+        "ITEM_IsSocketable"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DropItem",
+      "address": "00558aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558aa0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "DropItem",
+        "InitializeStaticPath",
+        "BlockCollisionPath",
+        "DRLGROOM_AddUnitToRoom",
+        "SetupUpdateFlag",
+        "ITEM_SetItemData_ePage",
+        "ITEM_CalculateDespawnTimer",
+        "QUEST_OnItemDropped"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeUnusedItems",
+      "address": "00558b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558b90"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "FreeUnusedItems",
+        "DRLGROOM_GetRoomFromAct",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "IterateAllUnits",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_RemoveRuneword",
+      "address": "00558c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558c50"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RemoveRuneword",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "ITEM_EditItemData_eItemFlag",
+        "SetMagixPrefix",
+        "GetStatListByStateOrFlagsIfNotExists",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemFlag"
+      ]
+    },
+    {
+      "name": "ITEM_CreateFromSaveData",
+      "address": "00558cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558cb0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_CreateFromSaveData",
+        "TXT_Items_GetSize",
+        "CreateUnit",
+        "ITEM_LoadFromSaveData",
+        "ITEM_EditItemData_eItemFlag",
+        "RefreshDurability",
+        "RefreshQuantity",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2ItemsTableStrc",
+        "D2RoomStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_CreateItemInstance",
+      "address": "00558d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00558d90"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_CreateItemInstance",
+        "TXT_Items_GetLine",
+        "TXT_Items_GetSize",
+        "CreateUnit",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_SetItemData_wItemVersion",
+        "InitSeed_Param_666",
+        "SetModSeed",
+        "GetItemSeed",
+        "ITEM_SetItemData_nItemLevel",
+        "ITEM_SetItemData_ePage",
+        "ITEM_InitItemBaseStats",
+        "FreeServerUnit",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_GetItemData_wItemVersion",
+        "ITEMS_IsA",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "ITEM_GetMaxSockCount",
+        "GetModSeed",
+        "ITEM_RollSocketCount",
+        "ITEM_GetItemData_wType",
+        "SetStat",
+        "STATLIST_SetUnitStat",
+        "GetPlayerData",
+        "ITEM_GetPlayerNameAkaNamedString",
+        "STATSEX_GetCurrentStat",
+        "ITEM_SetItemData_nEarLevel",
+        "SUNIT_GetClient",
+        "CLIENT_TestFileFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RefreshDurability",
+        "RefreshQuantity"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ItemGenContextStrc",
+        "D2ItemsTableStrc",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eD2ItemTypes",
+        "int16_t",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DROP_SpawnRandomItemInRoom",
+      "address": "00559130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00559130"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "DROP_SpawnRandomItemInRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "ITEMDROP_RollItemClassByLevel",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetFreeCoordinates_WithFieldCoords",
+        "memset",
+        "ITEM_CreateItemInstance",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc *",
+        "POINT",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DROP_SpawnGoldInRoom",
+      "address": "00559300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00559300"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "GetFreeCoordinates_WithFieldCoords",
+        "DROP_SpawnGoldInRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "memset",
+        "ITEM_CreateItemInstance",
+        "ITEM_EditItemData_eItemFlag",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DROP_SpawnExceptionalItem",
+      "address": "005594c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005594c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "DROP_SpawnExceptionalItem",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "ITEMDROP_RollExceptionalItemClass",
+        "FindBestSpotToSpawnItem",
+        "memset",
+        "ITEM_CreateItemInstance",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DROP_SpawnNormalItem",
+      "address": "00559630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00559630"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "DROP_SpawnNormalItem",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "ITEMDROP_RollNormalItemClass",
+        "TXT_Items_GetBitFieldAnd0x02",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetFreeCoordinates_WithFieldCoords",
+        "memset",
+        "ITEM_CreateItemInstance",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DROP_SpawnEliteItem",
+      "address": "00559830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00559830"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMDROP_RollEliteItemClass",
+        "DROP_SpawnEliteItem",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "DRLGROOM_IsRoomInTown",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetFreeCoordinates_WithFieldCoords",
+        "memset",
+        "ITEM_CreateItemInstance",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_RewardItemToDrop",
+      "address": "00559a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00559a30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_RewardItemToDrop",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetGamePointer",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "ITEMDROP_RollItemClassByLevel",
+        "TXT_Items_GetLine",
+        "ITEMDROP_RollNormalItemClass",
+        "TXT_Items_ConvertItemCodeToItemClassId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetCoords",
+        "FindBestSpotToSpawnItem",
+        "memset",
+        "ITEM_CreateItemInstance",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "POINT",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CreateFromTemplate",
+      "address": "00559ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00559ce0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_CreateFromTemplate",
+        "memset",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetGamePointer",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "ITEM_CreateItemInstance",
+        "ITEM_EditItemData_eItemFlag",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemQuality",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_ReduceDurability",
+      "address": "00559e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00559e30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMS_ReduceDurability",
+        "ITEMS_IsA",
+        "ITEM_CheckIfItemHasDurability",
+        "ITEM_GetTxtItemTypes_throwable",
+        "STATSEX_GetCurrentStat",
+        "CheckItemFlag",
+        "ITEMMODE_SendItemUpdate",
+        "ITEM_GetItemData_wItemVersion",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "PLRMODES_CheckWeaponQuantityAndDurability",
+        "GetTxtMaxDurability",
+        "ITEM_GetMaxStack",
+        "RefreshDurability"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DROP_SpawnGoldPiles",
+      "address": "0055a090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055a090"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "DROP_SpawnGoldPiles",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "UNITS_GetRoom",
+        "GetCoords",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetFreeCoordinates_WithFieldCoords",
+        "ITEM_CreateFromTemplate",
+        "GetInventoryGoldLimit",
+        "STATLIST_SetUnitStat",
+        "DropItem"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "POINT",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_DropEarOnPvpDeath",
+      "address": "0055a200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055a200"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_DropEarOnPvpDeath",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "STATSEX_GetCurrentStat",
+        "ITEM_CreateFromTemplate",
+        "DropItem"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_CloneFromSerializedData",
+      "address": "0055a2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055a2a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_CloneFromSerializedData",
+        "UNITS_GetRoom",
+        "SerializeItem",
+        "ExtractItemDetails",
+        "ITEM_CreateFromSaveData",
+        "ITEM_EditItemData_eItemFlag",
+        "SetupUpdateFlag",
+        "GetGUID",
+        "PutItemInItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "STATSEX_GetCurrentStat",
+        "EVENT_TimerTypeExistsOnUnit",
+        "SetEvent",
+        "ITEM_ClearFlagsAndCommands",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMGEN_CreateItemFromClassIdAndQuality",
+      "address": "0055a550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055a550"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEMGEN_CreateItemFromClassIdAndQuality",
+        "__security_check_cookie",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "memset",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetGamePointer",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "ITEM_CreateItemInstance"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_ITEM_RollItemToDrop",
+      "address": "0055a6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055a6d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "SERVER_ITEM_RollItemToDrop",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_Items_GetLine",
+        "GAME_GetItemQuality",
+        "TXT_Items_GetType",
+        "TXT_ItemTypes_CheckIfTypeIsThrowable",
+        "TXT_Items_ConvertItemCodeToItemClassId",
+        "ITEMGEN_CreateItemFromClassIdAndQuality",
+        "ITEMS_IsA",
+        "STATSEX_GetCurrentStat",
+        "SetStat",
+        "ITEM_ApplyGoldBonus",
+        "TC_GetParsedTreasureClassByLevel",
+        "GetOwnerUnit",
+        "CountDeadPartyMembers",
+        "SERVER_GAME_CountPlayers",
+        "GetType",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2ParsedTreasureClassEntriesStrc",
+        "D2ParsedTreasureClassStrc",
+        "D2SeedStrc",
+        "D2TCStackEntryStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "SERVER_ITEM_RollItemAndGetTreasureClass",
+      "address": "0055afa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055afa0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "SERVER_ITEM_RollItemAndGetTreasureClass",
+        "TXT_MonStats_GetLine",
+        "STATSEX_GetCurrentStat",
+        "TC_GetParsedTreasureClassByLevel",
+        "SERVER_ITEM_RollItemToDrop"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2ParsedTreasureClassStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "DROP_SpawnGoldOnGround",
+      "address": "0055b030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b030"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "DROP_SpawnGoldOnGround",
+        "DROP_SpawnGoldPiles"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_GiveGoldOrDrop",
+      "address": "0055b060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b060"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items::Drop",
+      "calledFunctions": [
+        "ITEM_GiveGoldOrDrop",
+        "GetInventoryGoldLimit",
+        "STATSEX_GetCurrentStat",
+        "DROP_SpawnGoldPiles",
+        "ChangeGoldForPlayer"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

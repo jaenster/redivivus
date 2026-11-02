@@ -80,8 +80,8 @@ struct D2WardenModuleObjectStrc {
 
 struct D2WardenModuleStrc {
     /* 0x00 */ void * pLibrary;
-    /* 0x04 */ uint32_t field_0x4;
-    /* 0x08 */ uint32_t field_0x8;
+    /* 0x04 */ uint32_t nImageSize;
+    /* 0x08 */ uint32_t nLoadedLibraryCount;
     /* 0x0C */ struct D2WardenModuleObjectStrc * pModuleObject;
     /* 0x10 */ struct D2WardenModuleObjectStrc * (__fastcall *pfnCreateInterface)(::WardenClient *);
 };
@@ -112,7 +112,7 @@ uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalL
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nSize);
 // @sourcefile .\WARDEN\WardenClient.cpp
-void __fastcall WARDEN_CbFreeModuleStruct(void * pParam);
+void __fastcall WARDEN_CbFreeModuleStruct(void * pModuleStruct);
 // @sourcefile .\WARDEN\WardenClient.cpp
 LPVOID * __thiscall WARDEN_DestroyModuleObject(LPVOID * ppModule, uint8_t bFreeStruct);
 uint32_t __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize);

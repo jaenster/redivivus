@@ -48,7 +48,7 @@ void __fastcall Q21_Callback02_NpcDeactivate(struct D2QuestDataStrc * pQuestData
 //   holds Golden Bird -> 3, +1 if Step0x04 (4).  holds Jade -> 1, +1 if Step0x02 (2).
 //   else if quest active (bIsNotIntroduction): clamps nStateFlagPrev, >5 -> 6 (+1 if multiplayer).
 // Always returns true (out byte written).
-bool __fastcall Q21_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q21_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // Q21_PlayerSetGoldenBirdQuestState -- per-party-member Golden Bird progress sync (callback for
 // ExecuteFunctionForEveryPartyMember). For a member whose quest is neither Completed nor RewardAwaits,
 // copies the quest-leader's golden-bird sub-state (pA3Q4->sQuestGUID.aPlayerGUID[6], the cached

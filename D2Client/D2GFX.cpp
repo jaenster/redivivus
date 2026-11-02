@@ -13,11 +13,11 @@ void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenY
     uint32_t nClipLeft;
     uint8_t* pbSrcPixel;
     uint8_t* nDstRowPtr;
-    uint32_t uVar2;
+    uint32_t nGapPixels;
     uint32_t nClipRight;
     int iRow = 0;
     uint8_t* pbDstPixel = pbDstRow;
-    uint8_t* puVar1 = pbDstRow;
+    uint8_t* pRowStart = pbDstRow;
     int nScreenY = nScreenYStart;
     if (nRowCount <= 0) {
       return;
@@ -25,15 +25,15 @@ void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenY
 
     do {
       uint32_t nSkipCount;
-      uVar2 = (uint32_t)*pbTileData;
+      nGapPixels = (uint32_t)*pbTileData;
       nSkipCount = (uint32_t)pbTileData[1];
       pbSrcPixel = pbTileData + 2;
-      if (!uVar2 && !nSkipCount) {
+      if (!nGapPixels && !nSkipCount) {
         iRow++;
         nScreenY++;
-        nDstRowPtr = puVar1 + gRenderBufferPitch;
+        nDstRowPtr = pRowStart + gRenderBufferPitch;
         pbTileData = pbSrcPixel;
-        puVar1 = nDstRowPtr;
+        pRowStart = nDstRowPtr;
         pbDstRow = nDstRowPtr;
       } else {
         if (nScreenY >= gnMinTileScreenY) {
@@ -41,18 +41,18 @@ void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenY
         }
         if (!(nScreenY < gnMinTileScreenY_b)) {
           pbTileData = pbSrcPixel + nSkipCount;
-          nDstRowPtr = pbDstPixel + nSkipCount + uVar2;
-          nClipLeft = gnTileClipLeft - (int)(pbDstPixel + nClipOriginX + (uVar2 - (int)puVar1));
+          nDstRowPtr = pbDstPixel + nSkipCount + nGapPixels;
+          nClipLeft = gnTileClipLeft - (int)(pbDstPixel + nClipOriginX + (nGapPixels - (int)pRowStart));
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
-          nClipRight = -(int)(pbDstPixel + nClipOriginX + (uVar2 - (int)puVar1)) + gnTileClipRight;
+          nClipRight = -(int)(pbDstPixel + nClipOriginX + (nGapPixels - (int)pRowStart)) + gnTileClipRight;
           nClipRight = (int)nClipRight <= 0 ? 0 : nClipRight;
           if ((int)nClipRight >= (int)nSkipCount) {
             nClipRight = nSkipCount;
           }
 
-          puVar1 = pbDstRow;
+          pRowStart = pbDstRow;
           if ((int)(nClipRight - nClipLeft) > 0) {
-            pbDstPixel = pbDstPixel + nClipLeft + uVar2;
+            pbDstPixel = pbDstPixel + nClipLeft + nGapPixels;
             pbSrcPixel += nClipLeft;
             switch (nClipRight - nClipLeft) {
               case 0x20:
@@ -122,7 +122,7 @@ void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenY
             }
           }
         } else {
-          nDstRowPtr = pbDstPixel + nSkipCount + uVar2;
+          nDstRowPtr = pbDstPixel + nSkipCount + nGapPixels;
           pbTileData = pbSrcPixel + nSkipCount;
         }
       }
@@ -137,10 +137,10 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
     uint8_t* pbSrcPixel;
     uint8_t* nDstRowPtr;
     uint32_t nClipRight;
-    uint32_t uVar2;
+    uint32_t nClipEnd;
     int iRow = 0;
     uint8_t (*pbLineBufRowPtr)[32] = gpLineBufferTileArray[nLightAccumX >> (byShift & 0x1f)] + (nLightAccumY >> (byShift & 0x1f));
-    uint8_t* puVar1 = nDstRowBase;
+    uint8_t* pRowStart = nDstRowBase;
     uint8_t* pbDstPixel = nDstRowBase;
     int nScreenY = nScreenYStart;
     if (nRowCount <= 0) {
@@ -154,13 +154,13 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
       pbSrcPixel = pbTileData + 2;
       if (!nClipRight && !nRunLength) {
         nLightAccumY += nLightStepY;
-        nDstRowPtr = puVar1 + gRenderBufferPitch;
+        nDstRowPtr = pRowStart + gRenderBufferPitch;
         iRow++;
         nScreenY++;
         nLightAccumX += nLightStepX;
         pbLineBufRowPtr = gpLineBufferTileArray[nLightAccumX >> (byShift & 0x1f)] + (nLightAccumY >> (byShift & 0x1f));
         pbTileData = pbSrcPixel;
-        puVar1 = nDstRowPtr;
+        pRowStart = nDstRowPtr;
         nDstRowBase = nDstRowPtr;
       } else {
         if (nScreenY >= gnMinTileScreenY) {
@@ -171,17 +171,17 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
         if (!(nScreenY < gnMinTileScreenY_b)) {
           pbTileData = pbSrcPixel + nRunLength;
           nDstRowPtr = pbDstPixel + nRunLength + nClipRight;
-          nClipLeft = gnTileClipLeft - (int)(pbDstPixel + nClipOriginX + (nClipRight - (int)puVar1));
+          nClipLeft = gnTileClipLeft - (int)(pbDstPixel + nClipOriginX + (nClipRight - (int)pRowStart));
           nClipLeft = (int)nClipLeft <= 0 ? 0 : nClipLeft;
-          uVar2 = -(int)(pbDstPixel + nClipOriginX + (nClipRight - (int)puVar1)) + gnTileClipRight;
-          uVar2 = (int)uVar2 <= 0 ? 0 : uVar2;
-          if ((int)uVar2 >= (int)nRunLength) {
-            uVar2 = nRunLength;
+          nClipEnd = -(int)(pbDstPixel + nClipOriginX + (nClipRight - (int)pRowStart)) + gnTileClipRight;
+          nClipEnd = (int)nClipEnd <= 0 ? 0 : nClipEnd;
+          if ((int)nClipEnd >= (int)nRunLength) {
+            nClipEnd = nRunLength;
           }
-          if ((int)(uVar2 - nClipLeft) > 0) {
+          if ((int)(nClipEnd - nClipLeft) > 0) {
             pbDstPixel = pbDstPixel + nClipLeft + nClipRight;
             pbSrcPixel += nClipLeft;
-            switch (uVar2 - nClipLeft) {
+            switch (nClipEnd - nClipLeft) {
               case 0x20:
                 pbDstPixel[0x1f] = gaPaletteColorLUT[pbLightBufPixel[0x1f]][pbSrcPixel[0x1f]];
               case 0x1f:
@@ -250,7 +250,7 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
           }
 
           pbLineBufRowPtr = (uint8_t (*)[32])(pbLightBufPixel + nRunLength);
-          puVar1 = nDstRowBase;
+          pRowStart = nDstRowBase;
         } else {
           nDstRowPtr = pbDstPixel + nRunLength + nClipRight;
           pbLineBufRowPtr = (uint8_t (*)[32])(pbLightBufPixel + nRunLength);

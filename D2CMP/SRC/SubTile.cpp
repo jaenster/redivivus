@@ -24,7 +24,7 @@ typedef uint8_t (__stdcall *pfnRGBToPaletteIndex)(uint8_t nRed, uint8_t nGreen, 
 
 namespace D2CMP::SRC::SubTile {
 
-int __fastcall SUBTILE_CountRunLength(char cParam, char * pCur, char * pEnd, int32_t nMaxRunLen, uint32_t * pbAtEnd, uint32_t * pbExactMatch) {
+int __fastcall SUBTILE_CountRunLength(char byRunValue, char * pCur, char * pEnd, int32_t nMaxRunLen, uint32_t * pbAtEnd, uint32_t * pbExactMatch) {
     if (pCur >= pEnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45);
       exit(-1);
@@ -32,7 +32,7 @@ int __fastcall SUBTILE_CountRunLength(char cParam, char * pCur, char * pEnd, int
 
     int nCount = 0;
     do {
-      if (cParam != *pCur || nCount >= nMaxRunLen) {
+      if (byRunValue != *pCur || nCount >= nMaxRunLen) {
         break;
       }
 
@@ -47,7 +47,7 @@ int __fastcall SUBTILE_CountRunLength(char cParam, char * pCur, char * pEnd, int
     }
 
     *pbAtEnd = 0;
-    for (; pCur < pEnd && cParam == *pCur; pCur++) {}
+    for (; pCur < pEnd && byRunValue == *pCur; pCur++) {}
 
     *pbExactMatch = (uint32_t)(pCur == pEnd);
     return nCount;
@@ -55,7 +55,7 @@ int __fastcall SUBTILE_CountRunLength(char cParam, char * pCur, char * pEnd, int
 
 char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, char * * ppCompressedEnd) {
     int nRunLength;
-    int iVar2;
+    int nLiteralCount;
     char* pNextRowStart;
     char cZeroRunLen;
     uint32_t bExactMatch;
@@ -79,12 +79,12 @@ char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, char * * ppCompressed
           *pDstPtr = '\x7f';
           pDstPtr++;
         } else {
-          iVar2 = SUBTILE_CountRunLengthForByte(pDataStart, pRowEnd, '\0', 0x7f, (uint32_t*)&bAtEnd, &bExactMatch);
+          nLiteralCount = SUBTILE_CountRunLengthForByte(pDataStart, pRowEnd, '\0', 0x7f, (uint32_t*)&bAtEnd, &bExactMatch);
           cZeroRunLen = (char)nRunLength;
           *pDstPtr = cZeroRunLen;
-          pDstPtr[1] = (char)iVar2;
+          pDstPtr[1] = (char)nLiteralCount;
           pDstPtr += 2;
-          for (; (uint32_t)iVar2 > 0; iVar2--) {
+          for (; (uint32_t)nLiteralCount > 0; nLiteralCount--) {
             *pDstPtr = *pDataStart;
             pDstPtr++;
             pDataStart++;
@@ -117,7 +117,7 @@ void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw) {
     char* pCompressedBuf;
     int i;
     char* pCompEndPtr;
-    char* local_8 = (char*)pRawData;
+    char* pCompressedEnd = (char*)pRawData;
     if (bIsRaw) {
       pCompressedBuf = (char*)D2_ALLOC_AT(0xc00, ".\\SRC\\SubTile.cpp", 0x66);
       pCompEndPtr = pCompressedBuf;
@@ -129,8 +129,8 @@ void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw) {
 
       pCompEndPtr = (char*)0xc00;
     } else {
-      pCompressedBuf = SUBTILE_CompressToRLE((char*)pRawData, &local_8);
-      pCompEndPtr = local_8;
+      pCompressedBuf = SUBTILE_CompressToRLE((char*)pRawData, &pCompressedEnd);
+      pCompEndPtr = pCompressedEnd;
     }
 
     uint32_t* pSubTileEntry = (uint32_t*)D2_ALLOC_AT(0x14, ".\\SRC\\SubTile.cpp", 0x6e);
@@ -427,8 +427,8 @@ static void __stdcall SUBTILE_CompressWithColorKey(pfnRGBToPaletteIndex pfnGetPa
 
 void __fastcall SUBTILE_RecompressExisting(D2GroundSubTileStrc * pSubTileEntry) {
     uint8_t* pMemoryToFree = pSubTileEntry->pPixelData;
-    BOOL iVar1 = SUBTILE_CheckIfIsometricEmpty(pMemoryToFree);
-    if (iVar1) {
+    BOOL bIsEmpty = SUBTILE_CheckIfIsometricEmpty(pMemoryToFree);
+    if (bIsEmpty) {
       SUBTILE_CompressIsometricShape(pSubTileEntry, (char*)pMemoryToFree);
     } else {
       SUBTILE_ExtractIsometricPixels(pSubTileEntry, pMemoryToFree);
@@ -438,10 +438,10 @@ void __fastcall SUBTILE_RecompressExisting(D2GroundSubTileStrc * pSubTileEntry) 
 }
 
 void __fastcall CELCMP_CompressAllFramesWithColorKey(int32_t pSrcCelFile, int32_t pDstCelFile, uint32_t dwColorKey, uint8_t * pfnGetPaletteIndex) {
-    uint32_t uVar1;
     int32_t pSrcFrameData;
     D2GroundSubTileStrc* pDstFrame;
     int iFrame;
+    uint32_t dwPacked;
     int nFrameOffset = 0;
     if (!pSrcCelFile) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ec);
@@ -464,15 +464,15 @@ void __fastcall CELCMP_CompressAllFramesWithColorKey(int32_t pSrcCelFile, int32_
       }
 
       do {
-        uVar1 = *(uint32_t*)(*(int*)(pSrcCelFile + 0x54) + nFrameOffset);
+        dwPacked = *(uint32_t*)(*(int*)(pSrcCelFile + 0x54) + nFrameOffset);
         pSrcFrameData = *(int*)(pSrcCelFile + 0x54) + nFrameOffset;
         pDstFrame = (D2GroundSubTileStrc*)(*(int*)(pDstCelFile + 0x54) + nFrameOffset);
-        pDstFrame->nOffsetX = (short int)uVar1;
-        pDstFrame->nOffsetY = (short int)((uint32_t)uVar1 >> 0x10);
-        uVar1 = *(uint32_t*)(pSrcFrameData + 4);
-        pDstFrame->nTextureCacheIndex = (short int)uVar1;
-        pDstFrame->nSubIdxLo = (char)((uint32_t)uVar1 >> 0x10);
-        pDstFrame->nSubIdxHi = (char)((uint32_t)uVar1 >> 0x18);
+        pDstFrame->nOffsetX = (short int)dwPacked;
+        pDstFrame->nOffsetY = (short int)((uint32_t)dwPacked >> 0x10);
+        dwPacked = *(uint32_t*)(pSrcFrameData + 4);
+        pDstFrame->nTextureCacheIndex = (short int)dwPacked;
+        pDstFrame->nSubIdxLo = (char)((uint32_t)dwPacked >> 0x10);
+        pDstFrame->nSubIdxHi = (char)((uint32_t)dwPacked >> 0x18);
         *(uint32_t*)&pDstFrame->wFormat = *(uint32_t*)(pSrcFrameData + 8);
         *(uint32_t*)((uintptr_t)&pDstFrame->dwField0A + 2) = *(uint32_t*)(pSrcFrameData + 0xc);
         pDstFrame->pPixelData = 0;

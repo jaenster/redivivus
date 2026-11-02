@@ -1,0 +1,27 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/ListBox.cpp",
+  "functions": [
+    {
+      "name": "SehHandler_6ca263",
+      "address": "006ca263",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca263"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox",
+      "calledFunctions": [
+        "SehHandler_6ca263"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

@@ -23,9 +23,9 @@ namespace D2CMP::Pallete {
 int32_t __stdcall TILEPROJECT_ForEachTileEntry(pfnTileEntryEnum pfnCallback, void * pContext);
 // Returns the tile library whose pTiles array holds pTargetEntry, or NULL.
 struct D2TileLibraryHeaderStrc * __stdcall TILEPROJECT_FindLibraryOfTile(struct D2TileLibraryEntryStrc * pTargetEntry);
-void __fastcall PALETTE_LoadFromFile(char * pdwParam, int32_t nPaletteSet);
+void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet);
 void __stdcall PALETTE_InitItemPalettes();
-void __stdcall PALETTE_SetAct(int32_t nParam);
+void __stdcall PALETTE_SetAct(int32_t nAct);
 uint8_t * __stdcall PALETTE_GetItemPalette(int32_t nPaletteSet, int32_t nRow);
 uint32_t __stdcall PALETTE_GetColorShiftIndex(int32_t nParam, uint32_t nParam2);
 

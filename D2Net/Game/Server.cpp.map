@@ -1,0 +1,692 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Net/Game/Server.cpp",
+  "functions": [
+    {
+      "name": "CreateThreadClientSocketOrSingleplayer",
+      "address": "0052b050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b050"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "CreateThreadClientSocketOrSingleplayer",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
+      ]
+    },
+    {
+      "name": "HandleIncomingPacketBuffer",
+      "address": "0052b0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b0e0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "HandleIncomingPacketBuffer",
+        "NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect",
+      "address": "0052b100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b100"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect",
+        "NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize",
+        "MatchesGameTokenFilter_Thunk"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WaitForEmptyEvent",
+      "address": "0052b1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b1f0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "WaitForEmptyEvent"
+      ]
+    },
+    {
+      "name": "NET_Thunk_QServerSwapWorkerSlotValue",
+      "address": "0052b210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b210"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_Thunk_QServerSwapWorkerSlotValue",
+        "SwapWorkerSlotValue"
+      ]
+    },
+    {
+      "name": "NET_Thunk_QServerAddGameTokenFilter",
+      "address": "0052b230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b230"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_Thunk_QServerAddGameTokenFilter",
+        "AddGameTokenFilter"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SetPlayersCount",
+      "address": "0052b250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b250"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_SetPlayersCount",
+        "SetPerIpConnectionLimit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_HACK_SetUseQServerHack",
+      "address": "0052b280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b280"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_HACK_SetUseQServerHack",
+        "SetHackMode"
+      ]
+    },
+    {
+      "name": "NET_QServer_FreeAndSend0xB0ToEveryone",
+      "address": "0052b2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b2a0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_QServer_FreeAndSend0xB0ToEveryone",
+        "Shutdown"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_DequeueModePacket_Mode1",
+      "address": "0052b2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b2d0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_DequeueModePacket_Mode1",
+        "DequeueModePacket"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_DequeueModePacket_Mode0",
+      "address": "0052b2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b2f0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_DequeueModePacket_Mode0",
+        "DequeueModePacket"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_DequeueModePacket_Mode2",
+      "address": "0052b310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b310"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_DequeueModePacket_Mode2",
+        "DequeueModePacket"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_SendPacketToClient",
+      "address": "0052b330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b330"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_SendPacketToClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
+        "NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket",
+        "__security_check_cookie",
+        "NET_D2GS_SERVER_LogSentPacket",
+        "NET_D2GS_SERVER_CompressPacket",
+        "SendPacketByClientId"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_QServer_FindIpAddressByClientIdForQServer",
+      "address": "0052b490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b490"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_QServer_FindIpAddressByClientIdForQServer",
+        "GetClientIpStringByClientId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetIpFromToken",
+      "address": "0052b4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b4b0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "GetIpFromToken",
+        "GetClientIpByToken"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_GetClientSocketByToken",
+      "address": "0052b4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b4d0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "SERVER_GetClientSocketByToken",
+        "GetClientSocketByToken"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_HACK_AddClientToHackList",
+      "address": "0052b4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b4f0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_HACK_AddClientToHackList",
+        "BanClient"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_HACK_CloseAndBanHackerIP",
+      "address": "0052b510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b510"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_HACK_CloseAndBanHackerIP",
+        "DisconnectAndBanIp"
+      ],
+      "usedTypes": [
+        "in_addr",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_HACK_UnlistIP",
+      "address": "0052b530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b530"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_HACK_UnlistIP",
+        "QSHackUnlistIP"
+      ],
+      "usedTypes": [
+        "in_addr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_DisconnectIP",
+      "address": "0052b550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b550"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_DisconnectIP",
+        "QSDisconnectIP"
+      ],
+      "usedTypes": [
+        "in_addr",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QSERVER_KillConnection",
+      "address": "0052b570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b570"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "QSERVER_KillConnection",
+        "thunk_CloseRemoteConnection"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_Thunk_QServerSetHacklistAddLineHook",
+      "address": "0052b5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b5a0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_Thunk_QServerSetHacklistAddLineHook",
+        "SetHacklistLineHook"
+      ],
+      "usedTypes": [
+        "fpD2QServerLineHook"
+      ]
+    },
+    {
+      "name": "NET_SetQServerCallbackFunction",
+      "address": "0052b5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b5c0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_SetQServerCallbackFunction",
+        "SetReservedHook"
+      ]
+    },
+    {
+      "name": "AssignClientToToken",
+      "address": "0052b5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b5e0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "AssignClientToToken",
+        "SetClientServerTokenByClientId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QSERVER_GetClientGameToken",
+      "address": "0052b610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b610"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "QSERVER_GetClientGameToken",
+        "GetClientServerTokenByClientId"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SendPacketWithFlags",
+      "address": "0052b640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b640"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_SendPacketWithFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SendPacketToClient"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_SendPacketToClient",
+      "address": "0052b690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b690"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_SendPacketToClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SendPacketToClient"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_WaitForEmptyEvent",
+      "address": "0052b6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b6d0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_WaitForEmptyEvent",
+        "WaitForEmptyEventOrPumpIo"
+      ]
+    },
+    {
+      "name": "_NullSub",
+      "address": "0052b6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b6f0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "_NullSub",
+        "_NullSubRet4"
+      ]
+    },
+    {
+      "name": "_NullSubRet8",
+      "address": "0052b700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b700"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "_NullSubRet8",
+        "_NullSubRet4"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_Send_0xAF01",
+      "address": "0052b720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b720"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_Send_0xAF01",
+        "NET_D2GS_SERVER_SendPacketToClient"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x70",
+      "address": "0052b750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b750"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x70",
+        "SendPacketToClient"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_Send_0xAF00",
+      "address": "0052b780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b780"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_Send_0xAF00",
+        "NET_D2GS_SERVER_SendPacketToClient"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QSERVER_CreateAndInit",
+      "address": "0052b7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b7a0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "QSERVER_CreateAndInit",
+        "NET_QServer_Init"
+      ],
+      "usedTypes": [
+        "eD2GSConnectionType",
+        "eD2GSGameType"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
+      "address": "0052b7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b7e0"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_SetD2GSConnectionType",
+      "address": "0052b810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b810"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_SetD2GSConnectionType"
+      ],
+      "usedTypes": [
+        "eD2GSConnectionType"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize",
+      "address": "0052b920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b920"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize",
+      "address": "0052bc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052bc20"
+        }
+      ],
+      "namespace": "D2Net::Game::Server",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

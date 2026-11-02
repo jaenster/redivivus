@@ -155,8 +155,8 @@ void __stdcall __break() {
     __debugbreak();
 }
 
-void __stdcall SSYSTEM_SetShutdownFlag(uint32_t dwParam) {
-    gbSSystemShutdownInProgress = dwParam;
+void __stdcall SSYSTEM_SetShutdownFlag(uint32_t bShutdown) {
+    gbSSystemShutdownInProgress = bShutdown;
 }
 
 uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase) {
@@ -279,7 +279,9 @@ uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode) {
     return *(uint32_t*)(pList + 8);
 }
 
-void __fastcall SSYSTEM_ListClearPositive(D2StormListHead * pList) {
+// TSList<HANDLER>::UnlinkAll on SErr's handler list: unlinks every node without freeing it.
+// Named per redivivus issue #35; T from the list's delete tag .?AUHANDLER@@ (00708434).
+void __fastcall TSList_HANDLER_UnlinkAll(D2StormListHead * pList) {
     int* pPrevLink;
     uint32_t nOffset;
     int* pNode;
@@ -307,9 +309,11 @@ void __fastcall SSYSTEM_ListClearPositive(D2StormListHead * pList) {
     }
 }
 
-void __fastcall SSYSTEM_ListClearAll(D2StormListHead * pList) {
+// TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
+// Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
+void __fastcall TSList_HANDLER_Destructor(D2StormListHead * pList) {
     int* pPrevLink;
-    SSYSTEM_ListClearPositive(pList);
+    TSList_HANDLER_UnlinkAll(pList);
     StormLinkStrc** pHead = &pList->pPrevLink;
     StormLinkStrc* pNext = *pHead;
     if (!pNext) {
@@ -372,7 +376,9 @@ int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory) {
     return pNode;
 }
 
-void __fastcall SSYSTEM_ListFreeAllNodes(int32_t pList) {
+// TSList<HANDLER>::Clear: unlinks and SMemFrees every node.
+// Named per redivivus issue #35; T from the delete tag .?AUHANDLER@@ (00708434).
+void __fastcall TSList_HANDLER_Clear(int32_t pList) {
     int* pPrevLink;
     uint32_t nOffset;
     int* pNode;
@@ -402,72 +408,9 @@ void __fastcall SSYSTEM_ListFreeAllNodes(int32_t pList) {
     }
 }
 
-int __stdcall SSYSTEM_MemCompare(uint8_t * pLeft, uint8_t * pRight, uint32_t nLength) {
-    int nResult;
-    for (; nLength >= 4; nLength -= 4) {
-      if (*(int*)pLeft != *(int*)pRight) {
-        goto compare_bytes;
-      }
-
-      pRight += 4;
-      pLeft += 4;
-    }
-
-    if (!nLength) {
-      equal:
-      nResult = 0;
-    } else {
-      int nDiff;
-      compare_bytes:
-      nDiff = (uint32_t)*pLeft - (uint32_t)*pRight;
-      if (!nDiff) {
-        if (nLength == 1) {
-          goto equal;
-        }
-
-        nDiff = (uint32_t)pLeft[1] - (uint32_t)pRight[1];
-        if (!nDiff) {
-          if (nLength == 2) {
-            goto equal;
-          }
-
-          nDiff = (uint32_t)pLeft[2] - (uint32_t)pRight[2];
-          if (!nDiff && (nLength == 3 || (nDiff = (uint32_t)pLeft[3] - (uint32_t)pRight[3] , !nDiff))) {
-            goto equal;
-          }
-        }
-      }
-
-      nResult = 1;
-      if (nDiff <= 0) {
-        return -1;
-      }
-    }
-
-    return nResult;
-}
-
-// @blizzard SMemCopy (Storm ordinal 491)
-void __stdcall SMemCopy(void * _Dst, void * _Src, size_t _Size) {
-    memcpy(_Dst, _Src, _Size);
-}
-
-// @blizzard SMemFill (Storm ordinal 492)
-void __stdcall SMemFill(void * pMemory, size_t nSize, uint8_t bValue) {
-    memset(pMemory, (uint32_t)bValue, nSize);
-}
-
-// @blizzard SMemMove (Storm ordinal 493)
-void __stdcall SMemMove(void * pParam1, void * pParam2, size_t nSize) {
-    memmove(pParam1, pParam2, nSize);
-}
-
-// @blizzard SMemZero (Storm ordinal 494)
-void __stdcall SMemZero(void * pMemory, size_t nSize) {
-    memset(pMemory, 0, nSize);
-}
-
-void __fastcall LINKEDLIST_GetNodeValue(void * pNode) {
+// TSFixedArray<unsigned int> constructor: zeroes the 20-byte array header.
+// Named per redivivus issue #35: SBIG_Constructor passes it with TSFixedArray_Ui_Destructor to the eh vector constructor iterator, so it is not a TSList helper.
+void __fastcall TSFixedArray_Ui_Constructor(void * pNode) {
     *(uint32_t*)pNode = 0;
     *(uint32_t*)((int)pNode + 4) = 0;
     *(uint32_t*)((int)pNode + 8) = 0;
@@ -491,7 +434,9 @@ StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(StormLinkStrc * pLink, int3
     return pResult;
 }
 
-void __fastcall LINKEDLIST_UnlinkNodeSelf(StormLinkStrc * pLink) {
+// TSLink<TMESSAGESOURCE>::Unlink: removes one link from its list and clears it.
+// Named per redivivus issue #35; a TSLink member used by every TSList<TMESSAGESOURCE> operation.
+void __fastcall TSLink_TMESSAGESOURCE_Unlink(StormLinkStrc * pLink) {
     StormLinkStrc* pPrevLink = pLink->pPrevLink;
     if (!pPrevLink) {
       return;
@@ -521,7 +466,7 @@ void __thiscall LINKEDLIST_InsertNode(StormLinkedListStrc * pList, void * pNewIt
     StormLinkStrc* pPrevLinkField;
     StormLinkStrc* pNodeLink = LINKEDLIST_GetOffset(pList, pNewItem);
     if (pNodeLink->pPrevLink) {
-      LINKEDLIST_UnlinkNodeSelf(pNodeLink);
+      TSLink_TMESSAGESOURCE_Unlink(pNodeLink);
     }
     if (pRefItem) {
       pAnchorLink = LINKEDLIST_GetOffset(pList, pRefItem);
@@ -561,36 +506,40 @@ int32_t __thiscall LINKEDLIST_GetNodeAt(int * pList, int32_t nOffset) {
     return nNodeValue;
 }
 
-void __thiscall LINKEDLIST_RemoveNode(int * pnParam, int32_t nOffset) {
-    StormLinkStrc* pNodeLink = LINKEDLIST_GetOffset((StormLinkedListStrc*)pnParam, (void*)nOffset);
-    LINKEDLIST_UnlinkNodeSelf(pNodeLink);
+void __thiscall LINKEDLIST_RemoveNode(int * pList, int32_t nOffset) {
+    StormLinkStrc* pNodeLink = LINKEDLIST_GetOffset((StormLinkedListStrc*)pList, (void*)nOffset);
+    TSLink_TMESSAGESOURCE_Unlink(pNodeLink);
 }
 
 // @wasnamed LINKEDLIST_GetCount - one name on two different functions.
 // @evidence Calls LINKEDLIST_GetOffset(nOffset,p) then returns node[+4].
 // It counts nothing. 00426a60 is the real count (returns max(pList[+8],0)).
 // @caveat no xrefs - an inlined Storm TS-list template instance. Name is body-derived, not recovered.
-int32_t __thiscall LINKEDLIST_GetNodeLinkAtOffset(int * pnParam, int32_t nOffset) {
-    StormLinkStrc* pListNode = LINKEDLIST_GetOffset((StormLinkedListStrc*)pnParam, (void*)nOffset);
+int32_t __thiscall LINKEDLIST_GetNodeLinkAtOffset(int * pList, int32_t nOffset) {
+    StormLinkStrc* pListNode = LINKEDLIST_GetOffset((StormLinkedListStrc*)pList, (void*)nOffset);
     return pListNode->pNext;
 }
 
-void __fastcall LINKEDLIST_FreeNode(void * pParam) {
+// TSList<TMESSAGESOURCE>::UnlinkAll: unlinks every node without freeing it.
+// Named per redivivus issue #35; T from gFaultHandlerList, whose nodes are allocated with .?AUTMESSAGESOURCE@@ (0072f9fc).
+void __fastcall TSList_TMESSAGESOURCE_UnlinkAll(void * pList) {
     while (true) {
       int nOffset;
-      nOffset = *(int*)((int)pParam + 8);
+      nOffset = *(int*)((int)pList + 8);
       if (nOffset <= 0) {
         nOffset = 0;
         break;
       }
 
-      LINKEDLIST_RemoveNode((int*)pParam, nOffset);
+      LINKEDLIST_RemoveNode((int*)pList, nOffset);
     }
 }
 
-void __fastcall LINKEDLIST_FreeNodeAndUnlink(void * pParam) {
-    LINKEDLIST_FreeNode(pParam);
-    LINKEDLIST_UnlinkNodeSelf((StormLinkStrc*)((int)pParam + 4));
+// TSList<TMESSAGESOURCE>::~TSList: UnlinkAll, then unlinks the terminator link. No direct callers; byte-identical to 005176d3.
+// Named per redivivus issue #35; T from the UnlinkAll it calls.
+void __fastcall TSList_TMESSAGESOURCE_Destructor(void * pList) {
+    TSList_TMESSAGESOURCE_UnlinkAll(pList);
+    TSLink_TMESSAGESOURCE_Unlink((StormLinkStrc*)((int)pList + 4));
 }
 
 void * __thiscall LINKEDLIST_AllocAndInsertNode(StormLinkedListStrc * pList, int32_t nInsertMode, int32_t nExtraSize, uint32_t dwFlags) {
@@ -612,7 +561,7 @@ void * __thiscall LINKEDLIST_AllocAndInsertNode(StormLinkedListStrc * pList, int
 }
 
 FILE * __thiscall LINKEDLIST_DetachNode(FILE * pFile, uint8_t bFree) {
-    LINKEDLIST_UnlinkNodeSelf((StormLinkStrc*)pFile);
+    TSLink_TMESSAGESOURCE_Unlink((StormLinkStrc*)pFile);
     if (!(bFree & 1)) {
       return pFile;
     }
@@ -621,12 +570,16 @@ FILE * __thiscall LINKEDLIST_DetachNode(FILE * pFile, uint8_t bFree) {
     return pFile;
 }
 
-void __fastcall LINKEDLIST_FreeNodeSafe(void * pParam) {
-    LINKEDLIST_FreeNode(pParam);
-    LINKEDLIST_UnlinkNodeSelf((StormLinkStrc*)((int)pParam + 4));
+// Second out-of-line copy of TSList<TMESSAGESOURCE>::~TSList, byte-identical to 00517658. No direct callers; the address suffix keeps the two apart.
+// Named per redivivus issue #35; T from the UnlinkAll it calls.
+void __fastcall TSList_TMESSAGESOURCE_Destructor_5176d3(void * pList) {
+    TSList_TMESSAGESOURCE_UnlinkAll(pList);
+    TSLink_TMESSAGESOURCE_Unlink((StormLinkStrc*)((int)pList + 4));
 }
 
-void __fastcall LINKEDLIST_FreeAllNodes(void * pListHead) {
+// TSList<TMESSAGESOURCE>::Clear: unlinks and SMemFrees every node.
+// Named per redivivus issue #35; T from the delete tag .?AUTMESSAGESOURCE@@ (0072f9fc).
+void __fastcall TSList_TMESSAGESOURCE_Clear(void * pListHead) {
     while (true) {
       FILE* pObject;
       pObject = *(FILE**)((int)pListHead + 8);

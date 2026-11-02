@@ -60,7 +60,5 @@ namespace Storm {
 // Function declarations
 // @blizzard SMsgBreakHandlerChain (SMSG.CPP)
 int __stdcall SMsgBreakHandlerChain(void * pUnderMouse);
-void StaticFini_Empty_6cb400();
-void StaticFini_gFaultHandlerList();
 
 } // namespace Storm

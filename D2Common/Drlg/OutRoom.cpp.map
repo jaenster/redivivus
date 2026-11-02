@@ -1,0 +1,69 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/OutRoom.cpp",
+  "functions": [
+    {
+      "name": "DRLGOUTROOM_FreeDrlgOutdoorRoomData",
+      "address": "0067d610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067d610"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutRoom",
+      "calledFunctions": [
+        "DRLGOUTROOM_FreeDrlgOutdoorRoomData",
+        "DRLGGRID_FreeGrid",
+        "DRLGVER_FreeVertices",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_FreeOutRoomEx",
+      "address": "0067d680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067d680"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutRoom",
+      "calledFunctions": [
+        "DRLGOUTROOM_FreeOutRoomEx",
+        "DRLGGRID_FreeGrid",
+        "DRLGVER_FreeVertices"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExDataMazeStrc",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_AllocOutdoorRoomData",
+      "address": "0067d6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067d6d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutRoom",
+      "calledFunctions": [
+        "DRLGOUTROOM_AllocOutdoorRoomData",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExDataMazeStrc",
+        "D2RoomExStrc"
+      ]
+    }
+  ]
+}

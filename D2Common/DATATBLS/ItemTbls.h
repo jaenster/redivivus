@@ -116,7 +116,7 @@ void __fastcall TXT_AllocTxt_itemratio(struct D2PoolManagerStrc * pMemory);
 void __stdcall thunk_UnloadBin_LvlMaze();
 // QualityRatio.txt row lookup. Returns quality upgrade chance ratios for treasure class calculations. Used by ITEM_RollItemQuality to apply TC quality bonuses during quality cascade.
 struct D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint32_t dwUnused, uint16_t nQualityTier);
-int SORT_ItemDescPriority(LPCVOID pParam1, LPCVOID pParam2);
+int SORT_ItemDescPriority(LPCVOID pEntry1, LPCVOID pEntry2);
 // Builds the itemstatcost.txt field-descriptor array (52 columns) and compiles it into the in-memory ItemStatCost table via DataTbls::CompileTxt (record size 0x144), enforcing a max of 0x1FF stats (fatal error otherwise). Then post-processes op-relationships: clears each stat's aOpBaseDependents arrays to -1, derives the charged-skill-level bit count (clamped 1..8, default 6) and its mask, and for every stat with an op walks its op-base/op-stat references to populate the dependency graph (aOpBaseDependents, aOpRelations, bHasOpBaseDependencies/bHasOp4Or5Dependency flags) plus special-case stat flag bits. Finally collects stats with a nonzero descpriority, qsorts them via SORT_ItemDescPriority, and allocates/stores the sorted pItemStatCostDescPriority list. __fastcall, pMemory in ECX.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_itemstatcost(struct D2PoolManagerStrc * pMemory);
@@ -126,7 +126,7 @@ void __stdcall ITEMTBLS_FreeItemStatCost();
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_properties(struct D2PoolManagerStrc * pMemory);
 void __stdcall ITEMTBLS_FreeProperties();
-int TXT_Gamble_SortFunction(LPCVOID pParam1, LPCVOID pParam2);
+int TXT_Gamble_SortFunction(LPCVOID pEntry1, LPCVOID pEntry2);
 // One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and gnItemTblsCacheSize (per-level upper-bound cache for [1..99]).
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_gamble(struct D2PoolManagerStrc * pMemory);

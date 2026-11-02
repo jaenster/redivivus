@@ -1,0 +1,524 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Warden/WardenClient.cpp",
+  "functions": [
+    {
+      "name": "WARDEN_RC4Decrypt",
+      "address": "0047f8c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f8c0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_RC4Decrypt"
+      ],
+      "usedTypes": [
+        "D2RC4StateStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WARDEN_CheckSignatureMagic",
+      "address": "0047f950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f950"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_CheckSignatureMagic",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WARDEN_ComputeModuleHash",
+      "address": "0047f990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f990"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_ComputeModuleHash",
+        "Sha1_Initialize",
+        "Sha1_Append",
+        "SStrCopy",
+        "SStrUpper",
+        "SStrLen",
+        "Sha1_Finalize"
+      ],
+      "usedTypes": [
+        "D2Sha1ContextStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WARDEN_VerifyModuleSignature",
+      "address": "0047fa20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047fa20"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_VerifyModuleSignature",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SMemCopy",
+        "SMemAlloc",
+        "SMemFill",
+        "WARDEN_ComputeModuleHash",
+        "SBigNew",
+        "SBigFromBinary",
+        "SBigPowMod",
+        "SBigToBinaryBuffer",
+        "SMemCmp",
+        "SMemFree",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WARDEN_CbAllocModuleStruct",
+      "address": "0047fbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047fbf0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_CbAllocModuleStruct",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WARDEN_CbFreeModuleStruct",
+      "address": "0047fc10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047fc10"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_CbFreeModuleStruct",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "WARDEN_DestroyModuleObject",
+      "address": "0047fc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047fc40"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_DestroyModuleObject",
+        "WARDEN_FreeModuleLibraries",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WARDEN_DecryptAndLoadModule",
+      "address": "0047fc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047fc70"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_DecryptAndLoadModule",
+        "WARDEN_FreeModuleLibraries",
+        "SMemFree",
+        "SMemAlloc",
+        "SMemCopy",
+        "WARDEN_RC4Init",
+        "WARDEN_RC4Decrypt",
+        "WARDEN_VerifyModuleSignature",
+        "uncompress",
+        "WARDEN_DecryptModule",
+        "WARDEN_DecryptBuffer"
+      ],
+      "usedTypes": [
+        "D2RC4StateStrc",
+        "D2WardenModuleStrc",
+        "int32_t",
+        "pfnWardenCreateInterface",
+        "uint32_t",
+        "uint32_t *"
+      ]
+    },
+    {
+      "name": "WARDEN_ResolveAndLoadModule",
+      "address": "0047fee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047fee0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_ResolveAndLoadModule",
+        "SMemCmp",
+        "WARDEN_DecryptAndLoadModule",
+        "sprintf",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WARDEN_DownloadModule",
+      "address": "0047ffb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ffb0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_DownloadModule"
+      ],
+      "usedTypes": [
+        "_FILETIME",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendPacket",
+      "address": "00480000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480000"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient::WardenClient",
+      "calledFunctions": [
+        "SendPacket",
+        "NET_D2GS_CLIENT_Send_0x66"
+      ],
+      "usedTypes": [
+        "WardenClient",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckModule",
+      "address": "00480020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480020"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient::WardenClient",
+      "calledFunctions": [
+        "CheckModule",
+        "WARDEN_ResolveAndLoadModule"
+      ],
+      "usedTypes": [
+        "WardenClient",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LoadModule",
+      "address": "00480040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480040"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient::WardenClient",
+      "calledFunctions": [
+        "LoadModule",
+        "sprintf",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "WardenClient",
+        "_FILETIME",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "AllocateMemory",
+      "address": "004800c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004800c0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient::WardenClient",
+      "calledFunctions": [
+        "AllocateMemory",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "WardenClient",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeMemory",
+      "address": "004800e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004800e0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient::WardenClient",
+      "calledFunctions": [
+        "FreeMemory",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "WardenClient"
+      ]
+    },
+    {
+      "name": "SetRC4Data",
+      "address": "00480100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480100"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient::WardenClient",
+      "calledFunctions": [
+        "SetRC4Data",
+        "SMemFree",
+        "SMemAlloc",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "WardenClient",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetRC4Data",
+      "address": "00480150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480150"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient::WardenClient",
+      "calledFunctions": [
+        "GetRC4Data",
+        "SMemCopy",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "WardenClient",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004801c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004801c0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient::WardenClient",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "WardenClient"
+      ]
+    },
+    {
+      "name": "WARDEN_UnloadActiveModule",
+      "address": "004801d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004801d0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_UnloadActiveModule",
+        "WARDEN_FreeModuleLibraries",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2WardenModuleStrc"
+      ]
+    },
+    {
+      "name": "WARDEN_ActivatePendingModule",
+      "address": "00480230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480230"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_ActivatePendingModule",
+        "WARDEN_FreeModuleLibraries",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2WardenModuleObjectStrc",
+        "D2WardenModuleStrc"
+      ]
+    },
+    {
+      "name": "WARDEN_HandleServerPacket",
+      "address": "004802e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004802e0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_HandleServerPacket",
+        "WARDEN_ActivatePendingModule"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WARDEN_Tick",
+      "address": "00480320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480320"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_Tick",
+        "WARDEN_ActivatePendingModule"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WARDEN_Cleanup",
+      "address": "00480340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480340"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_Cleanup",
+        "WARDEN_FreeModuleLibraries",
+        "SMemFree",
+        "WARDEN_UnloadActiveModule"
+      ],
+      "usedTypes": [
+        "D2WardenModuleStrc"
+      ]
+    },
+    {
+      "name": "WARDEN_Initialize",
+      "address": "004803c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004803c0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_Initialize",
+        "WARDEN_Cleanup",
+        "NET_GetLobbyChatQueue",
+        "WARDEN_ResolveAndLoadModule",
+        "WARDEN_ActivatePendingModule"
+      ]
+    },
+    {
+      "name": "WARDEN_SetGlobalFlag",
+      "address": "004e0690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e0690"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_SetGlobalFlag"
+      ]
+    },
+    {
+      "name": "WARDEN_FreeModuleLibraries",
+      "address": "004e06a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e06a0"
+        }
+      ],
+      "namespace": "D2Client::Warden::WardenClient",
+      "calledFunctions": [
+        "WARDEN_FreeModuleLibraries"
+      ]
+    }
+  ]
+}

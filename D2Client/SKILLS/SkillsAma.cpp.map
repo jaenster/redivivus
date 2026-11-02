@@ -1,0 +1,396 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/SKILLS/SkillsAma.cpp",
+  "functions": [
+    {
+      "name": "GetTxtSkillParam5",
+      "address": "004f4110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4110"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "GetTxtSkillParam5"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckThrowableAmmo",
+      "address": "004f4140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4140"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckThrowableAmmo",
+        "SKILLS_CltCheckThrowableAmmo"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_SetParam1Zero",
+      "address": "004f4150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4150"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltStFunc_SetParam1Zero",
+        "GetCurrentSkill",
+        "SKILL_SetParam1"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckAmmoFindClosestTarget",
+      "address": "004f4170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4170"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckAmmoFindClosestTarget",
+        "SKILLS_CltCheckThrowableAmmo",
+        "GetCurrentSkill",
+        "D2GetSkillCalc",
+        "GetConfirmedTargetUnit",
+        "SKILL_FindClosestTargetWithStats",
+        "SKILL_FindClosestTarget",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "PATH_SetDirectionToTarget"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_FindClosestMeleeTargetSetParams",
+      "address": "004f42e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f42e0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltStFunc_FindClosestMeleeTargetSetParams",
+        "GetCurrentSkill",
+        "GetMeleeRangePlusFour",
+        "GetConfirmedTargetUnit",
+        "SKILL_FindClosestTargetWithStats",
+        "SKILL_SetParam1",
+        "SKILL_FindClosestTarget",
+        "D2GetSkillCalc",
+        "GetYPos",
+        "GetXPos",
+        "PATH_SetDirectionToTarget",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_FindMeleeTargetSetCalcParam",
+      "address": "004f4450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4450"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltStFunc_FindMeleeTargetSetCalcParam",
+        "GetCurrentSkill",
+        "GetMeleeRangePlusFour",
+        "GetConfirmedTargetUnit",
+        "SKILL_FindClosestTargetWithStats",
+        "SKILL_SetParam1",
+        "D2GetSkillCalc",
+        "GetYPos",
+        "GetXPos",
+        "PATH_SetDirectionToTarget",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ama_PlayDoSound",
+      "address": "004f4590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4590"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ama_PlayDoSound",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ama_MultiShotArrows",
+      "address": "004f4610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4610"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ama_MultiShotArrows",
+        "GetWeaponClass",
+        "D2GetSkillCalc",
+        "GetCooordinates",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SKILL_ScaleUpVelocityVector",
+        "SKILL_ComputePerpendicularUnitVector",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ama_GuidedArrow",
+      "address": "004f47b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f47b0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ama_GuidedArrow",
+        "GetCooordinates",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "GetConfirmedTargetUnit",
+        "memset",
+        "MakeMissile",
+        "SetTargetX",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ama_LinearMissileSpray",
+      "address": "004f48f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f48f0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ama_LinearMissileSpray",
+        "GetConfirmedTargetUnit",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ama_Strafe",
+      "address": "004f4a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4a30"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ama_Strafe",
+        "GetCurrentSkill",
+        "SKILL_GetParam1",
+        "D2GetSkillCalc",
+        "SKILL_GetParam3",
+        "SKILL_GetParam2",
+        "UNITS_FindClientSideUnit",
+        "SKILL_FindClosestTargetWithStats",
+        "SetTargetUnitForDynamicUnit",
+        "GetCooordinates",
+        "GetWeaponClass",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MakeMissile",
+        "SKILL_SetParam1",
+        "PATH_SetDirectionToTarget",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "GetTxtSkillParam5",
+        "SKILLS_ApplyDamageReduction"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ama_Impale",
+      "address": "004f4c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4c20"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ama_Impale",
+        "GetCurrentSkill",
+        "SKILL_GetParam3",
+        "SKILL_GetParam2",
+        "UNITS_FindClientSideUnit",
+        "GetMeleeRangePlusFour",
+        "IsInMeleeRange",
+        "SKILL_FindClosestTargetWithStats",
+        "SKILL_GetParam1",
+        "SKILL_SetParam1",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "PATH_SetDirectionToTarget",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "GetSkillId",
+        "GetSkilParam1",
+        "SKILLS_ApplyDamageReduction",
+        "GetHitClassForPlayerOrMonster",
+        "UNITSND_GetSkillCastSound",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Ama_PiercingShot",
+      "address": "004f4d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f4d90"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsAma",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Ama_PiercingShot",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "GetConfirmedTargetUnit",
+        "D2GetSkillCalc",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SKILL_FindClosestTargetWithStats",
+        "memset",
+        "MakeMissile",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

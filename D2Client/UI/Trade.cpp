@@ -63,11 +63,11 @@ int __stdcall DrawAgreeToTrade() {
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpTradeAgreeDialog, 1);
     Dialog::AddStringData(Dialog::gpTradeAgreeDialog, D2Lang::StrTable::strtable::GetLocaleString(0xfca), 0xf, 0, 0, 1, 0, 0);
     int32_t nLineNum = 1;
-    fpDialogFunc pcVar1 = ConfirmExchange;
-    Dialog::AddStringData(Dialog::gpTradeAgreeDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd49), 0xf, 0, 0, 1, pcVar1, nLineNum);
+    fpDialogFunc pfnConfirmOnClick = ConfirmExchange;
+    Dialog::AddStringData(Dialog::gpTradeAgreeDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd49), 0xf, 0, 0, 1, pfnConfirmOnClick, nLineNum);
     nLineNum = 1;
-    fpDialogFunc nParam2 = TRADE_GetPlayerGoldAmount;
-    Dialog::AddStringData(Dialog::gpTradeAgreeDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd48), 0xf, 0, 0, 1, nParam2, nLineNum);
+    fpDialogFunc pfnCancelOnClick = TRADE_GetPlayerGoldAmount;
+    Dialog::AddStringData(Dialog::gpTradeAgreeDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd48), 0xf, 0, 0, 1, pfnCancelOnClick, nLineNum);
     Dialog::DIALOG_SetSelectedLine(Dialog::gpTradeAgreeDialog, -1);
     return 1;
 }
@@ -91,9 +91,9 @@ void __stdcall TRADE_HandleTradeCancel() {
     Dialog::gpTradeCancelDialog = Dialog::AllocDialogStrc(0x140, 100, TRADE_GetPartnerGoldAmount, TRADE_GetPartnerGoldAmount, 0, 1, 1, 0, 0, 0, 1);
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpTradeCancelDialog, 1);
     Dialog::AddStringData(Dialog::gpTradeCancelDialog, D2Lang::StrTable::strtable::GetLocaleString(0xfcb), 0xf, 0, 0, 1, 0, 0);
-    int32_t iVar1 = 1;
+    int32_t nOnClickParam = 1;
     fpDialogFunc fpCancelCallback = TRADE_GetPartnerGoldAmount;
-    Dialog::AddStringData(Dialog::gpTradeCancelDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd48), 0xf, 0, 0, 1, fpCancelCallback, iVar1);
+    Dialog::AddStringData(Dialog::gpTradeCancelDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd48), 0xf, 0, 0, 1, fpCancelCallback, nOnClickParam);
     Dialog::DIALOG_SetSelectedLine(Dialog::gpTradeCancelDialog, -1);
 }
 

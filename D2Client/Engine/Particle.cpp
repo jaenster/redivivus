@@ -261,19 +261,19 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
     }
 
     _bySpriteLayer = pParticle->pOffsets[0].nOffsetX;
-    int iVar1;
-    iVar1 = pParticle->pOffsets[1].nOffsetX;
+    int nOffset;
+    nOffset = pParticle->pOffsets[1].nOffsetX;
     pParticle->nPosX += _bySpriteLayer;
     nOffsetY0 = pParticle->pOffsets[0].nOffsetY;
     pParticle->nPosY += nOffsetY0;
     pX = &pParticle->nPosX;
-    pParticle->pOffsets[0].nOffsetX = iVar1 + _bySpriteLayer;
+    pParticle->pOffsets[0].nOffsetX = nOffset + _bySpriteLayer;
     _bySpriteLayer = pParticle->pOffsets[1].nOffsetY;
-    iVar1 = pParticle->pOffsets[0].nOffsetZ;
-    pParticle->nPosZ += iVar1;
+    nOffset = pParticle->pOffsets[0].nOffsetZ;
+    pParticle->nPosZ += nOffset;
     pY = &pParticle->nPosY;
     pParticle->pOffsets[0].nOffsetY = _bySpriteLayer + nOffsetY0;
-    nOffsetX1 = iVar1 + pParticle->pOffsets[1].nOffsetZ;
+    nOffsetX1 = nOffset + pParticle->pOffsets[1].nOffsetZ;
     pParticle->pOffsets[0].nOffsetZ = nOffsetX1;
     if (nFlags & 2) {
       if (pParticle->nBounceCount) {
@@ -361,9 +361,9 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
       }
 
       *pX = pParticle->pOffsets[2].nOffsetX << 0xb;
-      iVar1 = pParticle->pOffsets[2].nOffsetY;
+      nOffset = pParticle->pOffsets[2].nOffsetY;
       pParticle->nPosZ = _bySpriteLayer << 0xb;
-      *pY = iVar1 << 0xb;
+      *pY = nOffset << 0xb;
     }
 
     pParticle->nFlags = nFlags | 1;

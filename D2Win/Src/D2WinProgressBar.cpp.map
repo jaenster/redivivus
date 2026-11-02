@@ -1,0 +1,69 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinProgressBar.cpp",
+  "functions": [
+    {
+      "name": "FORMS_DestroyD2WinProgressBar",
+      "address": "00507db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507db0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinProgressBar",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinProgressBar",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinProgressBar"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "00507dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507dc0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinProgressBar",
+      "calledFunctions": [
+        "Draw",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_GetColorFromCurrentPallete",
+        "D2GFX_DrawSolidRectEx"
+      ],
+      "usedTypes": [
+        "D2WinProgressBar",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WinProgressBar",
+      "address": "00507e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507e50"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinProgressBar",
+      "calledFunctions": [
+        "D2WinProgressBar",
+        "AllocClientMemory",
+        "memset",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinProgressBar",
+        "int32_t"
+      ]
+    }
+  ]
+}

@@ -208,8 +208,8 @@ static BOOL __stdcall SELECT_IsWarpDoubleClicked(uint32_t dwUnused, int32_t nCli
       return 0;
     }
 
-    int iVar1 = Game::GAMEDATA_GetQueuedPrimaryClick();
-    if (!iVar1) {
+    int nQueuedClick = Game::GAMEDATA_GetQueuedPrimaryClick();
+    if (!nQueuedClick) {
       return 0;
     }
 
@@ -590,22 +590,27 @@ static int * __stdcall SELECT_GetTargetCoords(int * pnOutX, int * pUnit, int * p
     if (pUnit) {
       eD2UnitType eUnitTypeForY;
       eUnitType = *pUnit;
+      long xValue;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        ptCoord.x = *(int32_t*)(pUnit[0xb] + 0xc);
+        xValue = *(int32_t*)(pUnit[0xb] + 0xc);
       } else if ((D2DynamicPathStrc*)pUnit[0xb]) {
-        ptCoord.x = D2Common::PATH::DynamicPath::GetXPos((D2DynamicPathStrc*)pUnit[0xb]);
+        xValue = D2Common::PATH::DynamicPath::GetXPos((D2DynamicPathStrc*)pUnit[0xb]);
       } else {
-        ptCoord.x = 0;
+        xValue = 0;
       }
 
+      ptCoord.x = xValue;
       eUnitTypeForY = *pUnit;
+      long yValue;
       if (eUnitTypeForY == UNIT_OBJECT || (int)eUnitTypeForY > 3 && (int)eUnitTypeForY <= 5) {
-        ptCoord.y = *(int32_t*)(pUnit[0xb] + 0x10);
+        yValue = *(int32_t*)(pUnit[0xb] + 0x10);
       } else if ((D2DynamicPathStrc*)pUnit[0xb]) {
-        ptCoord.y = D2Common::PATH::DynamicPath::GetYPos((D2DynamicPathStrc*)pUnit[0xb]);
+        yValue = D2Common::PATH::DynamicPath::GetYPos((D2DynamicPathStrc*)pUnit[0xb]);
       } else {
-        ptCoord.y = 0;
+        yValue = 0;
       }
+
+      ptCoord.y = yValue;
     } else {
       ptCoord.x = *pnOutX;
       ptCoord.y = *pnOutY;
@@ -692,16 +697,16 @@ D2UnitStrc * __fastcall SKILL_ValidateTarget(D2SkillStrc * pSkill, D2UnitStrc * 
       return pUnit;
     }
 
-    uint32_t uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pSkillsTxt + 0x6);
-    if (gadwBitMasks[6] & uVar1) {
+    uint32_t dwSkillFlags = (uint32_t)(uint8_t)*((uint8_t*)pSkillsTxt + 0x6);
+    if (gadwBitMasks[6] & dwSkillFlags) {
       pPlayerUnit_lcl = SKILL_FindTargetInRange(pSkill, pUnit, pX, pY, pSkillsTxt);
       return pPlayerUnit_lcl;
     }
-    if (!pUnit && gadwBitMasks[5] & uVar1 && bAllowDirectional) {
+    if (!pUnit && gadwBitMasks[5] & dwSkillFlags && bAllowDirectional) {
       pPlayerUnit_lcl = SELECT_FindTargetInFacingDirection(pPlayerUnit_lcl, pSkillsTxt);
       return pPlayerUnit_lcl;
     }
-    if (!(gadwBitMasks[7] & uVar1)) {
+    if (!(gadwBitMasks[7] & dwSkillFlags)) {
       return pUnit;
     }
 
@@ -759,7 +764,6 @@ void __stdcall SELECT_UpdateSelectedUnit() {
     static void * gpSelectLastPlayerRoom; D2_STATIC_GUARD_BSS(gpSelectLastPlayerRoom, "D2Client::GAME::Select::SELECT_UpdateSelectedUnit::gpSelectLastPlayerRoom");
 
     uint32_t bHitTest;
-    int nIsActive;
     eD2States eUnitState;
     int32_t nBestDistSq;
     D2UnitStrc* pIterUnit;
@@ -771,6 +775,8 @@ void __stdcall SELECT_UpdateSelectedUnit() {
     int nBestPriority;
     D2UnitStrc* pCurrentUnit;
     eD2UnitType eBestType;
+    int bIsActive;
+    int nPriority;
     eD2UnitType eBestUnitType;
     D2UnitStrc* pCandidate;
     if (_Selection::bCanSelectUnit) {
@@ -826,22 +832,22 @@ void __stdcall SELECT_UpdateSelectedUnit() {
     uint32_t nRoomIndex;
     nRoomIndex = 0;
     if (nRoomCount) {
-      int iVar1;
+      int nIsActive;
       do {
         pIterUnit = ppRoomList[nRoomIndex]->pUnitList;
         pPrevUnit = 0;
         nIterCount = 0;
-        iVar1 = nIterCount;
-        for (; nIterCount = iVar1 , pCurrentUnit = pIterUnit , pCandidate = pBestUnit , pIterUnit != 0; pIterUnit = pIterUnit->pRoomNext) {
+        nIsActive = nIterCount;
+        for (; nIterCount = nIsActive , pCurrentUnit = pIterUnit , pCandidate = pBestUnit , pIterUnit != 0; pIterUnit = pIterUnit->pRoomNext) {
           if (!pIterUnit) {
             eCurUnitType = UNIT_COUNT;
             consider_candidate:
             if (pPrevUnit == pIterUnit) {
               break;
             }
-            nIterCount = iVar1 + 1;
+            nIterCount = nIsActive + 1;
             pPrevUnit = pIterUnit;
-            if (iVar1 > 30000) {
+            if (nIsActive > 30000) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x218);
               exit(-1);
             }
@@ -853,9 +859,9 @@ void __stdcall SELECT_UpdateSelectedUnit() {
                 pCandidate = pBestUnit;
                 if (bHitTest) {
                   if (pSelectedUnit == pIterUnit) {
-                    iVar1 = UNIT::CUnit::IsActive(pIterUnit);
+                    bIsActive = UNIT::CUnit::IsActive(pIterUnit);
                     pCandidate = pIterUnit;
-                    if (!iVar1) {
+                    if (!bIsActive) {
                       break;
                     }
                   }
@@ -864,16 +870,16 @@ void __stdcall SELECT_UpdateSelectedUnit() {
                   if (pBestUnit) {
                     eBestUnitType = pBestUnit->eUnitType;
                     nBestPriority = gnSelectTimeout[eBestUnitType];
-                    iVar1 = gnSelectTimeout[eCurUnitType];
+                    nPriority = gnSelectTimeout[eCurUnitType];
                     if (eCurUnitType == UNIT_PLAYER) {
                       nIsActive = UNIT::CUnit::IsActive(pIterUnit);
                       if (nIsActive) {
-                        iVar1 = 1;
+                        nPriority = 1;
                       }
                     } else if (eCurUnitType == UNIT_MONSTER) {
                       bIsDeadOrDoor = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pIterUnit);
                       if (bIsDeadOrDoor) {
-                        iVar1 = -8;
+                        nPriority = -8;
                       }
 
                       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pIterUnit, STATE_attached);
@@ -905,20 +911,20 @@ void __stdcall SELECT_UpdateSelectedUnit() {
                         } else {
                           pick_higher_priority:
                           pCandidate = pBestUnit;
-                          if (nBestPriority < iVar1) {
+                          if (nBestPriority < nPriority) {
                             pCandidate = pIterUnit;
                           }
                         }
                       } else {
                         compare_priority_or_distance:
-                        if (nBestPriority == iVar1) {
+                        if (nBestPriority == nPriority) {
                           eCurUnitType = SELECT_GetDistanceSquared(pIterUnit, pPlayerUnit_lcl);
                           nBestDistSq = SELECT_GetDistanceSquared(pBestUnit, pPlayerUnitLocal);
                           pCandidate = pBestUnit;
                           if ((int)eCurUnitType < nBestDistSq) {
                             pCandidate = pIterUnit;
                           }
-                        } else if (nBestPriority < iVar1) {
+                        } else if (nBestPriority < nPriority) {
                           pCandidate = pIterUnit;
                         }
                       }
@@ -935,7 +941,7 @@ void __stdcall SELECT_UpdateSelectedUnit() {
                       bHitTest = SELECT_IsUnitBehindDoor(pBestUnit, pIterUnit);
                       pIterUnit = pCurrentUnit;
                       pCandidate = pBestUnit;
-                      if (bHitTest && nBestPriority < iVar1) {
+                      if (bHitTest && nBestPriority < nPriority) {
                         pBestUnit = pCurrentUnit;
                         pCandidate = pBestUnit;
                       }
@@ -954,7 +960,7 @@ void __stdcall SELECT_UpdateSelectedUnit() {
           next_unit:
           pBestUnit = pCandidate;
           pPlayerUnitLocal = pPlayerUnit_lcl;
-          iVar1 = nIterCount;
+          nIsActive = nIterCount;
         }
 
         pBestUnit = pCandidate;

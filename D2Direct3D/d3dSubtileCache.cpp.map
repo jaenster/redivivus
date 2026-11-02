@@ -1,0 +1,193 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Direct3D/d3dSubtileCache.cpp",
+  "functions": [
+    {
+      "name": "D3DSUBTILE_Initialize",
+      "address": "006ba9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba9a0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "D3DSUBTILE_Initialize",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "RENDERER_D3D_CreateSurfaceWithTexture"
+      ],
+      "usedTypes": [
+        "D3DSubtileCacheNodeStrc",
+        "D3DSubtileCacheStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D3DSUBTILE_SetPalette",
+      "address": "006baac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006baac0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "D3DSUBTILE_SetPalette",
+        "DIRECTD3D_LogError",
+        "SetPalette"
+      ],
+      "usedTypes": [
+        "D3DSubtileCacheStrc",
+        "IDirectDrawSurface7"
+      ]
+    },
+    {
+      "name": "D3DSUBTILE_InsertNodeAtTail",
+      "address": "006bab30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bab30"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "D3DSUBTILE_InsertNodeAtTail"
+      ],
+      "usedTypes": [
+        "D3DSubtileCacheNodeStrc",
+        "D3DSubtileCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DSUBTILE_RemoveNodeByIndex",
+      "address": "006babd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006babd0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "D3DSUBTILE_RemoveNodeByIndex"
+      ],
+      "usedTypes": [
+        "D2InventoryGridStrc",
+        "D2UnitStrc",
+        "D3DSubtileCacheNodeStrc",
+        "D3DSubtileCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DSUBTILE_AllocateNodeFromFreeList",
+      "address": "006bac50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bac50"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "D3DSUBTILE_AllocateNodeFromFreeList"
+      ],
+      "usedTypes": [
+        "D3DSubtileCacheNodeStrc",
+        "D3DSubtileCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DSUBTILE_PromoteNodeToMRU",
+      "address": "006bacb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bacb0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "D3DSUBTILE_RemoveNodeByIndex",
+        "GLSUBTILE_PromoteNodeToMRU",
+        "D3DSUBTILE_PromoteNodeToMRU",
+        "D3DSUBTILE_InsertNodeAtTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D3DSubtileCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DSUBTILE_InvalidateByIndex",
+      "address": "006bad70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bad70"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_InvalidateByIndex",
+        "D3DSUBTILE_InvalidateByIndex",
+        "D3DSUBTILE_RemoveNodeByIndex"
+      ],
+      "usedTypes": [
+        "D3DSubtileCacheStrc"
+      ]
+    },
+    {
+      "name": "D3DSUBTILE_Free",
+      "address": "006badc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006badc0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "D3DSUBTILE_Free",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D3DSubtileCacheNodeStrc",
+        "D3DSubtileCacheStrc",
+        "IUnknown"
+      ]
+    },
+    {
+      "name": "D3DSUBTILE_EnsureAvailableNode",
+      "address": "006baf00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006baf00"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dSubtileCache",
+      "calledFunctions": [
+        "D3DSUBTILE_EnsureAvailableNode",
+        "D3DSUBTILE_AllocateNodeFromFreeList"
+      ],
+      "usedTypes": [
+        "D3DSubtileCacheNodeStrc",
+        "D3DSubtileCacheStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

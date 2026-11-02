@@ -214,9 +214,9 @@ BOOL __fastcall WARP_IsPointInClickArea(D2UnitStrc * pUnit, int32_t nClickX, int
     }
 
     D2Common::Drlg::Transform::CoordsMapToScreen(&nPosX, &nPosY);
-    int iVar1 = pShadowBounds->SelectX + nPosX;
-    int iVar2 = pShadowBounds->SelectY + nPosY;
-    if (nClickX >= iVar1 && nClickY >= iVar2 && nClickX <= pShadowBounds->SelectDX + iVar1 && nClickY <= pShadowBounds->SelectDY + iVar2) {
+    int nAreaLeft = pShadowBounds->SelectX + nPosX;
+    int iVar1 = pShadowBounds->SelectY + nPosY;
+    if (nClickX >= nAreaLeft && nClickY >= iVar1 && nClickX <= pShadowBounds->SelectDX + nAreaLeft && nClickY <= pShadowBounds->SelectDY + iVar1) {
       return 1;
     }
 
@@ -275,10 +275,10 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
     }
 
     memset(&spriteParams, 0, 0x48);
-    D2UnitStrc* pDVar6 = (D2UnitStrc*)-1;
+    D2UnitStrc* pEquipContext = (D2UnitStrc*)-1;
     int* pFrameCountOut = &__frame0.nFrameCountOut;
     uint32_t nFrameLocal = nFrame;
-    int32_t nOffset = Engine::GfxUtil::DC6_AssignParams(&spriteParams, pUnit, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrameLocal, pFrameCountOut, (uint8_t)nAnimMode, pDVar6);
+    int32_t nOffset = Engine::GfxUtil::DC6_AssignParams(&spriteParams, pUnit, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrameLocal, pFrameCountOut, (uint8_t)nAnimMode, pEquipContext);
     if (!nOffset) {
       return 0;
     }
@@ -784,19 +784,19 @@ void __fastcall CUNIT_IterateItemsWithCallback(fnUnitIterCallback pfnCallback) {
     Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[2], pfnCallback);
 }
 
-static D2UnitStrc * CUNIT_IterateUntilWarp(int * pnParam) {
+static D2UnitStrc * CUNIT_IterateUntilWarp(int * pUnit) {
     while (true) {
-      if (!(D2UnitStrc*)pnParam) {
+      if (!(D2UnitStrc*)pUnit) {
         return nullptr;
       }
-      if (((D2UnitStrc*)pnParam)->eUnitType == UNIT_WARP) {
+      if (((D2UnitStrc*)pUnit)->eUnitType == UNIT_WARP) {
         break;
       }
 
-      pnParam = (int*)((D2UnitStrc*)pnParam)->pRoomNext;
+      pUnit = (int*)((D2UnitStrc*)pUnit)->pRoomNext;
     }
 
-    return (D2UnitStrc*)pnParam;
+    return (D2UnitStrc*)pUnit;
 }
 
 uint16_t * __fastcall ROOM_GetWarpDestinationName(D2RoomStrc * pRoom, D2UnitStrc * pWarpUnit) {
@@ -1740,7 +1740,7 @@ void __fastcall FaceTarget(D2UnitStrc * pUnit, int32_t bImmediate) {
 uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     DWORD nUnitGUID2;
     uint32_t nPartyFlag;
-    int iVar1;
+    int bIsActive;
     int32_t nClassId2;
     bool bIsDead;
     eD2UnitType eUnitType1;
@@ -1795,8 +1795,8 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
       }
       if (eUnitType1 == UNIT_PLAYER && eUnitType2 == UNIT_PLAYER) {
         if (pUnit2 && pUnit2->eUnitType == UNIT_PLAYER) {
-          iVar1 = IsActive(pUnit2);
-          if (iVar1) {
+          bIsActive = IsActive(pUnit2);
+          if (bIsActive) {
             bCheckResult = GAME::Roster::ROSTER_CheckPlayerCanLoot(nUnitGUID1, pUnit2->nUnitGUID);
             if (bCheckResult) {
               return 1;
@@ -1935,7 +1935,6 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
     eD2LevelId eLevel;
     uint32_t nNewSeed;
     D2UnitStrc* pFinalUnit;
-    int32_t nLine;
     D2SeedStrc sNextSeed;
     BOOL bIsExpansion;
     bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
@@ -1982,8 +1981,7 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
         Player::JoinRoomSetup(pUnit, pRoom, nX, nY);
       break;
       case UNIT_MONSTER:
-        nLine = 0x202;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x202);
       exit(-1);
       case UNIT_OBJECT:
         D2Common::Units::AllocStaticPath(pUnit);
@@ -2110,7 +2108,7 @@ D2UnitStrc * __fastcall CreateObject(int32_t nUnitGUID, int32_t nClassId, int32_
 
 // Client-side monster unit creation from a network create-monster packet. 00466723 is MOV EAX,ESI immediately before the epilogue: it returns the unit it made, and 0045f40c stores that into ESI and tests it. Typed void, the created monster was thrown away and NET_D2GS_CLIENT_Incoming0xAC read an uninitialised pUnit. The SIXTH parameter is real: 00466429 is CMP dword ptr [EBP+0x14],EBX - a client-unit flag at Stack[0x10]. Omitting it made the reconstruction read it as an uninitialised local and take the wrong branch.
 D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData, uint8_t * pItemSeed, uint8_t * pMonUModList, uint32_t nNameSeed, int16_t nBossId, int32_t bClientUnit) {
-    uint8_t bVar1;
+    uint8_t byDifficulty;
     D2UnitStrc* pUnit;
     uint8_t* pDstUModList;
     uint32_t uMercType;
@@ -2137,19 +2135,19 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
       }
     }
 
-    int iVar2 = pCreateData->nMonstatId;
-    if (!(iVar2 >= 0 && iVar2 < sgptDataTable->nTxtMonStatsSize)) {
+    int iVar1 = pCreateData->nMonstatId;
+    if (!(iVar1 >= 0 && iVar1 < sgptDataTable->nTxtMonStatsSize)) {
       return nullptr;
     }
 
-    D2MonStatsTxt* pDVar3 = sgptDataTable->pTxtMonStats + iVar2;
-    int nMonStatsExId = (int)pDVar3->MonStatsEx;
+    D2MonStatsTxt* pDVar2 = sgptDataTable->pTxtMonStats + iVar1;
+    int nMonStatsExId = (int)pDVar2->MonStatsEx;
     if (!(nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize)) {
       return nullptr;
     }
 
     D2MonStats2Txt* pMonStats2Diff = sgptDataTable->pTxtMonStatsEx;
-    if (!(pMonStats2Diff + nMonStatsExId && pDVar3)) {
+    if (!(pMonStats2Diff + nMonStatsExId && pDVar2)) {
       return nullptr;
     }
 
@@ -2183,7 +2181,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     }
 
     Monster::SetOwnerGUID(pUnit, pCreateData->nOwnerGUID);
-    uint16_t* pNameStr = D2Lang::StrTable::strtable::GetLocaleString(pDVar3->NameStr);
+    uint16_t* pNameStr = D2Lang::StrTable::strtable::GetLocaleString(pDVar2->NameStr);
     D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pNameStr);
     if (pMonUModList) {
       MonUnique::SetNameSeed(pUnit, (short int)nNameSeed);
@@ -2208,31 +2206,31 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
       }
     }
 
-    Monster::MONSTER_InitMonsterUnit(pUnit, (uint32_t)pRoom, nMercSkillId, pSkillIdPtr, iVar2, pCreateData->eUnitType);
+    Monster::MONSTER_InitMonsterUnit(pUnit, (uint32_t)pRoom, nMercSkillId, pSkillIdPtr, iVar1, pCreateData->eUnitType);
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, pMonStats2Diff[nMonStatsExId].MeleeRng);
     GAME::Wall2::WALL2_InitUnitGfx(pUnit);
-    CLIENT_PlaySkillVisualEffect(pUnit, iVar2);
+    CLIENT_PlaySkillVisualEffect(pUnit, iVar1);
     nPalShiftIdx = 2;
-    if (pDVar3->TransLvl < 8) {
-      nPalShiftIdx = pDVar3->TransLvl + 2;
+    if (pDVar2->TransLvl < 8) {
+      nPalShiftIdx = pDVar2->TransLvl + 2;
     }
 
     bResult = Monster::IsMonsterUnique(pUnit);
     if (bResult) {
-      bResult = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(iVar2, TXTMonStats2Field0x04DWORD_ns::noUniqueShift);
+      bResult = Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(iVar1, TXTMonStats2Field0x04DWORD_ns::noUniqueShift);
       if (!bResult) {
         nPalShiftIdx = GAME::PalShift::PALSHIFT_GenerateShiftDuration(pUnit, nNameSeed);
       }
     }
-    if (iVar2 < sgptDataTable->nTxtMonStatsSize) {
-      iVar2 = (int)sgptDataTable->pTxtMonStats[iVar2].MonStatsEx;
-      if (iVar2 >= 0 && iVar2 < sgptDataTable->nTxtMonStatsExSize) {
-        pMonStats2Diff = sgptDataTable->pTxtMonStatsEx + iVar2;
+    if (iVar1 < sgptDataTable->nTxtMonStatsSize) {
+      iVar1 = (int)sgptDataTable->pTxtMonStats[iVar1].MonStatsEx;
+      if (iVar1 >= 0 && iVar1 < sgptDataTable->nTxtMonStatsExSize) {
+        pMonStats2Diff = sgptDataTable->pTxtMonStatsEx + iVar1;
         if (pMonStats2Diff) {
-          bVar1 = GAME::Game::GetDificulity();
-          if (pMonStats2Diff->byUtrans[bVar1]) {
-            bVar1 = GAME::Game::GetDificulity();
-            nPalShiftIdx = (uint32_t)pMonStats2Diff->byUtrans[bVar1];
+          byDifficulty = GAME::Game::GetDificulity();
+          if (pMonStats2Diff->byUtrans[byDifficulty]) {
+            byDifficulty = GAME::Game::GetDificulity();
+            nPalShiftIdx = (uint32_t)pMonStats2Diff->byUtrans[byDifficulty];
             if (nPalShiftIdx == 0xff) {
               uMercType = GAME::RosterPets::ROSTER_IsUnitHostileToPlayer(pUnit);
               nPalShiftIdx = (uint32_t)!uMercType;
@@ -2247,10 +2245,10 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
       uint16_t nBossIdLookup;
       nBossIdLookup = MonUnique::GetBossId(pUnit);
       pSuperUnique = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine((int)(short int)nBossIdLookup);
-      bVar1 = GAME::Game::GetDificulity();
-      if (pSuperUnique->Utrans[bVar1] != '\0') {
-        bVar1 = GAME::Game::GetDificulity();
-        nPalShiftIdx = (uint32_t)(uint8_t)pSuperUnique->Utrans[bVar1];
+      byDifficulty = GAME::Game::GetDificulity();
+      if (pSuperUnique->Utrans[byDifficulty] != '\0') {
+        byDifficulty = GAME::Game::GetDificulity();
+        nPalShiftIdx = (uint32_t)(uint8_t)pSuperUnique->Utrans[byDifficulty];
       }
     }
     if ((int)nPalShiftIdx >= 0x1e) {
@@ -2306,10 +2304,10 @@ D2UnitStrc * __fastcall CreateMissileOrMonster(int32_t nMonstatId, int32_t nX, i
     return pCreatedUnit;
 }
 
-void ROOM_SpawnPresetUnitAtCoords(D2RoomStrc * pRoom, int * pnParam) {
+void ROOM_SpawnPresetUnitAtCoords(D2RoomStrc * pRoom, int * pPresetUnit) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
-    CreateMissileOrMonster(pnParam[1], pnParam[2] + sRoomCoords.dwXStart, pnParam[6] + sRoomCoords.dwYStart, pnParam[5], *pnParam);
+    CreateMissileOrMonster(pPresetUnit[1], pPresetUnit[2] + sRoomCoords.dwXStart, pPresetUnit[6] + sRoomCoords.dwYStart, pPresetUnit[5], *pPresetUnit);
 }
 
 void __fastcall CreateUnitsForMissiles(D2RoomStrc * pRoom) {
@@ -2335,6 +2333,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
     int anFrameMetrics[2];
     uint32_t nFrameCount;
     uint8_t byTotalPieces;
+    eD2PlayerAnimMode ePlayerAnimMode;
     D2UnitStrc* pUnitSaved;
     pUnitSaved = pUnit;
     int32_t nClickXSaved;
@@ -2487,7 +2486,6 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
     bool bMultiPiece;
     bMultiPiece = false;
     if (eUnitType != UNIT_PLAYER) {
-      eD2PlayerAnimMode eVar1;
       switch (eUnitType) {
         case UNIT_MONSTER:
           {
@@ -2510,8 +2508,8 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
               exit(-1);
             }
             if (pObjectsTxt->IsDoor) {
-              eVar1 = pUnit->eAnimMode.ePlayerMode;
-              if (eVar1 == Walk || eVar1 == eD2PlayerAnimMode_ns::GetHit || eVar1 == TownNeutral) {
+              ePlayerAnimMode = pUnit->eAnimMode.ePlayerMode;
+              if (ePlayerAnimMode == Walk || ePlayerAnimMode == eD2PlayerAnimMode_ns::GetHit || ePlayerAnimMode == TownNeutral) {
                 uResult = CUNIT_IsClickInSpriteBounds(nClickY, (int*)pUnitSaved, pObjectsTxt, nClickXSaved);
                 return uResult;
               }

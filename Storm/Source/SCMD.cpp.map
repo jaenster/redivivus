@@ -1,0 +1,715 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SCMD.cpp",
+  "functions": [
+    {
+      "name": "SCMD_ConvertBool",
+      "address": "006c3cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3cb0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ConvertBool"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_ConvertNumber",
+      "address": "006c3d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3d20"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "strtol",
+        "strtoul",
+        "SCMD_ConvertNumber",
+        "SStrLen",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2UnitDataMonsterStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_ConvertString",
+      "address": "006c3da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3da0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ConvertString",
+        "SStrLen",
+        "SMemFree",
+        "SMemAlloc",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_GenerateError",
+      "address": "006c3e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3e10"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_GenerateError",
+        "StormGetInstance",
+        "SStrCopy",
+        "strstr",
+        "SStrPack",
+        "SErrSetLastError",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "pfnSCmdErrorCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_ProcessFile",
+      "address": "006c3f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3f50"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ProcessFile",
+        "SCMD_GenerateError",
+        "SMemAlloc",
+        "SCMD_ProcessString",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "pfnSCmdErrorCallback",
+        "pfnSCmdUnknownArgCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_GetListOffset",
+      "address": "006c4040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4040"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_GetListOffset"
+      ],
+      "usedTypes": [
+        "SCMD",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_GetListHead",
+      "address": "006c4160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4160"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_GetListHead"
+      ],
+      "usedTypes": [
+        "SCMD"
+      ]
+    },
+    {
+      "name": "SCMD_MoveToList",
+      "address": "006c4180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4180"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_MoveToList"
+      ],
+      "usedTypes": [
+        "SCMD",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_GetNextOffset",
+      "address": "006c4230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4230"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_GetNextOffset"
+      ],
+      "usedTypes": [
+        "SCMD",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_UnlinkNode",
+      "address": "006c4290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4290"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_UnlinkNode"
+      ],
+      "usedTypes": [
+        "SCMD",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_FindFlagDef",
+      "address": "006c42e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c42e0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_FindFlagDef",
+        "SStrLen",
+        "_strnicmp",
+        "strncmp"
+      ],
+      "usedTypes": [
+        "StormCmdArgDefStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_GetHandler",
+      "address": "006c4380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4380"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_GetHandler"
+      ],
+      "usedTypes": [
+        "SCMD"
+      ]
+    },
+    {
+      "name": "SCMD_ClearList",
+      "address": "006c43f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c43f0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ClearList"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_ClearAll",
+      "address": "006c4430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4430"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ClearAll",
+        "SCMD_ClearList"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_AllocNode",
+      "address": "006c44c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c44c0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_AllocNode",
+        "SMemAlloc",
+        "SCMD_MoveToList"
+      ],
+      "usedTypes": [
+        "SCMD",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_FreeNode",
+      "address": "006c4520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4520"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_FreeNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "SCMD",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCmdRegisterArgument",
+      "address": "006c4580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4580"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdRegisterArgument",
+        "SStrLen",
+        "SErrSetLastError",
+        "SMemAlloc",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "SCMDCALLBACK",
+        "StormCmdArgDefStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_FreeAllNodes",
+      "address": "006c4760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4760"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_FreeAllNodes",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_RemoveNode",
+      "address": "006c47b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c47b0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_RemoveNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "SCMD",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_PerformConversion",
+      "address": "006c4820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4820"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_PerformConversion",
+        "SCMD_ConvertBool",
+        "SCMD_ConvertNumber",
+        "SCMD_ConvertString",
+        "SMemFree",
+        "SStrLen",
+        "SMemAlloc",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "CMDPARAMS",
+        "D2StormListHead",
+        "StormCmdArgDefStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_ProcessCurrentFlag",
+      "address": "006c4980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4980"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ProcessCurrentFlag",
+        "SCMD_PerformConversion",
+        "SCMD_FindFlagDef"
+      ],
+      "usedTypes": [
+        "int *"
+      ]
+    },
+    {
+      "name": "SCMD_ProcessFlags",
+      "address": "006c4a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4a00"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ProcessFlags",
+        "SStrLen",
+        "SStrCopy",
+        "SCMD_FindFlagDef",
+        "SCMD_GenerateError",
+        "__security_check_cookie",
+        "SStrChr",
+        "SCMD_ProcessCurrentFlag"
+      ],
+      "usedTypes": [
+        "StormCmdArgDefStrc",
+        "int *",
+        "pfnSCmdErrorCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_ProcessToken",
+      "address": "006c4bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4bc0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ProcessToken",
+        "SCMD_ProcessFile",
+        "SStrChr",
+        "SCMD_ProcessFlags",
+        "SCMD_ProcessCurrentFlag",
+        "SCMD_GenerateError",
+        "SCMD_PerformConversion"
+      ],
+      "usedTypes": [
+        "pfnSCmdErrorCallback",
+        "pfnSCmdUnknownArgCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCmdCheckId",
+      "address": "006c4ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4ca0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdCheckId"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "SCmdDestroy",
+      "address": "006c4cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4cf0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdDestroy",
+        "SMemFree",
+        "SCMD_FreeAllNodes"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "SCmdGetNum",
+      "address": "006c4d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4d70"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdGetNum"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "SCmdGetString",
+      "address": "006c4dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4dc0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdGetString",
+        "SErrSetLastError",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2StormListHead"
+      ]
+    },
+    {
+      "name": "SCmdRegisterArgList",
+      "address": "006c4e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4e50"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdRegisterArgument",
+        "SCmdRegisterArgList",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "ARGLIST",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCMD_ProcessString",
+      "address": "006c4ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4ec0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCMD_ProcessString",
+        "SStrTokenize",
+        "SCMD_ProcessToken",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "pfnSCmdErrorCallback",
+        "pfnSCmdUnknownArgCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCmdGetBool",
+      "address": "006c4f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4f90"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdGetBool",
+        "SCmdGetNum"
+      ]
+    },
+    {
+      "name": "SCmdProcess",
+      "address": "006c4fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c4fb0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdProcess",
+        "SErrSetLastError",
+        "SStrTokenize",
+        "SMemZero",
+        "SCMD_ProcessString",
+        "SCMD_GenerateError",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "pfnSCmdErrorCallback",
+        "pfnSCmdUnknownArgCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCmdProcessCommandLine",
+      "address": "006c50b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c50b0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "SCmdProcess",
+        "SCmdProcessCommandLine"
+      ],
+      "usedTypes": [
+        "pfnSCmdErrorCallback",
+        "pfnSCmdUnknownArgCallback"
+      ]
+    },
+    {
+      "name": "StaticInit_6cb030",
+      "address": "006cb030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb030"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "StaticInit_6cb030",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6cb050",
+      "address": "006cb050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb050"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "StaticInit_6cb050",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_gStormCmdListBackslash",
+      "address": "006cb4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb4f0"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "StaticFini_gStormCmdListBackslash",
+        "SCMD_ClearList"
+      ]
+    },
+    {
+      "name": "StaticFini_gStormCmdListSlash",
+      "address": "006cb550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb550"
+        }
+      ],
+      "namespace": "Storm::Source::SCMD",
+      "calledFunctions": [
+        "StaticFini_gStormCmdListSlash",
+        "SCMD_ClearList"
+      ]
+    }
+  ]
+}

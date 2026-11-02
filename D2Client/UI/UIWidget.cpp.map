@@ -1,0 +1,41 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/UIWidget.cpp",
+  "functions": [
+    {
+      "name": "Constructor",
+      "address": "004babe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004babe0"
+        }
+      ],
+      "namespace": "D2Client::UI::UIWidget",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "UIWidget"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "004be080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be080"
+        }
+      ],
+      "namespace": "D2Client::UI::UIWidget",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "UIWidget"
+      ]
+    }
+  ]
+}

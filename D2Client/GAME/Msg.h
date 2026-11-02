@@ -138,7 +138,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING();
 void __stdcall NET_D2GS_CLIENT_Send_0x69();
 void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash);
 void NET_D2GS_CLIENT_Send_0x6A();
-void __fastcall LOADING_SetProgressRatio(int32_t nParam1, int32_t nParam2);
+void __fastcall LOADING_SetProgressRatio(int32_t nProgress, int32_t nTotal);
 int __stdcall LOADING_GetProgressRatio();
 void __fastcall LOADING_AnimateProgressBar(int32_t nCurrentChunk, int32_t nTotalChunks);
 // Sends the player's save file to the game server as a stream of 0x6C (ASCII 'l') packets. Reads the entire save buffer via MSG_ReadSaveFileToBuffer, then sends it in 255-byte chunks followed by a final tail packet. Optionally animates a loading progress bar (bAnimate != 0). Updates gnPacketSendCount_0x69 and the network sync flag after each chunk.
@@ -151,7 +151,7 @@ void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, short nArg1);
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT(uint8_t nPacketId, int16_t nTargetX, int16_t nTargetY);
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(uint8_t nPacketId, int16_t nButtonId, int16_t nGoldHi, int16_t nGoldLow);
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT_SHORT(uint8_t nPacketId, int16_t nArg1, int16_t nArg2, int16_t nArg3, int16_t nArg4);
-void __fastcall NET_D2GS_CLIENT_Send_INT(uint8_t nId, int32_t nParam);
+void __fastcall NET_D2GS_CLIENT_Send_INT(uint8_t nId, int32_t nArg1);
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT(uint8_t nPacketId, int32_t nArg1, int32_t nArg2);
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT(uint8_t nPacketId, int32_t nArg1, int32_t nArg2, int32_t nArg3);
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT_INT(uint8_t nPacketId, int32_t nUnitType, int32_t nUnitGUID, int32_t nTargetX, int32_t nTargetY);

@@ -1,0 +1,369 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/stpl_SGAMEDATA.cpp",
+  "functions": [
+    {
+      "name": "SyncLeaveLock",
+      "address": "0052e470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e470"
+        }
+      ],
+      "namespace": "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+      "calledFunctions": [
+        "SyncLeaveLock"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Unlink",
+      "address": "0052e490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e490"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Unlink"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RawNext",
+      "address": "0052e510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e510"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "RawNext"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExplicitList<SGAMEDATA, -572662307>"
+      ]
+    },
+    {
+      "name": "Next",
+      "address": "0052e530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e530"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Next"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Unlock",
+      "address": "0052e570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e570"
+        }
+      ],
+      "namespace": "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+      "calledFunctions": [
+        "Unlock"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Delete",
+      "address": "0052e590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e590"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Delete",
+        "Unlink"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>"
+      ]
+    },
+    {
+      "name": "Delete",
+      "address": "0052e5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e5b0"
+        }
+      ],
+      "namespace": "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
+      "calledFunctions": [
+        "Delete",
+        "Unlink"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>"
+      ]
+    },
+    {
+      "name": "DeleteUnlock",
+      "address": "0052e5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e5d0"
+        }
+      ],
+      "namespace": "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+      "calledFunctions": [
+        "DeleteUnlock",
+        "Unlink"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DeleteNode",
+      "address": "0052e600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e600"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "DeleteNode",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Ptr",
+      "address": "0052e650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e650"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Ptr"
+      ],
+      "usedTypes": [
+        "HASHKEY_NONE",
+        "SGAMEDATA",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Ptr",
+      "address": "0052e6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e6b0"
+        }
+      ],
+      "namespace": "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
+      "calledFunctions": [
+        "Ptr"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GenerateUniqueHandle",
+      "address": "0052e6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e6d0"
+        }
+      ],
+      "namespace": "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
+      "calledFunctions": [
+        "GenerateUniqueHandle",
+        "Ptr"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Lock",
+      "address": "0052e710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052e710"
+        }
+      ],
+      "namespace": "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+      "calledFunctions": [
+        "Lock",
+        "Ptr"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GrowListArray",
+      "address": "0052ff20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052ff20"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "GrowListArray",
+        "UnlinkAll",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MonitorFullness",
+      "address": "00530600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00530600"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "MonitorFullness",
+        "GrowListArray"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<SGAMEDATA>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "New",
+      "address": "00530820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00530820"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "New",
+        "MonitorFullness"
+      ],
+      "usedTypes": [
+        "HASHKEY_NONE",
+        "SGAMEDATA",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<SGAMEDATA>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "New",
+      "address": "005308c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005308c0"
+        }
+      ],
+      "namespace": "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
+      "calledFunctions": [
+        "New",
+        "GenerateUniqueHandle"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NewLock",
+      "address": "005308f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005308f0"
+        }
+      ],
+      "namespace": "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+      "calledFunctions": [
+        "NewLock",
+        "GenerateUniqueHandle",
+        "New"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -364,7 +364,7 @@ void __fastcall SetStream(D2UnitStrc * pUnit, D2MissileStreamStrc * pStream) {
       return;
     }
 
-    pUnit->pUnitData.pUnitDataMissile->unk0x30 = pStream;
+    pUnit->pUnitData.pUnitDataMissile->pStream = pStream;
 }
 
 D2MissileStreamStrc * __fastcall GetStream(D2UnitStrc * pUnit) {
@@ -988,22 +988,22 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
     return 0;
 }
 
-int __fastcall MISSILE_Min(int nParam1, int nParam2, uint32_t dwParam3, uint32_t dwParam4) {
-    if (nParam1 < nParam2) {
-      return nParam1;
+int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
+    if (nLeft < nRight) {
+      return nLeft;
     }
 
-    nParam1 = nParam2;
-    return nParam1;
+    nLeft = nRight;
+    return nLeft;
 }
 
-int __fastcall MISSILE_Max(int nParam1, int nParam2, uint32_t dwParam3, uint32_t dwParam4) {
-    if (nParam1 > nParam2) {
-      return nParam1;
+int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4) {
+    if (nLeft > nRight) {
+      return nLeft;
     }
 
-    nParam1 = nParam2;
-    return nParam1;
+    nLeft = nRight;
+    return nLeft;
 }
 
 int32_t __fastcall GetRandomNumberInRange(int32_t nMin, int32_t nMax, int32_t nUnused, D2MissileRandCalcStrc * pCalc) {
@@ -1091,14 +1091,14 @@ uint32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * p
 }
 
 // Computes the full damage profile for a missile into a D2MissileDamageDataStrc (zeroed first, 0x7c bytes). Resolves base/elemental damage either from missiles.txt fields (SrcDamage/SrcMissDmg, EType, GetMin/MaxDamage, mastery bonus) or, when the missile carries a skill, from that skill's calc functions (SKILL_CalcMin/MaxDamage, SERVER_Min/MaxDamage, synergy). When SrcDamage applies, folds in the owner's weapon-derived physical damage (mindamage/maxdamage scaled by SrcDamage%, two-handed halving, str/dex item bonuses, throwing/secondary/two-hand weapon-damage stats, blunt-vs-undead bonus) plus damage%, item min/max-damage%, demon/undead/targetAC% and skill bypass-undead/demon/beast flags. When SrcMissDmg applies instead, pulls those stats from pUnit2. Routes elemental min/max/length into the matching fire/light/magic/cold/poison/drain/stun/burning fields, then calls AddStatsToDamage + CalculateFinalDamage. Core server missile-damage calc; no output if the missile/owner is invalid.
-void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitStrc * pMissile, int32_t nParam) {
+void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitStrc * pMissile, int32_t nLevel) {
     BOOL _bHasBonusStats;
     bool bHasBonusStats;
     int32_t nElemMinDmg;
     int32_t nMasteryElemMin;
     int32_t nMasteryElemMax;
     D2SkillsTxt* pSkillTxt;
-    D2UnitStrc* pDVar2;
+    D2UnitStrc* nFinalElemMinDmg;
     int nStatVal;
     uint32_t nMercType;
     uint32_t nMercTypeCheck;
@@ -1123,29 +1123,29 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
       return;
     }
 
-    short int sVar1 = pMissileTxt->Skill;
-    if (sVar1 <= 0 && !(*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[7])) {
+    short int nMissileSkillId = pMissileTxt->Skill;
+    if (nMissileSkillId <= 0 && !(*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[7])) {
       nSourceDamage = (uint32_t)pMissileTxt->SrcDamage;
       nSrcMissDmgPct = (uint32_t)pMissileTxt->SrcMissDmg;
-      nCalcMinDmg = GetMinDamage(pMissile, pUnit, nMissileId, nParam);
-      nCalcMaxDmg = GetMaxDamage(pMissile, pUnit, nMissileId, nParam);
+      nCalcMinDmg = GetMinDamage(pMissile, pUnit, nMissileId, nLevel);
+      nCalcMaxDmg = GetMaxDamage(pMissile, pUnit, nMissileId, nLevel);
       nElemType = (eD2ElementalDamageTypeDWORD)(uint8_t)pMissileTxt->EType;
-      nElemMinDmg = GetMinElemDamage(pMissile, pUnit, nMissileId, nParam);
-      nElemMaxDmg = GetMaxElemDamage(pMissile, pUnit, nMissileId, nParam);
-      nElemLength = GetElementalLength((int32_t)pMissile, pUnit, nMissileId, nParam);
-      pDVar2 = (D2UnitStrc*)nElemMinDmg;
+      nElemMinDmg = GetMinElemDamage(pMissile, pUnit, nMissileId, nLevel);
+      nElemMaxDmg = GetMaxElemDamage(pMissile, pUnit, nMissileId, nLevel);
+      nElemLength = GetElementalLength((int32_t)pMissile, pUnit, nMissileId, nLevel);
+      nFinalElemMinDmg = (D2UnitStrc*)nElemMinDmg;
       if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[0]) {
         nMasteryElemMin = CalculateMasteryBonus(pUnit, nElemType, nElemMinDmg);
         nMasteryElemMax = CalculateMasteryBonus(pUnit, nElemType, nElemMaxDmg);
         nElemMaxDmg += nMasteryElemMax;
-        pDVar2 = (D2UnitStrc*)(nElemMinDmg + nMasteryElemMin);
+        nFinalElemMinDmg = (D2UnitStrc*)(nElemMinDmg + nMasteryElemMin);
       }
     } else {
-      nSkillId = (int)sVar1;
+      nSkillId = (int)nMissileSkillId;
       if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[7]) {
         nSkillId = Missile::GetSkillId(pMissile);
         if (nSkillId <= 0) {
-          nSkillId = (int)sVar1;
+          nSkillId = (int)nMissileSkillId;
         }
       }
 
@@ -1160,15 +1160,15 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
         nSourceDamage = 0;
       }
 
-      nCalcMinDmg = Skills::SKILL_CalcMinDamage(pUnit, nSkillId, nParam, 0);
-      nCalcMaxDmg = Skills::SKILL_CalcMaxDamage(pUnit, nSkillId, nParam, 0);
+      nCalcMinDmg = Skills::SKILL_CalcMinDamage(pUnit, nSkillId, nLevel, 0);
+      nCalcMaxDmg = Skills::SKILL_CalcMaxDamage(pUnit, nSkillId, nLevel, 0);
       nElemType = (eD2ElementalDamageTypeDWORD)pSkillTxt->EType;
-      pDVar2 = (D2UnitStrc*)Skills::SERVER_MinDamage(pUnit, nSkillId, nParam, 1);
-      nElemMaxDmg = Skills::SERVER_MaxDamage(pUnit, nSkillId, nParam, 1);
-      nElemLength = Skills::SKILLS_GetElementalLength(pUnit, nSkillId, nParam, 1);
+      nFinalElemMinDmg = (D2UnitStrc*)Skills::SERVER_MinDamage(pUnit, nSkillId, nLevel, 1);
+      nElemMaxDmg = Skills::SERVER_MaxDamage(pUnit, nSkillId, nLevel, 1);
+      nElemLength = Skills::SKILLS_GetElementalLength(pUnit, nSkillId, nLevel, 1);
     }
 
-    int nUnit = (int)pDVar2;
+    int nUnit = (int)nFinalElemMinDmg;
     if (pMissileTxt->Holy & 1U) {
       pMissileDamageData->nFlags |= 0x100;
     }
@@ -1180,7 +1180,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
     }
 
     nMissileId = 0;
-    nParam = 0;
+    nLevel = 0;
     int nDmgPercentBonus = 0;
     int nItemMinDmgBonus = 0;
     int nItemMaxDmgPercent = 0;
@@ -1211,7 +1211,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
         nMissileId = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_mindamage, 0);
         nMissileId <<= 8;
         nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_maxdamage, 0);
-        nParam = nStatVal << 8;
+        nLevel = nStatVal << 8;
       } else {
         if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)gadwBitMasks[6]) {
           _bHasBonusStats = ITEMS::Items::IsTwoHanded((D2UnitStrc*)nSkillId);
@@ -1249,14 +1249,14 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
 
         nMissileId <<= 8;
         nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, eUnitStat, 0);
-        nParam = nStatVal << 8;
+        nLevel = nStatVal << 8;
         nMercType = ITEMS::Items::ITEMS_IsA((D2UnitStrc*)nSkillId, ITEMTYPE_Blunt);
         if (nMercType) {
           pMissileDamageData->nUndeadDamagePercent += 0x32;
         }
       }
 
-      nParam = (int)(nParam * nSourceDamage) / 128;
+      nLevel = (int)(nLevel * nSourceDamage) / 128;
       nMissileId = (int)(nMissileId * nSourceDamage) / 128;
       nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_damagepercent, 0);
       nDmgPercentBonus = nDmgPercentBonus + nStatVal + nItemMinDmgBonus;
@@ -1292,7 +1292,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
         nMissileId = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_mindamage, 0);
         nMissileId = (int)(nMissileId * nSrcMissDmgPct) / 128;
         nStatVal = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_maxdamage, 0);
-        nParam = (int)(nStatVal * nSrcMissDmgPct) / 128;
+        nLevel = (int)(nStatVal * nSrcMissDmgPct) / 128;
         nDmgPercentBonus = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_damagepercent, 0);
         nItemMinDmgBonus = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_mindamage_percent, 0);
         nItemMaxDmgPercent = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_maxdamage_percent, 0);
@@ -1317,7 +1317,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
 
     pMissileDamageData->nDamagePercent = nTotalDmgPercent;
     pMissileDamageData->nMinDamage = nMissileId + nCalcMinDmg;
-    pMissileDamageData->nMaxDamage = nParam + nCalcMaxDmg;
+    pMissileDamageData->nMaxDamage = nLevel + nCalcMaxDmg;
     if (nElemType != ELEMENTAL_NONE && true) {
       switch (nElemType) {
         case ELEMENTAL_FIRE:

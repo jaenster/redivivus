@@ -100,13 +100,13 @@ static void UI_DrawPartyMemberSeparatorBar(int32_t nBaseY) {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x10b, nBaseY - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
 }
 
-static void __stdcall UI_DrawPartyButtonFrame(DC6 * pDC6, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
+static void __stdcall UI_DrawPartyButtonFrame(DC6 * pDC6, int32_t nX, int32_t nFrame, int32_t nY) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = pDC6;
-    sGfxData.nFrameNumber = nParam2;
+    sGfxData.nFrameNumber = nFrame;
     sGfxData.nDirection = 0;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + nParam1, nParam3 - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + nX, nY - gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
 }
 
 void __stdcall FreeAllUiParty() {
@@ -121,14 +121,14 @@ void __stdcall FreeAllUiParty() {
     pUiParty = 0;
 }
 
-void __stdcall UI_InitializePartyButtonStruct(uint32_t nX, uint32_t nY, uint32_t nDC6OrCallback, uint32_t nFrame, uint32_t nButtonType, uint32_t nData1, uint32_t nData2, uint32_t * pdwParam) {
-    *pdwParam = nX;
-    pdwParam[1] = nY;
-    pdwParam[2] = nDC6OrCallback;
-    pdwParam[3] = nFrame;
-    pdwParam[4] = nButtonType;
-    pdwParam[5] = nData1;
-    pdwParam[6] = nData2;
+void __stdcall UI_InitializePartyButtonStruct(uint32_t nX, uint32_t nY, uint32_t nDC6OrCallback, uint32_t nFrame, uint32_t nButtonType, uint32_t nData1, uint32_t nData2, uint32_t * pButton) {
+    *pButton = nX;
+    pButton[1] = nY;
+    pButton[2] = nDC6OrCallback;
+    pButton[3] = nFrame;
+    pButton[4] = nButtonType;
+    pButton[5] = nData1;
+    pButton[6] = nData2;
 }
 
 static void SetupPartyButtons(D2RosterStrc * pRoster, D2UiPartyStrc * pUiParty, int32_t nPositionY) {
@@ -476,12 +476,12 @@ void __stdcall UI_DrawPartyButtons(D2UiPartyStrc * pUiParty) {
 }
 
 static void __stdcall UI_DrawPartyMemberLevelName(D2UiPartyStrc * pUiParty, int32_t nColor, int32_t nScreenY) {
-    int iVar3;
+    int nLevelNameWidth;
     uint16_t wszLevelName[255];
     uint16_t wszEllipsis[5];
     uint16_t wLastCharTmp;
     uint16_t* pwszLevelName = wszLevelName;
-    for (iVar3 = 0x7f; iVar3; iVar3--) {
+    for (nLevelNameWidth = 0x7f; nLevelNameWidth; nLevelNameWidth--) {
       pwszLevelName[0] = L'\0';
       pwszLevelName[1] = L'\0';
       pwszLevelName += 2;
@@ -501,11 +501,11 @@ static void __stdcall UI_DrawPartyMemberLevelName(D2UiPartyStrc * pUiParty, int3
       D2Lang::UTF8_ConvertToWideChar(wszEllipsis, szEllipsis, 5);
       wszEllipsis[3] = wLastCharTmp;
       nPixelWidth = D2Win::Src::D2WinFont::DRAW_text0(wszEllipsis);
-      iVar3 = D2Win::Src::D2WinFont::DRAW_text0(wszLevelName);
-      while (iVar3 > 0x8b - nPixelWidth) {
+      nLevelNameWidth = D2Win::Src::D2WinFont::DRAW_text0(wszLevelName);
+      while (nLevelNameWidth > 0x8b - nPixelWidth) {
         pTruncate--;
         *pTruncate = L'\0';
-        iVar3 = D2Win::Src::D2WinFont::DRAW_text0(wszLevelName);
+        nLevelNameWidth = D2Win::Src::D2WinFont::DRAW_text0(wszLevelName);
       }
 
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszLevelName, wszEllipsis);
@@ -590,8 +590,8 @@ static void __stdcall ShowToolTipOnPartyButtons(int16_t nLocaleIdLine1, int16_t 
       wszLine1[nBoxY] = L'\0';
     }
 
-    uint16_t* puVar5 = D2Lang::StrTable::strtable::GetLocaleString(nLocaleIdLine1);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine1, puVar5);
+    uint16_t* pwszSrc = D2Lang::StrTable::strtable::GetLocaleString(nLocaleIdLine1);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine1, pwszSrc);
     int32_t nWidth1 = D2Win::Src::D2WinFont::DRAW_text0(wszLine1);
     int32_t nWidth2 = 0;
     if (nLocaleIdLine2) {
@@ -600,8 +600,8 @@ static void __stdcall ShowToolTipOnPartyButtons(int16_t nLocaleIdLine1, int16_t 
         wszLine2[nBoxY] = L'\0';
       }
 
-      puVar5 = D2Lang::StrTable::strtable::GetLocaleString(nLocaleIdLine2);
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine2, puVar5);
+      pwszSrc = D2Lang::StrTable::strtable::GetLocaleString(nLocaleIdLine2);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine2, pwszSrc);
       nWidth2 = D2Win::Src::D2WinFont::DRAW_text0(wszLine2);
     }
 

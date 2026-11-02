@@ -1,0 +1,1056 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/PLAYER/Player.cpp",
+  "functions": [
+    {
+      "name": "PLAYER_AllocPlayerInteractedArray",
+      "address": "00534800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534800"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_AllocPlayerInteractedArray",
+        "GetPlayerData",
+        "STRUCT_AllocPlayerInteractedNPC"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerInteractedNPCStrc",
+        "D2UnitDataPlayerInteractedNPCStrc *",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreePartyData",
+      "address": "00534840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534840"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "FreePartyData",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PartyDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLAYERDATA_FreeInteractions",
+      "address": "00534880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534880"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYERDATA_FreeInteractions",
+        "GetPlayerData",
+        "FreePartyData",
+        "PLAYERDATA_FreeInteractedNPCs"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerInteractedNPCStrc *",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "STRUCT_FillPlayerUnit",
+      "address": "005348c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005348c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "STRUCT_FillPlayerUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRUCT_CreatePlayerInventory",
+        "STRUCT_CreateSkillsList",
+        "STRUCT_FillSkillsList",
+        "AllocStatListEx",
+        "AllocPlayerData",
+        "PLAYER_AllocPlayerInteractedArray",
+        "SetClient",
+        "EVENT_ClearTimerList",
+        "AllocPlayerArena",
+        "AllocPets",
+        "SetAlignment"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_FreeAllCorpseUnits",
+      "address": "00534970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534970"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_FreeAllCorpseUnits",
+        "INVENTORY_GetCorpse",
+        "INVENTORY_GetNextCorpse",
+        "ROOMCORPSE_GetGUID",
+        "FindUnitFromTable",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_FreeAllResources",
+      "address": "005349d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005349d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_FreeAllResources",
+        "FreePets",
+        "PARTY_RemoveUnitFromParty",
+        "PLAYERDATA_FreePlayerList",
+        "FreeCombat",
+        "PLAYER_FreeAllCorpseUnits",
+        "UNITS_FreeInventoryItems",
+        "STRUCT_FreeInventory",
+        "FreePlayerArena",
+        "PLAYERDATA_FreeInteractions",
+        "FreePlayerData",
+        "Free",
+        "EVENT_FreeAllTimersForUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreePlayers",
+      "address": "00534a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534a50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "FreePlayers",
+        "GetNextUnit",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLAYER_ClearTargetIfMatch",
+      "address": "00534ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534ab0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_ClearTargetIfMatch",
+        "GetTargetEx",
+        "SetTargetUnitForDynamicUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLAYER_MoveToLocationWithTimeout",
+      "address": "00534ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534ad0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_MoveToLocationWithTimeout",
+        "PLRMODES_MoveToLocation",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_PlaceItemInInventory",
+      "address": "00534b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534b30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_PlaceItemInInventory",
+        "ITEM_SetItemData_ePage",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SERVER_ItemToInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_EquipItemToBodyLoc",
+      "address": "00534bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534bb0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_EquipItemToBodyLoc",
+        "GetBodyLocation",
+        "SERVER_EquipItemToBodyLoc",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_PlaceItemInBelt",
+      "address": "00534c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534c10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_PlaceItemInBelt",
+        "GetXPosFromDynamicPathUnit",
+        "ITEM_TryPlaceInBelt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_CreateRewardItemFromTemplate",
+      "address": "00534c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534c70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CreateRewardItemFromTemplate",
+        "GetLevel",
+        "ITEM_CreateFromTemplate",
+        "GetStatList",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx",
+        "IsStackable",
+        "ITEM_GetMaxStack",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_CreateStarterItems",
+      "address": "00534d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534d60"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CreateStarterItems",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "PLAYER_CreateRewardItemFromTemplate",
+        "ITEM_EditItemData_eItemFlag",
+        "SetBodyLoc",
+        "ITEM_GetTxtItemTypes_beltable",
+        "PLAYER_PlaceItemInInventory",
+        "ITEMS_IsA",
+        "GetTxtMaxDurability",
+        "STATLIST_SetUnitStat",
+        "PLAYER_EquipItemToBodyLoc",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetXPos",
+        "ITEM_TryPlaceInBelt"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitStat",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_CreateAllStarterItems",
+      "address": "00534f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534f10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CreateAllStarterItems",
+        "PLAYER_CreateStarterItems"
+      ],
+      "usedTypes": [
+        "D2CharItemStrc",
+        "D2CharStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYER_SendAllItemsToClient",
+      "address": "00534f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534f80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_SendAllItemsToClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "Send0x9DItemEquip",
+        "CLIENTS_GetControlUnit",
+        "Send0x9CItemPutInContainer",
+        "Send0x9CItemPutInBelt"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPlayerTradeTickOrBusy",
+      "address": "00535060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535060"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "GetPlayerTradeTickOrBusy",
+        "GetInteractInfo",
+        "INVENTORY_GetHandItem",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_ClearCutsceneFlag",
+      "address": "005350b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005350b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_ClearCutsceneFlag",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_EndInteraction",
+      "address": "005350f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005350f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_EndInteraction",
+        "GetInteractInfo",
+        "FindUnitFromTable",
+        "thunk_TRADE_CompleteTrade",
+        "Q35_OnPlayerLeavesSummit",
+        "SUNITNPC_CloseNpcInteraction",
+        "OBJMODE_HandleObjectDeactivation",
+        "TXT_Items_GetLine",
+        "CUBE_OnCubeInteractionEnd"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_CancelInteraction",
+      "address": "005351c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005351c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CancelInteraction",
+        "GetInteractInfo",
+        "FindUnitFromTable",
+        "ClickButton",
+        "SUNITNPC_CloseNpcInteraction",
+        "OBJMODE_HandleObjectDeactivation",
+        "TXT_Items_GetLine",
+        "CUBE_OnCubeInteractionEnd",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_PlaceCorpse",
+      "address": "005352c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005352c0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_PlaceCorpse",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetFreeCoordinates_WithIncrementValue",
+        "FindUnitFromTable",
+        "PATH_GetCollisionTypeAt",
+        "SetupUpdateFlag",
+        "SetState",
+        "EVENT_RemoveUnitTimersByType",
+        "INVENTORY_GetCursorItemGUID",
+        "NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_SetUniqueId",
+      "address": "005353b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005353b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_SetUniqueId",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetPlayerUniqueId",
+      "address": "005353f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005353f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "GetPlayerUniqueId",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_DestroyPortalPair",
+      "address": "00535430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535430"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_DestroyPortalPair",
+        "GetPlayerData",
+        "FindUnitFromTable",
+        "QUEST_OnPlayerLeaveArreatSummit",
+        "UNITS_FindPortalOwnerUnit",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "ToggleHasPortalFlagRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GOLD_DropGoldFromInventory",
+      "address": "00535510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535510"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "GOLD_DropGoldFromInventory",
+        "FindUnitFromTable",
+        "STATSEX_GetCurrentStat",
+        "GetInventoryGoldLimit",
+        "GetCoords",
+        "DROP_SpawnGoldPiles",
+        "GetType",
+        "StoreOwner",
+        "SetStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckItemMovePermission",
+      "address": "00535610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535610"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "CheckItemMovePermission",
+        "GetInteractInfo",
+        "GetPlayerData",
+        "FindUnitFromTable",
+        "PLRTRADE_ValidateAndInitiateTrade",
+        "NpcStateIsntZero",
+        "ClearInteractInfo"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetHotkey",
+      "address": "005356b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005356b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "SetHotkey",
+        "SUNIT_GetClient",
+        "SetGotkeyInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYER_CountLivingPlayerInLevelCallback",
+      "address": "005356f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005356f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CountLivingPlayerInLevelCallback",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom"
+      ],
+      "usedTypes": [
+        "D2LevelPlayerCountArgStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "PLAYER_CountLivingPlayersInLevel",
+      "address": "00535730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535730"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CountLivingPlayersInLevel",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2LevelPlayerCountArgStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CountModeZeroDeath",
+      "address": "00535760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535760"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "CountModeZeroDeath",
+        "CheckForModeZeroDeath"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "COMMAND_playersX",
+      "address": "00535780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535780"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "COMMAND_playersX"
+      ]
+    },
+    {
+      "name": "SERVER_GAME_CountPlayers",
+      "address": "00535790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535790"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "SERVER_GAME_CountPlayers",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_ApplyGoldPenaltyOnDeath",
+      "address": "005357d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005357d0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_ApplyGoldPenaltyOnDeath",
+        "STATSEX_GetCurrentStat",
+        "GetOwnerUnit",
+        "GetStashGoldLimit",
+        "STATLIST_SetUnitStat",
+        "GOLD_DropGoldFromInventory",
+        "GetInventoryGoldLimit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EXP_ApplyDeathExpPenalty",
+      "address": "005359f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005359f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "EXP_ApplyDeathExpPenalty",
+        "GetDifficultyLevels",
+        "STATSEX_GetCurrentStat",
+        "TXT_Experience_GetLineLevel",
+        "SUNIT_GetClient",
+        "SetExperience",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_HandleDeathPenalties",
+      "address": "00535ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535ab0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_HandleDeathPenalties",
+        "PLAYER_ApplyGoldPenaltyOnDeath",
+        "GetOwnerUnit",
+        "EXP_ApplyDeathExpPenalty"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLAYER_CheckIsHostileToPlayer",
+      "address": "00535af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535af0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CheckIsHostileToPlayer",
+        "PLAYERLIST_GetFlagsMasked"
+      ],
+      "usedTypes": [
+        "D2PlayerHostileCheckArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_CountPlayersWithFilter",
+      "address": "00535b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535b10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CountPlayersWithFilter",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2PlayerHostileCheckArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLAYER_CheckPlayerIsHostileToThis",
+      "address": "00535b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535b50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CheckPlayerIsHostileToThis",
+        "PLAYERLIST_GetFlagsMasked"
+      ],
+      "usedTypes": [
+        "D2PlayerHostileCheckArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_CountPlayersWithFilter2",
+      "address": "00535b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535b80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_CountPlayersWithFilter2",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2PlayerHostileCheckArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLAYER_GetActiveWeaponForSkill",
+      "address": "00535bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535bc0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "PLAYER_GetActiveWeaponForSkill",
+        "INVENTORY_GetEquippedWeaponInfo",
+        "CanDualWield",
+        "GetCurrentSkill",
+        "GetSkillsTxt",
+        "SKILL_GetFlags",
+        "INVENTORY_FindWornItemByType",
+        "ITEMS_IsA",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EQUIPMENT_RecalcDualWieldWeaponStats",
+      "address": "00535d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535d10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "STATLIST_SetItemStatActive",
+        "EQUIPMENT_RecalcDualWieldWeaponStats",
+        "GetEquipedWeapon",
+        "SEVER_ITEM_GetOwner",
+        "GetPrimaryWeapon",
+        "CanDualWield",
+        "PLAYER_GetActiveWeaponForSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WEAPON_ApplyEquippedWeaponStats",
+      "address": "00535e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535e20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::Player",
+      "calledFunctions": [
+        "WEAPON_ApplyEquippedWeaponStats",
+        "GetEquipedWeapon",
+        "SEVER_ITEM_GetOwner",
+        "STATLIST_SetItemStatActive",
+        "GetPrimaryWeapon"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

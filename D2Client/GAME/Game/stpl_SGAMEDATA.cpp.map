@@ -1,0 +1,572 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Game/stpl_SGAMEDATA.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "0044fbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fbe0"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor_Unreferenced",
+      "address": "0044fc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fc20"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "Destructor_Unreferenced",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "0044fc60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fc60"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Clear",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "0044fcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fcf0"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "UnlinkAll",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "0044fd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fd80"
+        }
+      ],
+      "namespace": "TSGrowableArray<SGAMEDATA>",
+      "calledFunctions": [
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor_Unreferenced2",
+      "address": "0044fdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fdd0"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "Destructor_Unreferenced2",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReallocData",
+      "address": "0044fe10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044fe10"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "ReallocData",
+        "UnlinkAll",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "0044ff60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044ff60"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Reserve",
+      "address": "00450040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450040"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Reserve",
+        "CalcChunkSize",
+        "ReallocData"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004500a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004500a0"
+        }
+      ],
+      "namespace": "TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetCount",
+      "address": "00450110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450110"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "SetCount",
+        "CalcChunkSize",
+        "ReallocData",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00450210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450210"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Destructor",
+        "InternalClear",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LinkNode",
+      "address": "004502a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004502a0"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NewNode",
+      "address": "00450390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450390"
+        }
+      ],
+      "namespace": "TSExplicitList<SGAMEDATA, -572662307>",
+      "calledFunctions": [
+        "NewNode",
+        "SMemAlloc",
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InternalDelete",
+      "address": "004503f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004503f0"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "InternalDelete",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>"
+      ]
+    },
+    {
+      "name": "InternalNew",
+      "address": "00450420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450420"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "InternalNew",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004504d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004504d0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "00450500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450500"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "Clear",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
+      ]
+    },
+    {
+      "name": "Destroy",
+      "address": "00450520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450520"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Destroy",
+        "InternalClear",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00450550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450550"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "00450580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450580"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "Clear",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetCount_Unreferenced",
+      "address": "00450680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450680"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+      "calledFunctions": [
+        "SetCount_Unreferenced",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InternalDestroy",
+      "address": "00450690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450690"
+        }
+      ],
+      "namespace": "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "InternalDestroy",
+        "Clear"
+      ],
+      "usedTypes": [
+        "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004506b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004506b0"
+        }
+      ],
+      "namespace": "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Constructor",
+        "UnlinkAll",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSExplicitList<SGAMEDATA, -572662307>",
+        "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00450760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450760"
+        }
+      ],
+      "namespace": "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "Destructor",
+        "Clear",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>",
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CalcChunkSize",
+      "address": "00450810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450810"
+        }
+      ],
+      "namespace": "TSGrowableArray<SGAMEDATA>",
+      "calledFunctions": [
+        "CalcChunkSize"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<SGAMEDATA>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RoundToMultiple",
+      "address": "00450850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450850"
+        }
+      ],
+      "namespace": "TSGrowableArray<SGAMEDATA>",
+      "calledFunctions": [
+        "RoundToMultiple"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LinkNode",
+      "address": "004508a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004508a0"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
+        "TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>",
+        "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
+        "uint32_t"
+      ]
+    }
+  ]
+}

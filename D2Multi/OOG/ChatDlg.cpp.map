@@ -1,0 +1,38 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Multi/OOG/ChatDlg.cpp",
+  "functions": [
+    {
+      "name": "CHATDLG_GameListCallback_Noop",
+      "address": "0043ed50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ed50"
+        }
+      ],
+      "namespace": "D2Multi::OOG::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GameListCallback_Noop"
+      ]
+    },
+    {
+      "name": "CHATDLG_PrintCallback_SetFlag",
+      "address": "0043f580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f580"
+        }
+      ],
+      "namespace": "D2Multi::OOG::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_PrintCallback_SetFlag"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    }
+  ]
+}

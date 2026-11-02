@@ -1,0 +1,2951 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Skills.cpp",
+  "functions": [
+    {
+      "name": "SKILLS_CalcSkillParam",
+      "address": "00643580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643580"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CalcSkillParam"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetOrAllocStateStatList",
+      "address": "00643620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643620"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetOrAllocStateStatList",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Skills_GetPassiveState",
+      "address": "00643690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643690"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "TXT_Skills_GetPassiveState"
+      ]
+    },
+    {
+      "name": "SKILLS_Min",
+      "address": "006436e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006436e0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_Min"
+      ]
+    },
+    {
+      "name": "SKILLS_Max",
+      "address": "006436f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006436f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_Max"
+      ]
+    },
+    {
+      "name": "SKILLS_RandomRange",
+      "address": "00643700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643700"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_RandomRange",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetMissileSpecialParam",
+      "address": "00643740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643740"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetMissileSpecialParam",
+        "GetSpecialParamValue"
+      ],
+      "usedTypes": [
+        "D2UnitStrc *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetUnitStatValue",
+      "address": "00643770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643770"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetUnitStatValue",
+        "GetAttackRate",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMinimalStatValueShifted",
+        "SERVER_GetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSkill",
+      "address": "00643810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643810"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "GetSkillMode",
+      "address": "00643860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643860"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSkillMode"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SKILLS_GetSkillsTxtField0x14",
+      "address": "00643890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643890"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetSkillsTxtField0x14"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STRUCT_CreateSkillsList",
+      "address": "006438b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006438b0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "STRUCT_CreateSkillsList",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SkillListStrc"
+      ]
+    },
+    {
+      "name": "GetNext",
+      "address": "006438f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006438f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetNext"
+      ],
+      "usedTypes": [
+        "D2SkillStrc"
+      ]
+    },
+    {
+      "name": "GetFirstSkill",
+      "address": "00643910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643910"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetFirstSkill"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2SkillStrc"
+      ]
+    },
+    {
+      "name": "GetLeftSkill",
+      "address": "00643930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643930"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetLeftSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRightSkill",
+      "address": "00643960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643960"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetRightSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetCurrentSkill",
+      "address": "00643990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643990"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SetCurrentSkill"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2SkillStrc"
+      ]
+    },
+    {
+      "name": "GetCurrentSkill",
+      "address": "006439a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006439a0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetCurrentSkill"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2SkillStrc"
+      ]
+    },
+    {
+      "name": "GetSkillByIdAndOwner",
+      "address": "006439b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006439b0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSkillByIdAndOwner"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetSkillByEnum",
+      "address": "006439f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006439f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetSkillByEnum",
+        "GetSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "SwapLightMap",
+      "address": "00643a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643a00"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SwapLightMap"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2SkillListStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SKILLS_GetUnitField0xa8_0x14",
+      "address": "00643a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643a30"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetUnitField0xa8_0x14"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SKILLS_FreeSkillList",
+      "address": "00643a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643a60"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_FreeSkillList",
+        "GetMemPool",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SkillListStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetOwnerGUID",
+      "address": "00643ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643ad0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetOwnerGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetSkillData",
+      "address": "00643b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643b00"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetSkillData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_SetTimerFlag",
+      "address": "00643b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643b70"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_SetTimerFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SelectSkillLeft",
+      "address": "00643bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643bc0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SelectSkillLeft",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetFirstSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SelectSkillRight",
+      "address": "00643c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643c50"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SelectSkillRight",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetFirstSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSkillId",
+      "address": "00643ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643ce0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSkillId"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSequenceId",
+      "address": "00643d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643d00"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSequenceId",
+        "TXT_MonStats_GetLine"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetWeaponByHand",
+      "address": "00643d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643d60"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetWeaponByHand",
+        "INVENTORY_GetItemByGridOffset"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CheckItemTypeRequirement",
+      "address": "00643d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643d90"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CheckItemTypeRequirement",
+        "ITEMS_IsA",
+        "CheckItemFlag",
+        "ITEM_GetTxtItemTypes_shoots",
+        "ITEM_GetMinimalStatValueShifted",
+        "ITEM_GetMaxStack",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CheckWeaponRequirements",
+      "address": "00643f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643f80"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CheckWeaponRequirements",
+        "INVENTORY_GetItemByGridOffset",
+        "GetEquipedWeapon",
+        "SKILLS_CheckItemTypeRequirement"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2SkillStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SKILLS_CheckRestriction",
+      "address": "00644060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644060"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CheckRestriction",
+        "STATES_HasPoisonState",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CheckStartMana",
+      "address": "006440f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006440f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CheckStartMana",
+        "STATSEX_GetCurrentStat",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSkillsTxt",
+      "address": "00644140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644140"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSkillsTxt"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt"
+      ]
+    },
+    {
+      "name": "GetShrineBonus",
+      "address": "00644150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644150"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetShrineBonus",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetLevelBonus",
+      "address": "00644180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644180"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetLevelBonus",
+        "GetShrineBonus",
+        "STATSEX_GetCurrentStat",
+        "GetSkillDescription"
+      ],
+      "usedTypes": [
+        "D2SkillDescTxt",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetSkillLevel",
+      "address": "006442a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006442a0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSkillLevel",
+        "SKILL_GetLevelBonus",
+        "TXT_Experience_GetMaxLevel"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSkillBonus",
+      "address": "00644300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644300"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSkillBonus",
+        "GetSkillByIdAndOwner",
+        "SKILL_GetLevelBonus"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetSkillMode",
+      "address": "00644340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644340"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SetSkillMode"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetMode",
+      "address": "00644360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644360"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetMode"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetField0x10",
+      "address": "00644380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644380"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetField0x10",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_SetField0x10",
+      "address": "006443b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006443b0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_SetField0x10",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetField0x14",
+      "address": "006443f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006443f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetField0x14",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_SetField0x14",
+      "address": "00644420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644420"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_SetField0x14",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_ClearFields0x10_0x14",
+      "address": "00644460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644460"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_ClearFields0x10_0x14",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetParam1",
+      "address": "006444a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006444a0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetParam1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetParam2",
+      "address": "006444d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006444d0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetParam2",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetParam3",
+      "address": "00644500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644500"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetParam3",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetParam4",
+      "address": "00644530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644530"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetParam4",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_SetParam1",
+      "address": "00644560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644560"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_SetParam1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_SetParam2",
+      "address": "006445a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006445a0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_SetParam2",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_SetParam3",
+      "address": "006445e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006445e0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_SetParam3",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_SetParam4",
+      "address": "00644620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644620"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_SetParam4",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_SetFlags",
+      "address": "00644660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644660"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_SetFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetFlags",
+      "address": "006446a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006446a0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetFlags"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNIT_GetSkillBySkillId",
+      "address": "006446c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006446c0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "UNIT_GetSkillBySkillId",
+        "GetFirstSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Skills_GetReqLevel",
+      "address": "00644710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644710"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "TXT_Skills_GetReqLevel"
+      ],
+      "usedTypes": [
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetRequiredLevel",
+      "address": "00644750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644750"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetRequiredLevel",
+        "GetSkillByIdAndOwner"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSkillLevelById",
+      "address": "006447b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006447b0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "GetSkillLevelById",
+        "GetSkillByIdAndOwner"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SkillCalculateIfWeCanSkillThisSkill",
+      "address": "006447d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006447d0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SkillCalculateIfWeCanSkillThisSkill",
+        "STATSEX_GetCurrentStat",
+        "SKILL_GetRequiredLevel",
+        "UNIT_GetSkillBySkillId",
+        "GetSkillByIdAndOwner",
+        "TXT_Skills_GetLine",
+        "GetSkillLevelById"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpendSkillPointOnSkill",
+      "address": "00644920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644920"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SpendSkillPointOnSkill",
+        "STATSEX_GetCurrentStat",
+        "SKILL_GetRequiredLevel"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CalcToHit",
+      "address": "006449f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006449f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CalcToHit",
+        "SKILLS_CompileSkillFormula"
+      ],
+      "usedTypes": [
+        "D2SkillCalcContextStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetTotalSkillLevel",
+      "address": "00644aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644aa0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetTotalSkillLevel",
+        "GetSkill",
+        "SKILL_GetLevelBonus",
+        "TXT_Experience_GetMaxLevel"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CalculateManaCost",
+      "address": "00644b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644b10"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CalculateManaCost"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetValueByLevelBreakpoints",
+      "address": "00644b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644b70"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetValueByLevelBreakpoints"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CalculateBaseDamageFromStats",
+      "address": "00644c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644c20"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CalculateBaseDamageFromStats",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_ApplyElementalMasteryBonus",
+      "address": "00644c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644c90"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_ApplyElementalMasteryBonus",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2ElementalDamageTypeDWORD",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_MinDamage",
+      "address": "00644d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644d50"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SERVER_MinDamage",
+        "SKILLS_GetValueByLevelBreakpoints",
+        "SKILLS_CompileSkillFormula",
+        "D2ApplyPercent",
+        "SKILLS_ApplyElementalMasteryBonus"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2SkillCalcContextStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_MaxDamage",
+      "address": "00644e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644e40"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SERVER_MaxDamage",
+        "SKILLS_GetValueByLevelBreakpoints",
+        "SKILLS_CompileSkillFormula",
+        "D2ApplyPercent",
+        "SKILLS_ApplyElementalMasteryBonus"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2SkillCalcContextStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetElementalLength",
+      "address": "00644f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00644f20"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetElementalLength",
+        "SKILLS_CompileSkillFormula",
+        "D2ApplyPercent"
+      ],
+      "usedTypes": [
+        "D2SkillCalcContextStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetCharClassFromSkillId",
+      "address": "00645040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645040"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetCharClassFromSkillId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetCharClassFromSkillId_Validated",
+      "address": "00645080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645080"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetCharClassFromSkillId_Validated",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetQuantity",
+      "address": "006450f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006450f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetQuantity",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_SetQuantity",
+      "address": "00645120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645120"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_SetQuantity",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetAnimModeIndex",
+      "address": "00645160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645160"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetAnimModeIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_ValidateAnimModeForMonster",
+      "address": "00645190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645190"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_ValidateAnimModeForMonster"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetStateTransformGfx",
+      "address": "00645270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645270"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetStateTransformGfx",
+        "UNIT_GetUnitState",
+        "SKILLS_ValidateAnimModeForMonster"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_InitSkillSequence",
+      "address": "00645390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645390"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_InitSkillSequence",
+        "GetXSP1",
+        "GetYSP1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "InitSeed_Param_666"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetSkillWeaponClass",
+      "address": "00645460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645460"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetSkillWeaponClass",
+        "COMPOSIT_HasWeaponDrawn",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CheckMonsterCorpseSelectable",
+      "address": "006454c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006454c0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CheckMonsterCorpseSelectable",
+        "STATES_HasPassiveState",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2CheckIfCorpseIsConsumable",
+      "address": "00645510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645510"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "D2CheckIfCorpseIsConsumable",
+        "STATES_HasPassiveState",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_IsCorpseValidForRevive",
+      "address": "00645590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645590"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_IsCorpseValidForRevive",
+        "STATES_HasPassiveState",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "IsSoftMonster"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_IsSelectableCorpse",
+      "address": "006455e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006455e0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_IsSelectableCorpse",
+        "STATES_HasPassiveState",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SKILL_CanReviveMonster",
+      "address": "00645630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645630"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_CanReviveMonster",
+        "STATES_HasPassiveState",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "IsSoftMonster"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_IsSelectableCorpse2",
+      "address": "00645680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645680"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_IsSelectableCorpse2",
+        "STATES_HasPassiveState",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SKILLS_IsSelectableCorpse3",
+      "address": "006456d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006456d0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_IsSelectableCorpse3",
+        "STATES_HasPassiveState",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SKILL_GetThrownWeaponBonus",
+      "address": "00645720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645720"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetThrownWeaponBonus",
+        "GetCurrentSkill",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEMS_CheckItemTypeEquivalence",
+        "STATLIST_GetItemStatBonusValues",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetItemBonusDamage",
+      "address": "00645830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645830"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetItemBonusDamage",
+        "GetCurrentSkill",
+        "SKILL_GetThrownWeaponBonus",
+        "STATLIST_GetItemStatBonusValues",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_HasLineOfSight",
+      "address": "00645910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645910"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_HasLineOfSight",
+        "TestCollision"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_HasLineOfSightToUnit",
+      "address": "00645950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645950"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_HasLineOfSightToUnit",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "TestCollision"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CalculateManaCostShifted",
+      "address": "006459f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006459f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CalculateManaCostShifted",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CalculateDamageReduction",
+      "address": "00645a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645a70"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CalculateDamageReduction"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CalculateSynergyValue_Recursive",
+      "address": "00645a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645a90"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CalculateSynergyValue_Recursive"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CalcDiminishingReturns",
+      "address": "00645b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645b20"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CalcDiminishingReturns"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetParam01WithDiminishing",
+      "address": "00645b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645b70"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetParam01WithDiminishing",
+        "SKILLS_CalcDiminishingReturns"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetParam23WithDiminishing",
+      "address": "00645bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645bc0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetParam23WithDiminishing",
+        "SKILLS_CalcDiminishingReturns"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetParam45WithDiminishing",
+      "address": "00645c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645c10"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetParam45WithDiminishing",
+        "SKILLS_CalcDiminishingReturns"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_IsCoordInTown",
+      "address": "00645c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645c60"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_IsCoordInTown",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_FindTeleportPosition",
+      "address": "00645ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645ca0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_FindTeleportPosition",
+        "IsInMeleeRange",
+        "GetXPos",
+        "GetYPos",
+        "GetXSP1",
+        "GetYSP1",
+        "GetDistanceToXY",
+        "UNITS_GetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetUnitWidth",
+        "CheckCollision_BlockPlayer_Type",
+        "GetUnitSizeX",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "SKILLS_HasLineOfSight",
+        "SKILLS_IsCoordInTown"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "POINT",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetArrowModifierSkill",
+      "address": "00645f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645f00"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetArrowModifierSkill",
+        "GetWeaponClass",
+        "ITEM_GetMinimalStatValueShifted"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CheckSkillFlagBit1",
+      "address": "00645fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00645fb0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CheckSkillFlagBit1"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STATES_RemoveAllProgressiveStates",
+      "address": "00646020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646020"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "STATES_RemoveAllProgressiveStates",
+        "UNITS_IsShapeshifted",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetClassSkillByIndex",
+      "address": "006460f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006460f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_GetClassSkillByIndex"
+      ],
+      "usedTypes": [
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AmountOfSkillsByClassId",
+      "address": "00646140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646140"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "AmountOfSkillsByClassId"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_CalcAttackFrames",
+      "address": "00646170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646170"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_CalcAttackFrames",
+        "UNITS_IsShapeshifted",
+        "GetWeaponBySkill",
+        "ITEM_CalcWeaponAttackSpeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetConcentrationDamageBonus",
+      "address": "006461d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006461d0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetConcentrationDamageBonus",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_CalcKickDamage",
+      "address": "00646280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646280"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_CalcKickDamage",
+        "ITEM_GetMinimalStatValueShifted",
+        "GetEquipedWeapon",
+        "GetBodyLocation",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMS_IsA",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "SEVER_ITEM_GetOwner",
+        "STATLIST_SetItemStatActive",
+        "TXT_Items_GetLine",
+        "ITEM_GetItemsTxt_wStrBonus",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "ITEM_GetItemsTxt_wDexBonus"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLDESC_EvalDescCalcValue",
+      "address": "00646460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646460"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLDESC_EvalDescCalcValue",
+        "TXT_Skills_GetSkillRange",
+        "SKILLS_GetParam01WithDiminishing",
+        "MISSILE_GetBoltSpeed",
+        "SKILLS_GetParam23WithDiminishing",
+        "GetSkillParam4",
+        "SKILLS_GetParam45WithDiminishing",
+        "SKILLS_CalcSkillParam",
+        "SKILLS_CalcDiminishingReturns",
+        "SKILLS_GetManaCostMultiplier",
+        "GetSkilParam1",
+        "GetSkilParam2",
+        "GetSkilParam3",
+        "GetTxtSkillParam5",
+        "SERVER_MinDamage",
+        "SKILLS_GetElementalLength",
+        "SKILLS_CalcToHit",
+        "SKILL_GetPassiveElementCalc",
+        "GetSkillDescription",
+        "GetMissleById",
+        "GetMinElemDamage",
+        "GetMaxElemDamage",
+        "GetElementalLength",
+        "SERVER_MaxDamage",
+        "STATSEX_GetCurrentStat",
+        "GetSkill",
+        "GetSkillLevel",
+        "SKILLS_CompileSkillFormula"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillCalcContextStrc",
+        "D2SkillDescTxt",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_DescCalcCallback_Eval",
+      "address": "00646be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646be0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_DescCalcCallback_Eval",
+        "SKILLDESC_EvalDescCalcValue"
+      ],
+      "usedTypes": [
+        "D2SkillCalcContextStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_EvalSkillDescCalc_CurrentLevel",
+      "address": "00646c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646c00"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_EvalSkillDescCalc_CurrentLevel",
+        "GetSkill",
+        "GetSkillLevel",
+        "SKILLDESC_EvalDescCalcValue"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "eD2Skills",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_EvalSkillDescCalc_Chained",
+      "address": "00646c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646c60"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_EvalSkillDescCalc_Chained",
+        "SKILLDESC_EvalDescCalcValue"
+      ],
+      "usedTypes": [
+        "D2UnitStrc *",
+        "eD2Skills",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GetSkillCalc",
+      "address": "00646ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646ca0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "D2GetSkillCalc",
+        "SKILLS_CompileSkillFormula"
+      ],
+      "usedTypes": [
+        "D2SkillCalcContextStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_EvalDescCalcBytecode",
+      "address": "00646d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646d00"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_EvalDescCalcBytecode",
+        "SKILLS_CompileSkillFormula"
+      ],
+      "usedTypes": [
+        "D2SkillCalcContextStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_UpdatePassiveSkillStats",
+      "address": "00646d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646d60"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_UpdatePassiveSkillStats",
+        "GetSkill",
+        "UNIT_GetUnitState",
+        "GetSkillLevel",
+        "SKILLS_GetOrAllocStateStatList",
+        "STATLIST_GetBaseStatValue",
+        "D2GetSkillCalc",
+        "D2AddStatToStatsListEx",
+        "D2StatesTogglegfx",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_UpdateAllPassiveSkills",
+      "address": "00646f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646f20"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_UpdateAllPassiveSkills",
+        "GetSkill",
+        "UNIT_GetUnitState",
+        "SKILLS_UpdatePassiveSkillStats"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_RemoveSkill",
+      "address": "00646fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00646fd0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_RemoveSkill",
+        "TXT_Skills_GetPassiveState",
+        "SetState",
+        "SelectSkillLeft",
+        "SelectSkillRight",
+        "SKILLS_UpdatePassiveSkillStats",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "SKILL_RemoveSkillCallback",
+      "address": "006470f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006470f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_RemoveSkillCallback",
+        "SKILLS_RemoveSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AllocSkill",
+      "address": "00647110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647110"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "AllocSkill",
+        "TXT_Skills_GetPassiveState",
+        "SetState",
+        "GetFirstSkill",
+        "SKILL_GetMaxLevelForSkill",
+        "SKILLS_UpdatePassiveSkillStats",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddSkill",
+      "address": "00647280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647280"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "AddSkill",
+        "GetSkillByIdAndOwner",
+        "AllocSkill",
+        "SKILLS_UpdatePassiveSkillStats",
+        "SKILLS_RemoveSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_AddOrRemoveItemSkill",
+      "address": "00647320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647320"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_AddOrRemoveItemSkill",
+        "SelectSkillLeft",
+        "SelectSkillRight",
+        "FreeServerMemory",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2SkillListStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "thunk_SKILLS_AddOrRemoveItemSkill",
+      "address": "00647530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647530"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "thunk_SKILLS_AddOrRemoveItemSkill",
+        "SKILLS_AddOrRemoveItemSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_HasEnoughManaForSkill",
+      "address": "00647540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647540"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_HasEnoughManaForSkill",
+        "SKILL_GetLevelBonus",
+        "TXT_Experience_GetMaxLevel",
+        "UNIT_GetUnitState",
+        "UNITS_IsShapeshifted",
+        "STATSEX_GetCurrentStat",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_HasRequiredWeaponOrQuantity",
+      "address": "00647640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647640"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_HasRequiredWeaponOrQuantity",
+        "CanDualWield",
+        "INVENTORY_GetEquippedWeaponInfo",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetMinimalStatValueShifted",
+        "SKILLS_GetWeaponByHand",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CheckItemChargesRemaining",
+      "address": "00647840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647840"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CheckItemChargesRemaining",
+        "GetSkillLevel",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_IsDelayExpired",
+      "address": "006478f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006478f0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_IsDelayExpired",
+        "UNIT_GetUnitState",
+        "GetSkillLevel",
+        "D2GetSkillCalc"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_CanUseSkill",
+      "address": "00647960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647960"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_CanUseSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetSkillLevel",
+        "SKILLS_HasRequiredWeaponOrQuantity",
+        "SKILLS_CheckWeaponRequirements",
+        "SKILLS_HasEnoughManaForSkill",
+        "SKILLS_CheckRestriction",
+        "SKILLS_CheckStartMana",
+        "SKILLS_CheckItemChargesRemaining",
+        "SKILL_IsDelayExpired"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_SetSkillLevelBonus",
+      "address": "00647aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647aa0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILLS_SetSkillLevelBonus",
+        "GetSkillByIdAndOwner",
+        "AllocSkill",
+        "SKILLS_UpdatePassiveSkillStats"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_AdjustSkillLevelBonus",
+      "address": "00647b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647b20"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_AdjustSkillLevelBonus",
+        "AllocSkill",
+        "GetSkillByIdAndOwner",
+        "SKILLS_UpdatePassiveSkillStats"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_CalcMinDamage",
+      "address": "00647bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647bc0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_CalcMinDamage",
+        "STATSEX_GetCurrentStat",
+        "GetWeaponBySkill",
+        "INVENTORY_GetWeaponHandedness",
+        "GetTxtMinDamage",
+        "SKILLS_GetValueByLevelBreakpoints",
+        "D2GetSkillCalc",
+        "D2ApplyPercent"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_CalcMaxDamage",
+      "address": "00647d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647d00"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_CalcMaxDamage",
+        "SKILLS_CalculateBaseDamageFromStats",
+        "GetWeaponBySkill",
+        "STATSEX_GetCurrentStat",
+        "INVENTORY_GetWeaponHandedness",
+        "GetTxtMaxDamage",
+        "SKILLS_GetValueByLevelBreakpoints",
+        "D2GetSkillCalc",
+        "D2ApplyPercent"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_GetPassiveElementCalc",
+      "address": "00647e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647e00"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "SKILL_GetPassiveElementCalc",
+        "D2GetSkillCalc"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRUCT_FillSkillsList",
+      "address": "00647ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00647ee0"
+        }
+      ],
+      "namespace": "D2Common::Skills::Skills",
+      "calledFunctions": [
+        "STRUCT_FillSkillsList",
+        "AllocSkill",
+        "GetLeftSkill",
+        "SelectSkillLeft",
+        "GetRightSkill",
+        "SelectSkillRight"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2SkillStrc",
+        "D2UnitStrc"
+      ]
+    }
+  ]
+}

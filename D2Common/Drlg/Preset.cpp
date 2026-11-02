@@ -114,7 +114,6 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    uint32_t* puVar1;
     int nStrLen;
     int nCharLower;
     D2MonPresetTxt* pMonPresetTxt;
@@ -123,7 +122,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     D2PresetUnitStrc* pPreset;
     D2DrlgSubstGroupStrc* pSubstGroups;
     D2MapAIStrc* pPathNodes;
-    D2PathPosStrc* pDVar2;
+    D2PathPosStrc* pDVar1;
     uint32_t* pMonStatCheck;
     uint32_t* pCursor;
     uint32_t i;
@@ -133,6 +132,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     uint32_t nPresetCount;
     uint8_t byPresetType;
     uint32_t eCellUnitType;
+    uint32_t* pnPosY;
     int32_t* pDs1File;
     pDs1File = (int32_t*)Fog::Archive::D2FILE_AllocAndLoadD2File(pMemory, pBuffer, nullptr, ".\\DRLG\\Preset.cpp", 0x300);
     pFile->pDS1File = pDs1File;
@@ -445,15 +445,15 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     do {
       pClassId = (char*)*pCursor2;
       pCursor = pCursor2 + 1;
-      puVar1 = pCursor2 + 2;
+      pnPosY = pCursor2 + 2;
       pCursor2 += 3;
       if (pClassId) {
         for (pPreset = pFile->pPresetUnit; pPreset; pPreset = pPreset->pPresetUnitNext) {
-          if (pPreset->nPosX == *pCursor && pPreset->nPosY == *puVar1) {
+          if (pPreset->nPosX == *pCursor && pPreset->nPosY == *pnPosY) {
             pPathNodes = D2_NEW_POOL_AT(nullptr, D2MapAIStrc, ".\\DRLG\\Preset.cpp", 0x4a8);
             pPreset->pMapAI = pPathNodes;
-            pDVar2 = (D2PathPosStrc*)D2_ALLOC_POOL_AT(nullptr, (int)pClassId * 0xc, ".\\DRLG\\Preset.cpp", 0x4a9);
-            pPreset->pMapAI->pPosition = pDVar2;
+            pDVar1 = (D2PathPosStrc*)D2_ALLOC_POOL_AT(nullptr, (int)pClassId * 0xc, ".\\DRLG\\Preset.cpp", 0x4a9);
+            pPreset->pMapAI->pPosition = pDVar1;
             pPreset->pMapAI->nSize = (int)pClassId;
             if ((int)pClassId > 0) {
               nStrLen = 0;
@@ -462,13 +462,13 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
               do {
                 *(uint32_t*)((uintptr_t)&pPreset->pMapAI->pPosition->nXpos + nStrLen) = *pCursor;
                 *(uint32_t*)((uintptr_t)&pPreset->pMapAI->pPosition->nYpos + nStrLen) = pCursor[1];
-                pDVar2 = pPreset->pMapAI->pPosition;
+                pDVar1 = pPreset->pMapAI->pPosition;
                 pCursor2 = pCursor + 2;
                 if (__frame0.nDs1Version >= 0xf) {
-                  *(uint32_t*)((uintptr_t)&pDVar2->nDirection + nStrLen) = *pCursor2;
+                  *(uint32_t*)((uintptr_t)&pDVar1->nDirection + nStrLen) = *pCursor2;
                   pCursor2 = pCursor + 3;
                 } else {
-                  *(uint32_t*)((uintptr_t)&pDVar2->nDirection + nStrLen) = 1;
+                  *(uint32_t*)((uintptr_t)&pDVar1->nDirection + nStrLen) = 1;
                 }
 
                 nStrLen += 0xc;
@@ -573,11 +573,11 @@ void __fastcall DRLGPRESET_FreeSpawnPointList(D2PoolManagerStrc * pMemory, D2AiG
     D2_FREE_POOL_AT(pMemory, pAiGeneral, ".\\DRLG\\Preset.cpp", 0x598);
 }
 
-void __stdcall CreatePresetObject_Unused(int32_t nParam1, int32_t nParam2, D2PoolManagerStrc * pMemory, int32_t nParam3, int32_t nParam4) {
-    D2PresetUnitStrc* pPresetUnit = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_OBJECT, nParam2, 0, nParam1, nParam3);
+void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, D2PoolManagerStrc * pMemory, int32_t nPosY, int32_t pDrlgMap) {
+    D2PresetUnitStrc* pPresetUnit = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_OBJECT, nClassId, 0, nPosX, nPosY);
     pPresetUnit->nFlags |= 1;
-    pPresetUnit->pPresetUnitNext = *(D2PresetUnitStrc**)(nParam4 + 0x38);
-    *(D2PresetUnitStrc**)(nParam4 + 0x38) = (D2PresetUnitStrc*)pPresetUnit;
+    pPresetUnit->pPresetUnitNext = *(D2PresetUnitStrc**)(pDrlgMap + 0x38);
+    *(D2PresetUnitStrc**)(pDrlgMap + 0x38) = (D2PresetUnitStrc*)pPresetUnit;
 }
 
 // Spawns repeated object presets (class 0x41) along a vertical line in world coords from start to end, spaced by 0x28. Prepends each to pMap->pPresetUnit and marks flag bit 0x1.
@@ -1256,7 +1256,7 @@ void __fastcall DRLGPRESET_GetDrlgFileSize(D2RoomExStrc * pDrlgMap, int32_t * pn
 }
 
 // Already documented — existing description is accurate and meaningful.
-static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * pRoomEx, D2DrlgCoordsStrc * pPopLocation, uint32_t dwParam3, uint32_t dwParam4) {
+static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * pRoomEx, D2DrlgCoordsStrc * pPopLocation, uint32_t nMatchTileLibIndex, uint32_t bFadeIn) {
     BOOL _bInside;
     bool bInside;
     int* pTileFlags;
@@ -1269,7 +1269,7 @@ static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * p
     }
 
     {
-      uint32_t uVar1;
+      uint32_t nTileLibIndex;
       searchBox.WorldPosition.x = pPopLocation->WorldPosition.x - 1;
       searchBox.WorldSize.x = pPopLocation->WorldSize.x + 2;
       searchBox.WorldSize.y = pPopLocation->WorldSize.y + 2;
@@ -1283,13 +1283,13 @@ static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * p
       do {
         if (!(*pTileFlags & 0x200U) || (_bInside = DrlgRoom::AreXYInsideCoordinates(&searchBox, pTileFlags[-3] + pRoomEx->sCoords.WorldPosition.x, pTileFlags[-2] + pRoomEx->sCoords.WorldPosition.y) , !_bInside)) {
           if (!(*pTileFlags & 0x100U)) {
-            uVar1 = D2CMP::DUNGEON::Dungeon::GetIndex((D2TileLibraryEntryStrc*)pTileFlags[1]);
-            if (uVar1 == dwParam3) {
+            nTileLibIndex = D2CMP::DUNGEON::Dungeon::GetIndex((D2TileLibraryEntryStrc*)pTileFlags[1]);
+            if (nTileLibIndex == nMatchTileLibIndex) {
               _bInside = DrlgRoom::AreXYInsideCoordinates(&searchBox, pTileFlags[-3] + pRoomEx->sCoords.WorldPosition.x, pTileFlags[-2] + pRoomEx->sCoords.WorldPosition.y);
               if (_bInside) {
                 pTileFlags[4] |= 2;
                 nFadeAlpha = *(uint8_t*)(pTileFlags + 5);
-                if (dwParam4) {
+                if (bFadeIn) {
                   *(uint8_t*)((int)pTileFlags + 0x15) = '\0';
                   *(uint8_t*)((int)pTileFlags + 0x16) = 0xff;
                   if (!nFadeAlpha) {
@@ -1309,7 +1309,7 @@ static void __stdcall DRLGPRESET_UpdatePopTiles(int nTickCount, D2RoomExStrc * p
               }
             }
           }
-        } else if (dwParam4) {
+        } else if (bFadeIn) {
           pTileFlags[4] |= 4;
           pTileFlags[6] = nTickCount;
         } else {
@@ -1330,7 +1330,7 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
     BOOL _bInsideCoords;
     D2DrlgMapStrc* pDVar1;
     bool bInsideCoords;
-    uint32_t dwParam3;
+    uint32_t nMatchTileLibIndex;
     uint32_t nTickCount;
     uint32_t nPopTickDeadline;
     int nPopIdx;
@@ -1389,18 +1389,18 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
             }
             if (pDVar1 == pPresetRoomData && pDVar1->pPopsIndex[nPopIdx] == nMatchedPop) {
               if (!nPopTickDeadline) {
-                dwParam3 = pDVar1->pPopsSubIndex[nPopIdx];
+                nMatchTileLibIndex = pDVar1->pPopsSubIndex[nPopIdx];
                 nTickCount = nDeadline;
               } else {
                 if (!bOtherRoom) {
                   continue;
                 }
 
-                dwParam3 = pDVar1->pPopsSubIndex[nPopIdx];
+                nMatchTileLibIndex = pDVar1->pPopsSubIndex[nPopIdx];
                 nTickCount = nPopTickDeadline;
               }
 
-              DRLGPRESET_UpdatePopTiles(nTickCount, pCurNearRoomEx, (D2DrlgCoordsStrc*)((uintptr_t)&pDVar1->pPosLocation->nPosX + nY), dwParam3, 0);
+              DRLGPRESET_UpdatePopTiles(nTickCount, pCurNearRoomEx, (D2DrlgCoordsStrc*)((uintptr_t)&pDVar1->pPosLocation->nPosX + nY), nMatchTileLibIndex, 0);
               bDidUpdate = 1;
             }
           }

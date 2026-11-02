@@ -40,7 +40,7 @@ void __stdcall STRUCT_FreeTxtMessageForPacket0x27(struct D2GSPacketSrv0x27_TextS
 // @sourcefile .\Text\Text.cpp
 void __stdcall AddNewGossipText(struct D2GSPacketSrv0x27_TextStrc * pGossipText, int32_t nStringIndex, int32_t bMenu);
 // @sourcefile .\Text\Text.cpp
-void __stdcall TEXT_RemoveMessageById(struct D2GSPacketSrv0x27_TextStrc * ppPoolManager, int16_t nParam);
+void __stdcall TEXT_RemoveMessageById(struct D2GSPacketSrv0x27_TextStrc * ppPoolManager, int16_t nMessageId);
 int32_t __stdcall TEXT_CountMessagesOfType2(struct D2GSPacketSrv0x27_TextStrc * pMsgList);
 uint32_t __stdcall TEXT_GetMessageByIndex(struct D2GSPacketSrv0x27_TextStrc * pMsgList, int32_t nTargetIndex);
 uint32_t __stdcall OVERHEAD_GetMessageType0(struct D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nIndex);

@@ -1,0 +1,1018 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SMem.cpp",
+  "functions": [
+    {
+      "name": "SMEM_FatalError",
+      "address": "00411620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411620"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_FatalError",
+        "SErrDisplayError"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMEM_GetHandleByCaller",
+      "address": "00411670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411670"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_GetHandleByCaller",
+        "SStrHash"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemExtractBucketIndex",
+      "address": "00411700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411700"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemExtractBucketIndex"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMEM_LockHeapByBlockPtr",
+      "address": "00411710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411710"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_LockHeapByBlockPtr"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemFindHeapByHash",
+      "address": "00411740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411740"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemFindHeapByHash"
+      ],
+      "usedTypes": [
+        "D2FogHeapDescStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMEM_Warning",
+      "address": "004117a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004117a0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_Warning",
+        "SErrSetLastError",
+        "SErrDisplayError"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMEM_UnlockHeap",
+      "address": "004117d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004117d0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_UnlockHeap"
+      ]
+    },
+    {
+      "name": "SMEM_AllocateHeap",
+      "address": "004117f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004117f0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_AllocateHeap",
+        "SMEM_FatalError",
+        "SStrLen",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "D2FogHeapDescStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMEM_CheckValidBlock",
+      "address": "00411910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411910"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_CheckValidBlock",
+        "SMEM_Warning"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemCalculateAllocationLayout",
+      "address": "004119b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004119b0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemCalculateAllocationLayout"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMEM_ComputePageSize",
+      "address": "00411a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411a20"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_ComputePageSize"
+      ],
+      "usedTypes": [
+        "_SYSTEM_INFO",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemWriteBlockHeader",
+      "address": "00411a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411a50"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemWriteBlockHeader"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMEM_FreeHeap",
+      "address": "00411a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411a80"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_FreeHeap"
+      ]
+    },
+    {
+      "name": "SMEM_FreeHeapBlock",
+      "address": "00411aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411aa0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_FreeHeapBlock"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemGetBlockDataAndSize",
+      "address": "00411b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411b90"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemGetBlockDataAndSize"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemCommitMorePages",
+      "address": "00411bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411bd0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemCommitMorePages"
+      ],
+      "usedTypes": [
+        "D2FogHeapDescStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMEM_SatisfyFreeRequest",
+      "address": "00411c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411c20"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_SatisfyFreeRequest",
+        "SMemFill",
+        "SMEM_FreeHeapBlock"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc"
+      ]
+    },
+    {
+      "name": "SMemCoalesceFreeBlocks",
+      "address": "00411c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411c70"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemCoalesceFreeBlocks"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemInitialize",
+      "address": "00411cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411cd0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemInitialize",
+        "SRegLoadValue"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION"
+      ]
+    },
+    {
+      "name": "SMemSetDebugFlags",
+      "address": "00411d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411d40"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemSetDebugFlags"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMEM_CombineFreeBlocks",
+      "address": "00411dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411dc0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_CombineFreeBlocks"
+      ],
+      "usedTypes": [
+        "D2FogHeapDescStrc",
+        "uint16_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SMEM_DestroyHeap",
+      "address": "00411f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411f00"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_DestroyHeap",
+        "SMEM_Warning",
+        "SMEM_FreeHeapBlock",
+        "__security_check_cookie",
+        "SMEM_FreeHeap"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMEM_FreeEmptyHeaps",
+      "address": "00412000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412000"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_FreeEmptyHeaps",
+        "SMEM_FreeHeap"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION"
+      ]
+    },
+    {
+      "name": "SMemReallocInPlace",
+      "address": "00412080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412080"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemReallocInPlace",
+        "SMemCalculateAllocationLayout",
+        "SMemCommitMorePages",
+        "SMemCoalesceFreeBlocks",
+        "SMEM_CombineFreeBlocks",
+        "SMemWriteBlockHeader"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemShrinkBlock",
+      "address": "004121d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004121d0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemShrinkBlock",
+        "SMemCalculateAllocationLayout",
+        "SMemCoalesceFreeBlocks",
+        "SMemWriteBlockHeader"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemDestroy",
+      "address": "00412240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412240"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemDestroy",
+        "SErrReportResourceLeak",
+        "SMEM_FreeHeap",
+        "SMEM_DestroyHeap"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION"
+      ]
+    },
+    {
+      "name": "SMemFindNextBlock",
+      "address": "004122f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004122f0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemFindNextBlock",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SErrSetLastError",
+        "SMemZero",
+        "SMEM_CheckValidBlock",
+        "SMemGetBlockDataAndSize"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "LPCRITICAL_SECTION",
+        "int32_t",
+        "uint16_t *"
+      ]
+    },
+    {
+      "name": "SMemFindNextHeap",
+      "address": "004124b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004124b0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemFindNextHeap",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SErrSetLastError",
+        "SMemZero",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "SMemHeapDetailsStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemFree",
+      "address": "00412650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412650"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemFree",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SMEM_CheckValidBlock",
+        "SMEM_SatisfyFreeRequest"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SMemGetHeapByCaller",
+      "address": "00412710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412710"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemGetHeapByCaller",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SMEM_GetHandleByCaller"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemGetHeapByPtr",
+      "address": "00412760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412760"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemGetHeapByPtr",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SMEM_CheckValidBlock"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemGetSize",
+      "address": "004127e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004127e0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemGetSize",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SMEM_CheckValidBlock",
+        "SMemGetBlockDataAndSize"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemHeapCreate",
+      "address": "00412870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412870"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemHeapCreate",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SMEM_AllocateHeap"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemHeapDestroy",
+      "address": "004129d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004129d0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemHeapDestroy",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SMEM_DestroyHeap"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SMemHeapFree",
+      "address": "00412a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412a60"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemHeapFree",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SMEM_CheckValidBlock",
+        "SMEM_LockHeapByBlockPtr",
+        "SMEM_SatisfyFreeRequest"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemHeapSize",
+      "address": "00412b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412b10"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemHeapSize",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "SMEM_CheckValidBlock",
+        "SMemGetBlockDataAndSize"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SMEM_AllocateHeapBlock",
+      "address": "00412ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412ba0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_AllocateHeapBlock",
+        "SMemCalculateAllocationLayout",
+        "SMEM_CombineFreeBlocks",
+        "SMEM_AllocateHeap",
+        "SMemCommitMorePages",
+        "SMemCoalesceFreeBlocks",
+        "SMemWriteBlockHeader",
+        "SMEM_ComputePageSize",
+        "SMEM_FreeHeapBlock"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SMEM_SatisfyAllocRequest",
+      "address": "00412e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412e40"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMEM_SatisfyAllocRequest",
+        "SMEM_FatalError",
+        "SMEM_AllocateHeapBlock",
+        "SMemFill",
+        "SMemZero",
+        "SMemHeapAlloc"
+      ],
+      "usedTypes": [
+        "D2FogHeapDescStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemReallocCore",
+      "address": "00412f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00412f30"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemReallocCore",
+        "SMemGetBlockDataAndSize",
+        "SMemShrinkBlock",
+        "SMemReallocInPlace",
+        "SMEM_SatisfyAllocRequest",
+        "SMemCopy",
+        "SMEM_SatisfyFreeRequest",
+        "SMemZero",
+        "SMemFill"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemAlloc",
+      "address": "00413020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413020"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemAlloc",
+        "SMemInitialize",
+        "SMEM_FatalError",
+        "SMEM_GetHandleByCaller",
+        "SMEM_AllocateHeap",
+        "SMEM_SatisfyAllocRequest",
+        "SMEM_FreeEmptyHeaps"
+      ],
+      "usedTypes": [
+        "D2FogHeapDescStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemDumpState",
+      "address": "00413100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413100"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemDumpState",
+        "SMemInitialize",
+        "SMEM_Warning",
+        "__security_check_cookie",
+        "SErrSetLastError",
+        "SMemFindNextHeap"
+      ],
+      "usedTypes": [
+        "SMemHeapDetailsStrc",
+        "pfnSMemDumpCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemHeapAlloc",
+      "address": "00413250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413250"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemHeapAlloc",
+        "SMemInitialize",
+        "SMEM_FatalError",
+        "SMEM_SatisfyAllocRequest",
+        "SMEM_FreeEmptyHeaps"
+      ],
+      "usedTypes": [
+        "D2FogHeapDescStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemHeapReAlloc",
+      "address": "00413310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413310"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemHeapReAlloc",
+        "SMemInitialize",
+        "SMEM_FatalError",
+        "SMEM_CheckValidBlock",
+        "SMEM_LockHeapByBlockPtr",
+        "SMemReallocCore",
+        "SMEM_UnlockHeap",
+        "SMemHeapAlloc"
+      ],
+      "usedTypes": [
+        "D2FogHeapBlockHdrStrc",
+        "D2FogHeapDescStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemReAlloc",
+      "address": "004133d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004133d0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemReAlloc",
+        "SMemInitialize",
+        "SMEM_FatalError",
+        "SMEM_CheckValidBlock",
+        "SMEM_LockHeapByBlockPtr",
+        "SMemReallocCore",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "D2FogHeapDescStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMemCmp",
+      "address": "0041d200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d200"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemCmp"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemCopy",
+      "address": "0041d2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d2a0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemCopy",
+        "memcpy"
+      ]
+    },
+    {
+      "name": "SMemFill",
+      "address": "0041d2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d2c0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemFill",
+        "memset"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemMove",
+      "address": "0041d2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d2e0"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemMove",
+        "memmove"
+      ]
+    },
+    {
+      "name": "SMemZero",
+      "address": "0041d300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d300"
+        }
+      ],
+      "namespace": "Storm::Source::SMem",
+      "calledFunctions": [
+        "SMemZero",
+        "memset"
+      ]
+    }
+  ]
+}

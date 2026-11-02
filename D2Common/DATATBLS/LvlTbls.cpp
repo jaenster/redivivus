@@ -310,9 +310,9 @@ uint8_t __stdcall LEVEL_CanHaveRain(eD2LevelId eLevel) {
     return '\0';
 }
 
-uint8_t __stdcall LVLTBLS_GetNoPer(uint32_t nParam) {
-    if ((int)nParam > 0 && (int)nParam < sgptDataTable->nTxtLevelsSize) {
-      return sgptDataTable->pTxtLevels[nParam].NoPer;
+uint8_t __stdcall LVLTBLS_GetNoPer(uint32_t nLevelId) {
+    if ((int)nLevelId > 0 && (int)nLevelId < sgptDataTable->nTxtLevelsSize) {
+      return sgptDataTable->pTxtLevels[nLevelId].NoPer;
     }
 
     return 0;
@@ -410,8 +410,8 @@ static void LVLTBLS_BuildPortalLevelArray(D2LevelDefsTxt * pTxtLevelDefs) {
     } while (nLevelsRemaining < sgptDataTable->nTxtLevelsSize);
 }
 
-eD2LevelId * __fastcall GetPortalLevelArrayFromPortalFlags(uint32_t * pdwParam) {
-    *pdwParam = nPortalLevelCount;
+eD2LevelId * __fastcall GetPortalLevelArrayFromPortalFlags(uint32_t * pnPortalLevelCount) {
+    *pnPortalLevelCount = nPortalLevelCount;
     return (eD2LevelId*)gpPortalLevelArray;
 }
 
@@ -599,21 +599,21 @@ BOOL __stdcall TXT_LvlTypes_CheckIfTypeIsAssignedToAct(int32_t nLvlTypeId, char 
     return 0;
 }
 
-void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nParam1, int32_t nParam2, uint8_t * pParam) {
+void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nLvlType, int32_t nFileIndex, uint8_t * szFilename) {
     char cCurrent;
     if (!pTxtLvlTypes) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x251);
       exit(-1);
     }
 
-    D2LvlTypesTxt* pLvlTypeTxt = pTxtLvlTypes + nParam1;
-    *pParam = 0;
-    if (!(pLvlTypeTxt && nParam2 < 0x20)) {
+    D2LvlTypesTxt* pLvlTypeTxt = pTxtLvlTypes + nLvlType;
+    *szFilename = 0;
+    if (!(pLvlTypeTxt && nFileIndex < 0x20)) {
       return;
     }
 
-    char (*pFileSlot)[60] = pLvlTypeTxt->File + nParam2;
-    int nDstOffset = (int)pParam - (int)pFileSlot;
+    char (*pFileSlot)[60] = pLvlTypeTxt->File + nFileIndex;
+    int nDstOffset = (int)szFilename - (int)pFileSlot;
     do {
       cCurrent = (*pFileSlot)[0];
       *(char*)((int)pFileSlot + nDstOffset) = cCurrent;
@@ -623,11 +623,11 @@ void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nParam1, int32_t nParam2, uint
 
 // Loads and compiles the lvlprest.txt data table (preset-area level definitions) via CompileTxt, populating the field schema (Def, LevelId, Populate, sizes, AutoMap, Expansion flag, File1-File6 ASCII paths, Dt1Mask, etc.) into sgtDataTable.pTxtLvlPrest. When nParam!=0 also allocates pTxtLvlTbls (6 DRLG-file pointers per row) and, for each row visible in the current game mode (expansion rows skipped in classic), normalizes file path slashes and allocates a D2DrlgFileStrc for each non-empty File path. Side effects: sets global table pointers and size.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
-void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t nParam) {
-    char* pcVar1;
+void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoadDrlgFiles) {
     char (*pFileScan)[60];
     char (*szFile)[60];
     uint32_t nFileIdx;
+    char* pScanChar;
     D2BinFieldInputStrc lvlprest[24] = {
       {"Def", FIELDTYPE_INT, 0, 0, 0},
       {"LevelId", FIELDTYPE_INT, 0, 4, 0},
@@ -655,7 +655,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t nPara
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
     sgtDataTable.pTxtLvlPrest = (D2LvlPrestTxt*)DataTbls::CompileTxt(pMemory, "lvlprest", lvlprest, &sgtDataTable.nTxtLvlPrestSize, 0x1b0);
-    if (nParam) {
+    if (bLoadDrlgFiles) {
       size_t nAllocSize;
       nAllocSize = sgptDataTable->nTxtLvlPrestSize * 0x18;
       pTxtLvlTbls = (D2DrlgFileStrc**)D2_ALLOC_AT(nAllocSize, ".\\DATATBLS\\LvlTbls.cpp", 0x2a7);
@@ -677,12 +677,12 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t nPara
         szFile = pFirstFile;
         do {
           LVLTBLS_FixPathSlashes(*szFile, "DATA\\GLOBAL\\TILES");
-          if (nParam) {
+          if (bLoadDrlgFiles) {
             pFileScan = szFile;
             do {
-              pcVar1 = *pFileScan;
+              pScanChar = *pFileScan;
               pFileScan = (char (*)[60])(*pFileScan + 1);
-            } while (*pcVar1 != '\0');
+            } while (*pScanChar != '\0');
 
             if ((uint32_t)((int)pFileScan - (int)(*szFile + 1)) > 1) {
               Drlg::Preset::AllocDrlgFile(pTxtLvlTbls + nRowByteOffset + nFileIdx, nullptr, *szFile);

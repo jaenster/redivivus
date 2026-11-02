@@ -34,52 +34,52 @@ int __fastcall D2WINTEXTBOX_SetLinePadding(::D2WinTextBox * pnTextBox, int32_t n
 // @sourcefile .\Src\D2WinTextBox.cpp
 int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_t * wszText, int32_t nRow, int32_t nCol);
 // @sourcefile .\Src\D2WinTextBox.cpp
-void __fastcall D2WINTEXTBOX_ClearLineRow(::D2WinTextBox * pnParam, int32_t nRow);
-int32_t __fastcall D2WINTEXTBOX_GetLineCount(::D2WinTextBox * pnParam);
-int32_t __fastcall D2WINTEXTBOX_GetScrollPosition(::D2WinTextBox * pnParam);
-int32_t __fastcall D2WINTEXTBOX_GetSelectedLine(::D2WinTextBox * pnParam);
-void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pnParam, int32_t nLineIndex);
-uint32_t __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pnParam, int32_t nTargetLine);
-int32_t __fastcall D2WINTEXTBOX_GetVisibleLineCount(::D2WinTextBox * pnParam);
+void __fastcall D2WINTEXTBOX_ClearLineRow(::D2WinTextBox * pTextBox, int32_t nRow);
+int32_t __fastcall D2WINTEXTBOX_GetLineCount(::D2WinTextBox * pTextBox);
+int32_t __fastcall D2WINTEXTBOX_GetScrollPosition(::D2WinTextBox * pTextBox);
+int32_t __fastcall D2WINTEXTBOX_GetSelectedLine(::D2WinTextBox * pTextBox);
+void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pTextBox, int32_t nLineIndex);
+uint32_t __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTargetLine);
+int32_t __fastcall D2WINTEXTBOX_GetVisibleLineCount(::D2WinTextBox * pTextBox);
 uint16_t * __fastcall D2WINTEXTBOX_GetSelectedLineText(::D2WinTextBox * pnTextBox);
-uint16_t * __fastcall D2WINTEXTBOX_GetLineCellValue(::D2WinTextBox * pnParam, int32_t nRow, int32_t nColIndex);
-void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pnParam, int32_t nColumnCount);
-void __fastcall D2WINTEXTBOX_SetColumnWidth(::D2WinTextBox * pnParam, int32_t nColumnIndex, int32_t nColumnWidth);
-void __fastcall D2WINTEXTBOX_SetColumnAlignment(::D2WinTextBox * pnParam, int32_t nColumnIndex, int32_t nAlignment);
-int32_t __fastcall D2WINTEXTBOX_GetLastLineIndex(::D2WinTextBox * pnParam);
+uint16_t * __fastcall D2WINTEXTBOX_GetLineCellValue(::D2WinTextBox * pTextBox, int32_t nRow, int32_t nColIndex);
+void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pTextBox, int32_t nColumnCount);
+void __fastcall D2WINTEXTBOX_SetColumnWidth(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nColumnWidth);
+void __fastcall D2WINTEXTBOX_SetColumnAlignment(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nAlignment);
+int32_t __fastcall D2WINTEXTBOX_GetLastLineIndex(::D2WinTextBox * pTextBox);
 // Sets the active state of a text box and of its scrollbar (+0x90) via D2WINMAIN_SetControlActive; halts (D2WinTextBox.cpp lines 800/801, hChild) on NULL or a non-FORM_TextBox control.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __fastcall D2WINTEXTBOX_SetActive(::D2WinTextBox * pTextBox, BOOL bActive);
 // Body is only the halt at D2WinTextBox.cpp line 814.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall D2WINTEXTBOX_Unused_HaltLine814();
-uint32_t __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pnParam, int32_t nParam, uint32_t dwColor);
+uint32_t __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, uint32_t dwColor);
 BOOL __fastcall Draw(::D2WinTextBox * pTextBox);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall Key(struct D2ControlMsg * pControlMsg);
 // Returns D2WINSCROLLBAR_GetMaxValue of the text box's scrollbar; halts (lines 1400/1401) on NULL or a non-FORM_TextBox control.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall D2WINTEXTBOX_GetScrollbarMaxValue(::D2WinTextBox * pTextBox);
-void __fastcall D2WINTEXTBOX_SetScrollbarMaxRange(::D2WinTextBox * pnParam, uint32_t nMaxValue);
-int __fastcall D2WINTEXTBOX_RefreshScrollbar(::D2WinTextBox * pnParam);
-void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pnParam, int32_t nPosition);
+void __fastcall D2WINTEXTBOX_SetScrollbarMaxRange(::D2WinTextBox * pTextBox, uint32_t nMaxValue);
+int __fastcall D2WINTEXTBOX_RefreshScrollbar(::D2WinTextBox * pTextBox);
+void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pTextBox, int32_t nPosition);
 // MISNAMED: not a callback setter. Forwards its second argument verbatim to D2WINSCROLLBAR_SetLinkedTextBox(D2WinScrollbar*, D2WinTextBox*), so it is a D2WinTextBox pointer, not an int.
 void __fastcall D2WINTEXTBOX_SetScrollbarCallbackA(::D2WinTextBox * pTextBox, ::D2WinTextBox * pLinkedTextBox);
 // Forwards its second argument verbatim to D2WINSCROLLBAR_SetChangeCallback(pScrollbar, fpD2WinScrollbarOnChange*), so it is a code pointer, not an int. Only caller CHARSEL_InitCharSelScreen @0043af40 passes MAINMENU_CharSelScrollbarCallback (0x439df0).
 void __fastcall D2WINTEXTBOX_SetScrollbarCallbackB(::D2WinTextBox * pTextBox, fpD2WinScrollbarOnChange fpOnChange);
-void __fastcall D2WINTEXTBOX_SetScrollbarStyle(::D2WinTextBox * pnParam, int32_t nStyle);
+void __fastcall D2WINTEXTBOX_SetScrollbarStyle(::D2WinTextBox * pTextBox, int32_t nStyle);
 // Returns D2WINSCROLLBAR_GetStyle of the text box's scrollbar; halts (D2WinTextBox.cpp lines 1470/1471, hChild) on NULL or a non-FORM_TextBox control.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox);
 // @sourcefile .\Src\D2WinTextBox.cpp
-::D2WinTextBox * __fastcall D2WinTextBox(int32_t nParam1, int32_t nParam2, int32_t nWidth, int32_t nHeight, int32_t nParam3, int32_t nParam4, struct DC6 * pDC6, OnPress pOnPress, uint32_t nParam, int * pnParam1, int * pnParam2);
+::D2WinTextBox * __fastcall D2WinTextBox(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, int32_t nParam3, int32_t nParam4, struct DC6 * pDC6, OnPress pOnPress, uint32_t dwStyleFlags, int * pnScrollSize, int * pnScrollbarRect);
 void __fastcall FORMS_DestroyD2WinTextBox(::D2WinTextBox * pWinTextBox);
 // @sourcefile .\Src\D2WinTextBox.cpp
 BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nLineStyle, bool bIndent, int nAlignment);
 // @sourcefile .\Src\D2WinTextBox.cpp
-int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pnParam, uint16_t * wszText, int nRepeatCount, int32_t nLineStyle, bool bIndent);
-void __fastcall D2WINTEXTBOX_SetLineCellTextA(::D2WinTextBox * pnParam, char * szText, int32_t nRowIndex, int32_t nColIndex);
-void __fastcall D2WINTEXTBOX_SetLineCellTextWDirect(::D2WinTextBox * pnParam, uint16_t * wszText, int32_t nRow, int32_t nCol);
+int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pTextBox, uint16_t * wszText, int nRepeatCount, int32_t nLineStyle, bool bIndent);
+void __fastcall D2WINTEXTBOX_SetLineCellTextA(::D2WinTextBox * pTextBox, char * szText, int32_t nRowIndex, int32_t nColIndex);
+void __fastcall D2WINTEXTBOX_SetLineCellTextWDirect(::D2WinTextBox * pTextBox, uint16_t * wszText, int32_t nRow, int32_t nCol);
 // @sourcefile .\Src\D2WinTextBox.cpp
 BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint16_t * wszText, int32_t nLineStyle, int32_t nAlignment);
 // 3 internal functions (defined in .cpp)

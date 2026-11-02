@@ -33,9 +33,9 @@ DWORD __stdcall TXT_Experience_GetLineLevel(int32_t ePlayerClass, int32_t nLevel
 // Evidence: reads only [pTxtExperience + class*4]; callers clamp levels to it (006442a0, 0062b5b0, 0057eb10).
 int32_t __stdcall TXT_Experience_GetMaxLevel(int32_t ePlayerClass);
 // Computes nLevel (EAX) throughout the search loop and falls to bare return; the two known callers (UpdateGameInfo, SERVER_PlayerUpdateExperience) both feed the result straight into an unassigned nNewLevel used to gate a level-up branch.
-int __stdcall DATATBLS_GetLevelFromExperience(int32_t ePlayerClass, uint32_t nParam);
+int __stdcall DATATBLS_GetLevelFromExperience(int32_t ePlayerClass, uint32_t nExperience);
 // @sourcefile .\DATATBLS\DataTbls.cpp
-int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * pParam, int * pnParam, int * pnCapacity, void * pSrc, size_t nSize);
+int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * ppBuffer, int * pnSize, int * pnCapacity, void * pSrc, size_t nSize);
 // Resolves a text code to a table row index for the given code type/subtype. For nCodeType==1 it dispatches on nSubType: 3=skills link, 4=missiles link, 5=itemstatcost link (with special-cased base/mod/accr names), 6=skill-calc link; on link-table miss it normalizes szText to a packed 4-char code and looks it up via Excel link tables. Writes the resolved type tag into *pdwOutType (1 = found via link index, 0 = resolved via class-id/code fallback). Returns the table index (or -1/0 on failure). __fastcall.
 int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToConstant, int nAST, int nKeywordNumber);
 void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
@@ -59,7 +59,7 @@ void __stdcall sgtDataTableSetupIfUseTxt(int32_t nMode);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __stdcall UnloadBin(void * pTxtTable);
 // Populates the wide-string class-name field in every row of the CharStats txt table. For each row, looks up the string-table key via STRTABLE_GetStringByKey; if not found, formats a fallback like "&lt;keyname&gt;" and writes the wide string (up to nWstringSize chars) into the destination field at the computed struct offset.
-void __fastcall TXT_CharStats_DefineWideStringClass(struct D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nParam, size_t nWstringSize);
+void __fastcall TXT_CharStats_DefineWideStringClass(struct D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nDstFieldOffset, size_t nWstringSize);
 // Shutdown teardown for the miscellaneous data tables in sgtDataTable. Always frees compcode (table + its TxtLink); then, only when bUseTxt is set, frees the remaining misc txt tables and their TxtLinks: playerclass, bodylocs, storepage, elemtypes, hitclass, colors, hiredesc, monmode, plrmode, monai, monplace, skillcalc, misscalc, skillsheader, events. The base-pointer fixup before FreeServerMemory differs by table (-1 or -2 element offset) and the source-line code passed to the allocator depends on whether gpaMiscTxtTables is set (aggregate vs individual allocation), mirroring how each was allocated.
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __stdcall DATATBLS_FreeMiscTxtTables();

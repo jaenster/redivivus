@@ -1,0 +1,567 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Launch/Launcher.cpp",
+  "functions": [
+    {
+      "name": "CHARSEL_OnPressLoadCharListForPreferredRealm",
+      "address": "0043b490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b490"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "CHARSEL_OnPressLoadCharListForPreferredRealm",
+        "CHARSEL_LoadCharList",
+        "FORMS_DestroyList",
+        "CHARSEL_ResetCharListUI"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHARSEL_HandleRealmChange",
+      "address": "0043b4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b4c0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "CHARSEL_HandleRealmChange",
+        "D2WINTEXTBOX_GetSelectedLineText",
+        "WideCharToUTF8",
+        "CHARSEL_LoadCharList",
+        "CHARSEL_ClearCharDetailUI",
+        "MAINMENU_DetectDoubleClick",
+        "ChangeClosedRealmChoice"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HandleUpdateToExpansion",
+      "address": "0043b520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b520"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "HandleUpdateToExpansion",
+        "D2CheckExpansionGame",
+        "UpdateSaveFileToExpansion",
+        "GetLocaleString",
+        "UIMENU_AnotherSmallPopupWithContentAndSomeKindofTypeSelection",
+        "UNICODE_WideToMultiByte",
+        "MAINMENU_UpgradeCharacterToExpansion",
+        "GetD2GSJoinResult",
+        "CONTAINER_InitializeBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "UNICODE_FormatWideString",
+        "MAINMENU_ShowPopupWithCancel",
+        "DRAW_LocalCharsInSelectionScreen0",
+        "FORMS_DestroyList",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "D2ControlMsg",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_StartGameWithSelectedCharacter",
+      "address": "0043b6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b6b0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_StartGameWithSelectedCharacter",
+        "UNICODE_WideToMultiByte",
+        "MAINMENU_DeleteCharacterOnRealm",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupWithCancel",
+        "LAUNCHER_DeleteCharacterFiles",
+        "UIMENU_CharacterSelectAllGameTypes"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_InitNetworkLobbyQueue",
+      "address": "0043b7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b7a0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_InitNetworkLobbyQueue",
+        "NET_InitAndGetLobbyChatQueue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_SetBusyFlag",
+      "address": "0043b810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b810"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_SetBusyFlag"
+      ]
+    },
+    {
+      "name": "LAUNCHER_ClearBusyFlag",
+      "address": "0043b820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b820"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_ClearBusyFlag"
+      ]
+    },
+    {
+      "name": "LAUNCHER_GetBusyFlag",
+      "address": "0043b830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b830"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_GetBusyFlag"
+      ]
+    },
+    {
+      "name": "LAUNCHER_IsBnetConnectInProgress",
+      "address": "0043b840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b840"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_IsBnetConnectInProgress"
+      ]
+    },
+    {
+      "name": "LAUNCHER_CheckRevisionAndShowDialog",
+      "address": "0043b850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b850"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_CheckRevisionAndShowDialog",
+        "LAUNCHER_GetPatchDownloadFlag",
+        "MAINMENU_UpdateProgressBar",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "LAUNCHER_HandleBnetConnect_1",
+      "address": "0043b8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b8e0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_HandleBnetConnect_1",
+        "D2WINMAIN_ClearMessageLoopFlag",
+        "MAINMENU_GetGlobalValue2"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_PumpChangePasswordResponse",
+      "address": "0043b940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b940"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_PumpChangePasswordResponse",
+        "D2WINMAIN_ClearMessageLoopFlag",
+        "MAINMENU_GetGlobalValue2"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_DisconnectFromBnet",
+      "address": "0043b9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b9a0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_DisconnectFromBnet",
+        "FreeMCP"
+      ]
+    },
+    {
+      "name": "ShowOogErrorDialog",
+      "address": "0043b9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043b9f0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "ShowOogErrorDialog",
+        "CONTAINER_InitializeBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "GetLocaleString",
+        "WSTRING_PutWideCharIntoBuffer",
+        "UIMENU_CrashingCantTestIt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SStrCmp",
+        "SStrCopy",
+        "MAINMENU_SetGlobalValue3",
+        "STRING_ConvertCharToWchar",
+        "UIMENU_CreatePopupWithContent",
+        "MAINMENU_ShowPopupWithCancel",
+        "UIMENU_CreatePopupWithContentAndFooter",
+        "FreeMCP"
+      ],
+      "usedTypes": [
+        "D2OogErrorDataStrc",
+        "WCHAR",
+        "eOogErrorCode",
+        "int32_t",
+        "pfnUIMenuInstance",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_ShowOogErrorDialog_ForEnterEmail",
+      "address": "0043bf40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043bf40"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_ShowOogErrorDialog_ForEnterEmail",
+        "ShowOogErrorDialog"
+      ],
+      "usedTypes": [
+        "D2OogErrorDataStrc",
+        "eOogErrorCode"
+      ]
+    },
+    {
+      "name": "CLIENT_ConnectToBattleNet",
+      "address": "0043bf60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043bf60"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "CLIENT_ConnectToBattleNet",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "LAUNCHER_ClearPatchDownloadFlag",
+        "FreeMCP",
+        "ShowOogErrorDialog",
+        "UIMENU_ConnectinToBattleNetWitProgressDots",
+        "MessagePump",
+        "UIMENU_DownloadingPatch",
+        "LAUNCHER_GetPatchDownloadFlag",
+        "UIMENU_MainMenu",
+        "SRegSaveValue",
+        "D2GFX_CheckVideoMode",
+        "SaveAndUnload",
+        "FORMS_DestroyListJmp"
+      ],
+      "usedTypes": [
+        "D2OogErrorDataStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EnterEmailMessagePumper",
+      "address": "0043c180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043c180"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "EnterEmailMessagePumper",
+        "GetLocaleString",
+        "MAINMENU_ShowPopupWithCancel",
+        "UIMENU_PleaseWaitWithCancelButton",
+        "MessagePump",
+        "LAUNCHER_ShowOogErrorDialog_ForEnterEmail",
+        "MAINMENU_GetGlobalValue2",
+        "FORMS_DestroyListJmp",
+        "ShowOogErrorDialog",
+        "UIMENU_EnterEmailAddress",
+        "MAINMENU_EnterEmailCallback",
+        "FreeMCP",
+        "UIMENU_MainMenu",
+        "MAINMENU_SetGlobalValue3"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "D2OogErrorDataStrc",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+      "address": "0043c4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043c4f0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "UIMENU_MainMenuWithoutMenuButWithDiabloLogo",
+        "FORMS_DestroyLists",
+        "FORMS_CreateAnyFormFromListExEx",
+        "D2GFX_SetPaletteForDraw",
+        "MAINMENU_AdjustFormsForKorean"
+      ]
+    },
+    {
+      "name": "LAUNCHER_GetTime32",
+      "address": "0043c530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043c530"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "_time32",
+        "LAUNCHER_GetTime32"
+      ],
+      "usedTypes": [
+        "__time32_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_InitNewCharacterSaveFile",
+      "address": "0043c540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043c540"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_InitNewCharacterSaveFile",
+        "memset",
+        "SStrCopy",
+        "_time32",
+        "SAVEFILE_WriteEncodedInt14Bit"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_MarkCharacterHardcore",
+      "address": "0043c6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043c6a0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_MarkCharacterHardcore"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_WriteSaveFileToD2s",
+      "address": "0043c6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043c6b0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_WriteSaveFileToD2s",
+        "GetAndCreateSavePath",
+        "sprintf",
+        "thunk_CreateFileA",
+        "CalculateChecksum",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_DeleteCharacterFiles",
+      "address": "0043c750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043c750"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_DeleteCharacterFiles",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetAndCreateSavePath",
+        "SStrPrintf",
+        "SafeCreateDirectoryTree",
+        "SStrCopy",
+        "sprintf"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "_WIN32_FIND_DATAA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LAUNCHER_LoadCharacterAppearanceFromD2s",
+      "address": "0043c8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043c8a0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "LAUNCHER_LoadCharacterAppearanceFromD2s",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetAndCreateSavePath",
+        "sprintf",
+        "fopen",
+        "fread",
+        "SAVEFILE_WriteEncodedInt14Bit",
+        "fclose"
+      ],
+      "usedTypes": [
+        "D2SaveFileBufferStrc",
+        "FILE",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UpdateSaveFileToExpansion",
+      "address": "0043caa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043caa0"
+        }
+      ],
+      "namespace": "D2Launch::Launcher",
+      "calledFunctions": [
+        "UpdateSaveFileToExpansion",
+        "GetAndCreateSavePath",
+        "sprintf",
+        "thunk_CreateFileA",
+        "thunk_ReadFile",
+        "SFILE_Win32SetFilePointer",
+        "CalculateChecksum",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle"
+      ],
+      "usedTypes": [
+        "D2SaveFileBufferStrc",
+        "uint32_t"
+      ]
+    }
+  ]
+}

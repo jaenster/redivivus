@@ -1,0 +1,36 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/Cache.cpp",
+  "functions": [
+    {
+      "name": "StaticInit_6caea0",
+      "address": "006caea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006caea0"
+        }
+      ],
+      "namespace": "Bnclient::Cache",
+      "calledFunctions": [
+        "StaticInit_6caea0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_00881894",
+      "address": "006cb440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb440"
+        }
+      ],
+      "namespace": "Bnclient::Cache",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_00881894"
+      ]
+    }
+  ]
+}

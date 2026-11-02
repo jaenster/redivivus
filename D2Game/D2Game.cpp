@@ -66,13 +66,13 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 
 namespace D2Game {
 
-void __fastcall CLIENT_GetSaveCompleteClient(D2ClientStrc * pClient, uint32_t * pdwParam) {
-    uint32_t uVar1 = GAME::Clients::CLIENT_GetSaveCompleteFlag(pClient);
-    if (!uVar1) {
+void __fastcall CLIENT_GetSaveCompleteClient(D2ClientStrc * pClient, uint32_t * pdwClientOut) {
+    uint32_t dwSaveComplete = GAME::Clients::CLIENT_GetSaveCompleteFlag(pClient);
+    if (!dwSaveComplete) {
       return;
     }
 
-    *pdwParam = (uint32_t)pClient;
+    *pdwClientOut = (uint32_t)pClient;
 }
 
 // Callback for iterating active clients: if *pnParam is 0 (not yet assigned), writes nParam into *pnParam. Used as a visitor to capture the first active client slot index.
@@ -121,26 +121,26 @@ D2DrlgActStrc * __stdcall QSERVER_GetActFromFirstActiveGame(int32_t nActIndex) {
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __stdcall QSERVER_CountMonstersInFirstActiveGame() {
     D2UnitStrc* pUnit;
-    ::SGAMEDATA* pSVar1 = GAME::Server::QSERVER_GetFirstActiveGame();
-    if (!pSVar1) {
+    ::SGAMEDATA* pGame = GAME::Server::QSERVER_GetFirstActiveGame();
+    if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b);
       exit(-1);
     }
 
-    int iVar3 = 0;
-    D2UnitStrc* (*papDVar4)[128] = pSVar1->pUnitList + 1;
-    int iVar2 = 0x80;
+    int nMonsterCount = 0;
+    D2UnitStrc* (*papDVar1)[128] = pGame->pUnitList + 1;
+    int nBucketsLeft = 0x80;
     do {
-      for (pUnit = (*papDVar4)[0]; pUnit; pUnit = UNIT::SUnit::GetNextUnit(pUnit)) {
-        iVar3++;
+      for (pUnit = (*papDVar1)[0]; pUnit; pUnit = UNIT::SUnit::GetNextUnit(pUnit)) {
+        nMonsterCount++;
       }
 
-      papDVar4 = (D2UnitStrc* (*)[128])(*papDVar4 + 1);
-      iVar2--;
-    } while (iVar2);
+      papDVar1 = (D2UnitStrc* (*)[128])(*papDVar1 + 1);
+      nBucketsLeft--;
+    } while (nBucketsLeft);
 
     GAME::Server::LeaveCriticalSectionLastGameServer();
-    return iVar3;
+    return nMonsterCount;
 }
 
 D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActIndex, int32_t nSubtileX, int32_t nSubtileY) {
@@ -168,7 +168,7 @@ void __fastcall nullsub_4Arg(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
 
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x1C (c2 1c 00) - seven dword arguments.
-void __stdcall nullsub_7Arg(D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4, uint32_t dwParam5, uint32_t dwParam6, uint32_t dwParam7) {
+void __stdcall nullsub_7Arg(D2UnitStrc * pUnit, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4, uint32_t dwParam5, uint32_t dwParam6, uint32_t dwParam7) {
 
 }
 
@@ -178,7 +178,7 @@ void __stdcall nullsub_7Arg(D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t d
 // D2Common::Unit::SUnitDmg::DAMAGE_ApplyElementalDamageWithResist, both __fastcall shaped
 // (ECX and EDX loaded, three dwords pushed). The _B suffix is a disambiguator, not a claim
 // about behaviour.
-void __stdcall nullsub_B(D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3) {
+void __stdcall nullsub_B(D2UnitStrc * pUnit, uint32_t dwParam2, uint32_t dwParam3) {
 
 }
 
@@ -227,11 +227,11 @@ void __fastcall IncrementObjectTypeCount(int * pThis, uint32_t nObjectType) {
       return;
     }
 
-    short int* psVar1 = (short int*)(pThis[0x43c] + 0x1048 + nObjectType * 2);
-    (*psVar1)++;
+    short int* pnTypeCount = (short int*)(pThis[0x43c] + 0x1048 + nObjectType * 2);
+    (*pnTypeCount)++;
 }
 
-void __fastcall PLRMODES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall PLRMODES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
@@ -261,27 +261,27 @@ void __stdcall thunk_QueryPerformanceFrequency_B() {
 }
 
 // Task queue: calculates time until next scheduled task. Enters critical section for task slot (nParam & 0x1F), reads first task timestamp from priority queue, and returns delta from current timestamp.
-int __fastcall TASK_GetTimeUntilNextTask(uint32_t nParam) {
+int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot) {
     int nTimeDelta = 100;
-    EnterCriticalSection(aTaskQueueCriticalSections + (nParam & 0x1f));
-    D2TaskQueueSlotStrc* pDVar1 = gaTaskQueueHeadArray[nParam & 0x1f];
-    if (!pDVar1) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + (nParam & 0x1f));
+    EnterCriticalSection(aTaskQueueCriticalSections + (nQueueSlot & 0x1f));
+    D2TaskQueueSlotStrc* pTaskSlot = gaTaskQueueHeadArray[nQueueSlot & 0x1f];
+    if (!pTaskSlot) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + (nQueueSlot & 0x1f));
       return 100;
     }
 
-    PD2TaskNodeLink pFirstTask = pDVar1->sTaskList.pPrev;
-    if (pFirstTask != &pDVar1->sTaskList && pFirstTask) {
-      uint32_t uVar2;
-      uVar2 = GAME::Task::TASK_GetTimestamp();
-      nTimeDelta = ((D2TaskNodeStrc*)((char*)pFirstTask - 0xc))->dwTimestamp - uVar2;
+    PD2TaskNodeLink pFirstTask = pTaskSlot->sTaskList.pPrev;
+    if (pFirstTask != &pTaskSlot->sTaskList && pFirstTask) {
+      uint32_t uVar1;
+      uVar1 = GAME::Task::TASK_GetTimestamp();
+      nTimeDelta = ((D2TaskNodeStrc*)((char*)pFirstTask - 0xc))->dwTimestamp - uVar1;
     }
-    if (pDVar1->nSlotIndex >= 0x20) {
+    if (pTaskSlot->nSlotIndex >= 0x20) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x97);
       exit(-1);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pDVar1->nSlotIndex);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pTaskSlot->nSlotIndex);
     return nTimeDelta;
 }
 
@@ -359,7 +359,7 @@ uint32_t __fastcall SKILLS_AreaEffect_TrackBestUnitByUnitId(D2SkillCallbackConte
     return 1;
 }
 
-void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
     uint8_t byAIDelay;
     BOOL bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsModeZeroDeath) {
@@ -418,15 +418,15 @@ uint32_t __fastcall UNIT_IsAlive(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFi
 }
 
 void __fastcall Q33_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
-    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Completed);
-    if (BVar3 == 1) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
       return;
     }
 
-    BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits);
-    if (BVar3 == 1) {
+    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits);
+    if (BVar1 == 1) {
       return;
     }
 
@@ -440,8 +440,8 @@ void __fastcall Q33_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    eAct eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 != ACT_V) {
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_V) {
       return;
     }
 
@@ -519,15 +519,15 @@ uint8_t __fastcall Q02_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStr
 }
 
 void __fastcall fpExecuteOnUnitFunction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bIsCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersBurialGrounds, QUESTSTATE_Completed);
     if (bIsCompleted == 1) {
       return;
     }
 
-    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersBurialGrounds, QUESTSTATE_RewardAwaits);
-    if (BVar3 == 1) {
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersBurialGrounds, QUESTSTATE_RewardAwaits);
+    if (BVar1 == 1) {
       return;
     }
 
@@ -541,8 +541,8 @@ void __fastcall fpExecuteOnUnitFunction(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       return;
     }
 
-    eAct eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 != ACT_I) {
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_I) {
       return;
     }
 
@@ -551,20 +551,20 @@ void __fastcall fpExecuteOnUnitFunction(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 void __fastcall Q03_AutoCompleteIfHighLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
-    BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ToolsOfTheTrade, QUESTSTATE_Completed);
-    if (BVar2 == 1) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ToolsOfTheTrade, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
       return;
     }
 
-    BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ToolsOfTheTrade, QUESTSTATE_RewardAwaits);
-    if (BVar2 == 1) {
+    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ToolsOfTheTrade, QUESTSTATE_RewardAwaits);
+    if (BVar1 == 1) {
       return;
     }
 
-    int32_t iVar3 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
-    if (iVar3 < 8) {
+    int32_t nLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
+    if (nLevel < 8) {
       return;
     }
 
@@ -573,10 +573,10 @@ void __fastcall Q03_AutoCompleteIfHighLevel(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 void __fastcall Q05_SetPartyMemberRewardStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
-    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
-    if (BVar3 == 1) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
       return;
     }
 
@@ -590,8 +590,8 @@ void __fastcall Q05_SetPartyMemberRewardStates(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
 
-    eAct eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 != ACT_I) {
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_I) {
       return;
     }
 
@@ -640,15 +640,15 @@ uint8_t __fastcall Q09_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
 // For each in-game party member not already Completed/RewardAwaits, mark their record JustCompleted + RewardAwaits
 // so partymates near the destroyed altar also get the Tainted-Sun reward credit.
 void __fastcall Q11_SetTaintedSunRewardOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
-    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_Completed);
-    if (BVar3 == 1) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
       return;
     }
 
-    /* GetQuestState(buf, A2Q3, 1=RewardAwaits) - skip if reward already pending */ BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_RewardAwaits);
-    if (BVar3 == 1) {
+    /* GetQuestState(buf, A2Q3, 1=RewardAwaits) - skip if reward already pending */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_RewardAwaits);
+    if (BVar1 == 1) {
       return;
     }
 
@@ -662,8 +662,8 @@ void __fastcall Q11_SetTaintedSunRewardOnPartyMember(::SGAMEDATA * pGame, D2Unit
       return;
     }
 
-    eAct eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 != ACT_II) {
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_II) {
       return;
     }
 
@@ -685,15 +685,15 @@ uint8_t __fastcall Q11_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
 }
 
 void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
-    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
-    if (BVar3 == 1) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
       return;
     }
 
-    BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-    if (BVar3 == 1) {
+    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
+    if (BVar1 == 1) {
       return;
     }
 
@@ -707,8 +707,8 @@ void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitSt
       return;
     }
 
-    eAct eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 != ACT_II) {
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_II) {
       return;
     }
 
@@ -722,7 +722,7 @@ void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitSt
 
 uint8_t __fastcall Q11_TimerCheckDarkness(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA2Q3Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
-    pA2Q3Data->field_0x01 = 0;
+    pA2Q3Data->bDarknessTimerArmed = 0;
     if (pA2Q3Data->bSunDarkened) {
       return '\x01';
     }
@@ -746,7 +746,7 @@ void __fastcall MONSTER_ScheduleDeathIfRunningOrDead(::SGAMEDATA * pGame, D2Unit
     GAME::Event::SetEvent(pGame, pUnit, 7, pGame->dwGameFrame + 2, 0, 0);
 }
 
-void __fastcall MISSILESMODE_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall MISSILESMODE_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
@@ -780,15 +780,15 @@ BOOL __fastcall Q26_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStr
 }
 
 void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
-    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Completed);
-    if (BVar3 == 1) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
       return;
     }
 
-    BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
-    if (BVar3) {
+    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_RewardAwaits);
+    if (BVar1) {
       return;
     }
 
@@ -802,8 +802,8 @@ void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
       return;
     }
 
-    eAct eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 != ACT_IV) {
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_IV) {
       return;
     }
 
@@ -881,15 +881,15 @@ void __fastcall QUEST_StateHandler_PlayTomeHandInSound(D2QuestDataStrc * pQuestD
 
 void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     eD2QuestState eQuestState;
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
-    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
-    if (BVar3 == 1) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
       return;
     }
 
-    BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
-    if (BVar3 == 1) {
+    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
+    if (BVar1 == 1) {
       return;
     }
 
@@ -903,13 +903,13 @@ void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
       return;
     }
 
-    eAct eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 != ACT_III) {
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_III) {
       return;
     }
 
-    BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
-    if (BVar3) {
+    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
+    if (BVar1) {
       eQuestState = QUESTSTATE_Completed;
     } else {
       eQuestState = QUESTSTATE_Step0x04;
@@ -965,26 +965,26 @@ BOOL __fastcall Q22_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStr
 }
 
 BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
-    BOOL BVar3 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_UnknownDuplicate1, QUESTSTATE_Completed);
-    if (BVar3) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_UnknownDuplicate1, QUESTSTATE_Completed);
+    if (BVar1) {
       return 0;
     }
 
-    D2RoomStrc* pDVar4 = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pDVar4) {
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
       return 0;
     }
 
-    pDVar4 = D2Common::Units::UNITS_GetRoom(pUnit);
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pDVar4);
+    pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     if (eLevel == LEVEL_None) {
       return 0;
     }
 
-    eAct eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    if (eVar1 != ACT_III) {
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_III) {
       return 0;
     }
 
@@ -994,23 +994,24 @@ BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, D2UnitStrc 
 
 void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUnit, void * pSkillData) {
     int32_t nParam;
-    uint32_t uVar1 = SKILLS::SkillNec::SKILLNEC_ValidateCorpseTarget(*(::SGAMEDATA**)pSkillData, *(D2UnitStrc**)((int)pSkillData + 4), pUnit);
-    if (!uVar1) {
+    uint32_t nTargetGUID;
+    uint32_t bValidTarget = SKILLS::SkillNec::SKILLNEC_ValidateCorpseTarget(*(::SGAMEDATA**)pSkillData, *(D2UnitStrc**)((int)pSkillData + 4), pUnit);
+    if (!bValidTarget) {
       return;
     }
     if (*(char*)((int)pSkillData + 0x10) == '\0') {
-      uVar1 = *(uint32_t*)((int)pSkillData + 0x14);
+      nTargetGUID = *(uint32_t*)((int)pSkillData + 0x14);
       nParam = 1;
     } else {
-      uVar1 = *(uint32_t*)((int)pSkillData + 0x14);
+      nTargetGUID = *(uint32_t*)((int)pSkillData + 0x14);
       nParam = 2;
     }
 
-    Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nParam, uVar1);
+    Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nParam, nTargetGUID);
     GAME::Event::SetEvent(*(::SGAMEDATA**)pSkillData, pUnit, 10, (*(::SGAMEDATA**)pSkillData)->dwGameFrame + *(int*)((int)pSkillData + 0x18), 0, 0);
 }
 
-void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     if (!pUnit) {
       return;
@@ -1019,11 +1020,11 @@ void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUni
     pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
 }
 
-void __fastcall SKILLSASS_StatExpireCallback_ClearState2(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall SKILLSASS_StatExpireCallback_ClearState2(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
-void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
+void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     if (!pUnit) {
       return;
@@ -1032,7 +1033,7 @@ void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUni
     pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
 }
 
-void __fastcall MONSTERAI_FlagIfDeadOrNull(D2UnitStrc * pUnit, uint32_t * pdwParam, uint32_t dwArg1) {
+void __fastcall MONSTERAI_FlagIfDeadOrNull(D2UnitStrc * pUnit, uint32_t * pdwDeadFlag, uint32_t dwArg1) {
     if (pUnit) {
       BOOL BVar1;
       BVar1 = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
@@ -1041,7 +1042,7 @@ void __fastcall MONSTERAI_FlagIfDeadOrNull(D2UnitStrc * pUnit, uint32_t * pdwPar
       }
     }
 
-    *pdwParam = 1;
+    *pdwDeadFlag = 1;
 }
 
 BOOL __fastcall AI_SelectTarget_SameLevelFilter(D2UnitStrc * pSelf, D2UnitStrc * pTarget) {

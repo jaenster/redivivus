@@ -70,7 +70,7 @@ void __fastcall Q30_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
 // Q30_StatusFilter — stub, always returns false. Q30 (internal "Spoke to Malachai") contributes no
 // entry to the in-game Quest Log status panel; its dialog is driven purely via the active-filter gossip path.
-bool __fastcall Q30_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown) {
+bool __fastcall Q30_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 

@@ -1,0 +1,487 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/DrlgGrid.cpp",
+  "functions": [
+    {
+      "name": "DRLGGRID_FloodFillGridCoords",
+      "address": "0066c3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066c3d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_FloodFillGridCoords",
+        "DRLGCOORDS_IsPointInside",
+        "GetGridFlags",
+        "AlterGridFlag",
+        "DRLGGRID_IsGridValid"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OverwriteFlag",
+      "address": "0067c420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c420"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "OverwriteFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OrFlag",
+      "address": "0067c430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c430"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "OrFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AndFlag",
+      "address": "0067c440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c440"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "AndFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "XorFlag",
+      "address": "0067c450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c450"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "XorFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OverwriteFlagIfZero",
+      "address": "0067c460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c460"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "OverwriteFlagIfZero"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AndNegatedFlag",
+      "address": "0067c470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c470"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "AndNegatedFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGGRID_IsGridValid",
+      "address": "0067c480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c480"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_IsGridValid"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc"
+      ]
+    },
+    {
+      "name": "IsPointInsideGridArea",
+      "address": "0067c4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c4a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "IsPointInsideGridArea"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGGRID_GetCellAddress",
+      "address": "0067c4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c4d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_GetCellAddress"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "eD2GridCellFlags"
+      ]
+    },
+    {
+      "name": "AlterGridFlag",
+      "address": "0067c4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c4f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "AlterGridFlag"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGGRID_ApplyFlagOperation",
+      "address": "0067c520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c520"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_ApplyFlagOperation"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgGridStrc"
+      ]
+    },
+    {
+      "name": "GetOffset",
+      "address": "0067c550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c550"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "GetOffset"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetGridFlags",
+      "address": "0067c570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c570"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc"
+      ]
+    },
+    {
+      "name": "AlterAllGridFlags",
+      "address": "0067c590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c590"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "AlterAllGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "eD2GridCellFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FlagOperations",
+      "address": "0067c600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c600"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "FlagOperations"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "eD2GridCellFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGGRID_ApplyFlagToBorderCells",
+      "address": "0067c6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c6d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_ApplyFlagToBorderCells"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "eD2GridCellFlags"
+      ]
+    },
+    {
+      "name": "DRLGGRID_SetEdgeGridFlags",
+      "address": "0067c760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c760"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_SetEdgeGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2DrlgVertexStrc"
+      ]
+    },
+    {
+      "name": "DRLGGRID_SetLineFlagsWithWidth",
+      "address": "0067c8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c8e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_SetLineFlagsWithWidth",
+        "AreXYInsideCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordsStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgVertexStrc"
+      ]
+    },
+    {
+      "name": "DRLGGRID_InitGridCells",
+      "address": "0067cb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067cb80"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_InitGridCells",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FillGrid",
+      "address": "0067cbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067cbf0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "FillGrid",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGGRID_AllocGrid",
+      "address": "0067cc60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067cc60"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_AllocGrid",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2PoolManagerStrc",
+        "eD2GridCellFlags"
+      ]
+    },
+    {
+      "name": "DRLGGRID_InitGridFromTileData",
+      "address": "0067ccc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ccc0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_InitGridFromTileData",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgGridStrc",
+        "D2PoolManagerStrc",
+        "eD2GridCellFlags"
+      ]
+    },
+    {
+      "name": "FillExternalCellFlags",
+      "address": "0067cd30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067cd30"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "FillExternalCellFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgGridStrc",
+        "D2DrlgMapStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGGRID_FreeGrid",
+      "address": "0067cd90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067cd90"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "DRLGGRID_FreeGrid",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "ResetGrid",
+      "address": "0067cdc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067cdc0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgGrid",
+      "calledFunctions": [
+        "ResetGrid"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc"
+      ]
+    }
+  ]
+}

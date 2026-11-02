@@ -43,9 +43,9 @@ void __thiscall Destructor(::ButtonImplementation * pThis) {
 }
 
 BOOL __thiscall IsMouseInBounds(::ButtonImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
-    uint32_t uVar2 = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if ((int)uVar1 >= pThis->nPosX && (int)uVar1 <= pThis->nWidth + pThis->nPosX && (int)uVar2 >= pThis->nPosY - pThis->nHeight && (int)uVar2 <= pThis->nPosY) {
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
+    if ((int)nMouseX >= pThis->nPosX && (int)nMouseX <= pThis->nWidth + pThis->nPosX && (int)nMouseY >= pThis->nPosY - pThis->nHeight && (int)nMouseY <= pThis->nPosY) {
       return 1;
     }
 

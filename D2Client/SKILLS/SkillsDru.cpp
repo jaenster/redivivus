@@ -67,25 +67,25 @@ BOOL __fastcall Skills_CltStFunc_AddAuraToggleOverlay(D2UnitStrc * pUnit, eD2Ski
 }
 
 // Client-side helper for Druid shapeshifted melee skills: spawns nParam1 linear-path missiles of eMissileId at the owner's position toward cursor coordinates. If nParam4 is set, first spawns an extra lead missile and decrements the remaining count. Applies nParam3 animation speed override and optional flags0x40 clear (nParam5). Returns 1 on success, 0 if coords unavailable.
-BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t nParam1, eMissilesId eMissileId, eD2Skills eSkill, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5) {
+BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t nNumMissiles, eMissilesId eMissileId, eD2Skills eSkill, int32_t nSkillLevel, int32_t nAnimSpeed, int32_t bSpawnLeadMissile, int32_t bClearPathFlag0x40) {
     D2UnitStrc* pLeadMissile;
     D2SkillArgStrc sSkillArg;
     int nCoordY;
     int nCoordX;
-    int nCountdown = nParam1;
+    int nCountdown = nNumMissiles;
     BOOL bGotCoords = Skills::GetCooordinates(pUnit, &nCoordX, &nCoordY);
     if (!bGotCoords) {
       return 0;
     }
-    if (nParam4) {
+    if (bSpawnLeadMissile) {
       nCountdown--;
-      pLeadMissile = Skills::MakeMissileAtSkillTarget(pUnit, eMissileId, eSkill, nParam2);
+      pLeadMissile = Skills::MakeMissileAtSkillTarget(pUnit, eMissileId, eSkill, nSkillLevel);
       if (pLeadMissile) {
-        if (nParam5) {
+        if (bClearPathFlag0x40) {
           D2Common::PATH::DynamicPath::SetUnsetFlags0x40(pLeadMissile->pPath.pDynamicPath, 0);
         }
 
-        D2Common::Units::SetAnimationSpeed(pLeadMissile, nParam3);
+        D2Common::Units::SetAnimationSpeed(pLeadMissile, nAnimSpeed);
       }
     }
 
@@ -93,31 +93,35 @@ BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t
     eD2UnitType eUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
+    int nXValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sSkillArg.nX = pUnit->pPath.pStaticPath->nPosX;
+      nXValue = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      sSkillArg.nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      sSkillArg.nX = 0;
+      nXValue = 0;
     }
 
-    eD2UnitType eVar1 = pUnit->eUnitType;
-    if (eVar1 == UNIT_OBJECT || (int)eVar1 > 3 && (int)eVar1 <= 5) {
-      sSkillArg.nY = pUnit->pPath.pStaticPath->nPosY;
+    sSkillArg.nX = nXValue;
+    eD2UnitType eUnitTypeTmp = pUnit->eUnitType;
+    int nYValue;
+    if (eUnitTypeTmp == UNIT_OBJECT || (int)eUnitTypeTmp > 3 && (int)eUnitTypeTmp <= 5) {
+      nYValue = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      sSkillArg.nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
-      sSkillArg.nY = 0;
+      nYValue = 0;
     }
 
+    sSkillArg.nY = nYValue;
     int nMissileCount = nCountdown;
     sSkillArg.nUnitX = nCoordX;
     sSkillArg.nUnitY = nCoordY;
     sSkillArg.eSkillNo = eSkill;
-    sSkillArg.nSkillLevel = nParam2;
+    sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.nMissileTxtNo = eMissileId;
     sSkillArg.fpFunction = SkillsMon::SKILLSMON_SetMissilePathLinear;
-    if (nParam5) {
+    if (bClearPathFlag0x40) {
       sSkillArg.nFlags |= 0x2000;
     }
     if (nCountdown <= 0) {
@@ -129,11 +133,11 @@ BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t
       sSkillArg.nFunctionParam = nMissileIdx;
       pLeadMissile = UNIT::Missile::MakeMissile(&sSkillArg);
       if (pLeadMissile) {
-        if (nParam5) {
+        if (bClearPathFlag0x40) {
           D2Common::PATH::DynamicPath::SetUnsetFlags0x40(pLeadMissile->pPath.pDynamicPath, 0);
         }
 
-        D2Common::Units::SetAnimationSpeed(pLeadMissile, nParam3);
+        D2Common::Units::SetAnimationSpeed(pLeadMissile, nAnimSpeed);
       }
 
       nMissileIdx++;

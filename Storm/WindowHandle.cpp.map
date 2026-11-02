@@ -1,0 +1,691 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/WindowHandle.cpp",
+  "functions": [
+    {
+      "name": "SMsgDoMessageLoop",
+      "address": "004202a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004202a0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgDoMessageLoop"
+      ],
+      "usedTypes": [
+        "pfnStormMsgIdleCallback",
+        "tagMSG"
+      ]
+    },
+    {
+      "name": "WND_GetActiveWindow",
+      "address": "00420310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420310"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_GetActiveWindow"
+      ]
+    },
+    {
+      "name": "SMsgPopRegisterState",
+      "address": "00420320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420320"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgPopRegisterState",
+        "SEvtPopState"
+      ]
+    },
+    {
+      "name": "SMsgPushRegisterState",
+      "address": "00420360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420360"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgPushRegisterState",
+        "SEvtPushState"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_SetActiveWindow",
+      "address": "004203a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004203a0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_SetActiveWindow"
+      ]
+    },
+    {
+      "name": "WND_ResolveListOffset",
+      "address": "004203f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004203f0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_ResolveListOffset"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_GetNodeOrDefault",
+      "address": "00420520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420520"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_GetNodeOrDefault"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WND_InsertListNode",
+      "address": "00420540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420540"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_InsertListNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WND_GetNodeMaskedOffset",
+      "address": "004205f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004205f0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_GetNodeMaskedOffset"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_UnlinkListNode",
+      "address": "00420650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420650"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_UnlinkListNode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_GetNodeData",
+      "address": "004206e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004206e0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_GetNodeData"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WND_RemoveAllChildren",
+      "address": "00420750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420750"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_RemoveAllChildren"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_DetachAndClearChildren",
+      "address": "00420790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420790"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_DetachAndClearChildren",
+        "WND_RemoveAllChildren"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_AllocRecord",
+      "address": "00420820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420820"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_AllocRecord",
+        "SMemAlloc",
+        "WND_InsertListNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_UnlinkAndFreeRecord",
+      "address": "00420880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420880"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_UnlinkAndFreeRecord",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMSG_AddWindow",
+      "address": "004208e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004208e0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMSG_AddWindow",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormWndRecStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_RemoveAndFreeRecord",
+      "address": "00420970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420970"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_RemoveAndFreeRecord",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormWndRecStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMSG_FindWindow",
+      "address": "004209e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004209e0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMSG_FindWindow"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMSG_DeleteWindow",
+      "address": "00420a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420a10"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMSG_DeleteWindow",
+        "SMSG_FindWindow",
+        "SEvtUnregisterType",
+        "WND_RemoveAndFreeRecord"
+      ],
+      "usedTypes": [
+        "StormWndRecStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMSG_InternalRegister",
+      "address": "00420a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420a70"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMSG_InternalRegister",
+        "SErrSetLastError",
+        "SMSG_FindWindow",
+        "SMSG_AddWindow",
+        "SEvtRegisterHandler"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMSG_InternalUnregister",
+      "address": "00420ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420ab0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMSG_InternalUnregister",
+        "SMSG_FindWindow",
+        "SMSG_AddWindow",
+        "SEvtUnregisterHandler"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMsgDispatchMessage",
+      "address": "00420b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420b00"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgDispatchMessage",
+        "SEvtDispatch",
+        "SMSG_DeleteWindow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMsgRegisterCommand",
+      "address": "00420bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420bf0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgRegisterCommand",
+        "SMSG_InternalRegister"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMsgRegisterKeyDown",
+      "address": "00420c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420c10"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgRegisterKeyDown",
+        "SMSG_InternalRegister"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMsgRegisterKeyUp",
+      "address": "00420c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420c30"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgRegisterKeyUp",
+        "SMSG_InternalRegister"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMsgRegisterMessage",
+      "address": "00420c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420c50"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgRegisterMessage",
+        "SMSG_InternalRegister"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMsgUnregisterCommand",
+      "address": "00420c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420c70"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgUnregisterCommand",
+        "SMSG_InternalUnregister"
+      ]
+    },
+    {
+      "name": "SMsgUnregisterKeyDown",
+      "address": "00420c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420c90"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgUnregisterKeyDown",
+        "SMSG_InternalUnregister"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMsgUnregisterKeyUp",
+      "address": "00420cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420cb0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgUnregisterKeyUp",
+        "SMSG_InternalUnregister"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SMsgUnregisterMessage",
+      "address": "00420cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420cd0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "SMsgUnregisterMessage",
+        "SMSG_InternalUnregister"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GenericWndProc",
+      "address": "00420cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420cf0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "GenericWndProc",
+        "SMsgDispatchMessage"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_GetWndProc",
+      "address": "00420d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420d50"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_GetWndProc",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WND_ByteBuffer_HasRoom",
+      "address": "00420db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420db0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_ByteBuffer_HasRoom"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WND_EntryArray_AllocNext",
+      "address": "00420dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420dd0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_EntryArray_AllocNext"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WND_EntryArray_FreeEntries",
+      "address": "00420e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420e00"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_EntryArray_FreeEntries"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WND_EntryArray_AllocOrReuse",
+      "address": "00420e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420e10"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "WND_EntryArray_AllocOrReuse"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca8e0",
+      "address": "006ca8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca8e0"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "StaticInit_6ca8e0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_gWndTrackingList",
+      "address": "006cb310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb310"
+        }
+      ],
+      "namespace": "Storm::WindowHandle",
+      "calledFunctions": [
+        "StaticFini_gWndTrackingList",
+        "WND_RemoveAllChildren"
+      ]
+    }
+  ]
+}

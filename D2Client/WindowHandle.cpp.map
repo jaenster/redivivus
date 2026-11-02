@@ -1,0 +1,28 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/WindowHandle.cpp",
+  "functions": [
+    {
+      "name": "__GSHandlerCheck_EH_6c9f58",
+      "address": "006c9f58",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9f58"
+        }
+      ],
+      "namespace": "D2Client::WindowHandle",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9f58",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

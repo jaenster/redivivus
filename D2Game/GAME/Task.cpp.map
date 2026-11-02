@@ -1,0 +1,447 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/Task.cpp",
+  "functions": [
+    {
+      "name": "LINKLIST_InsertBefore",
+      "address": "00564210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564210"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "LINKLIST_InsertBefore",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LinkNodeStrc"
+      ]
+    },
+    {
+      "name": "TASK_LinkTaskToList",
+      "address": "00564250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564250"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "LINKLIST_InsertBefore",
+        "TASK_LinkTaskToList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LinkNodeStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKLIST_AppendToList",
+      "address": "00564290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564290"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "LINKLIST_AppendToList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LinkNodeStrc",
+        "D2LinkNodeStrc *"
+      ]
+    },
+    {
+      "name": "TASK_UnlinkTaskFromList",
+      "address": "005642e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005642e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_UnlinkTaskFromList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LinkNodeStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TASK_GetTimestamp",
+      "address": "00564340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564340"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_GetTimestamp",
+        "_allmul",
+        "_alldiv",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "LARGE_INTEGER",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_EnterQueueCriticalSection",
+      "address": "00564390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564390"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_EnterQueueCriticalSection"
+      ],
+      "usedTypes": [
+        "D2TaskQueueSlotStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_LeaveQueueCriticalSection",
+      "address": "005643c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005643c0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_EnterQueueCriticalSection",
+        "TASK_LeaveQueueCriticalSection",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TaskQueueSlotStrc"
+      ]
+    },
+    {
+      "name": "TASK_InsertTaskAtTimestamp",
+      "address": "00564400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564400"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_InsertTaskAtTimestamp",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LinkNodeStrc",
+        "D2TaskNodeStrc",
+        "D2TaskQueueSlotStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TASK_MoveTasksToSlotAndLinkSlot",
+      "address": "00564460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564460"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_AllocateTaskQueue",
+        "TASK_MoveTasksToSlotAndLinkSlot",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LinkNodeStrc",
+        "D2LinkNodeStrc *",
+        "D2TaskQueueSlotStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_GameTickCallback",
+      "address": "005645e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005645e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_GameTickCallback",
+        "QSERVER_FindAndLockGame",
+        "ServerGameLoop",
+        "FlushAllClientPackets",
+        "LOGMGR_GetHighResolutionTime",
+        "GetTickCount",
+        "Unlock",
+        "TASK_InsertTaskAtTimestamp",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated",
+        "SERVERCMD_SendSingleBytePacket",
+        "CleanUpClient",
+        "QSERVER_DestroyGameByToken",
+        "TASK_UnlinkTaskFromList",
+        "TASK_LinkTaskToList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2TaskNodeStrc",
+        "D2TaskQueueSlotStrc",
+        "PD2TaskNodeLink",
+        "PD2TaskQueueSlotLink",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_FreeAllSlots",
+      "address": "00564890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564890"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_FreeAllSlots",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2LinkNodeStrc",
+        "D2TaskQueueSlotStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_AllocateTaskQueue",
+      "address": "00564960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564960"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_AllocateTaskQueue",
+        "AllocServerMemory",
+        "TASK_MoveTasksToSlotAndLinkSlot"
+      ],
+      "usedTypes": [
+        "D2TaskQueueSlotStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_EnqueueGameTask",
+      "address": "00564a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564a00"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_GetTimestamp",
+        "TASK_EnqueueGameTask",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LinkNodeStrc",
+        "D2TaskNodeStrc",
+        "D2TaskQueueSlotStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_DequeueReadyTask",
+      "address": "00564b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564b20"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_DequeueReadyTask",
+        "TASK_GetTimestamp",
+        "TASK_UnlinkTaskFromList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TaskNodeStrc *",
+        "D2TaskQueueSlotStrc",
+        "PD2TaskNodeLink",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_Dispatch",
+      "address": "00564c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564c70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_Dispatch",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TASK_GameTickCallback"
+      ],
+      "usedTypes": [
+        "D2TaskNodeStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TASK_ReturnTrue",
+      "address": "00564ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564ca0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_ReturnTrue"
+      ]
+    },
+    {
+      "name": "TASK_Nop",
+      "address": "00564cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564cb0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "TASK_Nop"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "StaticInit_6caf70",
+      "address": "006caf70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006caf70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "StaticInit_6caf70",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6caf90",
+      "address": "006caf90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006caf90"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "StaticInit_6caf90",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_0088caa8",
+      "address": "006cb490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb490"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_0088caa8"
+      ]
+    },
+    {
+      "name": "StaticFini_aTaskQueueCriticalSections",
+      "address": "006cb4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb4a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Task",
+      "calledFunctions": [
+        "StaticFini_aTaskQueueCriticalSections"
+      ]
+    }
+  ]
+}

@@ -68,13 +68,13 @@ namespace D2Client::UNIT::UnitMode {
 // @sourcefile .\UNIT\UnitMode.cpp
 void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
     int32_t nPosY;
-    uint32_t uVar1;
+    uint32_t dwItemCode;
     D2SkillStrc* pSkill;
     DWORD dwTick;
     uint32_t bInventoryOpen;
-    char* pcVar2;
     int aSkillCastMsg[7];
     eD2UnitType eUnitTypeMasked;
+    char* szSrcFile;
     D2UnitStrc* pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
     eD2UnitType eUnitType_00 = (eD2UnitType)eUnitType;
     D2UnitStrc* pTargetUnit = Player::UNITS_FindClientSideUnit(nUnitGUID, eUnitType_00);
@@ -90,21 +90,21 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
             nPosY = Units::GetYPosFromDynamicPathUnit(pTargetUnit);
             D2Common::Units::UpdateDirectionAndSpeed(pPlayerUnit_lcl, Units::GetXPosFromDynamicPathUnit(pTargetUnit), nPosY);
             nPosY = 0x20d;
-            pcVar2 = ".\\UNIT\\UnitMode.cpp";
+            szSrcFile = ".\\UNIT\\UnitMode.cpp";
             memset(aSkillCastMsg, 0, 7 * sizeof(aSkillCastMsg[0]));
-            aSkillCastMsg[0] = D2Common::Skills::GetSkillId(D2Common::Skills::SKILLS_GetSkillByEnum(pPlayerUnit_lcl, SKILL_Kick), pcVar2, nPosY);
+            aSkillCastMsg[0] = D2Common::Skills::GetSkillId(D2Common::Skills::SKILLS_GetSkillByEnum(pPlayerUnit_lcl, SKILL_Kick), szSrcFile, nPosY);
             if (pTargetUnit->nClassId == 0x194) {
               if (pTargetUnit->eAnimMode.ePlayerMode == Death) {
                 pTargetUnit = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pPlayerUnit_lcl->pInventory);
-                if (!pTargetUnit || (uVar1 = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pTargetUnit) , uVar1 != 0x20326671)) {
+                if (!pTargetUnit || (dwItemCode = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pTargetUnit) , dwItemCode != 0x20326671)) {
                   UnitSnd::UNITSND_PlayPlayerSound(pPlayerUnit_lcl, 0x13);
                   return;
                 }
 
                 nPosY = 0x218;
-                pcVar2 = ".\\UNIT\\UnitMode.cpp";
+                szSrcFile = ".\\UNIT\\UnitMode.cpp";
                 pSkill = D2Common::Skills::GetSkillByIdAndOwner(pPlayerUnit_lcl, SKILL_Attack, -1);
-                aSkillCastMsg[0] = D2Common::Skills::GetSkillId(pSkill, pcVar2, nPosY);
+                aSkillCastMsg[0] = D2Common::Skills::GetSkillId(pSkill, szSrcFile, nPosY);
               }
             } else if (pTargetUnit->nClassId == 0x178) {
               if (pTargetUnit->eAnimMode.ePlayerMode == Death) {
@@ -113,15 +113,15 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
               }
               if (pTargetUnit->eAnimMode.ePlayerMode == Walk) {
                 pTargetUnit = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pPlayerUnit_lcl->pInventory);
-                if (!pTargetUnit || (uVar1 = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pTargetUnit) , uVar1 != 0x20686668)) {
+                if (!pTargetUnit || (dwItemCode = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pTargetUnit) , dwItemCode != 0x20686668)) {
                   UnitSnd::UNITSND_PlayPlayerSound(pPlayerUnit_lcl, 0x13);
                   return;
                 }
 
                 nPosY = 0x22e;
-                pcVar2 = ".\\UNIT\\UnitMode.cpp";
+                szSrcFile = ".\\UNIT\\UnitMode.cpp";
                 pSkill = D2Common::Skills::GetSkillByIdAndOwner(pPlayerUnit_lcl, SKILL_Attack, -1);
-                aSkillCastMsg[0] = D2Common::Skills::GetSkillId(pSkill, pcVar2, nPosY);
+                aSkillCastMsg[0] = D2Common::Skills::GetSkillId(pSkill, szSrcFile, nPosY);
               }
             }
 
@@ -207,11 +207,11 @@ uint32_t UNITMODE_CanInterruptSkill(D2UnitStrc * pUnit) {
     return 1;
 }
 
-BOOL __fastcall HandleMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage, int32_t nParam) {
+BOOL __fastcall HandleMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode) {
     BOOL nResult;
     switch (pUnit->eUnitType) {
       case UNIT_PLAYER:
-        nResult = Player::PlayerMessage(nMessageType, pUnit, pMessage, nParam);
+        nResult = Player::PlayerMessage(nMessageType, pUnit, pMessage, eNeutralMode);
       return nResult;
       case UNIT_MONSTER:
         Monster::MonsterMessage(nMessageType, pUnit, pMessage);
@@ -388,8 +388,8 @@ void __fastcall UNITMODE_SendWalkToPosition(D2UnitStrc * pUnit, int32_t nTargetX
     eUnitType = pUnit->eUnitType;
     int bMoved;
     bMoved = 0;
-    int32_t local_c;
-    local_c = nTargetX;
+    int32_t nPosX;
+    nPosX = nTargetX;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nPosDelta = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
@@ -433,7 +433,7 @@ void __fastcall UNITMODE_SendWalkToPosition(D2UnitStrc * pUnit, int32_t nTargetX
     }
     if (bMoved) {
       msg.nItemId = nTargetY;
-      msg.nSkillId = local_c;
+      msg.nSkillId = nPosX;
       nWalkMsgId = 1;
       if (eUnitType != UNIT_PLAYER) {
         if (eUnitType == UNIT_MONSTER) {
@@ -443,7 +443,7 @@ void __fastcall UNITMODE_SendWalkToPosition(D2UnitStrc * pUnit, int32_t nTargetX
         pPlayerUnit_lcl = Player::GetPlayerUnit_Net();
         if (pUnit != pPlayerUnit_lcl) {
           if (bUsePathMove) {
-            Path::PATH_MoveUnitToPoint(pUnit, (uint16_t)local_c, nTargetY, 2, 0, 0);
+            Path::PATH_MoveUnitToPoint(pUnit, (uint16_t)nPosX, nTargetY, 2, 0, 0);
             return;
           }
 

@@ -1,0 +1,92 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Item.cpp",
+  "functions": [
+    {
+      "name": "ITEM_UpdateSetItemStates",
+      "address": "00663a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663a20"
+        }
+      ],
+      "namespace": "D2Common::Item",
+      "calledFunctions": [
+        "ITEM_UpdateSetItemStates",
+        "GetItemQuality",
+        "GetSetItemsLine",
+        "ITEM_GetTxtSetItems_setIndex",
+        "STATLIST_ToggleStateDisabled"
+      ],
+      "usedTypes": [
+        "D2SetItemsTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "int16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEM_ManageSetBonusStatList",
+      "address": "00663b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663b40"
+        }
+      ],
+      "namespace": "D2Common::Item",
+      "calledFunctions": [
+        "ITEM_ManageSetBonusStatList",
+        "GetItemQuality",
+        "ITEM_CheckItemData_ItemQualityIsMagicOrBetter",
+        "ITEM_GetItemData_nFileIndex",
+        "GetSetItemsLine",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_FreeChildStatLists",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "SetState",
+        "STATLIST_AddStatValue",
+        "ITEMMOD_ApplySetBonuses",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ],
+      "usedTypes": [
+        "D2SetItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_ProcessSetItemEquip",
+      "address": "00663cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663cc0"
+        }
+      ],
+      "namespace": "D2Common::Item",
+      "calledFunctions": [
+        "ITEM_ProcessSetItemEquip",
+        "INVENTORY_IsItemOwnedBy",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "ITEMS_GetEquippedSetItemsMask",
+        "ITEM_UpdateSetItemStates",
+        "ITEM_ManageSetBonusStatList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

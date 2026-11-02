@@ -790,9 +790,9 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
       return;
     }
 
-    size_t sVar2 = Fog::Src::AsyncData::ASYNCDATA_GetReadSize(pAsyncData);
-    gnSoundBufferBytesLoaded += sVar2;
-    pSound->nSoundDataBytes = sVar2;
+    size_t nReadSize = Fog::Src::AsyncData::ASYNCDATA_GetReadSize(pAsyncData);
+    gnSoundBufferBytesLoaded += nReadSize;
+    pSound->nSoundDataBytes = nReadSize;
     SOUNDHDR_UpdateLRUTimestamp(nSoundId);
     gnSoundAsyncLoadCount++;
     pSound->nLoadState = 1;
@@ -809,7 +809,7 @@ void __fastcall SOUNDHDR_ProcessAsyncLoads(int32_t dwTick) {
       nRowOffset = 0x8e;
       do {
         pSoundRow = (D2SoundsTxt*)(pTxtSounds->Filename + nRowOffset);
-        if (!*(int*)((int)pTxtSounds->field_0x74 + nRowOffset + 0x12) && (pSoundRow->nRefCount || pSoundRow->Cache)) {
+        if (!*(int*)((int)pTxtSounds->aWavDataPtrAndSize + nRowOffset + 0x12) && (pSoundRow->nRefCount || pSoundRow->Cache)) {
           if (!dwTick || gnSoundAsyncLoadCount < 0xf && (uint32_t)(dwTick - gnSoundEvictedAudioVolume) >= 0xfa) {
             SOUNDHDR_LoadSoundFile(nRowIndex, (uint32_t)!dwTick, 1);
             if (pSoundRow->nLoadState == 1) {

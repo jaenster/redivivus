@@ -62,7 +62,6 @@ D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(D2PoolManagerStrc *
     D2DrlgVertexStrc* pEdgeVertex;
     int nAnchorPos;
     int nEdgeVtxPos;
-    int32_t nErrorCode;
     bool bHasGap;
     D2DrlgVertexStrc* pVertex1;
     pVertex1 = pFirstVertex->pNext;
@@ -118,8 +117,7 @@ D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(D2PoolManagerStrc *
         pEdgeVertex = pThirdVertex;
         break;
         default:
-          nErrorCode = 0x6d;
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorCode);
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6d);
         exit(-1);
       }
 

@@ -18,7 +18,7 @@ namespace D2Client::SKILLS::SkillsDru {
 // Function declarations
 BOOL __fastcall Skills_CltStFunc_AddAuraToggleOverlay(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side helper for Druid shapeshifted melee skills: spawns nParam1 linear-path missiles of eMissileId at the owner's position toward cursor coordinates. If nParam4 is set, first spawns an extra lead missile and decrements the remaining count. Applies nParam3 animation speed override and optional flags0x40 clear (nParam5). Returns 1 on success, 0 if coords unavailable.
-BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(struct D2UnitStrc * pUnit, int32_t nParam1, eMissilesId eMissileId, eD2Skills eSkill, int32_t nParam2, int32_t nParam3, int32_t nParam4, int32_t nParam5);
+BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(struct D2UnitStrc * pUnit, int32_t nNumMissiles, eMissilesId eMissileId, eD2Skills eSkill, int32_t nSkillLevel, int32_t nAnimSpeed, int32_t bSpawnLeadMissile, int32_t bClearPathFlag0x40);
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_FwdArc(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_SideArc(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_BackArc(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

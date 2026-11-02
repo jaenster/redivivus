@@ -18,7 +18,7 @@ namespace Fog::Src::QServer::QServer98 {
 void __fastcall QSERVER_CloseAllConnections(struct D2QServerStrc * pQServer);
 BOOL __fastcall SendToClientOnline(struct D2QServerStrc * pQServer, struct D2QServerClientConnectionStrc * pQServerClient, char * pBytes, int nSize);
 // NOTE: Callee-saved register params inferred (medium confidence): pQServerStrc (ESI): D2QServerStrc*
-void * __fastcall QSERVER_AllocateConnectionStruct(int nSocket, uint32_t nParam, struct D2QServerStrc * pQServerStrc);
+void * __fastcall QSERVER_AllocateConnectionStruct(int nSocket, uint32_t nIpAddress, struct D2QServerStrc * pQServerStrc);
 DWORD __stdcall SocketThreadMain(void * lpThreadParam);
 BOOL __fastcall CreateSocketOnline(struct D2QServerStrc * pQServer, u_short nPort);
 

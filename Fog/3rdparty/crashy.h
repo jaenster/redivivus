@@ -36,7 +36,7 @@ struct THREADNAME_INFO {
 namespace Fog::_3rdparty::crashy {
 
 // Function declarations
-void __fastcall CRT_LocalTime_Thunk(uint8_t * bParam, uint32_t * pnParam);
+void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime);
 bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc);
 uint32_t __stdcall isDebuggerPresent();
 // @wasnamed TerminateProcess - named after the Win32 API it calls; the body read as infinite recursion.

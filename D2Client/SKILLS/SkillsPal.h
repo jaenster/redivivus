@@ -15,7 +15,7 @@ typedef uint32_t eD2Skills;
 namespace D2Client::SKILLS::SkillsPal {
 
 // Function declarations
-int32_t __fastcall SKILLS_GetManaCostMultiplier(int32_t nParam);
+int32_t __fastcall SKILLS_GetManaCostMultiplier(int32_t nSkillId);
 // Client DoFunc for Paladin Zeal directional offset missile. Determines the firing direction quadrant from the unit's movement direction (or a random quadrant if stationary), applies a random ±1 offset from gnPaladinSkillIndexTable/gnPaladinSkillOffsetTable, then spawns a missile of the skill's cltmissilea type (offset by a calc-driven random variant) at the computed position. Returns 1 on success, 0 if skill/missile data is invalid or no confirmed target.
 BOOL __fastcall Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client DoFunc for Paladin Charge skill. Sets UNITFLAG_SKSRVDOFUNC on the caster, resolves target coordinates, spawns a missile, then sets the missile path type to 0xE (charge path) and recalculates its path. Returns TRUE if the missile was created and has a valid dynamic path.
@@ -33,8 +33,8 @@ BOOL __fastcall Skills_CltDoFunc_Pal_HolyBolt_Melee(struct D2UnitStrc * pUnit, e
 void __fastcall SKILL_StopAndClearUninterruptable(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Executes a skill cast triggered by an item (e.g. charged item, wand). Saves and restores the unit's current target/SP1 and SKSRVDOFUNC flag around the cast. Handles corpse-state suppression for corpse-targeting skills, plays the item cast sound and overlay, then calls SKILL_ExecuteClientDoFunc. Returns the client do-func result.
-void __fastcall SKILL_ExecuteItemCast(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * pDoFuncData, struct D2UnitStrc * pTargetUnit, int16_t nParam1, int16_t nParam2, uint16_t nParam);
-void __fastcall SKILL_ExecuteItemCastOnUnit(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, struct D2UnitStrc * pTargetUnit, uint16_t nParam);
+void __fastcall SKILL_ExecuteItemCast(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * pDoFuncData, struct D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget);
+void __fastcall SKILL_ExecuteItemCastOnUnit(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, struct D2UnitStrc * pTargetUnit, uint16_t bHasTarget);
 void __fastcall SKILL_ExecuteItemCastAtCoords(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam);
 // 1 internal function (defined in .cpp)
 

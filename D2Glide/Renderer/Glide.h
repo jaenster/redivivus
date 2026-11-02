@@ -71,14 +71,14 @@ BOOL EndScene2();
 BOOL __fastcall GetBackBuffer(BYTE * pBuffer);
 int32_t __fastcall GetScreenSize(int * pWidth, int * pHeight);
 void __fastcall SetPalette(LPPALETTEENTRY pPalette);
-int32_t __fastcall RENDERER_GLIDE_ScalePaletteValue(int32_t nParam);
+int32_t __fastcall RENDERER_GLIDE_ScalePaletteValue(int32_t nPaletteIndex);
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable);
 BOOL ActivateWindow();
 BOOL __fastcall SetOption(int32_t nOption, int32_t nValue);
-void __fastcall RENDERER_GLIDE_SetTextureMode(int32_t nParam);
-void __fastcall RENDERER_GLIDE_SetColorCombine(int32_t nParam);
-void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nParam);
-void __fastcall RENDERER_GLIDE_SetTextureFiltering(int32_t nParam);
+void __fastcall RENDERER_GLIDE_SetTextureMode(int32_t nTextureMode);
+void __fastcall RENDERER_GLIDE_SetColorCombine(int32_t nCombineMode);
+void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode);
+void __fastcall RENDERER_GLIDE_SetTextureFiltering(int32_t nFilteringMode);
 int * GetRenderStatistics();
 BOOL __stdcall RENDERER_GLIDE_IsPerspectiveMode();
 BOOL __stdcall RENDERER_GLIDE_InitTextureMemory();
@@ -105,7 +105,7 @@ void __fastcall DrawImageFast(struct D2GfxDataStrc * pData, int32_t nPosX, int32
 void __fastcall DebugFillBackBuffer(int32_t nPosX, int32_t nPosY);
 // @sourcefile .\Src\glSprite.cpp
 void __stdcall RENDERER_GLIDE_InitSpriteCache();
-int32_t __fastcall RENDERER_GLIDE_InitDebugFont(FxU32 nParam2, int32_t nParam);
+int32_t __fastcall RENDERER_GLIDE_InitDebugFont(FxU32 dwTexMemStart, int32_t nTexMemAlignment);
 void __stdcall RENDERER_GLIDE_GenerateDebugFont();
 void __stdcall RENDERER_GLIDE_FreeDebugFont();
 void __fastcall DrawString(int32_t nPosX, int32_t nPosY, char * szFormat, va_list va);

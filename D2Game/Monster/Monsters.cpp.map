@@ -1,0 +1,1918 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monster/Monsters.cpp",
+  "functions": [
+    {
+      "name": "GetMonLvlTxt",
+      "address": "005a0000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0000"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "GetMonLvlTxt"
+      ],
+      "usedTypes": [
+        "D2MonLvlTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_CheckMonTypeHasFlag",
+      "address": "005a0070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0070"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_CheckMonTypeHasFlag"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetUmodConstant",
+      "address": "005a00f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a00f0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "GetUmodConstant"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetMonUModList",
+      "address": "005a0120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0120"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "GetMonUModList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetNameSeed",
+      "address": "005a0140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0140"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "GetNameSeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CheckMonsterType",
+      "address": "005a0180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0180"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "CheckMonsterType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SetMonsterDataFlags",
+      "address": "005a01b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a01b0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_SetMonsterDataFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetBossNo",
+      "address": "005a01e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a01e0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "GetBossNo"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SetMonsterDataField0x26",
+      "address": "005a0200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0200"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_SetMonsterDataField0x26"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "CountActiveUMods",
+      "address": "005a0260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0260"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "CountActiveUMods"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_AddEnchantmentToList",
+      "address": "005a02e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a02e0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_AddEnchantmentToList"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetUniqueMonsterType",
+      "address": "005a0320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0320"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "SetUniqueMonsterType",
+        "GetMonsterArea",
+        "ReturnMonsterRegionEntryForLevel"
+      ],
+      "usedTypes": [
+        "D2MonsterRegionStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CheckMonUModList",
+      "address": "005a0380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0380"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "CheckMonUModList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_GetBossNo",
+      "address": "005a03a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a03a0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_GetBossNo"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_CanApplyUniqueModifier",
+      "address": "005a03e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a03e0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_CanApplyUniqueModifier",
+        "MONSTER_CheckMonTypeHasFlag",
+        "GetSomeMonsterStatFlag"
+      ],
+      "usedTypes": [
+        "D2MonUModTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SelectChampionMod",
+      "address": "005a0500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0500"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_SelectChampionMod",
+        "MONSTER_CanApplyUniqueModifier",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2MonUModTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_RollRandomModifier",
+      "address": "005a0600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0600"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONUMOD_RollRandomModifier",
+        "MONSTER_CanApplyUniqueModifier"
+      ],
+      "usedTypes": [
+        "D2MonUModTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_RollAndAssignUMods",
+      "address": "005a0760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0760"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_RollAndAssignUMods",
+        "CountActiveUMods",
+        "UNIT_GetModuloFromSeed",
+        "MONSTER_SelectChampionMod",
+        "MONSTER_AddEnchantmentToList",
+        "__security_check_cookie",
+        "memset",
+        "MONUMOD_RollRandomModifier"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_TransferEnchantments",
+      "address": "005a0930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0930"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_TransferEnchantments"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2UnitStrc",
+        "D2WaypointStrc *",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVER_SpawnMonsterInternal",
+      "address": "005a09e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a09e0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "SERVER_SpawnMonsterInternal",
+        "SPAWN_FindRandomPositionForMonster",
+        "SpawnMonsterAtRoomPos",
+        "SpawnMonsterAtRoomPosGuid",
+        "COLLISION_FindFreeCoordSpiral",
+        "SpawnMonsterInRoomCoordList",
+        "SetUniqueMonsterType",
+        "QUEST_CheckGoldenBirdDrop",
+        "AssignMinionOwner"
+      ],
+      "usedTypes": [
+        "D2RoomCoordListStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MONSTER_GetMinion1MonstatId",
+      "address": "005a0bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0bb0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_GetMinion1MonstatId"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SpawnMinionsForBoss",
+      "address": "005a0c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0c00"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "SpawnMonster",
+        "MONSTER_SpawnMinionsForBoss",
+        "MONSTER_GetMinion1MonstatId",
+        "RANDOM_RandomNumberSelector",
+        "SpawnMonsterAtUnit",
+        "SpawnMonsterAtCoordList",
+        "MONSTER_TransferEnchantments",
+        "GetGUID",
+        "AssignMinionOwner",
+        "AddMinionToList",
+        "MONSTERAI_SetTargetUnit"
+      ],
+      "usedTypes": [
+        "D2RoomCoordListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UMOD_DispatchInitFunction",
+      "address": "005a2100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2100"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "UMOD_DispatchInitFunction"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UMOD_ApplyEnchantmentsToMonster",
+      "address": "005a2120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2120"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "UMOD_ApplyEnchantmentsToMonster",
+        "MONSTER_SpawnMinionsForBoss",
+        "CallForEachMinion"
+      ],
+      "usedTypes": [
+        "D2RoomCoordListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SetElementalDamageFromLevel",
+      "address": "005a21d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a21d0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "D2AddStatToStatsListEx",
+        "MONSTER_SetElementalDamageFromLevel",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "GetStatsByFlags"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitStat",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ApplyAmplifyDamageCurse",
+      "address": "005a23d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a23d0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_ApplyAmplifyDamageCurse",
+        "UNITS_CheckIfCanAttackTarget",
+        "D2GetSkillCalc",
+        "SetStateWithExpiryTime",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_OnDeathAmplifyDamageAura",
+      "address": "005a2530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2530"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_OnDeathAmplifyDamageAura",
+        "STATSEX_GetCurrentStat",
+        "D2GetSkillCalc",
+        "SKILLS_ForEachUnitInRangeCallback"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_OnDeathScheduleDelayed",
+      "address": "005a25f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a25f0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_OnDeathScheduleDelayed",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_CorpseExplode",
+      "address": "005a2620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2620"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_CorpseExplode",
+        "GetXPos",
+        "GetYPos",
+        "CreatingAMissile",
+        "memset",
+        "STATSEX_GetCurrentStat",
+        "MONSTER_CalculateLevelScaledStats",
+        "GetDifficultyLevels",
+        "D2ApplyPercent",
+        "_allmul",
+        "_alldiv",
+        "RANDOM_RandomNumberSelector",
+        "DAMAGE_ApplyAreaOfEffectDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2DifficultyLevelsTxt",
+        "D2MonStatsInitStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Difficulty",
+        "eD2UnitType",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_CorpseExplodeFixed",
+      "address": "005a2840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2840"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_CorpseExplodeFixed",
+        "GetXPos",
+        "GetYPos",
+        "CreatingAMissile",
+        "memset",
+        "DAMAGE_ApplyAreaOfEffectDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "MONSTER_ShadowDeathNova",
+      "address": "005a2910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2910"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_ShadowDeathNova",
+        "GetOwnerUnit",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "GetCurrentLifePercentage",
+        "MISSILETBLS_CalculateVelocity",
+        "SKILLS_CreateMissileRing"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_LightningUniqueDeathBolts",
+      "address": "005a29a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a29a0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_LightningUniqueDeathBolts",
+        "STATSEX_GetCurrentStat",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MONSTER_LightningDeathIfNotRunning",
+      "address": "005a2ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2ba0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_LightningDeathIfNotRunning",
+        "MONSTER_LightningUniqueDeathBolts"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_DeathMissileRing",
+      "address": "005a2bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2bd0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DeathMissileRing",
+        "STATSEX_GetCurrentStat",
+        "MISSILETBLS_CalculateVelocity",
+        "SKILLS_CreateMissileRing"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_DeathPoisonCloud",
+      "address": "005a2c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2c20"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DeathPoisonCloud",
+        "STATSEX_GetCurrentStat",
+        "GetYPos",
+        "GetXPos",
+        "CreatingAMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_KillWithMinions",
+      "address": "005a2cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2cc0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_KillWithMinions",
+        "FreeAiOfMinions",
+        "AssignMinionOwner",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_OnDeathKillOwnerAndMinions",
+      "address": "005a2d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2d10"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_OnDeathKillOwnerAndMinions",
+        "GetOwnerUnit",
+        "CallForEachMinion",
+        "AssignMinionOwner",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "UMOD_AddBaseDamageBonus",
+      "address": "005a2d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2d80"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "UMOD_AddBaseDamageBonus",
+        "STATSEX_GetCurrentStat",
+        "GetStatsByFlags",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MONSTER_ScaleMissileDamageByOwner",
+      "address": "005a2e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2e00"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_ScaleMissileDamageByOwner",
+        "STATSEX_GetCurrentStat",
+        "GetOwnerUnit",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_BugLightningDeathBolts",
+      "address": "005a2ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2ee0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_BugLightningDeathBolts",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "STATSEX_GetCurrentStat",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "UMOD_SetRandomElementalDamage",
+      "address": "005a3040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3040"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "UMOD_SetRandomElementalDamage",
+        "MONSTER_SetElementalDamageFromLevel"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UMOD_SetRandomElementalForMissile",
+      "address": "005a30b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a30b0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "UMOD_SetRandomElementalForMissile",
+        "UMOD_SetRandomElementalDamage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_StealPotionFromBelt",
+      "address": "005a30e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a30e0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_StealPotionFromBelt",
+        "GetTargetEx",
+        "INVENTORY_GetItemInBeltSlot",
+        "INVENTORY_GetHandItem",
+        "ITEM_CloneFromSerializedData",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_EditItemData_eItemFlag",
+        "DropItem",
+        "GetXPosFromDynamicPathUnit",
+        "ITEMMODE_ConsumeItemAndRemove",
+        "ITEMMODE_SortBeltColumn"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_DispatchSpecialDeath",
+      "address": "005a3250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3250"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DispatchSpecialDeath",
+        "MONSTERAI_ThinkRangedSpecial",
+        "AI_Diablo_SpawnRingAttack",
+        "AI_Mephisto_SpawnDeathMissile",
+        "MONSTERAI_ThinkMeleeSkill",
+        "MONSTERAI_ThinkRangedNormal",
+        "MONSTERAI_Noop",
+        "AI_UberTristram_CheckDeathAndDropLoot",
+        "MONSTERAI_ThinkRangedShort"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterClassId"
+      ]
+    },
+    {
+      "name": "MONSTER_QueenPoisonCloudDeath",
+      "address": "005a3490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3490"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_QueenPoisonCloudDeath",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "STATSEX_GetCurrentStat",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "MONSTER_MissileSplitOnHit",
+      "address": "005a3610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3610"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_MissileSplitOnHit",
+        "GetOwnerUnit",
+        "CheckMonsterType",
+        "GetTargetEx",
+        "GetXSP1",
+        "GetYSP1",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "GetLevel",
+        "GetSkillId",
+        "CreatingAMissile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ScheduleEventIfRunning",
+      "address": "005a37d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a37d0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_ScheduleEventIfRunning",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ScheduleDeathEvent",
+      "address": "005a3800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3800"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_ScheduleDeathEvent",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_OnDeathTryScheduleRevive",
+      "address": "005a3840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3840"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_OnDeathTryScheduleRevive",
+        "STATSEX_GetAlignment",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SelfResurrect",
+      "address": "005a3910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3910"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_SelfResurrect",
+        "EVENT_RemoveUnitTimersByType",
+        "CheckForModeZeroDeath",
+        "STATES_HasPassiveState",
+        "STATSEX_GetAlignment",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "CheckCollision_BlockAll_Type",
+        "SetEvent",
+        "GetAiArgument",
+        "D2CheckIfCorpseIsConsumable",
+        "SERVER_UNIT_CastSkill",
+        "SetAiArgument"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ShatterOnDeath",
+      "address": "005a3a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3a80"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_ShatterOnDeath",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_HandleMinionDeath",
+      "address": "005a3aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3aa0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_HandleMinionDeath",
+        "CheckForModeZeroDeath",
+        "UNIT_GetUnitState",
+        "SetEvent",
+        "GetOwnerUnit",
+        "RemovePetByGuidAndNotify",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "UMOD_SetLevelAndAttackRating",
+      "address": "005a3b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3b50"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "UMOD_SetLevelAndAttackRating",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetMonLvlForDifficulty",
+        "STATLIST_SetUnitStat",
+        "GetStatsByFlags",
+        "D2AddStatToStatsListEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_AoEPhysicalDamage",
+      "address": "005a3d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3d20"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_AoEPhysicalDamage",
+        "STATSEX_GetCurrentStat",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "DAMAGE_ApplyAreaOfEffectDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStatsTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_HandleModeTransition",
+      "address": "005a3e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3e70"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_HandleModeTransition",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode"
+      ]
+    },
+    {
+      "name": "MONSTER_SuicideExplosion",
+      "address": "005a3ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a3ef0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_SuicideExplosion",
+        "memset",
+        "STATSEX_GetCurrentStat",
+        "MONSTER_CalculateLevelScaledStats",
+        "GetYPos",
+        "GetXPos",
+        "CreatingAMissile",
+        "DAMAGE_ApplyAreaOfEffectDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStatsInitStrc",
+        "D2MonStatsTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SpawnWormOnDeath",
+      "address": "005a4200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4200"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_SpawnWormOnDeath",
+        "SpawnMonsterBase",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_PeriodicMageThink",
+      "address": "005a4230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4230"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_PeriodicMageThink",
+        "CheckForModeZeroDeath",
+        "MONSTERAI_TriggerMageThink",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_DispatchUniqueModifiers",
+      "address": "005a4270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4270"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DispatchUniqueModifiers"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_DispatchUModOnSpawn",
+      "address": "005a4350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4350"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DispatchUModOnSpawn",
+        "MONSTER_DispatchUniqueModifiers"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_DispatchUModOnDeath",
+      "address": "005a4360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4360"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DispatchUModOnDeath",
+        "MONSTER_DispatchUniqueModifiers"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_DispatchUModOnHit",
+      "address": "005a4370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4370"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DispatchUModOnHit",
+        "MONSTER_DispatchUniqueModifiers"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_DispatchUModOnAttack",
+      "address": "005a4390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4390"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DispatchUModOnAttack",
+        "MONSTER_DispatchUniqueModifiers"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_DispatchUModOnSpecial",
+      "address": "005a43a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a43a0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DispatchUModOnSpecial",
+        "MONSTER_DispatchUniqueModifiers"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_DispatchUModOnSkill",
+      "address": "005a43b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a43b0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_DispatchUModOnSkill",
+        "MONSTER_DispatchUniqueModifiers"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SpawnUniquePack",
+      "address": "005a43e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a43e0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "SpawnUniquePack",
+        "SERVER_SpawnMonsterInternal",
+        "MONSTER_RollAndAssignUMods",
+        "UMOD_ApplyEnchantmentsToMonster"
+      ],
+      "usedTypes": [
+        "D2RoomCoordListStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_SpawnMonster",
+      "address": "005a4440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4440"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "SERVER_SpawnMonster",
+        "SERVER_SpawnMonsterInternal",
+        "UMOD_ApplyEnchantmentsToMonster",
+        "AuraEnchanted",
+        "SetState",
+        "QUEST_AttachToUnitByQuestId"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2SuperUniqueId",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SpawnWithUniqueModifiers",
+      "address": "005a46e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a46e0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_SpawnWithUniqueModifiers",
+        "SpawnMonsterAtRoomPosGuid",
+        "SPAWN_FindRandomPositionForMonster"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "InitUmods",
+      "address": "005a4850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4850"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "InitUmods",
+        "SetUniqueMonsterType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_AddUniqueModifier",
+      "address": "005a48c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a48c0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_AddUniqueModifier",
+        "SetUniqueMonsterType",
+        "CountActiveUMods",
+        "UNITS_GetRoom",
+        "UMOD_ApplyEnchantmentsToMonster"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MONSTER_PromoteToUnique",
+      "address": "005a4940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4940"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_PromoteToUnique",
+        "SetUniqueMonsterType",
+        "MONSTER_RollAndAssignUMods",
+        "UNITS_GetRoom",
+        "UMOD_ApplyEnchantmentsToMonster",
+        "SetUnsetSummonerFlags"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SPAWN_UniqueMonster",
+      "address": "005a49b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a49b0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "SPAWN_UniqueMonster",
+        "__security_check_cookie",
+        "TXT_SuperUniques_GetLine",
+        "SERVER_SpawnMonsterInternal",
+        "GetMonUModList",
+        "MONSTER_SetMonsterDataField0x26",
+        "memset",
+        "CountActiveUMods",
+        "MONUMOD_RollRandomModifier",
+        "UMOD_ApplyEnchantmentsToMonster",
+        "AuraEnchanted",
+        "SetState",
+        "QUEST_AttachToUnitByQuestId",
+        "AttachCorrectAiFunctionToMonster",
+        "InitUmods",
+        "UNIT_GetModuloFromSeed",
+        "SpawnMonsterAtUnit",
+        "SpawnMinions_BySlot",
+        "QUEST_OnUniqueMonsterSpawned",
+        "AssignMinionOwner",
+        "UNITS_GetRoom",
+        "GetMonsterBaseId"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2RoomStrc",
+        "D2SuperUniquesTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2QuestsInternal",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_IsMonsterUnit",
+      "address": "005a4ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4ee0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_IsMonsterUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_AwardKillExperience",
+      "address": "005a4ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4ef0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "SERVER_AwardKillExperience",
+        "SERVER_KillExperience"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_CalculateCorpseBombDamage",
+      "address": "005a4f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4f20"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_CalculateCorpseBombDamage"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_RecalculateCombatStats",
+      "address": "005a4f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a4f50"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_RecalculateCombatStats",
+        "SKILLS_CalcPetSkillDamage",
+        "GetStatsByFlags",
+        "STATLIST_FreeChildStatLists",
+        "GetGamePointer",
+        "STATSEX_GetAlignment",
+        "STATSEX_GetCurrentStat",
+        "MONSTER_CalculateCorpseBombDamage",
+        "memset",
+        "MONSTER_CalculateLevelScaledStats",
+        "D2AddStatToStatsListEx",
+        "UNIT_GetModuloFromSeed",
+        "GetClassId"
+      ],
+      "usedTypes": [
+        "D2MonStatsInitStrc",
+        "D2MonStatsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ElementalDamageType",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_CalculateHitCheck",
+      "address": "005a5470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5470"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_CalculateHitCheck",
+        "DAMAGE_CalculateHitCheck"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_AttackTarget",
+      "address": "005a5490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5490"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_AttackTarget",
+        "GetTargetEx",
+        "memset",
+        "DAMAGE_CalculateHitCheck",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_CheckSpecialDeathFlag",
+      "address": "005a54f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a54f0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_CheckSpecialDeathFlag",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "ApplyDamageCritical",
+      "address": "005a5560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5560"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "ApplyDamageCritical",
+        "SetDamageHitClass",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MONSTER_GetHpPercent128",
+      "address": "005a5650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a5650"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters",
+      "calledFunctions": [
+        "MONSTER_GetHpPercent128",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

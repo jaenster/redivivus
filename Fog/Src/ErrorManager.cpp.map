@@ -1,0 +1,672 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/ErrorManager.cpp",
+  "functions": [
+    {
+      "name": "FOG_ReturnZeroCallback",
+      "address": "00402370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402370"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "FOG_ReturnZeroCallback"
+      ]
+    },
+    {
+      "name": "CrashGame",
+      "address": "00407970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407970"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "CrashGame"
+      ]
+    },
+    {
+      "name": "FILETOOLS_WriteOneStringToFile",
+      "address": "00407980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407980"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "FILETOOLS_WriteOneStringToFile",
+        "Printf"
+      ],
+      "usedTypes": [
+        "Report"
+      ]
+    },
+    {
+      "name": "GetParentProcessId",
+      "address": "00407990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407990"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "GetParentProcessId",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "PROCESSENTRY",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetModuleFileNameForProcess",
+      "address": "00407a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407a20"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "GetModuleFileNameForProcess"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "WriteCrashReportProcessInfo",
+      "address": "00407a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407a80"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "WriteCrashReportProcessInfo",
+        "IsOpen",
+        "__security_check_cookie",
+        "Printf",
+        "GetModuleFileNameForProcess",
+        "strrchr",
+        "GetParentProcessId",
+        "MISC_GetLanguageCode",
+        "STRTABLE_GetRegistryLanguage",
+        "memset",
+        "InitLogFilePathPointers",
+        "AddAttachment"
+      ],
+      "usedTypes": [
+        "PSID",
+        "Report",
+        "_SID_IDENTIFIER_AUTHORITY",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "InitializeSystemInfo",
+      "address": "00407de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407de0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "InitializeSystemInfo",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "_MEMORYSTATUS",
+        "_OSVERSIONINFOA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EXIT_AtExit",
+      "address": "00407f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407f20"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "EXIT_AtExit",
+        "STRUCT_FreeAsyncData",
+        "FreeMemoryPool",
+        "DEBUG_UnloadStackCrawlDbgHelp",
+        "ExitOrCrashCleanup",
+        "LOGMGR_DeleteHighResTimerLock",
+        "StopLogWriterThread"
+      ]
+    },
+    {
+      "name": "StubHook1",
+      "address": "00407f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407f80"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook1"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StubHook2",
+      "address": "00407f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407f90"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StubHook2"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LogStringConditional",
+      "address": "00407fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407fc0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "LogStringConditional",
+        "LogWithCategory",
+        "LogWithCategoryVarArgs"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetErrorState",
+      "address": "00407ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00407ff0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "GetErrorState"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StripPathPrefixToRelative",
+      "address": "00408000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408000"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "StripPathPrefixToRelative",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetInstructionPointer",
+      "address": "00408090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408090"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "GetInstructionPointer"
+      ]
+    },
+    {
+      "name": "FormatDebugOutput",
+      "address": "004080b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004080b0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "FormatDebugOutput",
+        "_snprintf",
+        "_vsnprintf",
+        "LogWithCategoryVarArgs",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "SYSTEMTIME",
+        "uint8_t",
+        "va_list"
+      ]
+    },
+    {
+      "name": "OutputDebugStringSimple",
+      "address": "004081a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004081a0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "OutputDebugStringSimple",
+        "_vsnprintf",
+        "__security_check_cookie"
+      ]
+    },
+    {
+      "name": "OutputDebugStringIfCapsLock",
+      "address": "00408220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408220"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "OutputDebugStringIfCapsLock",
+        "_vsnprintf",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "FormatDebugOutputVariadic",
+      "address": "004082a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004082a0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "FormatDebugOutputVariadic",
+        "FormatDebugOutput"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FormatDebugOutputLogOnly",
+      "address": "004082c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004082c0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "FormatDebugOutputLogOnly",
+        "FormatDebugOutput"
+      ]
+    },
+    {
+      "name": "DumpLog",
+      "address": "004082e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004082e0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "DumpLog",
+        "Constructor",
+        "Open",
+        "WriteCrashReportProcessInfo",
+        "Printf",
+        "GetCurrentThreadId",
+        "CRASH_DumpThreadContext",
+        "CRASH_FormatStackTrace",
+        "CRASH_DumpRegisters",
+        "CRASH_EnumerateThreads",
+        "EnumerateAndDumpAllFunctions",
+        "SStrCopy",
+        "SStrPack",
+        "CrashDumpWriterThread",
+        "AddAttachment",
+        "Close",
+        "memset",
+        "ErrorReportingLaunch",
+        "SYSTEM_Win32TerminateProcess",
+        "Destructor",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BlizzardErrorArgument",
+        "D2CrashReportStrc",
+        "Report",
+        "char[1024]",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CRASH_FillupCrashTxt",
+      "address": "00408660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408660"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "CRASH_FillupCrashTxt",
+        "Constructor",
+        "Open",
+        "WriteCrashReportProcessInfo",
+        "Printf",
+        "GetCurrentThreadId",
+        "CRASH_DumpThreadContext",
+        "CRASH_DumpRegisters",
+        "CRASH_EnumerateThreads",
+        "AddAttachment",
+        "Close",
+        "memset",
+        "ErrorReportingLaunch",
+        "Destructor",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BlizzardErrorArgument",
+        "PFN_CrtExceptionFilter",
+        "Report",
+        "char *",
+        "char[1024]",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckErrorDuringError",
+      "address": "004088c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004088c0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "CheckErrorDuringError",
+        "StripPathPrefixToRelative",
+        "LOGMANAGER_TraceToModuleLog"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FOG_ErrorHandler",
+      "address": "00408900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408900"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "FOG_ErrorHandler",
+        "CheckErrorDuringError",
+        "LogWithCategoryVarArgs",
+        "ExitOrCrashCleanUpJmp",
+        "isDebuggerPresent",
+        "SStrPrintf",
+        "StripPathPrefixToRelative",
+        "CRASH_FillupCrashTxt",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "eFOG_ErrorType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ERROR_UnrecoverableInternalError_AssertionFailure",
+      "address": "00408a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408a30"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "ERROR_UnrecoverableInternalError_AssertionFailure",
+        "WSACleanup",
+        "FOG_ErrorHandler",
+        "ExitOrCrashCleanUpJmp"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ERROR_UnrecoverableInternalError_Halt",
+      "address": "00408a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408a60"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "FOG_ErrorHandler",
+        "ERROR_UnrecoverableInternalError_AssertionFailure",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "WSACleanup",
+        "ExitOrCrashCleanUpJmp"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ERROR_UnrecoverableInternalError_Warning",
+      "address": "00408a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408a90"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "ERROR_UnrecoverableInternalError_Warning",
+        "WSACleanup",
+        "FOG_ErrorHandler",
+        "ExitOrCrashCleanUpJmp"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ERROR_DeadlockedThread",
+      "address": "00408ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408ac0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "ERROR_DeadlockedThread",
+        "WSACleanup",
+        "FOG_ErrorHandler",
+        "ExitOrCrashCleanUpJmp"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ERROR_UnrecoverableInternalError_Any",
+      "address": "00408af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408af0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "ERROR_UnrecoverableInternalError_Any",
+        "WSACleanup",
+        "FOG_ErrorHandler",
+        "ExitOrCrashCleanUpJmp"
+      ],
+      "usedTypes": [
+        "eFOG_ErrorType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ShowUnrecoverableErrorDialog",
+      "address": "00408b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408b20"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "ShowUnrecoverableErrorDialog",
+        "StripPathPrefixToRelative",
+        "SStrPrintf",
+        "LogWithCategory",
+        "GetInstructionPointer",
+        "WSACleanup",
+        "FOG_ErrorHandler",
+        "ExitOrCrashCleanUpJmp",
+        "exit",
+        "_vsnprintf",
+        "LogWithCategoryVarArgs",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "va_list"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_InitErrorManager",
+      "address": "00408ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00408ce0"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "ERRORMANAGER_InitErrorManager",
+        "thunk_InitializeDebugSubsystem",
+        "CRASH_SetExceptionHandler",
+        "SFILE_GetExecutableDirectory",
+        "SYSTEM_SetGlobalString",
+        "sprintf",
+        "SStrCopy",
+        "IsWindowsNT",
+        "InitHighResTimer",
+        "SRegLoadValue",
+        "InitializePoolSystem",
+        "SMemInitPerfCounters",
+        "GetInstructionPointer",
+        "WSACleanup",
+        "FOG_ErrorHandler",
+        "ExitOrCrashCleanUpJmp",
+        "exit",
+        "InitializeSystemInfo",
+        "StartLogWriterThread",
+        "LOGFILE_StoreGameStartupInfo",
+        "atexit",
+        "DEBUG_LoadStackCrawlDbgHelp",
+        "SErrSetBlizzardErrorFunction",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9bfb",
+      "address": "006c9bfb",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9bfb"
+        }
+      ],
+      "namespace": "Fog::Src::ErrorManager",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9bfb",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

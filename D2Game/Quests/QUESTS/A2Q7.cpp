@@ -187,9 +187,9 @@ int __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame) {
 uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassIdForGame(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     if (pQuestData) {
-      uint32_t uVar1;
-      uVar1 = A2Q6_GetNextFalseTombPortalClassId(pQuestData);
-      return uVar1;
+      uint32_t nPortalClassId;
+      nPortalClassId = A2Q6_GetNextFalseTombPortalClassId(pQuestData);
+      return nPortalClassId;
     }
 
     return 0x133;
@@ -232,8 +232,8 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
           }
         }
       }
-      if (pQuestSpecific->field_0x4) {
-        pDVar1 = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pQuestSpecific->field_0x20);
+      if (pQuestSpecific->bOrificeObjectPresent) {
+        pDVar1 = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pQuestSpecific->nOrificeObjectGUID);
         if (pDVar1) {
           nOrificeX = D2Client::Units::GetXPosFromDynamicPathUnit(pDVar1);
           nOrificeY = D2Client::Units::GetYPosFromDynamicPathUnit(pDVar1);
@@ -371,14 +371,14 @@ void __fastcall Objects_InitFn21(D2ObjectInitFnArg * pInitArg) {
     }
 
     D2QuestDataA2Q6Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA2Q6;
-    pQuestSpecificData->field_0x4 = 1;
+    pQuestSpecificData->bOrificeObjectPresent = 1;
     if (!pInitArg->pObject) {
       nStaffUsedFlag = -1;
     } else {
       nStaffUsedFlag = pInitArg->pObject->nUnitGUID;
     }
 
-    pQuestSpecificData->field_0x20 = nStaffUsedFlag;
+    pQuestSpecificData->nOrificeObjectGUID = nStaffUsedFlag;
     if (!pQuestSpecificData->nStateResumeFlag || pQuestSpecificData->bPortalTimerArmed) {
       if (!pQuestSpecificData->bPortalCreated) {
         return;
@@ -478,12 +478,14 @@ BOOL __fastcall OBJOP_A2Q7_OpenArcaneNpcTrade(D2ObjectOperateFnArg * pOperation)
     D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
     pInteractedNpc = pOperation->sArg.pVictim;
     sPacket.nPacketId = 'X';
+    uint32_t nUnitGUIDValue;
     if (!pInteractedNpc) {
-      sPacket.nUnitGUID = -1;
+      nUnitGUIDValue = -1;
     } else {
-      sPacket.nUnitGUID = pInteractedNpc->nUnitGUID;
+      nUnitGUIDValue = pInteractedNpc->nUnitGUID;
     }
 
+    sPacket.nUnitGUID = nUnitGUIDValue;
     sPacket.nUIType = '\0';
     GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pClient, &sPacket);
     return 0;
@@ -605,7 +607,7 @@ bool __fastcall Q14_IsSevenTombsLessThanState4(::SGAMEDATA * pGame) {
 }
 
 // Q14: compute Tyrael's post-Duriel spawn coordinates. Only if the portal-spawn-in-progress flag is set: picks a spot in Lut Gholein (LEVEL_LutGholein) near object class 0xc, finds free WARP-collision coords, writes x/y into pPoint and the room into *pdwParam. Returns 1 on success, 0 otherwise.
-BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2RoomStrc * * pdwParam) {
+BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2RoomStrc * * ppSpawnRoom) {
     LONG nSpawnY;
     LONG nSpawnX;
     D2QuestDataStrc* pSevenTombsData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
@@ -623,7 +625,7 @@ BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2
     if (pSpawnRoom) {
       pPoint->x = nSpawnX;
       pPoint->y = nSpawnY;
-      *pdwParam = pSpawnRoom;
+      *ppSpawnRoom = pSpawnRoom;
       return 1;
     }
 
@@ -631,7 +633,7 @@ BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2
 }
 
 // Q14: set/clear the Izual(Tyrael) placement flag in A2Q6 data, only while the quest is introduced and field_0x0E unset. cParam==0 -> mark located (bIzualLocationSet=1) and set pIzualUnit sentinel (8 single-player / 9 multiplayer); cParam!=0 -> clear bIzualLocationSet. No quest-record state change.
-void __fastcall Q14_SetTyraelState(int nParam, char cParam) {
+void __fastcall Q14_SetTyraelState(int nParam, char bClear) {
     D2QuestDataStrc* pA4Q1Data = GetQuestDataByQuestNoInternal(*(::SGAMEDATA**)(nParam + 4), QUESTINT_TheSevenTombs);
     if (!(pA4Q1Data && pA4Q1Data->bIsNotIntroduction != '\0')) {
       return;
@@ -641,7 +643,7 @@ void __fastcall Q14_SetTyraelState(int nParam, char cParam) {
     if (pSevenTombsData->bStaffInserted == 1) {
       return;
     }
-    if (cParam == '\0') {
+    if (bClear == '\0') {
       eD2HostGameType eGameType;
       eGameType = pA4Q1Data->pGame->nGameType;
       pSevenTombsData->bIzualLocationSet = 1;
@@ -751,7 +753,7 @@ void __fastcall Q15_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q15 (Act2Guard4Gossip) status filter: always returns false. The Jerhyn gossip pseudo-quest never shows in the quest-log status pass.
-bool __fastcall Q15_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown) {
+bool __fastcall Q15_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 

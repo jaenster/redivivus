@@ -1,0 +1,1001 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinMain.cpp",
+  "functions": [
+    {
+      "name": "D2WINMAIN_SetBackgroundDC6",
+      "address": "004f9140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9140"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetBackgroundDC6"
+      ],
+      "usedTypes": [
+        "DC6"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_SetCursorDC6",
+      "address": "004f9160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9160"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetCursorDC6"
+      ],
+      "usedTypes": [
+        "DC6"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_SetExitCallback",
+      "address": "004f9180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9180"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetExitCallback"
+      ],
+      "usedTypes": [
+        "pfnVoidNoArgCallback"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_ClearMessageLoopFlag",
+      "address": "004f9190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9190"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_SetControlField4",
+      "address": "004f91a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f91a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetControlField4"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_SetFocusedControl",
+      "address": "004f91c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f91c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_ClearSelection"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "FORMS_GetFormTextAndEditBox",
+      "address": "004f9200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9200"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FORMS_GetFormTextAndEditBox"
+      ],
+      "usedTypes": [
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "FORMS_AddControlToGlobalList",
+      "address": "004f9210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9210"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "FORMS_AppendFormToDestroyQueue",
+      "address": "004f9250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9250"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FORMS_AppendFormToDestroyQueue"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_FreeLeadingFormControls",
+      "address": "004f9290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9290"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_FreeLeadingFormControls",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyControl",
+      "address": "004f9310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9310"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FORMS_DestroyControl",
+        "FORMS_AppendFormToDestroyQueue"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "FORMS_CreateAnyForm",
+      "address": "004f93c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f93c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FORMS_CreateAnyForm",
+        "D2WinEditBox",
+        "D2WinImage",
+        "D2WinAnimImage",
+        "D2WinTextBox",
+        "D2WinScrollbar",
+        "D2WinButton",
+        "D2WinList",
+        "D2WinTimer",
+        "D2WinSmack",
+        "D2WinProgressBar",
+        "D2WinAccountList",
+        "D2WinImageEx"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinProgressBar",
+        "DC6",
+        "FORMS_PredefinedFormStrc"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyAnyForm",
+      "address": "004f95c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f95c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FORMS_DestroyAnyForm",
+        "FORMS_DestroyD2WinEditBox",
+        "FORMS_DestroyD2WinImage",
+        "FORMS_DestroyD2WinAnimImage",
+        "FORMS_DestroyD2WinTextBox",
+        "FORMS_DestroyD2WinScrollbar",
+        "FORMS_DestroyD2WinButton",
+        "FORMS_DestroyD2WinList",
+        "FORMS_DestroyD2WinTimer",
+        "FORMS_DestroyD2WinSmack",
+        "FORMS_DestroyD2WinProgressBar",
+        "FORMS_DestroyD2WinAccountList",
+        "FORMS_DestroyD2WinImageEx"
+      ],
+      "usedTypes": [
+        "D2ControlStrc *",
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_SetControlVisible",
+      "address": "004f96f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f96f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_GetControlVisible",
+      "address": "004f9710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9710"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_GetControlVisible",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_SetControlActive",
+      "address": "004f9740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9740"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetControlActive",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_IsControlActive",
+      "address": "004f9780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9780"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_IsControlActive",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_TestMouseInRect",
+      "address": "004f97b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f97b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_TestMouseInRect"
+      ],
+      "usedTypes": [
+        "RECT"
+      ]
+    },
+    {
+      "name": "DrawCursorOOG",
+      "address": "004f97e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f97e0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "DrawCursorOOG",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "DRAW_UI_Sprites",
+      "address": "004f9870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9870"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "DRAW_UI_Sprites",
+        "D2COMP_GetCompositeUnitListHead",
+        "D2COMP_GetNextCompositeUnit",
+        "D2COMP_DrawUnitShadow",
+        "D2COMP_DrawCompositeUnit",
+        "D2COMP_DrawUnitNameAndTitle",
+        "DRAW_OOG_ChannelPlayers"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RENDERER_DrawOutOfGameScene",
+      "address": "004f98e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f98e0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "RENDERER_DrawOutOfGameScene",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_GetScreenSize",
+        "D2GFX_BeginScene",
+        "D2GFX_ClearScreen",
+        "memset",
+        "D2GFX_DrawImage",
+        "DRAW_UI_Sprites",
+        "D2GFX_DrawSolidRectAlpha",
+        "DrawCursorOOG",
+        "D2GFX_EndScene",
+        "D2WINMAIN_FreeLeadingFormControls"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2GfxDataStrc",
+        "DC6",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WndProc",
+      "address": "004f9a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9a80"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "WndProc",
+        "SMsgDispatchMessage"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_FormKeyHandler",
+      "address": "004f9b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9b60"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "INPUT_FormKeyHandler",
+        "D2WINEDITBOX_HandleKeyPress",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2UIMouseMsgStrc",
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "INPUT_FormKeyUpHandler",
+      "address": "004f9bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9bf0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "INPUT_FormKeyUpHandler",
+        "D2WINEDITBOX_HandleKeyRelease",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2UIMouseMsgStrc",
+        "D2WinEditBox"
+      ]
+    },
+    {
+      "name": "INPUT_FormActivate",
+      "address": "004f9c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9c80"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "INPUT_FormActivate",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_FormDeactivate",
+      "address": "004f9ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9ca0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "INPUT_FormDeactivate",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "D2WIN_HandleSystemCommand",
+      "address": "004f9cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9cc0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_HandleSystemCommand",
+        "IsFullscreen",
+        "GetHwnd",
+        "D2GFX_GetResolutionMode",
+        "D2GFX_GetWindowSizeByResolutionMode",
+        "D2GFX_GetFixAspect",
+        "D2GFX_UpdateWindowSize"
+      ],
+      "usedTypes": [
+        "HMONITOR",
+        "WINDOWPLACEMENT",
+        "int32_t",
+        "tagMONITORINFO",
+        "tagRECT",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WIN_HandleActivation",
+      "address": "004f9f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9f20"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_HandleActivation",
+        "SOUND_GetMusicVolume",
+        "D2GFX_OnActivationChange",
+        "GetErrorState",
+        "D2WINPALETTE_SetPaletteIndex",
+        "SOUND_SetMusicVolume",
+        "D2GFX_CheckCutScene",
+        "D2GFX_EndCutSceneReturnSceneState"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WIN_SaveScreenshotToFile",
+      "address": "004f9fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9fb0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_SaveScreenshotToFile",
+        "sprintf",
+        "thunk_CreateFileA",
+        "SFILE_Win32CloseHandle",
+        "memset"
+      ],
+      "usedTypes": [
+        "JPEG_CORE_PROPERTIES",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2WIN_TakeThrottledScreenshot",
+      "address": "004fa0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa0c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_TakeThrottledScreenshot",
+        "GetTickCount",
+        "D2GFX_GetScreenSize",
+        "AllocClientMemory",
+        "D2GFX_GetBackBuffer",
+        "D2WIN_SaveScreenshotToFile",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "D2WIN_ToggleMusicOptions",
+      "address": "004fa160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa160"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_ToggleMusicOptions",
+        "SOUND_IsSoundEffectsInitialized",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled",
+        "SOUND_FadeOutMusic",
+        "SOUND_SetOptionsMusic"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WIN_FindClosestControlToMouse",
+      "address": "004fa200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa200"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_FindClosestControlToMouse"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_FormMouseWheel",
+      "address": "004fa340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa340"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "INPUT_FormMouseWheel",
+        "D2WINPOPUP_IsActiveAndVisible",
+        "D2WINSCROLLBAR_GetMaxValue",
+        "D2WIN_FindClosestControlToMouse",
+        "D2WINSCROLLBAR_HandleMouseWheel",
+        "D2WINBUTTON_HandleMouseWheel",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2UIMouseMsgStrc",
+        "D2WinScrollbar",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_SetCursorVisible",
+      "address": "004fa410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa410"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetCursorVisible"
+      ]
+    },
+    {
+      "name": "SetUnsetFlag0x08",
+      "address": "004fa420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa420"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "SetUnsetFlag0x08"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_SetFormFourth",
+      "address": "004fa450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa450"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_SetFormFourth"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_GetWinMainState",
+      "address": "004fa460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa460"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_GetWinMainState"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FORMS_SetGlobalFormImage",
+      "address": "004fa470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa470"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FORMS_SetGlobalFormImage"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_GetFirstElement",
+      "address": "004fa490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa490"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_GetFirstElement"
+      ],
+      "usedTypes": [
+        "void *"
+      ]
+    },
+    {
+      "name": "D2WINMAIN_GetFormImage",
+      "address": "004fa4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa4b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WINMAIN_GetFormImage"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "D2WIN_HandleCursorHide",
+      "address": "004fa4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa4c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_HandleCursorHide",
+        "UpdateOSCursorVisibilty"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WIN_HandleMouseLeave",
+      "address": "004fa4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa4f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_HandleMouseLeave",
+        "UpdateOSCursorVisibilty"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_PreSetupBeforeCreatingWindow",
+      "address": "004fa520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa520"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2GFX_PreSetupBeforeCreatingWindow",
+        "SetCompressedDataGlobalAndSaveItToRegistry",
+        "D2GFX_Initialize"
+      ],
+      "usedTypes": [
+        "eD2RendererMode"
+      ]
+    },
+    {
+      "name": "FreeInGameGFX",
+      "address": "004fa550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa550"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "FreeInGameGFX",
+        "D2WINMAIN_FreeLeadingFormControls",
+        "D2WINLIST_FreePentSpinCursor",
+        "D2WINFONT_FreeFontCache",
+        "GetHwnd",
+        "D2WIN_UnregisterWindowHandlerArray"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MessagePump",
+      "address": "004fa590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa590"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "MessagePump",
+        "GetTickCount",
+        "RENDERER_DrawOutOfGameScene"
+      ],
+      "usedTypes": [
+        "pfnFramePump",
+        "tagMSG",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MOUSE_CaptureMousePosition",
+      "address": "004fa6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa6b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "MOUSE_CaptureMousePosition",
+        "UpdateOSCursorVisibilty",
+        "D2GFX_GetScreenSize",
+        "D2GFX_IsWindowActive"
+      ],
+      "usedTypes": [
+        "tagTRACKMOUSEEVENT",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_FormTabKey",
+      "address": "004fa760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa760"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "INPUT_FormTabKey",
+        "D2WINBUTTON_InvokeClickCallback",
+        "SMsgBreakHandlerChain",
+        "INPUT_FormKeyUpHandler"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "TakeScreenshot",
+      "address": "004fa7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa7a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "TakeScreenshot",
+        "GetTickCount",
+        "D2GFX_GetScreenSize",
+        "AllocClientMemory",
+        "D2GFX_GetBackBuffer",
+        "D2WIN_SaveScreenshotToFile",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "D2WIN_Unused_Placeholder_5",
+      "address": "004fa840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa840"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "D2WIN_Unused_Placeholder_5",
+        "TakeScreenshot"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_FormMouseHandler",
+      "address": "004fa860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fa860"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinMain",
+      "calledFunctions": [
+        "INPUT_FormMouseHandler",
+        "MOUSE_CaptureMousePosition",
+        "D2WINPOPUP_IsActiveAndVisible",
+        "D2WINPOPUP_HandleClick",
+        "D2WINPOPUP_Destroy",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    }
+  ]
+}

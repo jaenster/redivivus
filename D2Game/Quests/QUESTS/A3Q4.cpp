@@ -230,9 +230,9 @@ void __fastcall Q21_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // Quest event 2 (NPC deactivate, dialog closed) for Q21: by the target NPC class (254 Alkor, 245 Cain, 264 Meshif) clears the matching talked-to byte in the quest data, clears the low flag byte and calls QUEST_SetStateAndBroadcast with Q21_PlayerNotifyCompleted (state 5 for Alkor, which also sets byte +0; 2 and 4 for Cain's two talks; 3 for Meshif).
 // Evidence: Q21_Callback11_ScrollMessage stores it at sStateFunctions slot 2 (+0xa8) after each talk; [EDX+8] is pQuestArgs->pTarget, [EAX+4] its class id. Was the label Q21_Callback_02 (kept as a secondary label).
 void __fastcall Q21_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    short int sVar1 = !pQuestArgs->pTarget ? -1 : (short int)pQuestArgs->pTarget->nClassId;
+    short int nNpcClassId = !pQuestArgs->pTarget ? -1 : (short int)pQuestArgs->pTarget->nClassId;
     D2QuestDataA3Q4Strc* pQuestDataA3Q4 = pQuestData->pQuestSpecificData.pA3Q4;
-    if (sVar1 == 0xfe) {
+    if (nNpcClassId == 0xfe) {
       if (pQuestDataA3Q4->bRewardGivenToAlchemist == '\x01') {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, true);
@@ -240,7 +240,7 @@ void __fastcall Q21_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
         pQuestDataA3Q4->bBirdDropped = '\x01';
         return;
       }
-    } else if (sVar1 == 0xf5) {
+    } else if (nNpcClassId == 0xf5) {
       if (pQuestDataA3Q4->bCainToldAboutTome == '\x01') {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, true);
@@ -252,7 +252,7 @@ void __fastcall Q21_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
         pQuestDataA3Q4->bAlchemistTradedBird = '\0';
         return;
       }
-    } else if (sVar1 == 0x108 && pQuestDataA3Q4->bJadeGivenToMeshif == '\x01') {
+    } else if (nNpcClassId == 0x108 && pQuestDataA3Q4->bJadeGivenToMeshif == '\x01') {
       pQuestData->nQuestPacketFlags = '\0';
       QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, true);
       pQuestDataA3Q4->bJadeGivenToMeshif = '\0';
@@ -266,16 +266,16 @@ void __fastcall Q21_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 //   holds Golden Bird -> 3, +1 if Step0x04 (4).  holds Jade -> 1, +1 if Step0x02 (2).
 //   else if quest active (bIsNotIntroduction): clamps nStateFlagPrev, >5 -> 6 (+1 if multiplayer).
 // Always returns true (out byte written).
-bool __fastcall Q21_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown) {
+bool __fastcall Q21_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_AbleGoToAct3, QUESTSTATE_Completed);
     if (!BVar1) {
-      *nUnknown = '\0';
+      *pbyStatusCode = '\0';
       return true;
     }
 
     /* GetQuestState RewardAwaits(1) -> out=5 (go collect reward from Alkor) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheGoldenBird, QUESTSTATE_RewardAwaits);
     if (BVar1) {
-      *nUnknown = '\x05';
+      *pbyStatusCode = '\x05';
       return true;
     }
 
@@ -283,34 +283,34 @@ bool __fastcall Q21_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
     if (BVar1) {
       /* GetQuestState JustCompleted(0xd) -> out = 0xb + 2*set (0xd if just-completed
                          cinematic) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheGoldenBird, QUESTSTATE_JustCompleted);
-      *nUnknown = BVar1 != 0 ? 13 : 11;
+      *pbyStatusCode = BVar1 != 0 ? 13 : 11;
       return true;
     }
 
-    *nUnknown = '\0';
+    *pbyStatusCode = '\0';
     D2UnitStrc* pGoldenBirdItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20343367);
     D2UnitStrc* pJadeItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x2034336a);
     if (pGoldenBirdItem) {
       /* GetQuestState Step0x04(4) -- holds Golden Bird: out = 3 + set (3=have bird,
                          4=shown to Meshif) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheGoldenBird, QUESTSTATE_Step0x04);
-      *nUnknown = BVar1 != 0 ? 4 : 3;
+      *pbyStatusCode = BVar1 != 0 ? 4 : 3;
       return true;
     }
     if (pJadeItem) {
       /* GetQuestState Step0x02(2) -- holds Jade: out = 1 + set (1=have jade, 2=traded
                          to Meshif) */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_TheGoldenBird, QUESTSTATE_Step0x02);
-      *nUnknown = BVar1 != 0 ? 2 : 1;
+      *pbyStatusCode = BVar1 != 0 ? 2 : 1;
       return true;
     }
     if (pQuestData->bIsNotIntroduction == '\0') {
       return true;
     }
     if (pQuestData->nStateFlagPrev >= 6) {
-      *nUnknown = pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER ? 7 : 6;
+      *pbyStatusCode = pQuestData->pGame->nGameType != SGAMETYPE_SINGLEPLAYER ? 7 : 6;
       return true;
     }
 
-    *nUnknown = pQuestData->nStateFlagPrev;
+    *pbyStatusCode = pQuestData->nStateFlagPrev;
     return true;
 }
 

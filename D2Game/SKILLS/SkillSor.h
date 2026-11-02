@@ -29,7 +29,7 @@ struct __attribute__((packed)) D2StaticFieldArgStrc {
 namespace D2Game::SKILLS::SkillSor {
 
 // Function declarations
-int32_t __fastcall GetTxtTableParam6(int32_t nParam);
+int32_t __fastcall GetTxtTableParam6(int32_t nSkillId);
 // Per-tick server handler for the Sorceress Inferno skill. Validates the skill/missile records, retrieves the cursor target position, then spawns an Inferno missile each tick for as many frames as the calc specifies. For monsters using Inferno it manages the inferno state and schedules the end-anim event via SetEvent; for players it sets up the anim timer events.
 BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl2, eMissilesId eMissileId);
 // Starts or sustains a channelled Inferno cast. On first call (no STATE_inferno stat list), allocates a stat list, schedules a 0xC event at frame+20, attaches it, sets the expire callback, and activates STATE_inferno. On subsequent calls, refreshes the stat-list timeout to frame+6, reschedules the event, and calls INFERNO_CastInfernoTick to spawn the next missile tick. For monster casters, param1 is set to game-frame + calc[1] duration.
@@ -39,7 +39,7 @@ BOOL __fastcall SKILLSOR_SrvStFn11_InfernoChannel(::SGAMEDATA * pGame, struct D2
 BOOL __fastcall SKILLSOR_SrvStFn12_TargetInAuraRange(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLSOR_SrvStFn13_ThunderStorm(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
 BOOL __fastcall SKILLSOR_SrvStFn14_Hydra(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILL_InitChargedBoltPath(struct D2UnitStrc * pUnit, int32_t nParam);
+void __fastcall SKILL_InitChargedBoltPath(struct D2UnitStrc * pUnit, int32_t nMissileIdx);
 // Server do-func for Sorceress Charged Bolt (skill 17). Sets UNITFLAG_SKSRVDOFUNC, looks up the charge-up missile ID (SKILLASS_GetChargeUpMissile), evaluates calc[0] for bolt count, then loops that many times calling CreatingMissile with a per-bolt D2SkillArgStrc (fpFunction = SKILL_InitChargedBoltPath, flags 0x21, target from SKILLS_GetTargetOrCursorPos). Each bolt gets an independent random path initialised by SKILL_InitChargedBoltPath.
 BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // @sourcefile .\SKILLS\SkillSor.cpp

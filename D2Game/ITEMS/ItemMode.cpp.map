@@ -1,0 +1,3625 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/ITEMS/ItemMode.cpp",
+  "functions": [
+    {
+      "name": "GetMonsterData",
+      "address": "0055b7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b7e0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "GetMonsterData"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "STATSLISTEX_FunctionCallback",
+      "address": "0055b800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b800"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "STATSLISTEX_FunctionCallback",
+        "SUNITEVENT_RemoveEventsByQueueAndOwner",
+        "UNITEVENT_FindByCallbackParams",
+        "D2SetAuraEvent",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "GetMonsterData",
+        "MONSTER_GetMercType",
+        "SKILLS_GetStateTransformGfx",
+        "TXT_Skills_GetLine",
+        "GetSkillByIdAndOwner",
+        "AllocSkill",
+        "AddSkill",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL",
+        "SKILLS_UpdatePassiveSkillStats",
+        "SKILLS_UpdatePetMax",
+        "GetSkillLevel",
+        "GetLeftSkill",
+        "Server_SelectSkill",
+        "GetRightSkill",
+        "UNIT_GetUnitState",
+        "D2UpdateState",
+        "SetState",
+        "D2StatesTogglegfx",
+        "SKILL_DeactivateAura",
+        "SKILL_ProcessPeriodicAuraTick",
+        "SKILLS_ApplyAllPassiveStates",
+        "SEVER_ITEM_GetOwner",
+        "thunk_SKILLS_AddOrRemoveItemSkill"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ItemStatCostTxt",
+        "D2MonStatsTxt",
+        "D2SUnitEventStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendDropItemPacket",
+      "address": "0055bed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055bed0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SendDropItemPacket",
+        "CLIENTS_GetControlUnit",
+        "Send0x9CItemDroppedToGround",
+        "Send0x9CItemOnGround"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PacketUpdateForClient",
+      "address": "0055bf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055bf30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "PacketUpdateForClient",
+        "SendDropItemPacket"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SERVER_ITEM_SendStackableUsagePackets",
+      "address": "0055bf50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055bf50"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "CheckItemFlag",
+        "ITEM_EditItemData_eItemFlag",
+        "GetType",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3F_SETSPELLICON"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetItemSkillId",
+      "address": "0055bff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055bff0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetItemSkillId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEMS_IsA",
+        "GetMagicSuffix",
+        "TXT_Books_GetLine"
+      ],
+      "usedTypes": [
+        "D2BooksTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_UpdateBookSkillQuantity",
+      "address": "0055c070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c070"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_UpdateBookSkillQuantity",
+        "ITEMMODE_GetItemSkillId",
+        "GetSkillByIdAndOwner",
+        "SKILL_GetQuantity",
+        "SKILL_SetQuantity",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x22_UpdateItemSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_UpdateItemSkill",
+      "address": "0055c110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c110"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_UpdateItemSkill",
+        "ITEMMODE_GetItemSkillId",
+        "STATSEX_GetCurrentStat",
+        "ITEMS_IsA",
+        "GetSkillByIdAndOwner",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SKILL_GetQuantity",
+        "STATLIST_AddUnitStat",
+        "SKILL_AllocSkillPoint",
+        "SKILL_SetQuantity",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x22_UpdateItemSkill",
+        "GetLeftSkill",
+        "Server_SelectSkill",
+        "GetRightSkill"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ApplyItemToOwner",
+      "address": "0055c270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c270"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEMMODE_UpdateItemSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_AddStatsList",
+      "address": "0055c2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c2c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ApplyRuneAndGemStats",
+        "ITEMMODE_AddStatsList",
+        "UNIT_GetUnitState",
+        "ITEMS_IsA",
+        "GetItemQuality",
+        "ITEM_ProcessSetItemEquip",
+        "TXT_Items_GetLine",
+        "TXT_Gems_GetLine",
+        "ITEM_GetItemsTxt_bGemApplyType",
+        "ITEMMODE_ApplyItemToOwner",
+        "GetEquipedWeapon",
+        "CanDualWield",
+        "CheckItemFlag",
+        "STATLIST_SetItemStatActive",
+        "UpdateAnimSpeed"
+      ],
+      "usedTypes": [
+        "D2GemsTxt",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_AddStatsList_ForMercSwap",
+      "address": "0055c460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c460"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_AddStatsList_ForMercSwap",
+        "ITEMMODE_AddStatsList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetEquippedWeapons",
+      "address": "0055c470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c470"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetEquippedWeapons",
+        "GetEquipedWeapon",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_IsSkillUsableCheck",
+      "address": "0055c4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c4d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_IsSkillUsableCheck",
+        "SKILLS_CanUseSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ResetSkillToDefault",
+      "address": "0055c4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c4f0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ResetSkillToDefault",
+        "GetRightSkillData",
+        "GetLeftSkillData",
+        "GetSkillByIdAndOwner",
+        "SKILLS_CanUseSkill",
+        "Server_SelectSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CanUseSkillWithWeapon",
+      "address": "0055c560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c560"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CanUseSkillWithWeapon",
+        "GetSkillsTxt",
+        "ITEMS_CheckItemTypeEquivalence",
+        "ITEMMODE_IsSkillUsableCheck"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ValidateWeaponSkills",
+      "address": "0055c5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c5c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ValidateWeaponSkills",
+        "ITEMMODE_GetEquippedWeapons",
+        "ITEMS_IsA",
+        "GetLeftSkill",
+        "ITEMMODE_CanUseSkillWithWeapon",
+        "InitLeftSkill",
+        "Server_SelectSkill",
+        "SKILLS_CanUseSkill",
+        "ITEMMODE_ResetSkillToDefault",
+        "GetRightSkill",
+        "InitRightSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_RemoveItemStates",
+      "address": "0055c6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c6e0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_RemoveItemStates",
+        "ITEMMODE_UpdateItemSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_UnequipItemStats",
+      "address": "0055c730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c730"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_UnequipItemStats",
+        "UNIT_GetUnitState",
+        "EVENT_RemoveUnitTimersByType",
+        "SEVER_ITEM_GetOwner",
+        "GetItemQuality",
+        "ITEM_ProcessSetItemEquip",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "CanDualWield",
+        "ITEMS_IsA",
+        "STATLIST_SetItemStatActive",
+        "ITEMMODE_RemoveItemStates",
+        "UpdateResourceStats"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PickingGold",
+      "address": "0055c850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c850"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "PickingGold",
+        "GetInventoryGoldLimit",
+        "STATSEX_GetCurrentStat",
+        "GetOwnerUnit",
+        "GetPartyId",
+        "STATLIST_SetUnitStat",
+        "STATLIST_AddUnitStat",
+        "PARTY_SplitGoldToPartyMembers",
+        "ChangeGoldForPlayer",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "ITEM_DeleteItemAndFreeUnit",
+        "DROP_SpawnGoldOnGround",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetItemPageForUnit",
+      "address": "0055c9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055c9a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetItemPageForUnit",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "ITEM_SetItemData_ePage",
+        "SetupUpdateFlag",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckQuestItemCodePair",
+      "address": "0055ca00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055ca00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckQuestItemCodePair"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckDuplicateQuestItem",
+      "address": "0055ca40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055ca40"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckDuplicateQuestItem",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetContainingInventoryPage",
+        "TXT_Items_GetLine",
+        "ITEMMODE_CheckQuestItemCodePair"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_CheckIfPickable",
+      "address": "0055cc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055cc90"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_CheckIfPickable",
+        "INVENTORY_GetFirstItem",
+        "TXT_Items_GetLine",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex",
+        "INV_GetUniqueItemsTxtLine",
+        "ITEMMODE_CheckDuplicateQuestItem",
+        "GetPlayerData",
+        "GetQuestBitBuffer",
+        "GetQuestState",
+        "INVENTORY_GetCorpse",
+        "ROOMCORPSE_GetGUID",
+        "FindUnitFromTable",
+        "INVENTORY_GetNextCorpse"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2CorpseStrc",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UniqueItemsTxt",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_PickToCursor",
+      "address": "0055cf50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055cf50"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_PickToCursor",
+        "INVENTORY_GetHandItem",
+        "GetPlayerTradeTickOrBusy",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "SERVER_CheckIfPickable",
+        "ITEMMODE_GetItemPageForUnit",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "ITEM_GetItemData_wType",
+        "PickingGold",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "CopyInventoryOfPlayerOrFree",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEM_SetItemData_ePage",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "QUEST_OnItemPickedUp",
+        "SetupUpdateEvent_AttachEventSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_AutoStackItem",
+      "address": "0055d0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d0d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_AutoStackItem",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetTxtItemTypes_autostack",
+        "ITEM_GetTxtItemTypes_quiver",
+        "INVENTORY_FindSocketableItemInMain",
+        "INVENTORY_FindSocketableItemInStash",
+        "IsItemSocketable",
+        "ITEM_GetMaxStack",
+        "ITEM_CheckIfItemHasDurability",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEM_GetItemData_wType",
+        "ITEMMODE_UpdateBookSkillQuantity",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "ITEM_DeleteItemAndFreeUnit",
+        "CopyInventoryOfPlayerOrFree",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckAutoStack",
+      "address": "0055d370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d370"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckAutoStack",
+        "INVENTORY_FindMatchingScrollBook",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxStack",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEMMODE_UpdateBookSkillQuantity",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "ITEM_DeleteItemAndFreeUnit",
+        "CopyInventoryOfPlayerOrFree",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetItemTypeFlags",
+      "address": "0055d560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d560"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetItemTypeFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEMS_IsA",
+        "IsTwoHanded",
+        "ITEM_GetTxtItemTypes_throwable",
+        "ITEM_GetMinimalStatValueShifted"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckItemTypeConflict",
+      "address": "0055d670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d670"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckItemTypeConflict"
+      ]
+    },
+    {
+      "name": "ITEMMODE_FindBestBodyLocForItem",
+      "address": "0055d710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d710"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_FindBestBodyLocForItem",
+        "ITEM_CheckEquipRequirements",
+        "ITEMS_GetRequiredBodyType",
+        "CheckItemFlag",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "ITEM_GetItemData_wType",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMTYPE_IsQuiver",
+        "ITEM_GetTxtItemTypes_shoots",
+        "ITEMS_IsA",
+        "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2",
+        "ITEMMODE_GetItemTypeFlags",
+        "ITEMMODE_CheckItemTypeConflict",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ReturnOne",
+      "address": "0055d930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d930"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ReturnOne"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetItemGoldValue",
+      "address": "0055d940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d940"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetItemGoldValue",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GetAnimOrSeqMode",
+        "ITEMMODE_UnequipItemStats"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckCanPickup",
+      "address": "0055d970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d970"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckCanPickup",
+        "GetBodyLocation",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "GetAnimOrSeqMode",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ValidateItemForPlayer",
+      "address": "0055d9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055d9d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ValidateItemForPlayer",
+        "STATSEX_GetCurrentStat",
+        "GetLeftSkill",
+        "GetOwnerGUID",
+        "GetSkillId",
+        "GetRightSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ValidateItemQuality",
+      "address": "0055da70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055da70"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ValidateItemQuality",
+        "GetSkillByIdAndOwner",
+        "GetLeftSkill",
+        "SKILLS_CanUseSkill",
+        "Server_SelectSkill",
+        "GetRightSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckItemRequirements",
+      "address": "0055db00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055db00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckItemRequirements",
+        "ITEM_CheckEquipRequirements",
+        "ITEM_GetTxtItemTypes_quiver",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_RecalcEquippedItemStates",
+      "address": "0055dbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055dbc0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMS_RecalcEquippedItemStates",
+        "ITEMMODE_ValidateItemForPlayer",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "ITEM_IsActiveCharm",
+        "SEVER_ITEM_GetOwner",
+        "ITEMMODE_CheckItemRequirements",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMMODE_CheckCanPickup",
+        "INVENTORY_GetNextItem",
+        "INVENTORY_GetItemByGridOffset",
+        "CheckItemFlag",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GetAnimOrSeqMode",
+        "ITEMMODE_UnequipItemStats",
+        "GetBodyLocation",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEMMODE_AddStatsList",
+        "GetItemQuality",
+        "ITEMMODE_ValidateItemQuality",
+        "RefreshInventory",
+        "GetOwnerUnit",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x48_ITEMUPDATEREQUIREMENTSMET"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMS_RecalcAndRefreshInventory",
+      "address": "0055df00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055df00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMS_RecalcAndRefreshInventory",
+        "ITEMS_RecalcEquippedItemStates"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_DeleteItemFromInventory",
+      "address": "0055df10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055df10"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_DeleteItemFromInventory",
+        "ItemBelongsToInventoryOfPlayer",
+        "ITEM_GetContainingInventoryPage",
+        "GetInventoryPage",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UnusedDebug",
+        "ITEM_SetItemData_ePage",
+        "SUNIT_GetClient",
+        "SendRemoveObject",
+        "ITEM_DeleteItemAndFreeUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ConsumeItem",
+      "address": "0055e000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e000"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ConsumeItem",
+        "SUNIT_GetClient",
+        "ITEM_SetServerSideFlag",
+        "Send0x9DRemoveItemFromContainer",
+        "ITEMMODE_DeleteItemFromInventory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemFlag"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetItemCastSkill",
+      "address": "0055e050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e050"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetItemCastSkill",
+        "ITEMS_IsA",
+        "GetMagicSuffix",
+        "TXT_Books_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BooksTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CastItemSkill",
+      "address": "0055e0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e0d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CastItemSkill",
+        "GetSkillByIdAndOwner",
+        "SKILL_GetQuantity",
+        "GetRightSkill",
+        "Server_SelectSkill",
+        "SKILL_SetQuantity",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x22_UpdateItemSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SpecialItemsBonuses",
+      "address": "0055e170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e170"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SpecialItemsBonuses",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "INVENTORY_GetHandItem",
+        "IsUseable",
+        "ITEM_GetItemData_wType",
+        "STATSEX_GetCurrentStat",
+        "IsInteractingWithPlayer",
+        "SKILLITEM_DispatchItemSpell",
+        "TXT_Items_GetLine",
+        "GetQuestBitBuffer",
+        "GetQuestState",
+        "UnsetQuestState",
+        "STATLIST_AddUnitStat",
+        "SendQuestState",
+        "ITEMMODE_ConsumeItem",
+        "ClearSkills",
+        "ClearStats",
+        "SetupUpdateEvent_AttachEventSound",
+        "SetQuestState",
+        "CalculateBonusResistances",
+        "ITEMMODE_GetItemCastSkill",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "NET_D2GS_SERVER_Send_CMD_BYTE_INT",
+        "ITEMMODE_CastItemSkill",
+        "GetSkillByIdAndOwner",
+        "SKILL_GetQuantity",
+        "GetRightSkill",
+        "Server_SelectSkill",
+        "SKILL_SetQuantity",
+        "NET_D2GS_SERVER_Send_0x22_UpdateItemSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2ItemsTxt",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_MergeStackableItems",
+      "address": "0055e590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e590"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_MergeStackableItems",
+        "IsItemSocketable",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxStack",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEM_GetItemData_wType",
+        "ITEMMODE_UpdateBookSkillQuantity",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_CheckIfItemHasDurability",
+        "CopyInventoryOfPlayerOrFree",
+        "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
+        "ITEM_DeleteItemAndFreeUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StackItem",
+      "address": "0055e7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e7c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "StackItem",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEM_GetContainingInventoryPage",
+        "IsItemSocketable",
+        "ITEMMODE_MergeStackableItems",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_InitItemCreateContext",
+      "address": "0055e8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e8e0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_InitItemCreateContext",
+        "memset",
+        "ITEM_GetItemData_nItemLevel",
+        "GetXPos",
+        "GetYPos",
+        "GetModSeed"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RemoveStackItem",
+      "address": "0055e9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e9a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "RemoveStackItem"
+      ]
+    },
+    {
+      "name": "ITEM_TryPlaceInBelt",
+      "address": "0055e9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055e9b0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEM_TryPlaceInBelt",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEM_GetTxtItemTypes_beltable",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "INVENTORY_CanPlaceItemInBelt",
+        "ITEM_SetItemData_ePage",
+        "INVENTORY_PlacePotionInBelt",
+        "PutItemInInventory",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_BeltSwapItem",
+      "address": "0055eb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055eb30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_BeltSwapItem",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEM_GetTxtItemTypes_beltable",
+        "ItemBelongsToInventoryOfPlayer",
+        "GetXPosFromDynamicPathUnit",
+        "INVENTORY_OnBeltChanged_NoOp",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_RemoveItemStates",
+        "ITEMMODE_UnequipItemStats",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "INVENTORY_CanPlaceItemInBelt",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "PutItemInInventory",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "ITEM_SetItemData_ePage",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_DeleteItemFromCorpse",
+      "address": "0055ed30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055ed30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_DeleteItemFromCorpse",
+        "ItemBelongsToInventoryOfPlayer",
+        "GetXPos",
+        "INVENTORY_OnBeltChanged_NoOp",
+        "ITEM_DeleteItemAndFreeUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_SortBeltColumn",
+      "address": "0055edc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055edc0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_SortBeltColumn",
+        "INVENTORY_GetItemInBeltSlot",
+        "INVENTORY_CanPlaceItemInBelt",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "INVENTORY_OnBeltChanged_NoOp"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ToCursorItem",
+      "address": "0055eea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055eea0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ToCursorItem",
+        "INVENTORY_GetHandItem",
+        "SUNIT_GetClient",
+        "ITEM_SetServerSideFlag",
+        "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEM_DeleteItemAndFreeUnit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEM_InsertScrollIntoBook",
+      "address": "0055ef20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055ef20"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEM_InsertScrollIntoBook",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEMS_IsA",
+        "ITEM_GetItemData_wType",
+        "GetMagicSuffix",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxStack",
+        "ToCursorItem",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "ITEM_DeleteItemAndFreeUnit",
+        "CopyInventoryOfPlayerOrFree",
+        "STATLIST_AddUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEMMODE_UpdateBookSkillQuantity",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_NullSub",
+      "address": "0055f120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f120"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_NullSub"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ReturnZero2",
+      "address": "0055f130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f130"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ReturnZero2",
+        "RemoveStatListAfterTimeout"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckEquipRestrictions",
+      "address": "0055f140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f140"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckEquipRestrictions",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "ITEMS_IsA",
+        "ITEM_GetContainingInventoryPage",
+        "INVENTORY_GetNextItem",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_AddUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEMMODE_ConsumeItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetAlternateBodyLoc",
+      "address": "0055f240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f240"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetAlternateBodyLoc"
+      ],
+      "usedTypes": [
+        "eD2BodyLocDWORD"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CanEquipOnBodyLoc",
+      "address": "0055f2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f2a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CanEquipOnBodyLoc",
+        "ITEMMODE_GetAlternateBodyLoc",
+        "INVENTORY_GetItemByGridOffset"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "eD2BodyLocDWORD"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ResolveEquipConflict",
+      "address": "0055f2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f2d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ResolveEquipConflict",
+        "ITEMMODE_GetAlternateBodyLoc",
+        "ITEM_GetTxtItemTypes_shoots",
+        "ITEMS_IsA",
+        "ITEM_GetTxtItemTypes_quiver",
+        "IsTwoHanded",
+        "BARBARIAN_CheckItemData_b1or2Handed_isTrue"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "eD2BodyLoc",
+        "eD2BodyLocDWORD",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ReturnZero3",
+      "address": "0055f4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f4f0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ReturnZero3"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ITEMMODE_RecalcAllEquippedStats",
+      "address": "0055f500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f500"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_RecalcAllEquippedStats",
+        "ITEMMODE_ValidateItemForPlayer",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "SEVER_ITEM_GetOwner",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "STATLIST_SetItemStatActive",
+        "ITEMMODE_ValidateItemQuality"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_HasSocketedItems",
+      "address": "0055f590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f590"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_GetItemsTxt_bHasInv",
+        "ITEM_ItemsInItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetSocketCount",
+      "address": "0055f5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f5d0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetSocketCount",
+        "GetMagicPrefix",
+        "GetMagicSuffix",
+        "GetAutoMagic"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ValidateSocketedItems",
+      "address": "0055f640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f640"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ValidateSocketedItems",
+        "ITEMS_IsA",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetItemData_wType",
+        "ITEM_GetContainingInventoryPage",
+        "ITEMMODE_GetSocketCount",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxStack"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "eInventoryPage",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckItemEthereal",
+      "address": "0055f6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f6e0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckItemEthereal",
+        "STATLIST_AddUnitStat",
+        "STATSEX_GetCurrentStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEMMODE_UpdateBookSkillQuantity"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_HandleItemDurability",
+      "address": "0055f740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f740"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_HandleItemDurability",
+        "ITEMS_IsA",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_GetItemData_wType",
+        "ITEM_GetContainingInventoryPage",
+        "ITEMMODE_GetSocketCount",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMaxStack",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEMMODE_UpdateBookSkillQuantity"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "eD2UnitStat",
+        "eInventoryPage",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_SendItemUpdate",
+      "address": "0055f850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f850"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_SendItemUpdate",
+        "ITEM_EditItemData_eItemFlag",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GetAnimOrSeqMode",
+        "ITEMMODE_UnequipItemStats",
+        "ITEMS_RecalcEquippedItemStates",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEM_ProcessSetItemEquip",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitStat",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ProcessItemFlags",
+      "address": "0055f900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f900"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ProcessItemFlags",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMMODE_CheckCanPickup",
+        "ITEMS_RecalcEquippedItemStates",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "GetTxtMaxDurability",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEM_ProcessSetItemEquip",
+        "ITEMMODE_ValidateWeaponSkills"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitStat",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_SetItemFlags",
+      "address": "0055f9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055f9c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_SetItemFlags",
+        "ITEMMODE_GetItemSkillId",
+        "STATSEX_GetCurrentStat",
+        "GetSkillByIdAndOwner",
+        "SKILL_GetQuantity",
+        "SKILL_SetQuantity",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x22_UpdateItemSkill"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckItemLevel",
+      "address": "0055fa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055fa40"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckItemLevel",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEMMODE_SetItemFlags",
+        "ITEM_GetContainingInventoryPage",
+        "ITEMMODE_UpdateItemSkill"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ApplyQuestReward",
+      "address": "0055fb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055fb10"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ApplyQuestReward",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_HandleItemPickup",
+      "address": "0055fb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055fb80"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_HandleItemPickup",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetDifficultyLevels",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2ItemsTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "int64_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ProcessItemDropLogic",
+      "address": "0055fcc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055fcc0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ProcessItemDropLogic",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "ITEM_IsActiveCharm",
+        "ReturnFalse",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_IsItemLocationValid",
+        "NullSub_2Arg",
+        "ITEMMODE_UnequipItemStats",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeRecursiveInventorysWithChilds"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UpdatePlayerItemState",
+      "address": "0055fde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055fde0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "UpdatePlayerItemState",
+        "ITEMS_RecalcEquippedItemStates",
+        "RefreshInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_GetItemCursorMode",
+      "address": "0055fe00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055fe00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_GetItemCursorMode",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "ITEMS_RecalcEquippedItemStates",
+        "RefreshInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_IsItemOnCursor",
+      "address": "0055fe60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055fe60"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_IsItemOnCursor",
+        "ITEMMODE_AddStatsList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_HandleCursorItem",
+      "address": "0055fe80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055fe80"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_HandleCursorItem",
+        "SUNIT_GetClient",
+        "STATLIST_GetItemStatBonusValues",
+        "ITEMMOD_SetChargedSkillCharges",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ValidateInventorySlot",
+      "address": "0055ffa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055ffa0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ValidateInventorySlot",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_FindMatchingScrollBook",
+        "ITEM_InsertScrollIntoBook"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_CheckInventorySpace",
+      "address": "00560020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00560020"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_CheckInventorySpace",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEMS_IsA",
+        "ITEMMODE_ValidateInventorySlot",
+        "ITEMMODE_CheckAutoStack",
+        "IsStackable",
+        "ITEM_GetTxtItemTypes_autostack",
+        "ITEMMODE_AutoStackItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_PlaceItemInInventoryPage",
+      "address": "005600a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005600a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_PlaceItemInInventoryPage",
+        "GetInventoryPage",
+        "INVENTORY_AutoPlaceItemInGrid",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "PutItemInInventory",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "ITEM_SetItemData_ePage",
+        "QUEST_OnItemPickedUp",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_ItemToInventory",
+      "address": "00560200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00560200"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_ItemToInventory",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEM_GetContainingInventoryPage",
+        "GetInventoryPage",
+        "INVENTORY_PlaceItemAtCoords",
+        "INVENTORY_AutoPlaceItemInGrid",
+        "PutItemInInventory",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "CopyInventoryOfPlayerOrFree",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "PLRTRADE_AddItemToTrade",
+        "ITEMS_RecalcEquippedItemStates"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_TakeItemToCursor",
+      "address": "00560420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00560420"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_TakeItemToCursor",
+        "INVENTORY_GetHandItem",
+        "FindUnitFromTable",
+        "GetPlayerTradeTickOrBusy",
+        "ITEM_GetContainingInventoryPage",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "ItemBelongsToInventoryOfPlayer",
+        "ITEMMODE_UnequipItemStats",
+        "ITEM_IsActiveCharm",
+        "ITEMS_RecalcEquippedItemStates",
+        "RefreshInventory",
+        "ITEMMODE_RemoveItemStates",
+        "GetInventoryPage",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UnusedDebug",
+        "ITEM_SetItemData_ePreviousPage",
+        "ITEM_SetItemData_ePage",
+        "CopyInventoryOfPlayerOrFree",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eItemFlag",
+        "SERVER_TradeTransferItemToCursor",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEMMODE_HasSocketedItems",
+        "CheckItemFlag",
+        "UpsertToUpdateList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_EquipItemToBodyLoc",
+      "address": "005606b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005606b0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_EquipItemToBodyLoc",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "INVENTORY_GetEquipActionForBodySlot",
+        "ITEM_CheckEquipRequirements",
+        "GetEquipedWeapon",
+        "SetWeaponGUID",
+        "INVENTORY_GetItemAtBodyLoc",
+        "PutItemInInventory",
+        "SetBodyLoc",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEMMODE_AddStatsList",
+        "CopyInventoryOfPlayerOrFree",
+        "SetupUpdateFlag",
+        "ITEM_SetItemData_ePage",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "ITEMMODE_ValidateWeaponSkills",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_RemoveItemFromBelt",
+      "address": "005608c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005608c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_RemoveItemFromBelt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetBeltsLine",
+        "GetBeltType",
+        "INVENTORY_GetItemInBeltSlot",
+        "ITEM_SetServerSideFlag",
+        "SUNIT_GetClient",
+        "Send0x9CItemRemoveFromBelt",
+        "ItemBelongsToInventoryOfPlayer",
+        "GetXPos",
+        "INVENTORY_OnBeltChanged_NoOp",
+        "SetupUpdateFlag",
+        "ITEMMODE_RemoveItemStates",
+        "ITEM_SetItemData_ePage",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEM_GetContainingInventoryPage",
+        "GetInventoryPage",
+        "INVENTORY_AutoPlaceItemInGrid",
+        "PutItemInInventory",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "PLRTRADE_AddItemToTrade",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "ITEMMODE_UnequipItemStats",
+        "DropItem",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BeltsTxt",
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eD2UnitType",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "EquipItem",
+      "address": "00560cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00560cd0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "EquipItem",
+        "INVENTORY_GetHandItem",
+        "INVENTORY_GetItemByGridOffset",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "INVENTORY_GetEquipActionForBodySlot",
+        "GetCurrentItemOnBodyLocation",
+        "ReturnFalse",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "ITEM_GetItemData_wType",
+        "ITEMMODE_RemoveItemFromBelt",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEMMODE_UnequipItemStats",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEMMODE_HasSocketedItems",
+        "CheckItemFlag",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "ITEMMODE_ValidateWeaponSkills",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_Swap2HandItem",
+      "address": "00560f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00560f00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "swap",
+        "SERVER_Swap2HandItem",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "INVENTORY_GetEquipActionForBodySlot",
+        "GetEquipedWeapon",
+        "SetWeaponGUID",
+        "INVENTORY_GetItemByGridOffset",
+        "GetCurrentItemOnBodyLocation",
+        "ITEMMODE_UnequipItemStats",
+        "ITEM_CheckEquipRequirements",
+        "ITEMMODE_AddStatsList",
+        "SetupUpdateEvent_AttachEventSound",
+        "ITEM_GetItemData_wType",
+        "ITEMMODE_RemoveItemFromBelt",
+        "ReturnFalse",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "CopyInventoryOfPlayerOrFree",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "CheckItemFlag",
+        "UpsertToUpdateList",
+        "INVENTORY_GetItemAtBodyLoc",
+        "PutItemInInventory",
+        "SetBodyLoc",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEM_SetItemData_ePage",
+        "ITEMMODE_ValidateWeaponSkills",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_EquipItemToBodyLoc",
+      "address": "00561220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00561220"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_EquipItemToBodyLoc",
+        "FindUnitFromTable",
+        "INVENTORY_GetEquipActionForBodySlot",
+        "ITEM_CheckEquipRequirements",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "GetInventoryPage",
+        "INVENTORY_GetItemByGridOffset",
+        "INVENTORY_CanMoveEquippedToPage",
+        "ReturnFalse",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "ITEMMODE_UnequipItemStats",
+        "INVENTORY_AutoPlaceItemInGrid",
+        "PutItemInInventory",
+        "ITEM_SetItemData_ePage",
+        "CopyInventoryOfPlayerOrFree",
+        "SetupUpdateFlag",
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "ITEMMODE_AddStatsList",
+        "ITEMMODE_ApplyQuestReward",
+        "SetupUpdateEvent_AttachEventSound",
+        "RefreshInventory",
+        "INVENTORY_GetItemAtBodyLoc",
+        "SetBodyLoc",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEMMODE_ValidateWeaponSkills",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2BodyLocDWORD",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_WeaponSwap",
+      "address": "005616a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005616a0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "swap",
+        "ITEMMODE_WeaponSwap",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "GetSwitchLeftSkillDataResetLeftSkill",
+        "GetSwitchRightSkillDataResetRightSkill",
+        "InitSwitchRightSkill",
+        "InitSwitchLeftSkill",
+        "INVENTORY_GetItemByGridOffset",
+        "GetCurrentItemOnBodyLocation",
+        "ITEMMODE_UnequipItemStats",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "ITEM_SetItemData_ePage",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "UpsertToUpdateList",
+        "INVENTORY_GetItemAtBodyLoc",
+        "PutItemInInventory",
+        "SetBodyLoc",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEMMODE_AddStatsList",
+        "SetupUpdateFlag",
+        "ITEMMODE_ValidateWeaponSkills",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetSkillByIdAndOwner",
+        "SUNIT_GetClient",
+        "HasWeaponSwapped",
+        "SetWeaponSwap",
+        "NET_D2GS_SERVER_Send_0x97_WeaponSwitch",
+        "SKILLS_CanUseSkill",
+        "GetLeftSkill",
+        "GetSkillId",
+        "GetOwnerGUID",
+        "Server_SelectSkill",
+        "SERVER_SendPacket0x23",
+        "GetRightSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "D2WeaponSwapSlotStrc",
+        "SGAMEDATA",
+        "eD2BodyLocDWORD",
+        "eD2ItemFlag",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ExchangeInventoryItem",
+      "address": "00561b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00561b00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ExchangeInventoryItem",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEM_GetContainingInventoryPage",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "ItemBelongsToInventoryOfPlayer",
+        "ITEMMODE_UnequipItemStats",
+        "GetInventoryPage",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UnusedDebug",
+        "ITEM_SetItemData_ePage",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_RemoveItemStates",
+        "ITEM_SetItemData_eExchangePage",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "UpsertToUpdateList",
+        "INVENTORY_PlaceItemAtCoords",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "PutItemInInventory",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "PLRTRADE_AddItemToTrade",
+        "RefreshInventory",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ConsumeItemAndRemove",
+      "address": "00561e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00561e70"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ConsumeItemAndRemove",
+        "SUNIT_GetClient",
+        "ITEM_SetServerSideFlag",
+        "Send0x9CItemRemoveFromBelt",
+        "ITEMMODE_DeleteItemFromCorpse"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "ITEMMODE_UseItemOnItem",
+      "address": "00561ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00561ed0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_UseItemOnItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "ITEMS_IsA",
+        "IsInteractingWithPlayer",
+        "INVENTORY_GetHandItem",
+        "ITEMMODE_ConsumeItemAndRemove",
+        "ITEM_GetItemData_wType",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "NET_D2GS_SERVER_Send_CMD_BYTE_INT",
+        "SKILLITEM_DispatchItemSpell",
+        "ITEMMODE_GetItemCastSkill",
+        "ITEMMODE_CastItemSkill",
+        "STATLIST_AddUnitStat",
+        "ITEMMODE_ConsumeItem"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemAnimMode",
+        "eD2ItemTypes",
+        "eD2Skills",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVER_BeltTakeItem",
+      "address": "00562250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562250"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_BeltTakeItem",
+        "INVENTORY_GetHandItem",
+        "FindUnitFromTable",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "GetXPosFromDynamicPathUnit",
+        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_OnBeltChanged_NoOp",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_RemoveItemStates",
+        "ITEMMODE_UnequipItemStats",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "ITEMMODE_SortBeltColumn",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_UseItemAtCoords",
+      "address": "00562390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562390"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_UseItemAtCoords",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "INVENTORY_GetHandItem",
+        "IsUseable",
+        "IsInteractingWithPlayer",
+        "ITEMS_IsA",
+        "SERVER_GetUnitPetByTypeId",
+        "SKILLITEM_DispatchItemSpell",
+        "GetXPosFromDynamicPathUnit",
+        "ITEMMODE_GetItemCastSkill",
+        "GetSkillByIdAndOwner",
+        "SKILL_GetQuantity",
+        "GetRightSkill",
+        "Server_SelectSkill",
+        "SKILL_SetQuantity",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x22_UpdateItemSkill",
+        "ITEMMODE_ConsumeItemAndRemove",
+        "ITEMMODE_SortBeltColumn",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ProcessItemSell",
+      "address": "00562590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562590"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ProcessItemSell",
+        "CheckItemFlag",
+        "ITEM_CheckItemData_eD2ItemCmd",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEMMODE_GetItemCursorMode",
+        "ITEM_EditItemData_eItemFlag",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PutItemInItem",
+      "address": "00562660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562660"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "PutItemInItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "CheckItemFlag",
+        "ITEM_IsSocketable",
+        "ITEM_GetItemsTxt_bHasInv",
+        "STRUCT_CreatePlayerInventory",
+        "ITEM_GetSocketsCount",
+        "ITEM_ItemsInItem",
+        "PutItemInInventory",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_AddStatsList",
+        "ItemUpdateStatsAfterSocketing",
+        "SetupUpdateFlag",
+        "CalculateRunewordByItem",
+        "RollRunewordMostlikely",
+        "RefreshDurability",
+        "RefreshQuantity",
+        "ITEMMODE_HandleCursorItem",
+        "ITEM_EditItemData_eItemFlag",
+        "RefreshInventory",
+        "UpsertToUpdateList"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2RuneTableStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_HandleItemRepair",
+      "address": "005628c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005628c0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_HandleItemRepair",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEM_GetItemsTxt_szCode",
+        "IsInteractingWithPlayer",
+        "ITEM_GetContainingInventoryPage",
+        "SetupUpdateEvent_AttachEventSound",
+        "ITEM_SetItemData_ePage",
+        "SERVER_ItemToInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ProcessItemBuy",
+      "address": "00562a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562a30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ProcessItemBuy",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "ITEM_CheckEquipRequirements",
+        "ItemBelongsToInventoryOfPlayer",
+        "GetInventoryPage",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UnusedDebug",
+        "ITEM_SetItemData_ePage",
+        "INVENTORY_GetItemAtBodyLoc",
+        "PutItemInInventory",
+        "NullSub_2Arg",
+        "SetBodyLoc",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMS_IsA",
+        "ITEMMODE_AddStatsList",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "UpsertToUpdateList",
+        "ITEMMODE_ValidateWeaponSkills",
+        "RefreshInventory",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "eD2BodyLoc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_HandleItemGamble",
+      "address": "00562c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562c40"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_HandleItemGamble",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "ITEM_GetItemData_nPlayerGUID",
+        "FindUnitFromTable",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "CheckItemFlag",
+        "ITEMMODE_ProcessItemFlags",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ValidateTradeItem",
+      "address": "00562d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562d30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ValidateTradeItem",
+        "CheckItemFlag",
+        "ITEM_CheckIfItemHasDurability",
+        "GetTxtMaxDurability",
+        "ITEMMODE_HandleItemGamble",
+        "IsStackable",
+        "ITEM_GetMaxStack"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMEVENT_DefaultCallback",
+      "address": "00562da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562da0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMEVENT_DefaultCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2TimerTypeDWORD",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_TryPutItemInInventory",
+      "address": "00562e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562e00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_TryPutItemInInventory",
+        "ITEMMODE_FindBestBodyLocForItem",
+        "INVENTORY_GetItemAtBodyLoc",
+        "PutItemInInventory",
+        "SetBodyLoc",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_AddStatsList",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "ITEM_SetItemData_ePage",
+        "ITEMMODE_ValidateWeaponSkills",
+        "NullSub_2Arg",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_EquipCorpseItems",
+      "address": "00562f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00562f30"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_EquipCorpseItems",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CheckEquipRequirements",
+        "ITEMMODE_GetAlternateBodyLoc",
+        "ITEMMODE_ResolveEquipConflict",
+        "ITEMMODE_PlaceItemInInventoryPage",
+        "RefreshDurability",
+        "RefreshQuantity",
+        "ITEM_EditItemData_eItemFlag",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "INVENTORY_GetItemAtBodyLoc",
+        "PutItemInInventory",
+        "CopyInventoryOfPlayerOrFree",
+        "SetBodyLoc",
+        "SetupUpdateFlag",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "ITEM_SetItemData_ePage",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEMMODE_AddStatsList",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEMMODE_ValidateWeaponSkills",
+        "QUEST_OnItemPickedUp",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "SERVER_CheckIfPickable",
+        "ITEMMODE_TryPutItemInInventory",
+        "ITEM_GetTxtItemTypes_beltable",
+        "INVENTORY_PlacePotionInBelt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEMMODE_UpdateItemSkill",
+        "ITEM_IsActiveCharm",
+        "ITEMS_RecalcEquippedItemStates"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLocDWORD",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_ProcessCorpsePickup",
+      "address": "00563350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00563350"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_ProcessCorpsePickup",
+        "ITEM_GetItemsTxt_bHasInv",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_CloneFromSerializedData",
+        "SetupUpdateFlag",
+        "GetXPos",
+        "SetXForStaticUnit",
+        "GetYPos",
+        "SetYForStaticUnit",
+        "GetGUID",
+        "PutItemInItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_RemoveItemFromCurrentLocation",
+      "address": "00563470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00563470"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEM_RemoveItemFromCurrentLocation",
+        "ITEM_GetContainingInventoryPage",
+        "ITEM_SetItemData_ePreviousPage",
+        "SUNIT_GetClient",
+        "ITEM_SetServerSideFlag",
+        "Send0x9DRemoveItemFromContainer",
+        "ITEMMODE_DeleteItemFromInventory",
+        "INVENTORY_GetItemXPosition",
+        "EquipItem",
+        "ToCursorItem"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemAnimMode",
+        "eInventoryPage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_PickToInventory",
+      "address": "00563560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00563560"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_PickToInventory",
+        "INVENTORY_GetHandItem",
+        "GetPlayerTradeTickOrBusy",
+        "FindUnitFromTable",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "SERVER_CheckIfPickable",
+        "ITEMMODE_GetItemPageForUnit",
+        "SetupUpdateEvent_AttachEventSound",
+        "ITEM_GetItemData_wType",
+        "PickingGold",
+        "ITEMMODE_CheckInventorySpace",
+        "ITEMMODE_FindBestBodyLocForItem",
+        "ITEM_GetTxtItemTypes_beltable",
+        "INVENTORY_CheckIfItemCanBeAutoBelted",
+        "INVENTORY_PlacePotionInBelt",
+        "ITEMMODE_PlaceItemInInventoryPage",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "RemoveCollision_Vector",
+        "RemoveUnitFromRoom",
+        "PutItemInInventory",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "SetupUpdateFlag",
+        "ITEM_SetItemData_ePage",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "UpsertToUpdateList",
+        "RefreshInventory",
+        "ITEMS_RecalcEquippedItemStates",
+        "INVENTORY_GetEquipActionForBodySlot",
+        "ITEMMODE_TryPutItemInInventory",
+        "QUEST_OnItemPickedUp",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_RemoveItemsFromCube",
+      "address": "00563840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00563840"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_RemoveItemsFromCube",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetContainingInventoryPage",
+        "ITEM_SetServerSideFlag",
+        "ITEM_SetItemData_ePreviousPage",
+        "SUNIT_GetClient",
+        "Send0x9DRemoveItemFromContainer",
+        "ItemBelongsToInventoryOfPlayer",
+        "ITEMMODE_RemoveItemsFromCube_HaltTail",
+        "GetInventoryPage",
+        "GetYPos",
+        "GetXPos",
+        "UnusedDebug",
+        "SetupUpdateFlag",
+        "ITEM_SetItemData_ePage",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "INVENTORY_AutoPlaceItemInGrid",
+        "PutItemInInventory",
+        "ITEMMODE_ApplyItemToOwner",
+        "ITEM_IsActiveCharm",
+        "ITEMMODE_AddStatsList",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "RefreshInventory",
+        "UpsertToUpdateList",
+        "PLRTRADE_AddItemToTrade",
+        "ITEMS_RecalcEquippedItemStates",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "DropItem"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "eD2UnitType",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_RemoveItemsFromCube_HaltTail",
+      "address": "00563864",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00563864"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "ITEMMODE_RemoveItemsFromCube_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "SERVER_DropItemFromPlayer",
+      "address": "00563c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00563c00"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SERVER_DropItemFromPlayer",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "GetCoords",
+        "UNITS_GetRoom",
+        "FindBestSpotToSpawnItem",
+        "DropItem",
+        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_HasSocketedItems",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "ITEMMODE_RemoveItemsFromCube",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ITEMMODE_EquipItemToSwapBodyLoc",
+      "address": "00563d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00563d20"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "swap",
+        "ITEMMODE_EquipItemToSwapBodyLoc",
+        "SERVER_ITEM_SendStackableUsagePackets",
+        "FindUnitFromTable",
+        "INVENTORY_GetItemByGridOffset",
+        "GetCurrentItemOnBodyLocation",
+        "INVENTORY_GetEquipActionForBodySlot",
+        "ITEMMODE_UnequipItemStats",
+        "ITEM_CheckEquipRequirements",
+        "ITEMMODE_AddStatsList",
+        "SetupUpdateEvent_AttachEventSound",
+        "GetEquipedWeapon",
+        "SetWeaponGUID",
+        "ReturnFalse",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "ItemBelongsToInventoryOfPlayer",
+        "NullSub_2Arg",
+        "ITEM_GetItemData_wType",
+        "ITEMMODE_RemoveItemFromBelt",
+        "CopyInventoryOfPlayerOrFree",
+        "SetupUpdateFlag",
+        "INVENTORY_GetItemAtBodyLoc",
+        "PutItemInInventory",
+        "SetBodyLoc",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "ITEM_SetItemData_ePage",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "UpsertToUpdateList",
+        "ITEMMODE_ValidateWeaponSkills",
+        "ITEMS_RecalcEquippedItemStates",
+        "RefreshInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Transmorgify",
+      "address": "00563fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00563fe0"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "Transmorgify",
+        "TXT_Items_GetLine",
+        "__security_check_cookie",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "ITEMMODE_InitItemCreateContext",
+        "ITEMMODE_ConsumeItem",
+        "ITEM_CreateItemInstance",
+        "STATLIST_SetUnitStat",
+        "RANDOM_RandomNumberSelector",
+        "ITEM_SetItemData_ePage",
+        "SERVER_ItemToInventory",
+        "SERVER_DropItemFromPlayer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemGenContextStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    }
+  ]
+}

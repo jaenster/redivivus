@@ -1,0 +1,27 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Stats.cpp",
+  "functions": [
+    {
+      "name": "D2ApplyPercent",
+      "address": "00483360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483360"
+        }
+      ],
+      "namespace": "D2Client::Stats",
+      "calledFunctions": [
+        "D2ApplyPercent",
+        "_alldiv"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

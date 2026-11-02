@@ -1,0 +1,86 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/String/FogString.cpp",
+  "functions": [
+    {
+      "name": "SMEM_TitleCaseString",
+      "address": "00411320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411320"
+        }
+      ],
+      "namespace": "Fog::Src::String::FogString",
+      "calledFunctions": [
+        "SMEM_TitleCaseString",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "toupper",
+        "tolower"
+      ]
+    },
+    {
+      "name": "SMemStringToUppercase",
+      "address": "004113c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004113c0"
+        }
+      ],
+      "namespace": "Fog::Src::String::FogString",
+      "calledFunctions": [
+        "SMemStringToUppercase"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemEscapeString",
+      "address": "004113e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004113e0"
+        }
+      ],
+      "namespace": "Fog::Src::String::FogString",
+      "calledFunctions": [
+        "SMemEscapeString",
+        "SStrPrintf",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemFormat64BitWithSeparators",
+      "address": "00411540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411540"
+        }
+      ],
+      "namespace": "Fog::Src::String::FogString",
+      "calledFunctions": [
+        "SMemFormat64BitWithSeparators",
+        "memset",
+        "__security_check_cookie",
+        "_alldvrm"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    }
+  ]
+}

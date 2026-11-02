@@ -25,7 +25,7 @@ void __stdcall INPUT_MiniPanelMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_MiniPanelMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall MINIPANEL_Init();
 void __stdcall MINIPANEL_Shutdown();
-BOOL __fastcall MINIPANEL_IsMouseInArea(int32_t nParam1, int32_t nParam2);
+BOOL __fastcall MINIPANEL_IsMouseInArea(int32_t nMouseX, int32_t nMouseY);
 void __stdcall SetupMiniPanel();
 BOOL __stdcall WAYPOINT_IsMouseInMiniPanel();
 void __stdcall DRAW_UI_MiniPanel();

@@ -47,7 +47,7 @@ int __fastcall ERRORMANAGER_FReadFile(struct D2MPQFileStrc * pFileHandle, void *
 DWORD __fastcall ERRORMANAGER_FGetFileSize(struct D2MPQFileStrc * pFileHandle, LPDWORD pdwFileSize);
 // @wasnamed SFILE_SeekFileWrapper
 // @basis internal. NOT an exported Storm symbol. Renamed only to follow its callee: a __fastcall thunk whose entire body forwards to SFileSetFilePointer (004165a0) and discards the result.
-DWORD __fastcall SFILE_SetFilePointerThunk(struct D2MPQFileStrc * pFileHandle, int32_t nOffset, int * pnParam, uint32_t dwMoveMethod);
+DWORD __fastcall SFILE_SetFilePointerThunk(struct D2MPQFileStrc * pFileHandle, int32_t nOffset, int * pnOffsetHigh, uint32_t dwMoveMethod);
 HANDLE __fastcall thunk_CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
 void __fastcall thunk_DeleteFileA(LPCSTR szText);
 // @wasnamed CloseHandle - a function named after the Win32 API it calls, so the body read as infinite

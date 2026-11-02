@@ -294,8 +294,8 @@ BOOL __fastcall Q13_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // A2Q5 "The Summoner" - quest-timer end callback (scheduled by Callback_08 via AddQuestTimer). First invocation: sets pA2Q5->bCainSaved flag and iterates players running Q13_PlayCompletionSound (play the completion jingle). Second invocation (flag already set): clears eFlags and broadcasts quest state 4 (post-kill stage; notify=Q13_NotifySummonerComplete), then clears field_0x08. Drives the delayed completion sequence after the Summoner dies.
 uint8_t __fastcall Q13_OnEndCallbackAndNotify(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA2Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA2Q5;
-    if (!pQuestSpecificData->field_0x9) {
-      pQuestSpecificData->field_0x9 = 1;
+    if (!pQuestSpecificData->bCompletionSoundPlayed) {
+      pQuestSpecificData->bCompletionSoundPlayed = 1;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q13_PlayCompletionSound);
       return '\0';
     }
@@ -397,7 +397,7 @@ void __fastcall Q13_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
         AddQuestTimer(pQuestData, Q13_OnEndCallbackAndNotify, 3);
       }
 
-      pDVar1->field_0x9 = 0;
+      pDVar1->bCompletionSoundPlayed = 0;
       pDVar1->bSummonerKilled = 1;
       pDVar2 = D2Common::Units::UNITS_GetRoom(pQuestArgs->pTarget);
       pDVar1->pSummonerRoom = pDVar2;
@@ -463,7 +463,7 @@ void __fastcall Q13_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q13_Callback13_PlayerStartedGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q13_Callback08_MonsterKilled;
     pQuestSpecificData->bSummonerKilled = 0;
-    pQuestSpecificData->field_0x1 = 0;
+    pQuestSpecificData->bSummonerAiActivated = 0;
     pQuestSpecificData->bEndCallbackScheduled = 0;
     pQuestSpecificData->pSummonerRoom = 0;
 }

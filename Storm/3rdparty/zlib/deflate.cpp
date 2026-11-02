@@ -51,10 +51,10 @@ int __fastcall deflateResetKeep(z_stream * pStream) {
 
 int __fastcall deflateSetHeader(z_stream * pStream, gz_header * pHead) {
     if (pStream) {
-      void* pvVar1;
-      pvVar1 = pStream->state;
-      if (pvVar1 && *(int*)((int)pvVar1 + 0x18) == 2) {
-        *(gz_header**)((int)pvVar1 + 0x1c) = (gz_header*)pHead;
+      void* pState;
+      pState = pStream->state;
+      if (pState && *(int*)((int)pState + 0x18) == 2) {
+        *(gz_header**)((int)pState + 0x1c) = (gz_header*)pHead;
         return 0;
       }
     }
@@ -205,7 +205,7 @@ void putShortMSB(deflate_state * pDeflateState, uint32_t wValue) {
 }
 
 static void flush_pending(z_stream * pStream) {
-    uint32_t* puVar1;
+    uint32_t* pnPending;
     deflate_state* pDeflateState = (deflate_state*)pStream->state;
     trees::_tr_flush_bits(pDeflateState);
     uint32_t nCopyLen = pDeflateState->pending;
@@ -221,9 +221,9 @@ static void flush_pending(z_stream * pStream) {
     pDeflateState->pending_out += nCopyLen;
     pStream->total_out += nCopyLen;
     pStream->avail_out -= nCopyLen;
-    puVar1 = &pDeflateState->pending;
-    *puVar1 -= nCopyLen;
-    if (*puVar1) {
+    pnPending = &pDeflateState->pending;
+    *pnPending -= nCopyLen;
+    if (*pnPending) {
       return;
     }
 
@@ -231,10 +231,10 @@ static void flush_pending(z_stream * pStream) {
 }
 
 uint32_t __fastcall deflateEnd(z_stream * pStream) {
-    deflate_state* pDeflateState;
     int nStatus;
+    void* pBuffer;
     if (pStream) {
-      void* pvVar1;
+      deflate_state* pDeflateState;
       pDeflateState = (deflate_state*)pStream->state;
       if (pDeflateState) {
         nStatus = pDeflateState->status;
@@ -245,19 +245,19 @@ uint32_t __fastcall deflateEnd(z_stream * pStream) {
           pStream->zfree(pStream->opaque, pDeflateState->pending_buf);
         }
 
-        pvVar1 = *(void**)((int)pStream->state + 0x44);
-        if (pvVar1) {
-          pStream->zfree(pStream->opaque, pvVar1);
+        pBuffer = *(void**)((int)pStream->state + 0x44);
+        if (pBuffer) {
+          pStream->zfree(pStream->opaque, pBuffer);
         }
 
-        pvVar1 = *(void**)((int)pStream->state + 0x40);
-        if (pvVar1) {
-          pStream->zfree(pStream->opaque, pvVar1);
+        pBuffer = *(void**)((int)pStream->state + 0x40);
+        if (pBuffer) {
+          pStream->zfree(pStream->opaque, pBuffer);
         }
 
-        pvVar1 = *(void**)((int)pStream->state + 0x38);
-        if (pvVar1) {
-          pStream->zfree(pStream->opaque, pvVar1);
+        pBuffer = *(void**)((int)pStream->state + 0x38);
+        if (pBuffer) {
+          pStream->zfree(pStream->opaque, pBuffer);
         }
 
         pStream->zfree(pStream->opaque, pStream->state);
@@ -273,17 +273,17 @@ uint32_t __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
     uint8_t* pAllocTree;
     uint16_t* pHashHead;
     int nCopyWords;
-    z_stream* pzVar1;
+    z_stream* pDestCursor;
     deflate_state* pSrcState;
     if (pSrcStream && pDestStream) {
       deflate_state* pDestState;
       pSrcState = (deflate_state*)pSrcStream->state;
       if (pSrcState) {
-        pzVar1 = pDestStream;
+        pDestCursor = pDestStream;
         for (nCopyWords = 0xe; nCopyWords; nCopyWords--) {
-          pzVar1->next_in = pSrcStream->next_in;
+          pDestCursor->next_in = pSrcStream->next_in;
           pSrcStream = (z_stream*)&pSrcStream->avail_in;
-          pzVar1 = (z_stream*)&pzVar1->avail_in;
+          pDestCursor = (z_stream*)&pDestCursor->avail_in;
         }
 
         pDestState = (deflate_state*)pDestStream->zalloc(pDestStream->opaque, 1, 0x16c4);
@@ -325,29 +325,29 @@ uint32_t __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
 }
 
 uint32_t __fastcall read_buf(z_stream * pStream, uint8_t * pBuf, uint32_t nSize) {
-    uint32_t uVar3;
-    uint32_t uVar1 = pStream->avail_in;
-    uint32_t _Size = uVar1;
-    if (uVar1 > nSize) {
+    uint32_t dwChecksum;
+    uint32_t nAvailIn = pStream->avail_in;
+    uint32_t _Size = nAvailIn;
+    if (nAvailIn > nSize) {
       _Size = nSize;
     }
     if (!_Size) {
       return 0;
     }
 
-    pStream->avail_in = uVar1 - _Size;
+    pStream->avail_in = nAvailIn - _Size;
     memcpy(pBuf, pStream->next_in, _Size);
-    int iVar2 = *(int*)((int)pStream->state + 0x18);
-    if (iVar2 == 1) {
-      uVar3 = D2Client::Source::SSComp::ZLIB_Adler32(pStream->adler, pBuf, _Size);
+    int nWrap = *(int*)((int)pStream->state + 0x18);
+    if (nWrap == 1) {
+      dwChecksum = D2Client::Source::SSComp::ZLIB_Adler32(pStream->adler, pBuf, _Size);
       pStream->next_in += _Size;
       pStream->total_in += _Size;
-      pStream->adler = uVar3;
+      pStream->adler = dwChecksum;
       return _Size;
     }
-    if (iVar2 == 2) {
-      uVar3 = crc32::crc32(pStream->adler, pBuf, _Size);
-      pStream->adler = uVar3;
+    if (nWrap == 2) {
+      dwChecksum = crc32::crc32(pStream->adler, pBuf, _Size);
+      pStream->adler = dwChecksum;
     }
 
     pStream->next_in += _Size;
@@ -359,11 +359,11 @@ static void lm_init(deflate_state * pDeflateState) {
     pDeflateState->window_size = pDeflateState->w_size * 2;
     pDeflateState->head[pDeflateState->hash_size - 1] = 0;
     memset(pDeflateState->head, 0, pDeflateState->hash_size * 2 - 2);
-    int iVar1 = pDeflateState->level;
-    pDeflateState->max_lazy_match = (uint32_t)gaSSCompDeflateBlockTable[iVar1].nMaxLazy;
-    pDeflateState->good_match = (uint32_t)gaSSCompDeflateBlockTable[iVar1].nGoodLength;
-    pDeflateState->nice_match = (uint32_t)gaSSCompDeflateBlockTable[iVar1].nNiceLength;
-    uint16_t wMaxChainLen = gaSSCompDeflateBlockTable[iVar1].nMaxChain;
+    int nLevel = pDeflateState->level;
+    pDeflateState->max_lazy_match = (uint32_t)gaSSCompDeflateBlockTable[nLevel].nMaxLazy;
+    pDeflateState->good_match = (uint32_t)gaSSCompDeflateBlockTable[nLevel].nGoodLength;
+    pDeflateState->nice_match = (uint32_t)gaSSCompDeflateBlockTable[nLevel].nNiceLength;
+    uint16_t wMaxChainLen = gaSSCompDeflateBlockTable[nLevel].nMaxChain;
     pDeflateState->strstart = 0;
     pDeflateState->block_start = 0;
     pDeflateState->lookahead = 0;
@@ -1473,9 +1473,7 @@ int32_t __fastcall deflateReset(z_stream * pStream) {
 }
 
 uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
-    uint16_t uVar1;
-    uint8_t byOsFlags;
-    uint8_t bVar3;
+    uint8_t byHeaderByte2;
     uint32_t nChecksum;
     int nLevelFlag;
     block_state nBlockState;
@@ -1483,6 +1481,8 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
     uint32_t nCrcPendingStart;
     deflate_state* pState;
     bool bDone;
+    gz_header* pGzHead;
+    uint16_t wAdlerHalf;
     if (!pStream) {
       return -2;
     }
@@ -1504,7 +1504,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
     pDeflateState->strm = pStream;
     pDeflateState->last_flush = nFlush;
     if (pDeflateState->status == 0x2a) {
-      gz_header* pgVar2;
+      uint8_t byOsFlags;
       if (pDeflateState->wrap == 2) {
         nChecksum = crc32::crc32(0, nullptr, 0);
         pStream->adler = nChecksum;
@@ -1514,8 +1514,8 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
         pDeflateState->pending++;
         pDeflateState->pending_buf[pDeflateState->pending] = 8;
         pDeflateState->pending++;
-        pgVar2 = pDeflateState->gzhead;
-        if (!pgVar2) {
+        pGzHead = pDeflateState->gzhead;
+        if (!pGzHead) {
           pDeflateState->pending_buf[pDeflateState->pending] = 0;
           pDeflateState->pending++;
           pDeflateState->pending_buf[pDeflateState->pending] = 0;
@@ -1540,7 +1540,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
           pDeflateState->pending++;
           pDeflateState->status = 0x71;
         } else {
-          pDeflateState->pending_buf[pDeflateState->pending] = (pgVar2->comm ? 0x10U : 0) + (pgVar2->hcrc ? 2U : 0) + (pgVar2->name ? 8U : 0) + (pgVar2->extra ? 4U : 0) + (pgVar2->text != 0);
+          pDeflateState->pending_buf[pDeflateState->pending] = (pGzHead->comm ? 0x10U : 0) + (pGzHead->hcrc ? 2U : 0) + (pGzHead->name ? 8U : 0) + (pGzHead->extra ? 4U : 0) + (pGzHead->text != 0);
           pDeflateState->pending++;
           pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->gzhead->time;
           pDeflateState->pending++;
@@ -1551,14 +1551,14 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
           pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->gzhead->time + 3);
           pDeflateState->pending++;
           if (pDeflateState->level == 9) {
-            bVar3 = 2;
+            byHeaderByte2 = 2;
           } else if (pDeflateState->strategy < 2 && pDeflateState->level >= 2) {
-            bVar3 = 0;
+            byHeaderByte2 = 0;
           } else {
-            bVar3 = 4;
+            byHeaderByte2 = 4;
           }
 
-          pDeflateState->pending_buf[pDeflateState->pending] = bVar3;
+          pDeflateState->pending_buf[pDeflateState->pending] = byHeaderByte2;
           pDeflateState->pending++;
           pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->gzhead->os;
           pDeflateState->pending++;
@@ -1601,15 +1601,15 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
         pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)nLevelFlag;
         pDeflateState->pending++;
         if (pDeflateState->strstart) {
-          uVar1 = *(uint16_t*)((uintptr_t)&pStream->adler + 2);
-          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)uVar1 >> 8);
+          wAdlerHalf = *(uint16_t*)((uintptr_t)&pStream->adler + 2);
+          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)wAdlerHalf >> 8);
           pDeflateState->pending++;
-          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)uVar1;
+          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wAdlerHalf;
           pDeflateState->pending++;
-          uVar1 = (uint16_t)pStream->adler;
-          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)uVar1 >> 8);
+          wAdlerHalf = (uint16_t)pStream->adler;
+          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)wAdlerHalf >> 8);
           pDeflateState->pending++;
-          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)uVar1;
+          pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wAdlerHalf;
           pDeflateState->pending++;
         }
 
@@ -1673,12 +1673,12 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
             }
           }
 
-          bVar3 = pDeflateState->gzhead->name[pDeflateState->gzindex];
+          byHeaderByte2 = pDeflateState->gzhead->name[pDeflateState->gzindex];
           pDeflateState->gzindex++;
-          pDeflateState->pending_buf[nHeader] = bVar3;
+          pDeflateState->pending_buf[nHeader] = byHeaderByte2;
           pDeflateState->pending++;
           bDone = false;
-        } while (bVar3);
+        } while (byHeaderByte2);
 
         if (pDeflateState->gzhead->hcrc && pDeflateState->pending > nCrcPendingStart) {
           nChecksum = crc32::crc32(pStream->adler, pDeflateState->pending_buf + nCrcPendingStart, pDeflateState->pending - nCrcPendingStart);
@@ -1712,12 +1712,12 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
             }
           }
 
-          bVar3 = pDeflateState->gzhead->comm[pDeflateState->gzindex];
+          byHeaderByte2 = pDeflateState->gzhead->comm[pDeflateState->gzindex];
           pDeflateState->gzindex++;
-          pDeflateState->pending_buf[nHeader] = bVar3;
+          pDeflateState->pending_buf[nHeader] = byHeaderByte2;
           pDeflateState->pending++;
           bDone = false;
-        } while (bVar3);
+        } while (byHeaderByte2);
 
         if (pDeflateState->gzhead->hcrc && pDeflateState->pending > nCrcPendingStart) {
           nChecksum = crc32::crc32(pStream->adler, pDeflateState->pending_buf + nCrcPendingStart, pDeflateState->pending - nCrcPendingStart);
@@ -1827,15 +1827,15 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
       pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pStream->total_in + 3);
       pDeflateState->pending++;
     } else {
-      uVar1 = *(uint16_t*)((uintptr_t)&pStream->adler + 2);
-      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)uVar1 >> 8);
+      wAdlerHalf = *(uint16_t*)((uintptr_t)&pStream->adler + 2);
+      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)wAdlerHalf >> 8);
       pDeflateState->pending++;
-      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)uVar1;
+      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wAdlerHalf;
       pDeflateState->pending++;
-      uVar1 = (uint16_t)pStream->adler;
-      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)uVar1 >> 8);
+      wAdlerHalf = (uint16_t)pStream->adler;
+      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)wAdlerHalf >> 8);
       pDeflateState->pending++;
-      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)uVar1;
+      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wAdlerHalf;
       pDeflateState->pending++;
     }
 

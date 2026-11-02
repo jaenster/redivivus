@@ -1,0 +1,104 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/D2QSQueue.cpp",
+  "functions": [
+    {
+      "name": "D2QSQUEUE_Initialize",
+      "address": "006c1f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c1f60"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSQueue",
+      "calledFunctions": [
+        "D2QSQUEUE_Initialize"
+      ],
+      "usedTypes": [
+        "D2QSQueueStrc"
+      ]
+    },
+    {
+      "name": "Free",
+      "address": "006c1f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c1f80"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSQueue",
+      "calledFunctions": [
+        "Free",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QSQueueStrc"
+      ]
+    },
+    {
+      "name": "GetAddress",
+      "address": "006c1fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c1fd0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSQueue",
+      "calledFunctions": [
+        "GetAddress"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FOG_EnqueueMessage",
+      "address": "006c1ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c1ff0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSQueue",
+      "calledFunctions": [
+        "FOG_EnqueueMessage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2QSQueueEntryStrc",
+        "D2QSQueueStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "D2QSQUEUE_Dequeue",
+      "address": "006c2090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c2090"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSQueue",
+      "calledFunctions": [
+        "D2QSQUEUE_Dequeue",
+        "memcpy",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QSQueueEntryStrc",
+        "D2QSQueueStrc",
+        "uint32_t"
+      ]
+    }
+  ]
+}

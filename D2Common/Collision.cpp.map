@@ -1,0 +1,1478 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Collision.cpp",
+  "functions": [
+    {
+      "name": "GetDistanceBetweenUnits",
+      "address": "00641530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00641530"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "GetDistanceBetweenUnits",
+        "GetXPos",
+        "GetYPos",
+        "GetUnitSizeX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetCollisionDistance",
+      "address": "006416d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006416d0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "GetCollisionDistance",
+        "GetXPos",
+        "GetYPos",
+        "GetUnitSizeX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetDistanceToXY",
+      "address": "006417f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006417f0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "GetDistanceToXY",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COLLISION_IsUnitInRange",
+      "address": "00641890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00641890"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "COLLISION_IsUnitInRange",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CoordIsInRoom",
+      "address": "00641930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00641930"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CoordIsInRoom",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "_unused",
+      "address": "006419f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006419f0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "_unused",
+        "GetUnitSizeX",
+        "UNITS_GetRoom",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "CoordIsInRoom",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "pfnUnitProximityTest"
+      ]
+    },
+    {
+      "name": "CallCollisionFunction",
+      "address": "00641cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00641cb0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CallCollisionFunction",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "CoordIsInRoom",
+        "GetUnitSizeX",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "fpMissileSrvDoFuncData",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TileLibrary_AddCollision",
+      "address": "0064c4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c4c0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "TileLibrary_AddCollision",
+        "TILE_GetTileFlags"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2TileLibraryEntryStrc",
+        "eCollisionFlags",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TileLibrary_RemoveCollision",
+      "address": "0064c580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c580"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "TileLibrary_RemoveCollision",
+        "TILE_GetTileFlags"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2TileLibraryEntryStrc",
+        "eCollisionFlags",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TileLibrary_SetCollision",
+      "address": "0064c640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c640"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "TileLibrary_SetCollision",
+        "TILE_GetTileFlags"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2TileLibraryEntryStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AddCollisionFlagToCoords",
+      "address": "0064c700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c700"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollisionFlagToCoords"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TileLibrary_SetupCollision",
+      "address": "0064c790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c790"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "TileLibrary_SetupCollision",
+        "CoordsRoomToWorld",
+        "AreSubtileCoordinatesInsideRoom",
+        "TileLibrary_AddCollision",
+        "TileLibrary_SetCollision",
+        "AddCollisionFlagToCoords"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2RoomCollisionGridStrc",
+        "D2TileLibraryEntryStrc *",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TileLibrary_UpdateCollision",
+      "address": "0064c860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c860"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "TileLibrary_UpdateCollision",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "CoordsRoomToWorld",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "TileLibrary_RemoveCollision",
+        "TileLibrary_AddCollision"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "D2TileLibraryEntryStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocRoomCollisionGrid",
+      "address": "0064c900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c900"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AllocRoomCollisionGrid",
+        "DRLGROOM_GetRoomCoordinates",
+        "AllocServerMemory",
+        "DRLGROOM_SetCollisionGridInRoom",
+        "memset",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "DRLGROOM_GetFloorTilesFromRoom",
+        "TileLibrary_SetupCollision",
+        "DRLGROOM_GetWallTilesFromRoom",
+        "DRLGROOM_GetRoofTilesFromRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2PoolManagerStrc",
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeRoomCollisionGrid",
+      "address": "0064ca10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ca10"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "FreeRoomCollisionGrid",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "FreeServerMemory",
+        "DRLGROOM_SetCollisionGridInRoom"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "COLLISN_CheckCellMask_RegArgs",
+      "address": "0064ca50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ca50"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "COLLISN_CheckCellMask_RegArgs",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveCollision_Vector1",
+      "address": "0064caa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064caa0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveCollision_Vector1",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddCollision_Vector1",
+      "address": "0064caf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064caf0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollision_Vector1",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BlockPlayerMissile",
+      "address": "0064cb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cb30"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_BlockPlayerMissile",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddCollision",
+      "address": "0064cb90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cb90"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollision",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveCollision",
+      "address": "0064cbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cbe0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveCollision",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CollisionGrid_CheckCollision_BoundingBox",
+      "address": "0064cc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cc30"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CollisionGrid_CheckCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomCollisionGridStrc",
+        "eCollisionFlags"
+      ]
+    },
+    {
+      "name": "CollisionGrid_RemoveCollision_BoundingBox",
+      "address": "0064cce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cce0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CollisionGrid_RemoveCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomCollisionGridStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CollisionGrid_AddCollision_BoundingBox",
+      "address": "0064cd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cd70"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CollisionGrid_AddCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomCollisionGridStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BoundnigBox_AdaptBoundingBoxToGrid",
+      "address": "0064cdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cdf0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "BoundnigBox_AdaptBoundingBoxToGrid",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BoundingBox",
+      "address": "0064ceb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ceb0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "BoundnigBox_AdaptBoundingBoxToGrid",
+        "CheckCollision_BoundingBox",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "CollisionGrid_CheckCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "int16_t",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BlockPlayer_BoundingBox",
+      "address": "0064cf50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cf50"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_BoundingBox",
+        "CheckCollision_BlockPlayer_BoundingBox",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "BoundnigBox_AdaptBoundingBoxToGrid",
+        "CollisionGrid_CheckCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveCollision_BoundingBox",
+      "address": "0064cff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064cff0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveCollision_BoundingBox",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "BoundnigBox_AdaptBoundingBoxToGrid",
+        "CollisionGrid_RemoveCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddCollision_BoundingBox",
+      "address": "0064d060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d060"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollision_BoundingBox",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "BoundnigBox_AdaptBoundingBoxToGrid",
+        "CollisionGrid_AddCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BoundingBox",
+      "address": "0064d0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d0d0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_Cross",
+      "address": "0064d100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d100"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_Cross",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "COLLISN_CheckCellMask_RegArgs"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COLLISN_CheckCellMaskOrBlocked",
+      "address": "0064d450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d450"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "COLLISN_CheckCellMaskOrBlocked",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BoundingBox1",
+      "address": "0064d4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d4a0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_BoundingBox1",
+        "CheckCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BlockPlayer_Cross",
+      "address": "0064d4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d4e0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_BlockPlayer_Cross",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "COLLISN_CheckCellMask_RegArgs"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BlockPlayer_BoundingBox1",
+      "address": "0064d7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d7c0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_BlockPlayer_BoundingBox1",
+        "CheckCollision_BlockPlayer_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_Vector",
+      "address": "0064d800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d800"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_Vector",
+        "COLLISN_CheckCellMask_RegArgs",
+        "CheckCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BlockAll_Type",
+      "address": "0064d870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d870"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_BlockAll_Type",
+        "COLLISN_CheckCellMaskOrBlocked",
+        "CheckCollision_Cross",
+        "CheckCollision_BoundingBox1"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "eD2CollisionShapeType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BlockPlayer_Type",
+      "address": "0064d910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d910"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_BlockPlayer_Type",
+        "COLLISN_CheckCellMaskOrBlocked",
+        "CheckCollision_BlockPlayer_Cross",
+        "CheckCollision_BlockPlayer_BoundingBox1"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "eD2CollisionShapeType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckCollision_BlockAll_Width",
+      "address": "0064d9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064d9b0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "CheckCollision_BlockAll_Width",
+        "COLLISN_CheckCellMaskOrBlocked",
+        "CheckCollision_Cross",
+        "CheckCollision_BoundingBox1"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "eD2CollisionUnitSize",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveCollision_Cross",
+      "address": "0064da40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064da40"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveCollision_Cross",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "COLLISN_ClearCellMask",
+      "address": "0064db70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064db70"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "COLLISN_ClearCellMask",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveCollision_BoundingBox1",
+      "address": "0064dbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064dbc0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveCollision_BoundingBox1",
+        "RemoveCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveCollision_Vector",
+      "address": "0064dc00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064dc00"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveCollision_Vector",
+        "RemoveCollision_Vector1",
+        "RemoveCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AddCollision_Cross",
+      "address": "0064dc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064dc80"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollision_Cross",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COLLISN_SetCellMask",
+      "address": "0064ddb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ddb0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "COLLISN_SetCellMask",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddCollision_BoundingBox1",
+      "address": "0064ddf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ddf0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollision_BoundingBox1",
+        "AddCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddCollision_Vector",
+      "address": "0064de30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064de30"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollision_Vector",
+        "AddCollision_Vector1",
+        "AddCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetFreeCoordinates",
+      "address": "0064dea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064dea0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "free",
+        "GetFreeCoordinates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FIELDTBLS_AllocPoint",
+        "SetXY",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "CheckCollision_BlockAll_Width",
+        "FIELDTBLS_TracePathCheckCollision",
+        "FIELDTBLS_FreePoint"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TestCollision",
+      "address": "0064e260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064e260"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "TestCollision",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "POINT",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetFreeCoordinates_WithMaxDistance",
+      "address": "0064e780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064e780"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "GetFreeCoordinates_WithMaxDistance",
+        "GetFreeCoordinates"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetFreeCoordinates_WithNeighboorRooms",
+      "address": "0064e7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064e7b0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "GetFreeCoordinates"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetFreeCoordinates_WithIncrementValue",
+      "address": "0064e7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064e7e0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "GetFreeCoordinates_WithIncrementValue",
+        "GetFreeCoordinates"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetFreeCoordinates_WithFieldCoords",
+      "address": "0064e810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064e810"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "GetFreeCoordinates_WithFieldCoords",
+        "GetFreeCoordinates"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COLLISION_FindFreeCoordSpiral",
+      "address": "0064e840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064e840"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "COLLISION_FindFreeCoordSpiral",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_GetCollisionGridFromRoom",
+        "CheckCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomCollisionGridStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "POINT",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AddCollision_Width",
+      "address": "0064ea00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ea00"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollision_Width",
+        "COLLISN_SetCellMask",
+        "AddCollision_Cross",
+        "AddCollision_BoundingBox"
+      ],
+      "usedTypes": [
+        "D2BoundingBoxStrc",
+        "D2RoomStrc",
+        "eD2CollisionUnitSize",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddCollision_Type",
+      "address": "0064ea90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ea90"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "AddCollision_Type",
+        "AddCollision_Cross",
+        "COLLISN_SetCellMask",
+        "AddCollision_BoundingBox1"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2CollisionShapeType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveCollision_Width",
+      "address": "0064eba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064eba0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveCollision_Width",
+        "COLLISN_ClearCellMask",
+        "RemoveCollision_Cross",
+        "RemoveCollision_BoundingBox1"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2CollisionUnitSize",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveCollision_Type",
+      "address": "0064ec10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ec10"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveCollision_Type",
+        "RemoveCollision_Cross",
+        "COLLISN_ClearCellMask",
+        "RemoveCollision_BoundingBox1"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2CollisionShapeType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveGetCollision_Width",
+      "address": "0064ed20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ed20"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveGetCollision_Width",
+        "RemoveCollision_Width",
+        "CheckCollision_BlockAll_Width",
+        "AddCollision_Width"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "eD2CollisionUnitSize",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveGetCollision_Type",
+      "address": "0064eda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064eda0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "RemoveGetCollision_Type",
+        "RemoveCollision_Type",
+        "CheckCollision_BlockAll_Type",
+        "AddCollision_Type"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateGetCollision_Unused",
+      "address": "0064ee20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ee20"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "UpdateGetCollision_Unused",
+        "RemoveCollision_Type",
+        "CheckCollision_BlockPlayer_Type",
+        "AddCollision_Type"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateGetCollision_Width",
+      "address": "0064ee70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ee70"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "UpdateGetCollision_Width",
+        "RemoveCollision_Width",
+        "CheckCollision_BlockAll_Width",
+        "AddCollision_Width"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "eD2CollisionUnitSize",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateCollision_Width",
+      "address": "0064eed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064eed0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "UpdateCollision_Width",
+        "RemoveCollision_Width",
+        "AddCollision_Width"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2CollisionUnitSize",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UpdateGetCollision_Type",
+      "address": "0064ef10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064ef10"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "UpdateGetCollision_Type",
+        "RemoveCollision_Type",
+        "CheckCollision_BlockPlayer_Type",
+        "AddCollision_Type"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateCollision_Type",
+      "address": "0064efa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064efa0"
+        }
+      ],
+      "namespace": "D2Common::Collision::Collision",
+      "calledFunctions": [
+        "UpdateCollision_Type",
+        "RemoveCollision_Type",
+        "AddCollision_Type"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

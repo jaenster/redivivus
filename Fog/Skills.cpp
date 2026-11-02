@@ -47,7 +47,7 @@ static int __fastcall SKILLS_PopValue(int * pValueStack) {
 }
 
 // Stack-based bytecode evaluator for compiled skill and missile calc formulas. The 64-entry value stack keeps its count in the 65th slot, at byte offset 0x100 from the base, which is why it is one int[65] local and not a head plus a separate counter. Consecutive SKILLS_PopValue calls reuse the stack pointer in ECX without reloading it, so that callee is typed __fastcall_ecxsafe.
-uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, fnSkillCalcMethod pFunction, D2ItemsEventMethodStrc * pFunctionArray, int32_t nFunctionArraySize, void * dwParam) {
+uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pFormula, int nFormulaSize, fnSkillCalcMethod pFunction, D2ItemsEventMethodStrc * pFunctionArray, int32_t nFunctionArraySize, void * pContext) {
     uint32_t uFuncResult;
     uint32_t nOperand3;
     int uOperandB;
@@ -56,7 +56,7 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
     uint32_t uVar1;
     int nIntResult;
     int aFormulaValueStack[65];
-    if (nParam <= 0) {
+    if (nFormulaSize <= 0) {
       return 0;
     }
 
@@ -64,8 +64,8 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
     nArgCount = 0;
     aFormulaValueStack[0x40] = 0;
     uint8_t* pbReadPtr;
-    pbReadPtr = (uint8_t*)pdwParam;
-    if (nParam <= 0) {
+    pbReadPtr = (uint8_t*)pFormula;
+    if (nFormulaSize <= 0) {
       return 0;
     }
 
@@ -88,14 +88,14 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
           if (!pFunction) {
             return 0;
           }
-        if ((int)pbNext2 - (int)pdwParam >= nParam) {
+        if ((int)pbNext2 - (int)pFormula >= nFormulaSize) {
           return 0;
         }
 
-        nArgCount = (*pFunction)((uint32_t)*pbNext2, dwParam);
+        nArgCount = (*pFunction)((uint32_t)*pbNext2, pContext);
         goto push_and_skip_byte_operand;
         case 7:
-          if ((int)pbNext2 - (int)pdwParam >= nParam) {
+          if ((int)pbNext2 - (int)pFormula >= nFormulaSize) {
             return 0;
           }
         nArgCount = (int)(char)*pbNext2;
@@ -108,11 +108,11 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
           if (!pFunction) {
             return 0;
           }
-        if ((int)pbNext2 - (int)pdwParam >= nParam) {
+        if ((int)pbNext2 - (int)pFormula >= nFormulaSize) {
           return 0;
         }
 
-        nArgCount = (*pFunction)((int)*(short int*)pbNext2, dwParam);
+        nArgCount = (*pFunction)((int)*(short int*)pbNext2, pContext);
         SKILLS_PushValue(aFormulaValueStack, nArgCount);
         pbNext2 = pbReadPtr + 3;
         nArgCount = aFormulaValueStack[0x40];
@@ -121,17 +121,17 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
           if (!pFunction) {
             return 0;
           }
-        if ((int)pbNext2 - (int)pdwParam >= nParam) {
+        if ((int)pbNext2 - (int)pFormula >= nFormulaSize) {
           return 0;
         }
 
-        uFuncResult = (*pFunction)(*(int32_t*)pbNext2, dwParam);
+        uFuncResult = (*pFunction)(*(int32_t*)pbNext2, pContext);
         SKILLS_PushValue(aFormulaValueStack, uFuncResult);
         pbNext2 = pbReadPtr + 5;
         nArgCount = aFormulaValueStack[0x40];
         break;
         case 8:
-          if ((int)pbNext2 - (int)pdwParam >= nParam) {
+          if ((int)pbNext2 - (int)pFormula >= nFormulaSize) {
             return 0;
           }
         SKILLS_PushValue(aFormulaValueStack, (int)*(short int*)pbNext2);
@@ -139,7 +139,7 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
         nArgCount = aFormulaValueStack[0x40];
         break;
         case 9:
-          if ((int)pbNext2 - (int)pdwParam >= nParam) {
+          if ((int)pbNext2 - (int)pFormula >= nFormulaSize) {
             return 0;
           }
         SKILLS_PushValue(aFormulaValueStack, *(uint32_t*)pbNext2);
@@ -173,7 +173,7 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
               nIntResult = 0;
             }
 
-            uOperandB = pFunctionArray[uVar1].pfnMethod(nIntResult, nArgCount, 0, dwParam);
+            uOperandB = pFunctionArray[uVar1].pfnMethod(nIntResult, nArgCount, 0, pContext);
             SKILLS_PushValue(aFormulaValueStack, uOperandB);
             nArgCount = aFormulaValueStack[0x40];
             break;
@@ -182,7 +182,7 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
           nOperand3 = SKILLS_PopValue(aFormulaValueStack);
           nArgCount = SKILLS_PopValue(aFormulaValueStack);
           nIntResult = SKILLS_PopValue(aFormulaValueStack);
-          nArgCount = pFunctionArray[uVar1].pfnMethod(nIntResult, nArgCount, nOperand3, dwParam);
+          nArgCount = pFunctionArray[uVar1].pfnMethod(nIntResult, nArgCount, nOperand3, pContext);
           SKILLS_PushValue(aFormulaValueStack, nArgCount);
           nArgCount = aFormulaValueStack[0x40];
         }
@@ -486,7 +486,7 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pdwParam, int nParam, f
       }
 
       pbReadPtr = pbNext2;
-      if ((int)pbNext2 - (int)pdwParam >= nParam) {
+      if ((int)pbNext2 - (int)pFormula >= nFormulaSize) {
         return 0;
       }
     }
@@ -516,18 +516,18 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
     *pnTokenValue = 0;
     char cCur = *szToken;
     CalcGetKeyWordToNumber_t local_118 = pFuncLookup;
-    CalcGetLinkerIndex_t local_114 = pfnSkillLookup;
-    int* local_110 = pnTokenValue;
+    CalcGetLinkerIndex_t pfnGetLinkerIndex = pfnSkillLookup;
+    int* pnValueOut = pnTokenValue;
     uint8_t* local_10c = pTokenType;
     for (; cCur != '\0' && (nCtype = isspace((int)cCur) , nCtype || *szToken == '\"'); szToken++) {
       cCur = szToken[1];
     }
 
     nCtype = isdigit((int)*szToken);
-    int* piVar1 = local_110;
+    int* piVar1 = pnValueOut;
     if (nCtype) {
       *pTokenType = '\x10';
-      *local_110 = *szToken - 0x30;
+      *pnValueOut = *szToken - 0x30;
       nCtype = isdigit((int)szToken[1]);
       while (true) {
         szToken++;
@@ -569,15 +569,15 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
       nLookupResult = *(int*)(nParserContext + 0x140);
       szTokenBuf[nCtype] = '\0';
       local_10c = 0;
-      nCtype = (*local_114)(szTokenBuf, (int*)&local_10c, (uint32_t)*(uint8_t*)(nLookupResult - 1 + nParserContext), *(uint32_t*)(nParserContext + 0x3c + nLookupResult * 4));
+      nCtype = (*pfnGetLinkerIndex)(szTokenBuf, (int*)&local_10c, (uint32_t)*(uint8_t*)(nLookupResult - 1 + nParserContext), *(uint32_t*)(nParserContext + 0x3c + nLookupResult * 4));
       if (nCtype >= 0) {
         *pTokenType = !local_10c + '\x10';
-        *local_110 = nCtype;
+        *pnValueOut = nCtype;
         return pcTokenEnd;
       }
 
       *pTokenType = '\x10';
-      *local_110 = 0;
+      *pnValueOut = 0;
       return pcTokenEnd;
     }
 
@@ -613,7 +613,7 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
             nCtype = (*local_118)(szTokenBuf);
             if (nCtype >= 0) {
               *local_10c = '\x12';
-              *local_110 = nCtype;
+              *pnValueOut = nCtype;
               return pcTokenEnd + 1;
             }
           }
@@ -626,15 +626,15 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
       } while (true);
 
       local_11c = 0;
-      nCtype = (*local_114)(szTokenBuf, &local_11c, (uint32_t)*(uint8_t*)(*(int*)(nParserContext + 0x140) - 1 + nParserContext), *(uint32_t*)(nParserContext + 0x3c + *(int*)(nParserContext + 0x140) * 4));
+      nCtype = (*pfnGetLinkerIndex)(szTokenBuf, &local_11c, (uint32_t)*(uint8_t*)(*(int*)(nParserContext + 0x140) - 1 + nParserContext), *(uint32_t*)(nParserContext + 0x3c + *(int*)(nParserContext + 0x140) * 4));
       if (nCtype >= 0) {
         *local_10c = !local_11c + '\x10';
-        *local_110 = nCtype;
+        *pnValueOut = nCtype;
         return pcTokenEnd;
       }
 
       *local_10c = '\x10';
-      *local_110 = 0;
+      *pnValueOut = 0;
       return pcTokenEnd;
     }
 
@@ -714,10 +714,10 @@ char * __fastcall SKILLS_ParseSkillDescription(CalcGetKeyWordToNumber_t pFuncLoo
       nLookupResult = *(int*)(nParserContext + 0x140);
       szTokenBuf[nCtype] = '\0';
       local_118 = 0;
-      nCtype = (*local_114)(szTokenBuf, (int*)&local_118, (uint32_t)*(uint8_t*)(nLookupResult - 1 + nParserContext), *(uint32_t*)(nParserContext + 0x3c + nLookupResult * 4));
+      nCtype = (*pfnGetLinkerIndex)(szTokenBuf, (int*)&local_118, (uint32_t)*(uint8_t*)(nLookupResult - 1 + nParserContext), *(uint32_t*)(nParserContext + 0x3c + nLookupResult * 4));
       if (nCtype >= 0) {
         *local_10c = '\x10';
-        *local_110 = nCtype;
+        *pnValueOut = nCtype;
         return pcTokenEnd;
       }
 
@@ -907,7 +907,7 @@ static uint8_t * __fastcall SKILLS_WriteValueToBuffer2(uint8_t * pBase, int nVal
 }
 
 // Parse calc expression from skill desc into bytecode formula
-int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pbByteCodeOutput, int nMaxOutputSize, CalcGetKeyWordToNumber_t pDescTable, CalcGetFunctionParameterCount_t pOpcodeInfo, CalcGetLinkerIndex_t pParam) {
+int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pbByteCodeOutput, int nMaxOutputSize, CalcGetKeyWordToNumber_t pDescTable, CalcGetFunctionParameterCount_t pOpcodeInfo, CalcGetLinkerIndex_t pfnGetLinkerIndex) {
     // Frame slots -348..-8 are ONE object: &dwTokenValue is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -936,10 +936,10 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
     bHasVarRef = false;
     __frame0.aTokenBuf = 0;
     char* szToken;
-    szToken = SKILLS_ParseSkillDescription(pDescTable, pParam, (int)__frame0.aOpStackTokenTypes, szExpressionString, &__frame0.aTokenBuf, (int*)&__frame0.dwTokenValue);
+    szToken = SKILLS_ParseSkillDescription(pDescTable, pfnGetLinkerIndex, (int)__frame0.aOpStackTokenTypes, szExpressionString, &__frame0.aTokenBuf, (int*)&__frame0.dwTokenValue);
     uint8_t* pbWritePtr;
     pbWritePtr = pbByteCodeOutput;
-    for (; szToken; szToken = SKILLS_ParseSkillDescription(pDescTable, pParam, (int)__frame0.aOpStackTokenTypes, szToken, &__frame0.aTokenBuf, (int*)&__frame0.dwTokenValue)) {
+    for (; szToken; szToken = SKILLS_ParseSkillDescription(pDescTable, pfnGetLinkerIndex, (int)__frame0.aOpStackTokenTypes, szToken, &__frame0.aTokenBuf, (int*)&__frame0.dwTokenValue)) {
       /* switch on aTokenBuf[0] = eD2SkillCalcToken (parser token type). Maps each
                          token to the
                          emitted eD2SkillCalcOp opcode (see bEmitOpcode / bToken):

@@ -1,0 +1,54 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/d3dFloorCache.cpp",
+  "functions": [
+    {
+      "name": "D3D_RenderBinkVideoFrame",
+      "address": "006bbbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bbbf0"
+        }
+      ],
+      "namespace": "Fog::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_RenderBinkVideoFrame",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DDSURFACEDESC",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D3D_PlayBinkVideo",
+      "address": "006bbce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bbce0"
+        }
+      ],
+      "namespace": "Fog::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_PlayBinkVideo",
+        "GetUseDirectCommand",
+        "SFileOpenFileEx",
+        "GetTickCount",
+        "SOUNDSMP_SetGlobalVolume",
+        "exit",
+        "D3D_RenderBinkVideoFrame"
+      ],
+      "usedTypes": [
+        "fnBinkFrameCallback",
+        "tagMSG",
+        "uint32_t"
+      ]
+    }
+  ]
+}

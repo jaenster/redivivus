@@ -13,10 +13,10 @@ namespace D2CMP {
 // Function declarations
 void __fastcall SPRITECACHE_LRU_FreeEntryCallback(int pEntry);
 void __fastcall SPRITECACHE_LRU_RemoveCacheEntryCallback(int pEntry);
-uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nParam1, uint32_t nParam2, int * pdwParam, int32_t nParam);
-uint32_t __stdcall TILEPROJECT_GetSoundIndexIndex(int32_t nParam);
-uint32_t __stdcall TILEPROJECT_GetMainIndex(uint32_t nParam);
-uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t nParam);
+uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDirections, int * ppRawData, int32_t bRawData);
+uint32_t __stdcall TILEPROJECT_GetSoundIndexIndex(int32_t pComp8);
+uint32_t __stdcall TILEPROJECT_GetMainIndex(uint32_t pComp24);
+uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t pComp24);
 void __stdcall D2CMP_MinDouble(double fParam1, double fParam2);
 void __stdcall D2CMP_MaxDouble(double fParam1, double fParam2);
 int32_t __fastcall SUBTILE_CountRunLength(char * pDataStart, char * pDataEnd, int32_t nMaxRunLength, uint32_t * pIsAtEndFlag, uint32_t * pIsExactMatchFlag);

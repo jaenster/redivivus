@@ -54,7 +54,7 @@ void __stdcall A2Q4_OnMonsterDeathClass331_NoOp(uint32_t dwArg1, uint32_t dwArg2
 // A2Q4 - CheckJerhynGateOpen. One-shot edge detector: returns 1 the first time Jerhyn's initial-talk flag is set and the gate has not yet been opened (then latches bJerhynGateOpened). Used to open the Lut Gholein palace harem gate once Jerhyn has been spoken to.
 BOOL __fastcall Q12_CheckJerhynGateOpen(::SGAMEDATA * pGame);
 // A2Q4 - BlockHaremRoomForPlayerAccess. Spawns a blocking object (classId 0x13e) just in front of the player to wall off the harem/palace room until the quest opens it. Tries player-pos offset, then a fallback offset; on success marks the substruct occupied and records the object GUID.
-void __fastcall BlockHaremRoomForPlayerAccess(int32_t nParam, struct D2UnitStrc * pUnit);
+void __fastcall BlockHaremRoomForPlayerAccess(int32_t pQuestData, struct D2UnitStrc * pUnit);
 // A2Q4 - Objects_InitFn30. Object init fn: syncs a quest object's visual/update flag to the portal substate (sSub.nPortalGUID), records its GUID, and removes its collision once the portal substate == 2 (portal active). No quest-record writes.
 void __fastcall Objects_InitFn30(struct D2ObjectInitFnArg * pInitArg);
 // A2Q4 (A2Q6/Duriel-related) - Q14_CheckDurielProximity. Per-player iterator: if The Seven Tombs (Duriel) is not Completed(0)/RewardAwaits(1) and the player is within ~31 units of the tracked Duriel-quest coords, sets the proximity flag and records the player GUID. Reads A2Q4 quest data block (shared union) for the coords. Returns 1 on trigger.

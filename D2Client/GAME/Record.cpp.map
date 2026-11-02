@@ -1,0 +1,290 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Record.cpp",
+  "functions": [
+    {
+      "name": "AllocGameRecord",
+      "address": "00451400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451400"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "AllocGameRecord",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2GameRecordStrc"
+      ]
+    },
+    {
+      "name": "AddGameEntry",
+      "address": "00451450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451450"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "AddGameEntry",
+        "AllocGameRecord",
+        "GetEntryIndex"
+      ],
+      "usedTypes": [
+        "D2GameRecordEntryStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HandleWinProcMsg",
+      "address": "004514b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004514b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "HandleWinProcMsg",
+        "AddGameEntry"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SaveGameRecordToFile",
+      "address": "00451620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451620"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "SaveGameRecordToFile",
+        "GetEntryIndex",
+        "GetInitSeedFromAct"
+      ],
+      "usedTypes": [
+        "D2GameRecordFileHeaderStrc",
+        "D2GameRecordStrc"
+      ]
+    },
+    {
+      "name": "LoadGameRecordFromFile",
+      "address": "00451710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451710"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "LoadGameRecordFromFile",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GameRecordStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeGameRecord",
+      "address": "00451850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451850"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "FreeGameRecord",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GameRecordStrc"
+      ]
+    },
+    {
+      "name": "GAME_ReplayRecordedWindowMessage",
+      "address": "00451880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451880"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "GAME_ReplayRecordedWindowMessage",
+        "GetEntryIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetHwnd",
+        "SMsgDispatchMessage"
+      ],
+      "usedTypes": [
+        "D2GameRecordEntryStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetupRecording",
+      "address": "004518e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004518e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "SetupRecording",
+        "LoadGameRecordFromFile",
+        "GAME_SetForcedGameSeed"
+      ]
+    },
+    {
+      "name": "IsNotRecording",
+      "address": "00451910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451910"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "IsNotRecording"
+      ]
+    },
+    {
+      "name": "CallCloseRecordingFunction",
+      "address": "00451920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451920"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "CallCloseRecordingFunction",
+        "SaveGameRecordToFile"
+      ]
+    },
+    {
+      "name": "SetCleanupFunction",
+      "address": "00451940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451940"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "SetCleanupFunction",
+        "RegisterExitFunction"
+      ]
+    },
+    {
+      "name": "RECORD_SetPlaybackActive",
+      "address": "00451970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451970"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "RECORD_SetPlaybackActive"
+      ]
+    },
+    {
+      "name": "IsRecording",
+      "address": "00451980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451980"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "IsRecording"
+      ]
+    },
+    {
+      "name": "IsPlaybackActive",
+      "address": "00451990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451990"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "IsPlaybackActive"
+      ]
+    },
+    {
+      "name": "StopRecordingSetFlags",
+      "address": "004519a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004519a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "StopRecordingSetFlags"
+      ]
+    },
+    {
+      "name": "RecordCurrentStep",
+      "address": "004519c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004519c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Record",
+      "calledFunctions": [
+        "RecordCurrentStep",
+        "GetEntryIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GAME_ReplayRecordedWindowMessage"
+      ],
+      "usedTypes": [
+        "D2GameRecordEntryStrc",
+        "D2GameRecordStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

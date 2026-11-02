@@ -265,9 +265,9 @@ void __stdcall CMDTBL_InvokeMouseMiddleButtonHandler() {
     (*gpfnMouseMiddleButtonHandler)();
 }
 
-void __fastcall CMD_InvokeCallbackByParam(int32_t nParam) {
+void __fastcall CMD_InvokeCallbackByParam(int32_t nScrollDirection) {
     BOOL bIsBadPtr;
-    if (nParam > 0) {
+    if (nScrollDirection > 0) {
       if (!gpfnScrollUpButtonHandler) {
         return;
       }
@@ -281,7 +281,7 @@ void __fastcall CMD_InvokeCallbackByParam(int32_t nParam) {
       (*gpfnScrollUpButtonHandler)();
       return;
     } else {
-      if (-1 < nParam) {
+      if (-1 < nScrollDirection) {
         return;
       }
       if (!gpfnScrollDownButtonHandler) {
@@ -445,11 +445,11 @@ void __stdcall CMD_WriteKeyFile() {
     } while (nCount);
 
     D2KeyBindStrc* pSrc = g_KeyBindingsTable;
-    int32_t* puVar5 = (int32_t*)(szBuffer + 2);
+    int32_t* pCopyDst = (int32_t*)(szBuffer + 2);
     for (nCount = 0x11d; nCount; nCount--) {
-      *puVar5 = pSrc->nCmdIndex;
+      *pCopyDst = pSrc->nCmdIndex;
       pSrc = (D2KeyBindStrc*)&pSrc->wKeyCode;
-      puVar5++;
+      pCopyDst++;
     }
 
     Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)szBuffer, 0x476, &nWritten, (LPOVERLAPPED)0x0);
@@ -476,8 +476,7 @@ void __stdcall CMD_WriteKeyFile() {
 }
 
 // @sourcefile .\UI\CmdTbl.cpp
-void __stdcall CMD_LoadDefaultKeyBindings(DWORD dwParam) {
-    char* pEnd;
+void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
     HANDLE hFile;
     D2CmdTbl_Line0x50f* pKeyData;
     int nCount;
@@ -490,9 +489,10 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD dwParam) {
     char szPath[260];
     char szLangAbbr[4];
     char* pScan;
+    uint16_t wVersion;
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbr, 0);
-    if (dwParam) {
-      uint16_t uVar1;
+    if (bUseInstallDir) {
+      char* pEnd;
       Fog::Source::SFile::SFILE_GetInstallPath(szPath, 0xdc);
       pScan = &cStack_10d;
       do {
@@ -503,16 +503,16 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD dwParam) {
       memcpy(pEnd + 1, "default.key", 0xc);
       hFile = Fog::Source::SFile::thunk_CreateFileA(szPath, 0x80000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x80, (HANDLE)0x0);
       if (hFile != (HANDLE)-1) {
-        Fog::Source::SFile::thunk_ReadFile(hFile, aKeyBindFileBuf, 0x47a, &dwParam, (LPOVERLAPPED)0x0);
+        Fog::Source::SFile::thunk_ReadFile(hFile, aKeyBindFileBuf, 0x47a, &bUseInstallDir, (LPOVERLAPPED)0x0);
         Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
-        if (dwParam == 0x47a) {
+        if (bUseInstallDir == 0x47a) {
           pKeyData = D2_NEW_POOL_AT(nullptr, D2CmdTbl_Line0x50f, ".\\UI\\CmdTbl.cpp", 0x50f);
           pFileBufCursor = (uint16_t*)aKeyBindFileBuf;
           pDst = pKeyData;
           for (nCount = 0x11e; nCount; nCount--) {
-            uVar1 = pFileBufCursor[1];
+            wVersion = pFileBufCursor[1];
             pDst->wMagic = pFileBufCursor[0];
-            pDst->wVersion = uVar1;
+            pDst->wVersion = wVersion;
             pFileBufCursor += 2;
             pDst = (D2CmdTbl_Line0x50f*)&pDst->wSize;
           }
@@ -547,9 +547,9 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD dwParam) {
     }
 }
 
-void __fastcall CMD_ResetKeyBindingsToDefaults(DWORD dwParam) {
+void __fastcall CMD_ResetKeyBindingsToDefaults(DWORD bUseInstallDir) {
     int nCount;
-    CMD_LoadDefaultKeyBindings(dwParam);
+    CMD_LoadDefaultKeyBindings(bUseInstallDir);
     uint16_t* pWKeyCode = &g_KeyBindingsTable[0].wKeyCode;
     do {
       *pWKeyCode = 0xffff;
@@ -581,8 +581,8 @@ uint16_t __fastcall CMD_GetKeyForCommand(int32_t nCmdIndex, int32_t nSlot) {
     return g_KeyBindingsTable[nIndex].wKeyCode;
 }
 
-BOOL __fastcall CMD_IsBindableKey(uint16_t nParam) {
-    uint32_t nKeyCode = (uint32_t)nParam;
+BOOL __fastcall CMD_IsBindableKey(uint16_t wKeyCode) {
+    uint32_t nKeyCode = (uint32_t)wKeyCode;
     if ((int32_t)nKeyCode < 0x105) {
       if (0xff < (int32_t)nKeyCode) {
         return 1;
@@ -796,7 +796,7 @@ BOOL __fastcall CMD_IsBindableKey(uint16_t nParam) {
 BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKeyCode, uint16_t * pErrorCode) {
     PD2KeyBindSlot pBinding2;
     int nIndex;
-    int iVar1;
+    int nClearedIndex;
     if (pErrorCode) {
       *pErrorCode = 0;
     }
@@ -812,12 +812,12 @@ BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKe
         return 0;
       }
       if (wKeyCode != 0x2c || !gaCmdBindings[nCmdIndex].pfnHandler) {
-        iVar1 = 0x72;
+        nClearedIndex = 0x72;
         nIndex = 0;
         do {
           if (g_KeyBindingsTable[nIndex].wKeyCode == wKeyCode) {
             g_KeyBindingsTable[nIndex].wKeyCode = 0xffff;
-            iVar1 = nIndex;
+            nClearedIndex = nIndex;
             break;
           }
 
@@ -830,11 +830,11 @@ BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKe
           pBinding2 = (PD2KeyBindSlot)((int)pBinding2 + 10);
           nIndex++;
           if ((int)pBinding2 >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6)) {
-            if (iVar1 == 0x72) {
+            if (nClearedIndex == 0x72) {
               return 0;
             }
 
-            g_KeyBindingsTable[iVar1].wKeyCode = wKeyCode;
+            g_KeyBindingsTable[nClearedIndex].wKeyCode = wKeyCode;
             return 0;
           }
         }
@@ -1353,14 +1353,14 @@ uint16_t * __fastcall CMD_GetKeyDescForCommand(int32_t nCmdIndex, int32_t nSlot)
 }
 
 void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
-    int iVar1;
     SHORT sKeyState;
+    int nCmdIndex;
     if (pMsg->uLParam.nLParam & 0x40000000U) {
       return;
     }
 
     int nIndex = 0;
-    while ((uint32_t)g_KeyBindingsTable[nIndex].wKeyCode != pMsg->nWParam || (iVar1 = g_KeyBindingsTable[nIndex].nCmdIndex , iVar1 == 0xffff) || iVar1 >= 0x39 || iVar1 > 0xdf || !gaCmdBindings[iVar1].pfnHandler) {
+    while ((uint32_t)g_KeyBindingsTable[nIndex].wKeyCode != pMsg->nWParam || (nCmdIndex = g_KeyBindingsTable[nIndex].nCmdIndex , nCmdIndex == 0xffff) || nCmdIndex >= 0x39 || nCmdIndex > 0xdf || !gaCmdBindings[nCmdIndex].pfnHandler) {
       nIndex++;
       if ((int)&g_KeyBindingsTable[nIndex] >= (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable))) {
         return;
@@ -1536,11 +1536,11 @@ void __stdcall CMD_LoadUserKeyBindings() {
       pDstTable += 5;
     } while ((int)pDstTable < (intptr_t)&g_KeyBindingsTable + 1144);
 
-    int* piVar1 = gaKeyBindingsDefault;
+    int* pDefaultSrc = gaKeyBindingsDefault;
     pBindingRow = g_KeyBindingsTable;
     for (nCmdIndex = 0x11d; nCmdIndex; nCmdIndex--) {
-      pBindingRow->nCmdIndex = *piVar1;
-      piVar1++;
+      pBindingRow->nCmdIndex = *pDefaultSrc;
+      pDefaultSrc++;
       pBindingRow = (D2KeyBindStrc*)&pBindingRow->wKeyCode;
     }
 

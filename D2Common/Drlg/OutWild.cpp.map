@@ -1,0 +1,251 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/OutWild.cpp",
+  "functions": [
+    {
+      "name": "DRLGOUTROOM_IsGridColumnEmpty",
+      "address": "0067fc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067fc70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_IsGridColumnEmpty",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_GetPresetVariantFromGridCell",
+      "address": "0067fcd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067fcd0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_GetPresetVariantFromGridCell"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_PlaceRiverCrossingPreset",
+      "address": "0067fd20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067fd20"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_PlaceRiverCrossingPreset",
+        "DRLGOUTDOOR_IsGridCellEmpty",
+        "GetGridFlags",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_SpawnVerticalBorderPresets",
+      "address": "0067fe90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067fe90"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_SpawnVerticalBorderPresets",
+        "GetGridFlags",
+        "SpawnOutdoorLevelPresetEx",
+        "DRLGOUTROOM_PlaceRiverCrossingPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_MarkBorderJunctions",
+      "address": "00680070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00680070"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_MarkBorderJunctions"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2DrlgVertexStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_SpawnCornerFillPreset",
+      "address": "006801a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006801a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_SpawnCornerFillPreset",
+        "GetGridFlags",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_FillBorderCornersAndPresets",
+      "address": "00680200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00680200"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_FillBorderCornersAndPresets",
+        "DRLGOUTROOM_IsGridColumnEmpty",
+        "DRLGOUTROOM_SpawnVerticalBorderPresets",
+        "DRLGOUTROOM_SpawnCornerFillPreset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnTownTransitionsAndCaves",
+      "address": "006803d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006803d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "SpawnTownTransitionsAndCaves",
+        "DRLGOUTROOM_IsGridColumnEmpty",
+        "DRLGOUTROOM_SpawnVerticalBorderPresets",
+        "SpawnOutdoorLevelPresetEx",
+        "GetLevelAndAlloc",
+        "SpawnPresetFarAway",
+        "SpawnOutdoorLevelPreset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_SpawnRandomOutdoorDecorations",
+      "address": "006804e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006804e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_SpawnRandomOutdoorDecorations",
+        "SpawnRandomOutdoorDS1"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_SpawnAct1LevelPresets",
+      "address": "00680580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00680580"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "DRLGOUTROOM_SpawnAct1LevelPresets",
+        "SpawnRandomOutdoorDS1",
+        "DRLGOUTROOM_SpawnRandomOutdoorDecorations",
+        "SpawnOutdoorLevelPreset",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "InitAct1OutdoorLevel",
+      "address": "006807f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006807f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutWild",
+      "calledFunctions": [
+        "InitAct1OutdoorLevel",
+        "DRLGOUTROOM_MarkBorderJunctions",
+        "SetOutGridLinkFlags",
+        "PlaceAct1245OutdoorBorders",
+        "AddAct124SecondaryBorder",
+        "DRLGOUTROOM_FillBorderCornersAndPresets",
+        "SpawnTownTransitionsAndCaves",
+        "DRLGOUTROOM_LinkOutdoorRoomExits",
+        "SpawnAct12Waypoint",
+        "SpawnAct12Shrines",
+        "DRLGOUTROOM_SpawnAct1LevelPresets"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    }
+  ]
+}

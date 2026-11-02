@@ -1,0 +1,46 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/SkillHelpers.cpp",
+  "functions": [
+    {
+      "name": "INV_SkipColorCodeSuffix",
+      "address": "004834a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004834a0"
+        }
+      ],
+      "namespace": "D2Client::_SkillHelpers",
+      "calledFunctions": [
+        "INV_SkipColorCodeSuffix",
+        "STRING_GetWideStringLength"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "INV_SubstituteFormatToken",
+      "address": "004834e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004834e0"
+        }
+      ],
+      "namespace": "D2Client::_SkillHelpers",
+      "calledFunctions": [
+        "INV_SubstituteFormatToken",
+        "STRING_GetWideStringLength",
+        "AppendToBuffer",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    }
+  ]
+}

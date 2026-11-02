@@ -215,8 +215,8 @@ static void __stdcall DrawHirelingName(int32_t nX, int32_t nY, int32_t nColor, u
       nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(lwMessage);
     }
 
-    int32_t iVar1 = D2Win::Src::D2WinFont::DRAW_text0(lwMessage);
-    nX += 0x16 - iVar1 / 2;
+    int32_t nFinalWidth = D2Win::Src::D2WinFont::DRAW_text0(lwMessage);
+    nX += 0x16 - nFinalWidth / 2;
     if (nX < 0) {
       nX = 0;
     }
@@ -537,10 +537,10 @@ void __stdcall INPUT_HireableHireClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     bool bIsCombatMode = gnHireDisplayMode == 2;
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     pMsg->bHandled = 0;
-    if (bIsCombatMode || (int)uVar1 < gpHireHoverUnit || (int)uVar1 > gpHireHoverUnit + 0x2e || (uint32_t)(nMouseY - 0x18) > 0x24) {
+    if (bIsCombatMode || (int)nMouseX < gpHireHoverUnit || (int)nMouseX > gpHireHoverUnit + 0x2e || (uint32_t)(nMouseY - 0x18) > 0x24) {
       gnHireIconHoverIndex = 0;
       return;
     }
@@ -563,12 +563,12 @@ void __stdcall UI_HandleHirelingTooltipHoverTimer(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     bool bIsCombatMode = gnHireDisplayMode == 2;
     pMsg->bHandled = 0;
     gnHireIconHoverY = 0;
-    if (bIsCombatMode || (int)uVar1 < gpHireHoverUnit || (int)uVar1 > gpHireHoverUnit + 0x2e || (uint32_t)(nMouseY - 0x18) > 0x24) {
+    if (bIsCombatMode || (int)nMouseX < gpHireHoverUnit || (int)nMouseX > gpHireHoverUnit + 0x2e || (uint32_t)(nMouseY - 0x18) > 0x24) {
       gnHireIconHoverX = 0;
       gnHireIconHoverIndex = 0;
       return;
@@ -646,11 +646,11 @@ void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     bool bNotCombatMode = gnHireDisplayMode != 2;
     pMsg->bHandled = 0;
-    if (bNotCombatMode && (int)uVar1 >= gpHireHoverUnit && (int)uVar1 <= gpHireHoverUnit + 0x2e && nMouseY >= 0x18 && nMouseY <= 0x3c) {
+    if (bNotCombatMode && (int)nMouseX >= gpHireHoverUnit && (int)nMouseX <= gpHireHoverUnit + 0x2e && nMouseY >= 0x18 && nMouseY <= 0x3c) {
       DWORD dwNow;
       if (!gnHireIconHoverIndex) {
         gnHireIconHoverIndex = GetTickCount();

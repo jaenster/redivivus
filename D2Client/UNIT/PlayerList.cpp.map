@@ -1,0 +1,153 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/PlayerList.cpp",
+  "functions": [
+    {
+      "name": "AllocPlayerList",
+      "address": "004dc270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc270"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlayerList",
+      "calledFunctions": [
+        "AllocPlayerList",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreePlayerList",
+      "address": "004dc2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc2b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlayerList",
+      "calledFunctions": [
+        "FreePlayerList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "D2PlayerListSubStrc"
+      ]
+    },
+    {
+      "name": "AllocPlayerListSub",
+      "address": "004dc320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc320"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlayerList",
+      "calledFunctions": [
+        "AllocPlayerListSub",
+        "GetPlayerList",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "D2PlayerListSubStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreePlayerListSub",
+      "address": "004dc380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc380"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlayerList",
+      "calledFunctions": [
+        "FreePlayerListSub",
+        "GetPlayerList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "D2PlayerListSubStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetUnsetFlags",
+      "address": "004dc3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc3e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlayerList",
+      "calledFunctions": [
+        "SetUnsetFlags",
+        "GetPlayerList"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "D2PlayerListSubStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetFlag",
+      "address": "004dc440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc440"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlayerList",
+      "calledFunctions": [
+        "GetFlag",
+        "GetPlayerList"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "D2PlayerListSubStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetFlag",
+      "address": "004dc4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc4c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::PlayerList",
+      "calledFunctions": [
+        "SetFlag",
+        "GetPlayerList"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "D2PlayerListSubStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

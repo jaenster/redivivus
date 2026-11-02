@@ -111,7 +111,7 @@ void __stdcall STRUCT_FreeAsyncData() {
 }
 
 void __fastcall ASYNCDATA_CancelAndCleanup(D2AsyncData_Line0x128 * pAsyncData) {
-    size_t sVar2;
+    size_t nResultSize;
     if (pAsyncData->nFlags & 1) {
       return;
     }
@@ -134,9 +134,9 @@ void __fastcall ASYNCDATA_CancelAndCleanup(D2AsyncData_Line0x128 * pAsyncData) {
     }
 
     D2_FREE_POOL_AT(pAsyncData->pMemory, pAsyncData->pReadBuffer, ".\\Src\\AsyncData.cpp", 0xd7);
-    sVar2 = pAsyncData->tCallback.nResultSize;
+    nResultSize = pAsyncData->tCallback.nResultSize;
     pAsyncData->pReadBuffer = pAsyncData->tCallback.pResultBuffer;
-    pAsyncData->nReadSize = sVar2;
+    pAsyncData->nReadSize = nResultSize;
     pAsyncData->tCallback.pfnCallback = 0;
     memset(pAsyncData->tCallback.aUserData, 0, 4 * sizeof(pAsyncData->tCallback.aUserData[0]));
     pAsyncData->tCallback.pResultBuffer = 0;
@@ -194,7 +194,7 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     return nullptr;
 }
 
-D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, size_t nReadSize, void * pReadBuffer, D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nParam) {
+D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, size_t nReadSize, void * pReadBuffer, D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine) {
     DWORD nSeekResult;
     D2AsyncDataSlotStrc* pSlot;
     int i;
@@ -225,7 +225,7 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
       if (pReadBuffer) {
         pAsyncData->nFlags &= -3;
       } else {
-        pReadBuffer = Memory::Alloc(pMemory, pAsyncData->nReadSize, szText2, nParam);
+        pReadBuffer = Memory::Alloc(pMemory, pAsyncData->nReadSize, szText2, nLine);
         pAsyncData->nFlags |= 2;
       }
 

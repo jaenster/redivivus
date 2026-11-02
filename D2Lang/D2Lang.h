@@ -21,7 +21,7 @@ struct D2Utf8DecodeRowStrc {
 namespace D2Lang {
 
 // Function declarations
-void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nParam1, int32_t nParam2);
+void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nNumber, int32_t nMaxLen);
 // Decodes next UTF-8 character from byte stream. Multi-byte decoding using table at gaUtf8DecodeTable. Returns character width in bytes or -1 on error. Validates continuation bytes (0x80 mask).
 int32_t __stdcall UTF8_DecodeNextChar(uint8_t * pUtf8, uint16_t * pwCharOut, int32_t nMaxBytes);
 // Counts UTF-8 characters in string. Iterates via GetNextCharWidth, handles variable-width encoding. Returns character count (not byte count).

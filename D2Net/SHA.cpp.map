@@ -1,0 +1,129 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Net/SHA.cpp",
+  "functions": [
+    {
+      "name": "SHA1_BigIntShl",
+      "address": "0052a330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a330"
+        }
+      ],
+      "namespace": "D2Net::SHA",
+      "calledFunctions": [
+        "SBigShl",
+        "SHA1_BigIntShl"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntSubValue",
+      "address": "0052a3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a3d0"
+        }
+      ],
+      "namespace": "D2Net::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntSubValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigSub",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntMul",
+      "address": "0052a410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a410"
+        }
+      ],
+      "namespace": "D2Net::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntMul",
+        "SBigMul"
+      ],
+      "usedTypes": [
+        "BigData"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntDivValue",
+      "address": "0052a470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a470"
+        }
+      ],
+      "namespace": "D2Net::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntDivValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigDiv",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntMod",
+      "address": "0052a4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a4b0"
+        }
+      ],
+      "namespace": "D2Net::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntMod",
+        "SBigMod"
+      ],
+      "usedTypes": [
+        "BigData"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntModToInt",
+      "address": "0052a4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a4d0"
+        }
+      ],
+      "namespace": "D2Net::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntModToInt",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigMod",
+        "SBigToBinaryBuffer",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    }
+  ]
+}

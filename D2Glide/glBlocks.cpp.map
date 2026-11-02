@@ -1,0 +1,198 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Glide/glBlocks.cpp",
+  "functions": [
+    {
+      "name": "GLBLOCKS_AllocBlockBuffers",
+      "address": "0050f870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f870"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_AllocBlockBuffers",
+        "AllocClientMemory"
+      ]
+    },
+    {
+      "name": "GLBLOCKS_FreeBlockBuffers",
+      "address": "0050f8c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f8c0"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_FreeBlockBuffers",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "GLBLOCKS_DecodeRLEBlock",
+      "address": "0050f910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f910"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_DecodeRLEBlock",
+        "memset"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GLBLOCKS_RenderTileSubBlocks",
+      "address": "0050f980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f980"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_RenderTileSubBlocks",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GLBLOCKS_LoadFloorTileTexture",
+      "address": "0050fad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050fad0"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_LoadFloorTileTexture",
+        "SPRITECACHE_AllocEntry",
+        "GLBLOCKS_RenderTileSubBlocks",
+        "GLFLOOR_EnsureCapacity",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GLFLOOR_PromoteNodeToMRU",
+        "RENDERER_GLIDE_SetTextureMode"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "FxU",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLBLOCKS_LoadWallSubtileTexture",
+      "address": "0050fbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050fbd0"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_LoadWallSubtileTexture",
+        "GLSUBTILE_PromoteNodeToMRU",
+        "RENDERER_GLIDE_SetTextureMode",
+        "GLBLOCKS_DecodeRLEBlock",
+        "GLSUBTILE_EnsureCapacity",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "FxU",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLBLOCKS_ReleaseTileTextures",
+      "address": "0050fcb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050fcb0"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_ReleaseTileTextures",
+        "GLFLOOR_InvalidateByIndex",
+        "GLSUBTILE_InvalidateByIndex"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc"
+      ]
+    },
+    {
+      "name": "GLBLOCKS_RenderBinkVideoFrame",
+      "address": "0050fd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050fd10"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_RenderBinkVideoFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "FxBool",
+        "GrLfbInfo_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLBLOCKS_PlayBinkVideo",
+      "address": "0050fdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050fdf0"
+        }
+      ],
+      "namespace": "D2Glide::glBlocks",
+      "calledFunctions": [
+        "GLBLOCKS_PlayBinkVideo",
+        "GetUseDirectCommand",
+        "SFileOpenFileEx",
+        "GetTickCount",
+        "GLBLOCKS_RenderBinkVideoFrame",
+        "SOUNDSMP_SetGlobalVolume"
+      ],
+      "usedTypes": [
+        "fnBinkFrameCallback",
+        "int32_t",
+        "tagMSG",
+        "uint32_t"
+      ]
+    }
+  ]
+}

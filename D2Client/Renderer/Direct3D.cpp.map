@@ -1,0 +1,203 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Renderer/Direct3D.cpp",
+  "functions": [
+    {
+      "name": "CheckCutScene",
+      "address": "006b1c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c00"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "CheckCutScene"
+      ]
+    },
+    {
+      "name": "UpdateScaleFactor",
+      "address": "006b1c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c10"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "UpdateScaleFactor"
+      ]
+    },
+    {
+      "name": "CheckGamma",
+      "address": "006b1c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c20"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "CheckGamma"
+      ]
+    },
+    {
+      "name": "EndScene2",
+      "address": "006b1c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c30"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "EndScene2"
+      ]
+    },
+    {
+      "name": "GetScreenSize",
+      "address": "006b1c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c60"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "GetScreenSize"
+      ]
+    },
+    {
+      "name": "SetPalette",
+      "address": "006b1c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1c70"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "SetPalette"
+      ],
+      "usedTypes": [
+        "LPPALETTEENTRY",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetPaletteTable",
+      "address": "006b1d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1d60"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "SetPaletteTable"
+      ],
+      "usedTypes": [
+        "BYTE *"
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_CopyPixelsWithStride",
+      "address": "006b1d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1d80"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_CopyPixelsWithStride",
+        "memcpy"
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_ConvertPalettedTo32Bit",
+      "address": "006b1e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1e30"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_ConvertPalettedTo32Bit"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetRenderStatistics",
+      "address": "006b20a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b20a0"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "GetRenderStatistics"
+      ]
+    },
+    {
+      "name": "ActivateWindow",
+      "address": "006b20b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b20b0"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "ActivateWindow"
+      ]
+    },
+    {
+      "name": "SetOption",
+      "address": "006b20c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b20c0"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "SetOption"
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_CloseRegistryKey",
+      "address": "006b2f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b2f40"
+        }
+      ],
+      "namespace": "D2Client::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_CloseRegistryKey"
+      ]
+    }
+  ]
+}

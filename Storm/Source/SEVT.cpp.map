@@ -1,0 +1,550 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SEVT.cpp",
+  "functions": [
+    {
+      "name": "SEVT_NextPowerOf2",
+      "address": "00426160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426160"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEVT_NextPowerOf2"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SEVT_CopyIdHashTable",
+      "address": "00426180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426180"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEVT_CopyIdHashTable",
+        "SMemAlloc",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint32_t *"
+      ]
+    },
+    {
+      "name": "SEVT_DeleteIdHashTable",
+      "address": "00426210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426210"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEVT_DeleteIdHashTable",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SEVT_FindTypeHashEntry",
+      "address": "00426270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426270"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEVT_FindTypeHashEntry"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SEvtDestroy",
+      "address": "004262b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004262b0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEvtDestroy",
+        "SEVT_DeleteIdHashTable",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "SEvtPushState",
+      "address": "00426370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426370"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEvtPushState",
+        "SMemAlloc",
+        "SEVT_CopyIdHashTable"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint32_t *"
+      ]
+    },
+    {
+      "name": "SEvtRegisterHandler",
+      "address": "00426420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426420"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEvtRegisterHandler",
+        "SErrSetLastError",
+        "SEVT_FindTypeHashEntry",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "pfnSEvtHandler",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SEvtUnregisterHandler",
+      "address": "00426720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426720"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEvtUnregisterHandler",
+        "MISC_OperatorDeleteShim"
+      ],
+      "usedTypes": [
+        "D2SevtHandlerNodeStrc",
+        "pfnSEvtHandler",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SEvtUnregisterType",
+      "address": "00426810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426810"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEvtUnregisterType",
+        "SEVT_DeleteIdHashTable",
+        "MISC_OperatorDeleteShim"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetNextOffset",
+      "address": "00426910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426910"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetNextOffset"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetNodeOffset",
+      "address": "00426930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426930"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetNodeOffset"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf",
+      "address": "00426960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426960"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SEvtPopState",
+      "address": "004269c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004269c0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEvtPopState",
+        "SEvtUnregisterType",
+        "SEVT_DeleteIdHashTable"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCount",
+      "address": "00426a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426a60"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCount"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetNextOrHead",
+      "address": "00426ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426ae0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetNextOrHead"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_LinkNode",
+      "address": "00426b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426b00"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LinkNode",
+        "LINKEDLIST_LinkNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetCountMasked",
+      "address": "00426bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426bb0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetCountMasked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetHead",
+      "address": "00426c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426c10"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetHead"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetValueAtIndex",
+      "address": "00426c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426c80"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetValueAtIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_GetTail",
+      "address": "00426cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426cf0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_GetTail"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_InsertHead",
+      "address": "00426d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426d30"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_InsertHead",
+        "LINKEDLIST_GetTail"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_AllocNode",
+      "address": "00426dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426dc0"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_AllocNode",
+        "SMemAlloc",
+        "LINKEDLIST_LinkNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkAndFree",
+      "address": "00426e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426e20"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkAndFree",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SEvtBreakHandlerChain",
+      "address": "00426e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426e80"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEvtBreakHandlerChain",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "StormBreakCmdStrc",
+        "StormLinkStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkFreeAndGetCount",
+      "address": "00426f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426f20"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkFreeAndGetCount",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SEvtDispatch",
+      "address": "00426f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00426f90"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "SEvtDispatch",
+        "SMemFree",
+        "SEVT_FindTypeHashEntry",
+        "LINKEDLIST_UnlinkFreeAndGetCount",
+        "LINKEDLIST_GetValueAtIndex"
+      ],
+      "usedTypes": [
+        "D2SevtHandlerNodeStrc",
+        "pfnSEvtHandler",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca900",
+      "address": "006ca900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca900"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "StaticInit_6ca900",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca920",
+      "address": "006ca920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca920"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "StaticInit_6ca920",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_0077930c",
+      "address": "006cb370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb370"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_0077930c"
+      ]
+    },
+    {
+      "name": "StaticFini_gSevtBreakCmdList",
+      "address": "006cb380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb380"
+        }
+      ],
+      "namespace": "Storm::Source::SEVT",
+      "calledFunctions": [
+        "StaticFini_gSevtBreakCmdList",
+        "LINKEDLIST_GetTail"
+      ]
+    }
+  ]
+}

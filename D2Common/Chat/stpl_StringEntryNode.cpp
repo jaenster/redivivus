@@ -371,10 +371,10 @@ template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
     TSExplicitList<::StringEntryNode, -572662307>* pTVar1;
     ::StringEntryNode* pNode;
-    int iVar2;
     int* pSlot;
     int* pPrevLink;
     int nHeadEntry;
+    int nLinkOffset;
     uint32_t nNextLink;
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();
@@ -391,9 +391,9 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_
           break;
         }
         if (bUnlinkOnly) {
-          iVar2 = pTVar1[iBucket].m_linkoffset;
-          nHeadEntry = *(int*)((uintptr_t)&pNode->m_hashval + iVar2);
-          pSlot = (int*)((uintptr_t)&pNode->m_hashval + iVar2);
+          nLinkOffset = pTVar1[iBucket].m_linkoffset;
+          nHeadEntry = *(int*)((uintptr_t)&pNode->m_hashval + nLinkOffset);
+          pSlot = (int*)((uintptr_t)&pNode->m_hashval + nLinkOffset);
           if (nHeadEntry) {
             nNextLink = pSlot[1];
             if ((int)nNextLink < 0) {

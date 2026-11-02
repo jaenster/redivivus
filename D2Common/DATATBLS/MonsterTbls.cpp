@@ -193,16 +193,16 @@ int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, ui
 // TXT field linker for a MonStats skill slot (index nSkillIdx, max 7): zeroes the skill mode byte and sequence ID, then resolves szText as a monster mode name (via FilterNameString + monmode link) or falls back to a monster sequence ID (via monseq link). Writes mode byte to pMonStats+0x180+idx and seq short to +0x188+idx*2.
 void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, uint32_t nSkillIdx, int32_t nMonStatsOffset, int32_t nReserved1, int32_t nReserved2) {
     int32_t nModeId;
-    uint32_t uVar2 = nSkillIdx;
+    uint32_t nSlotIdx = nSkillIdx;
     if (!(pRecord && nSkillIdx <= 7)) {
       return;
     }
 
     pRecord[nSkillIdx + 0x180] = '\0';
-    short int sVar1 = *(short int*)(pRecord + nSkillIdx * 2 + 0x170);
+    short int nSkillId = *(short int*)(pRecord + nSkillIdx * 2 + 0x170);
     (pRecord + nSkillIdx * 2 + 0x188)[0] = -1;
     (pRecord + nSkillIdx * 2 + 0x188)[1] = -1;
-    if (!(sVar1 >= 0 && szText)) {
+    if (!(nSkillId >= 0 && szText)) {
       return;
     }
 
@@ -221,15 +221,15 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
       FilterNameString((char*)&nSkillIdx, (char*)&pModeLink);
       nModeId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMonModeLink, (uint32_t)pModeLink, 1);
       cModeChar = (char)nModeId;
-      pRecord[uVar2 + 0x180] = cModeChar;
+      pRecord[nSlotIdx + 0x180] = cModeChar;
       if (cModeChar >= 0 && cModeChar != '\x0e') {
         return;
       }
     }
 
-    pRecord[uVar2 + 0x180] = '\x0e';
+    pRecord[nSlotIdx + 0x180] = '\x0e';
     nModeId = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMonSeqLink, szText, 1);
-    *(short int*)(pRecord + uVar2 * 2 + 0x188) = (short int)nModeId;
+    *(short int*)(pRecord + nSlotIdx * 2 + 0x188) = (short int)nModeId;
 }
 
 // Loads and compiles monstats.txt into the engine's runtime MonStats table. Builds the column schema as a stack D2BinFieldInputStrc array (Id/BaseId/NextInClass/NameStr/DescStr/Code/TransLvl/... with per-field type/offset/linker), wiring the field linkers to sgtDataTable.pTxtMonStatsLink (most fields), pTxtMonSoundsLink (sound fields), and DATATBLS_LookupStringId for the string-key name/desc columns, then hands the schema + pMemory to the standard DATATBLS bin-compile/alloc routine to populate the MonStats table. pMemory passed in ECX (thiscall/fastcall-style); large alloca'd stack frame.
@@ -838,16 +838,16 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
     char szTCLinkCode[8];
     TC_ExtendTreasureClassSize("");
     D2ItemsTableStrc* pnTotalItems = ItemTbls::TXT_Items_GetSize();
-    int iVar1 = sgptDataTable->nTxtItemTypesSize;
+    int nItemTypesCount = sgptDataTable->nTxtItemTypesSize;
     eD2ItemTypes nRecordId = ITEMTYPE_None1;
-    if (iVar1 > 0) {
+    if (nItemTypesCount > 0) {
       nItemTypeStride = 0;
       pSgtDataTable = sgptDataTable;
       do {
         if (nItemTypeStride < 0) {
           break;
         }
-        if ((int)nRecordId >= iVar1) {
+        if ((int)nRecordId >= nItemTypesCount) {
           break;
         }
 
@@ -906,24 +906,24 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
           } while (nLevelStep <= 0x60);
         }
 
-        iVar1 = pSgtDataTable->nTxtItemTypesSize;
+        nItemTypesCount = pSgtDataTable->nTxtItemTypesSize;
         nRecordId += ITEMTYPE_None2;
         nItemTypeStride++;
-      } while ((int)nRecordId < iVar1);
+      } while ((int)nRecordId < nItemTypesCount);
     }
 }
 
-static int32_t TC_ExtractNextIntModifier(char cParam, uint32_t * * pnParam) {
-    uint32_t* pCurrent = *pnParam;
-    char* pSeparator = strchr((char*)pCurrent, (int)cParam);
-    *pnParam = (uint32_t*)pSeparator;
+static int32_t TC_ExtractNextIntModifier(char cSeparator, uint32_t * * ppCursor) {
+    uint32_t* pCurrent = *ppCursor;
+    char* pSeparator = strchr((char*)pCurrent, (int)cSeparator);
+    *ppCursor = (uint32_t*)pSeparator;
     if (pSeparator) {
       *pSeparator = '\0';
-      *pnParam = (uint32_t*)((int)*pnParam + 1);
+      *ppCursor = (uint32_t*)((int)*ppCursor + 1);
     }
 
-    long int lVar1 = atoi((char*)pCurrent);
-    return lVar1;
+    long int nModifier = atoi((char*)pCurrent);
+    return nModifier;
 }
 
 // Parses one TreasureClasses.txt drop entry (item code + probability) into a parsed-TC node and appends it to pParsedTC. Strips quotes, splits the field on ',', and resolves the code: a <5-char item code becomes an item-class entry (tagging TC_Expansion by items.txt version); otherwise it tries the monster-TC, unique-items, then set-items link tables (tagging TC_Monster/TC_Unique/TC_Set and the link node id). Calls AddOneParsedTCEntry then AdjustRarities with the probability and expansion flag. After the base entry it parses optional trailing modifiers ("mul","cu","cs","cr","cm","ce","cg","ma","mg") via _atol / TC_ExtractNextIntModifier, storing them into the entry's nUniqueMod/nSetMod/nRareMod/nMagicMod/etc fields. Returns 1 on success, 0 if prob<1 or no code resolves. Custom convention: szItemCode in EAX, pParsedTC/nProb on stack.
@@ -1350,22 +1350,21 @@ void __stdcall thunk_UnloadBin_MonStats() {
 }
 
 D2MonItemPercentTxt * __stdcall TC_GetTreasureClassArrayEntry(int32_t nTCArrayIdx) {
-    int32_t nLine;
     if (!(nTCArrayIdx < (int)gnTreasureClassArraySize && nTCArrayIdx != -1)) {
       return nullptr;
     }
     if (!pMonItemPercentTxt) {
-      nLine = 0x6dc;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6dc);
+      exit(-1);
     } else {
-      if (pMonItemPercentTxt + nTCArrayIdx) {
-        return pMonItemPercentTxt + nTCArrayIdx;
+      if (!(pMonItemPercentTxt + nTCArrayIdx)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6dd);
+        exit(-1);
       }
 
-      nLine = 0x6dd;
+      return pMonItemPercentTxt + nTCArrayIdx;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
     return nullptr;
 }
 
@@ -1645,10 +1644,10 @@ D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelin
     return pResult;
 }
 
-D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, int32_t nParam) {
+D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, int32_t pPrevEntry) {
     int nIndex = 0;
-    if (nParam) {
-      nIndex = (nParam - (int)sgtDataTable.pTxtHireling) / 0x118 + 1;
+    if (pPrevEntry) {
+      nIndex = (pPrevEntry - (int)sgtDataTable.pTxtHireling) / 0x118 + 1;
     }
     if (nIndex < sgtDataTable.nTxtHirelingSize) {
       uint16_t* pNameRange;
@@ -1667,10 +1666,10 @@ D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t n
     return nullptr;
 }
 
-D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, int32_t nParam) {
+D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, int32_t pPrevEntry) {
     int nIndex = 0;
-    if (nParam) {
-      nIndex = (nParam - (int)sgtDataTable.pTxtHireling) / 0x118 + 1;
+    if (pPrevEntry) {
+      nIndex = (pPrevEntry - (int)sgtDataTable.pTxtHireling) / 0x118 + 1;
     }
     if (nIndex < sgtDataTable.nTxtHirelingSize) {
       D2HirelingTxt* pEntry;
@@ -1689,11 +1688,11 @@ D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t n
     return nullptr;
 }
 
-D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, int32_t nParam) {
+D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, int32_t pPrevEntry) {
     *(uint16_t*)(char*)&bIsExpansion = bIsExpansion ? 100 : 0;
     int nIndex = 0;
-    if (nParam) {
-      nIndex = (nParam - (int)sgtDataTable.pTxtHireling) / 0x118 + 1;
+    if (pPrevEntry) {
+      nIndex = (pPrevEntry - (int)sgtDataTable.pTxtHireling) / 0x118 + 1;
     }
     if (nIndex < sgtDataTable.nTxtHirelingSize) {
       int* pDifficulty;
@@ -1847,10 +1846,10 @@ D2MonSoundsTxt * __stdcall TxtGetMonSoundsLine(int32_t nSoundId) {
     return nullptr;
 }
 
-D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nParam) {
-    if (sgtDataTable.pTxtMonSounds && sgtDataTable.pTxtMonStats && nParam < sgtDataTable.nTxtMonStatsSize) {
+D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nMonStatsId) {
+    if (sgtDataTable.pTxtMonSounds && sgtDataTable.pTxtMonStats && nMonStatsId < sgtDataTable.nTxtMonStatsSize) {
       int nMonSoundId;
-      nMonSoundId = (int)sgtDataTable.pTxtMonStats[nParam].MonSound;
+      nMonSoundId = (int)sgtDataTable.pTxtMonStats[nMonStatsId].MonSound;
       if (nMonSoundId >= 0 && nMonSoundId < sgtDataTable.nTxtMonSoundsSize) {
         return sgtDataTable.pTxtMonSounds + nMonSoundId;
       }
@@ -1869,19 +1868,19 @@ void __fastcall MONSTERTBLS_ParseMonSeqField(char * szText, char * pRecord, uint
     }
 
     pRecord[nSeqSlot + 0x15] = '\0';
-    char* pcVar1 = pRecord + nSeqSlot * 0xc + 0x26;
-    pcVar1[0] = -1;
-    pcVar1[1] = -1;
-    pcVar1[2] = -1;
-    pcVar1[3] = -1;
-    pcVar1[4] = -1;
-    pcVar1[5] = -1;
-    pcVar1[6] = -1;
-    pcVar1[7] = -1;
-    pcVar1[8] = -1;
-    pcVar1[9] = -1;
-    pcVar1[10] = -1;
-    pcVar1[0xb] = -1;
+    char* pSeqCodes = pRecord + nSeqSlot * 0xc + 0x26;
+    pSeqCodes[0] = -1;
+    pSeqCodes[1] = -1;
+    pSeqCodes[2] = -1;
+    pSeqCodes[3] = -1;
+    pSeqCodes[4] = -1;
+    pSeqCodes[5] = -1;
+    pSeqCodes[6] = -1;
+    pSeqCodes[7] = -1;
+    pSeqCodes[8] = -1;
+    pSeqCodes[9] = -1;
+    pSeqCodes[10] = -1;
+    pSeqCodes[0xb] = -1;
     if (!szText) {
       return;
     }
@@ -1940,7 +1939,7 @@ void __fastcall MONSTERTBLS_ParseMonSeqField(char * szText, char * pRecord, uint
       }
 
       nClassId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtCompCodeLink, dwCodeBuf, 1);
-      pcVar1[nCodeLen] = (char)nClassId;
+      pSeqCodes[nCodeLen] = (char)nClassId;
       nCodeLen++;
       if (!pszNextToken) {
         break;
@@ -2459,16 +2458,16 @@ void __stdcall MONSTERTBLS_FreeMonPresetTxt() {
     sgtDataTable.pTxtMonPresetPerActId[4] = 0;
 }
 
-D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nParam, int * pnParam) {
-    if (!pnParam) {
+D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * pnRecordCount) {
+    if (!pnRecordCount) {
       return nullptr;
     }
-    if (nParam <= 4 && sgtDataTable.pTxtMonPresetPlace) {
-      *pnParam = sgtDataTable.pTxtMonPresetPerActId[nParam];
-      return sgtDataTable.pTxtMonPresetPerAct[nParam];
+    if (nAct <= 4 && sgtDataTable.pTxtMonPresetPlace) {
+      *pnRecordCount = sgtDataTable.pTxtMonPresetPerActId[nAct];
+      return sgtDataTable.pTxtMonPresetPerAct[nAct];
     }
 
-    *pnParam = 0;
+    *pnRecordCount = 0;
     return nullptr;
 }
 
@@ -2494,12 +2493,12 @@ void __fastcall TXT_AllocTxt_sounds(D2PoolManagerStrc * pMemory) {
       return;
     }
 
-    D2BinFieldInputStrc local_2c[2] = {
+    D2BinFieldInputStrc aSoundsFields[2] = {
       {"Sound", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtSoundsLink},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
     sgtDataTable.pTxtSoundsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MonsterTbls.cpp", 0xc99);
-    sgtDataTable.pTxtSounds = (D2SoundsTxtSmall*)DataTbls::CompileTxt(pMemory, "sounds", local_2c, &sgtDataTable.nTxtSoundsSize, 2);
+    sgtDataTable.pTxtSounds = (D2SoundsTxtSmall*)DataTbls::CompileTxt(pMemory, "sounds", aSoundsFields, &sgtDataTable.nTxtSoundsSize, 2);
 }
 
 void __stdcall TXT_FreeTxt_sounds() {
@@ -2579,7 +2578,7 @@ void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
     int nMonStatIdx;
     short int* pMonStatEntry;
     short int* pLocSlot;
-    uint32_t* puVar4;
+    uint32_t* pdwItemCode;
     int nSlotLoop;
     int nEquipRow;
     int32_t nErrCode;
@@ -2634,14 +2633,14 @@ void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
             }
 
             pLocSlot = pMonStatEntry + 10;
-            puVar4 = (uint32_t*)(pMonStatEntry + 4);
+            pdwItemCode = (uint32_t*)(pMonStatEntry + 4);
             nSlotLoop = 3;
             do {
-              if ((char)*pLocSlot <= 0 || (char)*pLocSlot >= 11 || *puVar4 != 0x20202020 && (nErrCode = Fog::Src::Excel::GetClassIdFromName(sgptDataTable->sTxtItemsLink, *puVar4, 1) , nErrCode < 0)) {
+              if ((char)*pLocSlot <= 0 || (char)*pLocSlot >= 11 || *pdwItemCode != 0x20202020 && (nErrCode = Fog::Src::Excel::GetClassIdFromName(sgptDataTable->sTxtItemsLink, *pdwItemCode, 1) , nErrCode < 0)) {
                 *(char*)pLocSlot = '\0';
               }
 
-              puVar4++;
+              pdwItemCode++;
               pLocSlot = (short int*)((int)pLocSlot + 1);
               nSlotLoop--;
             } while (nSlotLoop);

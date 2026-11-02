@@ -1,0 +1,1124 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Multi/ComCallback.cpp",
+  "functions": [
+    {
+      "name": "EDITBOX_Cb_COMCALLBACK_ClearChannelUserList",
+      "address": "0043db90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043db90"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "EDITBOX_Cb_COMCALLBACK_ClearChannelUserList",
+        "COMCALLBACK_ClearChannelUserList"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleBannerAdFile",
+      "address": "00446b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446b70"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleBannerAdFile",
+        "D2WINSMACK_CloseAndDeleteFile",
+        "thunk_CreateFileA",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle",
+        "strrchr",
+        "tolower",
+        "D2WINSMACK_LoadAndDecodeSmacker",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_GetCurrentChannelName",
+      "address": "00446cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446cf0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_GetCurrentChannelName"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ReturnTrue",
+      "address": "00446d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446d20"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ReturnTrue"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_CreateChannelUser",
+      "address": "00446d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446d90"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_CreateChannelUser",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SAVEFILE_ReadEncodedInt14Bit",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_FormatChannelUserData",
+      "address": "004471b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004471b0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_FormatChannelUserData",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "memset",
+        "SStrChr",
+        "SStrCopy",
+        "memcpy",
+        "UNICODE_AppendWideStringN",
+        "D2COMP_SetUnitDisplayStrings"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "WCHAR",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_AddOrUpdateChannelUser",
+      "address": "00447400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447400"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_AddOrUpdateChannelUser",
+        "SStrChr",
+        "FreeClientMemory",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_FormatChatMessage",
+      "address": "00447560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447560"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_FormatChatMessage",
+        "SStrCopy",
+        "SStrChr",
+        "_stricmp",
+        "memcpy",
+        "D2COMP_GetFlags",
+        "D2COMP_GetTitlePrefix"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q2Strc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleGameListError",
+      "address": "00447700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447700"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleGameListError",
+        "CHATDLG_ResetButtonsAndForms"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ReturnFalse",
+      "address": "00447730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447730"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ReturnFalse"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_CheckUserListFlags",
+      "address": "00447740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447740"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_CheckUserListFlags"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ClearChannelUserList",
+      "address": "004477a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004477a0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ClearChannelUserList",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "D2WINMAIN_SetControlVisible",
+        "D2COMP_GetFlags"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_FormatWhisperFrom",
+      "address": "00447870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447870"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_FormatWhisperFrom",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "UTF8_ConvertToWideChar",
+        "AppendToBuffer",
+        "STRING_GetWideStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_FormatWhisperTo",
+      "address": "00447940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447940"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_FormatWhisperTo",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "UTF8_ConvertToWideChar",
+        "AppendToBuffer",
+        "STRING_GetWideStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ValidateGameJoinability",
+      "address": "00447a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447a10"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ValidateGameJoinability",
+        "COMCALLBACK_CheckUserListFlags",
+        "SStrCopy",
+        "COMCALLBACK_HandleBannerAdFile"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PrintChannelText",
+      "address": "00447ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447ab0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "PrintChannelText",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_AppendChatWithUser",
+      "address": "00447b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447b00"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_AppendChatWithUser",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "OOGUTIL_AppendChatText",
+        "COMCALLBACK_FormatWhisperTo",
+        "COMCALLBACK_FormatWhisperFrom",
+        "AppendToBuffer",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_UpdateChannelUserList",
+      "address": "00447bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447bb0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_UpdateChannelUserList",
+        "D2COMP_SetScreenX",
+        "D2COMP_SetFlags"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "D2ChannelUserStrc *",
+        "eD2PlayerStatus",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_AddUserToChannelList",
+      "address": "00447fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00447fd0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_AddUserToChannelList",
+        "COMCALLBACK_CreateChannelUser",
+        "SStrCopy",
+        "D2CheckExpansionGame",
+        "D2COMP_CreateCompositeUnit",
+        "COMCALLBACK_FormatChannelUserData",
+        "COMCALLBACK_UpdateChannelUserList"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ClearChannelListView",
+      "address": "00448050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448050"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ClearChannelListView",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2COMP_GetFlags",
+        "D2COMP_SetFlags",
+        "CHATDLG_IsLobbyInitialized",
+        "COMCALLBACK_ClearChannelUserList"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleChannelJoin",
+      "address": "004480d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004480d0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleChannelJoin",
+        "COMCALLBACK_AddUserToChannelList"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_AppendServerMessage",
+      "address": "00448150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448150"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_AppendServerMessage",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_AppendChatWithColor",
+      "address": "004481b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004481b0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_AppendChatWithColor",
+        "sprintf",
+        "COMCALLBACK_AppendChatWithUser"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_BroadcastChatMessage",
+      "address": "004481f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004481f0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_BroadcastChatMessage",
+        "SStrCopy",
+        "SStrChr",
+        "COMCALLBACK_FormatChatMessage",
+        "sprintf",
+        "COMCALLBACK_AppendChatWithUser"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleWhisperMessage",
+      "address": "00448370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448370"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleWhisperMessage",
+        "COMCALLBACK_FormatChatMessage",
+        "MISC_GetIgnorelist",
+        "sprintf",
+        "COMCALLBACK_AppendChatWithColor"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "IgnoreList",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_AppendErrorMessage",
+      "address": "004484e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004484e0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_AppendErrorMessage",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_AppendInfoMessage",
+      "address": "00448540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448540"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_AppendInfoMessage",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleInfoRequest1",
+      "address": "004485a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004485a0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleInfoRequest1",
+        "sprintf",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleInfoRequest2",
+      "address": "00448610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448610"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleInfoRequest2",
+        "sprintf",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ValidateWhisperTarget",
+      "address": "00448680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448680"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ValidateWhisperTarget",
+        "sprintf",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ProcessWhisperCommand",
+      "address": "004486f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004486f0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ProcessWhisperCommand",
+        "COMCALLBACK_FormatChatMessage",
+        "MISC_GetIgnorelist",
+        "sprintf",
+        "COMCALLBACK_ValidateWhisperTarget"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_FormatWhisperReply",
+      "address": "00448810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448810"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_FormatWhisperReply",
+        "sprintf",
+        "SStrChr",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleWhisperReply",
+      "address": "00448920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448920"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleWhisperReply",
+        "COMCALLBACK_FormatChatMessage",
+        "MISC_GetIgnorelist",
+        "sprintf",
+        "SStrChr",
+        "COMCALLBACK_FormatWhisperReply"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ValidateEmoteTarget",
+      "address": "00448a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448a60"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ValidateEmoteTarget",
+        "sprintf",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ProcessEmoteCommand",
+      "address": "00448ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448ad0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ProcessEmoteCommand",
+        "COMCALLBACK_FormatChatMessage",
+        "SStrChr",
+        "COMCALLBACK_ValidateEmoteTarget",
+        "sprintf"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ScrollChannelUserList",
+      "address": "00448bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448bd0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ScrollChannelUserList",
+        "COMCALLBACK_UpdateChannelUserList",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleUserListClick",
+      "address": "00448c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448c70"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleUserListClick",
+        "OOGUTIL_CloseProfileDialog",
+        "SStrChr",
+        "OOGUTIL_CreateEditProfileDialog",
+        "OOGUTIL_CreateViewProfileDialog",
+        "GetTickCount",
+        "COMCALLBACK_ClearChannelListView",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2COMP_GetFlags",
+        "D2COMP_SetFlags",
+        "COMCALLBACK_ClearChannelUserList"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleGameListError1",
+      "address": "00448e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448e30"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleGameListError1",
+        "GetTickCount",
+        "SStrChr",
+        "sprintf",
+        "COMCALLBACK_ClearChannelListView",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "D2WINEDITBOX_SetTextWide",
+        "SStrCmpI",
+        "MISC_GetIgnorelist"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "IgnoreList",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleGameListError2",
+      "address": "00448f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00448f60"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleGameListError2",
+        "GetTickCount",
+        "SStrChr",
+        "sprintf",
+        "COMCALLBACK_ClearChannelListView",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "D2WINEDITBOX_SetTextWide",
+        "MISC_GetIgnorelist"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "IgnoreList",
+        "WCHAR",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_CreateChannelUserEntry",
+      "address": "00449050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449050"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "Name",
+        "COMCALLBACK_CreateChannelUserEntry",
+        "AllocClientMemory",
+        "memset",
+        "COMCALLBACK_CreateChannelUser",
+        "D2CheckExpansionGame",
+        "AllocCharSelectComponent",
+        "D2COMP_SetScreenY",
+        "D2COMP_SetAnimationSpeed",
+        "GetTickCount",
+        "srand",
+        "D2COMP_GetNumFrames",
+        "rand",
+        "D2COMP_SetCurrentFrame",
+        "COMCALLBACK_FormatChannelUserData",
+        "COMCALLBACK_AddOrUpdateChannelUser",
+        "sprintf",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "FORMS_DisplayBattleNetNews",
+        "COMCALLBACK_ScrollChannelUserList",
+        "COMCALLBACK_UpdateChannelUserList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "strchr",
+        "COMCALLBACK_AddUserToChannelList"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "D2CharSelCompStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_Unused1",
+      "address": "00449330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449330"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_Unused1",
+        "COMCALLBACK_CreateChannelUserEntry"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_Unused2",
+      "address": "00449350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449350"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_Unused2",
+        "COMCALLBACK_CreateChannelUserEntry",
+        "sprintf",
+        "PrintChannelText"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_Unused3",
+      "address": "004493c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004493c0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_Unused3",
+        "COMCALLBACK_Unused2"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_RemoveChannelUser",
+      "address": "004493e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004493e0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "Name",
+        "COMCALLBACK_RemoveChannelUser",
+        "sprintf",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "FORMS_DisplayBattleNetNews",
+        "COMCALLBACK_ScrollChannelUserList",
+        "COMCALLBACK_UpdateChannelUserList",
+        "strchr",
+        "PrintChannelText",
+        "COMCALLBACK_ClearChannelListView",
+        "D2COMP_DestroyCompositeUnit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "WCHAR",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_ClearAllChannelUsers",
+      "address": "004495a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004495a0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_ClearAllChannelUsers",
+        "COMCALLBACK_ClearChannelListView",
+        "D2COMP_DestroyCompositeUnit",
+        "FreeClientMemory",
+        "sprintf",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "FORMS_DisplayBattleNetNews",
+        "COMCALLBACK_ScrollChannelUserList"
+      ],
+      "usedTypes": [
+        "D2ChannelUserStrc",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_Unused4",
+      "address": "00449690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449690"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_Unused4",
+        "COMCALLBACK_RemoveChannelUser"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_HandleJoinedChannel",
+      "address": "004496b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004496b0"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_HandleJoinedChannel",
+        "sprintf",
+        "STRING_ConvertCharToWchar",
+        "OOGUTIL_AppendChatText",
+        "CHATDLG_AppendTextToTextBox_ForComCallback",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINMAIN_SetControlActive",
+        "COMCALLBACK_ClearAllChannelUsers"
+      ],
+      "usedTypes": [
+        "D2WinButton *",
+        "WCHAR",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_RemoveUserFromList",
+      "address": "00449890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449890"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_RemoveUserFromList"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMCALLBACK_DetectCDKeyInMessage",
+      "address": "00449920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00449920"
+        }
+      ],
+      "namespace": "D2Multi::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_DetectCDKeyInMessage",
+        "COMCALLBACK_RemoveUserFromList",
+        "tolower",
+        "toupper",
+        "SStrCopy",
+        "strtoul"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

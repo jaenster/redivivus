@@ -1,0 +1,378 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat.cpp",
+  "functions": [
+    {
+      "name": "Alloc",
+      "address": "00661110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661110"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "Alloc",
+        "AllocServerMemory",
+        "strncpy",
+        "MISC_GetLanguageCode"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Free",
+      "address": "006611a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006611a0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "Free",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "CHAT_GetChatField",
+      "address": "006611c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006611c0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "CHAT_GetChatField"
+      ]
+    },
+    {
+      "name": "GetExpireFrame",
+      "address": "006611d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006611d0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "GetExpireFrame"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_CopyHoverMessageString",
+      "address": "006611e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006611e0"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "TEXT_CopyHoverMessageString"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc"
+      ]
+    },
+    {
+      "name": "HOVERTEXT_GetTextLineList",
+      "address": "00661200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661200"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "HOVERTEXT_GetTextLineList"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc"
+      ]
+    },
+    {
+      "name": "HOVERTEXT_SetTextLineList",
+      "address": "00661210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661210"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "HOVERTEXT_SetTextLineList"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc"
+      ]
+    },
+    {
+      "name": "GetLanguageCode",
+      "address": "00661220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661220"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "GetLanguageCode"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetLanguageCode",
+      "address": "00661230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661230"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "SetLanguageCode"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca2b8",
+      "address": "006ca2b8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca2b8"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca2b8",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca2e8",
+      "address": "006ca2e8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca2e8"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca2e8",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca326",
+      "address": "006ca326",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca326"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca326",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca366",
+      "address": "006ca366",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca366"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca366",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca3b9",
+      "address": "006ca3b9",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca3b9"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca3b9",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca3e8",
+      "address": "006ca3e8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca3e8"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca3e8",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca418",
+      "address": "006ca418",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca418"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca418",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca475",
+      "address": "006ca475",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca475"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca475",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca4b1",
+      "address": "006ca4b1",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca4b1"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca4b1",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca4e1",
+      "address": "006ca4e1",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca4e1"
+        }
+      ],
+      "namespace": "D2Common::Chat::Chat",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca4e1",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

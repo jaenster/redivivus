@@ -35,7 +35,9 @@ int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSiz
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int __fastcall SREG_DeleteValueInternal(uint8_t byFlags, char * pszSubKey, LPCSTR szValueName) {
+// Worker for SRegDeleteValue: deletes one registry value.
+// Name from the PowerPC 1.13c Storm traceback table (static InternalDeleteEntry @10037640).
+int __fastcall SREG_InternalDeleteEntry(uint8_t byFlags, char * pszSubKey, LPCSTR szValueName) {
     DWORD lResult;
     DWORD lResult2;
     HKEY hKey;
@@ -201,7 +203,7 @@ int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, uint8_t 
       return 0;
     }
 
-    int nResult = SREG_DeleteValueInternal(byFlags, pszSubKey, szValueName);
+    int nResult = SREG_InternalDeleteEntry(byFlags, pszSubKey, szValueName);
     return nResult;
 }
 

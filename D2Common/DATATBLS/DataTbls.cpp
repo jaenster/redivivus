@@ -185,7 +185,7 @@ int32_t __stdcall TXT_Experience_GetMaxLevel(int32_t ePlayerClass) {
 }
 
 // Computes nLevel (EAX) throughout the search loop and falls to bare return; the two known callers (UpdateGameInfo, SERVER_PlayerUpdateExperience) both feed the result straight into an unassigned nNewLevel used to gate a level-up branch.
-int __stdcall DATATBLS_GetLevelFromExperience(int32_t ePlayerClass, uint32_t nParam) {
+int __stdcall DATATBLS_GetLevelFromExperience(int32_t ePlayerClass, uint32_t nExperience) {
     int nClassIdClamped;
     int nLevel;
     if (ePlayerClass < 0 || ePlayerClass >= 7) {
@@ -197,7 +197,7 @@ int __stdcall DATATBLS_GetLevelFromExperience(int32_t ePlayerClass, uint32_t nPa
 
     int* pExpEntry = sgtDataTable.pTxtExperience[1].Class + ePlayerClass;
     uint32_t nExpThreshold = *pExpEntry;
-    for (nLevel = 0; nParam >= nExpThreshold && nLevel < sgtDataTable.pTxtExperience->Class[nClassIdClamped]; nLevel++) {
+    for (nLevel = 0; nExperience >= nExpThreshold && nLevel < sgtDataTable.pTxtExperience->Class[nClassIdClamped]; nLevel++) {
       pExpEntry += 8;
       nExpThreshold = *pExpEntry;
     }
@@ -206,21 +206,21 @@ int __stdcall DATATBLS_GetLevelFromExperience(int32_t ePlayerClass, uint32_t nPa
 }
 
 // @sourcefile .\DATATBLS\DataTbls.cpp
-int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * pParam, int * pnParam, int * pnCapacity, void * pSrc, size_t nSize) {
-    while ((int)(*pnParam + nSize) >= *pnCapacity) {
+int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * ppBuffer, int * pnSize, int * pnCapacity, void * pSrc, size_t nSize) {
+    while ((int)(*pnSize + nSize) >= *pnCapacity) {
       void* pRealloced;
       *pnCapacity += 0x400;
       if (*pnCapacity >= 0x7fffffff) {
         return 0;
       }
 
-      pRealloced = D2_REALLOC_POOL_AT(nullptr, *pParam, *pnCapacity, ".\\DATATBLS\\DataTbls.cpp", 0x292);
-      *pParam = pRealloced;
+      pRealloced = D2_REALLOC_POOL_AT(nullptr, *ppBuffer, *pnCapacity, ".\\DATATBLS\\DataTbls.cpp", 0x292);
+      *ppBuffer = pRealloced;
     }
 
-    int nOffset = *pnParam;
-    memcpy((void*)((int)*pParam + nOffset), pSrc, nSize);
-    *pnParam += nSize;
+    int nOffset = *pnSize;
+    memcpy((void*)((int)*ppBuffer + nOffset), pSrc, nSize);
+    *pnSize += nSize;
     return nOffset;
 }
 
@@ -229,10 +229,10 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
     int32_t nResult;
     char cFirstChar;
     if (nAST == 1) {
-      int iVar1;
+      int nLinkIndex;
       switch (nKeywordNumber) {
         case 3:
-          if (sgtDataTable.pTxtSkillsLink && (iVar1 = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtSkillsLink, szText, 0) , iVar1 >= 0)) {
+          if (sgtDataTable.pTxtSkillsLink && (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtSkillsLink, szText, 0) , nLinkIndex >= 0)) {
             break;
           }
         DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
@@ -240,7 +240,7 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
         *pOutHasResolvedToConstant = 0;
         return nResult;
         case 4:
-          if (!sgtDataTable.pTxtMissilesLink || (iVar1 = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMissilesLink, szText, 0) , iVar1 < 0)) {
+          if (!sgtDataTable.pTxtMissilesLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMissilesLink, szText, 0) , nLinkIndex < 0)) {
             DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
             nResult = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMissCalcLink, nAST, 1);
             *pOutHasResolvedToConstant = 0;
@@ -248,7 +248,7 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
           }
         break;
         case 5:
-          if (!sgtDataTable.pTxtItemStatCostLink || (iVar1 = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtItemStatCostLink, szText, 0) , iVar1 < 0)) {
+          if (!sgtDataTable.pTxtItemStatCostLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtItemStatCostLink, szText, 0) , nLinkIndex < 0)) {
             nResult = Storm::Source::SSTR::SStrCmpI(szText, "base", 0x20);
             if (!nResult) {
               *pOutHasResolvedToConstant = 0;
@@ -267,7 +267,7 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
           }
         break;
         case 6:
-          if (!sgtDataTable.pTxtSkillsLink || (iVar1 = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtSkillsLink, szText, 0) , iVar1 < 0)) {
+          if (!sgtDataTable.pTxtSkillsLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtSkillsLink, szText, 0) , nLinkIndex < 0)) {
             DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
             nResult = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtSkillCalcLink, nAST, 1);
             *pOutHasResolvedToConstant = 0;
@@ -279,7 +279,7 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
       }
 
       *pOutHasResolvedToConstant = 1;
-      return iVar1;
+      return nLinkIndex;
     }
 
     lookup_skill_calc:
@@ -310,49 +310,49 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
 }
 
 void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
-    size_t sVar1;
+    size_t nByteCodeLen;
     uint32_t nCompiledLen;
     uint8_t aByteCodeBuf[1024];
     if (!pRecord) {
       return;
     }
     if (szText) {
-      sVar1 = Fog::Skills::SKILLS_ParseCalcExpression(szText, aByteCodeBuf, 0x400, DATATBLS_CalcExpr_ParseTokenType, DATATBLS_CalcExpr_GetArgCount, DATATBLS_LookupCalcCode);
-      if ((int)sVar1 > 0) {
-        nCompiledLen = DATATBLS_AppendDataToBuffer(&sgtDataTable.pSkillsCode, &sgtDataTable.nSkillsCodeSize, &sgtDataTable.nSkillsCodeCapacity, aByteCodeBuf, sVar1);
+      nByteCodeLen = Fog::Skills::SKILLS_ParseCalcExpression(szText, aByteCodeBuf, 0x400, DATATBLS_CalcExpr_ParseTokenType, DATATBLS_CalcExpr_GetArgCount, DATATBLS_LookupCalcCode);
+      if ((int)nByteCodeLen > 0) {
+        nCompiledLen = DATATBLS_AppendDataToBuffer(&sgtDataTable.pSkillsCode, &sgtDataTable.nSkillsCodeSize, &sgtDataTable.nSkillsCodeCapacity, aByteCodeBuf, nByteCodeLen);
         *(uint32_t*)(pRecord + nOffset) = nCompiledLen;
         return;
       }
     }
 
-    char* pcVar1 = pRecord + nOffset;
-    pcVar1[0] = -1;
-    pcVar1[1] = -1;
-    pcVar1[2] = -1;
-    pcVar1[3] = -1;
+    char* pCodeField = pRecord + nOffset;
+    pCodeField[0] = -1;
+    pCodeField[1] = -1;
+    pCodeField[2] = -1;
+    pCodeField[3] = -1;
 }
 
 void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
-    size_t sVar1;
+    size_t nByteCodeLen;
     uint32_t nCompiledLen;
     uint8_t aByteCodeBuf[1024];
     if (!pRecord) {
       return;
     }
     if (szText) {
-      sVar1 = Fog::Skills::SKILLS_ParseCalcExpression(szText, aByteCodeBuf, 0x400, DATATBLS_CalcExpr_ParseTokenType, DATATBLS_CalcExpr_GetArgCount, DATATBLS_LookupCalcCode);
-      if ((int)sVar1 > 0) {
-        nCompiledLen = DATATBLS_AppendDataToBuffer(&sgtDataTable.pSkillDescCode, &sgtDataTable.nSkillDescCodeSize, &sgtDataTable.nSkillDescCodeCapacity, aByteCodeBuf, sVar1);
+      nByteCodeLen = Fog::Skills::SKILLS_ParseCalcExpression(szText, aByteCodeBuf, 0x400, DATATBLS_CalcExpr_ParseTokenType, DATATBLS_CalcExpr_GetArgCount, DATATBLS_LookupCalcCode);
+      if ((int)nByteCodeLen > 0) {
+        nCompiledLen = DATATBLS_AppendDataToBuffer(&sgtDataTable.pSkillDescCode, &sgtDataTable.nSkillDescCodeSize, &sgtDataTable.nSkillDescCodeCapacity, aByteCodeBuf, nByteCodeLen);
         *(uint32_t*)(pRecord + nOffset) = nCompiledLen;
         return;
       }
     }
 
-    char* pcVar1 = pRecord + nOffset;
-    pcVar1[0] = -1;
-    pcVar1[1] = -1;
-    pcVar1[2] = -1;
-    pcVar1[3] = -1;
+    char* pCodeField = pRecord + nOffset;
+    pCodeField[0] = -1;
+    pCodeField[1] = -1;
+    pCodeField[2] = -1;
+    pCodeField[3] = -1;
 }
 
 D2AnimDataStrc * __stdcall TXT_AnimTbls_Get() {
@@ -375,14 +375,14 @@ void __fastcall DATATBLS_BuildStatesDataBitMask(D2StatesDataTbls * pStatesData, 
       return;
     }
 
-    uint8_t* pbVar3 = (uint8_t*)((int)sgtDataTable.pTxtStates->overlay + ((int)nFlagBit >> 3) + 0xe);
+    uint8_t* pStateFlagByte = (uint8_t*)((int)sgtDataTable.pTxtStates->overlay + ((int)nFlagBit >> 3) + 0xe);
     do {
-      if ((uint8_t)gadwBitMasks[nFlagBit & 7] & *pbVar3) {
+      if ((uint8_t)gadwBitMasks[nFlagBit & 7] & *pStateFlagByte) {
         pStatesData->nStateBitmask[(int)nStateIdx >> 5] |= gadwBitMasks[nStateIdx & 0x1f];
       }
 
       nStateIdx++;
-      pbVar3 += 0x3c;
+      pStateFlagByte += 0x3c;
     } while ((int)nStateIdx < sgtDataTable.nTxtStatesSize);
 }
 
@@ -398,15 +398,15 @@ void __fastcall DATATBLS_BuildStatesDataList(D2AllStatesDataTbl * * ppAllStatesD
       return;
     }
 
-    uint8_t* pbVar3 = (uint8_t*)((int)pTxtStates->overlay + ((int)nFlag >> 3) + 0xe);
+    uint8_t* pStateFlagByte = (uint8_t*)((int)pTxtStates->overlay + ((int)nFlag >> 3) + 0xe);
     do {
-      if ((uint8_t)gadwBitMasks[nFlag & 7] & *pbVar3) {
+      if ((uint8_t)gadwBitMasks[nFlag & 7] & *pStateFlagByte) {
         (*ppAllStatesData)[*pCounter].nStateId = (short int)nStateIdx;
         (*pCounter)++;
       }
 
       nStateIdx++;
-      pbVar3 += 0x3c;
+      pStateFlagByte += 0x3c;
     } while (nStateIdx < sgtDataTable.nTxtStatesSize);
 }
 
@@ -609,7 +609,7 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
     int32_t nErrorLine;
     uint32_t nSize = 0;
     if (sgtDataTable.bUseTxt) {
-      size_t sVar5;
+      size_t nTxtLineCount;
       nStrCmpResult = _stricmp(szTableName, "leveldefs");
       if (!nStrCmpResult) {
         nErrorLine = 0x8b9;
@@ -626,11 +626,11 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       }
 
       pBinField = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pArchiveTxt, nSize);
-      sVar5 = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinField);
-      nBinAllocSize = sVar5 * nEndOffset;
+      nTxtLineCount = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinField);
+      nBinAllocSize = nTxtLineCount * nEndOffset;
       pDataTable = D2_ALLOC_POOL_AT(nullptr, nBinAllocSize, ".\\DATATBLS\\DataTbls.cpp", 0x8c9);
       memset(pDataTable, 0, nBinAllocSize);
-      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pDataTable, sVar5, nEndOffset);
+      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pDataTable, nTxtLineCount, nEndOffset);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinField);
       strcpy(szTableNameBuf, szTableName);
       szEffectiveName = (char*)((uintptr_t)&nSize + 3);
@@ -640,7 +640,7 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       } while (pNameEnd[1] != '\0');
 
       memcpy(pNameEnd + 1, ".bin", 5);
-      StoreDataTables((uint32_t)szTableNameBuf, (D2InventoryToBeUpdatedStrc*)pDataTable, nBinAllocSize, sVar5);
+      StoreDataTables((uint32_t)szTableNameBuf, (D2InventoryToBeUpdatedStrc*)pDataTable, nBinAllocSize, nTxtLineCount);
       D2_FREE_POOL_AT(nullptr, pDataTable, ".\\DATATBLS\\DataTbls.cpp", 0x8d6);
     }
     if (gpaMiscTxtTables) {
@@ -699,7 +699,7 @@ void __stdcall UnloadBin(void * pTxtTable) {
 }
 
 // Populates the wide-string class-name field in every row of the CharStats txt table. For each row, looks up the string-table key via STRTABLE_GetStringByKey; if not found, formats a fallback like "&lt;keyname&gt;" and writes the wide string (up to nWstringSize chars) into the destination field at the computed struct offset.
-void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nParam, size_t nWstringSize) {
+void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nDstFieldOffset, size_t nWstringSize) {
     uint32_t* pWideOut;
     uint16_t* pWideResult;
     int i;
@@ -722,11 +722,11 @@ void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharSta
     D2Lang::UTF8_ConvertToWideChar(wszShortBuf + 0x10, "<", 0x10);
     D2Lang::UTF8_ConvertToWideChar(wszShortBuf, ">", 0x10);
     if (nTxtCharStatsSize > 0) {
-      pDestination = (uint16_t*)((int)pTxtCharStats->wszClass + nParam);
+      pDestination = (uint16_t*)((int)pTxtCharStats->wszClass + nDstFieldOffset);
       nRowsRemaining = nTxtCharStatsSize;
       do {
         memset(pDestination, 0, nWstringSize);
-        pszKeyField = (uint8_t*)(nSrcFieldOffset - nParam + (int)pDestination);
+        pszKeyField = (uint8_t*)(nSrcFieldOffset - nDstFieldOffset + (int)pDestination);
         pWideResult = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey(pszKeyField);
         if (!pWideResult) {
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSrcBuf, wszShortBuf + 0x10);
@@ -1228,7 +1228,7 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     __frame0_t __frame0;
     void* pTxtTable;
     D2SkillsTxt* local_EAX_15292;
-    int iVar2;
+    int nPetTypeIdx;
     int nCounter;
     int nMonStatsSize;
     D2SkillsTxt* nSkillId;
@@ -1733,10 +1733,10 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
       pSkillTxt = sgtDataTable.pTxtPetType;
       nPetType = sgtDataTable.pTxtSkills[nCounter].pettype;
       if (nPetType >= 0) {
-        iVar2 = (int)nPetType;
-        if (iVar2 < sgtDataTable.nTxtPetTypeSize && sgtDataTable.pTxtPetType[iVar2].nSkillIndexCounter < 0xf) {
-          sgtDataTable.pTxtPetType[iVar2].nSkillId[sgtDataTable.pTxtPetType[iVar2].nSkillIndexCounter] = (short int)nCounter;
-          pSkillTxt[iVar2].nSkillIndexCounter++;
+        nPetTypeIdx = (int)nPetType;
+        if (nPetTypeIdx < sgtDataTable.nTxtPetTypeSize && sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillIndexCounter < 0xf) {
+          sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillId[sgtDataTable.pTxtPetType[nPetTypeIdx].nSkillIndexCounter] = (short int)nCounter;
+          pSkillTxt[nPetTypeIdx].nSkillIndexCounter++;
         }
       }
 

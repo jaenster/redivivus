@@ -24,13 +24,13 @@
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -65,8 +65,8 @@ void __stdcall AllocPalShift_GreenBlood() {
     D2GamePalShiftGreenBloodStrc* pGreenBlood = D2_NEW_AT(D2GamePalShiftGreenBloodStrc, ".\\GAME\\PalShift.cpp", 0x52);
     PalShift_GreenBlood = pGreenBlood;
     memset(pGreenBlood, 0, 0x100);
-    D2FILE_ReadFile(nullptr, pFileHandle, pGreenBlood, 0x100);
-    D2FILE_CloseFile(nullptr, pFileHandle);
+    D2Hell::D2FILE_ReadFile(nullptr, pFileHandle, pGreenBlood, 0x100);
+    D2Hell::D2FILE_CloseFile(nullptr, pFileHandle);
 }
 
 // @sourcefile .\GAME\PalShift.cpp
@@ -86,8 +86,8 @@ void __stdcall InitPal() {
     gpPalShiftEntryListHead = 0;
     BOOL bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\RandTransforms.dat", &pRandTransformFile, 1);
     if (bFileExists) {
-      D2FILE_ReadFile(nullptr, pRandTransformFile, PalShift_RandTransform, 0x1e00);
-      D2FILE_CloseFile(nullptr, pRandTransformFile);
+      D2Hell::D2FILE_ReadFile(nullptr, pRandTransformFile, PalShift_RandTransform, 0x1e00);
+      D2Hell::D2FILE_CloseFile(nullptr, pRandTransformFile);
       gbPalShiftRandTransformLoaded = 1;
     }
 
@@ -99,8 +99,8 @@ void __stdcall InitPal() {
     D2GamePalShiftGreenBloodStrc* pGreenBlood = D2_NEW_AT(D2GamePalShiftGreenBloodStrc, ".\\GAME\\PalShift.cpp", 0x52);
     PalShift_GreenBlood = pGreenBlood;
     memset(pGreenBlood, 0, 0x100);
-    D2FILE_ReadFile(nullptr, pGreenBloodFile, pGreenBlood, 0x100);
-    D2FILE_CloseFile(nullptr, pGreenBloodFile);
+    D2Hell::D2FILE_ReadFile(nullptr, pGreenBloodFile, pGreenBlood, 0x100);
+    D2Hell::D2FILE_CloseFile(nullptr, pGreenBloodFile);
 }
 
 // @sourcefile .\GAME\PalShift.cpp
@@ -237,8 +237,8 @@ void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
 
     int* pPalShiftEntry = (int*)D2_ALLOC_AT(0x1008, ".\\GAME\\PalShift.cpp", 0xf4);
     memset(pPalShiftEntry, 0, 0x1008);
-    D2FILE_ReadFile(nullptr, pFileHandle, pPalShiftEntry + 1, 0x800);
-    D2FILE_CloseFile(nullptr, pFileHandle);
+    D2Hell::D2FILE_ReadFile(nullptr, pFileHandle, pPalShiftEntry + 1, 0x800);
+    D2Hell::D2FILE_CloseFile(nullptr, pFileHandle);
     PALSHIFT_ApplyGreenBloodPalette((uint8_t*)pPalShiftEntry, nMonsterId);
     *pPalShiftEntry = nMonsterId;
     pPalShiftEntry[0x401] = (int)gpPalShiftEntryListHead;

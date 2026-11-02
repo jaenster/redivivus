@@ -118,11 +118,11 @@ void __stdcall INPUT_FormKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormKeyUpHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormActivate(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormDeactivate(struct D2UIMouseMsgStrc * pMsg);
-void __stdcall D2WIN_HandleSystemCommand(int32_t nParam);
-void __stdcall D2WIN_HandleActivation(int32_t nParam);
+void __stdcall D2WIN_HandleSystemCommand(int32_t pMsg);
+void __stdcall D2WIN_HandleActivation(int32_t pMsg);
 // @sourcefile .\Src\D2WinMain.cpp
 void __fastcall D2WIN_TakeThrottledScreenshot(LPCSTR szFileName);
-void __stdcall D2WIN_ToggleMusicOptions(int32_t nParam);
+void __stdcall D2WIN_ToggleMusicOptions(int32_t pMsg);
 int32_t __stdcall D2WIN_FindClosestControlToMouse(struct D2ControlStrc * pControl1, struct D2ControlStrc * pControl2);
 void __stdcall INPUT_FormMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 // Sets gbCursorVisible cursor visibility flag
@@ -132,13 +132,13 @@ void __stdcall SetUnsetFlag0x08(struct D2ControlStrc * pControl, int32_t bSet);
 void __stdcall D2WINMAIN_SetFormFourth(struct D2ControlStrc * pControl);
 // Returns gnWinMainState global value
 uint32_t __stdcall D2WINMAIN_GetWinMainState();
-BOOL __stdcall FORMS_SetGlobalFormImage(struct D2ControlStrc * pControl, int32_t nParam);
+BOOL __stdcall FORMS_SetGlobalFormImage(struct D2ControlStrc * pControl, int32_t nInitialFormState);
 // Returns first element from linked list (dereferences pointer if non-null)
 void * __stdcall D2WINMAIN_GetFirstElement(void * * ppHead);
 // Returns pFormImage global control pointer
 struct D2ControlStrc * __stdcall D2WINMAIN_GetFormImage();
-void __stdcall D2WIN_HandleCursorHide(int32_t nParam);
-void __stdcall D2WIN_HandleMouseLeave(int32_t nParam);
+void __stdcall D2WIN_HandleCursorHide(int32_t pMsg);
+void __stdcall D2WIN_HandleMouseLeave(int32_t pMsg);
 BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2RendererMode eRenderedMode, BOOL bWindowed, BOOL bDontUseCompression);
 BOOL __stdcall FreeInGameGFX();
 void __stdcall MessagePump(pfnFramePump pfnFrameCallback);
@@ -146,7 +146,7 @@ void __stdcall MOUSE_CaptureMousePosition(HWND * phWnd);
 void __stdcall INPUT_FormTabKey(struct D2UIMouseMsgStrc * pMsg);
 // @sourcefile .\Src\D2WinMain.cpp
 void __stdcall TakeScreenshot();
-void __stdcall D2WIN_Unused_Placeholder_5(int32_t nParam);
+void __stdcall D2WIN_Unused_Placeholder_5(int32_t pMsg);
 void __stdcall INPUT_FormMouseHandler(struct D2UIMouseMsgStrc * pMsg);
 // 1 internal function (defined in .cpp)
 

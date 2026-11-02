@@ -1,0 +1,133 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/Targets.cpp",
+  "functions": [
+    {
+      "name": "TARGETS_AddTargetToTrackingList",
+      "address": "005b1880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1880"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "TARGETS_AddTargetToTrackingList",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2NodeUnkownStrc",
+        "D2UnitNodeStrc",
+        "D2UnitNodeStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "CreateUnitNode",
+      "address": "005b1900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1900"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "CreateUnitNode",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2NodeUnkownStrc",
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddNodeToTable",
+      "address": "005b1990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1990"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "AddNodeToTable",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2NodeUnkownStrc",
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNIT_FreeUnitNodes",
+      "address": "005b1a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1a20"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "UNIT_FreeUnitNodes",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "MONSTER_FreeUnitNodes",
+      "address": "005b1a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1a90"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "MONSTER_FreeUnitNodes",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "TARGETS_FreeAllUnitNodes",
+      "address": "005b1b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1b70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "TARGETS_FreeAllUnitNodes",
+        "UNIT_FreeUnitNodes"
+      ],
+      "usedTypes": [
+        "D2UnitNodeStrc",
+        "D2UnitNodeStrc *",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

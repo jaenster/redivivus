@@ -1,0 +1,1715 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Text.cpp",
+  "functions": [
+    {
+      "name": "TEXT_FreeTextLineList",
+      "address": "0049d370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d370"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc"
+      ]
+    },
+    {
+      "name": "TEXT_RecalcTextBoxDimensions",
+      "address": "0049d3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d3c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_RecalcTextBoxDimensions",
+        "DRAW_text0"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_FreeTextBox",
+      "address": "0049d410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d410"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeTextBox",
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc"
+      ]
+    },
+    {
+      "name": "TEXT_InitTextDisplaySettings",
+      "address": "0049d440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d440"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_InitTextDisplaySettings",
+        "memset",
+        "SRegLoadValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_FreeScreenMessage",
+      "address": "0049d490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d490"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeScreenMessage",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "ScreenMessage_t"
+      ]
+    },
+    {
+      "name": "TEXT_FreeAllScreenMessages",
+      "address": "0049d4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d4d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeAllScreenMessages",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ScreenMessageListStrc",
+        "ScreenMessage_t",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "TEXT_SetTextDisplayMode",
+      "address": "0049d570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d570"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_SetTextDisplayMode",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_DrawScrollingTextBox",
+      "address": "0049d5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d5a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawScrollingTextBox",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetAndReturnLastFont",
+        "D2GFX_DrawSolidRectExBySize",
+        "DRAW_Direct_RectFrame",
+        "DRAW_text",
+        "D2WINFONT_DrawVerticalCroppedText",
+        "D2WINFONT_GetCurrentFontHeight"
+      ],
+      "usedTypes": [
+        "RECT",
+        "int32_t",
+        "uint32_t",
+        "wchar_t",
+        "wchar_t *"
+      ]
+    },
+    {
+      "name": "TEXT_DrawTextBoxAtPosition",
+      "address": "0049d8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d8e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawTextBoxAtPosition",
+        "D2GFX_DrawSolidRectExBySize",
+        "SetAndReturnLastFont",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc",
+        "D2TextLineStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_DrawTextBoxWithBorderCheck",
+      "address": "0049d9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049d9a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawTextBoxWithBorderCheck",
+        "DRAW_GetTypeOfBorder",
+        "TEXT_DrawTextBoxAtPosition"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_OnClickCloseNpcDialog",
+      "address": "0049da10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049da10"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OnClickCloseNpcDialog",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "TEXT_SetNpcMenuSelection",
+      "address": "0049da30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049da30"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_SetNpcMenuSelection"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "TEXT_ClearNpcMenuSelection",
+      "address": "0049da50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049da50"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ClearNpcMenuSelection"
+      ]
+    },
+    {
+      "name": "TEXT_AllocScreenMessage",
+      "address": "0049db10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049db10"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_AllocScreenMessage",
+        "AllocClientMemory",
+        "STRING_GetWideStringLength",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "ScreenMessage_t",
+        "WCHAR",
+        "WCHAR *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_InsertScreenMessage",
+      "address": "0049dbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049dbc0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_InsertScreenMessage",
+        "TEXT_AllocScreenMessage",
+        "TEXT_FreeScreenMessage"
+      ],
+      "usedTypes": [
+        "ScreenMessage_t",
+        "WCHAR *"
+      ]
+    },
+    {
+      "name": "TEXT_DrawChatMessages",
+      "address": "0049dc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049dc40"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawChatMessages",
+        "SetAndReturnLastFont",
+        "GetUIFlag",
+        "DRAW_GetTypeOfBorder",
+        "STRING_GetWideStringLength",
+        "D2WINFONT_GetStringPixelWidthN",
+        "D2GFX_DrawSolidRectExBySize",
+        "DRAW_text",
+        "STRING_CopyWideString",
+        "D2WINFONT_WordWrapString",
+        "FreeClientMemory",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc",
+        "ScreenMessage_t",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_DrawPartyMessages",
+      "address": "0049dee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049dee0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawPartyMessages",
+        "SetAndReturnLastFont",
+        "GetUIFlag",
+        "STRING_GetWideStringLength",
+        "D2WINFONT_GetStringPixelWidthN",
+        "D2GFX_DrawSolidRectExBySize",
+        "DRAW_text",
+        "GetTickCount",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "DRAWMODE",
+        "ScreenMessage_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_FindNonOverlappingRect",
+      "address": "0049e070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e070"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FindNonOverlappingRect"
+      ],
+      "usedTypes": [
+        "RECT",
+        "int32_t",
+        "tagRECT",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TEXT_ConvertCharToWideWithLanguage",
+      "address": "0049e280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e280"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ConvertCharToWideWithLanguage",
+        "MISC_GetLanguageCode",
+        "STRING_CopyCharToWCharWithSetMaxSize"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TEXT_FreeStaticTextBox",
+      "address": "0049e300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e300"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeStaticTextBox",
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc"
+      ]
+    },
+    {
+      "name": "TEXT_DrawAllMessageLog",
+      "address": "0049e340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e340"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawAllMessageLog"
+      ],
+      "usedTypes": [
+        "ScreenMessage_t"
+      ]
+    },
+    {
+      "name": "TEXT_PrintGameString",
+      "address": "0049e3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e3a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_PrintGameString",
+        "AllocClientMemory",
+        "GetTickCount",
+        "SetAndReturnLastFont",
+        "D2WINFONT_WordWrapString",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "WideCharToUTF8",
+        "MISC_GetIgnorelist",
+        "TEXT_InsertScreenMessage",
+        "TEXT_FreeScreenMessage",
+        "SOUND_PlaySound",
+        "GetUIFlag",
+        "TEXT_DrawAllMessageLog"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc",
+        "IgnoreList",
+        "ScreenMessage_t",
+        "ScreenMessage_t *",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "TEXT_PrintPartyMessage",
+      "address": "0049e5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e5c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_PrintPartyMessage",
+        "SetAndReturnLastFont",
+        "AllocClientMemory",
+        "GetTickCount",
+        "STRING_GetWideStringLength",
+        "D2WINFONT_GetStringPixelWidthN",
+        "UNICODE_CheckLineBreakPosition",
+        "WideCharToUTF8",
+        "memset",
+        "WSTRING_PutWideCharIntoBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TEXT_InsertScreenMessage",
+        "TEXT_FreeScreenMessage",
+        "GetUIFlag",
+        "TEXT_DrawAllMessageLog",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "ScreenMessage_t",
+        "ScreenMessage_t *",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "TEXT_SetScrollCompleteCallback",
+      "address": "0049e7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e7e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_SetScrollCompleteCallback"
+      ],
+      "usedTypes": [
+        "pfnTextScrollComplete"
+      ]
+    },
+    {
+      "name": "TEXT_SetTextBoxExclusionRect",
+      "address": "0049e810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e810"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_SetTextBoxExclusionRect",
+        "SELECT_SetExclusionRect",
+        "ClearSelectedUnit"
+      ],
+      "usedTypes": [
+        "RECT"
+      ]
+    },
+    {
+      "name": "TEXT_GetOverheadSpeakerUnit",
+      "address": "0049e8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e8b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_GetOverheadSpeakerUnit",
+        "UNITS_FindClientSideUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "TEXT_FormatEventMessage",
+      "address": "0049e8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049e8f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FormatEventMessage",
+        "GetRosterByGUID",
+        "GetPlayerUnit_UI",
+        "GetRosterName",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "STRING_CopyWideString",
+        "GetLocaleString",
+        "AppendToBuffer",
+        "SOUND_PlaySound",
+        "UNICODE_FormatWideString",
+        "GetRosterGUID",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_HandleEventMessagePacket",
+      "address": "0049eb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049eb10"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_HandleEventMessagePacket",
+        "GetLocaleString",
+        "STRING_GetWideStringLength",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "TEXT_PrintGameString",
+        "GetPlayerUnit_UI",
+        "GetPlayerRosterName",
+        "CONTAINER_InitializeBuffer",
+        "UNICODE_FormatWideString",
+        "TXT_MonStats_GetLine",
+        "TXT_SuperUniques_GetLine",
+        "TXT_Objects_GetLine",
+        "TEXT_FormatEventMessage",
+        "TEXT_PrintPartyMessage",
+        "GetCurrentRoom",
+        "DRLGENV_InitializeEnvironment",
+        "SetShake",
+        "SOUND_PlaySound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2ObjectsTxt",
+        "D2Packet0x5aEventStructure",
+        "D2RoomStrc",
+        "D2SuperUniquesTxt",
+        "D2UnitStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TEXT_FreeHoverText",
+      "address": "0049f3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049f3d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeHoverText",
+        "HOVERTEXT_GetTextLineList",
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory",
+        "HOVERTEXT_SetTextLineList",
+        "Free"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc"
+      ]
+    },
+    {
+      "name": "TEXT_SetUnitHoverText",
+      "address": "0049f410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049f410"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_SetUnitHoverText",
+        "Free",
+        "Alloc",
+        "SetLanguageCode"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TEXT_ProcessChatMessage",
+      "address": "0049f490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049f490"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ProcessChatMessage",
+        "ROSTER_CheckPlayerNotHostile",
+        "UNITS_FindClientSideUnit",
+        "GetPlayerName",
+        "SStrCopy",
+        "MISC_GetIgnorelist",
+        "TEXT_ConvertCharToWideWithLanguage",
+        "TEXT_PrintGameString",
+        "CONTAINER_InitializeBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "UI_RemoveColorCodesFromString",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "AppendAsWideChar",
+        "TEXT_SetUnitHoverText",
+        "MISC_GetLanguageCode",
+        "CloseScrollOfWhatever"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "IgnoreList",
+        "MessageStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TEXT_ClearUnitHoverText",
+      "address": "0049f8c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049f8c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ClearUnitHoverText",
+        "UNITS_FindClientSideUnit",
+        "Free"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x76",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "TEXT_GetOverheadGlobalPointer",
+      "address": "0049f900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049f900"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_GetOverheadGlobalPointer"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_TextStrc"
+      ]
+    },
+    {
+      "name": "TEXT_LookupSoundStringIndex",
+      "address": "0049f910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049f910"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_LookupSoundStringIndex",
+        "GetLocaleString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "TEXT_CloseScrollingText",
+      "address": "0049f960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049f960"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_CloseScrollingText",
+        "SELECT_SetExclusionRect",
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory",
+        "SOUND_StopSound",
+        "SOUND_StopChannelGracefully",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "NET_D2GS_CLIENT_Send_INT_INT"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_DrawScrollBackground",
+      "address": "0049fa10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049fa10"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawScrollBackground",
+        "D2GFX_DrawSolidRectEx",
+        "IMAGE_LoadDC6Ex",
+        "memset",
+        "D2GFX_DrawImage",
+        "GetBuySellBtnDC6"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6"
+      ]
+    },
+    {
+      "name": "TEXT_DrawQuestScrollAnimation",
+      "address": "0049fba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049fba0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawQuestScrollAnimation",
+        "GetPlayerUnit_UI",
+        "memset",
+        "TEXT_DrawScrollBackground",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "SetAndReturnLastFont",
+        "GetTickCount",
+        "SOUND_PlaySound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2UnitStrc",
+        "DRAWMODE",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_FreeScrollDC6Images",
+      "address": "0049fe10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049fe10"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeScrollDC6Images",
+        "DC6_FreeAndDelete"
+      ]
+    },
+    {
+      "name": "TEXT_OnEscCloseQuestScroll",
+      "address": "0049fe60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049fe60"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OnEscCloseQuestScroll",
+        "SMsgBreakHandlerChain",
+        "SetUIFlag",
+        "TEXT_FreeScrollDC6Images"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "TEXT_OnClickCloseQuestScroll",
+      "address": "0049fea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049fea0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OnClickCloseQuestScroll",
+        "SetUIFlag",
+        "TEXT_FreeScrollDC6Images",
+        "SMsgBreakHandlerChain",
+        "UI_ResetInputState"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "TEXT_OnPanelUnregister_NoOp",
+      "address": "0049ff00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049ff00"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OnPanelUnregister_NoOp"
+      ]
+    },
+    {
+      "name": "TEXT_DrawQuestScrollUI",
+      "address": "0049ff10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049ff10"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawQuestScrollUI",
+        "TEXT_DrawQuestScrollAnimation",
+        "TEXT_DrawScrollBackground"
+      ]
+    },
+    {
+      "name": "TEXT_HandleScrollLinePacket",
+      "address": "0049ff60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049ff60"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_HandleScrollLinePacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x50"
+      ]
+    },
+    {
+      "name": "TEXT_OpenQuestScroll",
+      "address": "0049ff90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0049ff90"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OpenQuestScroll",
+        "SetUIFlag",
+        "UI_ResetInputState",
+        "NET_D2GS_CLIENT_Send_INT"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "TEXT_IsScrollingTextActive",
+      "address": "004a0000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0000"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_IsScrollingTextActive"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_FreeChatAndLogMessages",
+      "address": "004a0010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0010"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeChatAndLogMessages",
+        "TEXT_FreeAllScreenMessages"
+      ]
+    },
+    {
+      "name": "TEXT_CloseMessageLogDialog",
+      "address": "004a0030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0030"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_CloseMessageLogDialog",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "TEXT_OpenMessageLogDialog",
+      "address": "004a0050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0050"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_OpenMessageLogDialog",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "SMemAlloc",
+        "Constructor",
+        "AllocDialogSub",
+        "TEXT_DrawAllMessageLog",
+        "DIALOG_SetSelectedLine"
+      ],
+      "usedTypes": [
+        "ListBoxWrapper",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_DestroyMessageLogDialog",
+      "address": "004a01a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a01a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DestroyMessageLogDialog",
+        "FreeDialogStrc"
+      ]
+    },
+    {
+      "name": "TEXT_ClearChatMessages",
+      "address": "004a01e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a01e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ClearChatMessages"
+      ]
+    },
+    {
+      "name": "TEXT_SetUnitOverheadFromSoundTable",
+      "address": "004a0200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0200"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_SetUnitOverheadFromSoundTable",
+        "MISC_GetLanguageCode",
+        "sprintf",
+        "TEXT_SetUnitHoverText"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_CloseMessageUI",
+      "address": "004a02f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a02f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_CloseMessageUI",
+        "SetUIFlag"
+      ]
+    },
+    {
+      "name": "TEXT_ParseMultilineString",
+      "address": "004a0320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0320"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ParseMultilineString",
+        "memset",
+        "AllocClientMemory",
+        "STRING_GetWideStringLength",
+        "WideCharToUTF8",
+        "DRAW_text0",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "TEXT_AllocTextBox",
+      "address": "004a05e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a05e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_AllocTextBox",
+        "AllocClientMemory",
+        "D2WINFONT_WordWrapString",
+        "TEXT_RecalcTextBoxDimensions",
+        "SetAndReturnLastFont",
+        "TEXT_ParseMultilineString"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc",
+        "D2TextLineStrc",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_FreeEverything",
+      "address": "004a0680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0680"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_FreeEverything",
+        "STRUCT_FreeTxtMessageForPacket0x27",
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory",
+        "FreeDialogStrc",
+        "TEXT_FreeScrollDC6Images",
+        "SELECT_SetExclusionRect",
+        "TEXT_FreeAllScreenMessages"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc"
+      ]
+    },
+    {
+      "name": "TEXT_UpdateScrollingText",
+      "address": "004a0770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0770"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_UpdateScrollingText",
+        "SOUND_GetMasterVolume",
+        "SOUND_GetSoundByIndex",
+        "TEXT_DrawScrollingTextBox",
+        "TEXT_FreeTextBox",
+        "SELECT_SetExclusionRect",
+        "TEXT_CloseScrollingText",
+        "NPCMENU_CloseScrollAndInteraction",
+        "UI_UpdateCursorAnimationTimer",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_CloseNpcInteraction",
+      "address": "004a0880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0880"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_CloseNpcInteraction",
+        "NPCMENU_CloseScrollAndInteraction",
+        "UI_UpdateCursorAnimationTimer",
+        "TEXT_CloseScrollingText"
+      ]
+    },
+    {
+      "name": "TEXT_HandleEscapeKey",
+      "address": "004a08c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a08c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_HandleEscapeKey",
+        "TEXT_CloseScrollingText",
+        "NPCMENU_CloseScrollAndInteraction",
+        "UI_UpdateCursorAnimationTimer",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TEXT_FreeTextBox",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_DrawUnitOverheadText",
+      "address": "004a0a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0a00"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawUnitOverheadText",
+        "GetExpireFrame",
+        "Free",
+        "SetAndReturnLastFont",
+        "AllocClientMemory",
+        "D2WINFONT_WordWrapString",
+        "TEXT_RecalcTextBoxDimensions",
+        "TEXT_FindNonOverlappingRect",
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory",
+        "TEXT_DrawTextBoxWithBorderCheck"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "D2TextBoxStrc",
+        "D2TextLineStrc",
+        "D2UnitStrc",
+        "RECT",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_DrawMonsterHoverText",
+      "address": "004a0b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0b30"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawMonsterHoverText",
+        "GetTargetCoords",
+        "DRAW_GetTypeOfBorder",
+        "TEXT_CopyHoverMessageString",
+        "GetLocaleString",
+        "CONTAINER_InitializeBuffer",
+        "memset",
+        "STRING_GetWideStringLength",
+        "WSTRING_PutWideCharIntoBuffer",
+        "TEXT_DrawUnitOverheadText",
+        "GetLanguageCode",
+        "TEXT_ConvertCharToWideWithLanguage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "POINT",
+        "WCHAR",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TEXT_DrawObjectHoverText",
+      "address": "004a0d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0d20"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawObjectHoverText",
+        "GetTargetCoords",
+        "DRAW_GetTypeOfBorder",
+        "TEXT_CopyHoverMessageString",
+        "GetLocaleString",
+        "CONTAINER_InitializeBuffer",
+        "memset",
+        "STRING_GetWideStringLength",
+        "WSTRING_PutWideCharIntoBuffer",
+        "TEXT_DrawUnitOverheadText"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "D2UnitStrc",
+        "POINT",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_DrawMessageLogAndOverhead",
+      "address": "004a0e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a0e70"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_DrawMessageLogAndOverhead",
+        "VIEW_GetViewRect",
+        "GetCenterXY",
+        "CUNIT_IterateServerUnitsWithCallback",
+        "CUNIT_IterateMissilesWithCallback",
+        "CUNIT_IterateItemsWithCallback",
+        "TEXT_UpdateScrollingText",
+        "UNITS_FindClientSideUnit",
+        "IsPlayerDead",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "NPCMENU_ClearHireListAndStopNpcSound",
+        "TEXT_CloseNpcInteraction",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount",
+        "TEXT_DrawTextBoxWithBorderCheck",
+        "TEXT_FreeStaticTextBox",
+        "GetUIFlag",
+        "TEXT_DrawChatMessages",
+        "TEXT_DrawPartyMessages",
+        "DIALOG_DrawBackground"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_ShowNpcDialog",
+      "address": "004a10e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a10e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ShowNpcDialog",
+        "UI_ResetInputState",
+        "SOUND_StopSound",
+        "SOUND_StopChannelGracefully",
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory",
+        "UNITS_FindClientSideUnit",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "NPCMENU_ClearHireListAndStopNpcSound",
+        "SELECT_SetExclusionRect",
+        "ClearSelectedUnit",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "TEXT_AllocTextBox",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_DebugPrintChannels",
+        "UI_GetDialogLineCount",
+        "UNITSND_StopAllSkillSounds",
+        "GetPlayerUnit_UI",
+        "SOUND_PlaySound",
+        "GetTickCount",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc",
+        "D2UnitStrc",
+        "RECT",
+        "WCHAR",
+        "eD2Sounds",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "TEXT_ShowScrollingText",
+      "address": "004a1320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a1320"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ShowScrollingText",
+        "UI_ResetInputState",
+        "SOUND_StopSound",
+        "SOUND_StopChannelGracefully",
+        "SELECT_SetExclusionRect",
+        "ClearSelectedUnit",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "TEXT_AllocTextBox",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "UI_GetDialogLineCount",
+        "GetPlayerUnit_UI",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "RECT",
+        "WCHAR",
+        "eD2Sounds",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "TEXT_ShowStaticTextPopup",
+      "address": "004a1510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a1510"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_ShowStaticTextPopup",
+        "TEXT_FreeTextLineList",
+        "FreeClientMemory",
+        "GetLocaleString",
+        "SetAndReturnLastFont",
+        "AllocClientMemory",
+        "D2WINFONT_WordWrapString",
+        "TEXT_RecalcTextBoxDimensions",
+        "STRING_GetWideStringLength",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2TextBoxStrc",
+        "D2TextLineStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "TEXT_HandleOverheadTextPacket",
+      "address": "004a1600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a1600"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_HandleOverheadTextPacket",
+        "UNITS_FindClientSideUnit",
+        "Free",
+        "sprintf",
+        "Alloc",
+        "STRUCT_FreeTxtMessageForPacket0x27",
+        "STRUCT_AllocTxtMessageForPacket0x27",
+        "StoreMessages",
+        "TEXT_SortMessageList",
+        "TEXT_ShowStaticTextPopup",
+        "TEXT_ShowScrollingText"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27",
+        "D2HoverTextStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "TEXT_CloseNpcDialog",
+      "address": "004a1730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a1730"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "TEXT_CloseNpcDialog",
+        "TEXT_CloseScrollingText",
+        "STRUCT_FreeTxtMessageForPacket0x27"
+      ]
+    },
+    {
+      "name": "INPUT_TextDismiss",
+      "address": "004a1770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a1770"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "INPUT_TextDismiss",
+        "GetTickCount",
+        "SMsgBreakHandlerChain",
+        "TEXT_HandleEscapeKey"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_TextClickHandler",
+      "address": "004a17d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a17d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "INPUT_TextClickHandler",
+        "GetSelectedUnit",
+        "UNITS_FindClientSideUnit",
+        "SMsgBreakHandlerChain",
+        "INPUT_TextDismiss"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "INPUT_TextKeyHandler",
+      "address": "004a1870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a1870"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "INPUT_TextKeyHandler",
+        "CMD_IsCommandBound",
+        "CMD_GetKeyForCommand",
+        "INPUT_TextDismiss"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_TextKeyFilter",
+      "address": "004a18c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a18c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "INPUT_TextKeyFilter",
+        "INPUT_TextKeyHandler"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca07b",
+      "address": "006ca07b",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca07b"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca07b"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "StaticInit_6cac10",
+      "address": "006cac10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cac10"
+        }
+      ],
+      "namespace": "D2Client::UI::Text",
+      "calledFunctions": [
+        "StaticInit_6cac10"
+      ]
+    }
+  ]
+}

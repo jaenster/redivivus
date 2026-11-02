@@ -108,7 +108,9 @@ uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSe
 // Storm 64-bit string hash: hash = (table[c>>4]-table[c&15]) ^ (seed2+hash); seed2 = seed2*33 + c + hash + 3, per char (upper-cased and '/'->'\\' unless bCaseSensitive); qwSeed 0 means 0x7fed7fed7fed7fed; a 0 result becomes 1.
 // Provenance: 1.14d asm 00413dc0-00413f2c (SUB/SBB [c*8+0x6cee70]/[+0x6cee74], __allmul by 0x21, RET 0x10).
 ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive, ULONGLONG qwSeed);
-uint32_t __fastcall SSTR_JenkinsHash(int * pData, uint32_t nLength, uint32_t nInitVal);
+// Bob Jenkins hash over a byte buffer.
+// Name from the PowerPC 1.13c Storm traceback table (bjhash @10047b40).
+uint32_t __fastcall SSTR_bjhash(int * pData, uint32_t nLength, uint32_t nInitVal);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrHashHT(const char *)
 // @oracle-basis One parameter, and the only one-argument hash in the module (SStrHash takes three, SStrHash64 four).
@@ -126,7 +128,7 @@ void __stdcall SStrUpper(char * szText);
 // @oracle Mac PPC 1.10b Storm -- PPC export vector SStrLower__FPc -> 100479c0 is a 28-byte thunk whose only bl is ._strlwr. 1.14d 00414200 is the same 19-byte bare thunk to __strlwr.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SStrLower(char * szText);
-double __fastcall SSTR_Pow10Helper(uint32_t nValue, double param_1);
+double __fastcall SSTR_Pow10Helper(uint32_t nValue, double dBase);
 // Scales dBase by a power of ten. Returns a double in ST(0), not through a hidden return pointer, so dBase sits at Stack[0x4] and nExp at Stack[0xc]. An 80-bit x87 return type would make Ghidra add a __return_storage_ptr__ at Stack[0x4] and shift every argument by four bytes.
 double SSTR_PowDoubleInt(double dBase, int nExp);
 void __stdcall SSTR_InitPow10Table();
@@ -180,11 +182,11 @@ double __stdcall SStrToDouble(char * pStr);
 // returned in ST(0), never in EAX. That explicit 4-byte round-trip is also the evidence that its twin
 // SStrToDouble @004144c0, which has no such narrowing, returns a double.
 float __stdcall SStrToFloat(char * pStr);
-int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int * pnParam);
+int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int * pnCharsRead);
 int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF16Out, int nInBytes, int * pnCharsWritten, int * pnBytesRead);
-int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnParam);
+int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBytesRead);
 int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUTF8In, int nInBytes, int * pnCharsWritten, int * pnBytesRead);
-uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbParam, int * pnParam);
+uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbText, int * pnBytesRead);
 void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut);
 // ECX is not an argument: neither this body nor UTF8_AdvanceToCharBoundary reads it.
 void __stdcall UTF8_StepBackOneChar(uint8_t * str_base, int position);

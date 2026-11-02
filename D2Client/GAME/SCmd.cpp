@@ -392,10 +392,10 @@ int __stdcall CLIENT_GetCurrentRoomAct() {
     eD2LevelId eLevel;
     D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
     if (pRoom) {
-      eAct eVar1;
+      eAct eActNo;
       eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      return (uint32_t)eVar1;
+      eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+      return (uint32_t)eActNo;
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x527);
@@ -408,10 +408,10 @@ int __fastcall CLIENT_GetUnitAct(D2UnitStrc * pUnit) {
     eD2LevelId eLevel;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (pRoom) {
-      eAct eVar1;
+      eAct eActNo;
       eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      return (uint32_t)eVar1;
+      eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+      return (uint32_t)eActNo;
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x538);
@@ -429,10 +429,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x04_STARTACT(char * pBytes) {
     gLevelLoadInProgress = 0;
     D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
     if (pRoom) {
-      eAct eVar1;
+      eAct eActNo;
       eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      eVar1 = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      /* timing */ Engine::Gfx::GFX_UpdateGfxThrottled((uint32_t)eVar1);
+      eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+      /* timing */ Engine::Gfx::GFX_UpdateGfxThrottled((uint32_t)eActNo);
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer)) {
         return;
@@ -1850,11 +1850,11 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET(D2GSPacketSrv0x7A * pByte
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x81(D2GSPacketSrv0x81 * pBytes) {
-    D2RosterMercArg local_10;
-    local_10.nSeed = pBytes->nSeed2;
-    local_10.nInitSeed = pBytes->nInitSeed;
-    local_10.nZero = 0;
-    RosterPets::AddRosterPetMerc(pBytes->nMercGUID, pBytes->nOwnerGUID, (uint32_t)pBytes->nSkillId, (uint32_t)(uint16_t)pBytes->nRosterType, &local_10);
+    D2RosterMercArg sMercArg;
+    sMercArg.nSeed = pBytes->nSeed2;
+    sMercArg.nInitSeed = pBytes->nInitSeed;
+    sMercArg.nZero = 0;
+    RosterPets::AddRosterPetMerc(pBytes->nMercGUID, pBytes->nOwnerGUID, (uint32_t)pBytes->nSkillId, (uint32_t)(uint16_t)pBytes->nRosterType, &sMercArg);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS(char * pBytes) {
@@ -1981,7 +1981,6 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x8F(char * pBytes) {
 void __fastcall NET_D2GS_CLIENT_Incoming0x9C_ITEMEX(uint8_t * pBytes) {
     int nRemaining;
     uint8_t pBytesCopy[252];
-    int32_t nLine;
     uint8_t* pWriteCursor = pBytesCopy;
     memcpy(pWriteCursor, pBytes, 0xfc);
     switch (pBytesCopy[1]) {
@@ -2006,8 +2005,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9C_ITEMEX(uint8_t * pBytes) {
       case 0x16:
 
       case 0x17:
-        nLine = 0xf6d;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf6d);
       exit(-1);
       case 0:
         UNIT::HandleItemAddToGround(pBytesCopy);
@@ -2054,7 +2052,6 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9C_ITEMEX(uint8_t * pBytes) {
 void __fastcall NET_D2GS_CLIENT_Incoming0x9D(uint8_t * pBytes) {
     int nWordsRemaining;
     uint8_t pBytesCopy[257];
-    int32_t nLine;
     uint8_t* pWriteCursor = pBytesCopy;
     for (nWordsRemaining = 0x40; nWordsRemaining; nWordsRemaining--) {
       *(uint32_t*)pWriteCursor = *(uint32_t*)pBytes;
@@ -2089,8 +2086,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9D(uint8_t * pBytes) {
       case 0x10:
 
       case 0x12:
-        nLine = 0xfb7;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfb7);
       exit(-1);
       case 5:
         UNIT::HandleItemRemoveFromContainer(pBytesCopy);

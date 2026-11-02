@@ -1,0 +1,253 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Text.cpp",
+  "functions": [
+    {
+      "name": "TEXT_FreeAllMessages",
+      "address": "00661270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661270"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "TEXT_FreeAllMessages",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc"
+      ]
+    },
+    {
+      "name": "STRUCT_FreeTxtMessageForPacket0x27",
+      "address": "006612a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006612a0"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "STRUCT_FreeTxtMessageForPacket0x27",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc"
+      ]
+    },
+    {
+      "name": "AddNewGossipText",
+      "address": "006612f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006612f0"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "AddNewGossipText",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_RemoveMessageById",
+      "address": "00661330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661330"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "TEXT_RemoveMessageById",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "TEXT_CountMessagesOfType2",
+      "address": "00661390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661390"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "TEXT_CountMessagesOfType2"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_GetMessageByIndex",
+      "address": "006613c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006613c0"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "TEXT_GetMessageByIndex"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OVERHEAD_GetMessageType0",
+      "address": "00661400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661400"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "OVERHEAD_GetMessageType0"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OVERHEAD_GetMessageType1",
+      "address": "00661440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661440"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "OVERHEAD_GetMessageType1"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StoreMessages",
+      "address": "00661510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661510"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "StoreMessages",
+        "TEXT_FreeAllMessages",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TEXT_CompareMessagesByCode",
+      "address": "006615d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006615d0"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "TEXT_CompareMessagesByCode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "TEXT_SortMessages",
+      "address": "006615f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006615f0"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "TEXT_SortMessages"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnTextMessageCompare",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_SortMessageList",
+      "address": "006616e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006616e0"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "TEXT_SortMessageList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory",
+        "TEXT_SortMessages",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    }
+  ]
+}

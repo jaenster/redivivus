@@ -21,7 +21,7 @@ namespace D2Game::Quests::QUESTS::Quest38 {
 void __fastcall Q38_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A2Q5 "Sisters to the Slaughter" (or equivalent Act II quest) gossip callback (index 0): maps Act II NPC class IDs (Warriv, Greiz, Lysander, Drognan, Fara, Elzix, Geglash, Meshif) to expected player classes. If the player has not yet spoken with the NPC (PLAYER_CheckIfSpokenWithNPC), queues a class-matched (flag=1) or generic (flag=0) gossip message via AddGossipMessageOnMonster. Mirrors the Q37 pattern for Act II NPCs.
 void __fastcall Q38_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
-bool __fastcall Q38_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q38_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 bool __fastcall Q38_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 // InitData for quest slot 38, an act-intro "ActIntroduced" pseudo-quest (nQuestIdReal=QUEST_ActIntroduced). Zeroes the 0x3c state-handler table, installs state-0 handler Q38_Callback_00 (NPC gossip while pending) and state-0xb handler Q38_Callback_11 (dialog complete), points pNpcMessages at aNpcGossipData, marks the slot active, and wires Q38_StatusFilter/Q38_ActiveFilter. Not a journaled player quest.
 void __fastcall Q38_InitData(struct D2QuestDataStrc * pQuestData);

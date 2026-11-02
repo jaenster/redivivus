@@ -66,9 +66,9 @@ void __thiscall Draw(::SpinnerImplementation * pThis) {
 }
 
 BOOL __thiscall IsMouseOnUpButton(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
-    uint32_t uVar2 = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if ((int)uVar1 > pThis->nUpButtonX && (int)uVar1 < pThis->nButtonWidth + pThis->nUpButtonX && (int)uVar2 > pThis->nUpButtonY - pThis->nButtonHeight && (int)uVar2 <= pThis->nUpButtonY) {
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
+    if ((int)nMouseX > pThis->nUpButtonX && (int)nMouseX < pThis->nButtonWidth + pThis->nUpButtonX && (int)nMouseY > pThis->nUpButtonY - pThis->nButtonHeight && (int)nMouseY <= pThis->nUpButtonY) {
       return 1;
     }
 
@@ -76,9 +76,9 @@ BOOL __thiscall IsMouseOnUpButton(::SpinnerImplementation * pThis, D2UIMouseMsgS
 }
 
 BOOL __thiscall IsMouseOnDownButton(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
-    uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
-    uint32_t uVar2 = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if ((int)uVar1 > pThis->nDownButtonX && (int)uVar1 < pThis->nButtonWidth + pThis->nDownButtonX && (int)uVar2 > pThis->nDownButtonY - pThis->nButtonHeight && (int)uVar2 < pThis->nDownButtonY) {
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
+    if ((int)nMouseX > pThis->nDownButtonX && (int)nMouseX < pThis->nButtonWidth + pThis->nDownButtonX && (int)nMouseY > pThis->nDownButtonY - pThis->nButtonHeight && (int)nMouseY < pThis->nDownButtonY) {
       return 1;
     }
 
@@ -172,8 +172,8 @@ int __thiscall OnMouseDown(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * p
     }
 
     uint32_t uVar1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
-    uint32_t uVar2 = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    if ((int)uVar1 > pThis->nDownButtonX && (int)uVar1 < pThis->nButtonWidth + pThis->nDownButtonX && (int)uVar2 > pThis->nDownButtonY - pThis->nButtonHeight && (int)uVar2 < pThis->nDownButtonY) {
+    uint32_t nCursorY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
+    if ((int)uVar1 > pThis->nDownButtonX && (int)uVar1 < pThis->nButtonWidth + pThis->nDownButtonX && (int)nCursorY > pThis->nDownButtonY - pThis->nButtonHeight && (int)nCursorY < pThis->nDownButtonY) {
       dwNow = GetTickCount();
       pThis->dwPressStartTick = dwNow;
       pThis->bDownPressed = 1;

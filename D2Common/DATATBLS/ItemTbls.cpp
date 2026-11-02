@@ -16,6 +16,7 @@
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/UNIT/SUNITNPC.h"
 #include "D2Game/UNIT/SUnitDmg.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
@@ -26,7 +27,6 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Common/D2Common.h"
@@ -104,11 +104,11 @@ void __fastcall ITEMTBLS_CompileItemCodeExpression(char * szExpression, char * p
       }
     }
 
-    char* pcVar1 = pRecord + nOffset;
-    pcVar1[0] = -1;
-    pcVar1[1] = -1;
-    pcVar1[2] = -1;
-    pcVar1[3] = -1;
+    char* pCodeField = pRecord + nOffset;
+    pCodeField[0] = -1;
+    pCodeField[1] = -1;
+    pCodeField[2] = -1;
+    pCodeField[3] = -1;
 }
 
 // Loads and compiles items.txt into the engine's runtime ItemsTxt table. Builds the ~194-field D2BinFieldInputStrc schema (code/version/type/damage/req/inv/vendor min-max/quality columns, with code/string/sound/stat/state link resolvers and calc-string compilers), then compiles the weapons, armor and misc .txt files separately and memcpy-merges them into one contiguous sgpTxtItems array (sgpTxtWeapons/sgpTxtArmor/sgpTxtMisc point into it). Registers each item code in the items code link (FillUpTxtLinkSub0x08) unless bUseTxt, saves the itemscode bin, and builds sgpTxtItemsVersion: a short index table of all rows whose version==0 (classic items). __fastcall(pMemory).
@@ -465,8 +465,8 @@ void __fastcall ITEMTBLS_ParseSkillMonTypeOrStateId(char * szValue, char * pReco
       }
     }
 
-    char* pcVar1 = pRecord + nOffset;
-    memset(pcVar1, 0, 4 * sizeof(pcVar1[0]));
+    char* pIdField = pRecord + nOffset;
+    memset(pIdField, 0, 4 * sizeof(pIdField[0]));
 }
 
 // Loads and concatenates the magicsuffix/magicprefix/automagic .txt files into a single pTxtMagicAffixes table. Builds a D2BinFieldInputStrc descriptor array (name/spawnable/level/itypeN/etypeN/modNcode..max, etc.), calls DataTbls::CompileTxt for each of the three files (0x90-byte rows), allocates one combined server buffer (count*0x90), memcpys the three blocks in order (suffix, prefix, automagic), frees the temporaries, then resolves each row's display-name string id via STRTABLE_LookupString. Sets global nTxtMagicAffixesSize/pTxtMagicAffixes. Part of D2Common item-data table initialization.
@@ -1054,31 +1054,30 @@ D2QualityItemsTableStrc * __stdcall TXT_QualityItems_GetTableInfo() {
 
 // Returns D2QualityItemsTxt* for given index. Used for unique/set item table lookup.
 D2QualityItemsTxt * __stdcall TXT_QualityItems_GetLine(int32_t nIndex) {
-    int32_t nLine;
     if (!(nIndex < nTxtQualityItemsSize.nSize && nIndex != -1)) {
       return nullptr;
     }
     if (!nTxtQualityItemsSize.pTable) {
-      nLine = 0x4f2;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4f2);
+      exit(-1);
     } else {
-      if (nTxtQualityItemsSize.pTable + nIndex) {
-        return nTxtQualityItemsSize.pTable + nIndex;
+      if (!(nTxtQualityItemsSize.pTable + nIndex)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4f3);
+        exit(-1);
       }
 
-      nLine = 0x4f3;
+      return nTxtQualityItemsSize.pTable + nIndex;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
     return nullptr;
 }
 
 // Compiles the gems.txt data table into the runtime pTxtGems array via CompileTxt with a 42-field schema (gem name/letter/code plus weapon/helm/shield mod triplets). For each row, resolves the 3-char gem letter code to a string-table index (STRTABLE_LookupString) stored at +0x2c, and links each gem to its owning item record: writes 0xFFFFFFFF placeholder gem-offset into the item's szCode area (+0x70) and sets sgpTxtItems[code].dwGemOffset to the gem's row index. Called once during item data-table init.
 void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
-    uint8_t bVar2;
-    uint32_t nTxtGemsBase;
     int nGemsSize;
     char szGemCode[4];
+    uint8_t byCodeChar;
+    char* pGemOffset;
     D2BinFieldInputStrc aFieldDefs[42] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
       {"letter", FIELDTYPE_ASCII, 5, 0x20, 0},
@@ -1127,14 +1126,15 @@ void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
     uint16_t* pStringLookup = 0;
     int nGemIdx = 0;
     if (nTxtGemsSize.nSize > 0) {
+      uint32_t nTxtGemsBase;
       nGemsSize = 0;
       do {
         szGemCode[0] = nTxtGemsSize.pTable->letter[nGemsSize + 8] == 0x20U ? 0 : nTxtGemsSize.pTable->letter[nGemsSize + 8];
-        bVar2 = *(uint8_t*)((int)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 7);
-        szGemCode[1] = bVar2 == 0x20 ? 0 : bVar2;
-        bVar2 = *(uint8_t*)((int)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 6);
+        byCodeChar = *(uint8_t*)((int)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 7);
+        szGemCode[1] = byCodeChar == 0x20 ? 0 : byCodeChar;
+        byCodeChar = *(uint8_t*)((int)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 6);
         szGemCode[3] = '\0';
-        szGemCode[2] = bVar2 == 0x20 ? 0 : bVar2;
+        szGemCode[2] = byCodeChar == 0x20 ? 0 : byCodeChar;
         nTxtGemsBase = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szGemCode, &pStringLookup);
         *(short int*)((int)nTxtGemsSize.pTable->aWeaponMods + nGemsSize - 4) = (short int)nTxtGemsBase;
         nGemIdx++;
@@ -1150,12 +1150,11 @@ void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
     int nRunesSize = 0;
     int nTotalGemsRunesSize = 0;
     do {
-      char* pcVar1;
-      pcVar1 = (char*)&gsItemsTable.pItems[nTotalGemsRunesSize].dwGemOffset;
-      pcVar1[0] = -1;
-      pcVar1[1] = -1;
-      pcVar1[2] = -1;
-      pcVar1[3] = -1;
+      pGemOffset = (char*)&gsItemsTable.pItems[nTotalGemsRunesSize].dwGemOffset;
+      pGemOffset[0] = -1;
+      pGemOffset[1] = -1;
+      pGemOffset[2] = -1;
+      pGemOffset[3] = -1;
       if (nTxtGemsSize.pTable[nRunesSize].code >= 0) {
         gsItemsTable.pItems[nTxtGemsSize.pTable[nRunesSize].code].dwGemOffset = nGemsSize;
       }
@@ -1172,22 +1171,21 @@ void __stdcall thunk_UnloadBin_LvlType() {
 
 // Returns gem/rune table line for given index (192 bytes/entry). Used for socketed item property application.
 D2GemsTxt * __stdcall TXT_Gems_GetLine(int32_t nIndex) {
-    int32_t nLine;
     if (!(nIndex < nTxtGemsSize.nSize && nIndex != -1)) {
       return nullptr;
     }
     if (!nTxtGemsSize.pTable) {
-      nLine = 0x563;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x563);
+      exit(-1);
     } else {
-      if (nTxtGemsSize.pTable + nIndex) {
-        return nTxtGemsSize.pTable + nIndex;
+      if (!(nTxtGemsSize.pTable + nIndex)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x564);
+        exit(-1);
       }
 
-      nLine = 0x564;
+      return nTxtGemsSize.pTable + nIndex;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
     return nullptr;
 }
 
@@ -1220,22 +1218,21 @@ D2BooksTableStrc * __stdcall TXT_Books_GetTableInfo() {
 
 // Returns book table line for given index (32 bytes/entry). Used for scroll/book skill ID lookup.
 D2BooksTxt * __stdcall TXT_Books_GetLine(int32_t nIndex) {
-    int32_t nLine;
     if (!(nIndex < gsBooksTable.nSize && nIndex != -1)) {
       return nullptr;
     }
     if (!gsBooksTable.pTable) {
-      nLine = 0x59c;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59c);
+      exit(-1);
     } else {
-      if (gsBooksTable.pTable + nIndex) {
-        return gsBooksTable.pTable + nIndex;
+      if (!(gsBooksTable.pTable + nIndex)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59d);
+        exit(-1);
       }
 
-      nLine = 0x59d;
+      return gsBooksTable.pTable + nIndex;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
     return nullptr;
 }
 
@@ -1270,22 +1267,21 @@ D2LowQualityItemsTableStrc * __stdcall TXT_LowQualityItems_GetTableInfo() {
 
 // Returns low quality item table line for given index (34 bytes/entry). Used for crude/damaged quality application.
 D2LowQualityItemsTxt * __stdcall TXT_LowQualityItems_GetLine(int32_t nIndex) {
-    int32_t nLine;
     if (!(nIndex < nTxtLowQualityItemsSize.nSize && nIndex != -1)) {
       return nullptr;
     }
     if (!nTxtLowQualityItemsSize.pTable) {
-      nLine = 0x5d0;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d0);
+      exit(-1);
     } else {
-      if (nTxtLowQualityItemsSize.pTable + nIndex) {
-        return nTxtLowQualityItemsSize.pTable + nIndex;
+      if (!(nTxtLowQualityItemsSize.pTable + nIndex)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d1);
+        exit(-1);
       }
 
-      nLine = 0x5d1;
+      return nTxtLowQualityItemsSize.pTable + nIndex;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
     return nullptr;
 }
 
@@ -1358,12 +1354,12 @@ D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint3
     return pTxtItemRatio + nBestMatchIdx;
 }
 
-int SORT_ItemDescPriority(LPCVOID pParam1, LPCVOID pParam2) {
-    if (*(short int*)((int)pParam1 + 2) < *(short int*)((int)pParam2 + 2)) {
+int SORT_ItemDescPriority(LPCVOID pEntry1, LPCVOID pEntry2) {
+    if (*(short int*)((int)pEntry1 + 2) < *(short int*)((int)pEntry2 + 2)) {
       return -1;
     }
 
-    return (uint32_t)(*(short int*)((int)pParam1 + 2) != *(short int*)((int)pParam2 + 2));
+    return (uint32_t)(*(short int*)((int)pEntry1 + 2) != *(short int*)((int)pEntry2 + 2));
 }
 
 // Builds the itemstatcost.txt field-descriptor array (52 columns) and compiles it into the in-memory ItemStatCost table via DataTbls::CompileTxt (record size 0x144), enforcing a max of 0x1FF stats (fatal error otherwise). Then post-processes op-relationships: clears each stat's aOpBaseDependents arrays to -1, derives the charged-skill-level bit count (clamped 1..8, default 6) and its mask, and for every stat with an op walks its op-base/op-stat references to populate the dependency graph (aOpBaseDependents, aOpRelations, bHasOpBaseDependencies/bHasOp4Or5Dependency flags) plus special-case stat flag bits. Finally collects stats with a nonzero descpriority, qsorts them via SORT_ItemDescPriority, and allocates/stores the sorted pItemStatCostDescPriority list. __fastcall, pMemory in ECX.
@@ -1687,12 +1683,12 @@ void __stdcall ITEMTBLS_FreeProperties() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtPropertiesLink);
 }
 
-int TXT_Gamble_SortFunction(LPCVOID pParam1, LPCVOID pParam2) {
-    if (*(uint32_t*)((int)pParam1 + 4) > *(uint32_t*)((int)pParam2 + 4)) {
+int TXT_Gamble_SortFunction(LPCVOID pEntry1, LPCVOID pEntry2) {
+    if (*(uint32_t*)((int)pEntry1 + 4) > *(uint32_t*)((int)pEntry2 + 4)) {
       return 1;
     }
 
-    return -(uint32_t)(*(uint32_t*)((int)pParam2 + 4) > *(uint32_t*)((int)pParam1 + 4));
+    return -(uint32_t)(*(uint32_t*)((int)pEntry2 + 4) > *(uint32_t*)((int)pEntry1 + 4));
 }
 
 // One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and gnItemTblsCacheSize (per-level upper-bound cache for [1..99]).
@@ -1933,7 +1929,7 @@ static BOOL __stdcall ITEMTBLS_CheckIfDataFileExists(char * szFileName, D2PoolMa
       return 0;
     }
 
-    D2FILE_CloseFile(pPoolManagerStrc, pFile);
+    D2Hell::D2FILE_CloseFile(pPoolManagerStrc, pFile);
     return 1;
 }
 

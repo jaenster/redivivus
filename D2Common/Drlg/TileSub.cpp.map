@@ -1,0 +1,57 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/TileSub.cpp",
+  "functions": [
+    {
+      "name": "InitializeDrlgFile",
+      "address": "006704e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006704e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::TileSub",
+      "calledFunctions": [
+        "InitializeDrlgFile",
+        "AllocDrlgFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGGRID_InitGridFromTileData",
+        "AlterAllGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgFileStrc",
+        "D2DrlgFileStrc *",
+        "D2LvlSubTxt",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddSecondaryBorder",
+      "address": "00670750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670750"
+        }
+      ],
+      "namespace": "D2Common::Drlg::TileSub",
+      "calledFunctions": [
+        "AddSecondaryBorder",
+        "TXT_LvlSub_GetLineFromSubType",
+        "InitializeDrlgFile",
+        "DRLGOUTDOOR_ApplySubstitutionGroup"
+      ],
+      "usedTypes": [
+        "D2LvlSubTxt",
+        "D2PoolManagerStrc",
+        "D2UnkOutdoorStrc"
+      ]
+    }
+  ]
+}

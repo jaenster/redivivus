@@ -52,14 +52,14 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitDataPlayerArenaStrc) == 0x8, 
 
 namespace D2Game::GAME::Arena {
 
-static inline bool __stdcall ARENA_TestFlag(::SGAMEDATA * pGame, uint32_t nParam) {
+static inline bool __stdcall ARENA_TestFlag(::SGAMEDATA * pGame, uint32_t dwFlagMask) {
     if (!pGame->pArenaCtrl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27);
       exit(-1);
     }
 
-    return (pGame->pArenaCtrl->eArenaFlags & nParam) != 0;
-    return (pGame->pArenaCtrl->eArenaFlags & nParam) != 0;
+    return (pGame->pArenaCtrl->eArenaFlags & dwFlagMask) != 0;
+    return (pGame->pArenaCtrl->eArenaFlags & dwFlagMask) != 0;
 }
 
 // @sourcefile .\GAME\Arena.cpp
@@ -136,7 +136,7 @@ static inline int __stdcall ARENA_GetArenaTxtRecord(::SGAMEDATA * pGame) {
 }
 
 // Adjusts an arena participant's score by the modifier indexed by nParam (0-6) from the arena's ArenaTxt record. Cases 0/1/3/4/6 add the flat column value; cases 2/5 add a percentage of the opposing unit's current score. Sets the score-dirty flag and links the unit to the update list. Halts with an internal error if pUnit2 is null, not a player, the game has no arena control, or nParam is out of range.
-void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nParam, DWORD dwParam) {
+void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nScoreType, DWORD dwParam) {
     D2ArenaTxt* pArenaTxt;
     D2UnitDataPlayerArenaStrc* pArenaData;
     eD2ArenaFlags* peArenaFlags;
@@ -148,8 +148,8 @@ void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       pArenaData = pPlayerData->pArena;
       if (pArenaData && pGame->pArenaCtrl) {
         pArenaTxt = D2Common::DATATBLS::ArenaTbls::GetArenaTxtRecord(pGame->pArenaCtrl->nArenaTxtRecord);
-        if (nParam < 7) {
-          switch (nParam) {
+        if (nScoreType < 7) {
+          switch (nScoreType) {
             case 0:
 
             case 1:
@@ -159,7 +159,7 @@ void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
             case 4:
 
             case 6:
-              pArenaData->nScore += (&pArenaTxt->dwSuicide)[nParam];
+              pArenaData->nScore += (&pArenaTxt->dwSuicide)[nScoreType];
             break;
             case 2:
 
@@ -170,7 +170,7 @@ void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
               exit(-1);
             }
 
-            pArenaData->nScore += (&pArenaTxt->dwSuicide)[nParam] * pPlayerData->pArena->nScore / 100;
+            pArenaData->nScore += (&pArenaTxt->dwSuicide)[nScoreType] * pPlayerData->pArena->nScore / 100;
           }
 
           pArenaData->bScoreDirty = 1;

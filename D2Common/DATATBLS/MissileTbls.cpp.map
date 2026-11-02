@@ -1,0 +1,159 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/MissileTbls.cpp",
+  "functions": [
+    {
+      "name": "MISSILETBLS_PadCodeTo4Chars",
+      "address": "006617b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006617b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "calledFunctions": [
+        "MISSILETBLS_PadCodeTo4Chars"
+      ]
+    },
+    {
+      "name": "MapMissilesTxtKeywordToNumber",
+      "address": "00661800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661800"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "calledFunctions": [
+        "MapMissilesTxtKeywordToNumber",
+        "SStrCmpI"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILETBLS_ValidateCalcCode",
+      "address": "00661880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661880"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "calledFunctions": [
+        "MISSILETBLS_ValidateCalcCode",
+        "GetLinkNodeIndex",
+        "MISSILETBLS_PadCodeTo4Chars",
+        "GetClassIdFromName"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MissileCalcLinker",
+      "address": "006619a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006619a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "calledFunctions": [
+        "MissileCalcLinker",
+        "__security_check_cookie",
+        "SKILLS_ParseCalcExpression",
+        "DATATBLS_AppendDataToBuffer"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILETBLS_ValidateAndClampField",
+      "address": "00661a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661a30"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "calledFunctions": [
+        "MISSILETBLS_ValidateAndClampField"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_missiles",
+      "address": "00661b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661b20"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "calledFunctions": [
+        "CompileTxt",
+        "TXT_SaveTableToBinFile",
+        "TXT_AllocTxt_missiles",
+        "STRUCT_CreateTxtLinkStrc"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2DataTableTxtStrc",
+        "D2MissilesTxt",
+        "D2PoolManagerStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILETBLS_FreeTxt",
+      "address": "00663210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663210"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "calledFunctions": [
+        "MISSILETBLS_FreeTxt",
+        "FreeServerMemory",
+        "UnloadBin",
+        "STRUCT_FreeTxtLink"
+      ]
+    },
+    {
+      "name": "MISSILETBLS_CalculateVelocity",
+      "address": "00663270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663270"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::MissileTbls",
+      "calledFunctions": [
+        "MISSILETBLS_CalculateVelocity"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "int32_t"
+      ]
+    }
+  ]
+}

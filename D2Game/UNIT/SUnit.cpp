@@ -394,7 +394,7 @@ void __fastcall UNITS_SendUnitUpdateToClient(D2UnitStrc * pUnit, D2ClientStrc * 
 
 // Prepares a unit for reuse/recycling after removal from the game. Clears changed-stat flags, frees queued packets, clears animation mode and selected unit flags, processes pending inventory updates, and frees child stat lists. Per-type cleanup: resets player last-exp and arena dirty; for monsters clears summoner flags and teleport flag; for items clears REMOVED and NEW item flags. Halts if pUnit is null.
 void __fastcall UNITS_ResetUnitForReuse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    uint32_t uVar1;
+    uint32_t bStatsChanged;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x518);
       exit(-1);
@@ -415,8 +415,8 @@ void __fastcall UNITS_ResetUnitForReuse(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
         D2Common::Stats::StatsEx::STATLIST_FreeUnitChildStatLists(pUnit);
       }
 
-      uVar1 = D2Common::Stats::StatsEx::STATLIST_HasChangedStats(pUnit);
-      if (uVar1) {
+      bStatsChanged = D2Common::Stats::StatsEx::STATLIST_HasChangedStats(pUnit);
+      if (bStatsChanged) {
         D2Common::Stats::StatsEx::STATLIST_FreeUnitChildStatLists(pUnit);
       }
 
@@ -663,7 +663,7 @@ D2UnitStrc * __fastcall UNITS_FindPortalOwnerUnit(::SGAMEDATA * pGame, D2UnitStr
 
 // Walks the game's player (eUnitType=0) or monster (eUnitType=1) hash table (128 slots), skipping dead/body units (STATE_playerbody check), and calls pfnCallback(pCallbackArg) for each live unit. Returns the first unit for which the callback returns 1, or NULL if none found or the unit type is unsupported. Validates pfnCallback with IsBadCodePtr before iterating.
 D2UnitStrc * __fastcall IteratePlayerOrMonsterUnits(::SGAMEDATA * pGame, int eUnitType, void * pCallbackArg, ::fpExecuteOnUnitFunction pfnCallback) {
-    eD2States eVar1;
+    eD2States eState;
     int nSlot;
     D2UnitStrc** ppUnitTable;
     int32_t nErrorLine;
@@ -685,8 +685,8 @@ D2UnitStrc * __fastcall IteratePlayerOrMonsterUnits(::SGAMEDATA * pGame, int eUn
         nSlot = 0;
         do {
           for (pCurUnit = *ppUnitTable; pCurUnit; pCurUnit = pCurUnit->pListNext) {
-            eVar1 = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCurUnit, STATE_playerbody);
-            if (eVar1 == STATE_none) {
+            eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCurUnit, STATE_playerbody);
+            if (eState == STATE_none) {
               bBadCodePtr = (*pfnCallback)(pGame, pCurUnit, pCallbackArg);
               if (bBadCodePtr == 1) {
                 return pCurUnit;
@@ -785,17 +785,17 @@ void __fastcall UNITS_SetupAnimTimerEvents(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     D2AnimDataRecordStrc* pAnimData = pUnit->pAnimData;
     int nAnimSpeedAccum = nWeaponAnimClass * 0x100 + nAnimSpeed;
-    int iVar1 = (int)(nWeaponAnimClass * 0x100) >> 8;
+    int nFrame = (int)(nWeaponAnimClass * 0x100) >> 8;
     int pEventData = 0;
     while (nAnimSpeedAccum < nTotalFrameCount) {
       int nFrameIndex;
       nFrameIndex = nAnimSpeedAccum >> 8;
       nNextEventFrame++;
-      for (; iVar1 <= nFrameIndex && iVar1 < 0x90; iVar1++) {
+      for (; nFrame <= nFrameIndex && nFrame < 0x90; nFrame++) {
         if ((D2MonSeqTxt*)pUnit->pAnimSeq) {
-          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, iVar1 << 8, &nEventType);
+          D2Common::Merc::ANIM_GetEventFrame((D2MonSeqTxt*)pUnit->pAnimSeq, nFrame << 8, &nEventType);
         } else {
-          nEventType = (uint32_t)pAnimData->pFrameFlags[iVar1];
+          nEventType = (uint32_t)pAnimData->pFrameFlags[nFrame];
         }
         if (nEventType) {
           switch (nEventType) {
@@ -1115,12 +1115,12 @@ BOOL __stdcall GetInteractInfo(D2UnitStrc * pUnit, eD2UnitType * peUnitType, uin
 // Provenance: asm 0055416a..00554176 ([EBP+0x10] -> +0x64, [EBP+0xc] -> +0x68); was nParam / pLightMap. 2022.01.09 - dzik
 void __stdcall SetInteractInfo(D2UnitStrc * pUnit, eD2UnitType eInteractUnitType, uint32_t dwInteractGUID) {
     D2UnitDataPlayerStrc* pPlayerData;
-    char acStack_58[80];
+    char szMessage[80];
     if (pUnit->uSideData.pServerSide.bInteracting) {
       if (pUnit->eUnitType == UNIT_PLAYER) {
         pPlayerData = D2Common::Units::GetPlayerData(pUnit);
         if (pPlayerData) {
-          sprintf(acStack_58, "Player %s attempted to operate while busy\n", pPlayerData->szCharName);
+          sprintf(szMessage, "Player %s attempted to operate while busy\n", pPlayerData->szCharName);
           return;
         }
       }
@@ -1213,20 +1213,20 @@ uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, D2UnitStrc
     return (uint32_t)!bIsAlly;
 }
 
-BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pnParam, D2UnitStrc * pTarget, eD2Skills eSkill) {
-    if (!(pnParam && pTarget && (pnParam->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1])) {
+BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
+    if (!(pUnit && pTarget && (pUnit->eUnitType == UNIT_PLAYER || pTarget->eUnitType == UNIT_MONSTER) && (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x7) & (uint8_t)gadwBitMasks[1])) {
       return 0;
     }
 
     Ai::AiGeneral::GetMonsterNameAndAi(pTarget, &eSkill, (int*)&pTarget);
-    if (!pTarget && eSkill == pnParam->nUnitGUID) {
+    if (!pTarget && eSkill == pUnit->nUnitGUID) {
       return 1;
     }
 
     return 0;
 }
 
-static void __stdcall UNITS_OnAlignmentChanged(int32_t nParam, int32_t pStatEx, D2UnitStrc * pUnit, int32_t nStatValue) {
+static void __stdcall UNITS_OnAlignmentChanged(int32_t bDecreaseSpawnCount, int32_t pStatEx, D2UnitStrc * pUnit, int32_t nStatValue) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }
@@ -1235,7 +1235,7 @@ static void __stdcall UNITS_OnAlignmentChanged(int32_t nParam, int32_t pStatEx, 
     if (!pGame) {
       return;
     }
-    if (nParam) {
+    if (bDecreaseSpawnCount) {
       D2Game::Monster::MonsterRegion::DecreaseMonsterSpawnCount(pGame->pMonsterRegion, pUnit, pStatEx, nStatValue);
     }
     if (pStatEx == nStatValue) {
@@ -1386,12 +1386,12 @@ uint16_t __fastcall GetPartyId(D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
-BOOL __fastcall SetDamageHitClass(D2DamageStrc * pEvent, uint32_t nParam) {
+BOOL __fastcall SetDamageHitClass(D2DamageStrc * pEvent, uint32_t dwHitClass) {
     if (pEvent->dwHitClass & 0xf0U) {
       return 0;
     }
 
-    pEvent->dwHitClass |= nParam;
+    pEvent->dwHitClass |= dwHitClass;
     return 1;
 }
 
@@ -1671,6 +1671,11 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
       D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
       break;
+      case UNIT_MISSILE:
+        D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
+      pUnit->pPath.pStaticPath = 0;
+      D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
+      break;
       case UNIT_ITEM:
         if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
           D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
@@ -1680,19 +1685,13 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = iVar1;
         }
       break;
-      case UNIT_MISSILE:
-        D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
-      pUnit->pPath.pStaticPath = 0;
-      D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
-      break;
       case UNIT_WARP:
         D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
       D2Common::Units::BlockCollisionPath(pUnit, pRoom, nX, nY);
       D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
       break;
       default:
-        nErrorLine = 0x4aa;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4aa);
       exit(-1);
     }
 
@@ -1826,7 +1825,6 @@ BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pU
 // Server-side teleport/relocate of a unit to (nX,nY) in pRoom. Resolves a destination room (FindBetterNearbyRoom, or GetFreeCoordinates_WithNeighboorRooms when bFindFreeSpace==0), verifies the target tile is walkable via PATH_GetCollisionMaskAt, then re-links the unit to the room update list and sets UNITFLAGEX_TELEPORTED (nRelocMode==0) or flag 0x800. For players it also sends 0x07 MapReveal, records the reveal coords in player data (ring buffer of up to 0x14 entries), schedules a PLAYER_CancelMapReveal event (+0x32 frames) and updates pets. Returns 1 on success, 0 if no valid room/tile. Halts via ErrorManager on null pUnit/path.
 // @sourcefile .\UNIT\SUnit.cpp
 BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom, uint32_t nX, uint32_t nY, int32_t bFindFreeSpace, int32_t nRelocMode) {
-    D2RoomStrc* pCurrentRoom;
     BOOL nCollisionMask;
     D2ClientStrc* pPlayerClient;
     D2UnitDataPlayerStrc* pPlayerData;
@@ -1835,13 +1833,14 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
     POINT ptTarget;
     D2DynamicPathStrc* pDynamicPath;
     eCollisionFlags eCollisionFlag;
+    uint8_t nPosHistoryIndex;
     ::SGAMEDATA* pGameSave;
     ::SGAMEDATA* pGameLocal = pGame;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc21);
       exit(-1);
     } else {
-      uint8_t bVar1;
+      D2RoomStrc* pCurrentRoom;
       pCurrentRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       pDynamicPath = pUnit->pPath.pDynamicPath;
       if (!pDynamicPath) {
@@ -1885,14 +1884,14 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
 
         UNITS_UpdateRoomClientVisibility(pGameLocal, pUnit, nullptr);
         pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-        bVar1 = pPlayerData->nPosHistoryIndex;
+        nPosHistoryIndex = pPlayerData->nPosHistoryIndex;
         pPlayerData->nRevealingMapRelated = ptTarget.x;
         pPlayerData->nRevealingMapRelated2 = ptTarget.y;
         dwTickCount = GetTickCount();
         pGameSave = pGameLocal;
         pPlayerData->dwPosHistoryTick = dwTickCount;
-        pPlayerData->aPosHistory[bVar1].nX = ptTarget.x;
-        pPlayerData->aPosHistory[bVar1].nY = ptTarget.y;
+        pPlayerData->aPosHistory[nPosHistoryIndex].nX = ptTarget.x;
+        pPlayerData->aPosHistory[nPosHistoryIndex].nY = ptTarget.y;
         pPlayerData->nPosHistoryIndex += '\x01';
         if (pPlayerData->nPosHistoryIndex >= 0x14) {
           pPlayerData->nPosHistoryIndex = '\0';
@@ -2290,7 +2289,7 @@ void __fastcall FreeWarpUnits(::SGAMEDATA * pGame) {
 
 D2UnitStrc * __fastcall SpawnUnitByType(::SGAMEDATA * pGame, D2RoomStrc * pRoom, eD2UnitType eUnitType, int nClassId, int32_t nX, int32_t nY, int32_t bInitItem, uint32_t dwParam8) {
     D2UnitStrc* pDVar1;
-    int iVar2;
+    int bItemInitOk;
     D2ItemGenContextStrc sItemGenCtx;
     D2UnitStrc* pCreatedUnit;
     pCreatedUnit = 0;
@@ -2316,8 +2315,8 @@ D2UnitStrc * __fastcall SpawnUnitByType(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
         memset(&sItemGenCtx, 0, 0x84);
         sItemGenCtx.eQuality = QUALITY_NORMAL;
         sItemGenCtx.nItemLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-        iVar2 = ITEMS::Items::Drop::ITEM_InitItemBaseStats(pGame, &pCreatedUnit, &sItemGenCtx, 1);
-        if (!iVar2) {
+        bItemInitOk = ITEMS::Items::Drop::ITEM_InitItemBaseStats(pGame, &pCreatedUnit, &sItemGenCtx, 1);
+        if (!bItemInitOk) {
           FreeServerUnit(pGame, pCreatedUnit);
           return nullptr;
         }

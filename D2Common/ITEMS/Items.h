@@ -258,7 +258,7 @@ BOOL __stdcall ITEM_ValidateItemQuantity(struct D2UnitStrc * pUnit);
 BOOL __stdcall ReturnFalse(struct D2UnitStrc * dwParam1, struct D2UnitStrc * dwParam2);
 // Returns a bitmask of which set-item slots (by setIndex) the player has equipped from the same set as pItem. Iterates all equipped/body-loc items; for each set-quality, non-disabled, non-broken item from the same set, sets bit (1 &lt;&lt; setIndex). Returns 0 if pItem is not a set item or unit has no inventory.
 // @sourcefile .\ITEMS\Items.cpp
-uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t nParam);
+uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t bIncludeItem);
 struct D2SetItemsTxt * __stdcall GetSetItemsLine(struct D2UnitStrc * pUnit);
 BOOL __stdcall ITEM_CheckIfItemIsNotBrokenAndNotDisabled(struct D2UnitStrc * pUnit);
 // Counts unidentified items in a player's inventory and equipped slots. Iterates all inventory slots; counts carried items on INVENTORY_GRID_TYPE_INVENTORY pages (INVPAGE_INVENTORY or INVPAGE_CUBE) and body-loc slots whose ITEMFLAG_IDENTIFIED is not set. Returns the count.
@@ -313,10 +313,10 @@ BOOL __stdcall ITEM_CheckIfItemCanHaveSockets(struct D2UnitStrc * pUnit);
 // Tests whether two item units are "identical enough" to be socketed/stacked together. Returns TRUE only if both items match on: class id, item quality (defaulting to 2 if not an item or no item data), file index (variant), stackable flag (must be stackable), ethereal flag, both qualities can-have-sockets, all damage stats (min/max, secondary min/max, throw min/max), and both have zero sockets. Returns FALSE on any mismatch. Pure comparison predicate, no side effects.
 BOOL __stdcall IsItemSocketable(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Canonical D2 item bit-stream reader: deserializes one item from a D2BitBufferStrc into pUnit's item data + stat list (inverse of SerializeComplexItem). Reads version(10b), location code (ground=X/Y 16b each; else bodyloc+cell+inv page), item code (resolved to ClassId), flags, quality (switch over eD2ItemQuality decoding magic/set/rare/unique/crafted affix IDs, automod, charm), GUID/level/personalized char name, runeword and ear/bodypart data, then base stats (gold, defense, weapon min/max dmg with ethereal*3/2 and low-quality*3/4 scaling, durability) and a property/stat-list loop (9-bit stat IDs, grouped set/charge/on-hit-skill/skill-tab stats) via STATLIST_SetUnitStat. Field bit widths gated by item save/wire version (nParam2: <0x5d/<0x60 compact). __stdcall; returns 1 on success, -1 on parse error.
-int32_t __stdcall ITEM_DeserializeFromBitBuffer(struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, uint32_t nParam1, struct D2ItemStatCostTxt * pItemStatCostTxt, uint32_t * pnParam, uint32_t nParam2);
+int32_t __stdcall ITEM_DeserializeFromBitBuffer(struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, uint32_t nParam1, struct D2ItemStatCostTxt * pItemStatCostTxt, uint32_t * pnSocketedItemCount, uint32_t nFileVersion);
 void __stdcall ExtractItemDetails(uint8_t * pBytesAfterId, size_t size, BOOL isSave, struct D2UnitDataItemDetailsStrc * itemData);
 // Deserialises an item unit from a binary save-data bit buffer into pUnit. Validates the 0x4D4A ("JM") magic header when nParam1 is set, reads the 32-bit item flags word, strips invalid flags, resets all affix/prefix/suffix fields on the unit to clean state, then delegates to ITEM_DeserializeFromBitBuffer (full items) or ITEMS_DeserializeItemHeader (compact items). Returns the number of bits consumed.
-int32_t __stdcall ITEM_LoadFromSaveData(struct D2UnitStrc * pUnit, uint8_t * pbParam, size_t nSize, uint32_t nParam1, uint32_t * pnParam, uint32_t nParam2, int * pUnitDataItemDetails);
+int32_t __stdcall ITEM_LoadFromSaveData(struct D2UnitStrc * pUnit, uint8_t * pSaveData, size_t nSize, uint32_t bCheckHeader, uint32_t * pnSocketedItemCount, uint32_t nVersion, int * pUnitDataItemDetails);
 // Returns 1 if the item unit can be repaired at an NPC. Checks: must be an identified, non-ethereal item whose ItemTypesTxt entry has the repair flag, is not replenishable, and has durability. Also passes if the item's charged skills are not fully charged.
 uint32_t __stdcall ITEM_CanBeRepaired(struct D2UnitStrc * pUnit);
 int32_t __stdcall ITEM_GetTxtItemTypes_shoots(struct D2UnitStrc * pUnit);
@@ -326,7 +326,7 @@ uint32_t __stdcall ITEM_GetTxtItemTypes_reload(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEM_GetTxtItemTypes_reequip(struct D2UnitStrc * pUnit);
 uint8_t __stdcall ITEM_GetTxtItemTypes_storepage(struct D2UnitStrc * pUnit);
 uint8_t __stdcall ITEM_GetTxtItemTypes_varinvgfx(struct D2UnitStrc * pUnit);
-D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(struct D2UnitStrc * pUnit, uint32_t nParam);
+D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(struct D2UnitStrc * pUnit, uint32_t nGfxIndex);
 uint32_t __stdcall ITEM_GetTxtItemTypes_rare(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEM_GetTxtItemTypes_magic(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEM_GetTxtItemTypes_normal(struct D2UnitStrc * pUnit);

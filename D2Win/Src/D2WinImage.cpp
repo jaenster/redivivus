@@ -170,7 +170,7 @@ BOOL __fastcall Draw(::D2WinImage * pImage) {
     int nTileColCount;
     int nTileDrawX;
     int nPositionX;
-    D2GfxDataStrc local_60;
+    D2GfxDataStrc sGfxData;
     int nTileRowCount;
     int nTileDrawY;
     int nStartY;
@@ -191,10 +191,10 @@ BOOL __fastcall Draw(::D2WinImage * pImage) {
       nTileRowY = pImage->sControl.dwSizeY;
       nTilesY = (nTileRowY + 0xff >> 8) - 1;
       nTilesX = pImage->sControl.dwSizeX + 0xff >> 8;
-      memset(&local_60, 0, 0x48);
-      local_60.pDC6 = pImage->sControl.pDC6;
-      local_60.nFrameNumber = pImage->nFrame;
-      local_60.nDirection = 0;
+      memset(&sGfxData, 0, 0x48);
+      sGfxData.pDC6 = pImage->sControl.pDC6;
+      sGfxData.nFrameNumber = pImage->nFrame;
+      sGfxData.nDirection = 0;
       if (nTilesY > 0) {
         nTileDrawY = nStartY - nTileRowY + 0x101;
         nTileRowCount = nTilesY;
@@ -203,8 +203,8 @@ BOOL __fastcall Draw(::D2WinImage * pImage) {
           nTileDrawX = nPositionX;
           if (nTilesX > 0) {
             do {
-              D2gfx::D2GFX::D2GFX_DrawImage(&local_60, nTileDrawX, nTileDrawY, -1, pImage->eDrawMode, nullptr);
-              local_60.nFrameNumber++;
+              D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTileDrawX, nTileDrawY, -1, pImage->eDrawMode, nullptr);
+              sGfxData.nFrameNumber++;
               nTileDrawX += 256;
               nTileColCount--;
             } while (nTileColCount);
@@ -219,8 +219,8 @@ BOOL __fastcall Draw(::D2WinImage * pImage) {
       }
 
       do {
-        D2gfx::D2GFX::D2GFX_DrawImage(&local_60, nPositionX, pImage->sControl.dwPosY, -1, pImage->eDrawMode, nullptr);
-        local_60.nFrameNumber++;
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, pImage->sControl.dwPosY, -1, pImage->eDrawMode, nullptr);
+        sGfxData.nFrameNumber++;
         nPositionX += 256;
         nTilesX--;
       } while (nTilesX);
@@ -235,28 +235,28 @@ static void __stdcall D2WinImage_Draw(D2GfxTileRectStrc * pScreenRect, D2GfxTile
     D2GfxTileRectStrc sClipRect;
     int nSrcX1;
     int nTileCountX = pDstRect->nX1 - pDstRect->nX0;
-    int iVar1 = pScreenRect->nX1 - pScreenRect->nX0;
-    int iVar2 = pDstRect->nY1 - pDstRect->nY0;
+    int nTilesX = pScreenRect->nX1 - pScreenRect->nX0;
+    int nTileHeight = pDstRect->nY1 - pDstRect->nY0;
     int nDstOffsetX = pScreenRect->nY1 - pScreenRect->nY0;
-    if (nTileCountX == iVar1 && iVar2 == nDstOffsetX) {
+    if (nTileCountX == nTilesX && nTileHeight == nDstOffsetX) {
       D2gfx::D2GFX::D2GFX_DrawSprite6(pGfxData, pScreenRect->nX0 - pDstRect->nX0, pScreenRect->nY1 - pDstRect->nY1 + 0x100, pScreenRect, 5);
       return;
     }
 
-    iVar1 = (iVar1 - 1 + nTileCountX) / nTileCountX;
-    int nTileRepeatX = (nDstOffsetX - 1 + iVar2) / iVar2;
+    nTilesX = (nTilesX - 1 + nTileCountX) / nTileCountX;
+    int nTileRepeatX = (nDstOffsetX - 1 + nTileHeight) / nTileHeight;
     nDstOffsetX = pScreenRect->nY0 - pDstRect->nY0 + 0x100;
     if (nTileRepeatX <= 0) {
       return;
     }
 
     do {
-      int nParam1;
-      nParam1 = pScreenRect->nX0 - pDstRect->nX0;
-      nSrcX1 = iVar1;
-      if (iVar1 > 0) {
+      int nDrawX;
+      nDrawX = pScreenRect->nX0 - pDstRect->nX0;
+      nSrcX1 = nTilesX;
+      if (nTilesX > 0) {
         do {
-          sClipRect.nX0 = pDstRect->nX0 + nParam1;
+          sClipRect.nX0 = pDstRect->nX0 + nDrawX;
           if (pScreenRect->nX0 > sClipRect.nX0) {
             sClipRect.nX0 = pScreenRect->nX0;
           }
@@ -272,17 +272,17 @@ static void __stdcall D2WinImage_Draw(D2GfxTileRectStrc * pScreenRect, D2GfxTile
           }
 
           sClipRect.nY1 = pScreenRect->nY1;
-          if (pScreenRect->nY1 >= sClipRect.nY0 + iVar2) {
-            sClipRect.nY1 = sClipRect.nY0 + iVar2;
+          if (pScreenRect->nY1 >= sClipRect.nY0 + nTileHeight) {
+            sClipRect.nY1 = sClipRect.nY0 + nTileHeight;
           }
 
-          D2gfx::D2GFX::D2GFX_DrawSprite6(pGfxData, nParam1, nDstOffsetX, &sClipRect, 5);
-          nParam1 += nTileCountX;
+          D2gfx::D2GFX::D2GFX_DrawSprite6(pGfxData, nDrawX, nDstOffsetX, &sClipRect, 5);
+          nDrawX += nTileCountX;
           nSrcX1--;
         } while (nSrcX1);
       }
 
-      nDstOffsetX += iVar2;
+      nDstOffsetX += nTileHeight;
       nTileRepeatX--;
     } while (nTileRepeatX);
 }
@@ -349,7 +349,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     BOOL bPressResult;
     int nHitAreaIdx;
     int nRelMouseY;
-    int iVar2;
+    int nRelMouseX;
     D2WinImageHitArea* pHitAreaCur;
     D2WinImageHitArea* pHitAreaTable;
     ImageHitArea pfnHitEntry;
@@ -360,17 +360,17 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
       exit(-1);
     }
 
-    uint32_t uVar1 = pImage->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+    uint32_t dwState = pImage->sControl.dwState;
+    if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
       nRelMouseY = pImage->sControl.dwSizeY - pImage->sControl.dwPosY + D2Client::Mouse::nPosY;
-      iVar2 = D2Client::Mouse::nPosX - pImage->sControl.dwPosX;
+      nRelMouseX = D2Client::Mouse::nPosX - pImage->sControl.dwPosX;
       pHitAreaTable = pImage->pHitAreas;
       if (pHitAreaTable) {
         nHitAreaIdx = 0;
         pfnHitEntry = pHitAreaTable->pfnOnHit;
         pHitAreaCur = pHitAreaTable;
         while (pfnHitEntry) {
-          if (iVar2 >= pHitAreaCur->nX && nRelMouseY >= pHitAreaCur->nY - pHitAreaCur->nHeight && iVar2 < pHitAreaCur->nWidth + pHitAreaCur->nX && nRelMouseY < pHitAreaCur->nY) {
+          if (nRelMouseX >= pHitAreaCur->nX && nRelMouseY >= pHitAreaCur->nY - pHitAreaCur->nHeight && nRelMouseX < pHitAreaCur->nWidth + pHitAreaCur->nX && nRelMouseY < pHitAreaCur->nY) {
             bPressResult = pHitAreaTable[nHitAreaIdx].pfnOnHit(pControlMsg);
             return bPressResult;
           }
@@ -394,20 +394,20 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 }
 
 // @sourcefile .\Src\D2WinImage.cpp
-::D2WinImage * __fastcall D2WinImage(int32_t nParam1, int32_t nParam2, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, OnPress pfnOnPress, D2WinImageHitArea * pHitAreas, ::Key pKey) {
-    uint32_t uVar1;
+::D2WinImage * __fastcall D2WinImage(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, OnPress pfnOnPress, D2WinImageHitArea * pHitAreas, ::Key pKey) {
+    uint32_t dwState;
     ::D2WinImage* pNewImage = D2_NEW_AT(::D2WinImage, ".\\Src\\D2WinImage.cpp", 0x1d);
     memset(pNewImage, 0, 0x4c);
     pNewImage->sControl.neD2FormType = FORM_Image;
     pNewImage->sControl.dwState |= gadwBitMasks[0];
-    uVar1 = pNewImage->sControl.dwState | gadwBitMasks[2];
+    dwState = pNewImage->sControl.dwState | gadwBitMasks[2];
     pNewImage->sControl.pDC6 = pDC6;
-    pNewImage->sControl.dwState = uVar1;
+    pNewImage->sControl.dwState = dwState;
     pNewImage->sControl.dwSizeX = nSizeX;
     pNewImage->sControl.dwSizeY = nSizeY;
     pNewImage->sControl.fpKey = pKey;
-    pNewImage->sControl.dwPosX = nParam1;
-    pNewImage->sControl.dwPosY = nParam2;
+    pNewImage->sControl.dwPosX = nPosX;
+    pNewImage->sControl.dwPosY = nPosY;
     pNewImage->sControl.fpDraw = (::Draw)(BOOL (__fastcall *)(::D2WinImage*))D2WinImage::Draw;
     pNewImage->sControl.pNext = 0;
     pNewImage->sControl.fpPush = D2WinImage::Push;

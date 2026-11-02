@@ -6,7 +6,6 @@
 #include "Storm/3rdparty/zlib/inflate.h"
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SMem.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -151,7 +150,6 @@ static void SCOMP_SelectADPCMParams(uint8_t * pnBitsPerSample, uint32_t nChannel
 
 // Encodes PCM audio samples to ADPCM format with dynamic bit rate adjustment
 static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSamples, uint32_t nInSize, uint32_t nChannels, uint8_t nBitsPerSample, short * pOutBuffer) {
-    uint32_t nStepSize;
     uint32_t nDelta;
     int nPredicted;
     uint8_t bySignBit;
@@ -162,6 +160,7 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
     uint32_t nAccum;
     uint32_t nBitMask;
     short int nSample;
+    int* pnStepIndex;
     short int* pOutStart = pOutBuffer;
     if (nMaxOutSize < 2) {
       return 2;
@@ -200,7 +199,7 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
       return nOutSize;
     }
 
-    int* piVar1;
+    uint32_t nStepSize;
     do {
       if ((int)(pOutCur + (2 - (int)pOutStart)) > (int)nMaxOutSize) {
         return (uint32_t)(pOutCur + (2 - (int)pOutStart));
@@ -290,10 +289,10 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
 
         *pOutCur = bySignBit | (uint8_t)nBitMask;
         pOutCur++;
-        piVar1 = aChannelState + nChannel + 2;
-        *piVar1 += gnSSCompDeflateFlags[nBitMask & 0x1f];
+        pnStepIndex = aChannelState + nChannel + 2;
+        *pnStepIndex += gnSSCompDeflateFlags[nBitMask & 0x1f];
         aChannelState[nChannel] = nPredicted;
-        if (*piVar1 < 0) {
+        if (*pnStepIndex < 0) {
           aChannelState[nChannel + 2] = 0;
         } else if (aChannelState[nChannel + 2] > 0x58) {
           aChannelState[nChannel + 2] = 0x58;
@@ -307,12 +306,12 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
 }
 
 static short * __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uint8_t * pIn, uint32_t nChannels, int32_t nInSize) {
-    int* piVar1;
     int nPredicted;
     uint32_t nDelta;
     int aChannelState[4];
     uint8_t byCode;
     short int nSample;
+    int* pnStepIndex;
     uint8_t* pInBase = pIn;
     aChannelState[2] = 0x2c;
     aChannelState[3] = 0x2c;
@@ -368,9 +367,9 @@ static short * __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uint
               }
             case 2:
               {
-                piVar1 = aChannelState + nChannel + 2;
-                *piVar1 += -8;
-                if (*piVar1 < 0) {
+                pnStepIndex = aChannelState + nChannel + 2;
+                *pnStepIndex += -8;
+                if (*pnStepIndex < 0) {
                   aChannelState[nChannel + 2] = 0;
                 }
 
@@ -434,9 +433,9 @@ static short * __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uint
         nOutSize -= 2;
         *pOut = (short int)aChannelState[nChannel];
         pOut++;
-        piVar1 = aChannelState + nChannel + 2;
-        *piVar1 += gnSSCompDeflateFlags[byCode & 0x1f];
-        if (*piVar1 < 0) {
+        pnStepIndex = aChannelState + nChannel + 2;
+        *pnStepIndex += gnSSCompDeflateFlags[byCode & 0x1f];
+        if (*pnStepIndex < 0) {
           aChannelState[nChannel + 2] = 0;
         } else if (aChannelState[nChannel + 2] > 0x58) {
           aChannelState[nChannel + 2] = 0x58;
@@ -455,7 +454,7 @@ uint32_t SCOMP_PkwareBufferRead(void * pDst, uint32_t * pnReqSize, PKWARE_STREAM
       _Size = nAvail;
     }
 
-    SSystem::SMemCopy(pDst, (void*)((int)pStream->pInBuf + pStream->nInPos), _Size);
+    SMem::SMemCopy(pDst, (void*)((int)pStream->pInBuf + pStream->nInPos), _Size);
     pStream->nInPos += _Size;
     return _Size;
 }
@@ -468,7 +467,7 @@ void SCOMP_PkwareBufferWrite(void * pSrc, uint32_t * pnReqSize, PKWARE_STREAM * 
       _Size = nAvail;
     }
 
-    SSystem::SMemCopy((void*)((int)pStream->pOutBuf + pStream->nOutPos), pSrc, _Size);
+    SMem::SMemCopy((void*)((int)pStream->pOutBuf + pStream->nOutPos), pSrc, _Size);
     pStream->nOutPos += _Size;
 }
 
@@ -520,14 +519,14 @@ void * __fastcall SCOMP_ArenaAlloc(D2ScompArenaStrc * pArenaState, int32_t nItem
       nSize += 4 - ((uint32_t)nSize & 3);
     }
 
-    uint8_t* puVar1 = pArenaState->pCur;
-    if (nSize < pArenaState->pBase + (pArenaState->nSize - (int)puVar1)) {
-      pArenaState->pCur = nSize + (int)puVar1;
-      return puVar1;
+    uint8_t* pArenaBlock = pArenaState->pCur;
+    if (nSize < pArenaState->pBase + (pArenaState->nSize - (int)pArenaBlock)) {
+      pArenaState->pCur = nSize + (int)pArenaBlock;
+      return pArenaBlock;
     }
 
-    void* pvVar2 = SMem::SMemAlloc((uint32_t)nSize, ".\\SOURCE\\SCOMP.CPP", 0x4c4, 0);
-    return pvVar2;
+    void* pHeapBlock = SMem::SMemAlloc((uint32_t)nSize, ".\\SOURCE\\SCOMP.CPP", 0x4c4, 0);
+    return pHeapBlock;
 }
 
 // @sourcefile .\SOURCE\SCOMP.CPP
@@ -671,9 +670,11 @@ void __fastcall SCOMP_AdpcmStereoDecompress(short * pDst, uint32_t * pnDstLen, u
 }
 
 // @sourcefile .\SOURCE\SCOMP.CPP
-static uint32_t * SCOMP_AcquireTempBuffer(uint32_t nSize, int32_t * pbShared) {
+// Returns a scratch buffer for SCompCompress/SCompDecompress, the shared one when it is free.
+// Name from the PowerPC 1.13c Storm traceback table (static s_AllocDecompressBuffer @10049fa0).
+static uint32_t * SCOMP_s_AllocDecompressBuffer(uint32_t nSize, int32_t * pbShared) {
     // Static local variables (originally global data)
-    static uint32_t gnScompTempBufferCapacity; D2_STATIC_GUARD_BSS(gnScompTempBufferCapacity, "Storm::Source::SComp::SCOMP_AcquireTempBuffer::gnScompTempBufferCapacity");
+    static uint32_t gnScompTempBufferCapacity; D2_STATIC_GUARD_BSS(gnScompTempBufferCapacity, "Storm::Source::SComp::SCOMP_s_AllocDecompressBuffer::gnScompTempBufferCapacity");
 
     uint32_t* pBuf;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779214);
@@ -694,11 +695,11 @@ static uint32_t * SCOMP_AcquireTempBuffer(uint32_t nSize, int32_t * pbShared) {
       gpScompTempBuffer = SMem::SMemAlloc(nSize, ".\\SOURCE\\SCOMP.CPP", 0x631, 0);
     }
 
-    void* pvVar1 = gpScompTempBuffer;
+    void* pSharedBuffer = gpScompTempBuffer;
     *pbShared = 1;
     gnScompTempBufferOwnerThreadId = nThreadId;
     LeaveCriticalSection(&lpCriticalSection_00779214);
-    return (uint32_t*)pvVar1;
+    return (uint32_t*)pSharedBuffer;
 }
 
 // @sourcefile .\SOURCE\SCOMP.CPP
@@ -785,7 +786,7 @@ uint32_t __stdcall SCompCompress(uint32_t * pDst, uint32_t * pnDstLen, uint32_t 
       if (!nUnsupportedMask) {
         if (nSrcLen >= 2 || (__frame0.pTempBuf = 0 , (uint32_t*)((int)pDst + nSrcLenCur) > pSrc && (uint32_t*)((int)pSrc + nSrcLenCur) > pDst) && nSrcLen) {
           __frame0.pTempBuf = (uint32_t*)nUnsupportedMask;
-          __frame0.pTempBuf = SCOMP_AcquireTempBuffer(nSrcLenCur, (int32_t*)&nUnsupportedMask);
+          __frame0.pTempBuf = SCOMP_s_AllocDecompressBuffer(nSrcLenCur, (int32_t*)&nUnsupportedMask);
         }
 
         pSrc = &paSCompCompressCodecTable[0].dwMethodMask;
@@ -828,11 +829,11 @@ uint32_t __stdcall SCompCompress(uint32_t * pDst, uint32_t * pnDstLen, uint32_t 
         if (_Src != pDst) {
           if (_Src != (uint32_t*)((int)pDst + 1)) {
             if (!nMethodBit) {
-              SSystem::SMemCopy(pDst, _Src, _Size);
+              SMem::SMemCopy(pDst, _Src, _Size);
               goto cleanup;
             }
 
-            SSystem::SMemCopy((uint32_t*)((int)pDst + 1), _Src, _Size);
+            SMem::SMemCopy((uint32_t*)((int)pDst + 1), _Src, _Size);
             nMethodBit = nMethodMask & 0xff;
           }
 
@@ -863,14 +864,14 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    uint32_t* pStageBuf;
     uint32_t dwFlagsTmp;
     uint32_t nSrcSize;
     pfnSCompCodec* ppMethodEntry;
     uint32_t* pSrcCur;
-    uint32_t* puVar2;
+    uint32_t* pStageTarget;
     int32_t bTempBufShared;
     uint32_t dwMethodFlags;
+    uint8_t byCompressionMask;
     __frame0.nDestSize = *pnDstSize;
     if (!(!nSrcSizeIn ? 0 : (pDst ? (__frame0.nDestSize < nSrcSizeIn) - 1 : 0) & -(uint32_t)(pSrc != 0))) {
       SErr::SErrSetLastError(0x57);
@@ -878,31 +879,31 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
     }
     if (nSrcSizeIn == __frame0.nDestSize) {
       if (pDst != pSrc) {
-        SSystem::SMemCopy(pDst, pSrc, nSrcSizeIn);
+        SMem::SMemCopy(pDst, pSrc, nSrcSizeIn);
         return 1;
       }
     } else {
-      uint8_t bVar1;
-      bVar1 = (uint8_t)*pSrc;
-      dwMethodFlags = (uint32_t)bVar1;
+      uint32_t* pStageBuf;
+      byCompressionMask = (uint8_t)*pSrc;
+      dwMethodFlags = (uint32_t)byCompressionMask;
       pSrcCur = (uint32_t*)((int)pSrc + 1);
       nSrcSize = nSrcSizeIn - 1;
-      nSrcSizeIn = (uint32_t)((bVar1 & 8) != 0);
-      if (bVar1 & 2) {
+      nSrcSizeIn = (uint32_t)((byCompressionMask & 8) != 0);
+      if (byCompressionMask & 2) {
         nSrcSizeIn++;
       }
-      if (bVar1 & 1) {
+      if (byCompressionMask & 1) {
         nSrcSizeIn++;
       }
-      if ((char)bVar1 < '\0') {
+      if ((char)byCompressionMask < '\0') {
         nSrcSizeIn++;
       }
-      if (bVar1 & 0x40) {
+      if (byCompressionMask & 0x40) {
         nSrcSizeIn++;
       }
 
       pSrc = (uint32_t*)(dwMethodFlags & -204);
-      if (bVar1 & 0x34) {
+      if (byCompressionMask & 0x34) {
         return 0;
       }
 
@@ -923,7 +924,7 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
                          reused value, not
                          the caller's argument. */ bTempBufShared = (int32_t)pSrc;
       if (nSrcSizeIn >= 2 || (uint32_t*)((int)pDst + nSrcSize) > pSrcCur && (uint32_t*)((int)pSrcCur + nSrcSize) > pDst && nSrcSizeIn) {
-        pSrc = SCOMP_AcquireTempBuffer(__frame0.nDestSize, &bTempBufShared);
+        pSrc = SCOMP_s_AllocDecompressBuffer(__frame0.nDestSize, &bTempBufShared);
       }
 
       /* Codec table walk (verified): ESI starts at 0x6cfee8 =
@@ -942,13 +943,13 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
         pStageBuf = pSrcCur;
         if ((uint32_t)ppMethodEntry[-1] & dwFlagsTmp) {
           nSrcSizeIn--;
-          puVar2 = pSrc;
+          pStageTarget = pSrc;
           if (!(nSrcSizeIn & 1)) {
-            puVar2 = pDst;
+            pStageTarget = pDst;
           }
 
-          pStageBuf = puVar2;
-          if ((uint32_t*)((int)puVar2 + nSrcSize) > pSrcCur && (uint32_t*)(nSrcSize + (int)pSrcCur) > puVar2 && ((uint32_t*)((int)puVar2 + nSrcSize) <= pSrc || (pStageBuf = pDst , (uint32_t*)(nSrcSize + (int)pSrc) <= puVar2))) {
+          pStageBuf = pStageTarget;
+          if ((uint32_t*)((int)pStageTarget + nSrcSize) > pSrcCur && (uint32_t*)(nSrcSize + (int)pSrcCur) > pStageTarget && ((uint32_t*)((int)pStageTarget + nSrcSize) <= pSrc || (pStageBuf = pDst , (uint32_t*)(nSrcSize + (int)pSrc) <= pStageTarget))) {
             pStageBuf = pSrc;
           }
 
@@ -963,7 +964,7 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
       } while ((int)ppMethodEntry >= (intptr_t)((char*)&paSCompDecompressCodecTable + 4));
 
       if (pStageBuf != pDst) {
-        SSystem::SMemCopy(pDst, pStageBuf, nSrcSize);
+        SMem::SMemCopy(pDst, pStageBuf, nSrcSize);
       }
 
       *pnDstSize = nSrcSize;
@@ -1065,19 +1066,19 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
       (*pBitBuf)++;
     }
 
-    uint16_t* puVar2 = pBitBuf[1];
-    int* pQuickEntry = (int*)(pThis + (((uint32_t)puVar2 & 0x7f) * 3 + 0xd1d) * 4);
+    uint16_t* dwBitAccum = pBitBuf[1];
+    int* pQuickEntry = (int*)(pThis + (((uint32_t)dwBitAccum & 0x7f) * 3 + 0xd1d) * 4);
     bool bNeedRebuild = *pQuickEntry != *(int*)(pThis + 4);
     if (!bNeedRebuild) {
       nBitCount = pQuickEntry[1];
       if (nBitCount <= 7) {
         pBitBuf[2] = (uint16_t*)((int)pBitBuf[2] - nBitCount);
-        pBitBuf[1] = (uint16_t*)((uint32_t)puVar2 >> (uint8_t)nBitCount);
+        pBitBuf[1] = (uint16_t*)((uint32_t)dwBitAccum >> (uint8_t)nBitCount);
         return pQuickEntry[2];
       }
 
       pBitBuf[2] = (uint16_t*)((int)pBitBuf[2] - 7);
-      pBitBuf[1] = (uint16_t*)((uint32_t)puVar2 >> 7);
+      pBitBuf[1] = (uint16_t*)((uint32_t)dwBitAccum >> 7);
       pTreeNode = (uint16_t**)pQuickEntry[2];
     } else {
       nBitCount = *(uint32_t*)(**(int**)(pThis + 0x3060) + 4);
@@ -1087,13 +1088,13 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
     nBitCount = 0;
     pBitBuf = 0;
     do {
-      uint16_t** ppuVar1;
+      uint16_t** pnBitsLeft;
       wBits = pBitBufAlias[1];
       pTreeNode = (uint16_t**)pTreeNode[5];
-      ppuVar1 = pBitBufAlias + 2;
-      *ppuVar1 = (uint16_t*)((int)*ppuVar1 - 1);
+      pnBitsLeft = pBitBufAlias + 2;
+      *pnBitsLeft = (uint16_t*)((int)*pnBitsLeft - 1);
       pBitBufAlias[1] = (uint16_t*)((uint32_t)wBits >> 1);
-      if (!*ppuVar1) {
+      if (!*pnBitsLeft) {
         pBitBufAlias[1] = *(uint16_t**)*pBitBufAlias;
         *pBitBufAlias += 2;
         pBitBufAlias[2] = (uint16_t*)0x20;
@@ -1119,7 +1120,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
       return (int32_t)pTreeNode[2];
     }
 
-    uint32_t nQuickIdx = 0xffffffffU >> (0x20 - (uint8_t)nBitCount & 0x1f) & (uint32_t)puVar2 & 0x7f;
+    uint32_t nQuickIdx = 0xffffffffU >> (0x20 - (uint8_t)nBitCount & 0x1f) & (uint32_t)dwBitAccum & 0x7f;
     nQuickStep = 1 << (uint8_t)nBitCount;
     uint32_t* pQuickFill = (uint32_t*)(pThis + 0x347c + nQuickIdx * 0xc);
     do {
@@ -1223,24 +1224,24 @@ void __fastcall LINKEDLIST_LinkBefore(void * pNode) {
     *(uint32_t*)((int)pNode + 4) = 0;
 }
 
-void __fastcall LINKEDLIST_NodeDestructor(void * pnParam) {
+void __fastcall LINKEDLIST_NodeDestructor(void * pNode) {
     int* pPrevLink;
-    int pNext = *(int*)pnParam;
+    int pNext = *(int*)pNode;
     if (!pNext) {
       return;
     }
 
-    uint32_t nPrevEncoded = *(uint32_t*)((int)pnParam + 4);
+    uint32_t nPrevEncoded = *(uint32_t*)((int)pNode + 4);
     if ((int)nPrevEncoded < 0) {
       pPrevLink = (int*)~nPrevEncoded;
     } else {
-      pPrevLink = (int*)((int)pnParam + (nPrevEncoded - *(int*)(pNext + 4)));
+      pPrevLink = (int*)((int)pNode + (nPrevEncoded - *(int*)(pNext + 4)));
     }
 
     *pPrevLink = pNext;
-    *(uint32_t*)(*(int*)pnParam + 4) = *(uint32_t*)((int)pnParam + 4);
-    *(uint32_t*)pnParam = 0;
-    *(uint32_t*)((int)pnParam + 4) = 0;
+    *(uint32_t*)(*(int*)pNode + 4) = *(uint32_t*)((int)pNode + 4);
+    *(uint32_t*)pNode = 0;
+    *(uint32_t*)((int)pNode + 4) = 0;
 }
 
 int * * __thiscall HUFFMAN_AllocateNode(int32_t pThis, int32_t nInsertMode) {
@@ -3637,7 +3638,7 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
 
     D2CompressHuffNodeStrc** pSymbolSlot;
     pSymbolSlot = pEncoder->apSymbolNodes;
-    SSystem::SMemZero(pSymbolSlot, 0x408);
+    SMem::SMemZero(pSymbolSlot, 0x408);
     uint32_t nMaxWeight;
     nMaxWeight = 0;
     int nSymbol;
@@ -4079,9 +4080,9 @@ void __thiscall COMPRESS_EncodeSymbol(D2CompressEncoderStrc * pEncoder, int * nS
     pNodeB->pParent = 0;
     pNodeB->pSibling = 0;
     pNodeB->nSymbol = pParent->nSymbol;
-    uint32_t uVar2 = pParent->nWeight;
+    uint32_t nParentWeight = pParent->nWeight;
     pNodeB->pParent = pParent;
-    pNodeB->nWeight = uVar2;
+    pNodeB->nWeight = nParentWeight;
     pEncoder->apSymbolNodes[pNodeB->nSymbol] = pNodeB;
     pNodeB = (D2CompressHuffNodeStrc*)pEncoder->ppFreeListTailLink;
     if ((int)pNodeB <= 0 || !pNodeB) {
@@ -4335,7 +4336,7 @@ void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_
 }
 
 // PKWARE Data Compression Library explode(): callback-driven decompressor.
-uint8_t PKWARE_explode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TDcmpStruct * pWorkBuf, void * pParam) {
+uint8_t PKWARE_explode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TDcmpStruct * pWorkBuf, void * pUserData) {
     // Static local variables (originally global data)
     static uint8_t gaCRT_PKWareLitLenBitsTableB[64] = {
     0x2,
@@ -4545,7 +4546,7 @@ uint8_t PKWARE_explode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TDcmpStru
     uint32_t* pBufByteCount = &pWorkBuf->in_pos;
     pWorkBuf->read_buf = pfnRead;
     pWorkBuf->write_buf = pfnWrite;
-    pWorkBuf->param = pParam;
+    pWorkBuf->param = pUserData;
     *pBufByteCount = 0x800;
     uint32_t uVar1 = pWorkBuf->read_buf(pWorkBuf->in_buff, pBufByteCount, pWorkBuf->param);
     pWorkBuf->in_bytes = uVar1;
@@ -4717,13 +4718,13 @@ uint32_t PKWARE_ProcessItemInventory(TDcmpStruct * pDcmp) {
     return nDecodedValue;
 }
 
-int PKWARE_GetItemDataValue(TDcmpStruct * pClientSideData, int nParam) {
+int PKWARE_GetItemDataValue(TDcmpStruct * pClientSideData, int nMatchLength) {
     uint32_t uDataValue = (uint32_t)pClientSideData->DistPosCodes[pClientSideData->bit_buff & 0xff];
     BOOL nRangeCheckResult = PKWARE_CheckItemDataRange(pClientSideData, (uint32_t)pClientSideData->DistBits[uDataValue]);
     if (nRangeCheckResult) {
       return 0;
     }
-    if (nParam == 2) {
+    if (nMatchLength == 2) {
       uDataValue = uDataValue << 2 | pClientSideData->bit_buff & 3;
       nRangeCheckResult = PKWARE_CheckItemDataRange(pClientSideData, 2);
       if (nRangeCheckResult) {
@@ -4740,12 +4741,12 @@ int PKWARE_GetItemDataValue(TDcmpStruct * pClientSideData, int nParam) {
     return uDataValue + 1;
 }
 
-BOOL PKWARE_CheckItemDataRange(TDcmpStruct * pClientSideData, uint32_t nParam) {
+BOOL PKWARE_CheckItemDataRange(TDcmpStruct * pClientSideData, uint32_t nBitCount) {
     uint8_t bNextByte;
     uint32_t dwBitBuffer = pClientSideData->extra_bits;
-    if (dwBitBuffer >= nParam) {
-      pClientSideData->extra_bits = dwBitBuffer - nParam;
-      pClientSideData->bit_buff >>= (uint8_t)nParam & 0x1f;
+    if (dwBitBuffer >= nBitCount) {
+      pClientSideData->extra_bits = dwBitBuffer - nBitCount;
+      pClientSideData->bit_buff >>= (uint8_t)nBitCount & 0x1f;
       return 0;
     }
 
@@ -4766,8 +4767,8 @@ BOOL PKWARE_CheckItemDataRange(TDcmpStruct * pClientSideData, uint32_t nParam) {
     (*pInPos)++;
     dwBitBuffer = (uint32_t)bNextByte << 8 | pClientSideData->bit_buff;
     pClientSideData->bit_buff = dwBitBuffer;
-    pClientSideData->bit_buff = dwBitBuffer >> ((uint8_t)nParam - (char)pClientSideData->extra_bits & 0x1f);
-    pClientSideData->extra_bits = pClientSideData->extra_bits - nParam + 8;
+    pClientSideData->bit_buff = dwBitBuffer >> ((uint8_t)nBitCount - (char)pClientSideData->extra_bits & 0x1f);
+    pClientSideData->extra_bits = pClientSideData->extra_bits - nBitCount + 8;
     return 0;
 }
 
@@ -5099,22 +5100,22 @@ void PKWARE_IterateItemData(TDcmpStruct * pState) {
     } while (gaCRT_PKWareLitLenBitsTableC + 0xff < (unsigned char*)pHuffCodeWidthEntry);
 }
 
-void PKWARE_SetMemoryValue(uint32_t * pdwParam1, uint32_t * pdwParam2, uint32_t nParam) {
+void PKWARE_SetMemoryValue(uint32_t * pDst, uint32_t * pSrc, uint32_t nSize) {
     uint32_t nCount;
     uint32_t uDword;
-    for (nCount = nParam >> 2; nCount; nCount--) {
-      uDword = *pdwParam2;
-      pdwParam2++;
-      *pdwParam1 = uDword;
-      pdwParam1++;
+    for (nCount = nSize >> 2; nCount; nCount--) {
+      uDword = *pSrc;
+      pSrc++;
+      *pDst = uDword;
+      pDst++;
     }
 
-    for (nCount = nParam & 3; nCount; nCount--) {
+    for (nCount = nSize & 3; nCount; nCount--) {
       uint8_t uByte;
-      uByte = *(uint8_t*)pdwParam2;
-      pdwParam2 = (uint32_t*)((int)pdwParam2 + 1);
-      *(uint8_t*)pdwParam1 = uByte;
-      pdwParam1 = (uint32_t*)((int)pdwParam1 + 1);
+      uByte = *(uint8_t*)pSrc;
+      pSrc = (uint32_t*)((int)pSrc + 1);
+      *(uint8_t*)pDst = uByte;
+      pDst = (uint32_t*)((int)pDst + 1);
     }
 }
 
@@ -5128,7 +5129,7 @@ void PKWARE_SetMemoryValue(uint32_t * pdwParam1, uint32_t * pdwParam2, uint32_t 
 // belongs to no other function in the DCL.
 // @note Still filed under compiler:: for the same reason as PKWARE_explode - the DCL is third-party
 // code statically linked into several modules and which translation unit owns it is not established.
-uint32_t PKWARE_implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TCmpStruct * pWorkBuf, void * pParam, uint32_t * pnType, uint32_t * pnDictSize) {
+uint32_t PKWARE_implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TCmpStruct * pWorkBuf, void * pUserData, uint32_t * pnType, uint32_t * pnDictSize) {
     // Static local variables (originally global data)
     static uint8_t gaCRT_PKWareLitDecodeTable[64] = {
     0x2,
@@ -5842,7 +5843,7 @@ uint32_t PKWARE_implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TCmpStru
     pWorkBuf->write_buf = pfnWrite;
     pWorkBuf->dsize_bytes = *pnDictSize;
     pWorkBuf->ctype = *pnType;
-    pWorkBuf->param = pParam;
+    pWorkBuf->param = pUserData;
     pWorkBuf->dsize_bits = 4;
     pWorkBuf->dsize_mask = 0xf;
     uint32_t nCodeIndex = *pnDictSize;
@@ -5913,7 +5914,7 @@ uint32_t PKWARE_implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, TCmpStru
     return 0;
 }
 
-void PKWARE_ProcessMemoryBlock(TCmpStruct * pnParam) {
+void PKWARE_ProcessMemoryBlock(TCmpStruct * pCmp) {
     // Frame slots -8..0 are ONE object: &nBytesRemaining is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -5922,37 +5923,37 @@ void PKWARE_ProcessMemoryBlock(TCmpStruct * pnParam) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    uint32_t uVar1;
-    uint16_t uVar2;
     uint32_t nBytesRead;
     uint32_t nNextMatchLen;
     int nBytesReadTotal;
     uint32_t nDictSize;
     uint8_t* pbWindowEnd;
+    uint32_t nDictSizeBytes;
+    uint16_t wLiteral;
     __frame0.nPassCount = 0;
     bool bEndOfInput;
     bEndOfInput = false;
-    pnParam->out_buff[0] = (uint8_t)pnParam->ctype;
+    pCmp->out_buff[0] = (uint8_t)pCmp->ctype;
     uint16_t* pbWindowCursor;
-    pbWindowCursor = (uint16_t*)(pnParam->work_buff + pnParam->dsize_bytes + 0x204);
-    pnParam->out_buff[1] = (uint8_t)pnParam->dsize_bits;
-    pnParam->out_bytes = 2;
-    PKWARE_SetByteValue((uint32_t*)(pnParam->out_buff + 2), 0, 0x800);
-    pnParam->out_bits = 0;
+    pbWindowCursor = (uint16_t*)(pCmp->work_buff + pCmp->dsize_bytes + 0x204);
+    pCmp->out_buff[1] = (uint8_t)pCmp->dsize_bits;
+    pCmp->out_bytes = 2;
+    PKWARE_SetByteValue((uint32_t*)(pCmp->out_buff + 2), 0, 0x800);
+    pCmp->out_bits = 0;
     do {
       nDictSize = 0x1000;
       nBytesReadTotal = 0;
       do {
         __frame0.nBytesRemaining = nDictSize;
-        nBytesRead = pnParam->read_buf(pnParam->work_buff + pnParam->dsize_bytes + nBytesReadTotal + 0x204, &__frame0.nBytesRemaining, pnParam->param);
+        nBytesRead = pCmp->read_buf(pCmp->work_buff + pCmp->dsize_bytes + nBytesReadTotal + 0x204, &__frame0.nBytesRemaining, pCmp->param);
         if (!nBytesRead) {
           if (!nBytesReadTotal && !__frame0.nPassCount) {
-            PKWARE_CalculateOffset(pnParam, (uint32_t)pnParam->nChBits[0x305], (uint32_t)pnParam->nChCodes[0x305]);
-            if (pnParam->out_bits) {
-              pnParam->out_bytes++;
+            PKWARE_CalculateOffset(pCmp, (uint32_t)pCmp->nChBits[0x305], (uint32_t)pCmp->nChCodes[0x305]);
+            if (pCmp->out_bits) {
+              pCmp->out_bytes++;
             }
 
-            pnParam->write_buf(pnParam->out_buff, &pnParam->out_bytes, pnParam->param);
+            pCmp->write_buf(pCmp->out_buff, &pCmp->out_bytes, pCmp->param);
             return;
           }
 
@@ -5964,31 +5965,31 @@ void PKWARE_ProcessMemoryBlock(TCmpStruct * pnParam) {
         nDictSize -= nBytesRead;
       } while (nDictSize);
 
-      uVar1 = pnParam->dsize_bytes;
-      pbWindowEnd = pnParam->work_buff + uVar1 + nBytesReadTotal;
+      nDictSizeBytes = pCmp->dsize_bytes;
+      pbWindowEnd = pCmp->work_buff + nDictSizeBytes + nBytesReadTotal;
       if (bEndOfInput) {
         pbWindowEnd += 0x204;
       }
       if (__frame0.nPassCount) {
         if (__frame0.nPassCount != 1) {
-          PKWARE_CopyBufferData(pnParam, (uint8_t*)((int)pbWindowCursor - uVar1), pbWindowEnd + 1);
+          PKWARE_CopyBufferData(pCmp, (uint8_t*)((int)pbWindowCursor - nDictSizeBytes), pbWindowEnd + 1);
         } else {
-          PKWARE_CopyBufferData(pnParam, (uint8_t*)((int)pbWindowCursor + (0x204 - uVar1)), pbWindowEnd + 1);
+          PKWARE_CopyBufferData(pCmp, (uint8_t*)((int)pbWindowCursor + (0x204 - nDictSizeBytes)), pbWindowEnd + 1);
           __frame0.nPassCount++;
         }
       } else {
-        PKWARE_CopyBufferData(pnParam, (uint8_t*)pbWindowCursor, pbWindowEnd + 1);
+        PKWARE_CopyBufferData(pCmp, (uint8_t*)pbWindowCursor, pbWindowEnd + 1);
         __frame0.nPassCount++;
-        if (pnParam->dsize_bytes != 0x1000) {
+        if (pCmp->dsize_bytes != 0x1000) {
           __frame0.nPassCount++;
         }
       }
 
       encode_next:
       if (pbWindowEnd > (unsigned char*)pbWindowCursor) {
-        nDictSize = PKWARE_ParseByteStream(pnParam, (uint8_t*)pbWindowCursor);
+        nDictSize = PKWARE_ParseByteStream(pCmp, (uint8_t*)pbWindowCursor);
         while (true) {
-          if (!nDictSize || nDictSize == 2 && pnParam->distance >= 0x100) {
+          if (!nDictSize || nDictSize == 2 && pCmp->distance >= 0x100) {
             goto emit_literal;
           }
           if (bEndOfInput && (uint8_t*)((int)pbWindowCursor + nDictSize) > pbWindowEnd) {
@@ -5998,42 +5999,42 @@ void PKWARE_ProcessMemoryBlock(TCmpStruct * pnParam) {
             goto emit_match;
           }
 
-          nBytesRead = pnParam->distance;
-          nNextMatchLen = PKWARE_ParseByteStream(pnParam, (uint8_t*)((int)pbWindowCursor + 1));
+          nBytesRead = pCmp->distance;
+          nNextMatchLen = PKWARE_ParseByteStream(pCmp, (uint8_t*)((int)pbWindowCursor + 1));
           if (nDictSize >= nNextMatchLen || nDictSize + 1 >= nNextMatchLen && nBytesRead <= 0x80) {
-            pnParam->distance = nBytesRead;
+            pCmp->distance = nBytesRead;
             goto emit_match;
           }
 
-          uVar2 = *pbWindowCursor;
+          wLiteral = *pbWindowCursor;
           pbWindowCursor = (uint16_t*)((int)pbWindowCursor + 1);
-          PKWARE_CalculateOffset(pnParam, (uint32_t)pnParam->nChBits[(uint8_t)uVar2], (uint32_t)pnParam->nChCodes[(uint8_t)uVar2]);
+          PKWARE_CalculateOffset(pCmp, (uint32_t)pCmp->nChBits[(uint8_t)wLiteral], (uint32_t)pCmp->nChCodes[(uint8_t)wLiteral]);
           nDictSize = nNextMatchLen;
         }
 
         nDictSize = (int)pbWindowEnd - (int)pbWindowCursor;
-        if (nDictSize >= 2 && (nDictSize != 2 || pnParam->distance < 0x100)) {
+        if (nDictSize >= 2 && (nDictSize != 2 || pCmp->distance < 0x100)) {
           emit_match:
-          PKWARE_CalculateOffset(pnParam, (uint32_t)pnParam->nChBits[nDictSize + 0xfe], (uint32_t)pnParam->nChCodes[nDictSize + 0xfe]);
+          PKWARE_CalculateOffset(pCmp, (uint32_t)pCmp->nChBits[nDictSize + 0xfe], (uint32_t)pCmp->nChCodes[nDictSize + 0xfe]);
           if (nDictSize == 2) {
-            nDictSize = pnParam->distance >> 2;
-            PKWARE_CalculateOffset(pnParam, (uint32_t)pnParam->dist_bits[nDictSize], (uint32_t)pnParam->dist_codes[nDictSize]);
+            nDictSize = pCmp->distance >> 2;
+            PKWARE_CalculateOffset(pCmp, (uint32_t)pCmp->dist_bits[nDictSize], (uint32_t)pCmp->dist_codes[nDictSize]);
             pbWindowCursor++;
-            PKWARE_CalculateOffset(pnParam, 2, pnParam->distance & 3);
+            PKWARE_CalculateOffset(pCmp, 2, pCmp->distance & 3);
           } else {
-            nBytesRead = pnParam->distance >> ((uint8_t)pnParam->dsize_bits & 0x1f);
-            PKWARE_CalculateOffset(pnParam, (uint32_t)pnParam->dist_bits[nBytesRead], (uint32_t)pnParam->dist_codes[nBytesRead]);
+            nBytesRead = pCmp->distance >> ((uint8_t)pCmp->dsize_bits & 0x1f);
+            PKWARE_CalculateOffset(pCmp, (uint32_t)pCmp->dist_bits[nBytesRead], (uint32_t)pCmp->dist_codes[nBytesRead]);
             pbWindowCursor = (uint16_t*)((int)pbWindowCursor + nDictSize);
-            PKWARE_CalculateOffset(pnParam, pnParam->dsize_bits, pnParam->dsize_mask & pnParam->distance);
+            PKWARE_CalculateOffset(pCmp, pCmp->dsize_bits, pCmp->dsize_mask & pCmp->distance);
           }
 
           goto encode_next;
         }
 
         emit_literal:
-        uVar2 = *pbWindowCursor;
+        wLiteral = *pbWindowCursor;
         pbWindowCursor = (uint16_t*)((int)pbWindowCursor + 1);
-        PKWARE_CalculateOffset(pnParam, (uint32_t)pnParam->nChBits[(uint8_t)uVar2], (uint32_t)pnParam->nChCodes[(uint8_t)uVar2]);
+        PKWARE_CalculateOffset(pCmp, (uint32_t)pCmp->nChBits[(uint8_t)wLiteral], (uint32_t)pCmp->nChCodes[(uint8_t)wLiteral]);
         goto encode_next;
       }
       if (bEndOfInput) {
@@ -6041,24 +6042,24 @@ void PKWARE_ProcessMemoryBlock(TCmpStruct * pnParam) {
       }
 
       pbWindowCursor += -0x800;
-      PKWARE_CopyMemoryValue((uint32_t*)pnParam->work_buff, (uint32_t*)(pnParam->work_buff + 0x1000), pnParam->dsize_bytes + 0x204);
+      PKWARE_CopyMemoryValue((uint32_t*)pCmp->work_buff, (uint32_t*)(pCmp->work_buff + 0x1000), pCmp->dsize_bytes + 0x204);
     } while (true);
 
-    PKWARE_CalculateOffset(pnParam, (uint32_t)pnParam->nChBits[0x305], (uint32_t)pnParam->nChCodes[0x305]);
-    if (pnParam->out_bits) {
-      pnParam->out_bytes++;
+    PKWARE_CalculateOffset(pCmp, (uint32_t)pCmp->nChBits[0x305], (uint32_t)pCmp->nChCodes[0x305]);
+    if (pCmp->out_bits) {
+      pCmp->out_bytes++;
     }
 
-    pnParam->write_buf(pnParam->out_buff, &pnParam->out_bytes, pnParam->param);
+    pCmp->write_buf(pCmp->out_buff, &pCmp->out_bytes, pCmp->param);
 }
 
 int PKWARE_ParseByteStream(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
-    uint32_t uVar1;
     uint8_t* pbMatchCursor;
     int nCandidateLen;
     uint16_t nKmpFailure;
     short int nKmpPos;
     uint8_t* pbMatchEnd;
+    uint32_t nNextHashIdx;
     int nBestLen = 1;
     uint32_t nHashIdx = (uint32_t)pCmpState->phash_to_index[(uint32_t)pbSrcPos[1] * 5 + (uint32_t)*pbSrcPos * 4];
     uint16_t* pChainLinkEntry = pCmpState->phash_offs + nHashIdx;
@@ -6125,11 +6126,11 @@ int PKWARE_ParseByteStream(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
               }
 
               pChainLinkEntry = pCmpState->phash_offs + nHashIdx;
-              uVar1 = nHashIdx;
+              nNextHashIdx = nHashIdx;
               do {
-                nHashIdx = uVar1;
+                nHashIdx = nNextHashIdx;
                 pChainLinkEntry++;
-                uVar1 = nHashIdx + 1;
+                nNextHashIdx = nHashIdx + 1;
                 pbCandidateMatch = pCmpState->work_buff + *pChainLinkEntry;
                 if (pbCandidateMatch >= pbWindowLimit) {
                   return nBestLen;
@@ -6137,14 +6138,14 @@ int PKWARE_ParseByteStream(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
               } while (pbCandidateMatch + nCandidateLen < pbMatchEnd);
 
               if (pbCandidateMatch[nBestLen - 2] == pbSrcPos[nBestLen - 2]) {
-                nHashIdx = uVar1;
+                nHashIdx = nNextHashIdx;
                 if (pbCandidateMatch + nCandidateLen != pbMatchEnd) {
                   nCandidateLen = 0;
                   pbMatchEnd = pbCandidateMatch;
                 }
               } else {
                 pChainLinkEntry = pCmpState->phash_offs + nHashIdx + 1;
-                nHashIdx = uVar1;
+                nHashIdx = nNextHashIdx;
                 do {
                   pChainLinkEntry++;
                   nHashIdx++;
@@ -6234,33 +6235,33 @@ void PKWARE_CalculateOffset(TCmpStruct * pCmp, uint32_t nBitCount, uint32_t nBit
     PKWARE_ProcessBuffer(pCmp);
 }
 
-void PKWARE_CopyMemoryValue(uint32_t * pdwParam1, uint32_t * pdwParam2, uint32_t nParam) {
+void PKWARE_CopyMemoryValue(uint32_t * pDst, uint32_t * pSrc, uint32_t nSize) {
     uint32_t nCount;
     uint32_t uDword;
-    for (nCount = nParam >> 2; nCount; nCount--) {
-      uDword = *pdwParam2;
-      pdwParam2++;
-      *pdwParam1 = uDword;
-      pdwParam1++;
+    for (nCount = nSize >> 2; nCount; nCount--) {
+      uDword = *pSrc;
+      pSrc++;
+      *pDst = uDword;
+      pDst++;
     }
 
-    for (nCount = nParam & 3; nCount; nCount--) {
+    for (nCount = nSize & 3; nCount; nCount--) {
       uint8_t uByte;
-      uByte = *(uint8_t*)pdwParam2;
-      pdwParam2 = (uint32_t*)((int)pdwParam2 + 1);
-      *(uint8_t*)pdwParam1 = uByte;
-      pdwParam1 = (uint32_t*)((int)pdwParam1 + 1);
+      uByte = *(uint8_t*)pSrc;
+      pSrc = (uint32_t*)((int)pSrc + 1);
+      *(uint8_t*)pDst = uByte;
+      pDst = (uint32_t*)((int)pDst + 1);
     }
 }
 
-void PKWARE_SetByteValue(uint32_t * pnParam, uint8_t bParam, uint32_t nParam) {
+void PKWARE_SetByteValue(uint32_t * pDst, uint8_t byFill, uint32_t nSize) {
     int iVar1;
     uint32_t* pDwordDest;
-    uint32_t dwFillPattern = (uint32_t)bParam;
-    uint32_t nCount = nParam >> 2;
+    uint32_t dwFillPattern = (uint32_t)byFill;
+    uint32_t nCount = nSize >> 2;
     if (nCount) {
       uint32_t nDwordCount;
-      pDwordDest = pnParam;
+      pDwordDest = pDst;
       nDwordCount = nCount;
       if (nCount <= 1) {
         nCount = 1;
@@ -6272,10 +6273,10 @@ void PKWARE_SetByteValue(uint32_t * pnParam, uint8_t bParam, uint32_t nParam) {
         pDwordDest++;
       }
 
-      pnParam += nDwordCount;
+      pDst += nDwordCount;
     }
 
-    nCount = nParam & 3;
+    nCount = nSize & 3;
     if (!nCount) {
       return;
     }
@@ -6284,51 +6285,51 @@ void PKWARE_SetByteValue(uint32_t * pnParam, uint8_t bParam, uint32_t nParam) {
     }
 
     for (iVar1 = 0; iVar1; iVar1--) {
-      *pnParam = (uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)bParam << 8 | (uint16_t)(uint8_t)bParam) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)bParam << 8 | (uint16_t)(uint8_t)bParam));
-      pnParam++;
+      *pDst = (uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)byFill << 8 | (uint16_t)(uint8_t)byFill) << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)byFill << 8 | (uint16_t)(uint8_t)byFill));
+      pDst++;
     }
 
     for (; nCount; nCount--) {
-      *(uint8_t*)pnParam = bParam;
-      pnParam = (uint32_t*)((int)pnParam + 1);
+      *(uint8_t*)pDst = byFill;
+      pDst = (uint32_t*)((int)pDst + 1);
     }
 }
 
 void PKWARE_ProcessBuffer(TCmpStruct * pCmp) {
     uint32_t dwBlockSize = 0x800;
-    uint8_t* pnParam = pCmp->out_buff;
-    pCmp->write_buf(pnParam, &dwBlockSize, pCmp->param);
-    uint8_t uVar2 = pCmp->out_buff[pCmp->out_bytes];
+    uint8_t* pDst = pCmp->out_buff;
+    pCmp->write_buf(pDst, &dwBlockSize, pCmp->param);
+    uint8_t byPartialByte = pCmp->out_buff[pCmp->out_bytes];
     pCmp->out_bytes -= 0x800;
-    PKWARE_SetByteValue((uint32_t*)pnParam, 0, 0x802);
+    PKWARE_SetByteValue((uint32_t*)pDst, 0, 0x802);
     if (pCmp->out_bytes) {
-      uint8_t uVar1 = pCmp->out_buff[0x800];
-      *pnParam = uVar1;
+      uint8_t byCarryByte = pCmp->out_buff[0x800];
+      *pDst = byCarryByte;
     }
     if (!pCmp->out_bits) {
       return;
     }
 
-    pCmp->out_buff[pCmp->out_bytes] = uVar2;
+    pCmp->out_buff[pCmp->out_bytes] = byPartialByte;
 }
 
 void PKWARE_CopyBufferData(TCmpStruct * pCmp, uint8_t * pbStart, uint8_t * pbEnd) {
-    uint16_t nSlotIndex;
     uint8_t* pbScan;
     uint8_t bCurByte;
     uint8_t* pbNext;
+    short int wScanPos;
     uint16_t* pCountTableCursor = pCmp->phash_to_index;
     uint16_t nCumulativeCount = 0;
     uint32_t nClearDwordCount = (uint32_t)((int)pCmp + (0x1fcb - (int)pCountTableCursor)) >> 2;
-    uint16_t* puVar2 = pCountTableCursor;
+    uint16_t* puVar1 = pCountTableCursor;
     if (nClearDwordCount <= 1) {
       nClearDwordCount = 1;
     }
 
     for (; pbScan = pbStart , nClearDwordCount != 0; nClearDwordCount--) {
-      puVar2[0] = 0;
-      puVar2[1] = 0;
-      puVar2 += 2;
+      puVar1[0] = 0;
+      puVar1[1] = 0;
+      puVar1 += 2;
     }
 
     do {
@@ -6339,21 +6340,21 @@ void PKWARE_CopyBufferData(TCmpStruct * pCmp, uint8_t * pbStart, uint8_t * pbEnd
 
     do {
       nCumulativeCount += *pCountTableCursor;
-      puVar2 = pCountTableCursor + 1;
+      puVar1 = pCountTableCursor + 1;
       *pCountTableCursor = nCumulativeCount;
-      pCountTableCursor = puVar2;
-    } while (&pCmp->phash_to_index_end > puVar2);
+      pCountTableCursor = puVar1;
+    } while (&pCmp->phash_to_index_end > puVar1);
 
     pbScan = pbEnd - 1;
     do {
-      short int sVar1;
+      uint16_t nSlotIndex;
       pbNext = pbScan + 1;
       bCurByte = *pbScan;
-      sVar1 = (short int)(uintptr_t)pbScan;
+      wScanPos = (short int)(uintptr_t)pbScan;
       pbScan--;
       nSlotIndex = pCmp->phash_to_index[(uint32_t)*pbNext * 5 + (uint32_t)bCurByte * 4] - 1;
       pCmp->phash_to_index[(uint32_t)*pbNext * 5 + (uint32_t)bCurByte * 4] = nSlotIndex;
-      pCmp->phash_offs[nSlotIndex] = sVar1 - (short int)(uintptr_t)pCmp + 0xd834;
+      pCmp->phash_offs[nSlotIndex] = wScanPos - (short int)(uintptr_t)pCmp + 0xd834;
     } while (pbStart <= pbScan);
 }
 

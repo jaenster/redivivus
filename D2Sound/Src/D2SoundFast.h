@@ -28,13 +28,13 @@ int32_t __fastcall SOUND_SetMusicVolume(int32_t nVolume);
 int __stdcall SOUND_GetPositionalBias();
 int32_t __fastcall SOUND_SetPositionalBias(int32_t nBias);
 int __stdcall SOUND_GetNpcSpeech();
-int32_t __fastcall SOUND_SetNpcSpeech(int32_t nParam);
+int32_t __fastcall SOUND_SetNpcSpeech(int32_t nNpcSpeech);
 int __stdcall SOUND_GetOptionsMusic();
-int32_t __fastcall SOUND_SetOptionsMusic(int32_t nParam);
+int32_t __fastcall SOUND_SetOptionsMusic(int32_t nOptionsMusic);
 void __stdcall SOUND_InitSoundEffectBuffers();
 // @sourcefile .\Src\D2SoundFast.cpp
 void __fastcall SOUND_LoadWavFile(char * szText);
-void __fastcall SOUND_PlaySoundEffect(uint8_t * pbParam);
+void __fastcall SOUND_PlaySoundEffect(uint8_t * szSoundFile);
 BOOL __stdcall SOUND_IsAnySoundEffectPlaying();
 void __stdcall SOUND_FadeOutAllSoundEffects();
 int __stdcall SOUND_IsSoundEffectsInitialized();

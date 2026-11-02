@@ -1,0 +1,1852 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/SKILLS/SkillAss.cpp",
+  "functions": [
+    {
+      "name": "SKILLBAR_GetVelocityAndSpreadForMissile",
+      "address": "005d30a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d30a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLBAR_GetVelocityAndSpreadForMissile"
+      ],
+      "usedTypes": [
+        "D2MonEquipTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SrvStFn22_PsychicHammer",
+      "address": "005d30f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d30f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SrvStFn22_PsychicHammer",
+        "GetTargetEx",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_033_PsychicHammer",
+      "address": "005d3140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3140"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_033_PsychicHammer",
+        "SKILLASS_SrvStFn22_PsychicHammer",
+        "GetTargetEx",
+        "memset",
+        "DAMAGE_AddSkillBonusDamage",
+        "DAMAGE_ApplyDamageToUnit",
+        "STATSEX_GetCurrentStat",
+        "MONSTER_GetMercType",
+        "UnitIsMarkedBoss",
+        "CheckMonsterType",
+        "D2GetSkillCalc",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SeedStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SrvStFn23_MartialArtsCharge",
+      "address": "005d32f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d32f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SrvStFn23_MartialArtsCharge",
+        "GetTargetEx",
+        "IsInMeleeRange"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_AddChargeUpStack",
+      "address": "005d3320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3320"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_AddChargeUpStack",
+        "D2GetSkillCalc",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_AddStatValue",
+        "D2StatesTogglegfx"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitStat",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_034_ChargeUpStackMelee",
+      "address": "005d3490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3490"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_034_ChargeUpStackMelee",
+        "GetTargetEx",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_FindCombatEntry",
+        "SKILLASS_AddChargeUpStack",
+        "DAMAGE_ProcessCombatQueueEntry"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_035_ElementalChargeRelease",
+      "address": "005d35d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d35d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_035_ElementalChargeRelease",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "ITEMS_IsA",
+        "Skills_SrvDoFunc_034_ChargeUpStackMelee"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_HandleWarCryStun",
+      "address": "005d3680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3680"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLBAR_HandleWarCryStun",
+        "STATLIST_GetBaseStatValue",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "D2GetSkillCalc",
+        "GetGamePointer",
+        "GetTargetEx",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_AddChargeUpDamageRange",
+      "address": "005d3790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3790"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_AddChargeUpDamageRange",
+        "STATLIST_GetBaseStatValue",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "TXT_Skills_GetSkillRange"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_ApplyChargeUpDamage",
+      "address": "005d3880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3880"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_ApplyChargeUpDamage",
+        "STATLIST_GetBaseStatValue",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "SetDamageOnEvent",
+        "GetSkilParam1"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_ApplyChargeUpConvertDamage",
+      "address": "005d3970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3970"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_ApplyChargeUpConvertDamage",
+        "STATLIST_GetBaseStatValue",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "SetDamageOnEvent",
+        "GetSkillParam4",
+        "D2GetSkillCalc",
+        "D2ApplyPercent",
+        "SERVER_AppendDamageToUnitEvent"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_ApplyProgressiveDamageToTarget",
+      "address": "005d3ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3ac0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_ApplyProgressiveDamageToTarget",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "TXT_Skills_GetLine",
+        "SKILLBAR_HandleWarCryStun"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "SKILLASS_DispatchChargeUpDamage",
+      "address": "005d3ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3ba0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_DispatchChargeUpDamage",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "TXT_Skills_GetLine",
+        "SKILLASS_AddChargeUpDamageRange",
+        "SKILLASS_ApplyChargeUpDamage",
+        "SKILLASS_ApplyChargeUpConvertDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_ApplyWarCryDamage",
+      "address": "005d3cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3cb0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLBAR_ApplyWarCryDamage",
+        "SKILLS_ApplyDamageToTarget"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_GetChargeUpMissile",
+      "address": "005d3cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3cf0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_GetChargeUpMissile",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_GetChargeUpCalcValue",
+      "address": "005d3da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3da0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_GetChargeUpCalcValue",
+        "D2GetSkillCalc",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_038_DragonTail_KickAoE",
+      "address": "005d3e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3e80"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_GetChargeUpCalcValue",
+        "Skills_SrvDoFunc_038_DragonTail_KickAoE",
+        "GetTargetEx",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "SKILLS_GetTargetOrCursorPos",
+        "D2GetSkillCalc",
+        "memset",
+        "SKILLS_AddRandomSkillDamage",
+        "SetDamageOnEvent",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn",
+      "address": "005d3f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3f90"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLASS_GetChargeUpCalcValue",
+        "D2GetSkillCalc",
+        "memset",
+        "InitSeed_Param_666",
+        "UNITS_GetRoom",
+        "UNIT_GetModuloFromSeed",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SetupMissilePath",
+      "address": "005d40f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d40f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SetupMissilePath",
+        "GetTotalFrames",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "InitSeed_Param_666",
+        "PATH_SetPathType",
+        "OverwriteDistanceAndMaxDistance",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SpawnMissileRing",
+      "address": "005d4150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d4150"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SpawnMissileRing",
+        "InitSeed_Param_666",
+        "memset",
+        "CreatingMissile",
+        "GetSkilParam1",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_BuildSpiralMissilePath",
+      "address": "005d4680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d4680"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_BuildSpiralMissilePath",
+        "GetTotalFrames",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "InitSeed_Param_666",
+        "PATH_SetPathType",
+        "OverwriteDistanceAndMaxDistance",
+        "GetPathPoint",
+        "GetXPos",
+        "GetYPos",
+        "GetYSP1",
+        "GetXSP1",
+        "GetDirectionToCoords",
+        "MONSTERS_GetGfxOffsetTable2",
+        "SetPathPointsSize"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SpawnSpiralMissileRing",
+      "address": "005d4870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d4870"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SpawnSpiralMissileRing",
+        "InitSeed_Param_666",
+        "memset",
+        "CreatingMissile",
+        "GetSkilParam1",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_036_ChargeRelease_MissileRing",
+      "address": "005d4db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d4db0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_036_ChargeRelease_MissileRing",
+        "GetTargetEx",
+        "SKILLASS_GetChargeUpMissile",
+        "MISSILETBLS_CalculateVelocity",
+        "D2GetSkillCalc",
+        "SKILLS_CreateMissileRing"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter",
+      "address": "005d4e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d4e70"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLASS_GetChargeUpCalcValue",
+        "D2GetSkillCalc",
+        "SKILLASS_SpawnMissileRing"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_143_ChargeRelease_GroundStrike",
+      "address": "005d4f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d4f40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_143_ChargeRelease_GroundStrike",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLASS_GetChargeUpCalcValue",
+        "D2GetSkillCalc",
+        "SKILLASS_SpawnSpiralMissileRing"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_040_ChargeRelease_SingleMissile",
+      "address": "005d5010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5010"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_040_ChargeRelease_SingleMissile",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLS_CreateMissileAtTarget"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_041_BladeFury",
+      "address": "005d5080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5080"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_041_BladeFury",
+        "InitSeed_Param_666",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLASS_GetChargeUpCalcValue",
+        "memset",
+        "CreatingMissile",
+        "GetSeed_nSeedLow",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_ReleaseChargeUpAttack",
+      "address": "005d5220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5220"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_ReleaseChargeUpAttack",
+        "GetTargetEx",
+        "IsInMovingMode",
+        "IsInMeleeRange",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "TXT_Skills_GetLine",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "GetSeed",
+        "RollRandomSeed",
+        "SetSeed",
+        "D2AddStatToStatsListEx",
+        "SERVER_SendUnitMessagePacket",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "STATES_MoveTransformToGfx"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SeedStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_ApplyWhirlwindDamage",
+      "address": "005d54b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d54b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLBAR_ApplyWhirlwindDamage",
+        "SKILLASS_ApplyProgressiveDamageToTarget",
+        "SKILL_CalcMinDamage",
+        "SKILL_CalcMaxDamage",
+        "_alldiv",
+        "SKILL_CalcKickDamage",
+        "SetDamageOnEvent",
+        "GetEquipedWeapon",
+        "GetBodyLocation",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMS_IsA",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "SEVER_ITEM_GetOwner",
+        "STATLIST_SetItemStatActive",
+        "DAMAGE_CalculateOffensiveDamage",
+        "SKILLASS_DispatchChargeUpDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2InventoryStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2BodyLoc",
+        "eD2Skills",
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "D2CalcKickDamage",
+      "address": "005d5880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5880"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "D2CalcKickDamage",
+        "SKILLS_CalcToHit",
+        "STATSEX_GetCurrentStat",
+        "memset",
+        "DAMAGE_CalculateHitCheck",
+        "SKILLBAR_ApplyWhirlwindDamage",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SrvStFn24_DragonTalon",
+      "address": "005d5970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5970"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SrvStFn24_DragonTalon",
+        "GetCurrentSkill",
+        "GetTargetEx",
+        "SKILL_SetParam1",
+        "IsInMeleeRange",
+        "D2GetSkillCalc",
+        "D2CalcKickDamage"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_042_DragonTalon",
+      "address": "005d5a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5a30"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_042_DragonTalon",
+        "GetTargetEx",
+        "DAMAGE_FindCombatEntry",
+        "SKILLASS_ReleaseChargeUpAttack",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "GetCurrentSkill",
+        "SKILL_GetParam1",
+        "SKILL_SetParam1",
+        "STATSEX_GetCurrentStat",
+        "MONSTER_GetMercType",
+        "D2GetSkillCalc",
+        "UnitIsMarkedBoss",
+        "CheckMonsterType",
+        "UNIT_GetModuloFromSeed",
+        "D2CalcKickDamage",
+        "SKILLS_SetupAnimTimerPercent"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_CastScatterMissiles",
+      "address": "005d5bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5bf0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_CastScatterMissiles",
+        "SKILLS_GetTargetOrCursorPos",
+        "InitSeed_Param_666",
+        "memset",
+        "CreatingMissile",
+        "RANDOM_RandomNumberSelector",
+        "GetYPos",
+        "GetXPos",
+        "GetDistanceSquaredXY"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles",
+      "address": "005d5d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5d70"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLASS_GetChargeUpCalcValue",
+        "D2GetSkillCalc",
+        "SKILLASS_CastScatterMissiles"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_CreateSummon",
+      "address": "005d5e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d5e10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_CreateSummon",
+        "SKILLS_GetSummonMonsterClassId",
+        "D2GetSkillCalc",
+        "GetXPos",
+        "GetYPos",
+        "SKILLS_GetTargetOrCursorPos",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SKILL_CreateSummon",
+        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLNEC_ApplySummonBuffs",
+        "SetAlignment",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "GetOwnerUnit"
+      ],
+      "usedTypes": [
+        "D2MonsterCastPetHeadStrc",
+        "D2MonsterKillStrc",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_044_SummonBladeSentinel",
+      "address": "005d6020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6020"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_044_SummonBladeSentinel",
+        "SKILLS_GetSummonMonsterClassId",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLASS_CreateSummon",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "SUNIT_RelocateUnit",
+        "CreateAiCmdAndFill",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2AiCmdArgumentsStrc",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_045_SummonTrapSentry",
+      "address": "005d6170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6170"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_045_SummonTrapSentry",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLASS_CreateSummon"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SkillMeleeAttack",
+      "address": "005d6200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6200"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SkillMeleeAttack",
+        "memset",
+        "SKILLS_CalcToHit",
+        "STATSEX_GetCurrentStat",
+        "DAMAGE_CalculateHitCheck",
+        "SKILLASS_ApplyProgressiveDamageToTarget",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateOffensiveDamage",
+        "SKILLASS_DispatchChargeUpDamage",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SrvStFn25_DragonClaw",
+      "address": "005d6330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6330"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SrvStFn25_DragonClaw",
+        "GetTargetEx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_046_DragonClaw",
+      "address": "005d6340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6340"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_046_DragonClaw",
+        "GetTargetEx",
+        "SKILLASS_SkillMeleeAttack",
+        "DAMAGE_FindCombatEntry",
+        "SKILLASS_ReleaseChargeUpAttack",
+        "DAMAGE_ProcessCombatQueueEntry"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_ClearAllChargeUpStates",
+      "address": "005d6410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6410"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_ClearAllChargeUpStates",
+        "STATES_HasBlueState",
+        "thunk_UNIT_GetStateList_StateFlags",
+        "memcpy",
+        "SMemSizeClassBucketLookup",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_ApplyTimedStateWithCurseExpiry",
+      "address": "005d6520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6520"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILL_ApplyTimedStateWithCurseExpiry",
+        "CheckForModeZeroDeath",
+        "SetStateWithExpiryTime",
+        "D2AddStatToStatsListEx",
+        "D2CheckCorpseConsumed",
+        "AttachCorrectAiFunctionToMonster"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2SkillCallbackContextStrc",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_047_CloakOfShadows",
+      "address": "005d6630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6630"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_047_CloakOfShadows",
+        "UNIT_GetUnitState",
+        "D2GetSkillCalc",
+        "SetStateWithExpiryTime",
+        "D2AddStatToStatsListEx",
+        "D2StatesTogglegfx",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2SkillCurseArgStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_048_BladeFury",
+      "address": "005d68a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d68a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_048_BladeFury",
+        "SKILLS_GetSkillByEnum",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLASS_GetChargeUpCalcValue",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILL_GetParam1",
+        "memset",
+        "CreatingMissile",
+        "SKILL_SetParam1",
+        "UNIT_GetUnitState",
+        "UNITS_SetupAnimTimerEventsWithDelay"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SrvStFn26_BladeFury",
+      "address": "005d69d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d69d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SrvStFn26_BladeFury",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLS_GetSkillByEnum",
+        "GetStatsByState",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent",
+        "SKILL_GetParam1",
+        "Skills_SrvDoFunc_048_BladeFury",
+        "CalculateManaUse",
+        "UNITS_SetupAnimTimerEventsWithDelay",
+        "STATSEX_GetCurrentStat",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_SetExpireFunction",
+        "SetState",
+        "SKILL_SetParam1"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_EquipSummonItems",
+      "address": "005d6b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6b60"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_EquipSummonItems",
+        "SKILLBAR_GetVelocityAndSpreadForMissile",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_GetItemsTxt_szCode",
+        "MONSTER_CreateAndEquipItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2MonEquipEntryStrc",
+        "D2MonEquipTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint64_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_ApplyLevelScaledBuffs",
+      "address": "005d6cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6cf0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_ApplyLevelScaledBuffs",
+        "GetTxtMaxHp",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2GetSkillCalc",
+        "D2AddStatToStatsListEx",
+        "InitUmods"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_049_SummonShadowClone",
+      "address": "005d6e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d6e70"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_049_SummonShadowClone",
+        "SKILLS_GetSummonMonsterClassId",
+        "D2GetSkillCalc",
+        "SKILL_CreateSummon",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SKILLASS_ApplyLevelScaledBuffs",
+        "GetSkillParam4",
+        "TXT_Experience_GetMaxLevel",
+        "SKILLASS_EquipSummonItems",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SetState",
+        "StoreOwner",
+        "InitUmods",
+        "CreateUnitNode"
+      ],
+      "usedTypes": [
+        "D2MonsterCastPetStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SrvStFn27_DragonTail",
+      "address": "005d7090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7090"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SrvStFn27_DragonTail",
+        "SKILLS_ApplyAttackRateBuff",
+        "GetTargetEx",
+        "SKILLS_CalcToHit",
+        "STATSEX_GetCurrentStat",
+        "memset",
+        "DAMAGE_CalculateHitCheck",
+        "SKILLBAR_ApplyWhirlwindDamage",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_050_DragonTail_FireExplosion",
+      "address": "005d7180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7180"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_050_DragonTail_FireExplosion",
+        "GetTargetEx",
+        "DAMAGE_FindCombatEntry",
+        "SKILLASS_ReleaseChargeUpAttack",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "CheckForModeZeroDeath",
+        "memset",
+        "D2GetSkillCalc",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SKILLS_ApplyAreaDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMZ_GetGuidedArrowPiercingBonus",
+      "address": "005d72b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d72b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLAMZ_GetGuidedArrowPiercingBonus",
+        "MONSTER_GetMercType",
+        "STATSEX_GetAlignment",
+        "D2CheckCorpseConsumed",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_OnConversionExpire",
+      "address": "005d7310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7310"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_OnConversionExpire",
+        "SetAlignment",
+        "SetState",
+        "GetGamePointer",
+        "MONSTER_FreeUnitNodes",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "GetTxtMaxHp",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "GetStatsByFlags"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_ApplyConversionToUnit",
+      "address": "005d7430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7430"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_ApplyConversionToUnit",
+        "SKILLAMZ_GetGuidedArrowPiercingBonus",
+        "UNIT_GetModuloFromSeed",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent",
+        "SKILLS_FreeMonsterMinions",
+        "SetAlignment",
+        "CreateUnitNode",
+        "GetStatsByFlags",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "SetTargetUnitForDynamicUnit",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "D2AddStatToStatsListEx",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMZ_HandleStrafeDamageAndNextDelay",
+      "address": "005d7680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7680"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLAMZ_HandleStrafeDamageAndNextDelay",
+        "SKILLASS_ApplyConversionToUnit",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MindBlastArgStrc",
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_051_MindBlast",
+      "address": "005d76e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d76e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_GetChargeUpCalcValue",
+        "Skills_SrvDoFunc_051_MindBlast",
+        "SKILLS_GetTargetOrCursorPos",
+        "D2GetSkillCalc",
+        "memset",
+        "SKILLS_AddRandomSkillDamage",
+        "SetDamageOnEvent",
+        "SKILLS_GetParam45WithDiminishing",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MindBlastArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_052_DragonFlight",
+      "address": "005d7850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7850"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_052_DragonFlight",
+        "GetTargetEx",
+        "memset",
+        "SKILLS_CalcToHit",
+        "STATSEX_GetCurrentStat",
+        "DAMAGE_CalculateHitCheck",
+        "TXT_Skills_GetSkillRange",
+        "SKILLBAR_ApplyWhirlwindDamage",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_FindCombatEntry",
+        "SKILLASS_ReleaseChargeUpAttack",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "UNITS_GetRoom",
+        "SKILLS_GetTargetOrCursorPos",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetLine",
+        "TestCollisionByCoordinates",
+        "SUNIT_RelocateUnit"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2LevelsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLASS_SrvStFn28_BladeShield",
+      "address": "005d7a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7a00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_SrvStFn28_BladeShield",
+        "SKILLS_GetSkillByEnum",
+        "SKILLASS_GetChargeUpMissile",
+        "D2GetSkillCalc",
+        "D2UpdateState",
+        "SetStateWithExpiryTime",
+        "D2SetAurastatsFromSkills",
+        "D2AddStatToStatsListEx",
+        "D2StatesTogglegfx"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_053_Venom_BladeShield_AreaPulse",
+      "address": "005d7b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7b60"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_053_Venom_BladeShield_AreaPulse",
+        "SKILLASS_GetChargeUpCalcValue",
+        "D2GetSkillCalc",
+        "memset",
+        "SKILLS_AddRandomSkillDamage",
+        "SetDamageOnEvent",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMZ_GetStrafeArrowCount",
+      "address": "005d7c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7c40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLAMZ_GetStrafeArrowCount",
+        "SKILLS_CalcMissileToHit",
+        "DAMAGE_CalculateOffensiveDamage",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_ProcessCombatQueueEntry"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillAreaDamageArgStrc",
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_142_BladeShield_SpinDamage",
+      "address": "005d7ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7ce0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLASS_GetChargeUpCalcValue",
+        "Skills_SrvDoFunc_142_BladeShield_SpinDamage",
+        "D2GetSkillCalc",
+        "memset",
+        "SKILLS_AddRandomSkillDamage",
+        "SetDamageOnEvent",
+        "SKILLS_CalcToHit",
+        "SKILLS_ApplyAreaEffect"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillAreaDamageArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_054_BladeShield_Activate",
+      "address": "005d7e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7e10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_054_BladeShield_Activate",
+        "SKILLS_GetSkillByEnum",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "Skills_SrvDoFunc_142_BladeShield_SpinDamage"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    }
+  ]
+}

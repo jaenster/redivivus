@@ -134,7 +134,7 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
     int32_t nCalc;
     int nLevelDiff;
     uint32_t nUnsignedStatVal;
-    uint32_t uVar1;
+    uint32_t nStatValue;
     D2SkillsTxt* pSkillTxt;
     int* pSkillEntry;
     eD2Skills eSkill;
@@ -208,8 +208,8 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
         nUnsignedStatVal = pHirelingTxt->defPerlvl * nTmp + pHirelingTxt->defense;
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_armorclass, (int)nUnsignedStatVal < 0 ? 0 : nUnsignedStatVal, 0);
         nLevelDiff = pHirelingTxt->dmgPerlvl * nTmp;
-        uVar1 = nLevelDiff / 8 + pHirelingTxt->dmgMin;
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_secondary_mindamage, (int)uVar1 < 0 ? 0 : uVar1, 0);
+        nStatValue = nLevelDiff / 8 + pHirelingTxt->dmgMin;
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_secondary_mindamage, (int)nStatValue < 0 ? 0 : nStatValue, 0);
         nLevelDiff = pHirelingTxt->dmgPerlvl * nTmp;
         nCalc = nLevelDiff / 8 + pHirelingTxt->dmgMax;
         if (nCalc < 1) {
@@ -217,15 +217,15 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
         }
 
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_secondary_maxdamage, nCalc, 0);
-        uVar1 = pHirelingTxt->arPerlvl * nTmp + pHirelingTxt->ar;
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_tohit, (int)uVar1 < 0 ? 0 : uVar1, 0);
+        nStatValue = pHirelingTxt->arPerlvl * nTmp + pHirelingTxt->ar;
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_tohit, (int)nStatValue < 0 ? 0 : nStatValue, 0);
         nLevelDiff = pHirelingTxt->resistPerlvl * nTmp;
-        uVar1 = nLevelDiff / 4 + pHirelingTxt->resist;
-        uVar1 = (int)uVar1 < 0 ? 0 : uVar1;
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_fireresist, uVar1, 0);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_lightresist, uVar1, 0);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_coldresist, uVar1, 0);
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_poisonresist, uVar1, 0);
+        nStatValue = nLevelDiff / 4 + pHirelingTxt->resist;
+        nStatValue = (int)nStatValue < 0 ? 0 : nStatValue;
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_fireresist, nStatValue, 0);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_lightresist, nStatValue, 0);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_coldresist, nStatValue, 0);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_poisonresist, nStatValue, 0);
         nCalc = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_maxhp, 0);
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_hpregen, nCalc / 2000 < 0 ? 0 : nCalc / 2000, 0);
         pSkillEntry = pHirelingTxt->nSkillId;
@@ -243,17 +243,17 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
 
           pSkillTxt = D2Client::GAME::SCmd::TXT_Skills_GetLine(eSkill);
           if (pSkillTxt && nLevel >= pSkillTxt->reqlevel) {
-            uVar1 = ((char)pHirelingTxt->nSkillLvlPerLvl[nLevelDiff] * nTmp >> 5) + (int)(char)pHirelingTxt->nSkillLevel[nLevelDiff];
-            uVar1 = (int)uVar1 <= 0 ? 0 : uVar1;
-            if ((int)uVar1 >= 0x20) {
-              uVar1 = 0x20;
+            nStatValue = ((char)pHirelingTxt->nSkillLvlPerLvl[nLevelDiff] * nTmp >> 5) + (int)(char)pHirelingTxt->nSkillLevel[nLevelDiff];
+            nStatValue = (int)nStatValue <= 0 ? 0 : nStatValue;
+            if ((int)nStatValue >= 0x20) {
+              nStatValue = 0x20;
             } else {
-              if ((int)uVar1 <= 0) {
+              if ((int)nStatValue <= 0) {
                 continue;
               }
             }
 
-            SKILLS::SkillsServer::SetSkill(pMerc, *pSkillEntry, uVar1, 0);
+            SKILLS::SkillsServer::SetSkill(pMerc, *pSkillEntry, nStatValue, 0);
           }
         }
 
@@ -447,7 +447,7 @@ void __fastcall NpcState_MoveState0To1(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
-    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMissile ? 0 : (D2MonsterAiStrc*)pNpc->pUnitData.pUnitDataMissile->unk0x30;
+    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMissile ? 0 : (D2MonsterAiStrc*)pNpc->pUnitData.pUnitDataMissile->pStream;
     D2MonsterAiSubStrc* pAiSub = (D2MonsterAiSubStrc*)((D2MissileStreamStrc*)pMonsterAi)->pStream;
     if (!pAiSub) {
       return;
@@ -468,7 +468,7 @@ void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
 }
 
 uint32_t __fastcall NpcStateIs2(D2UnitStrc * pNpc, D2UnitStrc * pPlayer) {
-    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMissile ? 0 : (D2MonsterAiStrc*)pNpc->pUnitData.pUnitDataMissile->unk0x30;
+    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMissile ? 0 : (D2MonsterAiStrc*)pNpc->pUnitData.pUnitDataMissile->pStream;
     D2MonsterAiSubStrc* pAiSub = (D2MonsterAiSubStrc*)((D2MissileStreamStrc*)pMonsterAi)->pStream;
     while (true) {
       if (!pAiSub) {
@@ -614,7 +614,7 @@ void __fastcall AI_ClearSwitchAiTargetParams(D2UnitStrc * pUnit) {
     pMonsterData->nAiRelated1 = 0;
 }
 
-uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, D2UnitStrc * nParam) {
+uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {
     if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return 0;
     }
@@ -629,7 +629,7 @@ uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, D2UnitStrc * nParam) {
       if (!pSubAi) {
         return 1;
       }
-      if (pSubAi->pUnit == nParam) {
+      if (pSubAi->pUnit == pPlayer) {
         break;
       }
 

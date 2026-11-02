@@ -313,7 +313,7 @@ void __stdcall CleanupIdleRooms(::SGAMEDATA * pGame);
 // Frees unused dropped items every 1500 frames (60 seconds at 25 FPS). When dwGameFrame is exact multiple of 0x5dc (1500), iterates all 5 acts and calls FreeUnusedItems + SUNITINACTIVE_FreeUnusedItems for each. Removes items that have been on ground too long or in inactive state. Prevents memory leaks from abandoned loot in long-running games. Returns frame counter / 1500.
 void FreeUnusedItems(::SGAMEDATA * pGamee);
 // Checks all clients for connection timeouts. If timeout exceeded and client has file flag 0x4 set with 10+ heartbeat samples and 10+ seconds idle, OR 45+ seconds idle, OR forced timeout flag set, saves that player and disconnects them. Two timeout thresholds: strict (10 seconds with heartbeat monitoring) and lenient (45 seconds absolute). Sets *pnParam if any disconnects occur, triggering full game save. Only active when gnClientTimeoutCheckInterval enabled.
-void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pnParam);
+void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pbAnyDisconnected);
 // Updates day/night environment cycle for all 5 acts. For each act, checks if cycle index changed via DRLGENV_UpdateCycleIndex. When cycle changes, extracts new cycle index/tick count/eclipse flag, refreshes all player item states (charges/durability based on light level), and broadcasts 0x53 Darkness packet to all clients in that act. Environment cycles affect visibility, light radius, and missile behavior.
 void __fastcall UpdateActEnvironments(::SGAMEDATA * pGame);
 // Core 25 FPS server game loop. Updates environment→metrics→rooms→timers(missiles/players/monsters/objects/items)→clients→unit flags. Periodic cleanup: quests every 20 frames, idle rooms every 12 frames, dungeon levels every 11 frames, dropped items every 1500 frames (60 seconds). Debug modes 1-4 trigger crashes/allocs for testing. Called from QSERVER_TickAllGames (cooperative loop) or TASK_GameTickCallback (BNet task scheduler).
@@ -354,8 +354,8 @@ void __fastcall FlushAllClientPackets(::SGAMEDATA * pGame);
 void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken);
 // Locks global csGameHash, looks up game by token in hash-map, acquires per-game critical section, then releases global lock. Returns locked SGAMEDATA pointer or NULL if not found. Lock escalation pattern: global -> per-game -> release global, ensuring deadlock-free access to individual game state.
 ::SGAMEDATA * __fastcall QSERVER_FindAndLockGame(uint32_t nToken);
-void __stdcall RequestHostedGames(int32_t nParam);
-void __fastcall NET_RequestHostedGames(int32_t nParam);
+void __stdcall RequestHostedGames(int32_t nClientId);
+void __fastcall NET_RequestHostedGames(int32_t nClientId);
 // Server shutdown routine: iterates the global 1024-slot game-token table and destroys every active game. For each game, saves every connected player (SaveGameAllGameTypes), sends save-file data for open-BNet/LAN hosts (0xB3 packets until CLIENT_HasSaveData is false), sends a disconnect byte, cleans up the client, then calls QSERVER_DestroyGameByToken. Also frees all task slots via TASK_FreeAllSlots before iterating.
 void __stdcall QSERVER_ShutdownAllGames();
 int32_t __stdcall QSERVER_CountExpansionGames();
@@ -426,13 +426,13 @@ void __fastcall LeaveServer(::SGAMEDATA * pQServer, uint32_t nClientToken);
 int __stdcall QSERVER_InitializeServerState();
 // Callback invoked when the character-server (CS) delivers save data for a joining client (JOIN step 3). Accumulates chunked save data; on completion with nCsResult==0 stores file-time fields into pClient and sends state-command 2 to advance the join sequence. On CS error or stale pClientContainer, triggers disconnect.
 // @sourcefile .\GAME\Game.cpp
-uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void * pParam, uint16_t nChunkSize, uint16_t nTotalSize, int32_t nCsResult, uint32_t dwCharFlags, int * pFileTimeData, void * pClientContainer);
+uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void * pSaveData, uint16_t nChunkSize, uint16_t nTotalSize, int32_t nCsResult, uint32_t dwCharFlags, int * pFileTimeData, void * pClientContainer);
 // GAME_CreateBattleNetGame - Creates BNet multiplayer game. Same subsystem init as SP but with 0x8000 pool size. Registers token on QSERVER, sets game metadata (name/pass/desc/difficulty/expansion/itemformat/seed).
 // @sourcefile .\GAME\Game.cpp
 uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePassword, char * szGameDescription, eD2ArenaFlags flags, uint8_t bTemplate, uint8_t bReserved, uint8_t bLadder, uint16_t * pServerTokenOut);
 // Already-documented — existing description accurately covers SP/LAN game creation: allocates SGAMEDATA in hash map with generated token, initializes critical section and five unit-type lists, rolls seed, allocates Event/Arena/Party/MonsterRegion/ObjectControl/NpcControl/QuestControl subsystems, creates local D2ClientStrc, sends 0x01 GameFlags and state packets, and enqueues the game-loop task.
 // @sourcefile .\GAME\Game.cpp
-void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t Unknown4, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12);
+void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12);
 void __fastcall SetStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
 void StaticInit_6caf10();
 // 11 internal functions (defined in .cpp)

@@ -1,0 +1,109 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/CCmd.cpp",
+  "functions": [
+    {
+      "name": "IsTokenFirstGame",
+      "address": "0053eff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053eff0"
+        }
+      ],
+      "namespace": "D2Game::GAME::CCmd",
+      "calledFunctions": [
+        "IsTokenFirstGame",
+        "SERVER_IsTokenValid",
+        "QSERVER_FindAndLockGame",
+        "Unlock",
+        "GetFirstClientOfGame",
+        "GetCharName",
+        "SStrCmpI",
+        "GetNext"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_ProcessClientMessage_GameSetup",
+      "address": "0053f100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f100"
+        }
+      ],
+      "namespace": "D2Game::GAME::CCmd",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_ProcessClientMessage_GameSetup",
+        "SetupGameChecks",
+        "GAME_CreateSingleplayerGame",
+        "__security_check_cookie",
+        "SRVLog",
+        "IsTokenFirstGame",
+        "NET_D2GS_SERVER_Send_0xB4_ConnectionRefused",
+        "NET_HACK_AddClientToHackList",
+        "NET_D2GS_SERVER_IsValidChecks",
+        "NET_D2GS_SERVER_SrvJoinGame",
+        "NET_IsClientAllowedToLeave",
+        "NET_D2GS_SERVER_LeaveServer",
+        "Return1_GameSetup_0",
+        "NET_RequestHostedGames",
+        "NET_IsClientAllowedToJoin",
+        "NET_D2GS_SERVER_SrvJoinAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "Return1_GameSetup_1",
+        "CLIENT_ReceiveUploadedSave",
+        "NET_SendPong",
+        "FindMe_6E_Handler",
+        "QServer_AlternativeDisconnect",
+        "GetClientByToken",
+        "LeaveCriticalSection_ClientById"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSClientMsgEnvelopeStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_ProcessClientMessage_InGame",
+      "address": "0053f3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053f3d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::CCmd",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_ProcessClientMessage_InGame",
+        "NET_SERVER_FindGameByClientId",
+        "SRVLog",
+        "SERVER_GetClientFromGmeByClientId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount",
+        "CLIENTS_GetControlUnit",
+        "NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck",
+        "Unlock"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    }
+  ]
+}

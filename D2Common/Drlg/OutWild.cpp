@@ -59,7 +59,7 @@ int __stdcall DRLGOUTROOM_GetPresetVariantFromGridCell(uint32_t nGridFlags, int 
 }
 
 // Finds and places a river crossing preset pair in an outdoor wilderness level. Uses the level seed to pick a random starting row among usable grid rows (excluding top/bottom edge), then iterates rows looking for two horizontally adjacent cells whose grid flags both have bits 0x30000 set (river tile markers). On match, spawns preset 0x1c at both X positions; the second spawn variant depends on whether the road flag (dwFlags&4) is set.
-static void __stdcall DRLGOUTROOM_PlaceRiverCrossingPreset(D2DrlgLevelStrc * pDrlgLevelStrc, int dwParam2) {
+static void __stdcall DRLGOUTROOM_PlaceRiverCrossingPreset(D2DrlgLevelStrc * pDrlgLevelStrc, int nCrossingX) {
     BOOL bCellEmpty;
     uint32_t nGridFlags;
     int nCandidateX;
@@ -98,23 +98,23 @@ static void __stdcall DRLGOUTROOM_PlaceRiverCrossingPreset(D2DrlgLevelStrc * pDr
 
     do {
       nY = (int)(nYIter + nStartYOffset) % (int)nUsableRows + 1;
-      nCandidateX = dwParam2 - 1;
+      nCandidateX = nCrossingX - 1;
       if (!dwRoadFlags) {
         bCellEmpty = Outdoors::DRLGOUTDOOR_IsGridCellEmpty(pDrlgLevelStrc, nCandidateX, nY);
         if (bCellEmpty) {
-          nCandidateX = dwParam2 + 2;
+          nCandidateX = nCrossingX + 2;
           goto try_place_crossing;
         }
       } else {
         try_place_crossing:
         bCellEmpty = Outdoors::DRLGOUTDOOR_IsGridCellEmpty(pDrlgLevelStrc, nCandidateX, nY);
         if (bCellEmpty) {
-          nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, dwParam2, nY);
+          nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nCrossingX, nY);
           if ((nGridFlags & 0xf0000) == 0x30000) {
-            nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, dwParam2 + 1, nY);
+            nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nCrossingX + 1, nY);
             if ((nGridFlags & 0xf0000) == 0x30000) {
-              Outdoors::SpawnOutdoorLevelPresetEx(pDrlgLevelStrc, dwParam2, nY, 0x1c, 1, 0);
-              Outdoors::SpawnOutdoorLevelPresetEx(pDrlgLevelStrc, dwParam2 + 1, nY, 0x1c, dwRoadFlags != 0 ? 3 : 2, 0);
+              Outdoors::SpawnOutdoorLevelPresetEx(pDrlgLevelStrc, nCrossingX, nY, 0x1c, 1, 0);
+              Outdoors::SpawnOutdoorLevelPresetEx(pDrlgLevelStrc, nCrossingX + 1, nY, 0x1c, dwRoadFlags != 0 ? 3 : 2, 0);
               return;
             }
           }
@@ -232,8 +232,8 @@ static void DRLGOUTROOM_MarkBorderJunctions(D2DrlgLevelStrc * pLevel) {
 }
 
 // Spawns a corner fill preset at grid coordinates (nX, nY) to fill gaps in outdoor room layouts.
-static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(int nY, int nX, D2DrlgLevelStrc * dwParam3) {
-    D2DrlgLevelDataWildernessLevel* pWildData = dwParam3->pDrlgLevelData.pDrlgLevelOutdoorsData;
+static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(int nY, int nX, D2DrlgLevelStrc * pLevel) {
+    D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     int nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY);
     switch (nGridFlags) {
       case 0x10:
@@ -252,7 +252,7 @@ static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(int nY, int nX, D2DrlgLe
         }
     }
 
-    Outdoors::SpawnOutdoorLevelPresetEx(dwParam3, nX, nY, nGridFlags, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nGridFlags, -1, 0);
     pWildData->dwFlags |= 0x40;
     return 1;
 }

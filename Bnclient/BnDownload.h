@@ -43,13 +43,13 @@ int __fastcall BNDOWNLOAD_SetPatchFilename(char * szText);
 uint32_t __stdcall BNDOWNLOAD_HasPatchFilename();
 // Processes BNet prepatch.lst from downloaded MPQ archive - executes patches, extracts files, launches updates
 void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut);
-int __fastcall BNDOWNLOAD_ApplyPrepatch(uint32_t * pdwParam);
+int __fastcall BNDOWNLOAD_ApplyPrepatch(uint32_t * pbPatcherLaunched);
 uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam);
-void __fastcall BNDOWNLOAD_InitiateFileDownload(struct D2BnetDownloadStateStrc * pDownloadCtx, uint32_t nParam, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2);
+void __fastcall BNDOWNLOAD_InitiateFileDownload(struct D2BnetDownloadStateStrc * pDownloadCtx, uint32_t dwDownloadFlags, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2);
 // Processes downloaded BNFTP files: version info, cache files, ads, bnserver.ini, and ExtraWork DLLs. Handles extraction, loading, and cleanup.
 // EDX nDownloadFlags: download context +0x22c (file download) or 2 (patch download); not read here.
 void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownloadFlags, uint32_t eFileType, FILETIME * pModTime, LPCSTR szSourcePath, char * szDestPath, uint32_t * pPoolMgr, size_t nSize, int32_t bDeleteSource, int32_t bIsExtraWork);
-uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSize);
+uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t nSize);
 void StaticInit_6caed0();
 void StaticFini_CriticalSection_00881f64();
 // 7 internal functions (defined in .cpp)

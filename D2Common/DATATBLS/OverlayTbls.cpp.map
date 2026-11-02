@@ -1,0 +1,253 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/OverlayTbls.cpp",
+  "functions": [
+    {
+      "name": "TXT_AllocTxt_overlay",
+      "address": "00664150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664150"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "CompileTxt",
+        "TXT_AllocTxt_overlay",
+        "STRUCT_CreateTxtLinkStrc"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_FreeOverlayTables",
+      "address": "00664530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664530"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_FreeOverlayTables",
+        "STRUCT_FreeTxtLink",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_GetFrames",
+      "address": "00664560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664560"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_GetFrames"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_GetPreDraw",
+      "address": "006645a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006645a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_GetPreDraw"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_GetXOffset",
+      "address": "006645e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006645e0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_GetXOffset"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_GetYOffset",
+      "address": "00664620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664620"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_GetYOffset"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_GetTrans",
+      "address": "00664660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664660"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_GetTrans"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_GetLightRadiusAndRGB",
+      "address": "006646a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006646a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_GetLightRadiusAndRGB"
+      ],
+      "usedTypes": [
+        "D2OverlayTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_Get1ofN",
+      "address": "00664740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664740"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_Get1ofN"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_GetDir",
+      "address": "00664780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664780"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_GetDir"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetComponentsData",
+      "address": "006647c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006647c0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "GetComponentsData",
+        "TXT_MonStats_GetMonStats2"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_GetComponentOverlay",
+      "address": "00664860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664860"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "MONSTER_GetComponentOverlay",
+        "TXT_MonStats_GetMonStats2",
+        "DATATBLS_GetCompCodeByIndex",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "TXT_MonStats_GetBaseId",
+        "ValidateClassId"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OVERLAYTBLS_GetMonsterComponentOverlay",
+      "address": "00664930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664930"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::OverlayTbls",
+      "calledFunctions": [
+        "OVERLAYTBLS_GetMonsterComponentOverlay",
+        "DATATBLS_GetCompCodeByIndex"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

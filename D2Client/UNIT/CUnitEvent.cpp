@@ -44,7 +44,7 @@ D2PoolManagerStrc * __fastcall GetMemPool(D2UnitStrc * pUnit) {
 // @sourcefile .\UNIT\CUnitEvent.cpp
 void __fastcall FreeEventList(D2UnitStrc * pUnit) {
     int32_t nNull;
-    D2CUnitEventStrc* pvVar1;
+    D2CUnitEventStrc* pPrevEvent;
     char* szFile;
     if (!pUnit) {
       return;
@@ -53,19 +53,19 @@ void __fastcall FreeEventList(D2UnitStrc * pUnit) {
     D2CUnitEventStrc* pMemoryToFree = pUnit->uSideData.pClientSide.pCUnitEventList;
     while (pMemoryToFree) {
       int32_t nLine;
-      pvVar1 = pMemoryToFree->pPrev;
+      pPrevEvent = pMemoryToFree->pPrev;
       nNull = 0;
       nLine = 0x2f;
       szFile = ".\\UNIT\\CUnitEvent.cpp";
       Fog::Memory::FreeServerMemory(GetMemPool(pUnit), pMemoryToFree, szFile, nLine, nNull);
-      pMemoryToFree = pvVar1;
+      pMemoryToFree = pPrevEvent;
     }
 
     pUnit->uSideData.pClientSide.pCUnitEventList = 0;
 }
 
 // @sourcefile .\UNIT\CUnitEvent.cpp
-D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * pEventUnit, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int dwParam3, int dwParam4) {
+D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * pEventUnit, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int nEventType, int nEventState) {
     if (!pUnit) {
       return nullptr;
     }
@@ -80,8 +80,8 @@ D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, D2UnitStrc * 
     pNewEvent->pfnCallback = pfnCallback;
     pNewEvent->pUnit = pEventUnit;
     pNewEvent->pPrev = pUnit->uSideData.pClientSide.pCUnitEventList;
-    pNewEvent->nEventType = dwParam3;
-    pNewEvent->nEventState = dwParam4;
+    pNewEvent->nEventType = nEventType;
+    pNewEvent->nEventState = nEventState;
     D2CUnitEventStrc* pPrevHead = pUnit->uSideData.pClientSide.pCUnitEventList;
     if (pPrevHead) {
       pPrevHead->pNext = pNewEvent;
@@ -100,20 +100,20 @@ void __fastcall CUNITEVENT_RemoveByTypeAndState(D2UnitStrc * pUnit, int32_t nEve
       return;
     }
 
-    D2CUnitEventStrc* pvVar1 = pUnit->uSideData.pClientSide.pCUnitEventList;
+    D2CUnitEventStrc* pPrevEvent = pUnit->uSideData.pClientSide.pCUnitEventList;
     while (true) {
       D2CUnitEventStrc* pMemoryToFree;
-      pMemoryToFree = pvVar1;
+      pMemoryToFree = pPrevEvent;
       if (!pMemoryToFree) {
         break;
       }
 
-      pvVar1 = pMemoryToFree->pPrev;
+      pPrevEvent = pMemoryToFree->pPrev;
       if (pMemoryToFree->nEventType == nEventType && pMemoryToFree->nEventState == nEventState) {
         if (pMemoryToFree->pNext) {
-          pMemoryToFree->pNext->pPrev = pvVar1;
+          pMemoryToFree->pNext->pPrev = pPrevEvent;
         } else {
-          pUnit->uSideData.pClientSide.pCUnitEventList = pvVar1;
+          pUnit->uSideData.pClientSide.pCUnitEventList = pPrevEvent;
         }
         if (pMemoryToFree->pPrev) {
           pMemoryToFree->pPrev->pNext = pMemoryToFree->pNext;

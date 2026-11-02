@@ -1,0 +1,771 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Dialog.cpp",
+  "functions": [
+    {
+      "name": "UI_ScrollNpcMenuList",
+      "address": "004b7100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7100"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "UI_ScrollNpcMenuList",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_HandleMouseUpEvent",
+      "address": "004b7180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7180"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_HandleMouseUpEvent"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_HandleMouseDownEvent",
+      "address": "004b7200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7200"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_HandleMouseDownEvent",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DIALOG_HandleMouseUpEvent",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogClickHandler",
+      "address": "004b7270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7270"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogClickHandler",
+        "GetTickCount",
+        "SMsgBreakHandlerChain",
+        "DIALOG_HandleMouseDownEvent"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_DialogMouseUp",
+      "address": "004b72e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b72e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogMouseUp",
+        "GetUIFlag",
+        "MINIPANEL_IsMouseInArea",
+        "SMsgBreakHandlerChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount",
+        "DIALOG_HandleMouseUpEvent"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "D2UIMouseMsgStrc",
+        "fpDialogFunc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogMouseDown",
+      "address": "004b73e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b73e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogMouseDown",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount",
+        "SMsgBreakHandlerChain",
+        "DIALOG_HandleMouseDownEvent",
+        "GetUIFlag",
+        "MINIPANEL_IsMouseInArea",
+        "DRAW_GetTypeOfBorder",
+        "UI_IsMouseOnStatButton",
+        "UI_IsMouseOnSkillButton"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_HandleEscapeKeyEvent",
+      "address": "004b7570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7570"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_HandleEscapeKeyEvent",
+        "SMsgBreakHandlerChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UI_UpdateCursorAnimationTimer"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogEscapeKey",
+      "address": "004b75d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b75d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogEscapeKey",
+        "GetUIFlag",
+        "DIALOG_HandleEscapeKeyEvent"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_DialogMouseWheel",
+      "address": "004b7610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7610"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogMouseWheel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UI_ScrollNpcMenuList",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogConfirm",
+      "address": "004b76d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b76d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogConfirm",
+        "GetTickCount",
+        "SMsgBreakHandlerChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UI_UpdateCursorAnimationTimer"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogNavigateUp",
+      "address": "004b7770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7770"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogNavigateUp",
+        "SMsgBreakHandlerChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UI_ScrollNpcMenuList"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogNavigateDown",
+      "address": "004b77f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b77f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogNavigateDown",
+        "SMsgBreakHandlerChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UI_ScrollNpcMenuList"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogPageUp",
+      "address": "004b7870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7870"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogPageUp",
+        "SMsgBreakHandlerChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UI_ScrollNpcMenuList"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogPageDown",
+      "address": "004b78f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b78f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogPageDown",
+        "SMsgBreakHandlerChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UI_ScrollNpcMenuList"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_HandleEnterKeyEvent",
+      "address": "004b7970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7970"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_HandleEnterKeyEvent",
+        "CMD_IsCommandBound",
+        "CMD_GetKeyForCommand"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogEnterKey",
+      "address": "004b79d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b79d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogEnterKey",
+        "SMsgBreakHandlerChain",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DIALOG_HandleEnterKeyEvent",
+        "UI_UpdateCursorAnimationTimer"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2UIMouseMsgStrc",
+        "fpDialogFunc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_DialogKeyHandler",
+      "address": "004b7a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7a90"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "INPUT_DialogKeyHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DIALOG_HandleEnterKeyEvent",
+        "INPUT_DialogEnterKey",
+        "INPUT_DialogConfirm",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2DialogSubStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_InitializeSystem",
+      "address": "004b7b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7b40"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_InitializeSystem"
+      ]
+    },
+    {
+      "name": "DIALOG_CleanupSystem",
+      "address": "004b7b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7b50"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_CleanupSystem",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AllocDialogSub",
+      "address": "004b7c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7c00"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "AllocDialogSub",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_RegisterHandler",
+      "address": "004b7c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7c60"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_RegisterHandler",
+        "CMD_IsCommandBound",
+        "CMD_GetKeyForCommand"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocDialogStrcWithBackground",
+      "address": "004b7cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7cd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "AllocDialogStrcWithBackground",
+        "UI_RegisterAutoMapEventHandlers",
+        "INV_SetInventoryActive",
+        "UI_ResetInputState",
+        "AllocClientMemory",
+        "memset",
+        "GetTickCount",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "GetDC6Width",
+        "GetDC6Height",
+        "DIALOG_RegisterHandler",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2GfxDataStrc",
+        "DC6",
+        "DC6Block",
+        "fpDialogFunc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AllocDialogStrc",
+      "address": "004b7eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b7eb0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "AllocDialogStrc",
+        "UI_RegisterAutoMapEventHandlers",
+        "INV_SetInventoryActive",
+        "UI_ResetInputState",
+        "AllocClientMemory",
+        "memset",
+        "GetTickCount",
+        "DIALOG_RegisterHandler",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "fpDialogFunc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeDialogStrc",
+      "address": "004b8020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8020"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "FreeDialogStrc",
+        "UI_RegisterAutoMapEventHandlers",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "INV_SetInventoryActive",
+        "SELECT_SetExclusionRect",
+        "FreeClientMemory",
+        "DC6_FreeAndDelete",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_DrawBackground",
+      "address": "004b8100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8100"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_DrawBackground",
+        "memset",
+        "D2GFX_DrawSolidRectExBySize",
+        "DRAW_Direct_RectFrame",
+        "D2GFX_DrawImage",
+        "SetAndReturnLastFont",
+        "UI_GetCursorIconDC6",
+        "DRAW_text",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "D2DialogSubStrc",
+        "D2GfxDataStrc",
+        "RECT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_SetSelectedLine",
+      "address": "004b82f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b82f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_SetSelectedLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_SetHighlightStyle",
+      "address": "004b8370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8370"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_SetHighlightStyle",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_CenterStringLine",
+      "address": "004b83a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b83a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_CenterStringLine",
+        "SetAndReturnLastFont",
+        "DRAW_text0"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_RecalculateLayout",
+      "address": "004b8410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8410"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_RecalculateLayout",
+        "SetAndReturnLastFont",
+        "DRAW_text0",
+        "DIALOG_CenterStringLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DIALOG_GetSelectedIndex",
+      "address": "004b8580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b8580"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "DIALOG_GetSelectedIndex"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetDialogCounter",
+      "address": "004b85e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b85e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "GetDialogCounter"
+      ]
+    },
+    {
+      "name": "AddStringData",
+      "address": "004b85f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b85f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Dialog",
+      "calledFunctions": [
+        "AddStringData",
+        "STRING_GetWideStringLength",
+        "WSTRING_PutWideCharIntoBuffer",
+        "DIALOG_CenterStringLine",
+        "DIALOG_RecalculateLayout",
+        "SELECT_SetExclusionRect",
+        "DIALOG_SetSelectedLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DialogStrc",
+        "RECT",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

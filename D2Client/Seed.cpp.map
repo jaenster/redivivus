@@ -1,0 +1,45 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Seed.cpp",
+  "functions": [
+    {
+      "name": "RNG_GetRandomInRange",
+      "address": "00472210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472210"
+        }
+      ],
+      "namespace": "D2Client::Seed",
+      "calledFunctions": [
+        "RNG_GetRandomInRange"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RollBetweenMinAndMax",
+      "address": "00472280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00472280"
+        }
+      ],
+      "namespace": "D2Client::Seed",
+      "calledFunctions": [
+        "RollBetweenMinAndMax"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

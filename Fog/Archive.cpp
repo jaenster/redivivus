@@ -2,6 +2,7 @@
 
 #include "Fog/Archive.h"
 #include "D2Common/DATATBLS/DataTbls.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Launch/MainMenus.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Fog.h"
@@ -10,7 +11,6 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -50,14 +50,14 @@ void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * 
       return pBuffer;
     }
 
-    DWORD dwFileSize = D2FILE_GetFileSize(pMemory, __frame0.pFile, &__frame0.dwFileSizeOut);
+    DWORD dwFileSize = D2Hell::D2FILE_GetFileSize(pMemory, __frame0.pFile, &__frame0.dwFileSizeOut);
     pBuffer = D2_ALLOC_AT(dwFileSize + 800, ".\\SRC\\Archive.cpp", 0xcf);
     if (!pBuffer) {
       return pBuffer;
     }
 
-    D2FILE_ReadFile(pMemory, __frame0.pFile, pBuffer, dwFileSize);
-    D2FILE_CloseFile(pMemory, __frame0.pFile);
+    D2Hell::D2FILE_ReadFile(pMemory, __frame0.pFile, pBuffer, dwFileSize);
+    D2Hell::D2FILE_CloseFile(pMemory, __frame0.pFile);
     if (!pSize) {
       return pBuffer;
     }

@@ -1,0 +1,570 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/ListBox/ListBoxImplementation.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "004be090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be090"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "GetItemCount",
+      "address": "004be0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be0a0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "GetItemCount"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "004be0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be0b0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "Clear"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation",
+        "wchar_t[1024]"
+      ]
+    },
+    {
+      "name": "DrawScrollbar",
+      "address": "004be110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be110"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "DrawScrollbar",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "ListBoxImplementation",
+        "uint32_t",
+        "wchar_t[1024]"
+      ]
+    },
+    {
+      "name": "GetVisibleItemCount",
+      "address": "004be340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be340"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "GetVisibleItemCount"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation",
+        "uint32_t",
+        "wchar_t[1024]"
+      ]
+    },
+    {
+      "name": "DrawTruncatedText",
+      "address": "004be410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be410"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "DrawTruncatedText",
+        "STRING_CopyWideString",
+        "STRING_GetWideStringLength",
+        "D2WINFONT_GetStringPixelWidthN",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddItem",
+      "address": "004be500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be500"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "AddItem",
+        "WSTRING_PutWideCharIntoBuffer"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsMouseOnScrollUp",
+      "address": "004be720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be720"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "IsMouseOnScrollUp"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsMouseOnScrollDown",
+      "address": "004be770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be770"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "IsMouseOnScrollDown"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsMouseOnScrollTrack",
+      "address": "004be7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be7c0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "IsMouseOnScrollTrack"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsMouseInBounds",
+      "address": "004be810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be810"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "IsMouseInBounds"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnMouseWheel",
+      "address": "004be860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be860"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnMouseWheel",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "EnsureSelectionVisible",
+      "address": "004be8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be8d0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "EnsureSelectionVisible"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnUpArrow",
+      "address": "004be910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be910"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnUpArrow",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnDownArrow",
+      "address": "004be990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004be990"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnDownArrow",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnLeftArrow",
+      "address": "004bea30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bea30"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnLeftArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnRightArrow",
+      "address": "004bea40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bea40"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnRightArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "HitTestItem",
+      "address": "004bea50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bea50"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "HitTestItem"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "uint32_t",
+        "wchar_t[1024]"
+      ]
+    },
+    {
+      "name": "OnMouseMove",
+      "address": "004beb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004beb70"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnMouseMove",
+        "HitTestItem"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OnChar",
+      "address": "004bebc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bebc0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnChar",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "GetValue",
+      "address": "004bec30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bec30"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "GetValue"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "GetItemUserData",
+      "address": "004bec40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bec40"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "GetItemUserData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004bee90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bee90"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "Draw",
+        "DRAW_Direct_RectFrame",
+        "SetAndReturnLastFont",
+        "memset",
+        "D2GFX_DrawImage",
+        "GetVisibleItemCount",
+        "DrawTruncatedText",
+        "GetMouseY",
+        "GetMouseX"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "ListBoxImplementation_OnUpArrow",
+        "PD2ListBoxItemAuxData",
+        "RECT",
+        "int32_t",
+        "uint32_t",
+        "wchar_t[1024]"
+      ]
+    },
+    {
+      "name": "HandleScrollTrackClick",
+      "address": "004bf2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bf2f0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "HandleScrollTrackClick",
+        "SOUND_PlaySound",
+        "EnsureSelectionVisible"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnMouseDown",
+      "address": "004bf430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bf430"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnMouseDown",
+        "IsMouseOnScrollDown",
+        "IsMouseOnScrollTrack",
+        "HitTestItem"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnMouseUp",
+      "address": "004bf530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bf530"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "OnMouseUp",
+        "IsMouseOnScrollUp",
+        "IsMouseOnScrollDown",
+        "HitTestItem",
+        "IsMouseOnScrollTrack",
+        "HandleScrollTrackClick"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "ListBoxImplementation"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004bf650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bf650"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "Constructor",
+        "CONTAINER_InitializeBuffer",
+        "D2GFX_GetResolutionMode"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation",
+        "fpListBoxItemActivated",
+        "pfnEHHandlerRoutine",
+        "wchar_t[1024]"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004bf8c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bf8c0"
+        }
+      ],
+      "namespace": "D2Client::UI::ListBox::ListBoxImplementation",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "ListBoxImplementation",
+        "uint32_t"
+      ]
+    }
+  ]
+}

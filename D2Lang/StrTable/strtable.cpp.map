@@ -1,0 +1,535 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Lang/StrTable/strtable.cpp",
+  "functions": [
+    {
+      "name": "ARCHIVE_LoadMPQFiles",
+      "address": "00524810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524810"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "ARCHIVE_LoadMPQFiles",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ARCHIVE_LoadMPQ",
+        "ARCHIVE_FreeMpqFile"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_GetStringByIndex",
+      "address": "00524930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524930"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_GetStringByIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2StringTableTblFileStrc",
+        "WCHAR",
+        "WCHAR *",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_FreeMemory",
+      "address": "005249c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005249c0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_FreeMemory",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "STRTABLE_HashString",
+      "address": "005249e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005249e0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_HashString"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetLocaleString",
+      "address": "00524a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524a30"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "GetLocaleString",
+        "STRTABLE_GetStringByIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_GetTranslatedString",
+      "address": "00524ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524ac0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_GetTranslatedString",
+        "AllocClientMemory",
+        "UNICODE_GetWideCharCount",
+        "UTF8_ConvertToWideChar",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_FindStringByKey",
+      "address": "00524c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524c60"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_FindStringByKey",
+        "STRTABLE_HashString",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2StringTableTblFileStrc",
+        "WCHAR *",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_LookupString",
+      "address": "00524d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524d30"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_LookupString",
+        "STRTABLE_FindStringByKey",
+        "STRTABLE_GetTranslatedString",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "WCHAR *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_GetStringByKey",
+      "address": "00524e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524e20"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_GetStringByKey",
+        "STRTABLE_LookupString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STRINGTABLE_FreeStringTables",
+      "address": "00524e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524e40"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRINGTABLE_FreeStringTables",
+        "FreeClientMemory",
+        "UNICODE_FreeKamapTables"
+      ]
+    },
+    {
+      "name": "STRTABLE_InitCRC",
+      "address": "00524fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524fd0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_InitCRC"
+      ]
+    },
+    {
+      "name": "STRTABLE_UpdateCRC",
+      "address": "00524fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524fe0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_UpdateCRC"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_CalculateCRC",
+      "address": "00525020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525020"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_CalculateCRC",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_NormalizeLanguageCode",
+      "address": "00525090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525090"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_NormalizeLanguageCode",
+        "_stricmp"
+      ],
+      "usedTypes": [
+        "D2LangTableEntryStrc"
+      ]
+    },
+    {
+      "name": "STRTABLE_GetLanguageId",
+      "address": "00525100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525100"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_GetLanguageId",
+        "_stricmp"
+      ],
+      "usedTypes": [
+        "D2LangTableEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISC_GetLanguageCode",
+      "address": "00525150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525150"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "MISC_GetLanguageCode",
+        "D2FILE_AllocAndLoadD2File",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_GetRegistryLanguage",
+      "address": "005251c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005251c0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_GetRegistryLanguage",
+        "STRTABLE_GetLanguageId"
+      ],
+      "usedTypes": [
+        "HKEY",
+        "LSTATUS",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TABLES_GetLangAbbreviation",
+      "address": "00525260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525260"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "TABLES_GetLangAbbreviation",
+        "MISC_GetLanguageCode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_FormatNumber",
+      "address": "00525350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525350"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_FormatNumber",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "_ultoa",
+        "__security_check_cookie",
+        "UTF8_ConvertToWideChar",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_FormatInt64",
+      "address": "00525490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525490"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_FormatInt64",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "_i64toa",
+        "__security_check_cookie",
+        "UTF8_ConvertToWideChar",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_FormatUInt64WithAbbrev",
+      "address": "005255c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005255c0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_FormatUInt64WithAbbrev",
+        "_ui64toa",
+        "UTF8_ConvertToWideChar",
+        "STRING_CopyWideString",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_LoadAbbreviationSymbols",
+      "address": "00525770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525770"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_LoadAbbreviationSymbols",
+        "STRTABLE_GetStringByIndex",
+        "UNICODE_WideToMultiByte",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRTABLE_LoadStringTableFile",
+      "address": "00525920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00525920"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "STRTABLE_LoadStringTableFile",
+        "D2FILE_AllocAndLoadD2File",
+        "STRTABLE_CalculateCRC",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2StringTableTblFileStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TABLES_LoadStrings",
+      "address": "005259c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005259c0"
+        }
+      ],
+      "namespace": "D2Lang::StrTable::strtable",
+      "calledFunctions": [
+        "TABLES_LoadStrings",
+        "__security_check_cookie",
+        "TABLES_GetLangAbbreviation",
+        "_stricmp",
+        "sprintf",
+        "UNICODE_LoadKamapFile",
+        "strncpy",
+        "STRTABLE_LoadStringTableFile",
+        "AllocClientMemory",
+        "memset",
+        "UNICODE_GetWideCharCount",
+        "UTF8_ConvertToWideChar",
+        "STRTABLE_LoadAbbreviationSymbols",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2StringTableTblFileStrc",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

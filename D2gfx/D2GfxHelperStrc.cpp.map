@@ -1,0 +1,86 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2gfx/D2GfxHelperStrc.cpp",
+  "functions": [
+    {
+      "name": "D2GFXHELPER_DrawGroundTileDispatch1",
+      "address": "004f8810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8810"
+        }
+      ],
+      "namespace": "D2gfx::D2GfxHelperStrc",
+      "calledFunctions": [
+        "D2GFXHELPER_DrawGroundTileDispatch1",
+        "D2GFX_DrawWallTileBasic",
+        "D2GFX_DrawTileSimple"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFXHELPER_DrawGroundTileDispatch2",
+      "address": "004f8850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8850"
+        }
+      ],
+      "namespace": "D2gfx::D2GfxHelperStrc",
+      "calledFunctions": [
+        "D2GFXHELPER_DrawGroundTileDispatch2",
+        "D2GFX_DrawWallTileWithPerspective",
+        "D2GFX_DrawTileAdvanced"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fpDrawGroundTile",
+      "address": "004f8b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8b80"
+        }
+      ],
+      "namespace": "D2gfx::D2GfxHelperStrc",
+      "calledFunctions": [
+        "fpDrawGroundTile",
+        "D2GFXHELPER_DrawGroundTileWithLight",
+        "D2GFXHELPER_DrawGroundTileWithPerspectiveLight",
+        "D2GFXHELPER_DrawGroundTileDispatch1",
+        "D2GFXHELPER_DrawGroundTileDispatch2"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFX_SetupRenderFunctions",
+      "address": "004f8dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8dc0"
+        }
+      ],
+      "namespace": "D2gfx::D2GfxHelperStrc",
+      "calledFunctions": [
+        "D2GFX_SetupRenderFunctions",
+        "D2GFX_InitializeLineBuffer"
+      ]
+    }
+  ]
+}

@@ -340,7 +340,7 @@ static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * 
 }
 
 // Server-side: grants a class's starting equipment loop from a starter-item template entry (pnParam: item code, body-loc, count byte at +5). For each of count copies it creates the item (PLAYER_CreateRewardItemFromTemplate), flags it ITEMFLAG_BEGINNER and sets its body-loc. Beltable items go to the belt (ITEM_TryPlaceInBelt, fallback to inventory). Non-beltable: if a body-loc is set it equips (PLAYER_EquipItemToBodyLoc, fallback inventory) else places in inventory; then seeds durability (or quantity 250 / charges 100 for bow-quiver ammo). Used during new-character creation. No return value.
-void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t eClassId, int32_t nDifficulty, uint32_t * pnParam) {
+void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t eClassId, int32_t nDifficulty, uint32_t * pCharItem) {
     // Frame slots -20..-4 are ONE object: &dwBeltSlotOut is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -355,19 +355,19 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t bIsQuiver;
     BOOL nBeltResult;
     eD2UnitStat eUnitStat;
-    uint16_t uVar1;
     eD2UnitStat eStatId;
     eD2UnitType eItemUnitType;
     int32_t nLine;
     ::SGAMEDATA* pGameLocal;
+    uint16_t wLayer;
     D2ItemsTxt* pItemsTxt;
-    pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*pnParam, &__frame0.nItemTxtLine);
+    pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*pCharItem, &__frame0.nItemTxtLine);
     if (!pItemsTxt) {
       return;
     }
 
     __frame0.i = 0;
-    if ((uint8_t)*(char*)((int)pnParam + 5) <= '\0') {
+    if ((uint8_t)*(char*)((int)pCharItem + 5) <= '\0') {
       return;
     }
 
@@ -375,7 +375,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
       __frame0.pGameSaved = pGame;
       pNewItem = PLAYER_CreateRewardItemFromTemplate(__frame0.pGameSaved, nDifficulty, __frame0.nItemTxtLine, eClassId, pUnit);
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pNewItem, ITEMFLAG_BEGINNER, 1);
-      D2Common::ITEMS::Items::SetBodyLoc(pNewItem, *(eD2BodyLoc*)(pnParam + 1));
+      D2Common::ITEMS::Items::SetBodyLoc(pNewItem, *(eD2BodyLoc*)(pCharItem + 1));
       nLine = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_beltable(pNewItem);
       if (nLine) {
         if (!pNewItem) {
@@ -402,39 +402,39 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
           PLAYER_PlaceItemInInventory(pGameLocal, 1, pUnit, pNewItem);
         }
       } else {
-        if ((char)pnParam[1] != '\0') {
+        if ((char)pCharItem[1] != '\0') {
           nBeltResult = PLAYER_EquipItemToBodyLoc(__frame0.pGameSaved, pUnit, pNewItem);
           if (!nBeltResult) {
             PLAYER_PlaceItemInInventory(__frame0.pGameSaved, 1, pUnit, pNewItem);
           }
 
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
-          uVar1 = 0;
+          wLayer = 0;
           if (bIsQuiver) {
             nLine = 0xfa;
             set_quiver_quantity:
-            uVar1 = 0;
+            wLayer = 0;
             eStatId = UNITSTAT_quantity;
           } else {
             nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
             eStatId = UNITSTAT_durability;
           }
 
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eStatId, nLine, uVar1);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eStatId, nLine, wLayer);
         } else {
           PLAYER_PlaceItemInInventory(__frame0.pGameSaved, 1, pUnit, pNewItem);
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
-          uVar1 = 0;
+          wLayer = 0;
           if (bIsQuiver) {
             nLine = 0xfa;
             eUnitStat = UNITSTAT_quantity;
           } else {
-            uVar1 = 0;
+            wLayer = 0;
             nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
             eUnitStat = UNITSTAT_durability;
           }
 
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eUnitStat, nLine, uVar1);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, eUnitStat, nLine, wLayer);
           bIsQuiver = D2Common::ITEMS::Items::ITEMS_IsA(pNewItem, ITEMTYPE_BowQuiver);
           if (bIsQuiver) {
             nLine = 100;
@@ -444,7 +444,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
       }
 
       __frame0.i++;
-    } while (__frame0.i < (int)(uint32_t)*(uint8_t*)((int)pnParam + 5));
+    } while (__frame0.i < (int)(uint32_t)*(uint8_t*)((int)pCharItem + 5));
 }
 
 void __fastcall PLAYER_CreateAllStarterItems(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct) {

@@ -1,0 +1,563 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Draw/LightMap.cpp",
+  "functions": [
+    {
+      "name": "WEATHER_ApproximateDistanceCustomCC",
+      "address": "004740d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004740d0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "WEATHER_ApproximateDistanceCustomCC"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocLightMap",
+      "address": "00474160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474160"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "AllocLightMap",
+        "AllocClientMemory",
+        "GetPrecisionX",
+        "GetPrecisionY"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetRadiusY",
+      "address": "00474290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474290"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "SetRadiusY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_SetRadius",
+      "address": "004742d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004742d0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_SetRadius",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRadiusX",
+      "address": "00474350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474350"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "GetRadiusX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetRGB",
+      "address": "00474390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474390"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "SetRGB",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FreeLightMap",
+      "address": "004743d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004743d0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "FreeLightMap",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_ValidateAndReset",
+      "address": "00474470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474470"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_ValidateAndReset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_FillGridRect",
+      "address": "004744b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004744b0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_FillGridRect"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROOM_GetAmbientLightColor",
+      "address": "00474550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474550"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "ROOM_GetAmbientLightColor",
+        "ROOM_GetLevelLightColor",
+        "GetRGB_IntensityFromRoom",
+        "DRLGENV_GetLightColorFromAct",
+        "DRLGENV_GetIntensityFromAct"
+      ],
+      "usedTypes": [
+        "D2ColorInfo",
+        "D2RoomStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_InitFromPlayerAndRooms",
+      "address": "00474610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474610"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_InitFromPlayerAndRooms",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "LIGHTMAP_FillGridRect",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "ROOM_GetAmbientLightColor",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_ClearToBlack",
+      "address": "00474790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474790"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_ClearToBlack",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "LIGHTMAP_FillGridRect"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_AddLightToCell",
+      "address": "004747c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004747c0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_AddLightToCell"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_ApplyPointLight",
+      "address": "004748d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004748d0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_ApplyPointLight",
+        "GetPlayerUnit_Net",
+        "WEATHER_ApproximateDistanceCustomCC",
+        "LIGHTMAP_AddLightToCell"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_SampleGridToBuffer",
+      "address": "00474a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474a70"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_SampleGridToBuffer"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_ComputeInterpolationDir",
+      "address": "00474b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474b50"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_ComputeInterpolationDir"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_InterpolateCell",
+      "address": "00474c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474c00"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_InterpolateCell"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_ApplyStaticLightWithShadow",
+      "address": "00474d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00474d70"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_ApplyStaticLightWithShadow",
+        "memset",
+        "LIGHTMAP_SampleGridToBuffer",
+        "LIGHTMAP_ComputeInterpolationDir",
+        "LIGHTMAP_InterpolateCell",
+        "LIGHTMAP_AddLightToCell"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_ApplyCollisionOccludedLight",
+      "address": "004750f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004750f0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_ApplyCollisionOccludedLight",
+        "memset",
+        "UNITS_FindClientSideUnit",
+        "UNITS_FindServerSideUnit",
+        "UNITS_GetRoom",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CheckCollision_BlockPlayerMissile",
+        "LIGHTMAP_ComputeInterpolationDir",
+        "LIGHTMAP_InterpolateCell",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_ApplyLightWithPixelMap",
+      "address": "00475420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475420"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_ApplyLightWithPixelMap",
+        "WEATHER_ApproximateDistance",
+        "LIGHTMAP_AddLightToCell",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_UpdateSingleLight",
+      "address": "004755a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004755a0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_UpdateSingleLight",
+        "UNITS_FindClientSideUnit",
+        "UNITS_FindServerSideUnit",
+        "GetPrecisionX",
+        "GetPrecisionY",
+        "FreeClientMemory",
+        "FreeLightMap",
+        "LIGHTMAP_ApplyStaticLightWithShadow",
+        "LIGHTMAP_ApplyPointLight",
+        "AllocClientMemory",
+        "LIGHTMAP_ApplyCollisionOccludedLight",
+        "LIGHTMAP_ApplyLightWithPixelMap"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_BuildCollisionFlags",
+      "address": "004756d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004756d0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_BuildCollisionFlags",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "CheckCollision_BlockPlayerMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eCollisionFlags"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_GetQualityLevel",
+      "address": "00475780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475780"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_GetQualityLevel",
+        "D2GFX_GetLowQuality",
+        "GAMEDATA_GetFpsDrawn",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "dLightMapUpdate",
+      "address": "00475800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475800"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "dLightMapUpdate",
+        "GetPlayerUnit_UI",
+        "GetXPos",
+        "GetYPos",
+        "LIGHTMAP_InitFromPlayerAndRooms",
+        "LIGHTMAP_BuildCollisionFlags",
+        "LIGHTMAP_GetQualityLevel",
+        "LIGHTMAP_UpdateSingleLight"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_FreeAll",
+      "address": "004758d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004758d0"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "LIGHTMAP_FreeAll",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc"
+      ]
+    }
+  ]
+}

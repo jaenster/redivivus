@@ -158,7 +158,6 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     // Static local variables (originally global data)
     static uint32_t aQ32RewardItemCodes[3] = { 0x20373072, 0x20383072, 0x20393072 }; D2_STATIC_GUARD(aQ32RewardItemCodes, "D2Game::Quests::QUESTS::A5Q2::Q32_Callback11_ScrollMessage::aQ32RewardItemCodes");
 
-    uint32_t pBitBuffer_00;
     BOOL bQuestState;
     D2UnitStrc* pRewardItem;
     D2ClientStrc* pClient;
@@ -167,9 +166,10 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     D2QuestDataA5Q2Strc* pA5Q2DataRaw;
     int nRewardCount;
     bool bRewardGranted;
+    bool bAnyRewardGiven;
     int32_t nErrorLine;
-    uint16_t uVar1 = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
-    D2QuestDataA1Q1Strc* pDVar2 = pQuestData->pQuestSpecificData.pA1Q1;
+    uint16_t nMsgIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
+    D2QuestDataA1Q1Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q1;
     if (pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo != 0x203) {
       return;
     }
@@ -178,13 +178,13 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     *(uint32_t*)(char*)&pBitBuffer2 = (uint32_t)(uintptr_t)pBitBuffer;
-    if (uVar1 == 0x4e80) {
-      pDVar2->bQuestCompleted = true;
+    if (nMsgIndex == 0x4e80) {
+      pDVar1->bQuestCompleted = true;
       QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q2.cpp", 0x100);
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q32_UpdateQuestStep);
     } else {
-      bool bVar3;
-      if (uVar1 != 0x4e8e) {
+      uint32_t pBitBuffer_00;
+      if (nMsgIndex != 0x4e8e) {
         return;
       }
 
@@ -193,7 +193,7 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         return;
       }
 
-      bVar3 = false;
+      bAnyRewardGiven = false;
       /* GetQuestState(JustCompleted=0xd): just-rescued self game -> run sequence
                          filter, broadcast 0xd, detach handler[2] once */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
       if (bQuestState) {
@@ -231,13 +231,13 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
           pRewardItem = ITEM_RewardItemInInventory(pQuestArgs->pGame, pQuestArgs->pPlayer, aQ32RewardItemCodes[iRewardIdx], 0, QUALITY_NORMAL, 1);
           pBitBuffer_00 = *(uint32_t*)(char*)&pBitBuffer2;
           if (pRewardItem) {
-            bVar3 = true;
+            bAnyRewardGiven = true;
           }
 
           iRewardIdx++;
         } while (iRewardIdx < nRewardCount);
 
-        if (bVar3) {
+        if (bAnyRewardGiven) {
           /* SetQuestState(Completed=0): reward taken -> quest finished */ D2Common::QuestRecord::SetQuestState((D2BitBufferStrc*)*(uint32_t*)(char*)&pBitBuffer2, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
           /* UnsetQuestState(RewardAwaits=1): clear pending-reward flag now that reward
                          was granted */ D2Common::QuestRecord::UnsetQuestState((D2BitBufferStrc*)pBitBuffer_00, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);

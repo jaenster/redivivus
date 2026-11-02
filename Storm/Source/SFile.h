@@ -232,7 +232,7 @@ namespace Storm::Source::SFile {
 
 // Function declarations
 // Initializes a 4-element stream buffer structure by copying 4 sequential parameters into consecutive fields (param1→field[0], param2→field[1], param3→field[2], param4→field[3]). Used for stream buffer initialization in custom calling convention (ECX register for destination pointer).
-void __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwParam, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3);
+void __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwValues, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3);
 // Copies a 4-element stream buffer structure from source to destination by copying 4 consecutive fields. Custom calling convention uses ECX for destination pointer. Used for duplicating stream buffer state.
 void __thiscall SFILE_CopyStreamBuffer4(uint32_t * pDest, uint32_t * pSrc);
 // Reads data from an internal buffer with bounds checking. Calculates available bytes (param3[4] - param3[1]), clamps to requested size (*param2), memcpy's from buffer (param3[0] + param3[1]), and advances read position (param3[1] += size). Returns actual bytes read.
@@ -260,7 +260,9 @@ void __stdcall SFILE_EnsureHashSource();
 // @sourcefile .\SOURCE\SFILE.CPP
 // Verifies an archive's RSA signature (default key gaSFileSignatureRsaModulus/0x100, gaSFileSignatureRsaExponent/4 when both key pointers are null). Writes 1 or 5 to *pdwAuthResult (5 = verified) and returns result==5. The pArchive, nModulusLen and nExponentLen slots are reused for the verify context, the saved file position and the read count.
 // Provenance: 1.14d asm 00415bb0..00415d40.
-uint32_t __stdcall SFILE_VerifyFileChecksum(struct D2ArchiveStrc * pArchive, uint32_t * pdwAuthResult, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen);
+// Strong-signature worker of SFileAuthenticateArchive.
+// Name from the PowerPC 1.13c Storm traceback table (exported SFileAuthenticateArchiveEx @1001e440).
+uint32_t __stdcall SFileAuthenticateArchiveEx(struct D2ArchiveStrc * pArchive, uint32_t * pdwAuthResult, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen);
 // @sourcefile .\SOURCE\SFILE.CPP
 uint32_t __stdcall SFILE_ComputeFileHash(LPCSTR szFileName);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileRegisterLoadNotifyProc"
@@ -312,9 +314,9 @@ int __stdcall SFileGetArchiveName(struct D2ArchiveStrc * pArchive, char * szOutB
 // @wasnamed SFILE_GetFileName
 // @basis behaviour-confirmed, and a hard contradiction of the old name. Signature is (char *buffer, size_t size) - there is NO file handle anywhere in the body. It lazily initialises the global base-path buffer lpFilename_00778f28 via SFILE_InitBaseDirectory and copies it into the caller's buffer. The real SFileGetFileName takes a HANDLE and yields the name of an OPEN FILE; this function cannot be it. Same global is written by SFileSetBasePath (004164b0) and consumed by SFILE_BuildFullPath.
 int32_t __stdcall SFileGetBasePath(char * szText, int32_t nMaxLength);
-int32_t __stdcall SFILE_GetFileTime(struct D2MPQFileStrc * pArchive, void * pParam);
+int32_t __stdcall SFILE_GetFileTime(struct D2MPQFileStrc * pArchive, void * pFileTime);
 int32_t __stdcall SFILE_GetFileLocale(struct D2ArchiveStrc * pArchive);
-int __stdcall SFILE_GetFilePlatform(struct D2ArchiveStrc * pArchive, void * pParam);
+int __stdcall SFILE_GetFilePlatform(struct D2ArchiveStrc * pArchive, void * pPlatformInfo);
 // @oracle-basis PARTIAL - the old name is disproved, the new one is descriptive and deliberately makes
 // no Storm API claim. Established: this validates a FILE handle (SFILE_ValidateFileHandle), not an
 // archive handle, and bounded-copies the file record's name at +8. So SFILE_GetArchiveInfo was wrong on
@@ -339,7 +341,7 @@ int __stdcall SFileGetFileName(struct D2MPQFileStrc * pFile, char * szText, int3
 // @wasnamed SFILE_GetArchiveListFile
 // Copies an open file's name into the caller's buffer, preferring the alternate name at +0x10c.
 // @oracle-note 2026-08-28 pass 4. NOT SFileGetFileName - that is 00416230, settled because D2's PowerPC binary imports SFileGetFileName by name and 00416230 is the only file-name getter 1.14d D2 code calls (D2FILE_GetFileSize / SeekFile / ReadFile). This one has zero callers and returns the +0x10c alias when set, falling back to +8; it is the internal variant. Storm's 337-name export table has exactly one file-name getter, so this is not an export. Left descriptively named.
-int __stdcall SFILE_CopyFileRecordNameOrAlias(struct D2MPQFileStrc * pArchive, void * pParam, int32_t nBufferOutputLength);
+int __stdcall SFILE_CopyFileRecordNameOrAlias(struct D2MPQFileStrc * pArchive, void * szOutName, int32_t nBufferOutputLength);
 // @oracle PPC Mac Storm 1.10b export table: SFileGetFileArchive
 // @oracle-basis CONTRADICTION. The old name promised an archive NAME; the function copies no string at
 // all. It validates a FILE handle and, when the record's field at +0x110 equals -1 (the marker for
@@ -350,9 +352,9 @@ int __stdcall SFILE_CopyFileRecordNameOrAlias(struct D2MPQFileStrc * pArchive, v
 // record into.
 // @wasnamed SFILE_GetArchiveName
 // Returns the stored (compressed) size of a file that lives in an archive, else 0; writes 0 to the high-dword out parameter.
-int __stdcall SFileGetFileCompressedSize(struct D2MPQFileStrc * pArchive, void * pParam);
+int __stdcall SFileGetFileCompressedSize(struct D2MPQFileStrc * pArchive, void * pdwSizeHigh);
 // @blizzard SFileGetFileSize (SFILE.CPP)
-DWORD __stdcall SFileGetFileSize(struct D2MPQFileStrc * pMPQFile, LPDWORD pdwParam);
+DWORD __stdcall SFileGetFileSize(struct D2MPQFileStrc * pMPQFile, LPDWORD pdwFileSizeHigh);
 int __stdcall SFILE_GetFileTimestamp(struct D2MPQFileStrc * pArchive, LPFILETIME pFileTime);
 // @oracle PPC Mac Storm 1.10b export table: SFileSetAsyncBudget
 // @oracle-basis CONTRADICTION with the old name. The global is read at exactly one site, at the top of
@@ -365,7 +367,7 @@ int __stdcall SFILE_GetFileTimestamp(struct D2MPQFileStrc * pArchive, LPFILETIME
 // numerator of the same expression.
 // @wasnamed SFILE_SetAsyncPriority
 // Sets the async I/O byte budget in bytes per second; the worker thread paces reads to it.
-void __stdcall SFileSetAsyncBudget(uint32_t dwParam);
+void __stdcall SFileSetAsyncBudget(uint32_t nBudgetBytesPerSec);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetBasePath"
 // @wasnamed SFILE_SetMaxFileHandles
 // @basis behaviour-confirmed, and a hard contradiction of the old name. The single parameter is a PATH STRING, not a handle count: it is length-checked against MAX_PATH (0x104, SetLastError(0xa1) = ERROR_BAD_PATHNAME on overflow), copied into the global base-path buffer lpFilename_00778f28, and a trailing backslash is appended if absent. An empty string clears the base path. Nothing in the body touches a handle table. Counterpart of SFileGetBasePath (004160a0).
@@ -373,25 +375,25 @@ int32_t __stdcall SFileSetBasePath(char * szText);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetDataChunkSize"
 // @wasnamed SFILE_GetMaxFileHandles
 // @basis behaviour-confirmed, and a hard contradiction of the old name in BOTH halves. It is a setter, not a getter - it writes its argument into the global. And the value is a chunk size, not a handle count: the argument is rejected unless it is a power of two ((n-1) & n == 0), and downstream the global is used as the read granularity in SFILE_ReadFile (nChunkCount = <global>) and as a byte-rate numerator in SFILE_AsyncIOWorkerThread (<global> * 1000 / gnSFileAsyncIOPriority). A maximum-file-handle count would need neither a power-of-two constraint nor a role in the read loop. NOTE: the global itself is still named gnSFileMaxFileHandles and inherits the same error; it should read gnSFileDataChunkSize.
-void __stdcall SFileSetDataChunkSize(uint32_t nParam);
+void __stdcall SFileSetDataChunkSize(uint32_t nChunkSize);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetFilePointer". There is no "SFileSeekFile" on the 337-name list.
 // @wasnamed SFILE_SeekFile
 // @basis behaviour-confirmed. Win32 SetFilePointer semantics exactly: (hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod), returning the new position or 0xFFFFFFFF on failure, and rejecting a non-zero high dword with ERROR_INVALID_PARAMETER. Method 0/1/2 = FILE_BEGIN/FILE_CURRENT/FILE_END, applied to the MPQ file record's logical position field, and delegated straight to the Win32 SetFilePointer when the record wraps a plain OS handle (field 0x44 != -1). Also invalidates the record's cached sector on every move.
-DWORD __stdcall SFileSetFilePointer(struct D2MPQFileStrc * pMPQFile, int32_t nDistanceToMove, int * pnParam, DWORD dwMoveMethod);
+DWORD __stdcall SFileSetFilePointer(struct D2MPQFileStrc * pMPQFile, int32_t nDistanceToMove, int * pnDistanceToMoveHigh, DWORD dwMoveMethod);
 BOOL __stdcall SFileSetIoErrorMode(int32_t nErrorMode, pfnSFileReadError pfnErrorHandler);
 void __stdcall SFileSetLocale(uint16_t nLocale);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetPlatform"
 // @wasnamed SFILE_SetErrorCallback
 // @basis behaviour-confirmed and sibling-corroborated, contradicting the old name. The body sets one global scalar and registers nothing - there is no function pointer and no error path in it, so it cannot be a callback setter. The global it writes (gnSFileSearchHashOffset) is consumed in exactly one place, SFILE_SearchFileInArchives, as the argument immediately after gnSFileSearchLocale. gnSFileSearchLocale is written by SFileSetLocale at 004166d0, i.e. the adjacent function. The real API contains exactly one such pair, SFileSetLocale / SFileSetPlatform, and locale + platform are the two MPQ hash-table search selectors.
-void __stdcall SFileSetPlatform(uint8_t bParam);
+void __stdcall SFileSetPlatform(uint8_t byPlatform);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileUnloadFile (Storm 1.10b PPC)
 int32_t __stdcall SFileUnloadFile(void * pFile);
-uint32_t __thiscall SFILE_CompareFileTime1(int * pnParam, int * pLeft);
-uint32_t __thiscall SFILE_CompareFileTime2(int * pnParam, int * pLeft);
-uint32_t __thiscall SFILE_CompareFileSize1(int * pnParam, int * pLeft);
-uint32_t __thiscall SFILE_CompareFileSize2(int * pnParam, int * pLeft);
-uint32_t __thiscall SFILE_CompareFileName(int * pnParam, int * pLeft);
+uint32_t __thiscall SFILE_CompareFileTime1(int * pLink, int * pLeft);
+uint32_t __thiscall SFILE_CompareFileTime2(int * pLink, int * pLeft);
+uint32_t __thiscall SFILE_CompareFileSize1(int * pLink, int * pLeft);
+uint32_t __thiscall SFILE_CompareFileSize2(int * pLink, int * pLeft);
+uint32_t __thiscall SFILE_CompareFileName(int * pLink, int * pLeft);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard InternalReadAligned (SFILE.CPP)
 uint32_t __stdcall SFILE_InternalReadAligned(struct D2MPQFileStrc * pArchive, uint32_t nFileOffset, uint32_t * pDstBuf, uint32_t nReadLen);
@@ -432,25 +434,25 @@ void __fastcall SFILE_CloseStreamHandle4(struct D2StormListHead * pThis);
 void __fastcall SFILE_CloseStreamHandle5(struct D2StormListHead * pThis);
 // @sourcefile .\SOURCE\SFILE.CPP
 void __fastcall SFILE_FreeArchiveRecord(struct D2ArchiveStrc * pArchive);
-struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord1(struct D2ArchiveStrc * pArchive, uint8_t bParam);
+struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord1(struct D2ArchiveStrc * pArchive, uint8_t byFlags);
 uint32_t __stdcall SFILE_GetOpenFlags();
 void __stdcall SFILE_CloseArchiveByName(char * szText);
 void __fastcall SFILE_CloseAllOpenFiles1(struct D2ArchiveStrc * pArchive);
 void __fastcall SFILE_CloseAllOpenFiles2(struct D2ArchiveStrc * pArchive);
-void __fastcall SFILE_CloseStream1(struct D2StormListHead * nParam);
-void __fastcall SFILE_CloseStream2(struct D2StormListHead * nParam);
-void __fastcall SFILE_CloseStream3(struct D2StormListHead * nParam);
-void __fastcall SFILE_CloseStream4(struct D2StormListHead * nParam);
-void __fastcall SFILE_CloseStream5(struct D2StormListHead * nParam);
+void __fastcall SFILE_CloseStream1(struct D2StormListHead * pListHead);
+void __fastcall SFILE_CloseStream2(struct D2StormListHead * pListHead);
+void __fastcall SFILE_CloseStream3(struct D2StormListHead * pListHead);
+void __fastcall SFILE_CloseStream4(struct D2StormListHead * pListHead);
+void __fastcall SFILE_CloseStream5(struct D2StormListHead * pListHead);
 void __fastcall SFILE_DestroyFileRecord(struct D2MPQFileStrc * pMPQFile);
 struct D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord1(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags);
 struct D2MPQFileStrc * __thiscall SFILE_AllocFileRecord(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags);
 struct D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord2(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags);
-struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord2(struct D2ArchiveStrc * pArchive, uint8_t bParam);
+struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord2(struct D2ArchiveStrc * pArchive, uint8_t byFlags);
 // @sourcefile .\SOURCE\SFILE.CPP
 void __fastcall SFILE_FreeFileRecord(struct D2MPQFileStrc * pMPQFile);
-struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord3(struct D2ArchiveStrc * pArchive, uint8_t bParam);
-int __stdcall SFILE_EnumFilesInternal(struct D2ArchiveStrc * pArchive, char * szText, void * pParam, int nParam, struct D2ArchiveStrc * * ppArchive);
+struct D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord3(struct D2ArchiveStrc * pArchive, uint8_t byFlags);
+int __stdcall SFILE_EnumFilesInternal(struct D2ArchiveStrc * pArchive, char * szText, void * pFileRecord, int nParam, struct D2ArchiveStrc * * ppArchive);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenFileEx (SFILE.CPP)
 int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, char * szFileName, uint32_t dwFlags, void * * phFile);
@@ -463,7 +465,9 @@ int __stdcall SFileCloseFile(struct D2MPQFileStrc * pMPQFile);
 int32_t __stdcall SFileOpenFile(char * szFilename, struct D2MPQFileStrc * * ppFile);
 // Destroys an audio-stream record: releases its MPQ file (refcount +0x144), Releases the DirectSound buffer if owned, unlinks it from the stream list.
 // Provenance: 004199ca..00419a34 field accesses on the 0x50-byte stream record.
-void __fastcall SFILE_DestroyAudioStream(struct D2StormAudioStreamRec * pAudioStream);
+// Deleting destructor of the AUDIOSTREAM record.
+// Name from the PowerPC 1.13c Storm traceback table (AUDIOSTREAM::~AUDIOSTREAM @1001d280).
+void __fastcall AUDIOSTREAM_Destructor(struct D2StormAudioStreamRec * pAudioStream);
 // Scalar deleting destructor of the audio-stream record: SFILE_DestroyAudioStream, then frees it when bit0 of the flag is set; returns the record.
 // Provenance: CALL 004199a0, TEST [EBP+8],1, RET 4.
 struct D2StormAudioStreamRec * __thiscall SFILE_DeleteAudioStream(struct D2StormAudioStreamRec * pAudioStream, uint8_t bDelete);
@@ -475,20 +479,24 @@ struct D2StormAudioStreamRec * __thiscall SFILE_AudioStreamListDeleteNode(struct
 // Drops one reference (nRefCount +0x4c) on pAudioStream (ESI); at zero runs SFILE_DestroyAudioStream and SMemFree.
 // No call, jump or stored pointer reaches it in 1.14d (rel32 and pointer-byte scans of the image are empty); body ends at the RET 0x419bf0 before INT3 padding.
 void __stdcall SFILE_ReleaseAudioStream(struct D2StormAudioStreamRec * pAudioStream);
-void __stdcall SFILE_ProcessAsyncRequests();
+// CD-thread pass that issues refill requests for playing audio streams from their buffer position.
+// Name from the PowerPC 1.13c Storm traceback table (static CheckAudioStreams @1001fdd0).
+void __stdcall SFILE_CheckAudioStreams();
 // Shuts down async I/O subsystem by setting gbSFileAsyncIOShutdown shutdown flag, waiting for gpCurrentAsyncIORequest to finish (10ms polling, timeout when worker thread dies), then iterating gSFileStreamRecordList.pNext linked list to unlink, decrement refcount, and free all pending async file requests. Frees file record data when refcount hits zero.
 BOOL __stdcall SFileDdaDestroy();
 // Takes a D2StormAsyncOpStrc: drops the request's references to its file record (+0xc) and parent audio stream (+0x30), freeing either at zero, then unlinks the request from its list. Provenance: 1.14d asm 0041a04a/0041a077.
 void __fastcall SFILE_ReleaseAsyncRequest(struct D2StormAsyncOpStrc * pAsyncOp);
 // Deleting destructor of an async request (D2StormAsyncOpStrc): SFILE_ReleaseAsyncRequest, then SMemFree when bit 0 of bParam is set. Provenance: 1.14d asm 0041a0e0; the record is allocated with the REQUEST tag.
-struct D2StormAsyncOpStrc * __thiscall SFILE_DeleteAsyncRequest(struct D2StormAsyncOpStrc * pAsyncOp, uint8_t bParam);
+struct D2StormAsyncOpStrc * __thiscall SFILE_DeleteAsyncRequest(struct D2StormAsyncOpStrc * pAsyncOp, uint8_t byFlags);
 // Destroys SFile subsystem. Shuts down async I/O (sets gbAsyncIOWorkerShutdown, signals ghAsyncIOEvent, waits 1s for worker thread), frees gpCurrentAsyncIORequest and all linked lists (gSFileAsyncReqQueue.pNext, gSFileStreamRecordList.pNext pending requests, gSFileOpenFileList.pNext file records, g_pMpqArchiveListHead archives), and deallocates global buffers (g_pStormMpqCryptTable, gpSFileExplodeWorkBuffer, ghAsyncIOCompletionPort). Logs memory leaks via SSYSTEM_DebugMemoryHandleError.
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileDestroy (SFILE.CPP)
 int __stdcall SFileDestroy();
 // Releases and frees one async request (REQUEST tag) and returns the next link of the list it was on (0 at the end). Provenance: 1.14d asm 0041a2c0.
 int __thiscall SFILE_DeleteAsyncRequestGetNext(int32_t pListContext, struct D2StormAsyncOpStrc * pAsyncOp);
-int __stdcall SFILE_CancelAsyncRequest(int32_t hFileHandle, struct D2MPQFileStrc * pMPQFile);
+// Cancels a pending async file request. The PPC second parameter is IDirectSoundBuffer*; the Windows typing is unchanged.
+// Name from the PowerPC 1.13c Storm traceback table (static CancelRequest @10020440).
+int __stdcall SFILE_CancelRequest(int32_t hFileHandle, struct D2MPQFileStrc * pMPQFile);
 void __stdcall SFILE_SelectAsyncRequest(int32_t nFileHandle, uint32_t nCurrentFilePos, int * * ppReadyRequest, int * * ppTimeoutRequest, int32_t * ppMinTimeout);
 // Async I/O worker thread (lpStartAddress for CreateThread). Main loop: process cancelled requests, select next request (priority vs normal queue), read file via SFILE_ReadFileBytes/SFILE_SyncReadFile, invoke completion callbacks, signal hCompletionEvent, and free request when done. Throttles based on gnSFileDataChunkSize/gnSFileAsyncBudgetBytesPerSec. Exits when gbAsyncIOWorkerShutdown shutdown flag is set. Updates gpCurrentAsyncIORequest during execution.
 // @blizzard CdThreadProc (SFILE.CPP)
@@ -496,7 +504,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam);
 // @blizzard CreateCdThread (SFILE.CPP)
 void __stdcall SFILE_CreateCdThread();
 // Cancels async request without returning status. Validates handle (sets ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0). Called by ASYNCDATA_Free to silently cancel pending I/O during cleanup.
-void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nParam);
+void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nAsyncHandle);
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).
 int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nRequestHandle);
 // Cancels all async I/O requests for a file handle. Validates handle, iterates gSFileStreamRecordList.pNext list, cancels any matching requests (including gpCurrentAsyncIORequest if active), unlinks from queue, decrements refcount, and frees when refcount hits zero. Clears file handle's async flag (offset 0x134). Returns 1 on success, 0 if handle invalid.
@@ -515,10 +523,14 @@ uint32_t __stdcall SFileLoadFileEx2(struct D2ArchiveStrc * pArchive, char * pFil
 // @blizzard SFileReadFile (SFILE.CPP)
 int __stdcall SFileReadFile(struct D2MPQFileStrc * pMPQFile, void * pOutputBuffer, uint32_t nBytesToRead, uint32_t * pnSize, int32_t pAsyncReadCtx);
 // Simplified wrapper for SFILE_ReadFile that passes 0 for the completion callback parameter and param6 as the async flags. Used when caller doesn't need completion notification.
-void __stdcall SFILE_ReadFileSimple(struct D2MPQFileStrc * pMPQFile, void * pOutputBuffer, uint32_t nBytesToRead, uint32_t * pnSize, int32_t pAsyncReadCtx, struct D2StormAsyncCompletionStrc * pCompletion);
+// Exported forwarder to SFileReadFileEx2.
+// Name from the PowerPC 1.13c Storm traceback table (exported SFileReadFileEx @10019a10).
+void __stdcall SFileReadFileEx(struct D2MPQFileStrc * pMPQFile, void * pOutputBuffer, uint32_t nBytesToRead, uint32_t * pnSize, int32_t pAsyncReadCtx, struct D2StormAsyncCompletionStrc * pCompletion);
 // Load MPQ attributes from (attributes) file in archive
 // @sourcefile .\SOURCE\SFILE.CPP
-int __thiscall SFILE_LoadAttributes(struct D2ArchiveStrc * pArchive, int pAttributesBuffer, int nNumEntries);
+// Reads the archive's (attributes) file for SFILE_s_OpenArchive.
+// Name from the PowerPC 1.13c Storm traceback table (static ReadAdditionalAttributes @10020670).
+int __thiscall SFILE_ReadAdditionalAttributes(struct D2ArchiveStrc * pArchive, int pAttributesBuffer, int nNumEntries);
 // Open wave file as audio stream from MPQ archive. Parses RIFF/WAVE headers, allocates audio buffer, initializes DirectSound stream with frequency/channels settings. Starts async IO thread. Returns 1 on success, 0 on failure.
 // @sourcefile .\SOURCE\SFILE.CPP
 BOOL __stdcall SFileDdaBeginEx(struct D2MPQFileStrc * hFile, uint32_t dwBufferBytes, uint32_t dwFlags, uint32_t dwInitialPos, int32_t lVolume, int32_t lPan, struct IDirectSoundBuffer * lpDSB);
@@ -540,8 +552,12 @@ BOOL __stdcall SFileDdaBegin(struct D2MPQFileStrc * hFile, uint32_t dwBufferByte
 // @blizzard SFileOpenArchive (SFILE.CPP)
 int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
 // @sourcefile .\SOURCE\SFILE.CPP
-void __stdcall SFILE_OpenNestedArchive(int32_t nParentArchive, char * szFileName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
-void __fastcall CRC32_UpdateCRC(uint8_t * pbData, int32_t nLength, uint32_t * pdwCrc, uint8_t byFlags);
+// Opens an MPQ that is stored as a file inside another archive.
+// Name from the PowerPC 1.13c Storm traceback table (exported SFileOpenFileAsArchive @1001a4a0).
+void __stdcall SFileOpenFileAsArchive(int32_t nParentArchive, char * szFileName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
+// CRC-32 over a buffer, chained through a running value.
+// Name from the PowerPC 1.13c Storm traceback table (CrcBuffer @100a2330).
+void __fastcall CrcBuffer(uint8_t * pbData, int32_t nLength, uint32_t * pdwCrc, uint8_t byFlags);
 uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9e98(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ec8(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);

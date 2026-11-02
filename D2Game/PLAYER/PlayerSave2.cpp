@@ -88,20 +88,20 @@ __time32_t __stdcall PLRSAVE_GetTime32(__time32_t * pTime) {
 }
 
 int32_t __fastcall FindEndOfString(char * szString, int32_t nMaxSize) {
-    char* pcVar1 = szString + nMaxSize;
+    char* pBufEnd = szString + nMaxSize;
     char* pPosition = szString;
-    if (szString >= pcVar1) {
+    if (szString >= pBufEnd) {
       return -1;
     }
 
     while (*pPosition != '\0') {
       pPosition++;
-      if (pPosition >= pcVar1) {
+      if (pPosition >= pBufEnd) {
         return -1;
       }
     }
 
-    if (pPosition >= pcVar1) {
+    if (pPosition >= pBufEnd) {
       return -1;
     }
 
@@ -170,8 +170,8 @@ void __fastcall SaveMercData(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SaveFile
     pSaveHeader->sMerc.dwSeed = pPetData->nSeed;
     pSaveHeader->sMerc.wNameIndex = (uint16_t)pPetData->nNameId;
     pSaveHeader->sMerc.wHirelingId = (uint16_t)pPetData->nType;
-    uint32_t uVar2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_experience, 0);
-    pSaveHeader->sMerc.dwExperience = uVar2;
+    uint32_t dwMercExperience = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_experience, 0);
+    pSaveHeader->sMerc.dwExperience = dwMercExperience;
     pSaveHeader->sMerc.dwFlags = 0;
     pSaveHeader->sMerc.wNameIndex -= pHirelingTxt->nNameFirst;
     bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pMerc);
@@ -185,14 +185,13 @@ void __fastcall SaveMercData(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SaveFile
 // Serializes the fixed 0x14f-byte .d2s save-file header for a player into the caller's output buffer (pStartAddress..pEndAddress). Builds a D2SaveFileHeaderStrc: magic 0xAA55AA55, file version 0x60, char name, character-status flags (sets expansion 0x20 and non-SP 0x40 bits), class id, level, create/current time, init seed, the 16 hotkey skill/item bindings, left/right/swap-hand skill+item indices, per-difficulty current act (|0x80), 0xFF-filled appearance arrays (filled by SaveCharAppearance), merc data, and guild rank. Then memcpy's the header (0x14f bytes) to the buffer and advances *pStartAddress by 0x14f. Returns a Fog::GuardStack value; bails (returns guard 2) if client/name/length invalid, or if the buffer is too small.
 // @sourcefile .\PLAYER\PlrSave2.cpp
 int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pStartAddress, DWORD pEndAddress) {
-    uint8_t bWeaponSwapped;
     uint8_t byCurrentAct;
     int16_t nHotkeyItemIndex;
-    char* pcVar2;
+    char* pNameCursor;
     int32_t nCharLevel;
     uint32_t nClassId;
     uint8_t nAct;
-    int iVar3;
+    int iVar1;
     D2SkillStrc* pSkill;
     eD2Skills eSkillId;
     int32_t nScratch;
@@ -208,6 +207,7 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * p
     eD2Skills eSwapSkillId[2];
     uint8_t byGuildRank;
     D2SaveFileHeaderStrc sSaveHeader;
+    char* pNameEnd;
     uint8_t* pStartPtr;
     pStartPtr = (uint8_t*)pStartAddress;
     DWORD nStartAddress;
@@ -217,33 +217,33 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * p
     D2ClientStrc* pClientSaved;
     pClientSaved = pClient;
     if (pClient) {
-      char* pcVar1;
+      uint8_t bWeaponSwapped;
       szCharName = GAME::Clients::GetCharName(pClient);
       if (szCharName) {
-        pcVar1 = szCharName + 0x10;
-        pcVar2 = szCharName;
-        if (szCharName < pcVar1) {
+        pNameEnd = szCharName + 0x10;
+        pNameCursor = szCharName;
+        if (szCharName < pNameEnd) {
           do {
-            if (*pcVar2 == '\0') {
-              if (pcVar2 >= pcVar1) {
+            if (*pNameCursor == '\0') {
+              if (pNameCursor >= pNameEnd) {
                 goto LAB_00568da5;
               }
 
-              iVar3 = (int)pcVar2 - (int)szCharName;
+              iVar1 = (int)pNameCursor - (int)szCharName;
               goto code_r0x00568f9d;
             }
 
-            pcVar2++;
-          } while (pcVar2 < pcVar1);
+            pNameCursor++;
+          } while (pNameCursor < pNameEnd);
 
-          iVar3 = -1;
+          iVar1 = -1;
         } else {
           LAB_00568da5:
-          iVar3 = -1;
+          iVar1 = -1;
         }
 
         code_r0x00568f9d:
-        if (iVar3 >= 1) {
+        if (iVar1 >= 1) {
           nRequiredEndAddr = nStartAddress + 0x14f;
           if (nRequiredEndAddr > pEndAddress) {
             return 1;
@@ -263,8 +263,8 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * p
 
           nClassId = GAME::Clients::GetPlayerClassId(pClient);
           sSaveHeader.nPlayerClassId = (uint8_t)nClassId;
-          iVar3 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-          sSaveHeader.bCharacterLevel = (uint8_t)iVar3;
+          iVar1 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+          sSaveHeader.bCharacterLevel = (uint8_t)iVar1;
           sSaveHeader.nCreateTime = GAME::Clients::GetCreateTime(pClient);
           sSaveHeader.nTime32 = _time32(nullptr);
           sSaveHeader.nTimeEx = GAME::Clients::ReturnFFFFFFFF();
@@ -913,15 +913,15 @@ int __fastcall CalculateGetFlags(::SGAMEDATA * pGame, uint16_t dwCharacterStatus
     return 0;
 }
 
-void __fastcall SetHotkey(D2SaveHotKeyStrc * pSaveHotKey, uint32_t * pnParam, uint32_t * pnHand, uint32_t * nItemIndex) {
+void __fastcall SetHotkey(D2SaveHotKeyStrc * pSaveHotKey, uint32_t * pnSkillId, uint32_t * pnHand, uint32_t * nItemIndex) {
     if (pSaveHotKey->nSkillIdAndHand == 0xffff) {
-      *pnParam = -1;
+      *pnSkillId = -1;
       *pnHand = 0;
       *nItemIndex = -1;
       return;
     }
 
-    *pnParam = pSaveHotKey->nSkillIdAndHand & 0xfff;
+    *pnSkillId = pSaveHotKey->nSkillIdAndHand & 0xfff;
     *pnHand = (uint32_t)(pSaveHotKey->nSkillIdAndHand >> 0xf);
     uint16_t nRawItemIndex = pSaveHotKey->nItemIndex;
     *nItemIndex = (uint32_t)nRawItemIndex;
@@ -1025,12 +1025,12 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
 
     nResult = CalculateGetFlags(pGame, (uint16_t)pSaveFile->dwCharacterStatus, pClient);
     if (!nResult) {
-      uint8_t bVar2 = pSaveFile->nPlayerClassId;
-      if (bVar2 > 7) {
+      uint8_t byClassId = pSaveFile->nPlayerClassId;
+      if (byClassId > 7) {
         return 4;
       }
 
-      GAME::Clients::SetClassOfClient(pClient, bVar2);
+      GAME::Clients::SetClassOfClient(pClient, byClassId);
       uint32_t nCharStatus = pSaveFile->dwCharacterStatus;
       if (nCharStatus & 1) {
         pSaveFile->dwCharacterStatus = nCharStatus & -2;
@@ -1053,7 +1053,7 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
         pGame->pInitSeed.nSeedLow = pSaveFile->nInitSeed;
       }
 
-      D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, (uint32_t)bVar2, 0, 0, pGame, nullptr, 0, 0, nullptr);
+      D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, (uint32_t)byClassId, 0, 0, pGame, nullptr, 0, 0, nullptr);
       *pOutUnit = pUnit;
       PLAYERSAVE_LinkPlayerToUnit(pGame, pUnit, pClient);
       D2ClientStrc* pClientLocal = pClient;
@@ -1238,16 +1238,16 @@ static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, sho
 }
 
 // Deserialises a bitmask-encoded stat block from the save buffer into the unit's stat list. Reads a presence bitmask (bParam2 stats wide) followed by packed 32-bit values for set stats only; delegates to ReadStatsLong for stat counts above 0x5e. Returns 0 on success, 0x12 on format/bounds error.
-int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t bParam1, uint32_t bParam2) {
+int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t nFormat, uint32_t nStatCount) {
     int32_t nValue;
-    if (bParam1 > 0x5e) {
+    if (nFormat > 0x5e) {
       int nResult;
-      nResult = ReadStatsLong(pUnit, ppReadPos, pEndBuf, bParam1);
+      nResult = ReadStatsLong(pUnit, ppReadPos, pEndBuf, nFormat);
       return nResult;
     }
 
     short int* pReadCursor = *ppReadPos;
-    int32_t nBitmaskBytes = (int)(bParam2 + 7) / 8;
+    int32_t nBitmaskBytes = (int)(nStatCount + 7) / 8;
     if ((short int*)((int)pReadCursor + nBitmaskBytes + 2) > pEndBuf) {
       return 0x12;
     }
@@ -1264,7 +1264,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
 
     int32_t nPresentStats = 0;
     eD2UnitStat eUnitStat = UNITSTAT_strength;
-    if ((int)bParam2 > 0) {
+    if ((int)nStatCount > 0) {
       do {
         if ((uint8_t)gadwBitMasks[eUnitStat & UNITSTAT_maxhp] & pBitmaskBase[(int)eUnitStat >> 3]) {
           nValue = *(int32_t*)(pBitmaskBase + nPresentStats * 4 + nBitmaskBytes);
@@ -1275,7 +1275,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
 
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
         eUnitStat += UNITSTAT_energy;
-      } while ((int)eUnitStat < (int)bParam2);
+      } while ((int)eUnitStat < (int)nStatCount);
     }
 
     *ppReadPos = (short int*)(pBitmaskBase + nPresentStats * 4 + nBitmaskBytes);
@@ -1292,11 +1292,11 @@ void __fastcall PLRSAVE_SetSkillIfNonZero(uint32_t dwParam, D2UnitStrc * pUnit, 
 
 // Deserialises hard skill allocations (magic 0x6669) from the save buffer and applies them to the unit via SetSkill for each non-zero entry. After loading, sends the 0x94 skills-list packet to the client and recomputes all passive and pet bonuses. Returns 0x13 on header mismatch or missing client.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam, uint32_t bParam) {
+int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam, uint32_t nSkillCount) {
     int32_t nTotalClassSkills;
     int32_t iSkill;
-    short int* psVar1 = *ppReadPos + 1;
-    if (psVar1 > pEndBuf) {
+    short int* pSkillLevels = *ppReadPos + 1;
+    if (pSkillLevels > pEndBuf) {
       return 0x13;
     }
     if (**ppReadPos != 0x6669) {
@@ -1309,35 +1309,35 @@ int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short
     }
 
     uint32_t nClassId = GAME::Clients::GetPlayerClassId(pClient);
-    for (iSkill = 0; iSkill < (int)bParam; iSkill++) {
+    for (iSkill = 0; iSkill < (int)nSkillCount; iSkill++) {
       eD2Skills eSkill;
       eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, iSkill);
       nTotalClassSkills = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
       if (iSkill > nTotalClassSkills) {
         break;
       }
-      if (*(uint8_t*)(iSkill + (int)psVar1)) {
-        SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)*(uint8_t*)(iSkill + (int)psVar1), 1);
+      if (*(uint8_t*)(iSkill + (int)pSkillLevels)) {
+        SKILLS::SkillsServer::SetSkill(pUnit, eSkill, (uint32_t)*(uint8_t*)(iSkill + (int)pSkillLevels), 1);
       }
     }
 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(pClient, pUnit);
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);
-    *ppReadPos = (short int*)((int)psVar1 + bParam);
+    *ppReadPos = (short int*)((int)pSkillLevels + nSkillCount);
     return 0;
 }
 
-int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppItemList, int32_t nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnParam) {
+int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppItemList, int32_t nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnLoadResult) {
     D2UnitStrc** ppReadPos = ppItemList;
     D2UnitStrc* pBufStart = *ppItemList;
     ppItemList = 0;
     int32_t nLoadResult = PlayerSave::PLRSAVE_DispatchItemLoadByFormat(pGame, pUnit, (uint8_t*)pBufStart, nFormat, nItemMode - (int)pBufStart, 0, (short int**)&ppItemList);
     if (nLoadResult) {
-      if (!pnParam) {
+      if (!pnLoadResult) {
         return 0x14;
       }
 
-      *pnParam = nLoadResult;
+      *pnLoadResult = nLoadResult;
       return 0x14;
     }
 
@@ -1347,7 +1347,7 @@ int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 // Deserializes the player's saved corpse(s) from the .d2s save stream during game/character load. ppCorpseList points at the current read cursor; validates the 'JM' (0x4D4A) corpse block header and a count <2 (at most one corpse). For each corpse: creates a UNIT_PLAYER unit of the loading player's class, clears CANBEATTACKED, binds the owning client, copies the char name, seeds it from the game seed, sets STATE_playerbody, links its inventory owner GUID to the player, then loads the corpse's items via PLRSAVE_LoadItemsFromBuffer. Registers an inventory notification and sends the 0x8E corpse-assign packet. Advances *ppCorpseList past the consumed bytes. Returns 0 on success or 0x15 on error; on error writes a granular error code (0x65-0x6A or the item-load error) into *pnParam when non-null.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppCorpseList, D2UnitStrc * pOwnerUnit, uint32_t nParam, int * pnParam) {
+int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppCorpseList, D2UnitStrc * pOwnerUnit, uint32_t dwFileVersion, int * pnErrorCode) {
     int32_t nClassId;
     int nResult;
     int nItemLoadError;
@@ -1363,38 +1363,38 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2UnitStrc* pCorpseUnit = *ppCorpseList;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave2.cpp", 0x733);
     if (!pClient) {
-      if (!pnParam) {
+      if (!pnErrorCode) {
         return 0x15;
       }
 
-      *pnParam = 0x65;
+      *pnErrorCode = 0x65;
       return 0x15;
     }
     if (&pCorpseUnit->nClassId > (int*)pOwnerUnit) {
-      if (!pnParam) {
+      if (!pnErrorCode) {
         return 0x15;
       }
 
-      *pnParam = 0x66;
+      *pnErrorCode = 0x66;
       return 0x15;
     }
     if ((short int)pCorpseUnit->eUnitType != 0x4d4a) {
-      if (!pnParam) {
+      if (!pnErrorCode) {
         return 0x15;
       }
 
-      *pnParam = 0x67;
+      *pnErrorCode = 0x67;
       return 0x15;
     }
 
     uint16_t wCorpseCount = *(uint16_t*)((uintptr_t)&pCorpseUnit->eUnitType + 2);
     D2UnitStrc* pReadPtr = (D2UnitStrc*)&pCorpseUnit->nClassId;
     if (wCorpseCount > 1) {
-      if (!pnParam) {
+      if (!pnErrorCode) {
         return 0x15;
       }
 
-      *pnParam = 0x68;
+      *pnErrorCode = 0x68;
       return 0x15;
     }
 
@@ -1404,11 +1404,11 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
       do {
         pReadPtr = (D2UnitStrc*)&pReadPtr->nUnitGUID;
         if (pReadPtr > pOwnerUnit) {
-          if (!pnParam) {
+          if (!pnErrorCode) {
             return 0x15;
           }
 
-          *pnParam = 0x69;
+          *pnErrorCode = 0x69;
           return 0x15;
         }
 
@@ -1422,11 +1422,11 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         nClassId = D2Client::UNIT::GetClassId(pUnit);
         pCorpseUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, nClassId, nOwnerGUID, nPosY, pGame_00, pRoom, bCorpseInit, arg6, pReserved);
         if (!pCorpseUnit) {
-          if (!pnParam) {
+          if (!pnErrorCode) {
             return 0x15;
           }
 
-          *pnParam = 0x6a;
+          *pnErrorCode = 0x6a;
           return 0x15;
         }
 
@@ -1440,13 +1440,13 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         nClassId = D2Client::UNIT::GetGUID(pUnit);
         D2Common::INVENTORY::Inventory::INVENTORY_SetOwnerGUID(pCorpseUnit->pInventory, nClassId);
         nItemLoadError = 0;
-        nResult = PLRSAVE_LoadItemsFromBuffer(pGame, pCorpseUnit, &pReadPtr, (int32_t)pOwnerUnit, nParam, 1, &nItemLoadError);
+        nResult = PLRSAVE_LoadItemsFromBuffer(pGame, pCorpseUnit, &pReadPtr, (int32_t)pOwnerUnit, dwFileVersion, 1, &nItemLoadError);
         if (nResult) {
-          if (!pnParam) {
+          if (!pnErrorCode) {
             return 0x15;
           }
 
-          *pnParam = nItemLoadError;
+          *pnErrorCode = nItemLoadError;
           return 0x15;
         }
 
@@ -1464,9 +1464,9 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Deserializes a mercenary from save data and recreates it as a live unit. Reads 8 dwords of merc save data (type, GUID, name index, experience), looks up the hireling text entry, creates the merc unit via CreateMerc, links it to the player via PETS_UpdatePetData, clamps experience to the minimum for its level, applies level stats, and ensures an inventory is allocated. Returns the new D2UnitStrc or null if the save data is empty or creation fails.
-D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MercSaveDataStrc * pMercSaveData, uint32_t dwParam) {
+D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MercSaveDataStrc * pMercSaveData, uint32_t dwFileVersion) {
     D2UnitStrc* pMerc;
-    int32_t iVar1;
+    int32_t nMaxLevel;
     uint32_t exp;
     uint32_t nMinExp;
     int nCopyCount;
@@ -1503,7 +1503,7 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
     sPetData.nSeed = sMercSave.dwSeed;
     PlayerPets::PETS_UpdatePetData(pUnit, PETTYPE_hireable, pMerc->nUnitGUID, &sPetData);
     D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    iVar1 = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
+    nMaxLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
     pMercSaveData = (D2MercSaveDataStrc*)0x1;
     exp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pMerc, UNITSTAT_experience, 0);
     nMinExp = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&sMercSave.dwExperience + 2) << 16 | (uint32_t)(uint16_t)sMercSave.dwExperience);
@@ -1515,7 +1515,7 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
     pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)sMercSave.wHirelingId, 1);
     while (pHirelingTxt) {
       pSaveCopyDst = (D2MercSaveDataStrc*)((uintptr_t)&pMercSaveData->dwFlags + 1);
-      if ((int)pSaveCopyDst > iVar1 || (nMinExp = D2Common::Merc::GetBaseExperience((int32_t)pSaveCopyDst, pHirelingTxt->expPerLvl) , (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&sMercSave.dwExperience + 2) << 16 | (uint32_t)(uint16_t)sMercSave.dwExperience) < nMinExp)) {
+      if ((int)pSaveCopyDst > nMaxLevel || (nMinExp = D2Common::Merc::GetBaseExperience((int32_t)pSaveCopyDst, pHirelingTxt->expPerLvl) , (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&sMercSave.dwExperience + 2) << 16 | (uint32_t)(uint16_t)sMercSave.dwExperience) < nMinExp)) {
         Monster::MonsterAI::MERC_ApplyLevelStats(pGame, pUnit, pMerc, (int32_t)pMercSaveData);
         if (sMercSave.dwFlags & 0x10000) {
           PlayerPets::SERVERUNIT_RemovePetFromUnit(pGame, pUnit, pMerc);
@@ -1541,7 +1541,7 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
 
 // Loads a mercenary's equipped items from the save buffer into the given merc unit (expansion-only, magic 0x666a). Calls PLRSAVE_LoadItemsFromBuffer, then recalculates the merc's inventory stats and sets HP to max if the merc is alive. Skipped entirely in classic (non-expansion) games.
 // Registers: pGame (ECX) and pPlayer (EDX) are passed by the caller but not read.
-int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, D2UnitStrc * * ppUnit, D2UnitStrc * pUnit2, uint32_t nParam, int * pnParam) {
+int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit, D2UnitStrc * * ppUnit, D2UnitStrc * pUnit2, uint32_t dwFileVersion, int * pnErrorCode) {
     BOOL bIsDead;
     D2UnitStrc* pMercUnit = pUnit2;
     D2UnitStrc** ppReadPosOut = ppUnit;
@@ -1554,11 +1554,11 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc *
       return 0;
     }
     if ((short int)(*ppUnit)->eUnitType != 0x666a) {
-      if (!pnParam) {
+      if (!pnErrorCode) {
         return 0x16;
       }
 
-      *pnParam = 0x65;
+      *pnErrorCode = 0x65;
       return 0x16;
     }
 
@@ -1566,13 +1566,13 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc *
     if (pUnit) {
       int nLoadResult;
       ppUnit = 0;
-      nLoadResult = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, &pUnit2, (int32_t)pMercUnit, nParam, 0, (int*)&ppUnit);
+      nLoadResult = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, &pUnit2, (int32_t)pMercUnit, dwFileVersion, 0, (int*)&ppUnit);
       if (nLoadResult) {
-        if (!pnParam) {
+        if (!pnErrorCode) {
           return 0x16;
         }
 
-        *pnParam = (int)ppUnit;
+        *pnErrorCode = (int)ppUnit;
         return 0x16;
       }
 
@@ -1605,7 +1605,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     bool bPutResult;
     eD2ItemFlag eItemFlags;
     D2UnitStrc* pSocketedItem;
-    D2UnitDataItemDetailsStrc local_34;
+    D2UnitDataItemDetailsStrc sItemDetails;
     int32_t bSocketMode;
     DWORD dwSocketedItemGUID;
     int32_t nSocketBodyLoc;
@@ -1616,26 +1616,26 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     size_t nBytesConsumed = nEndOffset - (int)pReadPos;
     *ppGolemItem = 0;
     __frame0.pOwnerUnit = pUnit;
-    D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pReadPos, nBytesConsumed, 1, &local_34, nVersion);
-    if (local_34.classId == -1) {
+    D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pReadPos, nBytesConsumed, 1, &sItemDetails, nVersion);
+    if (sItemDetails.classId == -1) {
       return 0;
     }
 
-    __frame0.nSocketIdx = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pReadPos, nBytesConsumed, 1, &local_34, (int*)&nBytesConsumed, nVersion);
+    __frame0.nSocketIdx = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pReadPos, nBytesConsumed, 1, &sItemDetails, (int*)&nBytesConsumed, nVersion);
     if (!__frame0.nSocketIdx) {
       return 0;
     }
 
     pReadPos += nBytesConsumed;
     GAME::Task::TASK_Nop(__frame0.nSocketIdx);
-    __frame0.nUsedSockets = local_34.usedSockets;
+    __frame0.nUsedSockets = sItemDetails.usedSockets;
     __frame0.pGolemItem = __frame0.nSocketIdx;
     __frame0.nSocketIdx = 0;
-    if ((int)local_34.usedSockets > 0) {
+    if ((int)sItemDetails.usedSockets > 0) {
       do {
         nBytesConsumed = nEndOffset - (int)pReadPos;
-        D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pReadPos, nBytesConsumed, 1, &local_34, nVersion);
-        pSocketedItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pReadPos, nBytesConsumed, 1, &local_34, (int*)&nBytesConsumed, nVersion);
+        D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pReadPos, nBytesConsumed, 1, &sItemDetails, nVersion);
+        pSocketedItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pReadPos, nBytesConsumed, 1, &sItemDetails, (int*)&nBytesConsumed, nVersion);
         if (!pSocketedItem) {
           UNIT::SUnit::FreeServerUnit(pGame, __frame0.pGolemItem);
           return 0;
@@ -1728,33 +1728,33 @@ int __fastcall LoadGolem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, short * * ppRe
 // Body continues at 0056af31, the JNZ target of 0056af28 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'GetHotkeyItemOwner'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'GetHotkeyItemOwner':
 int32_t __fastcall HOTKEY_GetAssignedItemGUID(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nHotkeyIndex) {
-    D2UnitStrc* pDVar1;
+    D2UnitStrc* pItem;
     int32_t nReturnAddr;
     if (!pUnit->pInventory) {
       return -1;
     }
 
-    int iVar2 = 1;
-    D2UnitStrc* pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
+    int nItemIndex = 1;
+    D2UnitStrc* pInvNode = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
     while (true) {
-      if (!pUnit_00) {
+      if (!pInvNode) {
         return -1;
       }
 
-      pDVar1 = D2Common::INVENTORY::Inventory::GetCarriedItem(pUnit_00);
-      pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pUnit_00);
-      if (iVar2 == nHotkeyIndex) {
+      pItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvNode);
+      pInvNode = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvNode);
+      if (nItemIndex == nHotkeyIndex) {
         break;
       }
 
-      iVar2++;
+      nItemIndex++;
     }
 
-    if (!pDVar1) {
+    if (!pItem) {
       return -1;
     }
 
-    return pDVar1->nUnitGUID;
+    return pItem->nUnitGUID;
 }
 
 // Post-load fixup of a player unit's stats and hotkey/skill bindings (player save-restore path, PlrSave2.cpp). Clamps gold and stashed gold (goldbank) to their inventory/stash limits (zeroing if invalid), resets stamina to max, then remaps all 16 client hotkey item GUIDs and the four selected-skill owner GUIDs (left/right/switch) from save-relative to live unit GUIDs via HOTKEY_GetAssignedItemGUID. Re-selects left/right skills (Server_SelectSkill) when not SKILL_Attack, sets hitpoints/mana to the passed nHitpoints/nMana, resets attackrate/velocity%/animrate to 100, recomputes nextexp from the class' experience table, and sends a 0x97 weapon-switch packet if the client is on the swapped weapon set. __fastcall(pGameStrc,pUnit,nHitpoints,nMana).
@@ -1892,13 +1892,13 @@ int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, D2ClientStrc
 }; D2_STATIC_GUARD(gdwPlayerSaveVersion, "D2Game::PLAYER::PlayerSave2::PLAYERSAVE_LoadModernFormat::gdwPlayerSaveVersion");
 
     int nLoadError;
-    uint32_t nNewCharError;
     int nSavedHitpoints;
     int nSavedMana;
     D2UnitStrc* pMerc;
     D2RoomStrc* pRoom;
     bool bIsFatalError;
     int nSubError;
+    uint32_t dwFileVersion;
     eD2UnitType eUnitType;
     D2SaveFileHeaderStrc* pReadPos;
     pReadPos = pSaveHeader;
@@ -1916,6 +1916,7 @@ int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, D2ClientStrc
 
     nLoadError = PLAYERSAVE_ParseHeaderAndCreateUnit(pGame, pClient, &pReadPos, pBufEnd, ppUnit);
     if (nLoadError) {
+      uint32_t nNewCharError;
       if (nLoadError == 2) {
         if (pReadPos == pBufEnd) {
           nNewCharError = PLAYERSAVE_CreateNewCharacter(pClientSaved, pGame, ppUnit);
@@ -1927,41 +1928,40 @@ int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, D2ClientStrc
 
       bIsFatalError = nLoadError < 0;
     } else {
-      uint32_t dwParam;
-      dwParam = pSaveHeader->dwFileVersion;
+      dwFileVersion = pSaveHeader->dwFileVersion;
       pUnit = *ppUnit;
-      nLoadError = PLRSAVE_ReadQuestsFromBuffer(pGame, pUnit, (int**)&pReadPos, (int*)pBufEnd, dwParam);
+      nLoadError = PLRSAVE_ReadQuestsFromBuffer(pGame, pUnit, (int**)&pReadPos, (int*)pBufEnd, dwFileVersion);
       bIsFatalError = nLoadError < 0;
       if (!nLoadError) {
-        nLoadError = ReadWaypoints(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwParam);
+        nLoadError = ReadWaypoints(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwFileVersion);
         bIsFatalError = nLoadError < 0;
         if (!nLoadError) {
-          nLoadError = LoadPlayerIntro(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwParam);
+          nLoadError = LoadPlayerIntro(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwFileVersion);
           bIsFatalError = nLoadError < 0;
           if (!nLoadError) {
-            nLoadError = ReadStats(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwParam, (uint32_t)pSaveHeader->nConst16);
+            nLoadError = ReadStats(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwFileVersion, (uint32_t)pSaveHeader->nConst16);
             bIsFatalError = nLoadError < 0;
             if (!nLoadError) {
               nSavedHitpoints = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
               nSavedMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-              nLoadError = LoadHardSkills(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwParam, (uint32_t)pSaveHeader->nMaxSkillsCount);
+              nLoadError = LoadHardSkills(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwFileVersion, (uint32_t)pSaveHeader->nMaxSkillsCount);
               bIsFatalError = nLoadError < 0;
               if (!nLoadError) {
-                nLoadError = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, (D2UnitStrc**)&pReadPos, (int32_t)pBufEnd, dwParam, 0, &nSubError);
+                nLoadError = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, (D2UnitStrc**)&pReadPos, (int32_t)pBufEnd, dwFileVersion, 0, &nSubError);
                 bIsFatalError = nLoadError < 0;
                 if (!nLoadError) {
-                  nLoadError = PLRSAVE_LoadCorpseFromBuffer(pGame, pUnit, (D2UnitStrc**)&pReadPos, (D2UnitStrc*)pBufEnd, dwParam, &nSubError);
+                  nLoadError = PLRSAVE_LoadCorpseFromBuffer(pGame, pUnit, (D2UnitStrc**)&pReadPos, (D2UnitStrc*)pBufEnd, dwFileVersion, &nSubError);
                   bIsFatalError = nLoadError < 0;
                   if (!nLoadError) {
-                    pMerc = LoadMerc(pGame, pUnit, &pSaveHeader->sMerc, dwParam);
-                    nLoadError = LoadMerc2(pGame, pUnit, pMerc, (D2UnitStrc**)&pReadPos, (D2UnitStrc*)pBufEnd, dwParam, &nSubError);
+                    pMerc = LoadMerc(pGame, pUnit, &pSaveHeader->sMerc, dwFileVersion);
+                    nLoadError = LoadMerc2(pGame, pUnit, pMerc, (D2UnitStrc**)&pReadPos, (D2UnitStrc*)pBufEnd, dwFileVersion, &nSubError);
                     bIsFatalError = nLoadError < 0;
                     if (!nLoadError) {
                       if (pMerc) {
                         Monster::MonsterAI::SendMercPackets(pGame, pUnit, 1);
                       }
 
-                      nLoadError = LoadGolem(pGame, pUnit, (short int**)&pReadPos, (D2UnitStrc*)pBufEnd, dwParam);
+                      nLoadError = LoadGolem(pGame, pUnit, (short int**)&pReadPos, (D2UnitStrc*)pBufEnd, dwFileVersion);
                       if (!nLoadError) {
                         SetStatsAndHotkeys(pGame, pUnit, nSavedHitpoints, nSavedMana);
                         return 0;

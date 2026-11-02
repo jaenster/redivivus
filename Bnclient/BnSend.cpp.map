@@ -1,0 +1,2200 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/BnSend.cpp",
+  "functions": [
+    {
+      "name": "NET_SID_CLIENT_Send_0x1E_ClientId2",
+      "address": "0051a490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a490"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x1E_ClientId2",
+        "SRegLoadValue",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "SID_C2S_ClientId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_SetServerToken",
+      "address": "0051a540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a540"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_SetServerToken"
+      ]
+    },
+    {
+      "name": "BNSEND_GetServerToken",
+      "address": "0051a550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a550"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_GetServerToken"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_SetClientToken",
+      "address": "0051a560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a560"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_SetClientToken"
+      ]
+    },
+    {
+      "name": "BNCLIENT_GetBNetClientToken",
+      "address": "0051a570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a570"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_GetBNetClientToken"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x29_LogonResponse",
+      "address": "0051a580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a580"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x29_LogonResponse",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "SStrCopy",
+        "SStrLen",
+        "GetTickCount",
+        "XSHA1",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BnDoubleHashInput",
+        "SID_C2S_LogonResponse",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x3A_LogonResponse2",
+      "address": "0051a660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a660"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x3A_LogonResponse2",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "SStrCopy",
+        "SStrLen",
+        "GetTickCount",
+        "XSHA1",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BnDoubleHashInput",
+        "SID_C2S_LogonResponse",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x3D_CreateAccount2",
+      "address": "0051a740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a740"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x3D_CreateAccount2",
+        "SStrCopy",
+        "SStrLen",
+        "XSHA1",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2SHA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x31_ChangePassword",
+      "address": "0051a7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a7d0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x31_ChangePassword",
+        "SStrCopy",
+        "SStrLen",
+        "GetTickCount",
+        "XSHA1",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "BnDoubleHashInput",
+        "D2SHA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x07_ReportVersion",
+      "address": "0051a8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a8f0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x07_ReportVersion",
+        "memset",
+        "D2CheckExpansionGame",
+        "SStrCopy",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "SID_C2S_ReportVersion",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x06_StartVersioning",
+      "address": "0051a9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a9c0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x06_StartVersioning",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "BNDOWNLOAD_SetPatchFilename",
+        "D2CheckExpansionGame",
+        "NET_SID_CLIENT_Send",
+        "BNDOWNLOAD_HasPatchFilename",
+        "NET_SID_CLIENT_GetRequiredAnswer",
+        "SID_GetReadyFlag",
+        "BNDOWNLOAD_ResetState",
+        "memset",
+        "BNDOWNLOAD_PerformCheckRevision",
+        "BNMESSQUEUE_SetStateIfZero",
+        "__security_check_cookie",
+        "BNSEND_SendRawBytes",
+        "NET_SID_CLIENT_Send_0x07_ReportVersion",
+        "NET_SID_CLIENT_WaitForPacketId"
+      ],
+      "usedTypes": [
+        "SID_C2S_StartVersioning",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNSEND_StoreCDKeyHashData",
+      "address": "0051ab30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ab30"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_StoreCDKeyHashData",
+        "SMemFree",
+        "SMemAlloc",
+        "memcpy"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x41_QueryAdURL",
+      "address": "0051abb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051abb0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x41_QueryAdURL",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send",
+        "NET_SID_CLIENT_WaitForPacketId"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x40_QueryRealms2",
+      "address": "0051abf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051abf0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x40_QueryRealms2",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send",
+        "NET_SID_CLIENT_WaitForPacketId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_FreeChannelListData",
+      "address": "0051ac20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ac20"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_FreeChannelListData",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x0B_GetChannelList",
+      "address": "0051ac50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ac50"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x0B_GetChannelList",
+        "D2CheckExpansionGame",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send",
+        "NET_SID_CLIENT_WaitForPacketId"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x0C_JoinChannel",
+      "address": "0051aca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051aca0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x0C_JoinChannel",
+        "memset",
+        "D2CheckExpansionGame",
+        "SStrCopy",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_EncodePacketEscape",
+      "address": "0051ad70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ad70"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_EncodePacketEscape",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat",
+      "address": "0051ae10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ae10"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat",
+        "D2CheckExpansionGame",
+        "NET_SID_CLIENT_Send",
+        "memset",
+        "SStrCopy",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x10_LeaveChat",
+      "address": "0051af20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051af20"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x10_LeaveChat",
+        "NET_SID_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x0E_ChatCommand",
+      "address": "0051af40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051af40"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x0E_ChatCommand",
+        "TRANSTBL_Latin1ToUnicode",
+        "UTF16_ToUTF8",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x15_CheckAd",
+      "address": "0051b010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b010"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x15_CheckAd",
+        "D2CheckExpansionGame",
+        "_time32",
+        "NET_SID_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "SID_C2S_CheckAd"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x21_DisplayAd",
+      "address": "0051b060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b060"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x21_DisplayAd",
+        "D2CheckExpansionGame",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "SID_C2S_DisplayAd",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x1C_StartAdVex3",
+      "address": "0051b0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b0e0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x1C_StartAdVex3",
+        "SStrCopy",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "SID_C2S_StartAdvex",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_SendKeepAlive",
+      "address": "0051b1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b1b0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_SendKeepAlive",
+        "NET_SID_CLIENT_Send"
+      ]
+    },
+    {
+      "name": "thunk_NET_SID_CLIENT_Send",
+      "address": "0051b1b6",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b1b6"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "thunk_NET_SID_CLIENT_Send",
+        "NET_SID_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x1F_LeaveGame",
+      "address": "0051b1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b1d0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x1F_LeaveGame",
+        "MISC_GetIgnorelist",
+        "NET_SID_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "IgnoreList"
+      ]
+    },
+    {
+      "name": "BNCLIENT_GetEnterChatResponseFlags",
+      "address": "0051b1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b1f0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_GetEnterChatResponseFlags",
+        "SID_GetPacketResponseFlag",
+        "NET_SID_CLIENT_GetRequiredAnswer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_FreeGameListData",
+      "address": "0051b210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b210"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_FreeGameListData",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x09_GetAdvListEx",
+      "address": "0051b240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b240"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x09_GetAdvListEx",
+        "SStrCopy",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send",
+        "NET_SID_CLIENT_WaitForPacketId",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x22_NotifyJoin",
+      "address": "0051b320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b320"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x22_NotifyJoin",
+        "D2CheckExpansionGame",
+        "SStrCopy",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_StoreUserProfileData",
+      "address": "0051b3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b3e0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_StoreUserProfileData",
+        "FreeClientMemory",
+        "AllocClientMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "u_short",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x3E_LogonRealmEx",
+      "address": "0051b460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b460"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x3E_LogonRealmEx",
+        "XSHA1",
+        "SStrCopy",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send",
+        "NET_SID_CLIENT_WaitForPacketId",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x12_LocaleInfo",
+      "address": "0051b540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b540"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x12_LocaleInfo",
+        "memset",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "LANGID",
+        "SID_C2S_LocaleInfo",
+        "_SYSTEMTIME",
+        "_TIME_ZONE_INFORMATION"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x16_ClickAd",
+      "address": "0051b6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b6c0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x16_ClickAd",
+        "NET_SID_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "SID_C2S_ClickAd",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x27_WriteUserData",
+      "address": "0051b6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b6f0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x27_WriteUserData",
+        "SStrLen",
+        "AllocClientMemory",
+        "SStrCopy",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "char *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_StoreReadUserData",
+      "address": "0051b820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b820"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_StoreReadUserData",
+        "FreeClientMemory",
+        "AllocClientMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x26_ReadUserData",
+      "address": "0051b870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b870"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x26_ReadUserData",
+        "SStrLen",
+        "AllocClientMemory",
+        "SStrCopy",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "char *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_GetStoredReadUserData",
+      "address": "0051b960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b960"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_GetStoredReadUserData",
+        "NET_SID_CLIENT_GetRequiredAnswer",
+        "strncpy",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "char *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x59_SetEmail",
+      "address": "0051ba00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ba00"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x59_SetEmail",
+        "SStrLen",
+        "memcpy",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x5A_ResetPassword",
+      "address": "0051baa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051baa0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x5A_ResetPassword",
+        "__security_check_cookie",
+        "SStrLen",
+        "memcpy",
+        "NET_SID_CLIENT_Send",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x5B_ChangeEmail",
+      "address": "0051bb90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051bb90"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x5B_ChangeEmail",
+        "__security_check_cookie",
+        "SStrLen",
+        "memcpy",
+        "NET_SID_CLIENT_Send",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x5D_ReportCrash",
+      "address": "0051bcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051bcf0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x5D_ReportCrash",
+        "LoadPreviousCrashDump",
+        "__security_check_cookie",
+        "NET_SID_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_StoreRealmQueryData",
+      "address": "0051bd60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051bd60"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_StoreRealmQueryData",
+        "FreeClientMemory",
+        "AllocClientMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNSEND_StoreChannelListData",
+      "address": "0051bdc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051bdc0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_StoreChannelListData",
+        "FreeClientMemory",
+        "AllocClientMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNSEND_StoreGameListData",
+      "address": "0051be20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051be20"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_StoreGameListData",
+        "FreeClientMemory",
+        "AllocClientMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_InterlockedCompareExchange",
+      "address": "0051be80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051be80"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_InterlockedCompareExchange"
+      ]
+    },
+    {
+      "name": "GetDnsResults",
+      "address": "0051bee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051bee0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "GetDnsResults",
+        "isdigit",
+        "WSAGetLastError",
+        "BnetLog_WriteLine",
+        "DEBUG_UnusedDebugFunction",
+        "GetTickCount",
+        "srand",
+        "rand",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "_union_1226",
+        "char *",
+        "hostent",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetDnsRecordSync",
+      "address": "0051c0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c0e0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "GetDnsRecordSync"
+      ],
+      "usedTypes": [
+        "char *"
+      ]
+    },
+    {
+      "name": "BnetLoadAndReturn",
+      "address": "0051c180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c180"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BnetLoadAndReturn",
+        "Load"
+      ],
+      "usedTypes": [
+        "D2BNetGatewayAccessStr"
+      ]
+    },
+    {
+      "name": "GetBnetIp",
+      "address": "0051c190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c190"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "GetBnetIp",
+        "Load",
+        "DNS",
+        "SStrCopy",
+        "SRegLoadString",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_GetConnectionState",
+      "address": "0051c210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c210"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_GetConnectionState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_SendLogonRequest",
+      "address": "0051c240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c240"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_SendLogonRequest",
+        "BNCLIENT_GetBNetClientToken",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send_0x3A_LogonResponse2",
+        "NET_SID_CLIENT_Send_0x53_AuthAccountLogon"
+      ]
+    },
+    {
+      "name": "BNCLIENT_WaitForLogonResponse",
+      "address": "0051c290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c290"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_WaitForLogonResponse",
+        "SID_GetReadyFlag",
+        "BNCLIENT_GetBNetClientToken",
+        "NET_SID_CLIENT_GetRequiredAnswer",
+        "BNMESSQUEUE_SetStateIfZero"
+      ]
+    },
+    {
+      "name": "BNCLIENT_SendCreateAccountRequest",
+      "address": "0051c2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c2d0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_SendCreateAccountRequest",
+        "BNCLIENT_GetBNetClientToken",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send_0x3D_CreateAccount2",
+        "NET_SID_CLIENT_Send_0x52_AuthAccountCreate"
+      ]
+    },
+    {
+      "name": "BNCLIENT_WaitForCreateAccountResponse",
+      "address": "0051c320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c320"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_WaitForCreateAccountResponse",
+        "NET_SID_CLIENT_GetResponseCount2",
+        "BNCLIENT_GetBNetClientToken",
+        "NET_SID_CLIENT_GetRequiredAnswer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_SendChangePasswordRequest",
+      "address": "0051c350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c350"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_SendChangePasswordRequest",
+        "BNCLIENT_GetBNetClientToken",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send_0x31_ChangePassword",
+        "NET_SID_CLIENT_Send_0x55_AuthAccountChange"
+      ]
+    },
+    {
+      "name": "BNCLIENT_WaitForChangePasswordResponse",
+      "address": "0051c3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c3b0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_WaitForChangePasswordResponse",
+        "NET_SID_CLIENT_GetResponseCount1",
+        "BNCLIENT_GetBNetClientToken",
+        "NET_SID_CLIENT_GetRequiredAnswer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_EnterChatAndJoinChannel",
+      "address": "0051c3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c3e0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_EnterChatAndJoinChannel",
+        "BNNEWS_SetNewsChannel",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat",
+        "NET_SID_CLIENT_Send_0x0C_JoinChannel",
+        "NET_SID_CLIENT_WaitForPacketId",
+        "SID_GetReadyFlag",
+        "BNMESSQUEUE_SetStateIfZero",
+        "SID_SetStateFlag1"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "thunk_NET_SID_CLIENT_Send_0x10_LeaveChat",
+      "address": "0051c460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c460"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "thunk_NET_SID_CLIENT_Send_0x10_LeaveChat",
+        "NET_SID_CLIENT_Send_0x10_LeaveChat"
+      ]
+    },
+    {
+      "name": "BNSEND_Disconnect",
+      "address": "0051c470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c470"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_Disconnect",
+        "BNSEND_FreeChannelListData",
+        "BNSEND_FreeGameListData",
+        "CACHE_FreeAll",
+        "BNMESSQUEUE_ClearAll",
+        "NET_SID_CLIENT_FreeSRP",
+        "SID_SetReadyFlag",
+        "Free",
+        "BNDOWNLOAD_SetCancelFlag",
+        "BNDOWNLOAD_HasActiveDownloads"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send",
+      "address": "0051c5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c5c0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send",
+        "SMemCopy",
+        "WSASocket2_Send",
+        "__security_check_cookie",
+        "SID_SetReadyFlag"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_ParseAndEnqueueChatMessages",
+      "address": "0051c6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c6c0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_ParseAndEnqueueChatMessages",
+        "strchr",
+        "memcpy",
+        "BNMESSQUEUE_EnqueueString",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_IncomingPacketHandlerLoop",
+      "address": "0051c760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c760"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IncomingPacketHandlerLoop",
+        "memcpy",
+        "NET_SID_CLIENT_IncomingPacketHandler"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BnetReadFunction",
+      "address": "0051c7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c7e0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BnetReadFunction",
+        "__security_check_cookie",
+        "GetTickCount",
+        "Safesock_PollReadReady",
+        "WSASocket2_Read",
+        "SID_SetReadyFlag",
+        "NET_SID_CLIENT_IncomingPacketHandlerLoop",
+        "NET_SID_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_GetSocketPeerName",
+      "address": "0051c9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c9b0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_GetSocketPeerName",
+        "GetPeerNameDoesReturn"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "sockaddr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_GetSocketAddress",
+      "address": "0051c9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051c9e0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_GetSocketAddress",
+        "GetSockNameDoesReturn"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "sockaddr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GET_GameVersion",
+      "address": "0051ca10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ca10"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "GET_GameVersion"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_GetProtocolVersionChar",
+      "address": "0051ca20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ca20"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_GetProtocolVersionChar"
+      ]
+    },
+    {
+      "name": "BNCLIENT_IsSocketConnected",
+      "address": "0051ca30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ca30"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNCLIENT_IsSocketConnected",
+        "SID_GetState",
+        "SID_GetReadyFlag"
+      ]
+    },
+    {
+      "name": "BNSEND_GetBNetThreadInitFlag",
+      "address": "0051ca70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ca70"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_GetBNetThreadInitFlag"
+      ]
+    },
+    {
+      "name": "BNSEND_SetGlobalFlag",
+      "address": "0051ca80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ca80"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_SetGlobalFlag"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_LogonSequence",
+      "address": "0051ca90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ca90"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_LogonSequence",
+        "DEBUG_UnusedDebugFunction",
+        "memset",
+        "BNDOWNLOAD_ResetState",
+        "__security_check_cookie",
+        "BnetLog_WriteLine",
+        "strtok",
+        "GetTickCount",
+        "Create",
+        "WSAGetLastError",
+        "Free",
+        "SID_GetState",
+        "SID_GetReadyFlag",
+        "GetPeerNameDoesReturn",
+        "SAFESOCK_SetSocketNonBlocking",
+        "WSASocket2_Send",
+        "NET_SID_CLIENT_ResetRequireResponse",
+        "NET_SID_CLIENT_Send_0x50_AuthInfo",
+        "NET_SID_CLIENT_WaitForPacketId",
+        "NET_SID_CLIENT_Send_0x51_AuthCheck",
+        "SID_GetPacketResponseFlag",
+        "NET_SID_CLIENT_Send_0x33_GetFileTime",
+        "SID_SetStateFlag1"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "SOCKET",
+        "fd_set",
+        "fnInterlockedCompareExchange",
+        "int32_t",
+        "timeval",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BattleConnectFastest",
+      "address": "0051d0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d0a0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BattleConnectFastest",
+        "DEBUG_UnusedDebugFunction",
+        "BNDOWNLOAD_ResetState",
+        "GetBnetIp",
+        "BNET_LogIndent",
+        "BnetLog_WriteLine",
+        "StartUp",
+        "GetDnsRecordSync",
+        "SID_SetStateFlag1",
+        "NET_SID_CLIENT_LogonSequence"
+      ]
+    },
+    {
+      "name": "ConnectingToBattleNet",
+      "address": "0051d1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d1c0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "ConnectingToBattleNet",
+        "BnetLog_WriteLine",
+        "BNSEND_Disconnect",
+        "CACHE_Open",
+        "SID_InitializeProtocolState",
+        "NET_SID_CLIENT_InitializeSRP",
+        "DEBUG_UnusedDebugFunction"
+      ]
+    },
+    {
+      "name": "BNNEWS_SetNewsChannel",
+      "address": "0051d260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d260"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_SetNewsChannel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_GetNewsEntryByIndex",
+      "address": "0051d2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d2a0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_GetNewsEntryByIndex"
+      ]
+    },
+    {
+      "name": "BNNEWS_RoundToPowerOfTwo",
+      "address": "0051d2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d2f0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_RoundToPowerOfTwo"
+      ],
+      "usedTypes": [
+        "D2BnNewsTableStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_RoundUpToMultiple",
+      "address": "0051d330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d330"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_RoundUpToMultiple"
+      ]
+    },
+    {
+      "name": "BNNEWS_SaveToCache",
+      "address": "0051d370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d370"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_SaveToCache",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory",
+        "CACHE_WriteData",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "_FILETIME",
+        "_SYSTEMTIME",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_InvokeCallbacks",
+      "address": "0051d510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d510"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_InvokeCallbacks"
+      ]
+    },
+    {
+      "name": "BNNEWS_DestroyNewsTable",
+      "address": "0051d590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d590"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_DestroyNewsTable",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_ReallocateNewsTable",
+      "address": "0051d5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d5d0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_ReallocateNewsTable",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2BnNewsTableStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_ClearNewsTable",
+      "address": "0051d6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d6a0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_ClearNewsTable",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_EnsureCapacityWithGrowth",
+      "address": "0051d6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d6d0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_EnsureCapacityWithGrowth",
+        "BNNEWS_RoundToPowerOfTwo",
+        "BNNEWS_ReallocateNewsTable"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_Shutdown",
+      "address": "0051d750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d750"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_Shutdown",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "BNNEWS_AllocateNewsEntry",
+      "address": "0051d7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d7a0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_AllocateNewsEntry",
+        "BNNEWS_RoundToPowerOfTwo",
+        "BNNEWS_ReallocateNewsTable"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_EnsureCapacity",
+      "address": "0051d7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d7f0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_EnsureCapacity",
+        "BNNEWS_ReallocateNewsTable"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_SetNewsEntryCount",
+      "address": "0051d810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d810"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_SetNewsEntryCount",
+        "BNNEWS_RoundToPowerOfTwo",
+        "BNNEWS_ReallocateNewsTable"
+      ],
+      "usedTypes": [
+        "D2BnNewsTableStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Incoming0x46",
+      "address": "0051d860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d860"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Incoming0x46",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "strncpy",
+        "BNNEWS_SetNewsEntryCount",
+        "BNNEWS_SaveToCache",
+        "BNNEWS_InvokeCallbacks"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_LoadCachedNews",
+      "address": "0051da30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051da30"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_LoadCachedNews",
+        "CACHE_ReadData",
+        "BNNEWS_SetNewsEntryCount",
+        "BNNEWS_ReallocateNewsTable",
+        "BNNEWS_RoundToPowerOfTwo",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x46_NewsInfo",
+      "address": "0051dbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051dbf0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x46_NewsInfo",
+        "SMemFree",
+        "BNNEWS_LoadCachedNews",
+        "BNNEWS_InvokeCallbacks",
+        "NET_SID_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "pfnNewsEntryCallback",
+        "pfnVoidNoArgCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_GetTime32",
+      "address": "0051dc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051dc70"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "_time32",
+        "BNSEND_GetTime32"
+      ],
+      "usedTypes": [
+        "__time32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_HashCDKeyData",
+      "address": "0051dc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051dc80"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_HashCDKeyData",
+        "Sha1_Initialize",
+        "Sha1_Append",
+        "Sha1_Finalize",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2Sha1ContextStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_TransformCDKeyCharacter",
+      "address": "0051dcd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051dcd0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_TransformCDKeyCharacter",
+        "toupper"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNSEND_CalculateCDKeyChecksum",
+      "address": "0051dd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051dd50"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_CalculateCDKeyChecksum"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNSEND_DecodeCDKeyString",
+      "address": "0051ddd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ddd0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_DecodeCDKeyString",
+        "__security_check_cookie",
+        "SStrCopy",
+        "BNSEND_CalculateCDKeyChecksum",
+        "tolower",
+        "toupper",
+        "strtoul"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_DecodeCDKey26Char",
+      "address": "0051df90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051df90"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_DecodeCDKey26Char",
+        "NET_SID_CLIENT_TransformCdKeyToken"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_PrepareCDKeyHash",
+      "address": "0051dfc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051dfc0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_PrepareCDKeyHash",
+        "SStrLen",
+        "BNSEND_DecodeCDKeyString",
+        "XSHA1",
+        "__security_check_cookie",
+        "NET_SID_CLIENT_TransformCdKeyToken",
+        "BNSEND_HashCDKeyData"
+      ],
+      "usedTypes": [
+        "BnCDKeyHashInput",
+        "D2CDKeyHashStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x42_CDKey3",
+      "address": "0051e0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e0b0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x42_CDKey3",
+        "NET_SID_CLIENT_GetCdKeyOwner",
+        "NET_SID_CLIENT_GetCdKeyByType",
+        "NET_SID_CLIENT_GetProductId",
+        "_time32",
+        "GetTickCount",
+        "D2CheckExpansionGame",
+        "BNSEND_GetServerToken",
+        "BNSEND_PrepareCDKeyHash",
+        "SStrCopy",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2CDKeyHashStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNNEWS_DecodeCDKeys",
+      "address": "0051e270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e270"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_DecodeCDKeys",
+        "DecodeAndLoadKeys",
+        "NET_SID_CLIENT_GetCdKeyByType",
+        "SStrLen",
+        "BNSEND_DecodeCDKeyString",
+        "NET_SID_CLIENT_TransformCdKeyToken",
+        "D2CheckExpansionGame",
+        "FreeKeys",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_HashCDKeyByType",
+      "address": "0051e340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e340"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_HashCDKeyByType",
+        "BNSEND_GetServerToken",
+        "NET_SID_CLIENT_GetCdKeyByType",
+        "BNSEND_PrepareCDKeyHash"
+      ],
+      "usedTypes": [
+        "D2CDKeyHashStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNSEND_SendRawBytes",
+      "address": "0051e370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e370"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_SendRawBytes",
+        "SMemCopy"
+      ]
+    },
+    {
+      "name": "BNSEND_SendString",
+      "address": "0051e3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e3b0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_SendString",
+        "SStrCopy"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Send_0x33_GetFileTime",
+      "address": "0051e3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e3d0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Send_0x33_GetFileTime",
+        "SStrCopy",
+        "NET_SID_CLIENT_Send",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "SID_C2S_GetFileTime",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6caec0",
+      "address": "006caec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006caec0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "StaticInit_6caec0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_gpBNetNewsCache",
+      "address": "006cb450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb450"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "StaticFini_gpBNetNewsCache",
+        "SMemFree"
+      ]
+    }
+  ]
+}

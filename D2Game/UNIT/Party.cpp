@@ -518,17 +518,17 @@ void __fastcall FindUnitWithFilter(::SGAMEDATA * pGame, D2UnitStrc * pUnit, pfnP
     }
 }
 
-static void __stdcall GoldCalculations(D2UnitStrc * pUnit, int * pnParam1, int * pnParam2, int32_t nParam) {
+static void __stdcall GoldCalculations(D2UnitStrc * pUnit, int * pnGoldAccepted, int * pnGoldOverflow, int32_t nGoldAmount) {
     uint32_t nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit);
     int nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-    *pnParam2 = 0;
-    *pnParam1 = nParam;
-    if (!(nCurrentGold + nParam > (int)nGoldLimit)) {
+    *pnGoldOverflow = 0;
+    *pnGoldAccepted = nGoldAmount;
+    if (!(nCurrentGold + nGoldAmount > (int)nGoldLimit)) {
       return;
     }
 
-    *pnParam1 = nGoldLimit - nCurrentGold;
-    *pnParam2 = nParam - (nGoldLimit - nCurrentGold);
+    *pnGoldAccepted = nGoldLimit - nCurrentGold;
+    *pnGoldOverflow = nGoldAmount - (nGoldLimit - nCurrentGold);
 }
 
 // @sourcefile .\UNIT\Party.cpp
@@ -596,7 +596,7 @@ int16_t __fastcall GetPartyIdFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 void __fastcall PARTY_RemoveUnitFromParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int16_t nPartyId;
     D2UnitPartyControlSub* pPartySub;
-    int32_t iVar1;
+    int32_t nMemberCount;
     int nUnitGUID;
     D2UnitPartyControlSubSub* pSubSub;
     D2UnitPartyControlSubSub* pPrevSubSub = 0;
@@ -638,8 +638,8 @@ void __fastcall PARTY_RemoveUnitFromParty(::SGAMEDATA * pGame, D2UnitStrc * pUni
           pSubSub = pMemoryToFree->pNext;
         }
 
-        iVar1 = CountPartyControlSubSize(pGame, nPartyId);
-        if (iVar1 > 1) {
+        nMemberCount = CountPartyControlSubSize(pGame, nPartyId);
+        if (nMemberCount > 1) {
           return;
         }
 

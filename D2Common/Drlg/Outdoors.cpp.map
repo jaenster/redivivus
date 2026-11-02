@@ -1,0 +1,715 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/Outdoors.cpp",
+  "functions": [
+    {
+      "name": "DRLGOUTDOOR_GetPrimaryWallGridFlags",
+      "address": "0066f380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066f380"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_GetPrimaryWallGridFlags",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_ValidateSubTilePlacement",
+      "address": "0066f3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066f3b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_ValidateSubTilePlacement",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2LvlSubTxt",
+        "D2UnkOutdoorStrc",
+        "fpDrlgOutdoorValidateBorderCell",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_ApplySubTileToGrid",
+      "address": "0066f520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066f520"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_ApplySubTileToGrid",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2LvlSubTxt",
+        "D2UnkOutdoorStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_PlaceRandomBorderSubTiles",
+      "address": "0066f690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066f690"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_PlaceRandomBorderSubTiles",
+        "DRLGOUTDOOR_ValidateSubTilePlacement",
+        "DRLGOUTDOOR_ApplySubTileToGrid"
+      ],
+      "usedTypes": [
+        "D2LvlSubTxt",
+        "D2SeedStrc",
+        "D2UnkOutdoorStrc",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_CopyPresetUnitsFromSubTxt",
+      "address": "0066fa10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066fa10"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_CopyPresetUnitsFromSubTxt",
+        "CoordsRoomToWorld",
+        "AllocPresetUnit"
+      ],
+      "usedTypes": [
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_CheckSubTileOverlap",
+      "address": "0066fcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066fcf0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_CheckSubTileOverlap",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc *",
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_MatchSubTileTypes",
+      "address": "0066fe00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066fe00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_MatchSubTileTypes",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_GetAdjacentLevelVisMask",
+      "address": "00673ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673ff0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_GetAdjacentLevelVisMask",
+        "DRLGWARP_GetVisArrayFromLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetOutLinkVisFlag",
+      "address": "00674040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674040"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "GetOutLinkVisFlag",
+        "AreXYInsideCoordinates",
+        "DRLGOUTDOOR_GetAdjacentLevelVisMask"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2DrlgOrthStrc",
+        "D2DrlgVertexStrc",
+        "eDrlgDirection",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_GetPresetCoordFromGrid",
+      "address": "00674120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674120"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_GetPresetCoordFromGrid",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AlterAdjacentPresetGridCells",
+      "address": "00674160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674160"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "AlterAdjacentPresetGridCells",
+        "AlterGridFlag"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetBlankGridCell",
+      "address": "006741a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006741a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "SetBlankGridCell",
+        "AlterGridFlag"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_IsGridCellPresetFree",
+      "address": "006741e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006741e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_IsGridCellPresetFree",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_IsGridCellEmpty",
+      "address": "00674200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674200"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_IsGridCellEmpty",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TestOutdoorLevelPreset",
+      "address": "00674230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674230"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "TestOutdoorLevelPreset",
+        "TXT_LvlPrest_GetLine",
+        "IsPointInsideGridArea",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2LvlPrestTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_AllocPresetFileTracker",
+      "address": "00674320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674320"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_AllocPresetFileTracker",
+        "TXT_LvlPrest_GetLine",
+        "AllocServerMemory",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelLinkNodeStrc",
+        "D2DrlgLevelStrc",
+        "D2LvlPrestTxt",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnOutdoorLevelPresetEx",
+      "address": "006743c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006743c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "SpawnOutdoorLevelPresetEx",
+        "GetSizeX",
+        "GetSizeY",
+        "DRLGOUTDOOR_AllocPresetFileTracker",
+        "AlterGridFlag"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnPresetFarAway",
+      "address": "006744f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006744f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "SpawnPresetFarAway",
+        "TestOutdoorLevelPreset",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnOutdoorLevelPreset",
+      "address": "00674730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674730"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "SpawnOutdoorLevelPreset",
+        "TestOutdoorLevelPreset",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnRandomOutdoorDS1",
+      "address": "00674920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674920"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "SpawnRandomOutdoorDS1",
+        "TXT_LvlPrest_GetLine",
+        "GetGridFlags",
+        "TestOutdoorLevelPreset",
+        "SpawnOutdoorLevelPresetEx",
+        "SpawnOutdoorLevelPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "int64_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SpawnAct12Waypoint",
+      "address": "00674b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674b70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "AlterGridFlag",
+        "SpawnAct12Waypoint",
+        "DRLGWARP_GetVisArrayFromLevelId",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnAct12Shrines",
+      "address": "00674e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00674e40"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "SpawnAct12Shrines",
+        "GetGridFlags",
+        "AlterGridFlag"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_SimplifyOutdoorPoints",
+      "address": "00675080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00675080"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_SimplifyOutdoorPoints",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int *"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_CreateOutdoorRoomExGrid",
+      "address": "006750f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006750f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_CreateOutdoorRoomExGrid",
+        "GetGridFlags",
+        "DRLGOUTROOM_CreateOutdoorRoomEx",
+        "DRLGPRESET_AllocDrlgMap",
+        "DRLGPRESET_SetPickedFileInDrlgMap",
+        "BuildArea"
+      ],
+      "usedTypes": [
+        "D2DrlgCoordStrc",
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2DrlgMapStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AddAct124SecondaryBorder",
+      "address": "006752a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006752a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "AddAct124SecondaryBorder",
+        "memset",
+        "AddSecondaryBorder"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2UnkOutdoorStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGLEVEL_InitializeWithWildernessLevel",
+      "address": "00675320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00675320"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGLEVEL_InitializeWithWildernessLevel",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_GenerateLevel",
+      "address": "00675360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00675360"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_GenerateLevel",
+        "DRLGGRID_InitGridCells",
+        "GetActNoFromLevelNumber",
+        "DRLGVER_CreateRoomVertices",
+        "DRLGOUTDOOR_SimplifyOutdoorPoints",
+        "InitAct1OutdoorLevel",
+        "DRLGOUTDOOR_CreateOutdoorRoomExGrid",
+        "InitAct2OutdoorLevel",
+        "InitAct3OutdoorLevel",
+        "InitAct4OutdoorLevel",
+        "InitAct5OutdoorLevel"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2PoolManagerStrc",
+        "eAct",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_FreeOutdoorLevelData",
+      "address": "006754c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006754c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_FreeOutdoorLevelData",
+        "DRLGGRID_FreeGrid",
+        "DRLGVER_FreeVertices",
+        "memset",
+        "FreeRoomData",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgVertexStrc *",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTPLACE_PlaceAct4SpecialPresets",
+      "address": "0067e660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e660"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTPLACE_PlaceAct4SpecialPresets",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_SpawnAct4OutdoorPresets",
+      "address": "0067e6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e6a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "DRLGOUTDOOR_SpawnAct4OutdoorPresets",
+        "SpawnOutdoorLevelPreset"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "BuildChaosSanctuary",
+      "address": "0067e840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e840"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "BuildChaosSanctuary",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InitAct4OutdoorLevel",
+      "address": "0067e890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067e890"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Outdoors",
+      "calledFunctions": [
+        "InitAct4OutdoorLevel",
+        "SetOutGridLinkFlags",
+        "PlaceAct1245OutdoorBorders",
+        "DRLGOUTPLACE_PlaceAct4SpecialPresets",
+        "AddAct124SecondaryBorder",
+        "DRLGOUTDOOR_SpawnAct4OutdoorPresets",
+        "BuildChaosSanctuary"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    }
+  ]
+}

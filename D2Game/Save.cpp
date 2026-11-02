@@ -8,17 +8,17 @@
 
 namespace D2Game::Save {
 
-int __stdcall SAVEFILE_ReadEncodedInt14Bit(uint8_t * pbParam) {
-    return (pbParam[1] & 0x7f) * 0x80 + (*pbParam & 0x7f);
+int __stdcall SAVEFILE_ReadEncodedInt14Bit(uint8_t * pBuffer) {
+    return (pBuffer[1] & 0x7f) * 0x80 + (*pBuffer & 0x7f);
 }
 
-void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pbParam, uint32_t nParam) {
-    *pbParam = (uint8_t)nParam | 0x80;
-    pbParam[1] = (uint8_t)(nParam >> 7) | 0x80;
+void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pBuffer, uint32_t nParam) {
+    *pBuffer = (uint8_t)nParam | 0x80;
+    pBuffer[1] = (uint8_t)(nParam >> 7) | 0x80;
 }
 
-int __stdcall SAVEFILE_ReadEncodedInt32Bit(uint8_t * pbParam) {
-    return (((uint32_t)pbParam[3] * 0xff + (uint32_t)pbParam[2]) * 0xff + (uint32_t)pbParam[1]) * 0xff - 0xfe0200 + (uint32_t)*pbParam;
+int __stdcall SAVEFILE_ReadEncodedInt32Bit(uint8_t * pBuffer) {
+    return (((uint32_t)pBuffer[3] * 0xff + (uint32_t)pBuffer[2]) * 0xff + (uint32_t)pBuffer[1]) * 0xff - 0xfe0200 + (uint32_t)*pBuffer;
 }
 
 } // namespace D2Game::Save

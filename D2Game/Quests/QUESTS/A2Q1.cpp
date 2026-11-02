@@ -601,7 +601,7 @@ void __fastcall Q09_InitData(D2QuestDataStrc * pQuestData) {
     pQuestSpecificData->field_0x2 = 0;
     pQuestSpecificData->field_0x3 = 0;
     pQuestSpecificData->bSpokeToAtma = 0;
-    pQuestSpecificData->field_0x9 = 0;
+    pQuestSpecificData->bRadamentCompleteNotified = 0;
     pQuestSpecificData->bEndCallbackScheduled = false;
     pQuestSpecificData->field_0xB = 0;
     pQuestSpecificData->nBookOfSkillDropCount = 0;

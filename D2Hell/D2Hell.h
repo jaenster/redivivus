@@ -12,7 +12,6 @@
 // Forward declarations
 struct D2MPQFileStrc;
 struct D2PoolManagerStrc;
-struct D2UnitStrc;
 #ifndef RECON_FPTD_pfnFaultError
 #define RECON_FPTD_pfnFaultError
 typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpression);
@@ -23,43 +22,6 @@ typedef BOOL (__stdcall *pfnStormErrorHandler)(DWORD dwErrorCode, char * szBuffe
 #endif
 
 // Data types
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-
-struct _STARTUPINFOA {
-    /* 0x00 */ DWORD cb;
-    /* 0x04 */ LPSTR lpReserved;
-    /* 0x08 */ LPSTR lpDesktop;
-    /* 0x0C */ LPSTR lpTitle;
-    /* 0x10 */ DWORD dwX;
-    /* 0x14 */ DWORD dwY;
-    /* 0x18 */ DWORD dwXSize;
-    /* 0x1C */ DWORD dwYSize;
-    /* 0x20 */ DWORD dwXCountChars;
-    /* 0x24 */ DWORD dwYCountChars;
-    /* 0x28 */ DWORD dwFillAttribute;
-    /* 0x2C */ DWORD dwFlags;
-    /* 0x30 */ WORD wShowWindow;
-    /* 0x32 */ WORD cbReserved2;
-    /* 0x34 */ LPBYTE lpReserved2;
-    /* 0x38 */ HANDLE hStdInput;
-    /* 0x3C */ HANDLE hStdOutput;
-    /* 0x40 */ HANDLE hStdError;
-};
-
-#endif // _WIN32
-
-struct D2GroundItemLabelStrc {
-    /* 0x000 */ int nLeft;
-    /* 0x004 */ int nTop;
-    /* 0x008 */ int nRight;
-    /* 0x00C */ int nBottom;
-    /* 0x010 */ struct D2UnitStrc * pItem;
-    /* 0x014 */ uint16_t wszName[128]; // filled by UI_FormatItemNameWithQuality with cap 0x100 bytes
-    /* 0x114 */ int nColorKey;
-    /* 0x118 */ int nDrawPosition;
-    /* 0x11C */ int nTextColor;
-};
-
 struct StormFaultHandlerNode {
     /* 0x00 */ void * pPrevLink; // TSLink prev (Storm list: may hold ~&link)
     /* 0x04 */ struct StormFaultHandlerNode * pNext; // TSLink next; <=0 ends the walk next handler; the walk stops at a non-positive link (Storm list tag)
@@ -71,8 +33,9 @@ struct __attribute__((packed)) StormFaultHandlerNodeStrc {
     /* 0x08 */ BOOL (__stdcall *pfnHandler)(DWORD, char *, DWORD);
 };
 
+namespace D2Hell {
+
 // Function declarations
-void thunk__strstr(char * szText1, char * szText2);
 void __fastcall D2FILE_CreateProcess(LPCSTR szText);
 // Closes an open Storm file (ERRORMANAGER_FCloseFile) and halts on line 0x49 if pFile is null. ECX pMemory is unused; callers pass their pool or 0.
 // Provenance: 1.14d asm 00516e84..00516ea6.
@@ -95,21 +58,10 @@ void FAULT_ShowFormattedError(uint32_t nErrorCode, ...);
 void FAULT_ShowFormattedErrorAndTerminate(uint32_t nErrorCode, ...);
 void FAULT_ShowFormattedErrorWithArgs(uint32_t nErrorCode, ...);
 LPVOID __fastcall D2MEM_VirtualAlloc(SIZE_T nSize);
-void __fastcall D2MEM_VirtualFree(LPVOID pParam);
+void __fastcall D2MEM_VirtualFree(LPVOID pAddress);
 void __fastcall D2MEM_CopyRows(char * pCharSelComp, uint32_t * pSrc, int32_t nDstStride, int32_t nSrcStride, int32_t nRows, uint32_t nBytesPerRow);
 uint32_t __fastcall D2MEM_CompareBytes(int * pBuf1, int * pBuf2, uint32_t nByteCount);
 int32_t D2MEM_FindLowestSetBit(uint32_t dwMask);
-uint32_t __stdcall FOG_ParseStringValue(char * szText, uint32_t nParam);
-uint32_t __fastcall FOG_ParseFieldValue(char * szText, char * * ppszCursor, int * pnOut);
-char * __fastcall FOG_FindCharInString(char * szText, char cParam);
-void StaticInit_6ca960();
-void StaticInit_6ca980();
-void StaticInit_6caa90();
-void StaticInit_6caaa0();
-void StaticInit_6caab0();
-void StaticInit_6cad00();
-void StaticInit_6cadb0();
-void StaticInit_6cade0();
 // @evidence MOV EAX,0x72fa18 / NOT EAX / MOV [0x72fa1c],EAX - writes the
 // end-of-list terminator into gFaultHandlerList.head.pNext. The .data image
 // already carries head.pPrevLink = &gFaultHandlerList.head (0x0072fa18); only
@@ -121,3 +73,6 @@ void StaticInit_6cade0();
 // LINKEDLIST_GetNodePointer return ~0xff8d05e7 == 0x0072fa18, i.e. a write to
 // the ORIGINAL image address. Address-relative, not a constant.
 void StaticInit_gFaultHandlerList();
+void StaticFini_gFaultHandlerList();
+
+} // namespace D2Hell

@@ -1,0 +1,2033 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Multi/OOGUtilities.cpp",
+  "functions": [
+    {
+      "name": "OOG_DisableControlCallback",
+      "address": "0043daf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043daf0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOG_DisableControlCallback",
+        "D2WINMAIN_SetControlActive"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOG_WaitMCPThreadDonePump",
+      "address": "0043dbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043dbc0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOG_WaitMCPThreadDonePump",
+        "GetMCPThread",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "OOG_PollMCPCharLogonPump",
+      "address": "0043dbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043dbf0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOG_PollMCPCharLogonPump",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "MCPSTATE_GetCharLogonSuccess",
+        "HasPeerName",
+        "MCPSTATE_SetCharLogonSuccess",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OpenBrowserWithURL",
+      "address": "00440de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440de0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OpenBrowserWithURL",
+        "memset",
+        "sprintf",
+        "LAUNCHER_ReadRegistryValue",
+        "SMemZero",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "LPDWORD",
+        "WCHAR",
+        "_PROCESS_INFORMATION",
+        "_STARTUPINFOA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OpenChannelDialog",
+      "address": "00440fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440fc0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OpenChannelDialog",
+        "FORMS_CreateAnyForm",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINMAIN_SetFormFourth",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "COMCALLBACK_GetCurrentChannelName",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_SelectAll",
+        "D2WINTEXTBOX_ScrollToLine",
+        "CHATDLG_UpdateChannelOkButtonState"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_JoinChannelAndDestroyForms",
+      "address": "004411e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004411e0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_JoinChannelAndDestroyForms",
+        "CHATDLG_DestroyAllForms",
+        "D2WINBUTTON_SetPressed"
+      ]
+    },
+    {
+      "name": "OOGUTIL_JoinChannelFromInput",
+      "address": "00441240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00441240"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_JoinChannelFromInput",
+        "D2WINMAIN_GetControlVisible",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "OOGUTIL_JoinChannelAndDestroyForms"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_JoinDefaultChannel",
+      "address": "004412a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004412a0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_JoinDefaultChannel",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "CHATDLG_EnqueueClearMessage",
+        "CHATDLG_CreateAllForms",
+        "SRegLoadString",
+        "OOGUTIL_JoinChannelAndDestroyForms"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_HandleChannelListDoubleClick",
+      "address": "00441320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00441320"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_HandleChannelListDoubleClick",
+        "D2WINTEXTBOX_GetSelectedLine",
+        "GetTickCount",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "OOGUTIL_JoinChannelAndDestroyForms",
+        "D2WINTEXTBOX_GetSelectedLineText",
+        "D2WINEDITBOX_SetTextWide",
+        "D2WINMAIN_SetFocusedControl"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AbleToJoinGameOrBanned",
+      "address": "004413e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004413e0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "AbleToJoinGameOrBanned",
+        "CHATDLG_DestroyAllForms",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINMAIN_SetControlActive",
+        "HasPeerName",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "UIMENU_DrawSpecificJoinGameError"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "JoinOrCreateGame",
+      "address": "00441500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00441500"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "JoinOrCreateGame",
+        "D2WINMAIN_TestMouseInRect",
+        "D2WINMAIN_SetCursorDC6",
+        "GetTickCount",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "COMCALLBACK_ValidateGameJoinability",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "HasPeerName",
+        "GetD2GSRequestId",
+        "GetD2GSJoinResult",
+        "NET_MCP_CLIENT_Send_0x04_JoinGame",
+        "GetD2GSGameToken",
+        "MCPCONNECT_GetD2GSGameHash",
+        "GetD2GSConnectIp",
+        "D2WINMAIN_ClearMessageLoopFlag",
+        "MCPCONNECT_GetCharSelectBuffer",
+        "OOGMENU_RefreshGameListDisplay",
+        "MCPCONNECT_ClearCharSelectBuffer",
+        "UIMENU_DestroyLobbyAndJoinGameForms",
+        "AbleToJoinGameOrBanned",
+        "OOGMENU_AddGameToCache",
+        "OOGMENU_DisplayGameDetails",
+        "OOGMENU_RequestGameList",
+        "OOGMENU_RequestGameInfo",
+        "CHATDLG_ProcessPendingMessages"
+      ],
+      "usedTypes": [
+        "D2McpGameInfoStrc",
+        "DC6",
+        "WCHAR",
+        "fnGetTickCount",
+        "int32_t",
+        "tagRECT",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGMENU_RestoreMCPConnection",
+      "address": "00441a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00441a90"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGMENU_RestoreMCPConnection",
+        "HasPeerName",
+        "GetLocaleString",
+        "UIMENU_PrintSmallTitleOnCenterScreen",
+        "MCPCONNECT_CreateThread",
+        "MessagePump",
+        "FORMS_DestroyListEx",
+        "GetD2GSJoinResult",
+        "thunk_NET_MCP_CLIENT_Send_0x07_CharLogon"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_RunChatLobbyScreen",
+      "address": "00441b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00441b70"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "CHATDLG_RunChatLobbyScreen",
+        "GetTickCount",
+        "D2CheckExpansionGame",
+        "ReturnZero",
+        "TABLES_LoadStrings",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRINGTABLE_FreeStringTables",
+        "IMAGE_LoadPredefinedImagesExEx",
+        "D2WINMAIN_SetCursorDC6",
+        "D2WINMAIN_SetBackgroundDC6",
+        "UIMENU_CantTestItBeacuseItCrash",
+        "LAUNCHER_AllocCharSelectComponent",
+        "FORMS_CreateAnyForm",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_SetPasswordMode",
+        "COMCALLBACK_ClearChannelUserList",
+        "SetUnsetFlag0x08",
+        "D2WinButton",
+        "D2WINMAIN_SetControlActive",
+        "D2WINBUTTON_SetImageIndex",
+        "CHATDLG_ClearChatHistory",
+        "CHATDLG_DestroyAllForms",
+        "D2WINBUTTON_SetPressed",
+        "MCPCONNECT_SetMessageCallback",
+        "NET_MCP_CLIENT_Send_0x12_MOTD",
+        "CHATDLG_RefreshGameNameDisplay",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINMAIN_SetFormFourth",
+        "SOUND_InitSoundEffectBuffers",
+        "SOUND_LoadWavFile",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled",
+        "OOGMENU_RestoreMCPConnection",
+        "LOGFILE_WriteStringToFile",
+        "sprintf",
+        "SetIsMPCJoinSuccesfull",
+        "MessagePump",
+        "getIsMPCJoinSuccesfull",
+        "NET_MCP_CLIENT_Send_0x13_CancelGameCreate",
+        "FreeMCP",
+        "SOUND_FreeSoundEffectBuffers",
+        "COMCALLBACK_ClearAllChannelUsers",
+        "D2COMP_FreeAllCompositeUnits",
+        "CHATDLG_FreePlayerNameList",
+        "FORMS_DestroyAnyForm",
+        "LAUNCHER_FreeLauncherImages"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2IniConfigStrc",
+        "D2LobbyControlsStrc",
+        "D2PoolManagerStrc",
+        "D2WinButton",
+        "D2WinButton *",
+        "DC6",
+        "FORMS_PredefinedFormStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "fAPPMODE_multiplayer_ReturnAppMode_Caller",
+      "address": "00442150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442150"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "fAPPMODE_multiplayer_ReturnAppMode_Caller",
+        "UI_Init",
+        "D2GFX_SetVideoMode",
+        "CHATDLG_RunChatLobbyScreen",
+        "FreeInGameGFX"
+      ],
+      "usedTypes": [
+        "D2IniConfigStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_HandleReplyCommand",
+      "address": "00442180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442180"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_HandleReplyCommand",
+        "someStrCompare",
+        "sprintf",
+        "strtok",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "CONTAINER_InitializeBuffer",
+        "UTF8_ConvertToWideChar",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_HandleChatCommands",
+      "address": "004423b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004423b0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_HandleChatCommands",
+        "CHATDLG_AppendChatToHistory",
+        "OOGUTIL_HandleReplyCommand",
+        "CHATDLG_HandleNotifyCommand",
+        "someStrCompare",
+        "MISC_GetIgnorelist",
+        "GetLocaleString",
+        "CHATDLG_AppendTextToTextBox",
+        "CONTAINER_InitializeBuffer",
+        "CHATDLG_ParseCommandArgument",
+        "SStrCmpI",
+        "UTF8_ConvertToWideChar",
+        "SRegSaveString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "SRegLoadString",
+        "OOGUTIL_JoinChannelAndDestroyForms",
+        "UNICODE_FormatWideString",
+        "AppendToBuffer"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "IgnoreListVtable",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHAT_SendOutOfGameMessage",
+      "address": "00442810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442810"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "CHAT_SendOutOfGameMessage",
+        "OOGUTIL_HandleChatCommands",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "COMCALLBACK_BroadcastChatMessage",
+        "D2WINEDITBOX_SetTextWide",
+        "D2WINTEXTBOX_GetVisibleLineCount",
+        "D2WINTEXTBOX_GetLineCount",
+        "D2WINTEXTBOX_ScrollToLine"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressChatWarningOk",
+      "address": "004428b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004428b0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "CHAT_SendOutOfGameMessage",
+        "OOGUTIL_OnPressChatWarningOk",
+        "FORMS_DestroyListEx"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_SendChatMessage",
+      "address": "004428d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004428d0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_SendChatMessage",
+        "SMemZero",
+        "OOGUTIL_GetAccountName",
+        "sprintf",
+        "CHATDLG_FindSubstringMatch",
+        "CHATDLG_DetectCDKeyInString",
+        "CHAT_SendOutOfGameMessage",
+        "GetLocaleString",
+        "UIMENU_DrawTitleAndSubtitleOnCenterScreen"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_SendChatMessageWide",
+      "address": "004429a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004429a0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_SendChatMessageWide",
+        "STRING_GetWideStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNICODE_WideToMultiByte",
+        "strtok",
+        "D2WINEDITBOX_SetTextWide",
+        "OOGUTIL_SendChatMessage"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_GetStringEnd",
+      "address": "00442ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442ae0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_GetStringEnd",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_CheckCharacterLevel",
+      "address": "00442b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442b20"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_CheckCharacterLevel"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGMENU_AddGameToCache",
+      "address": "00442b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442b90"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGMENU_AddGameToCache"
+      ],
+      "usedTypes": [
+        "D2McpGameInfoStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "OOGMENU_RefreshGameListDisplay",
+      "address": "00442c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442c20"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGMENU_RefreshGameListDisplay",
+        "D2WINTEXTBOX_GetSelectedLineText",
+        "UNICODE_WideToMultiByte",
+        "D2WINTEXTBOX_GetScrollPosition",
+        "D2WINTEXTBOX_ClearAllLines",
+        "HasPeerName",
+        "memcpy",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "D2WINTEXTBOX_GetLastLineIndex",
+        "_itoa",
+        "D2WINTEXTBOX_SetLineCellTextA",
+        "D2WINTEXTBOX_ScrollToLine",
+        "D2WINTEXTBOX_SetSelectedLine"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_Unused1",
+      "address": "00442dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442dd0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_Unused1",
+        "strncpy"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "OOGMENU_RequestGameInfo",
+      "address": "00442e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442e00"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGMENU_RequestGameInfo",
+        "NET_MCP_CLIENT_Send_0x06_GameInfo"
+      ]
+    },
+    {
+      "name": "OOGUTIL_Unused2",
+      "address": "00442e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442e30"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_Unused2",
+        "D2WINTEXTBOX_ClearAllLines",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "D2WINTEXTBOX_ScrollToLine",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINMAIN_SetFocusedControl"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGMENU_DisplayGameDetails",
+      "address": "00442eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442eb0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGMENU_DisplayGameDetails",
+        "D2WINTEXTBOX_ClearAllLines",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "sprintf",
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "D2WINTEXTBOX_ScrollToLine"
+      ],
+      "usedTypes": [
+        "D2McpGameInfoStrc",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UIMENU_DestroyLobbyAndJoinGameForms",
+      "address": "00443130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443130"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "UIMENU_DestroyLobbyAndJoinGameForms",
+        "FORMS_DestroyAnyForm",
+        "D2WINMAIN_SetFormFourth"
+      ]
+    },
+    {
+      "name": "OOGUTIL_LoadMaxPlayersSetting",
+      "address": "004431b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004431b0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_LoadMaxPlayersSetting",
+        "SRegLoadValue",
+        "SRegSaveValue",
+        "sprintf",
+        "D2WINEDITBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_UpdateGameListFilter",
+      "address": "00443220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443220"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_UpdateGameListFilter",
+        "FORMS_DestroyAnyForm",
+        "D2WINMAIN_SetFormFourth",
+        "LAUNCHER_RestoreFocusToControl"
+      ]
+    },
+    {
+      "name": "OOGUTIL_Unused3",
+      "address": "00443360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443360"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_Unused3",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_Unused4",
+      "address": "00443390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443390"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_Unused4",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressMaxPlayersUp",
+      "address": "004433c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004433c0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressMaxPlayersUp",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8",
+        "sprintf",
+        "D2WINEDITBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressMaxPlayersDown",
+      "address": "00443420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443420"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressMaxPlayersDown",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8",
+        "sprintf",
+        "D2WINEDITBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressLevelRestrictionUp",
+      "address": "00443480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443480"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressLevelRestrictionUp",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8",
+        "sprintf",
+        "D2WINEDITBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressLevelRestrictionDown",
+      "address": "004434e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004434e0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressLevelRestrictionDown",
+        "FORMS_TextInput_GetValue",
+        "WideCharToUTF8",
+        "sprintf",
+        "D2WINEDITBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_SendPasswordPacket",
+      "address": "00443540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443540"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_SendPasswordPacket"
+      ]
+    },
+    {
+      "name": "OOGUTIL_Unused9",
+      "address": "004435d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004435d0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_Unused9"
+      ]
+    },
+    {
+      "name": "OOGUTIL_Unused10",
+      "address": "00443600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443600"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_Unused10"
+      ]
+    },
+    {
+      "name": "OOGUTIL_RefreshGameList",
+      "address": "00443630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443630"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_RefreshGameList",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "HasPeerName",
+        "sprintf",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINBUTTON_IsPressed",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_SetJoinGameError",
+      "address": "004437e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004437e0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_SetJoinGameError",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_Unused11",
+      "address": "00443840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443840"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_Unused11",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_TitleClickCallback",
+      "address": "00443870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443870"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "UIMENU_TitleClickCallback"
+      ]
+    },
+    {
+      "name": "OOG_PollMCPJoinD2GSPump",
+      "address": "00443880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443880"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOG_PollMCPJoinD2GSPump",
+        "NET_MCP_CLIENT_ReadAndParsePacket",
+        "getIsMPCJoinSuccesfull",
+        "GetD2GSGameToken",
+        "GetD2GSJoinResult",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressWaitInLineCancel",
+      "address": "004438c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004438c0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressWaitInLineCancel",
+        "CHATDLG_UpdateButtonVisibility",
+        "CHATDLG_CancelGameCreate",
+        "OOGUTIL_UpdateGameListFilter"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_HandleGameListEntry",
+      "address": "004438e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004438e0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_HandleGameListEntry",
+        "OOGUTIL_GetStringEnd",
+        "OOGUTIL_CheckCharacterLevel"
+      ],
+      "usedTypes": [
+        "eD2PlayerStatus",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_ProcessGameListEntry",
+      "address": "004439f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004439f0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_ProcessGameListEntry",
+        "D2WINMAIN_GetControlVisible",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "SMEM_TitleCaseString",
+        "HasPeerName",
+        "OOGMENU_JoinGame",
+        "UIMENU_DestroyLobbyAndJoinGameForms",
+        "GetLocaleString",
+        "UIMENU_PrintSmallTitleOnCenterScreen",
+        "NET_MakeIPV4AddressHumanFriendly",
+        "OOGUTIL_HandleGameListEntry",
+        "UIMENU_DrawTitleOnCenterSmaller"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2LanGameEntryStrc",
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressNoAction",
+      "address": "00443c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443c10"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressNoAction"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressDifficultyNormal",
+      "address": "00443c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443c20"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressDifficultyNormal",
+        "D2WINBUTTON_SetPressed"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressDifficultyNightmare",
+      "address": "00443c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443c70"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressDifficultyNightmare",
+        "D2WINBUTTON_SetPressed"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressDifficultyHell",
+      "address": "00443cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443cc0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressDifficultyHell",
+        "D2WINBUTTON_SetPressed"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_SetProfileUser",
+      "address": "00443d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443d10"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressProfileLadder",
+        "OOGUTIL_SetProfileUser"
+      ]
+    },
+    {
+      "name": "UIMENU_PlayerProfileLabels",
+      "address": "00443d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443d50"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "UIMENU_PlayerProfileLabels",
+        "FORMS_CreateAnyForm",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_CloseProfileDialog",
+      "address": "00443e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443e10"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_CloseProfileDialog",
+        "FORMS_DestroyAnyForm",
+        "D2WINMAIN_SetFormFourth",
+        "LAUNCHER_RestoreFocusToControl"
+      ],
+      "usedTypes": [
+        "D2WinTextBox *"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressProfileLadder",
+      "address": "00443ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443ef0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "CHATDLG_RequestLadderRank",
+        "OOGUTIL_OnPressProfileLadder",
+        "OOGUTIL_CloseProfileDialog",
+        "CHATDLG_OpenLadderClassicSoftcore",
+        "CHATDLG_OpenLadderClassicHardcore",
+        "CHATDLG_OpenLadderExpansionSoftcore",
+        "CHATDLG_OpenLadderExpansionHardcore"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_GetProfileCharacterName",
+      "address": "00443f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443f50"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_GetProfileCharacterName",
+        "SStrCopy"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressProfileClose",
+      "address": "00443f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443f70"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressProfileClose",
+        "OOGUTIL_CloseProfileDialog"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressProfileOK",
+      "address": "00443f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00443f80"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressProfileOK",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "CHATDLG_SendProfileData",
+        "OOGUTIL_CloseProfileDialog"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UIMENU_DialogWindowChatCommands",
+      "address": "00444020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00444020"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "UIMENU_DialogWindowChatCommands",
+        "CHATDLG_DestroyAllForms",
+        "CHATDLG_IsLobbyInitialized",
+        "D2WINBUTTON_SetPressed",
+        "FORMS_CreateAnyForm",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "D2WINMAIN_SetFormFourth",
+        "D2WINTEXTBOX_ScrollToLine"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "OOGUTIL_DestroyChatCommandsDialog",
+      "address": "00444e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00444e20"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "UIMENU_DialogWindowChatCommands",
+        "OOGUTIL_DestroyChatCommandsDialog",
+        "FORMS_DestroyAnyForm",
+        "D2WINMAIN_SetFormFourth"
+      ]
+    },
+    {
+      "name": "OOGUTIL_RequestGameListFromServer",
+      "address": "00444e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00444e70"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_RequestGameListFromServer",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "OOGUTIL_CheckCharacterLevel",
+        "OOGMENU_RefreshGameListDisplay"
+      ],
+      "usedTypes": [
+        "eD2PlayerStatus",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGMENU_RequestGameList",
+      "address": "00445020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00445020"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_RequestGameListFromServer",
+        "OOGMENU_RequestGameList",
+        "NET_MCP_CLIENT_Send_0x05_GameList"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_SendGamePassword",
+      "address": "004450a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004450a0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_SendGamePassword",
+        "D2WINTEXTBOX_SetSelectedLine",
+        "OOGUTIL_SendPasswordPacket"
+      ]
+    },
+    {
+      "name": "EDITBOX_Cb_OOGUTIL_SetJoinGameError",
+      "address": "004450c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004450c0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "EDITBOX_Cb_OOGUTIL_SetJoinGameError",
+        "OOGUTIL_SetJoinGameError"
+      ]
+    },
+    {
+      "name": "OOGUTIL_HandleGameCreation",
+      "address": "004450d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004450d0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_HandleGameCreation",
+        "D2WINTEXTBOX_GetSelectedLine",
+        "D2WINTEXTBOX_ClearAllLines",
+        "GetTickCount",
+        "OOGUTIL_ProcessGameListEntry",
+        "HasPeerName",
+        "OOGUTIL_Unused2",
+        "D2WINTEXTBOX_GetSelectedLineText",
+        "UNICODE_WideToMultiByte",
+        "OOGUTIL_Unused1",
+        "D2WINEDITBOX_SetTextWide",
+        "D2WINMAIN_SetFocusedControl"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_UpdateLevelRestrictionControls",
+      "address": "004451c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004451c0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_UpdateLevelRestrictionControls",
+        "D2WINBUTTON_IsPressed",
+        "D2WINMAIN_SetControlActive",
+        "D2WINMAIN_SetControlVisible",
+        "GetLocaleString",
+        "SetText",
+        "OOGUTIL_RefreshGameList"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_LoadLevelRestrictionSetting",
+      "address": "00445300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00445300"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_LoadLevelRestrictionSetting",
+        "SRegLoadValue",
+        "SRegSaveValue",
+        "D2WINBUTTON_SetPressed",
+        "OOGUTIL_UpdateLevelRestrictionControls",
+        "SStrPrintf",
+        "D2WINEDITBOX_SetTextFromAnsi"
+      ]
+    },
+    {
+      "name": "UIMENU_WaitInLine",
+      "address": "004453b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004453b0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "UIMENU_WaitInLine",
+        "FORMS_CreateAnyForm",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINTEXTBOX_SetTextFromAnsi",
+        "MCPSTATE_GetJoinTimestamp",
+        "sprintf",
+        "UTF8_ConvertToWideChar",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "D2WINMAIN_SetFormFourth",
+        "LAUNCHER_SetGameListCacheActive"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnTimerRefreshWaitInLine",
+      "address": "00445530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00445530"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnTimerRefreshWaitInLine",
+        "CHATDLG_DestroyAllForms",
+        "UIMENU_WaitInLine"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OnPressLevelRestrictionCheckbox",
+      "address": "00445550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00445550"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_OnPressLevelRestrictionCheckbox",
+        "D2WINBUTTON_IsPressed",
+        "D2WINMAIN_SetControlActive",
+        "D2WINMAIN_SetControlVisible",
+        "GetLocaleString",
+        "SetText",
+        "OOGUTIL_RefreshGameList"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "EDITBOX_Cb_OOGUTIL_RefreshGameList",
+      "address": "004456a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004456a0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "EDITBOX_Cb_OOGUTIL_RefreshGameList",
+        "OOGUTIL_RefreshGameList"
+      ]
+    },
+    {
+      "name": "OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers",
+      "address": "004456b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004456b0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers",
+        "OOGUTIL_RefreshGameList"
+      ]
+    },
+    {
+      "name": "OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction",
+      "address": "004456c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004456c0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction",
+        "OOGUTIL_RefreshGameList"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_PrepareGameCreatePacket",
+      "address": "004456d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004456d0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_PrepareGameCreatePacket",
+        "D2WINMAIN_GetControlVisible",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte",
+        "HasPeerName",
+        "D2WINBUTTON_IsPressed",
+        "SMEM_TitleCaseString",
+        "SStrCopy",
+        "GetLocaleString",
+        "UIMENU_PrintSmallTitleOnCenterScreen",
+        "MessagePump",
+        "FORMS_DestroyListEx",
+        "WideCharToUTF8",
+        "SRegSaveValue",
+        "NET_GetLocalIp",
+        "OOGMENU_CreateGame",
+        "OOGUTIL_UpdateGameListFilter",
+        "CHATDLG_CancelGameCreate",
+        "getIsMPCJoinSuccesfull",
+        "UIMENU_WaitInLine"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "WCHAR",
+        "eD2PlayerStatus",
+        "int32_t",
+        "mcp0x03data"
+      ]
+    },
+    {
+      "name": "OOGUTIL_CreateEditProfileDialog",
+      "address": "00445a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00445a80"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "COMCALLBACK_HandleUserListClick",
+        "OOGUTIL_CreateEditProfileDialog",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ReadUserProfile",
+        "CHATDLG_DestroyAllForms",
+        "FORMS_CreateAnyForm",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINMAIN_SetFormFourth",
+        "UIMENU_PlayerProfileLabels",
+        "D2WINEDITBOX_LinkTabOrder",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_SelectAll",
+        "OOGUTIL_SetProfileUser"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_CreateViewProfileDialog",
+      "address": "00445c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00445c70"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "COMCALLBACK_HandleUserListClick",
+        "OOGUTIL_CreateViewProfileDialog",
+        "OOGUTIL_GetAccountName",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ReadUserProfile",
+        "CHATDLG_DestroyAllForms",
+        "FORMS_CreateAnyForm",
+        "D2WINTEXTBOX_SetTextFromAnsiSimple",
+        "strtok",
+        "D2WINMAIN_SetFormFourth",
+        "UIMENU_PlayerProfileLabels",
+        "LAUNCHER_RestoreFocusToControl",
+        "OOGUTIL_SetProfileUser"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UIMENU_JoinGame",
+      "address": "00445df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00445df0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "UIMENU_JoinGame",
+        "isServerDown",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "FORMS_CreateAnyForm",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINMAIN_SetFormFourth",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINEDITBOX_LinkTabOrder",
+        "HasPeerName",
+        "D2WINTEXTBOX_SetColumnCount",
+        "D2WINTEXTBOX_SetColumnWidth",
+        "GetTickCount",
+        "OOGMENU_RequestGameList",
+        "D2WINMAIN_SetFocusedControl",
+        "OOGUTIL_SetJoinGameError"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_OpenCreateGameDialog",
+      "address": "00445ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00445ff0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "isServerDown",
+        "HasPeerName",
+        "OOGUTIL_OpenCreateGameDialog",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "getIsMPCJoinSuccesfull",
+        "UIMENU_WaitInLine",
+        "FORMS_CreateAnyForm",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINMAIN_SetFormFourth",
+        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "sprintf",
+        "D2WINEDITBOX_LinkTabOrder",
+        "SetText",
+        "D2WINMAIN_SetControlActive",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINEDITBOX_SetTextFromAnsi",
+        "D2WINBUTTON_SetPressed",
+        "D2WINBUTTON_SetImageIndex",
+        "OOGUTIL_LoadLevelRestrictionSetting",
+        "OOGUTIL_LoadMaxPlayersSetting",
+        "SRegLoadValue",
+        "SRegSaveValue",
+        "CHATDLG_SetControlParent",
+        "D2WINMAIN_SetFocusedControl",
+        "OOGUTIL_OnPressLevelRestrictionCheckbox"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "eD2PlayerStatus",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_Unused12",
+      "address": "00446810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446810"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_Unused12",
+        "strchr"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_GetAccountName",
+      "address": "00446820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446820"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "SStrChr",
+        "OOGUTIL_GetAccountName"
+      ]
+    },
+    {
+      "name": "OOGUTIL_CopyChannelName",
+      "address": "00446840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446840"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_CopyChannelName",
+        "SStrChr",
+        "memcpy",
+        "SStrCopy"
+      ]
+    },
+    {
+      "name": "OOGUTIL_ValidateUsername1",
+      "address": "00446890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446890"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_ValidateUsername1",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "UNICODE_WideToMultiByte",
+        "OOGUTIL_SendChatMessage"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_ValidateUsername2",
+      "address": "004468f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004468f0"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_ValidateUsername2",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "UNICODE_WideToMultiByte",
+        "OOGUTIL_SendChatMessage"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_ValidateUsername3",
+      "address": "00446970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446970"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_ValidateUsername3",
+        "FORMS_TextInput_GetValue",
+        "STRING_GetWideStringLength",
+        "UNICODE_WideToMultiByte",
+        "GetTickCount",
+        "sprintf",
+        "OOGUTIL_SendChatMessage"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_ValidateUsername4",
+      "address": "00446a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446a00"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_ValidateUsername4",
+        "GetTickCount",
+        "sprintf",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "D2WINEDITBOX_SetTextWide"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_AppendChatText",
+      "address": "00446a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446a90"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_AppendChatText",
+        "STRING_GetWideStringLength",
+        "GetLocaleString",
+        "UNICODE_FindSubstring",
+        "memmove",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_ValidateStringFilter",
+      "address": "00446b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00446b30"
+        }
+      ],
+      "namespace": "D2Multi::OOGUtilities",
+      "calledFunctions": [
+        "OOGUTIL_ValidateStringFilter",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "FORMS_DisplayBattleNetNews"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    }
+  ]
+}

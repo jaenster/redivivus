@@ -128,7 +128,7 @@ struct __attribute__((packed)) D2UnitDataMissileStrc {
     /* 0x24 */ int32_t nTargetGUID; // GUID of the target unit
     /* 0x28 */ int nHomeStatus; // Homing status
     /* 0x2C */ int sCoords; // Target/origin coordinates (packed short x,y)
-    /* 0x30 */ struct D2MissileStreamStrc * unk0x30; // Unknown last field
+    /* 0x30 */ struct D2MissileStreamStrc * pStream; // Unknown last field
 };
 
 struct __attribute__((packed)) D2UnitDataMonsterStrc {

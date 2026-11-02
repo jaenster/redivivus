@@ -1,0 +1,1344 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/Path.cpp",
+  "functions": [
+    {
+      "name": "DRLGPATH_GetApproxDistance",
+      "address": "00678b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678b10"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetApproxDistance"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetApproxDistancePacked",
+      "address": "00678b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678b40"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetApproxDistancePacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetDirectionIndex",
+      "address": "00678b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678b80"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetDirectionIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetDirectionIndexPacked",
+      "address": "00678c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678c10"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetDirectionIndexPacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetDirection",
+      "address": "00678cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678cb0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetDirection",
+        "DRLGPATH_GetDirectionIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetDirectionPacked",
+      "address": "00678cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678cd0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetDirectionPacked",
+        "DRLGPATH_GetDirectionIndexPacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetPathDirection",
+      "address": "00678cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678cf0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetPathDirection",
+        "DRLGPATH_GetDirectionIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetPathDirectionPacked",
+      "address": "00678d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678d10"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetPathDirectionPacked",
+        "DRLGPATH_GetDirectionIndexPacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetPathDirectionTriplet",
+      "address": "00678d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678d30"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetPathDirectionTriplet",
+        "DRLGPATH_GetDirectionIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetPathDirectionTripletPacked",
+      "address": "00678d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678d70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetPathDirectionTripletPacked",
+        "DRLGPATH_GetDirectionIndexPacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetDirectionTriplet",
+      "address": "00678db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678db0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetDirectionTriplet",
+        "DRLGPATH_GetDirectionIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetDirectionTripletPacked",
+      "address": "00678df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678df0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetDirectionTripletPacked",
+        "DRLGPATH_GetDirectionIndexPacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_UpdatePathVelocityAndDirection",
+      "address": "00678e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678e30"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_UpdatePathVelocityAndDirection",
+        "DRLGPATH_CalcPathDirection"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_NormalizeFixedPointPair",
+      "address": "00678f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678f00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_NormalizeFixedPointPair"
+      ]
+    },
+    {
+      "name": "DRLGPATH_StepPathWithCollisionCheck",
+      "address": "00678f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678f70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_StepPathWithCollisionCheck",
+        "DRLGPATH_UpdatePathVelocityAndDirection",
+        "DRLGPATH_NormalizeFixedPointPair",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CheckCollision_BlockAll_Width"
+      ],
+      "usedTypes": [
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_ApplyMissileOffset",
+      "address": "00679190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679190"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_ApplyMissileOffset",
+        "GetDirection",
+        "MATH_sinTable_f32_LookupOffset",
+        "MATH_sinTable_f32_Lookup",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetMissileTargetPosition",
+      "address": "00679250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679250"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetMissileTargetPosition",
+        "GetXPos",
+        "GetYPos",
+        "GetDirection",
+        "MATH_sinTable_f32_LookupOffset",
+        "MATH_sinTable_f32_Lookup",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetWeightedDistancePacked",
+      "address": "00679380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679380"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetWeightedDistancePacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_FindNonBlockedDirectionFromTriplet",
+      "address": "006793e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006793e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_FindNonBlockedDirectionFromTriplet",
+        "CheckCollision_BlockPlayer_Type",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_RaycastCollisionLine",
+      "address": "00679530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679530"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_RaycastCollisionLine",
+        "DRLGPATH_NormalizeFixedPointPair",
+        "CheckCollision_BlockPlayer_Type",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "eD2CollisionShapeType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_RaycastBresenhamLine",
+      "address": "00679720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679720"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_RaycastBresenhamLine",
+        "CheckCollision_BlockPlayer_Type"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_CheckTargetReachable",
+      "address": "00679a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679a60"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_CheckTargetReachable",
+        "DRLGPATH_AdvanceAlongPathPoints",
+        "DRLGPATH_RaycastBresenhamLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_SmoothPathPoints",
+      "address": "00679b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679b30"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_SmoothPathPoints",
+        "DRLGPATH_GetPathDirectionTripletPacked",
+        "DRLGPATH_FindNonBlockedDirectionFromTriplet"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2PathTypeArg",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathToward",
+      "address": "00679c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679c80"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathToward",
+        "DRLGPATH_SmoothPathPoints",
+        "DRLGPATH_CheckTargetReachable",
+        "DRLGPATH_GetWeightedDistancePacked",
+        "DRLGPATH_GetPathDirectionTripletPacked",
+        "DRLGPATH_FindNonBlockedDirectionFromTriplet"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2PathTypeArg",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathTowardFromStart",
+      "address": "00679e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679e50"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathTowardFromStart",
+        "PATH_FindPathToward"
+      ],
+      "usedTypes": [
+        "D2PathTypeArg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathSmoothed",
+      "address": "00679e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679e60"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathSmoothed",
+        "DRLGPATH_SmoothPathPoints"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathTypeArg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathTowardWithAStarFallback",
+      "address": "00679ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679ed0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathToward",
+        "PATH_FindPathTowardWithAStarFallback",
+        "DRLGPATH_GetWeightedDistancePacked",
+        "PATH_FindPathAStarLocalPool"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2PathTypeArg",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathSingleStep",
+      "address": "00679f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679f70"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathSingleStep",
+        "DRLGPATH_CheckTargetReachable"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2PathTypeArg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathForceMove",
+      "address": "00679fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00679fd0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathForceMove",
+        "DRLGPATH_CheckTargetReachable"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2PathTypeArg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathKnockback",
+      "address": "0067a000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a000"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathKnockback",
+        "GetXPos",
+        "GetYPos",
+        "DRLGPATH_RaycastBresenhamLine",
+        "SetSP1"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2PathTypeArg",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_BuildCircularPathPoints",
+      "address": "0067a140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a140"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_BuildCircularPathPoints",
+        "MATH_sinTable_f32_LookupOffset",
+        "MATH_sinTable_f32_Lookup"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_BuildRandomizedPathPoints",
+      "address": "0067a240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a240"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_BuildRandomizedPathPoints",
+        "DRLGPATH_GetPathDirectionTripletPacked"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_ScaleVelocityVector",
+      "address": "0067a390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a390"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_ScaleVelocityVector",
+        "DRLGPATH_CalcPathDirection",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "POINT",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_CheckRayCollisionToTarget",
+      "address": "0067a420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a420"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_CheckRayCollisionToTarget",
+        "DRLGPATH_ScaleVelocityVector",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGPATH_NormalizeFixedPointPair",
+        "DRLGPATH_RaycastCollisionLine"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "POINT",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_ValidateFullPath",
+      "address": "0067a4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a4a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_ValidateFullPath",
+        "CheckCollision_BlockPlayer_Type",
+        "DRLGPATH_CheckRayCollisionToTarget"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetSimpleDistancePacked",
+      "address": "0067a550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a550"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetSimpleDistancePacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetDirectionDeltaTable",
+      "address": "0067a5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a5d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetDirectionDeltaTable"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_IsPositionInBounds",
+      "address": "0067a5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a5f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_IsPositionInBounds"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_AdvanceNodeDirection",
+      "address": "0067a630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a630"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_AdvanceNodeDirection"
+      ],
+      "usedTypes": [
+        "D2DrlgAStarContextStrc",
+        "D2DrlgRoomAStarNodeStrc",
+        "D2SeedStrc"
+      ]
+    },
+    {
+      "name": "DRLGPATH_AdvancePathNodeChain",
+      "address": "0067a690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a690"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_AdvancePathNodeChain",
+        "DRLGPATH_AdvanceNodeDirection"
+      ],
+      "usedTypes": [
+        "D2DrlgAStarContextStrc",
+        "D2DrlgRoomAStarNodeStrc",
+        "D2SeedStrc"
+      ]
+    },
+    {
+      "name": "DRLGPATH_AStarExpandNode",
+      "address": "0067a740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a740"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_AStarExpandNode",
+        "CheckCollision_BlockPlayer_Type",
+        "DRLGPATH_AdvancePathNodeChain",
+        "DRLGPATH_GetPathDirectionPacked"
+      ],
+      "usedTypes": [
+        "D2DrlgAStarContextStrc",
+        "D2DrlgRoomAStarNodeStrc",
+        "D2PathPointStrc",
+        "D2PathTypeArg",
+        "int32_t",
+        "int64_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_ExtractPathFromResult",
+      "address": "0067a9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067a9f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_ExtractPathFromResult",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_FindPathAStar",
+      "address": "0067aaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067aaa0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_FindPathAStar",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "DRLGPATH_GetPathDirectionPacked",
+        "DRLGPATH_AStarExpandNode",
+        "DRLGPATH_ExtractPathFromResult"
+      ],
+      "usedTypes": [
+        "D2DrlgAStarContextStrc",
+        "D2DrlgRoomAStarNodeStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2PathTypeArg",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathAStar",
+      "address": "0067ad00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ad00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathAStar",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGPATH_FindPathAStar"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetSimpleDistancePacked2",
+      "address": "0067adc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067adc0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetSimpleDistancePacked2"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_FindNodeInOpenList",
+      "address": "0067ae00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ae00"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_FindNodeInOpenList"
+      ],
+      "usedTypes": [
+        "D2DrlgPathNodeStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_FindNodeInClosedList",
+      "address": "0067ae50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ae50"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_FindNodeInClosedList"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_InsertNodeSorted",
+      "address": "0067aed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067aed0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_InsertNodeSorted"
+      ],
+      "usedTypes": [
+        "D2DrlgPathNodeStrc",
+        "D2DrlgPathSearchCtxStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_PopBestNodeFromOpenList",
+      "address": "0067af40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067af40"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_PopBestNodeFromOpenList"
+      ],
+      "usedTypes": [
+        "D2DrlgPathSearchCtxStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_PropagateNodeCosts",
+      "address": "0067afe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067afe0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_PropagateNodeCosts"
+      ],
+      "usedTypes": [
+        "D2DrlgPathNodeStrc",
+        "D2DrlgPathNodeStrc *",
+        "D2DrlgPathSearchCtxStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_AllocPathNode",
+      "address": "0067b1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067b1c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_AllocPathNode",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2DrlgPathNodeStrc",
+        "D2DrlgPathSearchCtxStrc"
+      ]
+    },
+    {
+      "name": "DRLGPATH_TryExpandNeighborNode",
+      "address": "0067b200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067b200"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_TryExpandNeighborNode",
+        "DRLGPATH_FindNodeInOpenList",
+        "DRLGPATH_FindNodeInClosedList",
+        "DRLGPATH_AllocPathNode",
+        "DRLGPATH_GetSimpleDistancePacked2",
+        "DRLGPATH_InsertNodeSorted",
+        "DRLGPATH_PropagateNodeCosts"
+      ],
+      "usedTypes": [
+        "D2DrlgPathNodeStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_ExpandAllNeighbors",
+      "address": "0067b440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067b440"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_ExpandAllNeighbors",
+        "CheckCollision_BlockPlayer_Type",
+        "DRLGPATH_TryExpandNeighborNode"
+      ],
+      "usedTypes": [
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_ExtractPathFromResult2",
+      "address": "0067b690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067b690"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_ExtractPathFromResult2",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2DrlgPathNodeStrc",
+        "D2PathExtractFrameStrc",
+        "D2PathTypeArg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_CheckSurroundingCollisions",
+      "address": "0067b740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067b740"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_CheckSurroundingCollisions",
+        "CheckCollision_BlockPlayer_Type"
+      ],
+      "usedTypes": [
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PATH_FindPathAStarLocalPool",
+      "address": "0067b850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067b850"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "PATH_FindPathAStarLocalPool",
+        "DRLGPATH_CheckSurroundingCollisions",
+        "memset",
+        "DRLGPATH_InsertNodeSorted",
+        "DRLGPATH_PopBestNodeFromOpenList",
+        "DRLGPATH_ExpandAllNeighbors",
+        "DRLGPATH_ExtractPathFromResult2"
+      ],
+      "usedTypes": [
+        "D2DrlgPathNodeStrc",
+        "D2DrlgPathSearchCtxStrc",
+        "D2PathTypeArg",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetSquaredDistancePacked",
+      "address": "0067b9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067b9c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetSquaredDistancePacked"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_BuildBresenhamPointList",
+      "address": "0067b9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067b9f0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_BuildBresenhamPointList"
+      ],
+      "usedTypes": [
+        "D2PathPointStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_GetDirectionLookupFromPacked",
+      "address": "0067bbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067bbc0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_GetDirectionLookupFromPacked"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_TryStepWithFallbackDirections",
+      "address": "0067bbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067bbf0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_TryStepWithFallbackDirections",
+        "CheckCollision_BlockPlayer_Type",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_InsertWaypointsIntoBuffer",
+      "address": "0067bd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067bd80"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_InsertWaypointsIntoBuffer",
+        "memmove",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_FindPathDualScan",
+      "address": "0067bdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067bdf0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_FindPathDualScan",
+        "memset",
+        "DRLGPATH_TryStepWithFallbackDirections",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGPATH_InsertWaypointsIntoBuffer"
+      ],
+      "usedTypes": [
+        "D2DrlgPathScannerStrc",
+        "D2PathPointStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGPATH_SimplifyCollinearWaypoints",
+      "address": "0067c1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067c1e0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Path",
+      "calledFunctions": [
+        "DRLGPATH_SimplifyCollinearWaypoints"
+      ],
+      "usedTypes": [
+        "D2PathPointStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -449,13 +449,13 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
     }
 
     pLastSep = szSrcPath;
-    uint32_t uVar1;
-    uVar1 = nDestSize;
+    uint32_t nRemaining;
+    nRemaining = nDestSize;
     if (nDestSize) {
       char cCurChar;
       do {
-        uVar1--;
-        if (!uVar1) {
+        nRemaining--;
+        if (!nRemaining) {
           goto truncate;
         }
 
@@ -465,7 +465,7 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
         pLastSep++;
       } while (cCurChar != '\0');
 
-      if (uVar1) {
+      if (nRemaining) {
         return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)(pLastSep + (-1 - (int)szSrcPath)) >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)((uintptr_t)(pLastSep + (-1 - (int)szSrcPath)) < nDestSize));
       }
 
@@ -558,9 +558,9 @@ char * __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, c
 }
 
 int STRING_FormatVarArgs(char * szFormat, char * szDest, int32_t nDestSize, ...) {
-    int iVar1 = vsnprintf(szDest, nDestSize - 1, szFormat, (va_list)((uint8_t*)&szFormat + 4));
+    int nWritten = vsnprintf(szDest, nDestSize - 1, szFormat, (va_list)((uint8_t*)&szFormat + 4));
     szDest[nDestSize - 1] = '\0';
-    return iVar1;
+    return nWritten;
 }
 
 bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicationName, LPCSTR szCommandLine) {
@@ -647,8 +647,8 @@ bool FILETOOLS_GetTempPath_UTF8(LPSTR szDest) {
       return false;
     }
 
-    int iVar1 = WideCharToMultiByte(0xfde9, 0, (LPCWSTR)wszTempPath, nPathLen + 1, szDest, 0x400, (LPCSTR)0x0, (LPBOOL)0x0);
-    return iVar1 != 0;
+    int nConverted = WideCharToMultiByte(0xfde9, 0, (LPCWSTR)wszTempPath, nPathLen + 1, szDest, 0x400, (LPCSTR)0x0, (LPBOOL)0x0);
+    return nConverted != 0;
 }
 
 // Recursively creates a directory path (CreateDirectoryW, then split at the last separator and
@@ -681,8 +681,8 @@ bool __fastcall FILETOOLS_CreateDirectoryW(LPWSTR lpPathName) {
     }
 
     *pLastSep = L'\0';
-    bool bVar1 = FILETOOLS_CreateDirectoryW(lpPathName);
-    if (!bVar1) {
+    bool bParentCreated = FILETOOLS_CreateDirectoryW(lpPathName);
+    if (!bParentCreated) {
       return false;
     }
 
@@ -699,8 +699,8 @@ bool __stdcall FILETOOLS_CreateFolder_UTF8(LPCSTR szPathName) {
       return false;
     }
 
-    bool bVar1 = FILETOOLS_CreateDirectoryW((LPWSTR)wszPath);
-    return (bool)(uint8_t)(float)(uint32_t)((uint32_t)((uint32_t)extraout_var & 0xffffffu) << 8 | (uint32_t)(uint8_t)bVar1);
+    bool bCreated = FILETOOLS_CreateDirectoryW((LPWSTR)wszPath);
+    return (bool)(uint8_t)(float)(uint32_t)((uint32_t)((uint32_t)extraout_var & 0xffffffu) << 8 | (uint32_t)(uint8_t)bCreated);
 }
 
 } // namespace Fog::File

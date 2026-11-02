@@ -1,0 +1,32 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Server.cpp",
+  "functions": [
+    {
+      "name": "QSERVER_CooperativeThreadMain",
+      "address": "0044cf20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044cf20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Server",
+      "calledFunctions": [
+        "QSERVER_CooperativeThreadMain",
+        "QSERVER_ShutdownAllGames",
+        "QSERVER_DispatchAndCleanup",
+        "CLIENT_GetGameVersionInfo",
+        "GetUnitCountByServerId",
+        "NET_D2GS_SERVER_HandleAnyIncomingPacket",
+        "SrvProcessAllGames"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

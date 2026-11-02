@@ -261,7 +261,7 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     static int gbWeatherInitialized; D2_STATIC_GUARD_BSS(gbWeatherInitialized, "D2Client::Draw::Weather::MISC_PrepareWeatherOverlay::gbWeatherInitialized");
 
     uint32_t _byTintComp;
-    int32_t iVar1;
+    int32_t nFrameCount;
     uint8_t nRed;
     char szPath[260];
     uint32_t nDC6Size;
@@ -335,8 +335,8 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     DC6_UncompOverlays_Rain[3] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
     nGradientIndex = 0;
     do {
-      iVar1 = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(*(DC6**)((int)DC6_UncompOverlays_Rain + nGradientIndex));
-      *(int32_t*)((int)DC6_UncompOverlays_Rain_FrameCount + nGradientIndex) = iVar1;
+      nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(*(DC6**)((int)DC6_UncompOverlays_Rain + nGradientIndex));
+      *(int32_t*)((int)DC6_UncompOverlays_Rain_FrameCount + nGradientIndex) = nFrameCount;
       nGradientIndex += 4;
     } while (nGradientIndex < 0x10);
 
@@ -350,8 +350,8 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     DC6_UncompOverlays_bubble[3] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, nullptr);
     nGradientIndex = 0;
     do {
-      iVar1 = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(*(DC6**)((int)DC6_UncompOverlays_bubble + nGradientIndex));
-      *(int32_t*)((int)DC6_UncompOverlays_bubble_FrameCount + nGradientIndex) = iVar1;
+      nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(*(DC6**)((int)DC6_UncompOverlays_bubble + nGradientIndex));
+      *(int32_t*)((int)DC6_UncompOverlays_bubble_FrameCount + nGradientIndex) = nFrameCount;
       nGradientIndex += 4;
     } while (nGradientIndex < 0x10);
 
@@ -552,7 +552,7 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
       nRollResult = Seed::RollBetweenMinAndMax(pSeed, 0, 5);
       nRange = (nRollResult - 2) * 0x10000 + nWorldY;
     } else {
-      int32_t iVar1;
+      int32_t nRollOffset;
       nRollResult = Seed::RollBetweenMinAndMax(pSeed, 0, 0x50);
       nRange = nRollResult - 0x28;
       if (nRange < 0) {
@@ -560,8 +560,8 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
       }
 
       nRange = nRange * -2 + 0x50;
-      iVar1 = Seed::RollBetweenMinAndMax(pSeed, -nRange, nRange * 2);
-      *(int32_t*)((int)nRoll + nBubbleIndex * 0x18 + 4) = iVar1 + nScreenX;
+      nRollOffset = Seed::RollBetweenMinAndMax(pSeed, -nRange, nRange * 2);
+      *(int32_t*)((int)nRoll + nBubbleIndex * 0x18 + 4) = nRollOffset + nScreenX;
       nRange = nRollResult - 0x1e + nScreenY;
     }
 
@@ -647,13 +647,13 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     *pSeed = sNextSeed;
     int nLineIndex = pParticleArray[nParticleSlotIndex].nMaxY;
     pParticleArray[nParticleSlotIndex].nSinPhaseOffset = sNextSeed.nSeedLow & 0x1ff;
-    float fVar1 = (float)(nLineIndex - 0x28) / (float)(ScreenSizeY - 0x57);
+    float fDepthFactor = (float)(nLineIndex - 0x28) / (float)(ScreenSizeY - 0x57);
     if (nWeatherParticleCountAct5) {
       pParticleArray[nParticleSlotIndex].nAlpha = 0xff;
       *pSeed = D2_SEED_NEXT(*pSeed);
       pParticleArray[nParticleSlotIndex].nFadeCountdown = 1;
       nLineIndex = pParticleArray[nParticleSlotIndex].nMaxY;
-      pParticleArray[nParticleSlotIndex].nSpeed = 8 - (int)(fVar1 * -28.0);
+      pParticleArray[nParticleSlotIndex].nSpeed = 8 - (int)(fDepthFactor * -28.0);
       nLineIndex = (nLineIndex - 0x28) * 7 / (ScreenSizeY - 0x57);
       bIsBlizzard = gnWeatherAct5ParticleCount != 0;
       pParticleArray[nParticleSlotIndex].nLineIndex = nLineIndex;
@@ -692,8 +692,8 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
       break;
     }
 
-    pParticleArray[nParticleSlotIndex].nLineIndex = 4 - (int)(fVar1 * -8.0);
-    pParticleArray[nParticleSlotIndex].nSpeed = 0xf - (int)(fVar1 * -15.0);
+    pParticleArray[nParticleSlotIndex].nLineIndex = 4 - (int)(fDepthFactor * -8.0);
+    pParticleArray[nParticleSlotIndex].nSpeed = 0xf - (int)(fDepthFactor * -15.0);
     pParticleArray[nParticleSlotIndex].nFadeCountdown = 3;
 }
 
@@ -702,8 +702,9 @@ void __stdcall WEATHER_UpdateParticles(D2SeedStrc * pSeed) {
     static uint32_t gnWeatherParticleSinPhase; D2_STATIC_GUARD_BSS(gnWeatherParticleSinPhase, "D2Client::Draw::Weather::WEATHER_UpdateParticles::gnWeatherParticleSinPhase");
 
     float fVar1;
-    float fVar2;
     float fDepthFactor;
+    float fSinOffset;
+    float fScaledSpeed;
     if (nWeatherParticleCountAct5) {
       fDepthFactor = Fog::MATH_sinTable_f32_LookupOffset(gnWeatherParticleOffsetYModulo);
       fDepthFactor = std::fabs(fDepthFactor);
@@ -720,11 +721,11 @@ void __stdcall WEATHER_UpdateParticles(D2SeedStrc * pSeed) {
       int nXDrift;
       do {
         if (pParticleData->nFlags) {
-          fVar2 = (float)(int)((float)pParticleData->nSpeed * fDepthFactor);
+          fScaledSpeed = (float)(int)((float)pParticleData->nSpeed * fDepthFactor);
           fVar1 = Fog::MATH_sinTable_f32_LookupOffset(gnWeatherParticleOffsetYModulo);
-          nXDrift = (int)(fVar1 * fVar2);
+          nXDrift = (int)(fVar1 * fScaledSpeed);
           fVar1 = Fog::MATH_sinTable_f32_Lookup(gnWeatherParticleOffsetYModulo);
-          pParticleData->nPosY += (int)(fVar1 * fVar2) - gnCameraWorldDeltaY;
+          pParticleData->nPosY += (int)(fVar1 * fScaledSpeed) - gnCameraWorldDeltaY;
           if (pParticleData->nPosY > pParticleData->nMaxY) {
             pParticleData->nDying = 1;
           }
@@ -742,8 +743,8 @@ void __stdcall WEATHER_UpdateParticles(D2SeedStrc * pSeed) {
           }
           if (pParticleData->nFlags) {
             if (nWeatherParticleCountAct5 && !pParticleData->nDying) {
-              fVar2 = Fog::MATH_sinTable_f32_Lookup((uint32_t)(gnWeatherParticleSinPhase << 9) / 0x19 + pParticleData->nSinPhaseOffset & 0x1ff);
-              nXDrift += (int)(fVar2 + fVar2);
+              fSinOffset = Fog::MATH_sinTable_f32_Lookup((uint32_t)(gnWeatherParticleSinPhase << 9) / 0x19 + pParticleData->nSinPhaseOffset & 0x1ff);
+              nXDrift += (int)(fSinOffset + fSinOffset);
             }
 
             pParticleData->nPosX += nXDrift - gnCameraWorldDeltaX;
@@ -990,13 +991,13 @@ void __stdcall DRAW_Overlay_Weather() {
     int32_t nLineOrCoord;
     int32_t nSoundPosZ;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
-    bool bVar2 = false;
+    bool bIsRainLevel = false;
     if (pPlayer) {
-      uint8_t bVar1;
+      uint8_t bCanHaveRain;
       pRoom = D2Common::Units::UNITS_GetRoom(pPlayer);
       eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      bVar1 = D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveRain(eLevel);
-      bVar2 = bVar1 != '\0';
+      bCanHaveRain = D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveRain(eLevel);
+      bIsRainLevel = bCanHaveRain != '\0';
       D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveMud(eLevel);
     }
 
@@ -1053,7 +1054,7 @@ void __stdcall DRAW_Overlay_Weather() {
         return;
       }
     }
-    if (!(bVar2 && pEnvironmentParticles->nUsedCount)) {
+    if (!(bIsRainLevel && pEnvironmentParticles->nUsedCount)) {
       return;
     }
 

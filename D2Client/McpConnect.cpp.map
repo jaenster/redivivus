@@ -1,0 +1,42 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/McpConnect.cpp",
+  "functions": [
+    {
+      "name": "MCPCONNECT_SetGameListCallbacks",
+      "address": "0044b210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b210"
+        }
+      ],
+      "namespace": "D2Client::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SetGameListCallbacks"
+      ],
+      "usedTypes": [
+        "pfnMCPGameListEntry",
+        "pfnVoidNoArgCallback"
+      ]
+    },
+    {
+      "name": "MCPCONNECT_SetMessageCallback",
+      "address": "0044b220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044b220"
+        }
+      ],
+      "namespace": "D2Client::McpConnect",
+      "calledFunctions": [
+        "MCPCONNECT_SetMessageCallback"
+      ],
+      "usedTypes": [
+        "pfnMCPMessage"
+      ]
+    }
+  ]
+}

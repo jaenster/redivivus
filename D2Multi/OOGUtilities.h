@@ -21,6 +21,31 @@ struct D2WinButton;
 struct D2WinSmack;
 
 // Data types
+#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+
+struct _STARTUPINFOA {
+    /* 0x00 */ DWORD cb;
+    /* 0x04 */ LPSTR lpReserved;
+    /* 0x08 */ LPSTR lpDesktop;
+    /* 0x0C */ LPSTR lpTitle;
+    /* 0x10 */ DWORD dwX;
+    /* 0x14 */ DWORD dwY;
+    /* 0x18 */ DWORD dwXSize;
+    /* 0x1C */ DWORD dwYSize;
+    /* 0x20 */ DWORD dwXCountChars;
+    /* 0x24 */ DWORD dwYCountChars;
+    /* 0x28 */ DWORD dwFillAttribute;
+    /* 0x2C */ DWORD dwFlags;
+    /* 0x30 */ WORD wShowWindow;
+    /* 0x32 */ WORD cbReserved2;
+    /* 0x34 */ LPBYTE lpReserved2;
+    /* 0x38 */ HANDLE hStdInput;
+    /* 0x3C */ HANDLE hStdOutput;
+    /* 0x40 */ HANDLE hStdError;
+};
+
+#endif // _WIN32
+
 struct __attribute__((packed)) D2LanGameEntryStrc {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ char szGameName[16];
@@ -138,7 +163,7 @@ uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars);
 // +0x2c -> gszLanGameListEntryDescription. Called once per incoming MCP 0x05 game packet from JoinOrCreateGame.
 void __fastcall OOGMENU_AddGameToCache(struct D2McpGameInfoStrc * pGameInfo);
 void __stdcall OOGMENU_RefreshGameListDisplay();
-void __fastcall OOGUTIL_Unused1(char * szText, uint16_t nParam);
+void __fastcall OOGUTIL_Unused1(char * szText, uint16_t wRequestId);
 void __stdcall OOGMENU_RequestGameInfo();
 // Displays game details in the lobby textbox. Shows game description, elapsed time (HH:MM:SS), level restrictions (single level or range), max players, and iterates through all players to display their names and levels with class-specific formatting (Amazon/Sorceress/Necromancer/Paladin/Barbarian/Druid/Assassin). All formatted strings are written to a 256-byte buffer before being added to the display.
 void __fastcall OOGMENU_DisplayGameDetails(struct D2McpGameInfoStrc * pGameInfo);
@@ -173,7 +198,7 @@ int __stdcall OOG_PollMCPJoinD2GSPump(int nFrameIndex);
 // Provenance: 1.14d asm 004438c0..004438d4, RET 4.
 BOOL __stdcall OOGUTIL_OnPressWaitInLineCancel(struct D2ControlMsg * pControlMsg);
 int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, int32_t pEntry);
-int __stdcall OOGUTIL_ProcessGameListEntry(struct D2ControlStrc * dwParam);
+int __stdcall OOGUTIL_ProcessGameListEntry(struct D2ControlStrc * pControl);
 // OnPress handler that does nothing and returns 1.
 // Provenance: asm 00443c10 (MOV EAX,1; RET 4); fpOnPressCallback of the four 15x16 FORM_Button records 0070d7e0, 0070d810, 0070d840, 0070d870 (gaPredefinedForms_b).
 BOOL __stdcall OOGUTIL_OnPressNoAction(struct D2ControlMsg * pControlMsg);
@@ -243,7 +268,7 @@ void __stdcall UIMENU_JoinGame();
 // Opens the Battle.net CREATE GAME dialog (title string 0x141e): if isServerDown() returns -1 shows "Server Down" (0x1413) instead; if an MCP join is in progress runs UIMENU_WaitInLine instead. Otherwise creates the dialog forms (game name edit box, max players when HasPeerName(), level restriction, difficulty) and loads LVL_REST and MAX_PLAYER via OOGUTIL_LoadLevelRestrictionSetting and OOGUTIL_LoadMaxPlayersSetting.
 // Provenance: asm 00445ff0; called from CHATDLG_DestroyFormsAndOpenCreateGameDialog, the OnPress of the lobby CREATE button (gaPredefinedForms_b[6], string 0x14c0).
 void __stdcall OOGUTIL_OpenCreateGameDialog();
-char * OOGUTIL_Unused12(uint32_t * pnParam, int cParam);
+char * OOGUTIL_Unused12(uint32_t * szString, int nChar);
 // Returns the account part of a Battle.net user string "Character*Account": the text after '*', or szUserName itself when there is no '*' or nothing follows it.
 // Provenance: SStrChr(szUserName,'*') at 00446820; OOGUTIL_SendChatMessage whispers "/whisper *%s" with its result (00442905).
 char * __fastcall OOGUTIL_GetAccountName(char * szUserName);

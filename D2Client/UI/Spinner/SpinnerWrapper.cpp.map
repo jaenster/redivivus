@@ -1,0 +1,279 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Spinner/SpinnerWrapper.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "004bc1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc1f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "SpinnerWrapper",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004bc250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc250"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "SpinnerWrapper",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OnMouseWheel",
+      "address": "004bc280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc280"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnMouseWheel"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseDown",
+      "address": "004bc290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc290"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnMouseDown"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseUp",
+      "address": "004bc2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc2a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnMouseUp"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "OnMouseMove",
+      "address": "004bc2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc2b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnMouseMove"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004bc2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc2c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "Draw"
+      ],
+      "usedTypes": [
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "OnChar",
+      "address": "004bc2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc2d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnChar"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "OnDownArrow",
+      "address": "004bc2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc2e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnDownArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "OnUpArrow",
+      "address": "004bc2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc2f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnUpArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "OnRightArrow",
+      "address": "004bc300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc300"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnRightArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "OnLeftArrow",
+      "address": "004bc310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc310"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "OnLeftArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "GetValue",
+      "address": "004bc320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc320"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "GetValue"
+      ],
+      "usedTypes": [
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "GetRepeatDelta",
+      "address": "004bc330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc330"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "GetRepeatDelta"
+      ],
+      "usedTypes": [
+        "SpinnerWrapper"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004bc480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc480"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner::SpinnerWrapper",
+      "calledFunctions": [
+        "Constructor",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "SpinnerImplementation",
+        "SpinnerWrapper",
+        "fpSpinnerRepeatAction",
+        "pfnEHHandlerRoutine"
+      ]
+    }
+  ]
+}

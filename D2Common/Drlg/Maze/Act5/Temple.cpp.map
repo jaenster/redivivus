@@ -1,0 +1,30 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/Maze/Act5/Temple.cpp",
+  "functions": [
+    {
+      "name": "ReplaceRooms",
+      "address": "00673000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673000"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze::Act5::Temple",
+      "calledFunctions": [
+        "ReplaceRooms",
+        "ReplaceRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,538 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/Event.cpp",
+  "functions": [
+    {
+      "name": "_UnusedGetFromList",
+      "address": "00540b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540b70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "_UnusedGetFromList"
+      ],
+      "usedTypes": [
+        "D2TimerStrc *",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EVENT_AllocTimerPool",
+      "address": "00540bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540bb0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_AllocTimerPool",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2TimerListStrc",
+        "D2TimerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_GetTimerOrAllocNew",
+      "address": "00540c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540c30"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_GetTimerOrAllocNew",
+        "EVENT_AllocTimerPool",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2TimerListStrc",
+        "D2TimerQueueStrc",
+        "D2TimerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_RemoveAndRecycleTimer",
+      "address": "00540cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540cd0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_RemoveAndRecycleTimer",
+        "SetTimerListIfUnitExists"
+      ],
+      "usedTypes": [
+        "D2TimerQueueStrc",
+        "D2TimerStrc",
+        "D2TimerStrc *",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EVENT_AllocTimerToUnit",
+      "address": "00540df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540df0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_AllocTimerToUnit",
+        "EVENT_GetTimerOrAllocNew",
+        "GetTimerList",
+        "SetTimerListIfUnitExists"
+      ],
+      "usedTypes": [
+        "D2TimerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "EVENT_RemoveUnitTimersByType",
+      "address": "00540e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540e60"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_RemoveUnitTimersByType",
+        "GetTimerList",
+        "EVENT_RemoveAndRecycleTimer"
+      ],
+      "usedTypes": [
+        "D2TimerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2TimerTypeDWORD",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EVENT_RemoveCustomTimer",
+      "address": "00540ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540ea0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_RemoveCustomTimer",
+        "GetTimerList",
+        "EVENT_RemoveAndRecycleTimer"
+      ],
+      "usedTypes": [
+        "D2TimerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2TimerTypeDWORD",
+        "fpTimerFunctionUnit"
+      ]
+    },
+    {
+      "name": "EVENT_FreeAllTimersForUnit",
+      "address": "00540ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540ee0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_FreeAllTimersForUnit",
+        "GetTimerList",
+        "EVENT_RemoveAndRecycleTimer",
+        "SetTimerListIfUnitExists"
+      ],
+      "usedTypes": [
+        "D2TimerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_ClearTimerList",
+      "address": "00540f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540f30"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_ClearTimerList",
+        "GetTimerList",
+        "EVENT_FreeAllTimersForUnit",
+        "SetTimerListIfUnitExists"
+      ],
+      "usedTypes": [
+        "D2TimerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_DispatchPlayerTimers",
+      "address": "00540f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00540f60"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_DispatchPlayerTimers",
+        "PLAYEREVENT_DefaultCallback",
+        "EVENT_RemoveAndRecycleTimer"
+      ],
+      "usedTypes": [
+        "D2TimerQueueStrc",
+        "D2TimerStrc",
+        "SGAMEDATA",
+        "fpTimerFunctionUnit"
+      ]
+    },
+    {
+      "name": "EVENT_DispatchMonsterTimers",
+      "address": "00541060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541060"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_DispatchMonsterTimers",
+        "MONSTEREVENT_DefaultCallback",
+        "EVENT_RemoveAndRecycleTimer"
+      ],
+      "usedTypes": [
+        "D2TimerQueueStrc",
+        "D2TimerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_DispatchObjectTimers",
+      "address": "00541160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541160"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_DispatchObjectTimers",
+        "OBJECTEVENT_DefaultCallback",
+        "EVENT_RemoveAndRecycleTimer"
+      ],
+      "usedTypes": [
+        "D2TimerQueueStrc",
+        "D2TimerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_DispatchMissileTimers",
+      "address": "00541240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541240"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "MISSILEEVENT_DefaultCallback",
+        "EVENT_DispatchMissileTimers",
+        "EVENT_RemoveAndRecycleTimer"
+      ],
+      "usedTypes": [
+        "D2TimerQueueStrc",
+        "D2TimerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_DispatchItemTimers",
+      "address": "00541320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541320"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_DispatchItemTimers",
+        "ITEMEVENT_DefaultCallback",
+        "EVENT_RemoveAndRecycleTimer"
+      ],
+      "usedTypes": [
+        "D2TimerQueueStrc",
+        "D2TimerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_FreeTimerQueue",
+      "address": "00541400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541400"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_FreeTimerQueue",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2TimerListStrc",
+        "D2TimerQueueStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_AllocTimerQueue",
+      "address": "00541470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541470"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_AllocTimerQueue",
+        "EVENT_FreeTimerQueue",
+        "AllocServerMemory",
+        "memset",
+        "EVENT_AllocTimerPool"
+      ],
+      "usedTypes": [
+        "D2TimerListStrc",
+        "D2TimerQueueStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "EVENT_DispatchAllTimers",
+      "address": "005414d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005414d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_DispatchAllTimers",
+        "EVENT_DispatchMissileTimers",
+        "EVENT_DispatchPlayerTimers",
+        "EVENT_DispatchMonsterTimers",
+        "EVENT_DispatchObjectTimers",
+        "EVENT_DispatchItemTimers"
+      ],
+      "usedTypes": [
+        "D2TimerQueueStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EVENT_TimerTypeExistsOnUnit",
+      "address": "005415a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005415a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_TimerTypeExistsOnUnit",
+        "GetTimerList"
+      ],
+      "usedTypes": [
+        "D2TimerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2TimerTypeDWORD"
+      ]
+    },
+    {
+      "name": "EVENT_TriggerTimerInternal",
+      "address": "005415e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005415e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_TriggerTimerInternal",
+        "EVENT_AllocTimerToUnit"
+      ],
+      "usedTypes": [
+        "D2TimerStrc",
+        "D2TimerStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "fpTimerFunctionUnit",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EVENT_TriggerImmediate",
+      "address": "00541650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541650"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_TriggerImmediate",
+        "EVENT_TriggerTimerInternal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2TimerTypeDWORD",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EVENT_TriggerWithCallback",
+      "address": "00541680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541680"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "EVENT_TriggerWithCallback",
+        "EVENT_TriggerTimerInternal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2TimerTypeDWORD",
+        "fpTimerFunctionUnit",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetEventInternal",
+      "address": "005416b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005416b0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "SetUninterruptableState",
+        "SetEventInternal",
+        "EVENT_TriggerTimerInternal",
+        "UNIT_GetUnitState",
+        "EVENT_AllocTimerToUnit"
+      ],
+      "usedTypes": [
+        "D2TimerStrc",
+        "D2TimerStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "eD2TimerTypeDWORD",
+        "fpTimerFunctionUnit",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetEvent",
+      "address": "005417d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005417d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "SetEvent",
+        "SetEventInternal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetEventMapReveal",
+      "address": "00541800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00541800"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event",
+      "calledFunctions": [
+        "SetEventMapReveal",
+        "SetEventInternal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2TimerTypeDWORD",
+        "fpTimerFunctionUnit",
+        "int32_t"
+      ]
+    }
+  ]
+}

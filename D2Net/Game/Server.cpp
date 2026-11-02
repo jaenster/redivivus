@@ -100,8 +100,8 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
     return 3;
 }
 
-void __stdcall WaitForEmptyEvent(DWORD dwParam) {
-    Fog::Src::WaitForEmptyEvent(pQServer, dwParam);
+void __stdcall WaitForEmptyEvent(DWORD dwTimeout) {
+    Fog::Src::WaitForEmptyEvent(pQServer, dwTimeout);
 }
 
 void __stdcall NET_Thunk_QServerSwapWorkerSlotValue(int nWorkerIndex, int nNewSlotValueOrZero) {
@@ -129,8 +129,8 @@ void NET_QServer_FreeAndSend0xB0ToEveryone() {
 }
 
 int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, size_t nSize) {
-    int iVar1 = Fog::Src::DequeueModePacket(pQServer, 1, pBytes, nSize);
-    return iVar1;
+    int nResult = Fog::Src::DequeueModePacket(pQServer, 1, pBytes, nSize);
+    return nResult;
 }
 
 int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, size_t nSize) {
@@ -139,8 +139,8 @@ int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, size_t 
 }
 
 int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode2(char * pBytes, size_t nSize) {
-    int iVar1 = Fog::Src::DequeueModePacket(pQServer, 2, pBytes, nSize);
-    return iVar1;
+    int nResult = Fog::Src::DequeueModePacket(pQServer, 2, pBytes, nSize);
+    return nResult;
 }
 
 // Low-level server-to-client packet send. In single-player mode, loops the packet back via NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket. In multiplayer: skips logging/compression for opcode 0xAF (handshake) or nMode==2; otherwise compresses the packet (up to 1032 bytes) and sends via QServer::SendPacketByClientId with a 1- or 2-byte length prefix. Halts if raw packet exceeds 0x204 bytes.
@@ -591,10 +591,10 @@ int32_t __fastcall NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize
     0x1
 }; D2_STATIC_GUARD(NET_D2GS_CLIENT_OUTGOING_SIZE, "D2Net::Game::Server::NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize::NET_D2GS_CLIENT_OUTGOING_SIZE");
 
-    char* pcVar1;
     uint16_t wRawLen;
     uint32_t nStrLen1;
     uint32_t nStrLen2;
+    char* pszStr;
     if (nSize < 1) {
       return 0;
     }
@@ -624,16 +624,16 @@ int32_t __fastcall NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize
 
       case 0x15:
         if ((int)nSize >= 3) {
-          pcVar1 = pBytes + 3;
-          nStrLen1 = Storm::Source::SSTR::SStrLen(pcVar1);
+          pszStr = pBytes + 3;
+          nStrLen1 = Storm::Source::SSTR::SStrLen(pszStr);
           if ((int)nSize >= (int)(nStrLen1 + 4)) {
-            nStrLen2 = Storm::Source::SSTR::SStrLen(pcVar1);
-            pcVar1 = pcVar1 + nStrLen2 + 1;
-            nStrLen2 = Storm::Source::SSTR::SStrLen(pcVar1);
+            nStrLen2 = Storm::Source::SSTR::SStrLen(pszStr);
+            pszStr = pszStr + nStrLen2 + 1;
+            nStrLen2 = Storm::Source::SSTR::SStrLen(pszStr);
             nTableSize = nStrLen1 + 5 + nStrLen2;
             if ((int)nSize >= nTableSize) {
-              nStrLen1 = Storm::Source::SSTR::SStrLen(pcVar1);
-              nTableSize = nTableSize + 1 + (int)pcVar1[nStrLen1 + 1];
+              nStrLen1 = Storm::Source::SSTR::SStrLen(pszStr);
+              nTableSize = nTableSize + 1 + (int)pszStr[nStrLen1 + 1];
               if ((int)nSize >= nTableSize) {
                 *pSize = nTableSize;
                 return *pSize;

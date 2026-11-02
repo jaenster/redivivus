@@ -1,0 +1,26 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/DrlgWarp.cpp",
+  "functions": [
+    {
+      "name": "DRLGWARP_GetWarpDestinationFromArray",
+      "address": "0066af30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066af30"
+        }
+      ],
+      "namespace": "D2Common::Drlg::DrlgWarp",
+      "calledFunctions": [
+        "DRLGWARP_GetWarpDestinationFromArray",
+        "DRLGACTMISC_GetWarpsIdIfExists"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint8_t"
+      ]
+    }
+  ]
+}

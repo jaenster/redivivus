@@ -122,7 +122,7 @@ void __stdcall D2GFX_DrawPerspectiveImage(struct D2GfxDataStrc * pData, int32_t 
 BOOL __stdcall D2GFX_DrawImage(struct D2GfxDataStrc * pGfxData, int32_t nPositionX, int32_t nPositionY, int32_t dwGamma, DRAWMODE eDrawMode, struct D2GamePalShiftGreenBloodStrc * pPalette);
 void __stdcall D2GFX_DrawShiftedImage(struct D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, int32_t dwGamma, DRAWMODE eMode, GLOBALPALLETE nGlobalPaletteShift);
 void __stdcall D2GFX_DrawVerticalCropImage(struct D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, int32_t nPercentHideFromBottom, int32_t nPercentShowFromBottom, DRAWMODE nDrawMode);
-void __stdcall D2GFX_DrawSprite6(struct D2GfxDataStrc * pDC6Context, int32_t nParam1, int32_t nParam2, struct D2GfxTileRectStrc * pClipRect, int32_t nParam3);
+void __stdcall D2GFX_DrawSprite6(struct D2GfxDataStrc * pDC6Context, int32_t nPosX, int32_t nPosY, struct D2GfxTileRectStrc * pClipRect, int32_t nDrawMode);
 void __stdcall D2GFX_DrawShadow(struct D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY);
 void __stdcall D2GFX_DrawImageColoredShape(struct D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, int32_t nPaletteIndex);
 void __stdcall D2GFX_DebugFillBackBuffer(int32_t nXpos, int32_t nYpos);

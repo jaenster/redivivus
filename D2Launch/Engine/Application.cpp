@@ -284,10 +284,10 @@ void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText) {
     __frame0_t __frame0;
     char* pszCmdLineScan;
     char cChar;
-    char* pcVar2;
-    pcVar2 = *ppszText;
+    char* pszOrigCmdLine;
+    pszOrigCmdLine = *ppszText;
     __frame0.pUseCmdLine = 0;
-    if (!pcVar2 || (pszCmdLineScan = pcVar2 , (pszCmdLineScan = pszCmdLineScan + strlen(pszCmdLineScan) + 1 , pszCmdLineScan == pcVar2 + 1))) {
+    if (!pszOrigCmdLine || (pszCmdLineScan = pszOrigCmdLine , (pszCmdLineScan = pszCmdLineScan + strlen(pszCmdLineScan) + 1 , pszCmdLineScan == pszOrigCmdLine + 1))) {
       Storm::Source::SReg::SRegLoadValue("Diablo II", "UseCmdLine", 0, &__frame0.pUseCmdLine);
       if (__frame0.pUseCmdLine) {
         Storm::Source::SReg::SRegLoadString("Diablo II", "CmdLine", 0, REGISTRY_CmdLine, 0x400);
@@ -297,7 +297,7 @@ void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText) {
 
       memcpy(__frame0.szCmdLineBuf, "-skiptobnet", 0xc);
     } else {
-      sprintf(__frame0.szCmdLineBuf, "%s -skiptobnet", pcVar2);
+      sprintf(__frame0.szCmdLineBuf, "%s -skiptobnet", pszOrigCmdLine);
     }
 
     Storm::Source::SReg::SRegSaveString("Diablo II", "CmdLine", 0, __frame0.szCmdLineBuf);

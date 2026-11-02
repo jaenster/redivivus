@@ -116,8 +116,8 @@ BOOL __fastcall Skills_CltStFunc_SetParam1FromCalc(D2UnitStrc * pUnit, eD2Skills
       return 1;
     }
 
-    int32_t nParam1 = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-    D2Common::Skills::SKILL_SetParam1(pSkill, nParam1);
+    int32_t nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+    D2Common::Skills::SKILL_SetParam1(pSkill, nSkillCalc);
     return 1;
 }
 

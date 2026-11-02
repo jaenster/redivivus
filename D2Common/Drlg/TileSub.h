@@ -18,6 +18,6 @@ namespace D2Common::Drlg::TileSub {
 // Function declarations
 // Ensures pLvlSubTxtRecord->pDrlgFile is loaded, then initializes per-layer grids (wall/floor/shadow) from the DS1 tile-type layers. Also applies a per-wall-layer flag mask and validates that substitution groups exist.
 void __fastcall InitializeDrlgFile(struct D2PoolManagerStrc * pMemory, struct D2LvlSubTxt * pLvlSubTxtRecord);
-void __fastcall AddSecondaryBorder(struct D2UnkOutdoorStrc * pUnkOutdoor);
+void __fastcall AddSecondaryBorder(struct D2UnkOutdoorStrc * pOutdoorCtx);
 
 } // namespace D2Common::Drlg::TileSub

@@ -1,0 +1,418 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/UnitMode.cpp",
+  "functions": [
+    {
+      "name": "INTERACT_AnyObject",
+      "address": "00480930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480930"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "INTERACT_AnyObject",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UpdateDirectionAndSpeed",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "GetTickCount",
+        "GetUIFlag",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT",
+        "SetTarget",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillId",
+        "GetEquipedWeapon",
+        "ITEM_GetItemsTxt_szCode",
+        "UNITSND_PlayPlayerSound",
+        "GetSkillByIdAndOwner",
+        "SKILLS_CltStartSkillCast"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ClickWithSkillOnUnitOrCoord",
+      "address": "00480b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480b40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "ClickWithSkillOnUnitOrCoord",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitModeAction",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_CanInterruptSkill",
+      "address": "00480ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480ba0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_CanInterruptSkill",
+        "GetCurrentSkill",
+        "GetSkillId"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HandleMessage",
+      "address": "00480c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480c10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "HandleMessage",
+        "PlayerMessage",
+        "MonsterMessage",
+        "ObjectMessage",
+        "ItemMessage"
+      ],
+      "usedTypes": [
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_IsTargetInActionRange",
+      "address": "00480c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480c80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_IsTargetInActionRange",
+        "GetLeftSkill",
+        "GetRightSkill",
+        "GetSkillsTxt",
+        "SKILL_CheckAuraRange",
+        "IsObjectInInteractRange",
+        "TestCollisionBetweenInteractingUnits",
+        "IsInMovingModeEx",
+        "IsInMeleeRange"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_ShowElementalHitOverlay",
+      "address": "00480d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480d20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_ShowElementalHitOverlay",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_SetModeAndLoadCof",
+      "address": "00480e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480e30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_SetModeAndLoadCof",
+        "UTILS_OnUnitModeChange_NoOp",
+        "SetupUpdateFlag",
+        "GFX_LoadUnitModeCof"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_SetAnimMode",
+      "address": "00480e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480e70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_SetAnimMode",
+        "UTILS_OnUnitModeChange_NoOp",
+        "SetupUpdateFlag",
+        "GFX_LoadUnitModeCof",
+        "UNITMODE_ShowElementalHitOverlay",
+        "UNITSND_DispatchModeChangeSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode"
+      ]
+    },
+    {
+      "name": "UNITMODE_SetAnimModeSilent",
+      "address": "00480ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480ec0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_SetAnimModeSilent",
+        "UTILS_OnUnitModeChange_NoOp",
+        "SetupUpdateFlag",
+        "GFX_LoadUnitModeCof"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_SendWalkToPosition",
+      "address": "00480ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00480ef0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "PATH_MoveUnitToPoint",
+        "UNITMODE_SendWalkToPosition",
+        "GetXPos",
+        "GetYPos",
+        "GetSomeMonsterStatFlag",
+        "GetPlayerUnit_Net",
+        "HandleMessage",
+        "SetUnsetFlags0x20"
+      ],
+      "usedTypes": [
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_ExecuteSkillAction",
+      "address": "00481030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00481030"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_ExecuteSkillAction",
+        "UNITMODE_CanInterruptSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetLeftSkill",
+        "GetSkillId",
+        "GetOwnerGUID",
+        "GetRightSkill",
+        "UNITS_FindClientSideUnit",
+        "CheckFlags",
+        "HandleMessage",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "ClickWithSkillOnUnitOrCoord"
+      ],
+      "usedTypes": [
+        "D2ServerMessageHandleStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2UnitModeAction",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_HandleMoveAction",
+      "address": "004812e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004812e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_HandleMoveAction",
+        "GetMouseClickFlags",
+        "UNITMODE_CanInterruptSkill",
+        "HandleMessage",
+        "NET_D2GS_CLIENT_Send_INT_INT"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_HandleItemOrObjectInteraction",
+      "address": "00481400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00481400"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_HandleItemOrObjectInteraction",
+        "IsActive",
+        "UNITMODE_IsTargetInActionRange",
+        "UNITMODE_HandleMoveAction",
+        "ROSTER_CheckPlayerCanLoot",
+        "UNITMODE_ExecuteSkillAction",
+        "SELECT_UpdateUnitSelection"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_HandleSkillTargetInteraction",
+      "address": "004814a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004814a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_HandleSkillTargetInteraction",
+        "IsActive",
+        "SELECT_UpdateUnitSelection",
+        "GetLeftSkill",
+        "GetRightSkill",
+        "GetSkillId",
+        "UNITMODE_IsTargetInActionRange",
+        "UNITMODE_HandleMoveAction"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitModeAction",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_TryInteractWithObject",
+      "address": "004815a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004815a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_TryInteractWithObject",
+        "UNITMODE_IsTargetInActionRange",
+        "UNITMODE_HandleMoveAction",
+        "SELECT_UpdateUnitSelection"
+      ],
+      "usedTypes": [
+        "D2PathPointStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITMODE_ExecuteDeferredAction",
+      "address": "00481600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00481600"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitMode",
+      "calledFunctions": [
+        "UNITMODE_ExecuteDeferredAction",
+        "UNITS_FindClientSideUnit",
+        "SCMD_ClearPlayerTradeFields",
+        "GAMEDATA_GetGlobalTickCount",
+        "GAME_SetSyncTickCount",
+        "UNITMODE_HandleItemOrObjectInteraction",
+        "UNITMODE_HandleSkillTargetInteraction",
+        "CheckFlags",
+        "SELECT_UpdateUnitSelection",
+        "UNITMODE_TryInteractWithObject",
+        "UNITMODE_ExecuteSkillAction"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    }
+  ]
+}

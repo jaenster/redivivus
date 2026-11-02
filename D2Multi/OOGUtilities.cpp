@@ -36,10 +36,9 @@
 #include "Fog/Src/LogManager.h"
 #include "Fog/Src/Safesock.h"
 #include "Fog/Src/String/FogString.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/Source/SSystem.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 #include "D2Multi/OOG.h"
 #include "D2Win/D2WinEditBox.h"
@@ -127,8 +126,8 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
 
     szFileType[0] = '\0';
     memset(szFileType + 1, 0, 0x7ff);
-    int local_8;
-    local_8 = 0;
+    int bLaunched;
+    bLaunched = 0;
     HWND hWnd;
     hWnd = GetDesktopWindow();
     /* HWND hWnd for SetForegroundWindow */ SetForegroundWindow(hWnd);
@@ -171,13 +170,13 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
           pcCopyDst++;
         }
 
-        Storm::Source::SSystem::SMemZero(&sStartupInfo, 0x44);
+        Storm::Source::SMem::SMemZero(&sStartupInfo, 0x44);
         /* LPPROCESS_INFORMATION lpProcessInformation for CreateProcessA */ /* LPSTARTUPINFOA lpStartupInfo for CreateProcessA */ /* LPCSTR lpCurrentDirectory for CreateProcessA */ /* LPVOID lpEnvironment for CreateProcessA */ /* DWORD dwCreationFlags for CreateProcessA */ /* BOOL bInheritHandles for CreateProcessA */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateProcessA */ /* LPSECURITY_ATTRIBUTES lpProcessAttributes for CreateProcessA */ /* LPSTR lpCommandLine for CreateProcessA */ /* LPCSTR lpApplicationName for CreateProcessA */ sStartupInfo.cb = 0x44;
         bCreated = CreateProcessA((LPCSTR)0x0, szCommandLineBuffer + 1, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0x20, (LPVOID)0x0, (LPCSTR)0x0, &sStartupInfo, &sProcessInfo);
         if (bCreated) {
           /* HANDLE hObject for CloseHandle */ CloseHandle(sProcessInfo.hThread);
           /* HANDLE hObject for CloseHandle */ CloseHandle(sProcessInfo.hProcess);
-          local_8 = 1;
+          bLaunched = 1;
           goto report_click_result;
         }
       }
@@ -187,7 +186,7 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     wszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x14dc);
     ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, nullptr);
     report_click_result:
-    pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, (uint32_t)!local_8);
+    pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, (uint32_t)!bLaunched);
     return 1;
 }
 
@@ -296,9 +295,9 @@ int __stdcall OOGUTIL_JoinDefaultChannel(D2ControlMsg * pControlMsg) {
     pNetworkUnknown->pfnNewsShutdown();
     ChatDlg::CHATDLG_EnqueueClearMessage();
     ChatDlg::CHATDLG_CreateAllForms();
-    int32_t iVar1 = Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szDefaultChannel, 0x20);
+    int32_t bRegLoaded = Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szDefaultChannel, 0x20);
     char* szChannelName = szDefaultChannel;
-    if (!iVar1) {
+    if (!bRegLoaded) {
       szChannelName = "";
     }
 
@@ -379,7 +378,6 @@ int __stdcall JoinOrCreateGame(DWORD dwParam) {
     static unsigned int gdwLastGameInfoPollTick; D2_STATIC_GUARD_BSS(gdwLastGameInfoPollTick, "D2Multi::OOGUtilities::JoinOrCreateGame::gdwLastGameInfoPollTick");
     static uint32_t gdwLastNetworkHeartbeatTick; D2_STATIC_GUARD_BSS(gdwLastNetworkHeartbeatTick, "D2Multi::OOGUtilities::JoinOrCreateGame::gdwLastNetworkHeartbeatTick");
 
-    bool bVar1;
     uint16_t nGSRequestId;
     DWORD dwTickNow;
     uint16_t* pwszMessage;
@@ -393,6 +391,7 @@ int __stdcall JoinOrCreateGame(DWORD dwParam) {
     char* pszServerIpDst;
     tagRECT rcCursor;
     uint32_t nLoopActivity;
+    bool bPolled;
     char cIpChar;
     /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcCursor, 0x91, 0xb, 0x28f, 0x47);
     BOOL bMouseInRect;
@@ -580,11 +579,11 @@ int __stdcall JoinOrCreateGame(DWORD dwParam) {
       }
 
       run_periodic_polls:
-      bVar1 = false;
+      bPolled = false;
       dwTickNow = (*pfnGetTickCount)();
       if (dwTickNow - gdwLastNetworkHeartbeatTick >= 15000) {
         gdwLastNetworkHeartbeatTick += dwTickNow - gdwLastNetworkHeartbeatTick;
-        bVar1 = true;
+        bPolled = true;
         pNetworkUnknown->pfnSendCheckAd();
         if (!(D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Died) || !(D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore)) {
           nResult = 0;
@@ -603,7 +602,7 @@ int __stdcall JoinOrCreateGame(DWORD dwParam) {
         dwTickNow = (*pfnGetTickCount)();
         if (dwTickNow - gdwLastGameListRefreshTick >= 15000) {
           gdwLastGameListRefreshTick += dwTickNow - gdwLastGameListRefreshTick;
-          bVar1 = true;
+          bPolled = true;
           OOGMENU_RequestGameList();
         }
       }
@@ -611,12 +610,12 @@ int __stdcall JoinOrCreateGame(DWORD dwParam) {
       dwTickNow = (*pfnGetTickCount)();
       if (dwTickNow - gdwLastGameInfoPollTick >= 1000) {
         gdwLastGameInfoPollTick += dwTickNow - gdwLastGameInfoPollTick;
-        bVar1 = true;
+        bPolled = true;
         OOGMENU_RequestGameInfo();
       }
 
       ChatDlg::CHATDLG_ProcessPendingMessages();
-      if (!bVar1) {
+      if (!bPolled) {
         return 0;
       }
       if (!nLoopActivity) {
@@ -639,12 +638,12 @@ uint32_t __stdcall OOGMENU_RestoreMCPConnection() {
       return 0;
     }
 
-    int32_t iVar1 = D2MCPClient::McpConnect::HasPeerName();
-    if (iVar1) {
+    int32_t nResult = D2MCPClient::McpConnect::HasPeerName();
+    if (nResult) {
       return 1;
     }
 
-    gnMCPConnectionRestoreResult = iVar1;
+    gnMCPConnectionRestoreResult = nResult;
     uint16_t* pwszMessage = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
     ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszMessage, OOG::OOGUTIL_PrintCallback_SetFlag);
     uint32_t* pPeerData = (uint32_t*)pNetworkUnknown->pfnSendLogonRealmEx(D2IniData_multiplayer->szCharacterRealm, "password");
@@ -656,15 +655,15 @@ uint32_t __stdcall OOGMENU_RestoreMCPConnection() {
     D2Win::Src::D2WinMain::MessagePump(OOG_WaitMCPThreadDonePump);
     ChatDlg::FORMS_DestroyListEx();
     if (!gnMCPConnectionRestoreResult) {
-      iVar1 = D2MCPClient::McpConnect::HasPeerName();
-      if (iVar1) {
-        iVar1 = D2MCPClient::McpConnect::GetD2GSJoinResult();
-        if (!iVar1) {
+      nResult = D2MCPClient::McpConnect::HasPeerName();
+      if (nResult) {
+        nResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
+        if (!nResult) {
           D2MCPClient::McpConnect::thunk_NET_MCP_CLIENT_Send_0x07_CharLogon(D2IniData_multiplayer->szNAME);
           D2Win::Src::D2WinMain::MessagePump(OOG_PollMCPCharLogonPump);
           ChatDlg::FORMS_DestroyListEx();
-          iVar1 = D2MCPClient::McpConnect::GetD2GSJoinResult();
-          return (uint32_t)!iVar1;
+          nResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
+          return (uint32_t)!nResult;
         }
       }
     }
@@ -980,7 +979,6 @@ static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
 }
 
 void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
-    char* pcVar1;
     bool bCmdResult;
     ::IgnoreList* ppIgnoreListThis;
     uint16_t* pwszMsg;
@@ -991,7 +989,8 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
     char szArgBuffer[260];
     uint16_t wszNameWide[34];
     char szChannelName[32];
-    IgnoreListVtable* pvVar1;
+    IgnoreListVtable* pIgnoreVtbl;
+    char* szPattern;
     ChatDlg::CHATDLG_AppendChatToHistory(szText);
     uint32_t nHandled;
     nHandled = OOGUTIL_HandleReplyCommand("/r", szText);
@@ -1016,9 +1015,9 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
       ::IgnoreList* ppIgnoreListB;
       ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
       ppIgnoreListB = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-      pvVar1 = ppIgnoreListB->_vfptr;
+      pIgnoreVtbl = ppIgnoreListB->_vfptr;
       nCmdMatch = ppIgnoreListThis->_vfptr->GetPersistentSetting(ppIgnoreListThis);
-      pvVar1->SavePersistentSetting(ppIgnoreListB, (uint32_t)!nCmdMatch);
+      pIgnoreVtbl->SavePersistentSetting(ppIgnoreListB, (uint32_t)!nCmdMatch);
       ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
       nCmdMatch = ppIgnoreListThis->_vfptr->GetPersistentSetting(ppIgnoreListThis);
       if (nCmdMatch) {
@@ -1037,16 +1036,16 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
       Fog::File::CONTAINER_InitializeBuffer(wszFormatBuffer, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       Fog::File::CONTAINER_InitializeBuffer(wszOutputBuffer, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       Fog::File::CONTAINER_InitializeBuffer(wszNameWide, 2, 0x22, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      pcVar1 = szChannelName + 0xc;
-      ChatDlg::CHATDLG_ParseCommandArgument(0x11, szText, pcVar1);
+      szPattern = szChannelName + 0xc;
+      ChatDlg::CHATDLG_ParseCommandArgument(0x11, szText, szPattern);
       nCmdMatch = Storm::Source::SSTR::SStrCmpI(szChannelName + 0xd, D2IniData_multiplayer->szLastBnetAccount, 0x7fffffff);
       if (!nCmdMatch) {
         return;
       }
 
-      D2Lang::UTF8_ConvertToWideChar(wszNameWide, pcVar1, 0x22);
+      D2Lang::UTF8_ConvertToWideChar(wszNameWide, szPattern, 0x22);
       ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-      nCmdMatch = ppIgnoreListThis->_vfptr->AddByPattern(ppIgnoreListThis, pcVar1);
+      nCmdMatch = ppIgnoreListThis->_vfptr->AddByPattern(ppIgnoreListThis, szPattern);
       if (nCmdMatch) {
         pwszMsg = wszNameWide;
         pwszFmtTemplate = D2Lang::StrTable::strtable::GetLocaleString(0x2ba3);
@@ -1124,11 +1123,11 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
       Fog::File::CONTAINER_InitializeBuffer(wszFormatBuffer, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       Fog::File::CONTAINER_InitializeBuffer(wszOutputBuffer, 2, 0x208, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       Fog::File::CONTAINER_InitializeBuffer(wszNameWide, 2, 0x22, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-      pcVar1 = szChannelName + 0xc;
-      ChatDlg::CHATDLG_ParseCommandArgument(0x11, szText, pcVar1);
-      D2Lang::UTF8_ConvertToWideChar(wszNameWide, pcVar1, 0x22);
+      szPattern = szChannelName + 0xc;
+      ChatDlg::CHATDLG_ParseCommandArgument(0x11, szText, szPattern);
+      D2Lang::UTF8_ConvertToWideChar(wszNameWide, szPattern, 0x22);
       ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-      nCmdMatch = ppIgnoreListThis->_vfptr->RemoveByPattern(ppIgnoreListThis, pcVar1);
+      nCmdMatch = ppIgnoreListThis->_vfptr->RemoveByPattern(ppIgnoreListThis, szPattern);
       if (nCmdMatch) {
         pwszMsg = wszNameWide;
         pwszFmtTemplate = D2Lang::StrTable::strtable::GetLocaleString(0x2ba5);
@@ -1188,7 +1187,7 @@ int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix)
     int nSendResult;
     uint16_t nTitleStrId;
     char cFirstChar = *szText;
-    Storm::Source::SSystem::SMemZero(gszOogChatInputBuffer, 0x200);
+    Storm::Source::SMem::SMemZero(gszOogChatInputBuffer, 0x200);
     if (!bUseChannelPrefix || cFirstChar == '/' || !gpCurrentChatRoomContext) {
       pszSrc = szText;
       do {
@@ -1266,11 +1265,11 @@ char * __fastcall OOGUTIL_GetStringEnd(char * szText) {
     }
 
     {
-      char cVar1;
-      cVar1 = *szText;
-      while (cVar1 != '\0') {
+      char cChar;
+      cChar = *szText;
+      while (cChar != '\0') {
         szText++;
-        cVar1 = *szText;
+        cChar = *szText;
       }
 
       return szText + 1;
@@ -1401,9 +1400,9 @@ void __stdcall OOGMENU_RefreshGameListDisplay() {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpOOGGameListTextBox, 0);
 }
 
-void __fastcall OOGUTIL_Unused1(char * szText, uint16_t nParam) {
+void __fastcall OOGUTIL_Unused1(char * szText, uint16_t wRequestId) {
     strncpy(gszOOGRequestedGameName, szText, 0x100);
-    gnPendingGameInfoCharIndex = (uint32_t)nParam;
+    gnPendingGameInfoCharIndex = (uint32_t)wRequestId;
 }
 
 void __stdcall OOGMENU_RequestGameInfo() {
@@ -1952,7 +1951,7 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, i
     return 0;
 }
 
-int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * dwParam) {
+int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * pControl) {
     char* pbEntryName;
     char aGameName[256];
     uint8_t aPassword[256];
@@ -2756,7 +2755,7 @@ int __stdcall OOGUTIL_HandleGameCreation(D2ControlMsg * pControlMsg) {
     static int32_t gaOOGUtilGameCreationLangNames = -0x2; D2_STATIC_GUARD(gaOOGUtilGameCreationLangNames, "D2Multi::OOGUtilities::OOGUTIL_HandleGameCreation::gaOOGUtilGameCreationLangNames");
     static unsigned int gdwLastGameListClickTick; D2_STATIC_GUARD_BSS(gdwLastGameListClickTick, "D2Multi::OOGUtilities::OOGUTIL_HandleGameCreation::gdwLastGameListClickTick");
 
-    uint16_t nParam;
+    uint16_t wRequestId;
     char szLineText[256];
     int32_t pSelectedLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetSelectedLine(gpOOGGameListTextBox);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpOogGameListDetailsPanelControl);
@@ -2784,12 +2783,12 @@ int __stdcall OOGUTIL_HandleGameCreation(D2ControlMsg * pControlMsg) {
       if (pwszLineText) {
         D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szLineText, (uint16_t*)pwszLineText, 0x100);
         do {
-          nParam = CreateJoinGameRequestId + 1;
+          wRequestId = CreateJoinGameRequestId + 1;
           CreateJoinGameRequestId = 0;
-        } while (!nParam);
+        } while (!wRequestId);
 
-        CreateJoinGameRequestId = nParam;
-        OOGUTIL_Unused1(szLineText, nParam);
+        CreateJoinGameRequestId = wRequestId;
+        OOGUTIL_Unused1(szLineText, wRequestId);
         D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpOogGamePasswordEditControl, pwszLineText);
         D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
         return 0;
@@ -2932,8 +2931,8 @@ void __stdcall UIMENU_WaitInLine() {
       wszPositionString[nClearIter] = L'\0';
     }
 
-    uint32_t uVar2 = D2MCPClient::McpConnect::MCPSTATE_GetJoinTimestamp();
-    sprintf(szTimestampBuffer, "%d ", uVar2);
+    uint32_t dwJoinTimestamp = D2MCPClient::McpConnect::MCPSTATE_GetJoinTimestamp();
+    sprintf(szTimestampBuffer, "%d ", dwJoinTimestamp);
     D2Lang::UTF8_ConvertToWideChar(wszPositionString, szTimestampBuffer, 0x32);
     /* locale 11026 - Your position in line is: */ pwszClearCursor = D2Lang::StrTable::strtable::GetLocaleString(0x2b12);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszMessageBuffer, pwszClearCursor);
@@ -3601,9 +3600,9 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
     OOGUTIL_OnPressLevelRestrictionCheckbox(nullptr);
 }
 
-char * OOGUTIL_Unused12(uint32_t * pnParam, int cParam) {
-    char* pcVar1 = strchr((char*)pnParam, cParam);
-    return pcVar1;
+char * OOGUTIL_Unused12(uint32_t * szString, int nChar) {
+    char* pszFound = strchr((char*)szString, nChar);
+    return pszFound;
 }
 
 // Returns the account part of a Battle.net user string "Character*Account": the text after '*', or szUserName itself when there is no '*' or nothing follows it.
@@ -3722,7 +3721,7 @@ int __stdcall OOGUTIL_ValidateUsername4(DWORD dwParam) {
 
 void __stdcall OOGUTIL_AppendChatText(uint16_t * wszText) {
     uint16_t* pwszMatch;
-    int32_t iVar1;
+    int32_t nTotalLen;
     int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     if (!(nLength < 500)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x300);
@@ -3735,8 +3734,8 @@ void __stdcall OOGUTIL_AppendChatText(uint16_t * wszText) {
       nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszNewlineToken);
       pwszMatch = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)pwszNewlineToken);
       while (pwszMatch && pwszMatch[nLength] != L'\0') {
-        iVar1 = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszMatch);
-        memmove(pwszMatch, pwszMatch + nLength + 1, (iVar1 - nLength) * 2);
+        nTotalLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszMatch);
+        memmove(pwszMatch, pwszMatch + nLength + 1, (nTotalLen - nLength) * 2);
         pwszMatch = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)pwszNewlineToken);
       }
 

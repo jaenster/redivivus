@@ -188,7 +188,7 @@ void __stdcall SetActCallbackFunc(struct D2DrlgActStrc * pDrlgAct, ::ACTCALLBACK
 void __stdcall SaveKilledUnitGUID(struct D2RoomStrc * pRoom, int32_t nUnitGUID);
 // @sourcefile .\DUNGEON\Dungeon.cpp
 void __stdcall FreeAct(struct D2DrlgActStrc * pDrlgAct);
-struct D2RoomStrc * __stdcall SpawnUnit(struct D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t nParam, int * pnParam1, int * pnParam2, uint32_t nParam2);
+struct D2RoomStrc * __stdcall SpawnUnit(struct D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t nSpawnTypeOrMode, int * pnSpawnX, int * pnSpawnY, uint32_t nUnitSize);
 int32_t __stdcall GetGridIndex(struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 // Sets RoomEx activation priority to 0 (highest). Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 0).
 void DRLGROOMEX_SetPriority0(struct D2RoomExStrc * pRoomEx);

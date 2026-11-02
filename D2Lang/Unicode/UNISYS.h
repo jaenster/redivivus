@@ -33,20 +33,20 @@ uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestinati
 char * __fastcall UNICODE_WideToMultiByte(char * pszDst, uint16_t * pwszSrc, int32_t nSize);
 bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t * pwChar);
 void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszSuffix, int32_t nMaxChars, int32_t nLang);
-void UNICODE_FreeBuffer(void * pParam);
+void UNICODE_FreeBuffer(void * pBuffer);
 void UNICODE_AllocBuffer(uint32_t nSize);
 void __thiscall UNICODE_ReadByteRange(void * pThis, uint8_t * pByteRange);
 uint32_t __thiscall UNICODE_CheckByteInRange(void * pThis, uint8_t byValue);
 void __stdcall UNICODE_FreeKamapTables();
 // @sourcefile .\Unicode\UNISYS.CPP
 void __fastcall UNICODE_LoadKamapFile(struct D2PoolManagerStrc * pMemory, char * szFilename);
-int UNICODE_CompareKamapEntry(LPCVOID pParam1, LPCVOID pParam2);
+int UNICODE_CompareKamapEntry(LPCVOID pKey, LPCVOID pEntry);
 // The 4-byte search key sits in the slot the prologue's PUSH ECX reserves; only its high word (wChar) is
 // set and read - UNICODE_CompareKamapEntry compares the word at +2.
 uint32_t UNICODE_BinarySearchKamap(uint16_t wChar);
-uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t * pbParam, int32_t nSize);
-uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * pParam, uint16_t * wszSource, int32_t nSize);
-int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nParam);
+uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t * szSource, int32_t nSize);
+uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * szDest, uint16_t * wszSource, int32_t nSize);
+int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nMaxChars);
 int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile);
 // 3 internal functions (defined in .cpp)
 

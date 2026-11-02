@@ -139,13 +139,13 @@ BOOL __fastcall CreateObject0x235Tentacle4(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 // A5Q6 Eve of Destruction (state-fn slot 2). When the target monster is class 0x209 (Baal) and the tentacle object hasn't been created yet, iterate players and spawn the 0x235 tentacle object near each (CreateObject0x235Tentacle4), then latch bCreatedTentacle. One-shot Baal-encounter prop spawner.
 void __fastcall Q36_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2QuestDataA5Q6Strc* pvVar1 = pQuestData->pQuestSpecificData.pA5Q6;
-    if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x209 && !pvVar1->bCreatedTentacle)) {
+    D2QuestDataA5Q6Strc* pA5Q6Data = pQuestData->pQuestSpecificData.pA5Q6;
+    if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x209 && !pA5Q6Data->bCreatedTentacle)) {
       return;
     }
 
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, pQuestArgs->pPlayer, (::fpExecuteOnUnitFunction)CreateObject0x235Tentacle4);
-    pvVar1->bCreatedTentacle = 1;
+    pA5Q6Data->bCreatedTentacle = 1;
 }
 
 // A5Q6 Eve of Destruction. Per-player iterate callback: drives the journal "in progress" sub-steps. If the player's quest is neither Completed(0) nor RewardAwaits(1), and they are in Act V, read the live quest nStateFlag: nStateFlag==2 -> set record state Step0x02; nStateFlag==3 -> set record state Step0x03. Mirrors the server-side quest progression flag into the player's saved quest record bits.

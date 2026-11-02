@@ -42,10 +42,10 @@ BOOL EndScene2() {
 }
 
 int __fastcall GetScreenSize(int * pWidth, int * pHeight) {
-    int iVar1 = RENDERER_nWindowWidth;
+    int nWidth = RENDERER_nWindowWidth;
     *pWidth = RENDERER_nWindowWidth;
     *pHeight = RENDERER_nWindowHeight;
-    return iVar1;
+    return nWidth;
 }
 
 void __fastcall SetPalette(LPPALETTEENTRY pPalette) {

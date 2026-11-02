@@ -168,10 +168,10 @@ void __fastcall UI_SLIDER_ApplyNpcSpeech(D2EscMenuItemStrc * pItem, D2UIMouseMsg
 }
 
 void __fastcall UI_SLIDER_LoadAndApplyNpcSpeech(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = D2Sound::Src::D2SoundFast::SOUND_GetNpcSpeech();
-    pItem->nImageIndex = iVar1;
-    BOOL BVar2 = GAME::Sound::SOUND_IsInitializedDup();
-    if (!BVar2) {
+    int nNpcSpeech = D2Sound::Src::D2SoundFast::SOUND_GetNpcSpeech();
+    pItem->nImageIndex = nNpcSpeech;
+    BOOL BVar1 = GAME::Sound::SOUND_IsInitializedDup();
+    if (!BVar1) {
       return;
     }
 
@@ -209,8 +209,8 @@ void __fastcall UI_SLIDER_ApplyLightQuality(D2EscMenuItemStrc * pItem, D2UIMouse
 
 void __fastcall UI_SLIDER_InitLightQuality(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Light Quality", 0, &pItem->nImageIndex);
-    int iVar1 = pItem->nImageIndex;
-    switch (iVar1) {
+    int nLightQuality = pItem->nImageIndex;
+    switch (nLightQuality) {
       default:
         {
           return;
@@ -258,8 +258,8 @@ void __fastcall UI_SLIDER_ApplyResolution(D2EscMenuItemStrc * pItem, D2UIMouseMs
 
 void __fastcall UI_SLIDER_LoadAndApplyResolution(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int* pnOut = &pItem->nImageIndex;
-    int iVar1 = Storm::Source::SReg::SRegLoadValue("Diablo II", "Resolution", 0, pnOut);
-    if (!iVar1) {
+    int bLoaded = Storm::Source::SReg::SRegLoadValue("Diablo II", "Resolution", 0, pnOut);
+    if (!bLoaded) {
       *pnOut = 1;
     }
 
@@ -400,9 +400,9 @@ void __fastcall ESCMENU_InitAutomapPartyItem(D2EscMenuItemStrc * pItem, D2UIMous
 void __fastcall UI_SLIDER_InitAutomapParty(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     BOOL bHasParty = Automap::AUTOMAP_GetParty();
     if (bHasParty) {
-      int32_t iVar1;
-      iVar1 = Automap::AUTOMAP_GetPartyNames();
-      if (iVar1) {
+      int32_t bPartyNames;
+      bPartyNames = Automap::AUTOMAP_GetPartyNames();
+      if (bPartyNames) {
         pItem->nImageIndex = 1;
         return;
       }
@@ -414,28 +414,28 @@ void __fastcall UI_SLIDER_InitAutomapParty(D2EscMenuItemStrc * pItem, D2UIMouseM
 // Converts mouse Y coordinate to menu item index. Iterates visible items to find which contains the Y position, checking enable callbacks. Returns -1 if no valid item hit or if item is disabled.
 static int32_t ESCMENU_GetItemIndexFromMouseY(int32_t nParam) {
     BOOL nItemCount;
-    int iVar1 = gpEscMenuItemCount->nItemCount;
+    int nMenuItemCount = gpEscMenuItemCount->nItemCount;
     int nMenuCenterY = (ScreenSizeY - 0x50) / 2;
-    int nMenuHeight = gpEscMenuItemCount->nVerticalSpacing * iVar1 / 2;
+    int nMenuHeight = gpEscMenuItemCount->nVerticalSpacing * nMenuItemCount / 2;
     int32_t nFoundIndex = -1;
     if (!(nParam > nMenuCenterY - nMenuHeight && nParam < nMenuCenterY + nMenuHeight)) {
       return nFoundIndex;
     }
 
     nMenuCenterY = 0;
-    if (iVar1 <= 0) {
+    if (nMenuItemCount <= 0) {
       return nFoundIndex;
     }
 
     int* pItemYPosition = &gpEscMenuCurrentTable->nYPosition;
     do {
-      if (*pItemYPosition && nParam >= *pItemYPosition + iVar1) {
+      if (*pItemYPosition && nParam >= *pItemYPosition + nMenuItemCount) {
         nFoundIndex = nMenuCenterY;
       }
 
       nMenuCenterY++;
       pItemYPosition += 0x154;
-    } while (nMenuCenterY < iVar1);
+    } while (nMenuCenterY < nMenuItemCount);
 
     if (nFoundIndex < 0) {
       return nFoundIndex;
@@ -490,15 +490,17 @@ static void __stdcall ESCMENU_ClickMenuItem(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
-static void ESCMENU_HandleSliderDrag(int32_t nParam1, int32_t nParam2) {
+static void ESCMENU_HandleSliderDrag(int32_t nMouseY, int32_t nMouseX) {
     int32_t nHoveredIndex;
     BOOL nSliderLeftX;
     int nScreenCenterX;
-    int iVar3;
     int nSliderTrackX;
     int nSelectedIndex;
-    float fVar3;
-    if (!(gnEscMenuSliderValue || (nHoveredIndex = ESCMENU_GetItemIndexFromMouseY(nParam1) , nHoveredIndex == gnEscMenuSelectedIndex))) {
+    int nTrackHitX;
+    int nLastIndex;
+    int nImageIndex;
+    float fLastIndex;
+    if (!(gnEscMenuSliderValue || (nHoveredIndex = ESCMENU_GetItemIndexFromMouseY(nMouseY) , nHoveredIndex == gnEscMenuSelectedIndex))) {
       return;
     }
 
@@ -509,29 +511,29 @@ static void ESCMENU_HandleSliderDrag(int32_t nParam1, int32_t nParam2) {
       pDVar1 = gpEscMenuCurrentTable + gnEscMenuSelectedIndex;
       if (pDVar1->nMenuItemType == 2) {
         nScreenCenterX = ScreenSizeX / 2;
-        iVar3 = nScreenCenterX - 0x3b;
+        nTrackHitX = nScreenCenterX - 0x3b;
         nSliderTrackX = nScreenCenterX - 0x3c;
         if (!pDVar1->pDC6Main) {
-          iVar3 = nScreenCenterX - 0x90;
+          nTrackHitX = nScreenCenterX - 0x90;
           nSliderTrackX = nScreenCenterX - 0x91;
         }
-        if (gnEscMenuSliderValue || nParam2 > iVar3 && nParam2 < iVar3 + 0x121) {
-          if (nParam2 < nSliderTrackX + 0xc) {
+        if (gnEscMenuSliderValue || nMouseX > nTrackHitX && nMouseX < nTrackHitX + 0x121) {
+          if (nMouseX < nSliderTrackX + 0xc) {
             pDVar1->nImageIndex = 0;
           } else {
-            if (nParam2 > nSliderTrackX + 0x115) {
-              iVar3 = pDVar1->nSubImageCount - 1;
+            if (nMouseX > nSliderTrackX + 0x115) {
+              nImageIndex = pDVar1->nSubImageCount - 1;
             } else {
-              iVar3 = pDVar1->nSubImageCount - 1;
-              fVar3 = (float)iVar3;
-              if (iVar3 < 0) {
-                fVar3 += 4.2949673e+09;
+              nLastIndex = pDVar1->nSubImageCount - 1;
+              fLastIndex = (float)nLastIndex;
+              if (nLastIndex < 0) {
+                fLastIndex += 4.2949673e+09;
               }
 
-              iVar3 = (int)((float)(nParam2 - (nSliderTrackX + 0xc)) / (265.0 / fVar3 * 0.5) + 1.0) / 2;
+              nImageIndex = (int)((float)(nMouseX - (nSliderTrackX + 0xc)) / (265.0 / fLastIndex * 0.5) + 1.0) / 2;
             }
 
-            pDVar1->nImageIndex = iVar3;
+            pDVar1->nImageIndex = nImageIndex;
           }
 
           gnEscMenuSliderValue = 1;
@@ -542,9 +544,9 @@ static void ESCMENU_HandleSliderDrag(int32_t nParam1, int32_t nParam2) {
       return;
     }
 
-    pfnEscMenuItemAction ppVar2 = gpEscMenuCurrentTable[nSelectedIndex].fpClickCallback;
-    if (ppVar2) {
-      (*ppVar2)(gpEscMenuCurrentTable + nSelectedIndex, nullptr);
+    pfnEscMenuItemAction pfnClickCallback = gpEscMenuCurrentTable[nSelectedIndex].fpClickCallback;
+    if (pfnClickCallback) {
+      (*pfnClickCallback)(gpEscMenuCurrentTable + nSelectedIndex, nullptr);
     }
 
     Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
@@ -617,20 +619,20 @@ void __stdcall INPUT_EscMenuNavigatePrev(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_EscMenuOptionDecrease(D2UIMouseMsgStrc * pMsg) {
-    int iVar1;
-    uint32_t uVar2;
+    int nItemIndex;
+    uint32_t nLastImageIndex;
     int nPrevItemValue;
     nPrevItemValue = gpEscMenuCurrentTable[gnEscMenuSelectedIndex].nImageIndex;
     if (gpEscMenuCurrentTable[gnEscMenuSelectedIndex].fpVisibilityCheck) {
       BOOL bIsEnabled;
       bIsEnabled = gpEscMenuCurrentTable[gnEscMenuSelectedIndex].fpVisibilityCheck();
-      iVar1 = gnEscMenuSelectedIndex;
+      nItemIndex = gnEscMenuSelectedIndex;
       if (!bIsEnabled) {
         goto notify_if_changed;
       }
     }
 
-    iVar1 = gnEscMenuSelectedIndex;
+    nItemIndex = gnEscMenuSelectedIndex;
     D2EscMenuItemStrc* pItemData;
     pItemData = gpEscMenuCurrentTable + gnEscMenuSelectedIndex;
     if (pItemData->nMenuItemType != 1) {
@@ -639,14 +641,14 @@ void __stdcall INPUT_EscMenuOptionDecrease(D2UIMouseMsgStrc * pMsg) {
       }
     } else {
       pItemData->nImageIndex--;
-      uVar2 = pItemData->nSubImageCount - 1;
-      if ((uint32_t)pItemData->nImageIndex > uVar2) {
-        pItemData->nImageIndex = uVar2;
+      nLastImageIndex = pItemData->nSubImageCount - 1;
+      if ((uint32_t)pItemData->nImageIndex > nLastImageIndex) {
+        pItemData->nImageIndex = nLastImageIndex;
       }
     }
 
     notify_if_changed:
-    pItemData = gpEscMenuCurrentTable + iVar1;
+    pItemData = gpEscMenuCurrentTable + nItemIndex;
     if (nPrevItemValue != pItemData->nImageIndex) {
       if (pItemData->fpClickCallback) {
         pItemData->fpClickCallback(pItemData, nullptr);
@@ -662,7 +664,7 @@ void __stdcall INPUT_EscMenuOptionDecrease(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall INPUT_EscMenuOptionIncrease(D2UIMouseMsgStrc * pMsg) {
     int nItemIndex;
-    uint32_t uVar1;
+    uint32_t nLastImageIndex;
     int nPrevItemValue;
     nPrevItemValue = gpEscMenuCurrentTable[gnEscMenuSelectedIndex].nImageIndex;
     if (gpEscMenuCurrentTable[gnEscMenuSelectedIndex].fpVisibilityCheck) {
@@ -690,9 +692,9 @@ void __stdcall INPUT_EscMenuOptionIncrease(D2UIMouseMsgStrc * pMsg) {
       case 2:
         {
           pItemData->nImageIndex++;
-          uVar1 = pItemData->nSubImageCount - 1;
-          if ((uint32_t)pItemData->nImageIndex > uVar1) {
-            pItemData->nImageIndex = uVar1;
+          nLastImageIndex = pItemData->nSubImageCount - 1;
+          if ((uint32_t)pItemData->nImageIndex > nLastImageIndex) {
+            pItemData->nImageIndex = nLastImageIndex;
           }
 
           break;
@@ -1101,7 +1103,6 @@ void __stdcall DRAW_EscMenu() {
     static uint32_t gnEscMenuLastMouseX; D2_STATIC_GUARD_BSS(gnEscMenuLastMouseX, "D2Client::UI::EscMenu::DRAW_EscMenu::gnEscMenuLastMouseX");
     static uint32_t gnEscMenuLastMouseY; D2_STATIC_GUARD_BSS(gnEscMenuLastMouseY, "D2Client::UI::EscMenu::DRAW_EscMenu::gnEscMenuLastMouseY");
 
-    char* pcVar1;
     int nMouseX;
     int nMouseY;
     int nMenuCenterY;
@@ -1116,6 +1117,7 @@ void __stdcall DRAW_EscMenu() {
     uint8_t bItemVisible;
     int32_t nErrorLine;
     int nTotalItemCount;
+    char* pYPosition;
     if (!gpEscMenuItemCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x64b);
       exit(-1);
@@ -1151,8 +1153,8 @@ void __stdcall DRAW_EscMenu() {
         do {
           bItemVisible = 0;
           nMouseY = pCurrentTable[nItemIndex].nExpansionOnly;
-          pcVar1 = (char*)&pCurrentTable[nItemIndex].nYPosition;
-          memset(pcVar1, 0, 4 * sizeof(pcVar1[0]));
+          pYPosition = (char*)&pCurrentTable[nItemIndex].nYPosition;
+          memset(pYPosition, 0, 4 * sizeof(pYPosition[0]));
           if (!nMouseY || (bIsExpansion = Fog::D2CheckExpansionGame() , pCurrentTable = gpEscMenuCurrentTable , bIsExpansion != 0)) {
             pfnEnableCallback = pCurrentTable[nItemIndex].fpVisibilityCheck;
             if (!pfnEnableCallback || (bIsExpansion = (*pfnEnableCallback)() , pCurrentTable = gpEscMenuCurrentTable , bIsExpansion != 0)) {

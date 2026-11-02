@@ -1,0 +1,187 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Skills.cpp",
+  "functions": [
+    {
+      "name": "SKILLS_PushValue",
+      "address": "006c0b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0b80"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_PushValue"
+      ]
+    },
+    {
+      "name": "SKILLS_PopValue",
+      "address": "006c0ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0ba0"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_PopValue"
+      ]
+    },
+    {
+      "name": "SKILLS_CompileSkillFormula",
+      "address": "006c0bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0bc0"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_CompileSkillFormula",
+        "SKILLS_PopValue",
+        "SKILLS_PushValue"
+      ],
+      "usedTypes": [
+        "D2ItemsEventMethodStrc",
+        "fnSkillCalcMethod",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_ParseSkillDescription",
+      "address": "006c11c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c11c0"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_ParseSkillDescription",
+        "isspace",
+        "isdigit",
+        "__security_check_cookie",
+        "isalpha",
+        "isalnum"
+      ],
+      "usedTypes": [
+        "CalcGetKeyWordToNumber_t",
+        "CalcGetLinkerIndex_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_GetOpcodePrecedence",
+      "address": "006c1820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c1820"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_GetOpcodePrecedence"
+      ],
+      "usedTypes": [
+        "CalcGetFunctionParameterCount_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_EmitFormulaBytecode",
+      "address": "006c18a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c18a0"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_EmitFormulaBytecode",
+        "SKILLS_GetOpcodePrecedence"
+      ],
+      "usedTypes": [
+        "CalcGetFunctionParameterCount_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_WriteValueToBuffer",
+      "address": "006c19c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c19c0"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_WriteValueToBuffer"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q2Strc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_WriteValueToBuffer2",
+      "address": "006c1a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c1a50"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_WriteValueToBuffer2"
+      ],
+      "usedTypes": [
+        "D2QuestDataA5Q2Strc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLS_ParseCalcExpression",
+      "address": "006c1ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c1ae0"
+        }
+      ],
+      "namespace": "Fog::Skills",
+      "calledFunctions": [
+        "SKILLS_ParseCalcExpression",
+        "SKILLS_ParseSkillDescription",
+        "SKILLS_GetOpcodePrecedence",
+        "SKILLS_EmitFormulaBytecode",
+        "SKILLS_WriteValueToBuffer",
+        "SKILLS_WriteValueToBuffer2",
+        "SKILLS_CompileSkillFormula",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "CalcGetFunctionParameterCount_t",
+        "CalcGetKeyWordToNumber_t",
+        "CalcGetLinkerIndex_t",
+        "eD2SkillCalcOp",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

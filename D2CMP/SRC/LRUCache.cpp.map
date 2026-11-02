@@ -1,0 +1,204 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/LRUCache.cpp",
+  "functions": [
+    {
+      "name": "LRUCACHE_Init",
+      "address": "00609020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609020"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_Init",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2LRUCacheNodeStrc",
+        "D2LRUCacheStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "pfnLruFreeEntry",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LRUCACHE_PopOldest",
+      "address": "00609120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609120"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_PopOldest"
+      ],
+      "usedTypes": [
+        "D2LRUCacheNodeStrc",
+        "D2LRUCacheStrc"
+      ]
+    },
+    {
+      "name": "LRUCACHE_Unlink",
+      "address": "00609180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609180"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_Unlink",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "LRUCACHE_PopOldest"
+      ],
+      "usedTypes": [
+        "D2LRUCacheNodeStrc",
+        "D2LRUCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LRUCACHE_ForEach",
+      "address": "00609200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609200"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_ForEach",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LRUCacheStrc",
+        "fpLRUCacheForEachFn",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LRUCACHE_AllocEntry",
+      "address": "00609250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609250"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_AllocEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LRUCacheNodeStrc",
+        "D2LRUCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LRUCACHE_FreeEntry",
+      "address": "006092d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006092d0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_FreeEntry",
+        "LRUCACHE_Unlink",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2LRUCacheNodeStrc",
+        "D2LRUCacheStrc"
+      ]
+    },
+    {
+      "name": "LRUCACHE_MoveToFront",
+      "address": "00609380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609380"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_MoveToFront",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "LRUCACHE_Unlink"
+      ],
+      "usedTypes": [
+        "D2LRUCacheNodeStrc",
+        "D2LRUCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LRUCACHE_FreeAll",
+      "address": "006093e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006093e0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_FreeAll",
+        "LRUCACHE_FreeEntry",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2LRUCacheStrc"
+      ]
+    },
+    {
+      "name": "LRUCACHE_GetOrAlloc",
+      "address": "00609420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00609420"
+        }
+      ],
+      "namespace": "D2CMP::SRC::LRUCache",
+      "calledFunctions": [
+        "LRUCACHE_GetOrAlloc",
+        "LRUCACHE_AllocEntry",
+        "LRUCACHE_FreeEntry",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LRUCacheNodeStrc",
+        "D2LRUCacheStrc",
+        "uint32_t"
+      ]
+    }
+  ]
+}

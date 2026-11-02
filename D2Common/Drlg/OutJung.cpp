@@ -51,7 +51,7 @@ void __fastcall BuildJungle(D2DrlgLevelStrc * pLevel) {
     int nLevelWidthCells = pSpiderForestDefs->SizeX[nDifficulty] / 32;
     int nLevelHeightCells = pSpiderForestDefs->SizeY[nDifficulty] / 32;
     int nPresetArrayIdx = 0;
-    uint32_t nSeedModulo = D2Client::Archive::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevel->nUnknown_1B8 == 3 ? 0x6U : 0x2U);
+    uint32_t nSeedModulo = D2Client::Archive::UNIT_GetModuloFromSeed(&pLevel->sSeed, pLevel->nSpecialPresetCellCount == 3 ? 0x6U : 0x2U);
     int nSpecialPresetCount = 0;
     if (!pLevel->pAutomapEx) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27);
@@ -100,7 +100,7 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
     int32_t nY;
     BOOL bCanSpawn;
     uint32_t nRandIdxA;
-    uint32_t uVar2;
+    uint32_t uVar1;
     uint32_t nGridWidthCells;
     int nCellY;
     uint32_t nShuffleCountdown;
@@ -115,10 +115,10 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
     nSwapIdxA = nLevelPrestId2 - nLevelPrestId1;
     uint32_t nSwapIdxB;
     nSwapIdxB = nSwapIdxA + 1;
-    int iVar1;
-    iVar1 = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsWidth;
+    int nGridWidth;
+    nGridWidth = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsWidth;
     uint32_t nTotalCells;
-    nTotalCells = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsHeight * iVar1;
+    nTotalCells = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsHeight * nGridWidth;
     int nPlacedCount;
     nPlacedCount = 0;
     if (!nTotalCells) {
@@ -131,8 +131,8 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
     if ((int)nTotalCells > 0) {
       int nCellX;
       do {
-        nCellX = nLevelPrestId2 / iVar1;
-        nCellY = nLevelPrestId2 % iVar1;
+        nCellX = nLevelPrestId2 / nGridWidth;
+        nCellY = nLevelPrestId2 % nGridWidth;
         nLevelPrestId2++;
         *(int*)((int)pMemoryToFree + nLevelPrestId2 * 8 - 8) = nCellY;
         *(int*)((int)pMemoryToFree + nLevelPrestId2 * 8 - 4) = nCellX;
@@ -163,18 +163,18 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
             if (nTotalCells & nTotalCells - 1) {
               lSeedProduct = (uint64_t)nGridWidthCells * 0x6ac690c5 + (uint64_t)pLevel->sSeed.nSeedHigh;
               nGridWidthCells = (uint32_t)lSeedProduct;
-              uVar2 = (uint32_t)((uint64_t)lSeedProduct >> 0x20);
+              uVar1 = (uint32_t)((uint64_t)lSeedProduct >> 0x20);
               pLevel->sSeed.nSeedLow = nGridWidthCells;
               nGridWidthCells %= nTotalCells;
             } else {
               lSeedProduct = (uint64_t)nGridWidthCells * 0x6ac690c5 + (uint64_t)pLevel->sSeed.nSeedHigh;
               nGridWidthCells = (uint32_t)lSeedProduct;
-              uVar2 = (uint32_t)((uint64_t)lSeedProduct >> 0x20);
+              uVar1 = (uint32_t)((uint64_t)lSeedProduct >> 0x20);
               pLevel->sSeed.nSeedLow = nGridWidthCells;
               nGridWidthCells = nTotalCells - 1 & nGridWidthCells;
             }
 
-            pLevel->sSeed.nSeedHigh = uVar2;
+            pLevel->sSeed.nSeedHigh = uVar1;
           }
 
           nShuffleCountdown--;

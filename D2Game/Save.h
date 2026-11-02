@@ -11,8 +11,8 @@
 namespace D2Game::Save {
 
 // Function declarations
-int __stdcall SAVEFILE_ReadEncodedInt14Bit(uint8_t * pbParam);
-void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pbParam, uint32_t nParam);
-int __stdcall SAVEFILE_ReadEncodedInt32Bit(uint8_t * pbParam);
+int __stdcall SAVEFILE_ReadEncodedInt14Bit(uint8_t * pBuffer);
+void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pBuffer, uint32_t nParam);
+int __stdcall SAVEFILE_ReadEncodedInt32Bit(uint8_t * pBuffer);
 
 } // namespace D2Game::Save

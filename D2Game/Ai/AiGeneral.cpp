@@ -271,7 +271,7 @@ D2MonsterAiCmdStrc * __fastcall GetAiCmd(D2UnitStrc * pUnit) {
     return pAiGeneral->pCmdCurrent;
 }
 
-void __fastcall AI_SetCurrentAiCommand(D2UnitStrc * pUnit, int32_t nParam, D2MonsterAiCmdStrc * pAiCmd) {
+void __fastcall AI_SetCurrentAiCommand(D2UnitStrc * pUnit, int32_t nStepDelta, D2MonsterAiCmdStrc * pAiCmd) {
     if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
@@ -286,8 +286,8 @@ void __fastcall AI_SetCurrentAiCommand(D2UnitStrc * pUnit, int32_t nParam, D2Mon
       if (!pAiCmd) {
         return;
       }
-      if (nParam < 0) {
-        nStep = -nParam;
+      if (nStepDelta < 0) {
+        nStep = -nStepDelta;
         do {
           nStep--;
           pAiCmd = pAiCmd->pPrev;
@@ -297,7 +297,7 @@ void __fastcall AI_SetCurrentAiCommand(D2UnitStrc * pUnit, int32_t nParam, D2Mon
         return;
       }
 
-      for (; nParam; nParam--) {
+      for (; nStepDelta; nStepDelta--) {
         pAiCmd = pAiCmd->pNext;
       }
     }

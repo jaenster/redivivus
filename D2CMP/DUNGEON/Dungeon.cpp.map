@@ -1,0 +1,256 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/DUNGEON/Dungeon.cpp",
+  "functions": [
+    {
+      "name": "TILEPROJECT_AllocSlot",
+      "address": "00604a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604a40"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "Alloc",
+        "TILEPROJECT_AllocSlot",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_FreeSlot",
+      "address": "00604aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604aa0"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TILEPROJECT_FreeSlot",
+        "TILEPROJECT_GetProjectId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_LookupTilesInAllProjects",
+      "address": "00604ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604ae0"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TILEPROJECT_LookupTilesInAllProjects",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FINDTILE_Lookup"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "GetOrientation",
+      "address": "00604b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604b60"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetOrientation",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetIndex",
+      "address": "00604b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604b90"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_GetTileCount",
+      "address": "00604bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604bc0"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TILEPROJECT_GetTileCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_GetTileDataPtr",
+      "address": "00604bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604bf0"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TILEPROJECT_GetTileDataPtr",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_GetAnimatedTileDataPtr",
+      "address": "00604c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604c20"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TILEPROJECT_GetAnimatedTileDataPtr",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSubIndex",
+      "address": "00604c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604c50"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "GetSubIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_GetTileOrientationIndex",
+      "address": "00604c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604c80"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TILEPROJECT_GetTileOrientationIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TILEPROJECT_GetRoofHeightIndex",
+      "address": "00604cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604cb0"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TILEPROJECT_GetRoofHeightIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TILE_GetTileFlags",
+      "address": "00604ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604ce0"
+        }
+      ],
+      "namespace": "D2CMP::DUNGEON::Dungeon",
+      "calledFunctions": [
+        "TILE_GetTileFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

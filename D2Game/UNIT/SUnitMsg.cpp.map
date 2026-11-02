@@ -1,0 +1,744 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/UNIT/SUnitMsg.cpp",
+  "functions": [
+    {
+      "name": "PLAYER_SetStartingLevelForAct",
+      "address": "005706a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005706a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_SetStartingLevelForAct",
+        "DAMAGE_SetUnitToLevel"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYER_InitBaseStats",
+      "address": "005706d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005706d0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "GetAct",
+        "PLAYER_InitBaseStats",
+        "STATLIST_SetUnitStat",
+        "TXT_Experience_GetLineLevel",
+        "DAMAGE_SetUnitToLevel"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "thunk_NET_D2GS_SERVER_Send_0x75_PlayerPartyInfo",
+      "address": "00570850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00570850"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "thunk_NET_D2GS_SERVER_Send_0x75_PlayerPartyInfo",
+        "NET_D2GS_SERVER_Send_0x75_UPDATEROSTER"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "UpdateGameInfo",
+      "address": "00570880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00570880"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "UpdateGameInfo",
+        "SERVER_GetUnitStat",
+        "STATSEX_GetCurrentStat",
+        "DATATBLS_GetLevelFromExperience",
+        "STATLIST_SetUnitStat",
+        "TXT_Experience_GetLineLevel",
+        "GetTxtMaxHp",
+        "GetTxtMaxMana",
+        "GetTxtMaxStamina",
+        "STATLIST_AddUnitStat",
+        "SUNITPROXY_RefreshGambleForAllNpcs",
+        "SetupUpdateEvent_AttachEventSound",
+        "IterateAllUnits",
+        "ITEMMODE_RecalcAllEquippedStats",
+        "UpdatePlayerItemState",
+        "GetPlayerName"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "fnUpdateGameInformation *",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_AddEnergyStatPoints",
+      "address": "00570a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00570a80"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_AddEnergyStatPoints",
+        "STATLIST_AddUnitStat",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_AddVitalityStatPoints",
+      "address": "00570b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00570b60"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_AddVitalityStatPoints",
+        "STATLIST_AddUnitStat",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ClearStats",
+      "address": "00570c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00570c80"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "ClearStats",
+        "SERVER_GetUnitStat",
+        "STATLIST_AddUnitStat",
+        "ROOM_LinkUnitToUpdateList",
+        "PLAYER_AddEnergyStatPoints",
+        "PLAYER_AddVitalityStatPoints"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_AssignStatPoint",
+      "address": "00570d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00570d60"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_AssignStatPoint",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_AddUnitStat",
+        "ROOM_LinkUnitToUpdateList",
+        "PLAYER_AddEnergyStatPoints",
+        "PLAYER_AddVitalityStatPoints"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_SendStateListToClient",
+      "address": "00570e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00570e30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_SendStateListToClient",
+        "thunk_UNIT_GetStateList_StateFlags",
+        "memcpy",
+        "InitBitBuffer",
+        "SMemSizeClassBucketLookup",
+        "GetNextPositon",
+        "WriteValueToBitBuffer",
+        "GetStatsByState",
+        "CopyStatsToBuffer",
+        "NET_D2GS_SERVER_Send_0xAA_AddUnit_0xA8_SetState",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2DataTableTxtStrc",
+        "D2GSPacketSrv0xAA",
+        "D2ItemStatCostTxt",
+        "D2StatListExStrc",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYER_SendStateDeltaToClient",
+      "address": "005711d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005711d0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_SendStateDeltaToClient",
+        "STATES_AssertGetGfxFlags",
+        "memcpy",
+        "SMemSizeClassBucketLookup",
+        "UNIT_GetUnitState",
+        "NET_D2GS_SERVER_Send_0xA9_UNITSTATE_OFF_EX",
+        "GetStatsByState",
+        "NET_D2GS_SERVER_Send_0xA7_UNITSTATE_ON_EX",
+        "CopyStatsToBuffer",
+        "InitBitBuffer",
+        "WriteValueToBitBuffer",
+        "GetNextPositon",
+        "NET_D2GS_SERVER_Send_0xAA_AddUnit_0xA8_SetState",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2DataTableTxtStrc",
+        "D2GSPacketSrv0xA",
+        "D2ItemStatCostTxt",
+        "D2StatListExStrc",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PLAYER_SendStateUpdate",
+      "address": "00571580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571580"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_SendStateUpdate",
+        "PLAYER_SendStateListToClient",
+        "PLAYER_SendStateDeltaToClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYER_SendOverlayToClient",
+      "address": "005715a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005715a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_SendOverlayToClient",
+        "GetStatsByFlags",
+        "STATLIST_GetStatByState",
+        "NET_D2GS_SERVER_Send_0x11_UnitDoOverlay"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SendRemoveObject",
+      "address": "00571600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571600"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "SendRemoveObject",
+        "NET_D2GS_SERVER_Send_0x0A_REMOVEUNIT"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PLAYER_SendHoverTextToClient",
+      "address": "00571620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571620"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "PLAYER_SendHoverTextToClient",
+        "CLIENT_GetGame",
+        "CLIENTS_GetControlUnit",
+        "GetLanguageCode",
+        "memset",
+        "TEXT_CopyHoverMessageString",
+        "NET_D2GS_SERVER_Send_0x26_CHATSTART",
+        "__security_check_cookie",
+        "PLAYERLIST_GetFlagsMasked",
+        "NET_D2GS_SERVER_Send_CMD_BYTE_INT"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x",
+        "D2HoverTextStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNITMSG_SendSoundPacketToClient",
+      "address": "00571740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571740"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "UNITMSG_SendSoundPacketToClient",
+        "CLIENTS_GetControlUnit",
+        "NET_D2GS_SERVER_Send_0x2C_PlaySound"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x2C",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "UnitQueuePacket0x99",
+      "address": "005717c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005717c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "UnitQueuePacket0x99",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2SUnitMsgStrc *",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UnitQueuePacket0x9A",
+      "address": "00571840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571840"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "UnitQueuePacket0x9A",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2SUnitMsgStrc *",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UnitQueuePacket0x9E",
+      "address": "005718c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005718c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "UnitQueuePacket0x9E",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnitQueuePacket0xA1",
+      "address": "00571960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571960"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "UnitQueuePacket0xA1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UnitQueuePacket0xAB",
+      "address": "00571a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571a10"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "UnitQueuePacket0xAB",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVER_SendUnitMessagePacket",
+      "address": "00571aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571aa0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "SERVER_SendUnitMessagePacket",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UnitQueuePacket0xA5",
+      "address": "00571b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571b70"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "UnitQueuePacket0xA5",
+        "SetState",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVER_UnitQueuePacket0xA4",
+      "address": "00571c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571c00"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "SERVER_UnitQueuePacket0xA4",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "SERVER_SendPacket0x23",
+      "address": "00571c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571c60"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "SERVER_SendPacket0x23",
+        "AllocServerMemory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERVER_UnitQueuePacketSend",
+      "address": "00571cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571cd0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "SERVER_UnitQueuePacketSend",
+        "GetGUID",
+        "GetType",
+        "NET_D2GS_SERVER_Send_0x23_SetSkill",
+        "NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY",
+        "NET_D2GS_SERVER_Send_0x4D_SKILL_XY",
+        "NET_D2GS_SERVER_Send_0x9E_0x9F_0xA0_MercAttribute",
+        "NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience",
+        "NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL",
+        "NET_D2GS_SERVER_Send_0xA4_PRELOAD_MONSTER",
+        "NET_D2GS_SERVER_Send_0xA5_FORCESTOPSKILL",
+        "CheckFlags",
+        "CLIENTS_GetControlUnit",
+        "GetGamePointer",
+        "UNITS_CheckIfCanAttackTarget",
+        "NET_D2GS_SERVER_Send_0xAB_HEALTH_UPDATE"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVER_UnitQueuePacketFree",
+      "address": "00571f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571f40"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "SERVER_UnitQueuePacketFree",
+        "GetMemPool",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2SUnitMsgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_SendInitUnitPacket",
+      "address": "00571f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00571f90"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitMsg",
+      "calledFunctions": [
+        "SERVER_SendInitUnitPacket",
+        "GetCoords",
+        "CLIENTS_GetControlUnit",
+        "NET_D2GS_SERVER_Send_0x59_AssignPlayer",
+        "CheckForModeZeroDeath",
+        "STATES_HasLightState",
+        "NET_D2GS_SERVER_Send_0xAC_AddMonster",
+        "STATLIST_SetUnitStat",
+        "MONSTER_GetUnitData_AiGeneral_Offset0x3C",
+        "NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER",
+        "TXT_MonStats_GetLine",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "NET_D2GS_SERVER_Send_0x21_SETSKILLLEVEL",
+        "PLAYER_SendStateListToClient",
+        "SERVER_UnitQueuePacketSend",
+        "NET_D2GS_SERVER_Send_0x51_NEWOBJECT",
+        "NET_D2GS_SERVER_Send_0x60_SETWARPDEST",
+        "UNITS_FindPortalOwnerUnit",
+        "NET_D2GS_SERVER_Send_0x82_PortalOwnership",
+        "GetVelocity",
+        "MISSILES_SendMissilePacket",
+        "CheckFlags",
+        "Send0x9CItemDroppedToGround",
+        "Send0x9CItemAddToGround",
+        "NET_D2GS_SERVER_Send_0x09_NEWUNIT",
+        "SendInitUpdateAttributes",
+        "UNIT_GetUnitState",
+        "PLAYER_SendAllItemsToClient",
+        "INVENTORY_GetCursorItemGUID",
+        "FindUnitFromTable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CheckFlagWithMask",
+        "NET_D2GS_SERVER_Send_0x74_SYNCHDEADBODY",
+        "DispatchPlayerModeNetMsg",
+        "PLAYER_SendHoverTextToClient",
+        "MONSTER_SendUpdateToClient",
+        "SendDropItemPacket"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2MonStatsTxt",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

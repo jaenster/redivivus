@@ -1,0 +1,1523 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Roster.cpp",
+  "functions": [
+    {
+      "name": "GetRosterPlayerByGUID",
+      "address": "004792e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004792e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterLinkListStrc",
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPlayerRoster",
+      "address": "00479320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479320"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetPlayerRoster",
+        "GetPlayerUnit_UI",
+        "GetRosterPlayerByGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRosterByGuidOrName",
+      "address": "00479360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479360"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterByGuidOrName"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ROSTER_InitializeFields",
+      "address": "004793c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004793c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_InitializeFields",
+        "sprintf"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeRosterLinkList",
+      "address": "00479470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479470"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "FreeRosterLinkList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterLinkListStrc",
+        "D2RosterStrc"
+      ]
+    },
+    {
+      "name": "ClearBothRosterLists",
+      "address": "004794b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004794b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ClearBothRosterLists",
+        "FreePlayerList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterLinkListStrc",
+        "D2RosterStrc"
+      ]
+    },
+    {
+      "name": "GetNextRosterPlayer",
+      "address": "004795a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004795a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetNextRosterPlayer"
+      ],
+      "usedTypes": [
+        "D2RosterStrc"
+      ]
+    },
+    {
+      "name": "GetRosterName",
+      "address": "004795c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004795c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_SortByName",
+      "address": "004795f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004795f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_SortByName"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ROSTER_SortByLevel",
+      "address": "004796d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004796d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_SortByLevel"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2RosterStrc *"
+      ]
+    },
+    {
+      "name": "AllocRosterPartyList",
+      "address": "00479770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479770"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "AllocRosterPartyList",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "FreeRosterPartyList",
+      "address": "004797c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004797c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "FreeRosterPartyList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc"
+      ]
+    },
+    {
+      "name": "ROSTER_CollectPartiesIntoPartyList",
+      "address": "00479800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479800"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_CollectPartiesIntoPartyList"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc",
+        "D2RosterStrc",
+        "D2RosterStrc *"
+      ]
+    },
+    {
+      "name": "ROSTER_SortPartyListsByPartyId",
+      "address": "00479860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479860"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_SortPartyListsByPartyId"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc"
+      ]
+    },
+    {
+      "name": "ROSTER_MoveRosterPlayerToFrontOfParty",
+      "address": "004798c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004798c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_MoveRosterPlayerToFrontOfParty"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc",
+        "D2RosterStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ROSTER_GroupPlayersIntoParties",
+      "address": "00479940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479940"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_GroupPlayersIntoParties",
+        "AllocClientMemory",
+        "ROSTER_CollectPartiesIntoPartyList"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ROSTER_SortAllParties",
+      "address": "004799c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004799c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_SortAllParties",
+        "CLIENT_IsArenaLevel",
+        "ROSTER_SortByName",
+        "ROSTER_SortByLevel",
+        "ROSTER_SortPartyListsByPartyId"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc",
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_FlattenPartyListsIntoSingleRosterChain",
+      "address": "00479a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479a00"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_FlattenPartyListsIntoSingleRosterChain"
+      ],
+      "usedTypes": [
+        "D2RosterPartyListStrc",
+        "D2RosterStrc"
+      ]
+    },
+    {
+      "name": "ROSTER_MoveRosterPlayerToFront",
+      "address": "00479a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479a60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_MoveRosterPlayerToFront"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_RebuildPlayerParty",
+      "address": "00479ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479ab0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_RebuildPlayerParty",
+        "GetPlayerUnit_UI",
+        "GetRosterPlayerByGUID",
+        "ROSTER_GroupPlayersIntoParties",
+        "ROSTER_SortAllParties",
+        "ROSTER_MoveRosterPlayerToFrontOfParty",
+        "ROSTER_FlattenPartyListsIntoSingleRosterChain",
+        "FreeRosterPartyList",
+        "ROSTER_MoveRosterPlayerToFront"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ROSTER_SetArenaScore",
+      "address": "00479b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479b10"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_SetArenaScore",
+        "GetRosterPlayerByGUID",
+        "ROSTER_RebuildPlayerParty",
+        "ResetPartyUi"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ROSTER_GetArenaScore",
+      "address": "00479b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479b80"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_GetArenaScore"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRosterLevel",
+      "address": "00479b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479b90"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterLevel"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetRosterCharType",
+      "address": "00479ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479ba0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterCharType"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRosterByGUID",
+      "address": "00479bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479bb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterByGUID",
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRosterPartyId",
+      "address": "00479bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479bc0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterPartyId"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetUnitPartyId",
+      "address": "00479c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479c00"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetUnitPartyId",
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "ROSTER_GetLootFlag",
+      "address": "00479c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479c20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_GetLootFlag",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_GetListenFlag",
+      "address": "00479c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479c60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_GetListenFlag",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_GetMuteFlag",
+      "address": "00479ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479ca0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_GetMuteFlag",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_GetHostileFlag",
+      "address": "00479ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479ce0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_GetHostileFlag",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetRosterInPartyBool",
+      "address": "00479d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479d20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterInPartyBool"
+      ],
+      "usedTypes": [
+        "D2RosterStrc"
+      ]
+    },
+    {
+      "name": "ROSTER_TogglePlayerFlag",
+      "address": "00479d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479d30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_TogglePlayerFlag",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocPlayerListSub",
+        "GetFlag",
+        "SetUnsetFlags"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_ToggleLootAndSend",
+      "address": "00479da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479da0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_ToggleLootAndSend",
+        "ROSTER_TogglePlayerFlag",
+        "GetPlayerUnit_UI",
+        "GetFlag",
+        "NET_D2GS_CLIENT_Send_0x5D"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_ToggleListenAndSend",
+      "address": "00479de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479de0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_ToggleListenAndSend",
+        "ROSTER_TogglePlayerFlag",
+        "GetPlayerUnit_UI",
+        "GetFlag",
+        "NET_D2GS_CLIENT_Send_0x5D"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_ToggleMuteAndSend",
+      "address": "00479e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479e20"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_ToggleMuteAndSend",
+        "ROSTER_TogglePlayerFlag",
+        "GetPlayerUnit_UI",
+        "GetFlag",
+        "NET_D2GS_CLIENT_Send_0x5D",
+        "MISC_GetIgnorelist"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "IgnoreList",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ClickParty_i",
+      "address": "00479eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479eb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ClickParty_i",
+        "NET_D2GS_CLIENT_Send_0x5E",
+        "ROSTER_RebuildPlayerParty",
+        "ResetPartyUi",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_LeaveParty",
+      "address": "00479f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479f60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_LeaveParty",
+        "GetPlayerUnit_UI",
+        "GetRosterPlayerByGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ROSTER_RebuildPlayerParty",
+        "ResetPartyUi"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LeaveParty",
+      "address": "00479fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479fc0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "LeaveParty",
+        "ROSTER_LeaveParty",
+        "NET_D2GS_CLIENT_Send_0x5E"
+      ],
+      "usedTypes": [
+        "D2RosterStrc"
+      ]
+    },
+    {
+      "name": "ROSTER_ToggleHostileAndSend",
+      "address": "00479fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479fe0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_ToggleHostileAndSend",
+        "GetPlayerUnit_UI",
+        "GetFlag",
+        "ROSTER_TogglePlayerFlag",
+        "NET_D2GS_CLIENT_Send_0x5D",
+        "GetPlayerRoster",
+        "ROSTER_LeaveParty"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckRostersArePartied",
+      "address": "0047a070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a070"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "CheckRostersArePartied",
+        "GetRosterPlayerByGUID",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetRosterGUID",
+      "address": "0047a0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a0c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetRosterHpAndArea",
+      "address": "0047a0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a0d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "SetRosterHpAndArea",
+        "GetRosterPlayerByGUID",
+        "ROSTER_RebuildPlayerParty",
+        "ResetPartyUi"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SetRosterPosition",
+      "address": "0047a100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a100"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "SetRosterPosition",
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_CheckPlayerInSameParty",
+      "address": "0047a120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a120"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_CheckPlayerInSameParty",
+        "GetPlayerUnit_UI",
+        "GetPlayerUnitPartyId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRosterHP",
+      "address": "0047a150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a150"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterHP",
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_CheckPlayerNotHostile",
+      "address": "0047a170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a170"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_CheckPlayerNotHostile",
+        "GetRosterPlayerByGUID",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetRosterPosition",
+      "address": "0047a1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a1b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterPosition"
+      ],
+      "usedTypes": [
+        "D2RosterStrc"
+      ]
+    },
+    {
+      "name": "GetRosterArea",
+      "address": "0047a1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a1e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterArea"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "GetRosterNameByGUID",
+      "address": "0047a1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a1f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterPlayerByGUID",
+        "GetRosterNameByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPlayerRosterName",
+      "address": "0047a210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a210"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetPlayerRosterName",
+        "GetRosterPlayerByGUID",
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetRosterPortalGuidAndDestArea",
+      "address": "0047a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a270"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "SetRosterPortalGuidAndDestArea",
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPortalOwnerName",
+      "address": "0047a290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a290"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetPortalOwnerName"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckIfUnitHasPartiedRosters",
+      "address": "0047a2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a2c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "CheckIfUnitHasPartiedRosters",
+        "GetPlayerUnitPartyId"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetPlayerList",
+      "address": "0047a310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a310"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetPlayerList",
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetRosterPartyId",
+      "address": "0047a330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a330"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "SetRosterPartyId",
+        "GetRosterPlayerByGUID",
+        "ROSTER_RebuildPlayerParty",
+        "ResetPartyUi"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SetRosterInParty",
+      "address": "0047a350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a350"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "SetRosterInParty",
+        "GetRosterPlayerByGUID",
+        "ResetPartyUi"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_SetPlayerHostileFlag",
+      "address": "0047a370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a370"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_SetPlayerHostileFlag",
+        "GetRosterPlayerByGUID",
+        "AllocPlayerListSub",
+        "SetFlag",
+        "ResetPartyUi",
+        "GetPlayerUnit_UI",
+        "ROSTER_UpdateMercHostileColors"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "AllocRosterOther",
+      "address": "0047a3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a3d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "AllocRosterOther",
+        "GetRosterPlayerByGUID",
+        "AllocClientMemory",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RosterLinkListStrc",
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeAllRosterPlayer",
+      "address": "0047a490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a490"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "FreeAllRosterPlayer",
+        "GetRosterPlayerByGUID",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterLinkListStrc",
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_CheckPlayerCanLoot",
+      "address": "0047a4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a4f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_CheckPlayerCanLoot",
+        "GetRosterPlayerByGUID",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_CheckPlayersInSameParty",
+      "address": "0047a520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a520"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_CheckPlayersInSameParty",
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_CheckAnyPlayerHostileToMe",
+      "address": "0047a560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a560"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_CheckAnyPlayerHostileToMe",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ROSTER_HasIncomingHostile",
+      "address": "0047a5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a5b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_HasIncomingHostile",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_HasOutgoingHostile",
+      "address": "0047a5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a5e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_HasOutgoingHostile",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_HasIncomingLoot",
+      "address": "0047a610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a610"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_HasIncomingLoot",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_HasOutgoingLoot",
+      "address": "0047a640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a640"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_HasOutgoingLoot",
+        "GetPlayerUnit_UI",
+        "GetFlag"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RosterIsFemale",
+      "address": "0047a670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a670"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "RosterIsFemale"
+      ],
+      "usedTypes": [
+        "D2RosterStrc"
+      ]
+    },
+    {
+      "name": "SetRosterPlayerHpPercent",
+      "address": "0047a690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a690"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "SetRosterPlayerHpPercent",
+        "GetRosterPlayerByGUID"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetRosterPlayerHpPercent",
+      "address": "0047a6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a6b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "GetRosterPlayerHpPercent",
+        "GetRosterPlayerByGUID",
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_AllocOrUpdatePlayer",
+      "address": "0047a6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a6f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_AllocOrUpdatePlayer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetRosterByGuidOrName",
+        "AllocClientMemory",
+        "memset",
+        "AllocPlayerList",
+        "ROSTER_InitializeFields",
+        "ROSTER_RebuildPlayerParty",
+        "ResetPartyUi"
+      ],
+      "usedTypes": [
+        "D2PlayerListStrc",
+        "D2RosterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_UpdatePlayerPartyInfo",
+      "address": "0047a850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a850"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "ROSTER_UpdatePlayerPartyInfo",
+        "GetRosterPlayerByGUID",
+        "ROSTER_UpdateHostileColors",
+        "ROSTER_RebuildPlayerParty",
+        "ResetPartyUi"
+      ],
+      "usedTypes": [
+        "D2RosterLinkListStrc",
+        "D2RosterStrc",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PlayerLeft",
+      "address": "0047a8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047a8b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Roster",
+      "calledFunctions": [
+        "PlayerLeft",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ROSTER_RebuildPlayerParty",
+        "ResetPartyUi",
+        "FreePlayerList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterLinkListStrc",
+        "D2RosterStrc",
+        "D2RosterStrc *",
+        "int32_t"
+      ]
+    }
+  ]
+}

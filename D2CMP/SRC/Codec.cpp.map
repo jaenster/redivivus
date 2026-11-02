@@ -1,0 +1,269 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/Codec.cpp",
+  "functions": [
+    {
+      "name": "CODEC_ReadBits",
+      "address": "0060b200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b200"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_ReadBits"
+      ],
+      "usedTypes": [
+        "D2CodecBitStateStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CODEC_ReadBitsWithTransparency",
+      "address": "0060b280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b280"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_ReadBitsWithTransparency",
+        "CODEC_ReadBits"
+      ],
+      "usedTypes": [
+        "D2CodecBitStateStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CODEC_AdvanceFrameIterator",
+      "address": "0060b2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b2b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_AdvanceFrameIterator"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CODEC_InitializeFrameIterator",
+      "address": "0060b4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b4b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_InitializeFrameIterator",
+        "memset",
+        "CODEC_AdvanceFrameIterator"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CODEC_CalculateFrameBounds",
+      "address": "0060b530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b530"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_CalculateFrameBounds"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CODEC_BuildInversePalette",
+      "address": "0060b5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b5f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_BuildInversePalette"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CODEC_BuildInversePaletteFromBitmask",
+      "address": "0060b640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b640"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_BuildInversePaletteFromBitmask",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CODEC_DecodeFramePixels",
+      "address": "0060b7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b7b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_DecodeFramePixels",
+        "CODEC_ReadBits",
+        "memset",
+        "memcpy",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "CODEC_DecompressFrameData",
+      "address": "0060b9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b9a0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_DecompressFrameData",
+        "memset",
+        "CODEC_AdvanceFrameIterator",
+        "CODEC_ReadBits"
+      ],
+      "usedTypes": [
+        "D2CodecBitStateStrc",
+        "D2CodecPixelBufferEntryStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "CODEC_EncodeRLE",
+      "address": "0060bdb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060bdb0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_EncodeRLE",
+        "memcpy",
+        "LOGFILE_WriteStringToFile"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CODEC_LoadPaletteFromFile",
+      "address": "0060bf20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060bf20"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_LoadPaletteFromFile",
+        "ARCHIVE_OpenD2FileWrap",
+        "ERRORMANAGER_FReadFile",
+        "ERRORMANAGER_FGetFileSize",
+        "ERRORMANAGER_FCloseFile"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2DccFileHeaderStrc",
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CODEC_DecompressAllFrames",
+      "address": "0060bff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060bff0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::Codec",
+      "calledFunctions": [
+        "CODEC_DecompressAllFrames",
+        "AllocServerMemory",
+        "CODEC_ReadBits",
+        "CODEC_CalculateFrameBounds",
+        "CODEC_InitializeFrameIterator",
+        "memset",
+        "CODEC_BuildInversePaletteFromBitmask",
+        "CODEC_DecompressFrameData",
+        "CODEC_AdvanceFrameIterator",
+        "CODEC_DecodeFramePixels",
+        "CODEC_EncodeRLE",
+        "LOGFILE_WriteStringToFile",
+        "sprintf",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2CelDecodeStateStrc",
+        "D2CodecBitStateStrc",
+        "D2CodecFrameBoundsStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

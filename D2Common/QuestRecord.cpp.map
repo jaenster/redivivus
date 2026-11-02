@@ -1,0 +1,194 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/QuestRecord.cpp",
+  "functions": [
+    {
+      "name": "GetQuestState",
+      "address": "0065c310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c310"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "GetQuestState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CheckBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetQuestState",
+      "address": "0065c360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c360"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "SetQuestState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UnsetQuestState",
+      "address": "0065c3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c3a0"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "UnsetQuestState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UnsetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UnsetQuestStepStates",
+      "address": "0065c3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c3e0"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "UnsetQuestStepStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UnsetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2Quests",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateBitBuffer",
+      "address": "0065c430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c430"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "CreateBitBuffer",
+        "AllocServerMemory",
+        "memset",
+        "InitBitBuffer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2PoolManagerStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FreeQuestRecordPool",
+      "address": "0065c490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c490"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "FreeQuestRecordPool",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "ReadQuestRecordFromBuffer",
+      "address": "0065c4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c4d0"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "ReadQuestRecordFromBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UnsetBitAtOffset",
+        "CheckBitAtOffset",
+        "SetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "int16_t",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CopyQuestBitBuffer",
+      "address": "0065c560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c560"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "CopyQuestBitBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "int16_t",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

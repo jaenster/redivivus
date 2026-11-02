@@ -51,25 +51,25 @@
 
 namespace D2Client::GAME::Draw {
 
-void __thiscall DRAW_UpdateTileVisibilityBounds(int32_t nParam3, D2DrlgTileDataStrc * pActSub18, int32_t nParam1, int32_t nParam2) {
+void __thiscall DRAW_UpdateTileVisibilityBounds(int32_t pDrawFloor, D2DrlgTileDataStrc * pActSub18, int32_t nWorldX, int32_t nWorldY) {
     pActSub18->nFlags |= 0x20000;
-    if (!*(int*)(nParam3 + 0x28)) {
+    if (!*(int*)(pDrawFloor + 0x28)) {
       return;
     }
-    if (nParam1 < *(int*)(nParam3 + 0x2c)) {
-      *(int32_t*)(nParam3 + 0x2c) = nParam1;
+    if (nWorldX < *(int*)(pDrawFloor + 0x2c)) {
+      *(int32_t*)(pDrawFloor + 0x2c) = nWorldX;
     }
-    if (nParam1 > *(int*)(nParam3 + 0x30)) {
-      *(int32_t*)(nParam3 + 0x30) = nParam1;
+    if (nWorldX > *(int*)(pDrawFloor + 0x30)) {
+      *(int32_t*)(pDrawFloor + 0x30) = nWorldX;
     }
-    if (nParam2 < *(int*)(nParam3 + 0x34)) {
-      *(int32_t*)(nParam3 + 0x34) = nParam2;
+    if (nWorldY < *(int*)(pDrawFloor + 0x34)) {
+      *(int32_t*)(pDrawFloor + 0x34) = nWorldY;
     }
-    if (nParam2 <= *(int*)(nParam3 + 0x38)) {
+    if (nWorldY <= *(int*)(pDrawFloor + 0x38)) {
       return;
     }
 
-    *(int32_t*)(nParam3 + 0x38) = nParam2;
+    *(int32_t*)(pDrawFloor + 0x38) = nWorldY;
 }
 
 // Fills an 8x8 grid of D2GfxLightExStrc entries with light colour and intensity for a tile. For indoor tiles, queries the act environment for a flat intensity and RGB colour, then writes those constant values to all 64 cells. For outdoor tiles, iterates the 8x8 world-coordinate grid (tile origin * 8, stepped by 8) and calls DRAW_CoordIsInCoord for each cell to compute per-cell light colour from the outdoor lighting model.
@@ -162,7 +162,7 @@ static void __stdcall DRAW_CalcRoofLightGridOrtho(D2GfxLightExStrc * pLightEntry
 }
 
 // Populates a 6×6 grid of D2GfxLightExStrc entries for orthographic roof lighting. Reads the act's ambient light intensity and RGB color via DRLGENV_GetIntensityFromAct / DRLGENV_GetLightColorFromAct. Adjusts nScreenX by ±ScreenSizeX/4 for split-screen sides (nSplitSide 1/2). For each grid cell (skipping interior cells when bBorderOnly), sets screen-space X/Y position and either samples dynamic light (outdoor: DRAW_CoordIsInCoord) or fills with the flat ambient color (indoor). Output is written into the pParam array.
-void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pParam, int32_t nScreenX, int32_t nScreenY, int32_t nTileX, int32_t nTileY, int32_t nIndoorFlag, int32_t nSplitSide, int32_t bBorderOnly) {
+void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nScreenX, int32_t nScreenY, int32_t nTileX, int32_t nTileY, int32_t nIndoorFlag, int32_t nSplitSide, int32_t bBorderOnly) {
     int nHalfWidthAdj;
     D2GfxLightExStrc* pCurLight;
     uint32_t dwLightColor;
@@ -190,8 +190,8 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pParam, int32_t nScree
     fill_light_grid:
     D2Common::Environment::DRLGENV_GetLightColorFromAct(sgpDrlgAct, (uint8_t*)((uintptr_t)&dwLightColor + 2), (uint8_t*)&dwLightColor, (uint8_t*)((uintptr_t)&dwLightColor + 1));
     nHalfWidthAdj = 0;
-    pCurLight = pParam;
-    pParam = (D2GfxLightExStrc*)(nTileY * 8);
+    pCurLight = pLightGrid;
+    pLightGrid = (D2GfxLightExStrc*)(nTileY * 8);
     do {
       int nCol;
       nCol = 0;
@@ -205,7 +205,7 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pParam, int32_t nScree
             pCurLight->sLight.nBlue = *(uint8_t*)((char*)&dwLightColor + 1);
             pCurLight->sLight.nGreen = (uint8_t)dwLightColor;
           } else {
-            View::DRAW_CoordIsInCoord((nCol + nTileX) * 8, (int32_t)pParam, (uint8_t*)pCurLight, &pCurLight->sLight.nRed, &pCurLight->sLight.nGreen, &pCurLight->sLight.nBlue);
+            View::DRAW_CoordIsInCoord((nCol + nTileX) * 8, (int32_t)pLightGrid, (uint8_t*)pCurLight, &pCurLight->sLight.nRed, &pCurLight->sLight.nGreen, &pCurLight->sLight.nBlue);
           }
         }
 
@@ -213,7 +213,7 @@ void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pParam, int32_t nScree
         pCurLight++;
       } while (nCol < 6);
 
-      pParam = (D2GfxLightExStrc*)&pParam->nY;
+      pLightGrid = (D2GfxLightExStrc*)&pLightGrid->nY;
       nHalfWidthAdj++;
     } while (nHalfWidthAdj < 6);
 }
@@ -258,7 +258,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
     uint8_t byRed;
     uint8_t byBlue;
     uint8_t byGreen;
-    uint8_t* piVar1;
+    uint8_t* pScreenX;
     D2GfxLightExStrc* pLightEntry = (D2GfxLightExStrc*)nRow;
     int32_t nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(sgpDrlgAct);
     uint8_t byIntensity = (uint8_t)nIntensity;
@@ -307,9 +307,9 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
       nSplitSide = 0;
       do {
         if (!bBorderOnly || (!nSplitSide || nSplitSide == 5) && (!nRow || nRow == (uint8_t*)0x5)) {
-          piVar1 = (uint8_t*)((int)pLightEntry + 4);
-          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (int)(nRow + nTileY) * 0x10000, 0, (int*)piVar1, (int*)((int)pLightEntry + 8));
-          *(int*)piVar1 += nScreenHalfAdj;
+          pScreenX = (uint8_t*)((int)pLightEntry + 4);
+          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (int)(nRow + nTileY) * 0x10000, 0, (int*)pScreenX, (int*)((int)pLightEntry + 8));
+          *(int*)pScreenX += nScreenHalfAdj;
           View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (int)(nRow + nTileY) * 8, (uint8_t*)pLightEntry, (uint8_t*)((int)pLightEntry + 1), (uint8_t*)((int)pLightEntry + 2), (uint8_t*)((int)pLightEntry + 3));
         }
 
@@ -432,12 +432,12 @@ void __thiscall DRAW_DrawEdgeFloorTile(D2DrawFloorStrc * pDrawFloor, int32_t nWo
     DrawFloorTile(pDrawFloor, pTileData, (void*)0x1, nScreenX, nWorldX, nWorldY, nWorldY_00);
 }
 
-void __thiscall DrawSubTile(D2DrawFloorStrc * pDrawFloor, int32_t nTileX, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
+void __thiscall DrawSubTile(D2DrawFloorStrc * pDrawFloor, int32_t nTileX, int32_t nTileY, int32_t nStepX, int32_t nStepY) {
     int nWorldX = nTileX / 5 * 5;
-    int nParam = nParam1 / 5 * 5;
-    DRAW_DrawEdgeFloorTile(pDrawFloor, nWorldX, nParam);
-    DRAW_DrawEdgeFloorTile(pDrawFloor, nWorldX + nParam2, nParam + nParam3);
-    DRAW_DrawEdgeFloorTile(pDrawFloor, nWorldX + nParam2 * 2, nParam + nParam3 * 2);
+    int nWorldY = nTileY / 5 * 5;
+    DRAW_DrawEdgeFloorTile(pDrawFloor, nWorldX, nWorldY);
+    DRAW_DrawEdgeFloorTile(pDrawFloor, nWorldX + nStepX, nWorldY + nStepY);
+    DRAW_DrawEdgeFloorTile(pDrawFloor, nWorldX + nStepX * 2, nWorldY + nStepY * 2);
 }
 
 // Client-side floor renderer: populates the per-frame D2DrawFloorStrc from the current view/state then draws all floor tiles of the current room and its adjacent rooms. Caches low-quality/perspective flags, weather splash rate, window-border type, and the player's roll seed; resets the tile bounding box; conditionally enables weather splash/recording every few frames. For each adjacent room it gets room coords and floor tiles and calls DrawFloorTile for tiles whose flag-derived layer (nFlags>>14 &7) matches the current pass (1..2), honoring the level's FloorFilter. When the level draws edges in perspective, calls DrawSubTile to fill the four boundary edges around the player position. Halts via ERROR_UnrecoverableInternalError_Halt if no player or level row.
@@ -756,13 +756,13 @@ void __stdcall dInitWallDraw() {
     gLightBlue = roomColor.nBlue;
 }
 
-int32_t * __stdcall DRAW_GetIntensityTableForMode(int * pnTableMode, int32_t bPerspective, int * pnParam) {
-    *pnTableMode = gnIntensityTableModes[*pnParam];
+int32_t * __stdcall DRAW_GetIntensityTableForMode(int * pnTableMode, int32_t bPerspective, int * pnIntensityMode) {
+    *pnTableMode = gnIntensityTableModes[*pnIntensityMode];
     if (bPerspective) {
-      return aIntensityTable_Mode1 + *pnParam * 0xc;
+      return aIntensityTable_Mode1 + *pnIntensityMode * 0xc;
     }
 
-    return aIntensityTable_Mode0 + *pnParam * 0xc;
+    return aIntensityTable_Mode0 + *pnIntensityMode * 0xc;
 }
 
 // Client-side render pass: iterates the under-floor wall-tile node list in a Wall2 cell, expires fade transitions whose timer has elapsed, then draws each visible tile (flag mask 0x1c000 set, 0x408 clear) via D2GFX_DrawWallTile or D2GFX_DrawTransWallTile depending on alpha. Samples DRAW_CoordIsInCoord for per-light RGBA values and fills a local D2GfxLightStrc array. Accounts for perspective vs. isometric screen-coordinate calculation.
@@ -772,7 +772,7 @@ static void __stdcall WALL2_DrawUnderFloorTiles(D2GameViewStrc * pViewData, D2Wa
     int nScreenX;
     uint32_t nLightIdx;
     int nScreenY;
-    int32_t* piVar1;
+    int32_t* pIntensityRow;
     bool bMoreLights;
     D2GfxLightStrc aWallLightSamples[8];
     uint32_t dwAlphaByte;
@@ -800,15 +800,15 @@ static void __stdcall WALL2_DrawUnderFloorTiles(D2GameViewStrc * pViewData, D2Wa
         nScreenX = pTileEntry->pTileLibraryEntry->nDirection;
         nLightCount = gnIntensityTableModes[nScreenX];
         if (pTileEntry->nTransitionFlags & 1) {
-          piVar1 = aIntensityTable_Mode1 + nScreenX * 0xc;
+          pIntensityRow = aIntensityTable_Mode1 + nScreenX * 0xc;
         } else {
-          piVar1 = aIntensityTable_Mode0 + nScreenX * 0xc;
+          pIntensityRow = aIntensityTable_Mode0 + nScreenX * 0xc;
         }
 
         nLightIdx = 0;
         if (nLightCount > 0) {
           do {
-            View::DRAW_CoordIsInCoord(pWallTileNode->nX + piVar1[nLightIdx * 2] * 8, pWallTileNode->nY + piVar1[nLightIdx * 2 + 1] * 8, (uint8_t*)&dwAlpha, byColorRG, byColorRG + 1, &byBlue);
+            View::DRAW_CoordIsInCoord(pWallTileNode->nX + pIntensityRow[nLightIdx * 2] * 8, pWallTileNode->nY + pIntensityRow[nLightIdx * 2 + 1] * 8, (uint8_t*)&dwAlpha, byColorRG, byColorRG + 1, &byBlue);
             byMaskedIntensity = (uint8_t)dwAlpha ? (uint8_t)dwAlpha : 0;
             dwAlpha = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwAlpha + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byMaskedIntensity);
             sLight.nRed = byColorRG[0];
@@ -848,7 +848,7 @@ void __stdcall WALL2_DrawWallTilesWithAlpha(D2Wall2CellStrc * pWall2Cell, uint32
     int32_t nPosX;
     D2GfxLightStrc sLight;
     int32_t nScreenY;
-    int32_t* piVar1;
+    int32_t* pIntensityRow;
     uint32_t nLightIdx;
     bool bMoreLights;
     D2GfxLightStrc aWallLightSamples[8];
@@ -899,15 +899,15 @@ void __stdcall WALL2_DrawWallTilesWithAlpha(D2Wall2CellStrc * pWall2Cell, uint32
           nFadeCalc = pTileEntry->pTileLibraryEntry->nDirection;
           nLightCount = gnIntensityTableModes[nFadeCalc];
           if (pTileEntry->nTransitionFlags & 1) {
-            piVar1 = aIntensityTable_Mode1 + nFadeCalc * 0xc;
+            pIntensityRow = aIntensityTable_Mode1 + nFadeCalc * 0xc;
           } else {
-            piVar1 = aIntensityTable_Mode0 + nFadeCalc * 0xc;
+            pIntensityRow = aIntensityTable_Mode0 + nFadeCalc * 0xc;
           }
 
           nLightIdx = 0;
           if (nLightCount > 0) {
             do {
-              View::DRAW_CoordIsInCoord(pWallTileNode->nX + piVar1[nLightIdx * 2] * 8, pWallTileNode->nY + piVar1[nLightIdx * 2 + 1] * 8, (uint8_t*)&dwAlphaPacked, &byRed, &byBlue, (uint8_t*)((uintptr_t)&pWall2Cell + 3));
+              View::DRAW_CoordIsInCoord(pWallTileNode->nX + pIntensityRow[nLightIdx * 2] * 8, pWallTileNode->nY + pIntensityRow[nLightIdx * 2 + 1] * 8, (uint8_t*)&dwAlphaPacked, &byRed, &byBlue, (uint8_t*)((uintptr_t)&pWall2Cell + 3));
               byMaskedIntensity = (uint8_t)dwAlphaPacked ? (uint8_t)dwAlphaPacked : 0;
               sLight.nBlue = *(uint8_t*)((char*)&pWall2Cell + 3);
               sLight.nGreen = byBlue;

@@ -1,0 +1,85 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/3rdparty/zlib/zutil.cpp",
+  "functions": [
+    {
+      "name": "zlibVersion",
+      "address": "0042dc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc30"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zlibVersion"
+      ]
+    },
+    {
+      "name": "zlibCompileFlags",
+      "address": "0042dc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc40"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zlibCompileFlags"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "zError",
+      "address": "0042dc50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc50"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zError"
+      ]
+    },
+    {
+      "name": "zcalloc",
+      "address": "0042dc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc70"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zcalloc",
+        "malloc"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "zcfree",
+      "address": "0042dc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc90"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zcfree",
+        "free"
+      ]
+    }
+  ]
+}

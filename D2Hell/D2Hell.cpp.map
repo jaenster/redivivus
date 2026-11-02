@@ -1,0 +1,480 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Hell/D2Hell.cpp",
+  "functions": [
+    {
+      "name": "D2FILE_CreateProcess",
+      "address": "00516d8b",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516d8b"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2FILE_CreateProcess",
+        "memset"
+      ],
+      "usedTypes": [
+        "_PROCESS_INFORMATION",
+        "_STARTUPINFOA"
+      ]
+    },
+    {
+      "name": "D2FILE_CloseFile",
+      "address": "00516e84",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516e84"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2FILE_CloseFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ERRORMANAGER_FCloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2FILE_GetFileSize",
+      "address": "00516eab",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516eab"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2FILE_GetFileSize",
+        "ERRORMANAGER_FGetFileSize",
+        "__security_check_cookie",
+        "SFileGetFileName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2PoolManagerStrc",
+        "LPDWORD",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2FILE_SeekFile",
+      "address": "00516f14",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516f14"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2FILE_SeekFile",
+        "SFILE_SetFilePointerThunk",
+        "__security_check_cookie",
+        "SFileGetFileName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2FILE_ReadFile",
+      "address": "00516f85",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516f85"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2FILE_ReadFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ERRORMANAGER_FReadFile",
+        "SFileGetFileName",
+        "D2FILE_ReadFile_HaltTail",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2FILE_ReadFile_HaltTail",
+      "address": "00516faa",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516faa"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2FILE_ReadFile_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "D2FILE_OpenAndReadFile",
+      "address": "00517015",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517015"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2FILE_OpenAndReadFile",
+        "CheckIfFileExists",
+        "D2FILE_GetFileSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RegisterExitFunction",
+      "address": "005173d3",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005173d3"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "RegisterExitFunction"
+      ],
+      "usedTypes": [
+        "pfnFaultError"
+      ]
+    },
+    {
+      "name": "FAULT_TerminateCurrentProcess",
+      "address": "005173df",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005173df"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_TerminateCurrentProcess"
+      ]
+    },
+    {
+      "name": "FAULT_ShowErrorAndTerminate",
+      "address": "005173ef",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005173ef"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_ShowErrorAndTerminate",
+        "FAULT_TerminateCurrentProcess"
+      ]
+    },
+    {
+      "name": "FAULT_ShowErrorMessageBox",
+      "address": "0051740b",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051740b"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_ShowErrorMessageBox"
+      ]
+    },
+    {
+      "name": "FAULT_FormatAndShowError",
+      "address": "00517423",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517423"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_FormatAndShowError",
+        "FAULT_TerminateCurrentProcess",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FAULT_RegisterErrorHandler",
+      "address": "005177b2",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005177b2"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_RegisterErrorHandler",
+        "atexit",
+        "LINKEDLIST_AllocAndInsertNode"
+      ],
+      "usedTypes": [
+        "StormFaultHandlerNodeStrc",
+        "pfnStormErrorHandler"
+      ]
+    },
+    {
+      "name": "FAULT_LookupErrorString",
+      "address": "00517804",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517804"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_LookupErrorString",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "StormFaultHandlerNode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FAULT_ShowFormattedError",
+      "address": "00517874",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517874"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_ShowFormattedError",
+        "FAULT_LookupErrorString",
+        "FAULT_TerminateCurrentProcess",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FAULT_ShowFormattedErrorAndTerminate",
+      "address": "005178e9",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005178e9"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_ShowFormattedErrorAndTerminate",
+        "FAULT_LookupErrorString",
+        "FAULT_ShowErrorAndTerminate",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FAULT_ShowFormattedErrorWithArgs",
+      "address": "0051793e",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051793e"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "FAULT_ShowFormattedErrorWithArgs",
+        "FAULT_LookupErrorString",
+        "FAULT_ShowErrorMessageBox",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2MEM_VirtualAlloc",
+      "address": "00517993",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517993"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2MEM_VirtualAlloc"
+      ]
+    },
+    {
+      "name": "D2MEM_VirtualFree",
+      "address": "005179a4",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005179a4"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2MEM_VirtualFree"
+      ]
+    },
+    {
+      "name": "D2MEM_CopyRows",
+      "address": "005179b3",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005179b3"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2MEM_CopyRows"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2MEM_CompareBytes",
+      "address": "00517a36",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517a36"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2MEM_CompareBytes"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2MEM_FindLowestSetBit",
+      "address": "00517abb",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517abb"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2MEM_FindLowestSetBit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2FILE_CleanupCryptHandles",
+      "address": "00517df5",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517df5"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "D2FILE_CleanupCryptHandles"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StaticInit_gFaultHandlerList",
+      "address": "006cae5f",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cae5f"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "StaticInit_gFaultHandlerList",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_gFaultHandlerList",
+      "address": "006cb401",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb401"
+        }
+      ],
+      "namespace": "D2Hell",
+      "calledFunctions": [
+        "StaticFini_gFaultHandlerList",
+        "TSList_TMESSAGESOURCE_UnlinkAll",
+        "TSLink_TMESSAGESOURCE_Unlink"
+      ]
+    }
+  ]
+}

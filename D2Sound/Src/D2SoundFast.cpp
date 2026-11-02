@@ -123,8 +123,8 @@ int __stdcall SOUND_PlayNextAmbientSound() {
     BOOL BVar1;
     int nRandIdx;
     DWORD dwLanguageCode;
-    int32_t iVar8;
     bool bHasStreamBuffer;
+    int32_t nAmbientIdx;
     char* szSoundFile;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
     if (!gpMusicStreamBuffer || (dwVolume = D2SoundSmp::SOUNDSMP_GetEffectiveVolume() , !dwVolume) || gpMusicStreamBuffer && (dwVolume = D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer) , dwVolume != 0)) {
@@ -137,16 +137,16 @@ int __stdcall SOUND_PlayNextAmbientSound() {
     int nAmbientCount;
     nAmbientCount = gaAmbientSoundFlags;
     do {
-      iVar8 = 0;
+      nAmbientIdx = 0;
       if (nAmbientCount > 0) {
         do {
-          pAmbientEntry = Sound::SOUND_GetAmbientSoundEntry(iVar8);
+          pAmbientEntry = Sound::SOUND_GetAmbientSoundEntry(nAmbientIdx);
           if (!pAmbientEntry[1]) {
             goto play_unplayed_track;
           }
 
-          iVar8++;
-        } while (iVar8 < gaAmbientSoundFlags);
+          nAmbientIdx++;
+        } while (nAmbientIdx < gaAmbientSoundFlags);
       }
       if (bResetDone) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnMusicEnabled = 0;
@@ -307,20 +307,20 @@ int __stdcall SOUND_GetNpcSpeech() {
     return g_nSoundNpcSpeech;
 }
 
-int32_t __fastcall SOUND_SetNpcSpeech(int32_t nParam) {
-    Storm::Source::SReg::SRegSaveValue("Diablo II", "NPC Speech", 0, nParam);
-    g_nSoundNpcSpeech = nParam;
-    return nParam;
+int32_t __fastcall SOUND_SetNpcSpeech(int32_t nNpcSpeech) {
+    Storm::Source::SReg::SRegSaveValue("Diablo II", "NPC Speech", 0, nNpcSpeech);
+    g_nSoundNpcSpeech = nNpcSpeech;
+    return nNpcSpeech;
 }
 
 int __stdcall SOUND_GetOptionsMusic() {
     return g_nSoundOptionsMusic;
 }
 
-int32_t __fastcall SOUND_SetOptionsMusic(int32_t nParam) {
-    Storm::Source::SReg::SRegSaveValue("Diablo II", "Options Music", 0, nParam);
-    g_nSoundOptionsMusic = nParam;
-    return nParam;
+int32_t __fastcall SOUND_SetOptionsMusic(int32_t nOptionsMusic) {
+    Storm::Source::SReg::SRegSaveValue("Diablo II", "Options Music", 0, nOptionsMusic);
+    g_nSoundOptionsMusic = nOptionsMusic;
+    return nOptionsMusic;
 }
 
 void __stdcall SOUND_InitSoundEffectBuffers() {
@@ -376,7 +376,7 @@ void __fastcall SOUND_LoadWavFile(char * szText) {
     } while (cFilenameChar != '\0');
 }
 
-void __fastcall SOUND_PlaySoundEffect(uint8_t * pbParam) {
+void __fastcall SOUND_PlaySoundEffect(uint8_t * szSoundFile) {
     uint8_t* pbCacheEntry;
     int32_t bIsPlaying;
     uint8_t* pbSearchName;
@@ -386,7 +386,7 @@ void __fastcall SOUND_PlaySoundEffect(uint8_t * pbParam) {
       int nCmpResult;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_008817c4);
       pbCacheEntry = (uint8_t*)gpWavFileCacheListHead;
-      pbSearchName = pbParam;
+      pbSearchName = szSoundFile;
       pbMatchedEntry = (uint8_t*)gpWavFileCacheListHead;
       if (gpWavFileCacheListHead) {
         match_cache_entry:
@@ -419,7 +419,7 @@ void __fastcall SOUND_PlaySoundEffect(uint8_t * pbParam) {
     return;
     next_cache_entry:
     pbCacheEntry = *(uint8_t**)(pbMatchedEntry + 0x5c);
-    pbSearchName = pbParam;
+    pbSearchName = szSoundFile;
     pbMatchedEntry = pbCacheEntry;
     if (!pbCacheEntry) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_008817c4);

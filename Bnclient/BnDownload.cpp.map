@@ -1,0 +1,572 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/BnDownload.cpp",
+  "functions": [
+    {
+      "name": "BNDOWNLOAD_WriteFileWithTimestamp",
+      "address": "0051e440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e440"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_WriteFileWithTimestamp",
+        "thunk_CreateFileA",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle"
+      ],
+      "usedTypes": [
+        "FILETIME"
+      ]
+    },
+    {
+      "name": "NET_CopyDllFromArchive",
+      "address": "0051e490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e490"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "NET_CopyDllFromArchive",
+        "LOGFILE_WriteStringToFile",
+        "SStrPack",
+        "strrchr",
+        "SFileOpenFileEx",
+        "SFileGetFileSize",
+        "SMemAlloc",
+        "SFileReadFile",
+        "thunk_CreateFileA",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle",
+        "SMemFree",
+        "SFileCloseFile"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_SetCancelFlag",
+      "address": "0051e5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e5d0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_SetCancelFlag"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_HasActiveDownloads",
+      "address": "0051e5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e5e0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_HasActiveDownloads"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_RecvExact",
+      "address": "0051e5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e5f0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "NET_RecvExact"
+      ],
+      "usedTypes": [
+        "SOCKET",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_GetCachedFileSize",
+      "address": "0051e640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e640"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_GetCachedFileSize",
+        "thunk_CreateFileA",
+        "SFILE_Win32CloseHandle"
+      ],
+      "usedTypes": [
+        "FILETIME",
+        "_FILETIME",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_PerformCheckRevision",
+      "address": "0051e6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e6d0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_PerformCheckRevision",
+        "memset",
+        "GetTickCount",
+        "SFileOpenArchive",
+        "__security_check_cookie",
+        "SFileAuthenticateArchive",
+        "NET_CopyDllFromArchive",
+        "D2FILE_VerifyFileSignature",
+        "SFileCloseArchive"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "int32_t",
+        "pfnCheckRevision",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_ExtractFileFromArchive",
+      "address": "0051e920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e920"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_ExtractFileFromArchive",
+        "SFileOpenFileEx",
+        "SFileGetFileSize",
+        "SMemAlloc",
+        "SFileReadFile",
+        "thunk_CreateFileA",
+        "thunk_WriteFile",
+        "SFILE_Win32CloseHandle",
+        "SMemFree",
+        "SFileCloseFile"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_LaunchVerifiedExecutables",
+      "address": "0051e9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051e9d0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_LaunchVerifiedExecutables",
+        "D2FILE_VerifyFileSignature",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_UpdateProgressPercent",
+      "address": "0051ea20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ea20"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_UpdateProgressPercent"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_ResetState",
+      "address": "0051ea40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ea40"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_ResetState"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_GetProgress",
+      "address": "0051ea70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ea70"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_GetProgress"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_SetPatchFilename",
+      "address": "0051ea80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ea80"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_SetPatchFilename",
+        "SStrCopy"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_HasPatchFilename",
+      "address": "0051eaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051eaa0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_HasPatchFilename"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BnetDownloadFile",
+      "address": "0051eab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051eab0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BnetDownloadFile",
+        "SMemAlloc",
+        "SMemFree",
+        "DEBUG_UnusedDebugFunction",
+        "CACHE_WriteData",
+        "BNDOWNLOAD_WriteFileWithTimestamp"
+      ],
+      "usedTypes": [
+        "FILETIME",
+        "SOCKET",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_RecvFileFromSocket",
+      "address": "0051ebb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ebb0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_RecvFileFromSocket",
+        "thunk_CreateFileA",
+        "__security_check_cookie",
+        "SFILE_Win32SetFilePointer",
+        "SFILE_Win32CloseHandle",
+        "thunk_WriteFile"
+      ],
+      "usedTypes": [
+        "FILETIME",
+        "SOCKET",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_ProcessPrepatchList",
+      "address": "0051ed00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ed00"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_ProcessPrepatchList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "SStrChr",
+        "SRegLoadData",
+        "__security_check_cookie",
+        "SFileOpenArchive",
+        "SFileAuthenticateArchive",
+        "SFileCloseArchive",
+        "SFileOpenFileEx",
+        "SFileGetFileSize",
+        "SMemAlloc",
+        "SFileReadFile",
+        "SStrCopy",
+        "_strnicmp",
+        "BNDOWNLOAD_ExtractFileFromArchive",
+        "SMemFree",
+        "SFileCloseFile",
+        "SStrLen",
+        "sprintf",
+        "SRegSaveString",
+        "D2CheckExpansionGame",
+        "SaveAndUnload",
+        "BNDOWNLOAD_LaunchVerifiedExecutables"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_ApplyPrepatch",
+      "address": "0051f2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051f2d0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_ApplyPrepatch",
+        "BNDOWNLOAD_ProcessPrepatchList"
+      ]
+    },
+    {
+      "name": "BnetDownloadFile_II",
+      "address": "0051f310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051f310"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BnetDownloadFile_II",
+        "BNCLIENT_GetSocketPeerName",
+        "GetBnetIp",
+        "GetDnsRecordSync",
+        "strtok",
+        "closeSocket",
+        "SMemFree",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SMemAlloc",
+        "NET_RecvExact",
+        "DEBUG_UnusedDebugFunction",
+        "BNDOWNLOAD_GetCachedFileSize",
+        "BNDOWNLOAD_RecvFileFromSocket",
+        "NET_BNFTP_CLIENT_ProcessFile",
+        "BnetDownloadFile"
+      ],
+      "usedTypes": [
+        "D2BnetDownloadStateStrc",
+        "SOCKET",
+        "int32_t",
+        "sockaddr",
+        "u_short",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_InitiateFileDownload",
+      "address": "0051f910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051f910"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_InitiateFileDownload",
+        "CACHE_ReadData",
+        "BNDOWNLOAD_WriteFileWithTimestamp",
+        "NET_BNFTP_CLIENT_ProcessFile",
+        "CACHE_FreeMem",
+        "SMemAlloc",
+        "memset",
+        "SStrCopy",
+        "_beginthreadex"
+      ],
+      "usedTypes": [
+        "D2BnetDownloadStateStrc",
+        "FILETIME",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_BNFTP_CLIENT_ProcessFile",
+      "address": "0051fab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051fab0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "NET_BNFTP_CLIENT_ProcessFile",
+        "DEBUG_UnusedDebugFunction",
+        "__security_check_cookie",
+        "_stricmp",
+        "AllocClientMemory",
+        "memcpy",
+        "NET_SID_CLIENT_Send_0x21_DisplayAd",
+        "sprintf",
+        "BNMESSQUEUE_EnqueueString",
+        "BNMESSQUEUE_EnqueueBytes",
+        "SStrLen",
+        "SMemAlloc",
+        "SStrCopy",
+        "UpdateGatewaysFromIni",
+        "SMemFree",
+        "SaveAndUnload",
+        "BNDOWNLOAD_InitiateFileDownload",
+        "BNDOWNLOAD_ResetState",
+        "memset",
+        "SFileOpenArchive",
+        "SFileAuthenticateArchive",
+        "NET_CopyDllFromArchive",
+        "SFileOpenFile",
+        "SFileReadFile",
+        "SFileCloseFile",
+        "NET_SID_CLIENT_Send",
+        "SFileCloseArchive"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2MPQFileStrc",
+        "FARPROC",
+        "FILETIME",
+        "SID_C2S_ExtraWork",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNDOWNLOAD_InitiatePatchDownload",
+      "address": "00520020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520020"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "BNDOWNLOAD_InitiatePatchDownload",
+        "StartUp",
+        "SMemCopy",
+        "SRegSaveData",
+        "CACHE_ReadData",
+        "BNDOWNLOAD_WriteFileWithTimestamp",
+        "NET_BNFTP_CLIENT_ProcessFile",
+        "CACHE_FreeMem",
+        "SMemAlloc",
+        "memset",
+        "SStrCopy",
+        "_beginthreadex"
+      ],
+      "usedTypes": [
+        "FILETIME",
+        "uint32_t",
+        "uintptr_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6caed0",
+      "address": "006caed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006caed0"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "StaticInit_6caed0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_00881f64",
+      "address": "006cb470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb470"
+        }
+      ],
+      "namespace": "Bnclient::BnDownload",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_00881f64"
+      ]
+    }
+  ]
+}

@@ -76,15 +76,15 @@ static int32_t PATH_GetCollisionPatternFromMonStats(D2UnitStrc * pUnit) {
 
 int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
     D2MonStats2Txt* pMonStatsEx;
-    uint32_t uVar1;
+    uint32_t dwMonStats2Flags;
     if (nMonStatsIdx >= 0 && nMonStatsIdx < sgptDataTable->nTxtMonStatsSize) {
       int nMonStatsExId;
       nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nMonStatsIdx].MonStatsEx;
       pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
       if (pMonStatsEx && (uint32_t)(int)pMonStatsEx->SizeX <= 3) {
-        uVar1 = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
+        dwMonStats2Flags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsEx + 0x5);
         nMonStatsExId = gaUnitTypeInteractSizes[pMonStatsEx->SizeX];
-        if (!((gadwBitMasks[0] & uVar1 || gadwBitMasks[2] & uVar1) && !(gadwBitMasks[1] & uVar1))) {
+        if (!((gadwBitMasks[0] & dwMonStats2Flags || gadwBitMasks[2] & dwMonStats2Flags) && !(gadwBitMasks[1] & dwMonStats2Flags))) {
           return nMonStatsExId;
         }
         if (nMonStatsExId != 1) {
@@ -377,12 +377,12 @@ int32_t __stdcall GetTargetY(D2DynamicPathStrc * pDynamicPath) {
     return pDynamicPath->ScreenPos.y;
 }
 
-void __fastcall SetTargetX(D2DynamicPathStrc * pDynamicPath, LONG lParam) {
-    pDynamicPath->ScreenPos.x = lParam;
+void __fastcall SetTargetX(D2DynamicPathStrc * pDynamicPath, LONG nScreenX) {
+    pDynamicPath->ScreenPos.x = nScreenX;
 }
 
-void __fastcall SetTargetY(D2DynamicPathStrc * pDynamicPath, LONG lParam) {
-    pDynamicPath->ScreenPos.y = lParam;
+void __fastcall SetTargetY(D2DynamicPathStrc * pDynamicPath, LONG nScreenY) {
+    pDynamicPath->ScreenPos.y = nScreenY;
 }
 
 uint32_t __stdcall GetXSP1(D2DynamicPathStrc * pDynamicPath) {
@@ -1144,7 +1144,7 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t bForce) {
     return 1;
 }
 
-static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, int32_t nParam) {
+static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, int32_t pUnit) {
     uint32_t nPathPoints;
     int ePathType = pDynamicPath->ePathType;
     if (ePathType != 4) {
@@ -1159,7 +1159,7 @@ static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, int32
         return pDynamicPath->dwPathPoints;
       }
 
-      Drlg::Path::DRLGPATH_BuildRandomizedPathPoints(pDynamicPath, (D2SeedStrc*)(nParam + 0x20));
+      Drlg::Path::DRLGPATH_BuildRandomizedPathPoints(pDynamicPath, (D2SeedStrc*)(pUnit + 0x20));
     } else {
       nPathPoints = PATH_BuildDirectPathToTarget(pDynamicPath);
       if (!nPathPoints) {
@@ -1275,7 +1275,7 @@ static uint8_t PATH_ResolveTargetPosition(D2PathTypeArg * pPathTypeArg, int32_t 
 }
 
 // Computes a movement path for a unit's dynamic path toward its target, populating pDynamicPath->PathPoints. Asserts the path's owner matches pUnit (Fog halt otherwise). For missile paths (flag 0x40000) delegates to PATH_CalculateMissilePath. Otherwise: requires a valid current and target position; resolves the target via PATH_ResolveTargetPosition; bounds-checks the delta (<100 tiles) and finds the destination room. Calls PATH_CanMonsterPathInArea (proceeds anyway if nParam set), temporarily removes the unit's (and optionally the target unit's, flag 0x800) collision, optionally routes around a blocking obstacle (flag 0x1000), then dispatches to the path-type function in PATHTYPEFUNC[ePathType] (guarded by IsBadCodePtr) to fill the point list. Re-adds collisions, advances one step along the points, sets/clears the 0x20 (path-active) flag and updates target X/Y. Returns the number of path points found, or 0 if no path (clearing dwPathPoints and the 0x20 flag). Server-side monster/unit pathfinding entry.
-uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * pUnit, int32_t nParam) {
+uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * pUnit, int32_t bIgnoreAreaCheck) {
     // Static local variables (originally global data)
     static D2PathTypeFunc PATHTYPEFUNC[17] = {
     (D2PathTypeFunc)&D2Common::Drlg::Path::PATH_FindPathAStar,
@@ -1300,7 +1300,7 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
     bool bBadCodePtr;
     int32_t iVar1;
     int nDeltaX;
-    uint32_t uVar9;
+    uint32_t nResult;
     int32_t nCalcPathPoints;
     int32_t bCanPath;
     BOOL BVar2;
@@ -1357,8 +1357,8 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
             sPathTypeArg.pRoom = pDynamicPath_00->pRoom;
             sPathTypeArg.pRoomNext = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(sPathTypeArg.pRoom, (uint16_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4), (uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10);
             if (sPathTypeArg.pRoom && sPathTypeArg.pRoomNext) {
-              uVar9 = Path::PATH_CanMonsterPathInArea(pUnit, (uint16_t*)&sPathTypeArg);
-              if (uVar9 || nParam) {
+              nResult = Path::PATH_CanMonsterPathInArea(pUnit, (uint16_t*)&sPathTypeArg);
+              if (nResult || bIgnoreAreaCheck) {
                 sPathTypeArg.ePathType = pDynamicPath_00->ePathType;
                 pTargetUnit = pDynamicPath_00->pTargetUnit;
                 BVar2 = 0;
@@ -1421,14 +1421,14 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
                     pDynamicPath_00->nTargetY = pDynamicPath_00->PathPoints[pDynamicPath_00->dwPathPoints - 1].nY;
                   }
 
-                  uVar9 = pDynamicPath_00->dwPathPoints;
+                  nResult = pDynamicPath_00->dwPathPoints;
                   if (pDynamicPath_00->dwPathPoints) {
                     pDynamicPath_00->nFlags = dwFlags | 0x20;
-                    return uVar9;
+                    return nResult;
                   }
 
                   pDynamicPath_00->nFlags = dwFlags & -33;
-                  return uVar9;
+                  return nResult;
                 }
               }
             }
@@ -1601,11 +1601,11 @@ void __stdcall PATH_SetCorpseCollision(D2UnitStrc * pUnit, int32_t nParam) {
 }
 
 // Restores a monster's collision footprint after it was temporarily suppressed (nCollisionFlag==0x8000). Recomputes the effective unit width via GetUnitSizeX/GetInteractSize, then overrides it to 5 for specific large-body monster classes (base IDs 0x26, 0x9D, 0x9E, 0x13F). Removes the old collision cell, updates nUnitWidth, changes the collision type back to COLLIDE_MONSTER, and re-adds the unit. No-ops if nParam!=0, unit is not a monster, or path is missing.
-void __stdcall PATH_RestoreMonsterCollision(D2UnitStrc * pUnit, int32_t nParam) {
+void __stdcall PATH_RestoreMonsterCollision(D2UnitStrc * pUnit, int32_t bSkip) {
     void* nUnitWidth;
     D2RoomStrc* pRoom;
     int32_t nMonStatId;
-    if (nParam) {
+    if (bSkip) {
       return;
     }
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -1624,14 +1624,14 @@ void __stdcall PATH_RestoreMonsterCollision(D2UnitStrc * pUnit, int32_t nParam) 
 
     nMonStatId = Units::GetUnitSizeX(pUnit);
     nMonStatId = GetInteractSize(pUnit, nMonStatId);
-    int32_t iVar1;
-    iVar1 = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
-    if (iVar1 >= 0 && iVar1 < sgptDataTable->nTxtMonStatsSize) {
-      if (iVar1 <= 0x9e) {
-        if (iVar1 < 0x9d && iVar1 != 0x26) {
+    int32_t nMonBaseId;
+    nMonBaseId = D2Client::UNIT::Player::TXT_MonStats_GetBaseId(pUnit);
+    if (nMonBaseId >= 0 && nMonBaseId < sgptDataTable->nTxtMonStatsSize) {
+      if (nMonBaseId <= 0x9e) {
+        if (nMonBaseId < 0x9d && nMonBaseId != 0x26) {
           goto restore_collision;
         }
-      } else if (iVar1 != 0x13f) {
+      } else if (nMonBaseId != 0x13f) {
         goto restore_collision;
       }
 

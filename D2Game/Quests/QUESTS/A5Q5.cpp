@@ -226,34 +226,34 @@ BOOL __stdcall Q35_PrepareAncientsForBattle(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A5Q5 (Rite of Passage) full arena reset, called on player death or leaving during the fight. Iterates all three Ancient slots: kills and removes each spawned Ancient via Q35_KillAndRemoveAncient (or removes inactive unit if already dead), decrements alive/spawned counters, and restores all three altar statues to anim mode 0. Clears fight-active flags. No quest-state writes.
-static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, int32_t nParam1, int32_t nParam2) {
+static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, int32_t pQuestData, int32_t pA5Q5Data) {
     bool bKillSuccess;
     D2UnitStrc* pStatue;
-    DWORD* pAncientGUID = (DWORD*)(nParam2 + 0x20);
+    DWORD* pAncientGUID = (DWORD*)(pA5Q5Data + 0x20);
     int nAncientIdx = 0;
     do {
-      if (*(char*)(nParam2 + 0x2c + nAncientIdx) != '\0') {
+      if (*(char*)(pA5Q5Data + 0x2c + nAncientIdx) != '\0') {
         bKillSuccess = Q35_KillAndRemoveAncient(pGame, *pAncientGUID);
         if (bKillSuccess) {
-          (*(int*)(nParam2 + 0x40))--;
-          (*(int*)(nParam2 + 0x44))--;
+          (*(int*)(pA5Q5Data + 0x40))--;
+          (*(int*)(pA5Q5Data + 0x44))--;
         } else {
           UNIT::SUnitInactive::SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(pGame, 1, nAncientIdx + 0x21c, 4);
         }
 
-        *(uint8_t*)(nParam2 + 0x2c + nAncientIdx) = 0;
+        *(uint8_t*)(pA5Q5Data + 0x2c + nAncientIdx) = 0;
       }
 
       pAncientGUID++;
       nAncientIdx++;
     } while (nAncientIdx < 3);
 
-    *(uint8_t*)(nParam2 + 0x48) = 0;
+    *(uint8_t*)(pA5Q5Data + 0x48) = 0;
     int nStatueIdx = 0;
-    int* pStatueMode = (int*)(nParam2 + 0x30);
+    int* pStatueMode = (int*)(pA5Q5Data + 0x30);
     do {
-      *(uint8_t*)(nParam2 + 0x3c + nStatueIdx) = 0;
-      pStatue = UNIT::SUnit::FindUnitFromTable(*(::SGAMEDATA**)(nParam1 + 4), UNIT_OBJECT, pStatueMode[-7]);
+      *(uint8_t*)(pA5Q5Data + 0x3c + nStatueIdx) = 0;
+      pStatue = UNIT::SUnit::FindUnitFromTable(*(::SGAMEDATA**)(pQuestData + 4), UNIT_OBJECT, pStatueMode[-7]);
       if (pStatue) {
         D2Common::Units::SetupUpdateFlag(pStatue, 0);
       }
@@ -263,8 +263,8 @@ static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, int32_t nParam
       pStatueMode++;
     } while (nStatueIdx < 3);
 
-    *(uint32_t*)(nParam2 + 0x4c) = 0;
-    pStatue = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, *(uint32_t*)(nParam2 + 0x50));
+    *(uint32_t*)(pA5Q5Data + 0x4c) = 0;
+    pStatue = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, *(uint32_t*)(pA5Q5Data + 0x50));
     if (!pStatue) {
       return;
     }
@@ -737,9 +737,9 @@ BOOL __fastcall Q35_OnAncientsDefeated(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // [A5Q5 = Rite of Passage] Q35_FireAncientDeathMissile: cosmetic — fires the MISSILE_AncientDeathCenter effect at a slain Ancient's position. No quest-state writes.
-static void __stdcall Q35_FireAncientDeathMissile(D2QuestArgStrc * pQuestArg, D2QuestDataStrc * pQuestData, DWORD dwParam) {
+static void __stdcall Q35_FireAncientDeathMissile(D2QuestArgStrc * pQuestArg, D2QuestDataStrc * pQuestData, DWORD dwStatueGUID) {
     D2SkillArgStrc sSkillArg;
-    D2UnitStrc* pAncientUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, dwParam);
+    D2UnitStrc* pAncientUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, dwStatueGUID);
     if (!pAncientUnit) {
       return;
     }
@@ -750,30 +750,34 @@ static void __stdcall Q35_FireAncientDeathMissile(D2QuestArgStrc * pQuestArg, D2
     sSkillArg.nMissileTxtNo = MISSILE_AncientDeathCenter;
     eD2UnitType eUnitType = pAncientUnit->eUnitType;
     sSkillArg.pMissile = sSkillArg.pOwner;
+    int nUnitXValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sSkillArg.nUnitX = pAncientUnit->pPath.pStaticPath->nPosX;
+      nUnitXValue = pAncientUnit->pPath.pStaticPath->nPosX;
     } else if (pAncientUnit->pPath.pDynamicPath) {
-      sSkillArg.nUnitX = D2Common::PATH::DynamicPath::GetXPos(pAncientUnit->pPath.pDynamicPath);
+      nUnitXValue = D2Common::PATH::DynamicPath::GetXPos(pAncientUnit->pPath.pDynamicPath);
     } else {
-      sSkillArg.nUnitX = 0;
+      nUnitXValue = 0;
     }
 
+    sSkillArg.nUnitX = nUnitXValue;
     eUnitType = pAncientUnit->eUnitType;
+    int nUnitYValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sSkillArg.nUnitY = pAncientUnit->pPath.pStaticPath->nPosY;
+      nUnitYValue = pAncientUnit->pPath.pStaticPath->nPosY;
     } else if (pAncientUnit->pPath.pDynamicPath) {
-      sSkillArg.nUnitY = D2Common::PATH::DynamicPath::GetYPos(pAncientUnit->pPath.pDynamicPath);
+      nUnitYValue = D2Common::PATH::DynamicPath::GetYPos(pAncientUnit->pPath.pDynamicPath);
     } else {
-      sSkillArg.nUnitY = 0;
+      nUnitYValue = 0;
     }
 
+    sSkillArg.nUnitY = nUnitYValue;
     sSkillArg.nSkillLevel = 1;
     pAncientUnit = MISSILES::Missiles::CreatingMissile(pQuestData->pGame, &sSkillArg);
     if (!pAncientUnit) {
       return;
     }
 
-    D2Common::Units::Missile::SetTargetX(pAncientUnit, dwParam);
+    D2Common::Units::Missile::SetTargetX(pAncientUnit, dwStatueGUID);
 }
 
 // [A5Q5 = Rite of Passage] Q35_Callback_08 (sub-handler idx 8, the kill handler): fires when an Ancient (classId 0x21c Talic / 0x21d Korlic / 0x21e Madawc) dies. Plays death missile, decrements alive count; when all 3 dead it grants the killer Completed+JustCompleted+XP, runs Q35_OnAncientsDefeated (party) and Q35_SetCannotComplete (under-level), spawns the Worldstone portal (obj 0x231), advances the next quest's sequence filter, then sets nStateFlag 5 and broadcasts state 0xd (JustCompleted).
@@ -782,7 +786,7 @@ void __fastcall Q35_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     int nKilledClassId;
     BOOL bIsCompleted;
     int32_t nPosYSpawn2;
-    uint32_t dwParam;
+    uint32_t dwStatueGUID;
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
     if (!(pQuestSpecificData->bAncientsFightStarted && pQuestSpecificData->bAncientsActive && !pQuestSpecificData->nResurrectionCount)) {
       return;
@@ -801,13 +805,13 @@ void __fastcall Q35_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
       case 0x21c:
         {
           pQuestSpecificData->abAncientDead[2] = 1;
-          dwParam = pQuestSpecificData->anStatueObjectGUID[2];
+          dwStatueGUID = pQuestSpecificData->anStatueObjectGUID[2];
           break;
         }
       case 0x21d:
         {
           pQuestSpecificData->abAncientDead[0] = 1;
-          dwParam = pQuestSpecificData->anStatueObjectGUID[0];
+          dwStatueGUID = pQuestSpecificData->anStatueObjectGUID[0];
           break;
         }
       default:
@@ -817,12 +821,12 @@ void __fastcall Q35_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
       case 0x21e:
         {
           pQuestSpecificData->abAncientDead[1] = 1;
-          dwParam = pQuestSpecificData->anStatueObjectGUID[1];
+          dwStatueGUID = pQuestSpecificData->anStatueObjectGUID[1];
           break;
         }
     }
 
-    Q35_FireAncientDeathMissile(pQuestArgs, pQuestData, dwParam);
+    Q35_FireAncientDeathMissile(pQuestArgs, pQuestData, dwStatueGUID);
     NotifyPlayersAboutEvent(pQuestData->pGame, 0x12);
     int* pnAncientsAliveCount = &pQuestSpecificData->nAncientsAlive;
     (*pnAncientsAliveCount)--;
@@ -928,7 +932,7 @@ void __fastcall Q35_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q35_UpdateQuestStep);
     set_quest_object_mode:
-    if (!pQuestSpecificData->bAncientsDefeated && pQuestSpecificData->field_0x58 != '\0' && (pAncientAlive = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pQuestSpecificData->nSummitDoorGUID) , pAncientAlive != 0) && !pQuestSpecificData->nSummitDoorObjectMode) {
+    if (!pQuestSpecificData->bAncientsDefeated && pQuestSpecificData->bSummitDoorInitialized != '\0' && (pAncientAlive = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pQuestSpecificData->nSummitDoorGUID) , pAncientAlive != 0) && !pQuestSpecificData->nSummitDoorObjectMode) {
       pQuestSpecificData->nSummitDoorObjectMode = 2;
       D2Common::Units::SetupUpdateFlag(pAncientAlive, 1);
     }
@@ -964,8 +968,8 @@ bool __fastcall Q35_SequenceFilter(D2QuestDataStrc * pQuestData) {
         exit(-1);
       }
 
-      bool uVar1 = pNextQuestData->fpSequenceFilter(pNextQuestData);
-      return uVar1;
+      bool bResult = pNextQuestData->fpSequenceFilter(pNextQuestData);
+      return bResult;
     }
 
     return false;
@@ -1276,8 +1280,8 @@ BOOL __fastcall Q35_BootPlayerFromSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
-    eD2LevelId eVar1 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eVar1 != LEVEL_ArreatSummit) {
+    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    if (eLevelId != LEVEL_ArreatSummit) {
       return 0;
     }
 
@@ -1464,7 +1468,7 @@ void __fastcall Objects_InitFn76(D2ObjectInitFnArg * pInitArg) {
     int nUnitGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pA5Q5QuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
-    pA5Q5QuestSpecificData->field_0x58 = '\x01';
+    pA5Q5QuestSpecificData->bSummitDoorInitialized = '\x01';
     if (!pInitArg->pObject) {
       nUnitGUID = -1;
     } else {

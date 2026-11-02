@@ -66,14 +66,14 @@ uint32_t __fastcall CheckMonsterType(struct D2UnitStrc * pUnit, uint16_t eMonste
 void __fastcall MONSTER_SetMonsterDataFlags(struct D2UnitStrc * pUnit, uint16_t nFlagMask, int32_t nFlagValue);
 // 2022.01.09 - dzik
 int16_t __fastcall GetBossNo(struct D2UnitStrc * pUnit);
-void __fastcall MONSTER_SetMonsterDataField0x26(struct D2UnitStrc * pUnit, int16_t wParam);
+void __fastcall MONSTER_SetMonsterDataField0x26(struct D2UnitStrc * pUnit, int16_t nBossNo);
 int32_t __fastcall CountActiveUMods(uint8_t * pUModList);
 // 2022.01.09 - dzik
 uint32_t __fastcall CheckMonUModList(struct D2UnitStrc * pUnit);
 int32_t __fastcall MONSTER_GetBossNo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Rolls and assigns unique-modifier (UMod) enchantments to a newly spawned monster. If bResult is set, first rolls against the champion threshold (MonUMod.txt constants row 0) to potentially make the monster a champion instead; if champion, calls MONSTER_SelectChampionMod and returns. Otherwise rolls 1+difficulty extra UMod slots, calls MONUMOD_RollRandomModifier up to that count (avoiding already-assigned mods via a local dedup table), and appends each selected UMod ID to pUnitDataMonster->MonUModList. Guards against stack overflow via security cookie.
 void __thiscall MONSTER_RollAndAssignUMods(struct D2UnitStrc * pThis, ::SGAMEDATA * pGame, BOOL bResult);
-void __fastcall UMOD_DispatchInitFunction(struct D2UnitStrc * pUnit, int32_t nParam, BOOL bApply);
+void __fastcall UMOD_DispatchInitFunction(struct D2UnitStrc * pUnit, int32_t nUModId, BOOL bApply);
 // Applies the Amplify Damage curse (skill 0x42) from pUnit onto pAttacker. Validates attack eligibility and skill table bounds, then builds a D2StateExArgStrc with duration and stat values derived from skills.txt aura columns, calls SetStateWithExpiryTime to attach the state, and iterates remaining aura stats to add them to the resulting stat list.
 void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pAttacker, int32_t nDuration);
 void __fastcall MONSTER_OnDeathAmplifyDamageAura(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger);
@@ -139,16 +139,16 @@ void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, struct D2UnitStrc
 void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Server-side spawner for SuperUnique (named boss) monsters from the superuniques.txt entry nClassId. Bails if already spawned (boss-flag bitset in pGame->nBossFlagList) unless Stacks allows; applies AutoPos. Creates the base monster via SERVER_SpawnMonsterInternal, marks it superunique, sets boss flags, and rolls its UMod (monster modifier) list: copies the txt's fixed Mod entries (noting aura-enchant 0x1e), then rolls difficulty-scaled random mods via MONUMOD_RollRandomModifier, and applies them with UMOD_ApplyEnchantmentsToMonster and group min/max minion counts. A switch on the superunique's hardcoded index drives quest hooks and special minion spawns (e.g. Countess/ForgottenTower, Diablo, Baal-act bosses). Wraps return in Fog stack guard; returns the spawned unit or 0.
 struct D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, uint32_t nClassId);
-int32_t __fastcall MONSTER_IsMonsterUnit(struct D2UnitStrc * pnParam);
+int32_t __fastcall MONSTER_IsMonsterUnit(struct D2UnitStrc * pUnit);
 void __fastcall SERVER_AwardKillExperience(struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, ::SGAMEDATA * pGame);
 int32_t __fastcall MONSTER_CalculateCorpseBombDamage(::SGAMEDATA * pGame, int32_t nPlayerCount);
 // Recomputes a monster unit's combat damage/to-hit stats and elemental on-hit damage from monstats.txt, scaling by monster level, difficulty, multiplayer player-count, and a scaling-mode selector (5/normal vs 6-8 vs default difficulty bands). Adds pet-skill damage bonuses, applies the classic (non-expansion) difficulty damage/to-hit penalty divisors, and an expansion corpse-bomb/playercount damage multiplier. Writes mindamage/maxdamage/tohit into the unit's flag-1 stat list, then iterates the three elemental damage slots (El1/El2/El3 mode/type/chance) rolling chance from the unit seed and adding the matching elemental min/max/length stats (fire, lightning, magic, cold, poison, drains, stun, burning). Server/common monster setup; no-op for non-monster units.
 void __fastcall MONSTER_RecalculateCombatStats(struct D2UnitStrc * pUnit, uint32_t nDifficultyScaling);
-void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nParam, uint32_t dwParam);
+void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, uint32_t dwParam);
 void __fastcall MONSTER_AttackTarget(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 void __stdcall MONSTER_CheckSpecialDeathFlag(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage);
 // Rolls a critical-hit check for a monster attack using the monster's MonStats Crit percentage. If pnParam[0]==1, the class id in pnParam[1] is valid, and the RNG roll (stored in pnParam[8/9]) is below the Crit threshold, all damage fields in pEvent are doubled and the critical-hit overlay (0x36) is shown on pUnit.
-void __fastcall ApplyDamageCritical(struct D2UnitStrc * pnParam, struct D2UnitStrc * pUnit, struct D2DamageStrc * pEvent);
+void __fastcall ApplyDamageCritical(struct D2UnitStrc * pAttacker, struct D2UnitStrc * pUnit, struct D2DamageStrc * pEvent);
 uint8_t __fastcall MONSTER_GetHpPercent128(struct D2UnitStrc * pUnit);
 // 12 internal functions (defined in .cpp)
 

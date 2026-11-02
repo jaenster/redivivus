@@ -19,34 +19,36 @@ void __stdcall NET_SID_CLIENT_SHA1Init(uint32_t * pSha1Context) {
     pSha1Context[6] = 0;
 }
 
-void __stdcall NET_SID_CLIENT_SHA1Update(uint32_t * pnParam1, uint32_t nParam, uint32_t * pnParam2) {
+// SHA-0 update: adds to the bit count with signed carry, copies each 64-byte block to ctx+0x1c and calls SHA0_Transform.
+// Name per redivivus issue #36 (asm-verified hash variant).
+void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t * pnContext) {
     int nWordCopyIdx;
     uint32_t* pCtxBlock;
     uint32_t nBlocksRemaining;
-    uint32_t nNewBitLen = pnParam2[5] + nParam * 8;
-    if ((int)nNewBitLen < (int)pnParam2[5]) {
-      pnParam2[6]++;
+    uint32_t nNewBitLen = pnContext[5] + nLength * 8;
+    if ((int)nNewBitLen < (int)pnContext[5]) {
+      pnContext[6]++;
     }
 
-    pnParam2[6] += (int)nParam >> 0x1d;
-    pnParam2[5] = nNewBitLen;
-    if ((int)nParam < 0x40) {
+    pnContext[6] += (int)nLength >> 0x1d;
+    pnContext[5] = nNewBitLen;
+    if ((int)nLength < 0x40) {
       return;
     }
 
-    nBlocksRemaining = nParam >> 6;
+    nBlocksRemaining = nLength >> 6;
     do {
       uint32_t* pSrcBlock;
-      pSrcBlock = pnParam1;
-      pCtxBlock = pnParam2 + 7;
+      pSrcBlock = pnData;
+      pCtxBlock = pnContext + 7;
       for (nWordCopyIdx = 0x10; nWordCopyIdx; nWordCopyIdx--) {
         *pCtxBlock = *pSrcBlock;
         pSrcBlock++;
         pCtxBlock++;
       }
 
-      Bnclient::_net_sid::NET_SID_CLIENT_SHA1Transform(pnParam2);
-      pnParam1 += 0x10;
+      Bnclient::_net_sid::SHA0_Transform(pnContext);
+      pnData += 0x10;
       nBlocksRemaining--;
     } while (nBlocksRemaining);
 }

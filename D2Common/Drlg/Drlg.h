@@ -297,13 +297,13 @@ void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(struct D2UnkOutdoorStrc * pUnk
 // Applies a LvlSub DS1 patch to the outdoor room: copies floor/wall/shadow flags into the room’s grids, grows the room tile array for flagged shadow tiles, and spawns shadow tiles plus preset units from the sub file.
 void __stdcall DRLGOUTDOOR_ApplyLvlSubTileData(struct D2PoolManagerStrc * pMemory, int32_t baseX, int32_t baseY, struct D2DrlgWallLayerGridsStrc * pRoomCtx, int * pRect, struct D2LvlSubTxt * pSubTxt, int32_t rectOffsetY);
 // Iterates all substitution groups in a DRLG level-sub file and attempts to place each group's tile pattern on the outdoor room grid. Act 1: sweeps interior grid positions, applies overlap-checked tiles directly. Act 2: matches tile types and applies a randomly selected variant (using pSubTxt probability and the room seed) at each matching grid cell. Writes tile data via DRLGOUTDOOR_ApplyLvlSubTileData.
-void __stdcall CheckAll(struct D2DrlgWallLayerGridsStrc * pUnknown, struct D2LvlSubTxt * pSubTxt);
+void __stdcall CheckAll(struct D2DrlgWallLayerGridsStrc * pWallLayerGrids, struct D2LvlSubTxt * pSubTxt);
 // DRLG outdoor preset placement - place multiple preset objects without overlap checking all positions
 void __stdcall DoNotCheckAll(struct D2DrlgWallLayerGridsStrc * pRoomCtx, struct D2LvlSubTxt * pSubTxt);
 // Frees all grid and file data from a maze room's preset data.
 void __fastcall DRLGMAZE_FreeRoomPresetData(struct D2LvlSubTxt * pData);
 uint32_t __fastcall DRLGROOMEX_RollLevelSubstitutionMask(struct D2RoomExStrc * pRoomEx, int32_t nSubType, int32_t nSubTheme);
-void __fastcall SubTypeWpShrine(struct D2DrlgWallLayerGridsStrc * pUnkn);
+void __fastcall SubTypeWpShrine(struct D2DrlgWallLayerGridsStrc * pWallLayerGrids);
 // Returns whether the room's selected preset is a single-file type.
 BOOL __fastcall DRLGMAZE_IsPresetSingleFile(struct D2DrlgLevelStrc * pDrlgMap);
 // Computes output coordinates for edge border placement (normal orientation).
@@ -357,7 +357,7 @@ void __fastcall ACT1_fpLevelDataFn2_A(struct D2DrlgLevelStrc * pLevel, int nNode
 void __stdcall DRLGLEVEL_ParseLevelData(struct D2DrlgLevelDataList * pLevelData, fpLevelDataFn1 fnPlacementValidator, fpLevelDataFn2 fnLevelDataCallback, struct D2DrlgStrc * pDrlg);
 // Pathfinding entry point for units that cannot reach their target directly (path type fallback). Builds a Bresenham waypoint list from the unit's current packed position toward the destination. For each waypoint, checks collision via CheckCollision_BlockPlayer_Type; on blockage, delegates to DRLGPATH_FindPathDualScan to find the best reachable point. After traversal, simplifies collinear waypoints via DRLGPATH_SimplifyCollinearWaypoints and returns the resulting waypoint count. Only valid for PLAYER or MONSTER unit owners; halts otherwise.
 int32_t __fastcall PATH_FindPathTowardFallback(struct D2PathTypeArg * pPathTypeArg);
-void __fastcall DRLGGRID_OrFlagOnCellList(struct D2DrlgGridStrc * nGridPtr, int * pnParam, int32_t nFlag);
+void __fastcall DRLGGRID_OrFlagOnCellList(struct D2DrlgGridStrc * nGridPtr, int * pnCellNode, int32_t nFlag);
 // Initializes the DRLG collision/tile grids for a room during level generation. Allocates three D2DrlgGridStrc grids (tile-type, wall, floor) sized to the room's world dimensions from the room's memory pool, seeds the floor grid's border cells, and runs Act-1 outdoor room grid setup for ACT_I. Decodes the room's waypoint and shrine sub-counts from eRoomExFlags and lays out their sub-tiles via SubTypeWpShrine using the level's SubWaypoint/SubShrine ids. Applies a level-type-specific grid flag (special areas) to empty floor cells, then finalizes the wall and floor grids. __fastcall, no return value.
 void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGROOMEX_InitializeMazeRoom(struct D2RoomExStrc * pRoomEx);
@@ -392,7 +392,7 @@ void __stdcall DRLGOUTROOM_ComputeExitTargetPositions(struct D2DrlgLevelStrc * p
 // Main exit linker: builds exits, computes targets, A* pathfinds, builds vertex paths.
 void __fastcall DRLGOUTROOM_LinkOutdoorRoomExits(struct D2DrlgLevelStrc * pLevel);
 // Estimates path distance between two grid positions (nX1,nY1) and (nX2,nY2 on stack). Uses a weighted Manhattan heuristic: min(dx,dy) + 2*max(dx,dy), which approximates diagonal+cardinal movement cost. Used by outdoor room pathfinding to rank exit connections.
-int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int dwParam3, int dwParam4);
+int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY2);
 // NOTE: Register params: pint (EAX): int *
 int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, int dwParam3);
 // Core A* loop: expands nodes, computes f=g+h, uses 900-node pool.

@@ -1,0 +1,326 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Txt/Cube.cpp",
+  "functions": [
+    {
+      "name": "CUBE_PadItemCodeString",
+      "address": "00668510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00668510"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_PadItemCodeString"
+      ]
+    },
+    {
+      "name": "CUBE_TokenizeAndParseInt",
+      "address": "006685c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006685c0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_TokenizeAndParseInt",
+        "strcspn"
+      ],
+      "usedTypes": [
+        "char *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUBE_ParseInputItem",
+      "address": "00668600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00668600"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_ParseInputItem",
+        "strcspn",
+        "_stricmp",
+        "CUBE_PadItemCodeString",
+        "GetClassIdFromName",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "GetLinkNodeIndex"
+      ],
+      "usedTypes": [
+        "D2CubeInputStrc",
+        "D2ItemsTxt",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CUBE_ParseOutputItem",
+      "address": "00668a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00668a90"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_ParseOutputItem",
+        "strcspn",
+        "_stricmp",
+        "CUBE_PadItemCodeString",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "GetClassIdFromName",
+        "GetLinkNodeIndex",
+        "CUBE_TokenizeAndParseInt"
+      ],
+      "usedTypes": [
+        "D2CubeOutputStrc",
+        "D2ItemsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUBE_ParseInputItemField",
+      "address": "00669080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00669080"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_ParseInputItemField",
+        "CUBE_ParseInputItem"
+      ],
+      "usedTypes": [
+        "D2CubeMainTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUBE_ParseOutputItemField",
+      "address": "006690b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006690b0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_ParseOutputItemField",
+        "CUBE_ParseOutputItem"
+      ],
+      "usedTypes": [
+        "D2CubeMainTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_LinkerItemStatCost",
+      "address": "006690e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006690e0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "DATATBLS_LinkerItemStatCost",
+        "GetLinkNodeIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUBE_LoadCubeMainTable",
+      "address": "00669130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00669130"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_LoadCubeMainTable",
+        "CheckIfFileExists",
+        "CompileTxt",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CUBE_FreeCubeMainTable",
+      "address": "0066a1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a1a0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_FreeCubeMainTable",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "CUBE_GetRecipeByIndex",
+      "address": "0066a1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a1b0"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_GetRecipeByIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CubeMainTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CUBE_GetRecipeCount",
+      "address": "0066a200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a200"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "CUBE_GetRecipeCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "nullsub",
+      "address": "0066a220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a220"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "nullsub"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_AllocPlayerData_NoOp",
+      "address": "0066a250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a250"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_AllocPlayerData_NoOp"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreePlayerData_STUB",
+      "address": "0066a260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a260"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreePlayerData_STUB"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_InitTxtFiles_NoOp",
+      "address": "0066a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a270"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_InitTxtFiles_NoOp"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_FreeTables_NoOp",
+      "address": "0066a280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a280"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_FreeTables_NoOp"
+      ]
+    },
+    {
+      "name": "FIELDTBLS_Unused_HaltLine101",
+      "address": "0066a290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a290"
+        }
+      ],
+      "namespace": "D2Common::Txt::Cube",
+      "calledFunctions": [
+        "FIELDTBLS_Unused_HaltLine101",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    }
+  ]
+}

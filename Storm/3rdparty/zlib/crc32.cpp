@@ -835,7 +835,7 @@ static uint32_t crc32_little(uint8_t * pbBuf, uint32_t nLen, uint32_t nCrc) {
     return ~nCrcAcc;
 }
 
-int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * pbParam) {
+int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * pbData) {
     // Static local variables (originally global data)
     static uint32_t gdwCrc32TableBase[256] = {
     0x0,
@@ -1614,12 +1614,12 @@ int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * p
 
     uint32_t nBlockCount;
     uint32_t dwCrc = ~(((dwInitialCrc & 0xff00) + dwInitialCrc * 0x10000) * 0x100 + (dwInitialCrc >> 0x10 & 0xff) * 0x100 + (dwInitialCrc >> 0x18));
-    for (; nLength && (uint32_t)pbParam & 3; pbParam++) {
-      dwCrc = dwCrc << 8 ^ gdwCrc32TableBase[dwCrc >> 0x18 ^ (uint32_t)*pbParam];
+    for (; nLength && (uint32_t)pbData & 3; pbData++) {
+      dwCrc = dwCrc << 8 ^ gdwCrc32TableBase[dwCrc >> 0x18 ^ (uint32_t)*pbData];
       nLength--;
     }
 
-    uint32_t* pdwData = (uint32_t*)(pbParam - 4);
+    uint32_t* pdwData = (uint32_t*)(pbData - 4);
     if (nLength >= 0x20) {
       nBlockCount = nLength >> 5;
       do {
@@ -1659,16 +1659,16 @@ int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * p
 }
 
 uint32_t __fastcall gf2_matrix_times(uint32_t dwVec, uint32_t * pdwMat) {
-    uint32_t uVar1 = 0;
+    uint32_t dwSum = 0;
     for (; dwVec; dwVec >>= 1) {
       if (dwVec & 1) {
-        uVar1 ^= *pdwMat;
+        dwSum ^= *pdwMat;
       }
 
       pdwMat++;
     }
 
-    return uVar1;
+    return dwSum;
 }
 
 static void gf2_matrix_square(uint32_t * pdwMatA, uint32_t * pdwMatB) {

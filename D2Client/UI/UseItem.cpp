@@ -95,7 +95,7 @@ void __stdcall TEXT_HandleMouseMove() {
     npcmenu::SubmitItem(gnCursorItemUnitId);
 }
 
-void __fastcall TEXT_HandleItemUse(int32_t nParam1, int32_t nParam2) {
+void __fastcall TEXT_HandleItemUse(int32_t nMouseX, int32_t nMouseY) {
     int nClearCount;
     int nItemCount = nCashDisplayItemCount;
     if (nCashDisplayItemCount > 0) {
@@ -116,7 +116,7 @@ void __fastcall TEXT_HandleItemUse(int32_t nParam1, int32_t nParam2) {
     uint32_t* pBoundsEntry = (uint32_t*)&gaNpcCashTabs[0].nHitBoxX2;
     nClearCount = 0;
     do {
-      if (nParam1 >= (int)pBoundsEntry[-1] && nParam1 <= (int)*pBoundsEntry && nParam2 >= (int)pBoundsEntry[1] && nParam2 <= (int)pBoundsEntry[2]) {
+      if (nMouseX >= (int)pBoundsEntry[-1] && nMouseX <= (int)*pBoundsEntry && nMouseY >= (int)pBoundsEntry[1] && nMouseY <= (int)pBoundsEntry[2]) {
         Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
         nItemCount = nCashDisplayItemCount;
         *(uint8_t*)((int)pBoundsEntry + 0x11) = 1;
@@ -132,7 +132,7 @@ void __fastcall TEXT_HandleItemUse(int32_t nParam1, int32_t nParam2) {
 void __stdcall INPUT_UseItemClick(D2UIMouseMsgStrc * pMsg) {
     int nHandled;
     uint32_t uMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    uint32_t nParam1 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
@@ -148,14 +148,14 @@ void __stdcall INPUT_UseItemClick(D2UIMouseMsgStrc * pMsg) {
         return;
       }
 
-      TEXT_HandleItemUse(nParam1, uMouseY);
+      TEXT_HandleItemUse(nMouseX, uMouseY);
     } else if (gnPlayerCashDisplay == 2) {
       nHandled = Inv::INV_HandleInventoryLeftDown(pMsg);
       if (nHandled) {
         return;
       }
 
-      TEXT_HandleItemUse(nParam1, uMouseY);
+      TEXT_HandleItemUse(nMouseX, uMouseY);
     }
 
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
@@ -164,7 +164,7 @@ void __stdcall INPUT_UseItemClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerUnit_lcl->pInventory);
-    if (!(pPlayerUnit_lcl && nParam1 - 0x7b <= 0x58 && uMouseY - 0x6a <= 0x72)) {
+    if (!(pPlayerUnit_lcl && nMouseX - 0x7b <= 0x58 && uMouseY - 0x6a <= 0x72)) {
       return;
     }
 

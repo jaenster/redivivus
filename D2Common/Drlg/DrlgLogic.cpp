@@ -48,24 +48,24 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RoomCoordListStrc) == 0x30, "D2_N
 namespace D2Common::Drlg::DrlgLogic {
 
 // Iterates grid cells, builds coord entries for each non-flagged cell.
-static void DRLGLOGIC_PopulateGridCoordIndices(int * pnParam) {
+static void DRLGLOGIC_PopulateGridCoordIndices(int * pnFloodFillContext) {
     uint32_t nCellFlags;
     int nGridY;
     int nGridX;
-    int nWidth = *(int*)(*pnParam + 0x3c);
-    int nHeight = *(int*)(*pnParam + 0x40);
+    int nWidth = *(int*)(*pnFloodFillContext + 0x3c);
+    int nHeight = *(int*)(*pnFloodFillContext + 0x40);
     for (nGridY = 0; nGridY <= nHeight; nGridY++) {
       for (nGridX = 0; nGridX <= nWidth; nGridX++) {
-        nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnParam[1], nGridX, nGridY);
+        nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnFloodFillContext[1], nGridX, nGridY);
         if (!(nCellFlags & 0x10000000)) {
-          pnParam[6]++;
-          pnParam[7] = pnParam[6] & 0xfffffffU | 0x10000000;
-          nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnParam[4], nGridX, nGridY);
+          pnFloodFillContext[6]++;
+          pnFloodFillContext[7] = pnFloodFillContext[6] & 0xfffffffU | 0x10000000;
+          nCellFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)pnFloodFillContext[4], nGridX, nGridY);
           if ((nCellFlags & 0x1e0ff00) == 0x1e00000 || (int)nCellFlags < 0) {
-            pnParam[7] |= 0x20000000;
+            pnFloodFillContext[7] |= 0x20000000;
           }
 
-          DrlgGrid::DRLGGRID_FloodFillGridCoords(pnParam, nGridX, nGridY, -1);
+          DrlgGrid::DRLGGRID_FloodFillGridCoords(pnFloodFillContext, nGridX, nGridY, -1);
         }
       }
     }
@@ -570,8 +570,8 @@ static void DRLGLOGIC_LinkBorderCoordLists(D2RoomExStrc * pRoomEx) {
 void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, int nOrientGridFlags, int nFloorGridFlags, D2DrlgGridStrc * pGrid) {
     int nCoordCount;
     D2RoomCoordListStrc* pAllocCoordArray;
-    int local_1448[1024];
-    int local_448[256];
+    int aCellsFlags[1024];
+    int aCellsRowOffsets[256];
     D2DrlgGridStrc sLocalGrid;
     int nCoordIndexStart;
     D2DrlgLevelStrc* pLevel = pRoomEx->pLevel;
@@ -590,7 +590,7 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, int nOrient
 
     nCoordCount = pLevel->nLastRoomExCoordsIndex;
     nCoordIndexStart = nCoordCount;
-    DrlgGrid::FillGrid(&sLocalGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, local_1448, local_448);
+    DrlgGrid::FillGrid(&sLocalGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, aCellsFlags, aCellsRowOffsets);
     DRLGLOGIC_SetGridWallFlags(pRoomEx, &sLocalGrid);
     D2DrlgCoordIndexCtxStrc sCoordCtx = {0};
     sCoordCtx.pCoordGrid = &pCoordListStrc->sOrientationGrid;

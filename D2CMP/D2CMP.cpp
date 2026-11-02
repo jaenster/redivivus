@@ -15,7 +15,7 @@
 namespace D2CMP {
 
 void __fastcall SPRITECACHE_LRU_FreeEntryCallback(int pEntry) {
-    void* pvVar2 = *(void**)(pEntry + 8);
+    void* pCacheData = *(void**)(pEntry + 8);
     if (gpfnSpriteCacheFreeEntry) {
       BOOL BVar1;
       BVar1 = IsBadCodePtr((FARPROC)gpfnSpriteCacheFreeEntry);
@@ -24,11 +24,11 @@ void __fastcall SPRITECACHE_LRU_FreeEntryCallback(int pEntry) {
         exit(-1);
       }
 
-      (*gpfnSpriteCacheFreeEntry)(pvVar2);
+      (*gpfnSpriteCacheFreeEntry)(pCacheData);
     }
 
-    *(uint32_t*)((int)pvVar2 + 0x54) = 0;
-    *(uint32_t*)((int)pvVar2 + 0x5c) = 0;
+    *(uint32_t*)((int)pCacheData + 0x54) = 0;
+    *(uint32_t*)((int)pCacheData + 0x5c) = 0;
 }
 
 void __fastcall SPRITECACHE_LRU_RemoveCacheEntryCallback(int pEntry) {
@@ -37,75 +37,75 @@ void __fastcall SPRITECACHE_LRU_RemoveCacheEntryCallback(int pEntry) {
     SRC::CelDataHash::GFX_RemoveCacheEntry((D2PoolManagerStrc*)gCelDataCacheLru.pAllocator, gaCelDataHashTable, pEntry_00);
 }
 
-uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nParam1, uint32_t nParam2, int * pdwParam, int32_t nParam) {
-    uint32_t nFrameCount = nParam2;
-    uint32_t nAllocatedKey = nParam1;
-    uint32_t nBitShift1 = nParam2 >> 2 & 0x33333333;
-    uint32_t nBitShift2 = nParam2 >> 1 & 0x77777777;
-    uint32_t nBitCount = nParam2 >> 3 & 0x11111111;
-    if (((nParam2 - nBitShift2 - nBitShift1 - nBitCount >> 4) - nBitShift2 - nBitShift1 - nBitCount + nParam2 & 0xf0f0f0f) % 0xff != 1) {
+uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDirections, int * ppRawData, int32_t bRawData) {
+    uint32_t nFrameCount = dwNumDirections;
+    uint32_t nAllocatedKey = nFormat;
+    uint32_t nBitShift1 = dwNumDirections >> 2 & 0x33333333;
+    uint32_t nBitShift2 = dwNumDirections >> 1 & 0x77777777;
+    uint32_t nBitCount = dwNumDirections >> 3 & 0x11111111;
+    if (((dwNumDirections - nBitShift2 - nBitShift1 - nBitCount >> 4) - nBitShift2 - nBitShift1 - nBitCount + dwNumDirections & 0xf0f0f0f) % 0xff != 1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ff);
       exit(-1);
     }
-    if (!(nParam2 <= 0x20)) {
+    if (!(dwNumDirections <= 0x20)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x200);
       exit(-1);
     }
 
     ::CELLIST* pCelEntry;
-    if (!((int)nParam1 < 2)) {
+    if (!((int)nFormat < 2)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x201);
       exit(-1);
     }
 
-    pCelEntry = gCelCmpCacheHandler.NewLock(&nParam1, (int32_t*)&nParam2);
+    pCelEntry = gCelCmpCacheHandler.NewLock(&nFormat, (int32_t*)&dwNumDirections);
     pCelEntry->m_frames.Clear();
     pCelEntry->nFormat = nAllocatedKey;
     pCelEntry->nDirections = nFrameCount;
     pCelEntry->nFrameCount = 0;
     pCelEntry->dwFlags = 0;
-    if (nParam) {
+    if (bRawData) {
       pCelEntry->dwFlags = 4;
-      if (pdwParam) {
-        pCelEntry->pRawData = (void*)*pdwParam;
+      if (ppRawData) {
+        pCelEntry->pRawData = (void*)*ppRawData;
       }
     }
-    if (!nParam2) {
-      return nParam1;
+    if (!dwNumDirections) {
+      return nFormat;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
-    return nParam1;
+    return nFormat;
 }
 
-uint32_t __stdcall TILEPROJECT_GetSoundIndexIndex(int32_t nParam) {
-    if (!nParam) {
+uint32_t __stdcall TILEPROJECT_GetSoundIndexIndex(int32_t pComp8) {
+    if (!pComp8) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x82);
       exit(-1);
     }
 
-    return *(uint32_t*)(nParam + 0x10);
-    return *(uint32_t*)(nParam + 0x10);
+    return *(uint32_t*)(pComp8 + 0x10);
+    return *(uint32_t*)(pComp8 + 0x10);
 }
 
-uint32_t __stdcall TILEPROJECT_GetMainIndex(uint32_t nParam) {
-    if (!nParam) {
+uint32_t __stdcall TILEPROJECT_GetMainIndex(uint32_t pComp24) {
+    if (!pComp24) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
       exit(-1);
     }
 
-    return (uint32_t)((uint32_t)(uint16_t)(short int)(nParam >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(nParam + 4));
-    return (uint32_t)((uint32_t)(uint16_t)(short int)(nParam >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(nParam + 4));
+    return (uint32_t)((uint32_t)(uint16_t)(short int)(pComp24 >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(pComp24 + 4));
+    return (uint32_t)((uint32_t)(uint16_t)(short int)(pComp24 >> 0x10) << 16 | (uint32_t)(uint16_t)*(uint16_t*)(pComp24 + 4));
 }
 
-uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t nParam) {
-    if (!nParam) {
+uint32_t __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(int32_t pComp24) {
+    if (!pComp24) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);
       exit(-1);
     }
 
-    return *(uint32_t*)(nParam + 0x58);
-    return *(uint32_t*)(nParam + 0x58);
+    return *(uint32_t*)(pComp24 + 0x58);
+    return *(uint32_t*)(pComp24 + 0x58);
 }
 
 void __stdcall D2CMP_MinDouble(double fParam1, double fParam2) {

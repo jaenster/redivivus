@@ -1,0 +1,211 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Rendering.cpp",
+  "functions": [
+    {
+      "name": "SetupGamma",
+      "address": "004776c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004776c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "SetupGamma",
+        "D2GFX_SetGamma"
+      ]
+    },
+    {
+      "name": "SetCurrentEngineToOne",
+      "address": "004776e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004776e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "SetCurrentEngineToOne"
+      ]
+    },
+    {
+      "name": "RENDERER_Set3DFX",
+      "address": "004776f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004776f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "RENDERER_Set3DFX"
+      ]
+    },
+    {
+      "name": "RENDERER_SetOpenGL",
+      "address": "00477700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477700"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "RENDERER_SetOpenGL"
+      ]
+    },
+    {
+      "name": "RENDERER_SetMode6",
+      "address": "00477710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477710"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "RENDERER_SetMode6"
+      ]
+    },
+    {
+      "name": "RENDERER_SetMode7",
+      "address": "00477720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477720"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "RENDERER_SetMode7"
+      ]
+    },
+    {
+      "name": "GetCurrentEngine",
+      "address": "00477730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477730"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "GetCurrentEngine"
+      ]
+    },
+    {
+      "name": "IsWindowMode",
+      "address": "00477750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477750"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "IsWindowMode"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DrawRenderStats",
+      "address": "00477760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477760"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "DrawRenderStats",
+        "SPRITECACHE_GetStats",
+        "sprintf",
+        "D2GFX_DrawString",
+        "D2GFX_GetRenderStatistics"
+      ],
+      "usedTypes": [
+        "ULONG_PTR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_FPSStats",
+      "address": "00477980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477980"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "DRAW_UI_FPSStats",
+        "GetTickCount",
+        "GetFPSSkip",
+        "D2GFX_DrawString",
+        "GetPing",
+        "D2GFX_GetRendererMode",
+        "sprintf",
+        "GFX_GetCofCacheFlags",
+        "GFX_GetGfxSystemFlags",
+        "GFX_GetCofCacheMemUsage",
+        "SPRITECACHE_GetCacheSize",
+        "SPRITECACHE_GetTotalEntries",
+        "FOG_GetAsyncFileCount_ReturnZero",
+        "SPRITECACHE_GetCurrentSize",
+        "SPRITECACHE_GetMaxSize",
+        "SOUNDHDR_Nop",
+        "DrawRenderStats"
+      ],
+      "usedTypes": [
+        "_MEMORYSTATUS",
+        "eD2RendererMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ResetStats",
+      "address": "00477c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477c00"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "ResetStats",
+        "D2GFX_GetRenderStatistics",
+        "SPRITECACHE_Lock"
+      ]
+    },
+    {
+      "name": "STATLIST_ResetIfNotUpdating",
+      "address": "00477c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477c60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Rendering",
+      "calledFunctions": [
+        "STATLIST_ResetIfNotUpdating",
+        "ResetStats"
+      ]
+    }
+  ]
+}

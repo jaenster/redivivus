@@ -1,0 +1,228 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/Transform.cpp",
+  "functions": [
+    {
+      "name": "CoordsMapToScreen",
+      "address": "00643260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643260"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "CoordsMapToScreen"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLG_MapWorldToScreenCoords",
+      "address": "00643290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643290"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "DRLG_MapWorldToScreenCoords"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLG_CoordsWorldToScreenTile",
+      "address": "006432c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006432c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "DRLG_CoordsWorldToScreenTile"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CoordsMiniMapToScreen",
+      "address": "00643310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643310"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "CoordsMiniMapToScreen"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLG_OrthToIsoCoordsDiv160",
+      "address": "00643340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643340"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "DRLG_OrthToIsoCoordsDiv160"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SizeMiniMapToScreen",
+      "address": "006433c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006433c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "SizeMiniMapToScreen"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLG_OrthToIsoCoordsDiv32",
+      "address": "00643400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643400"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "DRLG_OrthToIsoCoordsDiv32"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SizeMapToScreen",
+      "address": "00643470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643470"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "SizeMapToScreen"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SizeRoomToWorld",
+      "address": "006434a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006434a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "SizeRoomToWorld"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SizeWorldToRoom",
+      "address": "006434c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006434c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "SizeWorldToRoom"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLG_WorldToScreenShift5",
+      "address": "00643510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643510"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "DRLG_WorldToScreenShift5"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLG_WorldToScreenNoShift",
+      "address": "00643540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643540"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "DRLG_WorldToScreenNoShift"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CoordsRoomToWorld",
+      "address": "00643560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00643560"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Drlg::Transform",
+      "calledFunctions": [
+        "CoordsRoomToWorld"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

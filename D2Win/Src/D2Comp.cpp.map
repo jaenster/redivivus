@@ -1,0 +1,1262 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2Comp.cpp",
+  "functions": [
+    {
+      "name": "D2COMP_PadStringTo4Chars",
+      "address": "005031d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005031d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_PadStringTo4Chars"
+      ]
+    },
+    {
+      "name": "D2COMP_AssertNotNull",
+      "address": "00503220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503220"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_AssertNotNull",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_LoadAndValidateCOFFile",
+      "address": "00503250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503250"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_LoadAndValidateCOFFile",
+        "ReturnZero",
+        "D2FILE_AllocAndLoadD2File",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_ValidateCOFLayerData",
+      "address": "005032b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005032b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_ValidateCOFLayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_FindOrAllocCOFCacheEntry",
+      "address": "00503340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503340"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_FindOrAllocCOFCacheEntry",
+        "AllocClientMemory",
+        "D2COMP_LoadAndValidateCOFFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_ReleaseCOFCacheEntry",
+      "address": "00503410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503410"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_ReleaseCOFCacheEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_BuildCOFFilePath",
+      "address": "005034b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005034b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_BuildCOFFilePath",
+        "ARCHIVE_OpenD2FileWrap",
+        "ERRORMANAGER_FCloseFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_FindCOFEntryByModeAndWeapon",
+      "address": "005035f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005035f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_FindCOFEntryByModeAndWeapon",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_GetOrLoadCOF",
+      "address": "00503640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503640"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetOrLoadCOF",
+        "D2COMP_FindCOFEntryByModeAndWeapon",
+        "memset",
+        "D2COMP_BuildCOFFilePath",
+        "AllocClientMemory",
+        "D2COMP_FindOrAllocCOFCacheEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_PopulateComponentFromCOF",
+      "address": "00503740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503740"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_PopulateComponentFromCOF",
+        "D2COMP_GetOrLoadCOF",
+        "D2COMP_PadStringTo4Chars",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_InitComponentEntry",
+      "address": "005038a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005038a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_InitComponentEntry",
+        "D2COMP_PopulateComponentFromCOF"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_GetPaletteTransformTable",
+      "address": "005038d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005038d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetPaletteTransformTable"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_ValidateComponentType",
+      "address": "00503920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503920"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_ValidateComponentType",
+        "D2MEM_FindLowestSetBit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_LoadLayerSpritesAndCalcHeight",
+      "address": "00503970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503970"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_LoadLayerSpritesAndCalcHeight",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "D2COMP_PopulateComponentFromCOF",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6OffsetY"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_DrawUnitShadow",
+      "address": "00503a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503a50"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_DrawUnitShadow",
+        "D2COMP_FindCOFEntryByModeAndWeapon",
+        "D2COMP_AssertNotNull",
+        "D2COMP_ValidateCOFLayerData",
+        "D2COMP_LoadLayerSpritesAndCalcHeight",
+        "memset",
+        "D2COMP_InitComponentEntry",
+        "D2GFX_DrawShadow",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_DrawCompositeUnit",
+      "address": "00503ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503ba0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_DrawCompositeUnit",
+        "memset",
+        "D2GFX_DrawImage",
+        "D2COMP_FindCOFEntryByModeAndWeapon",
+        "D2COMP_AssertNotNull",
+        "D2COMP_ValidateCOFLayerData",
+        "D2COMP_ValidateComponentType",
+        "D2COMP_PopulateComponentFromCOF",
+        "D2COMP_GetPaletteTransformTable",
+        "GetTickCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GamePalShiftGreenBloodStrc",
+        "D2GfxDataStrc",
+        "DC6",
+        "DRAWMODE",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_TruncateStringToFitWidth",
+      "address": "00503ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503ec0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_TruncateStringToFitWidth",
+        "UNICODE_WideToMultiByte",
+        "D2WINFONT_GetStringPixelWidth",
+        "STRING_CopyCharToWCharWithSetMaxSize"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_AddTextLineToLayout",
+      "address": "00503fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00503fa0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_AddTextLineToLayout",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRING_CopyWideString",
+        "TEXT_CalcTextDimensions"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_ZeroBuffer512",
+      "address": "00504020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504020"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_ZeroBuffer512"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_ValidateAndLoadCOFForUnit",
+      "address": "00504040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504040"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_ValidateAndLoadCOFForUnit",
+        "D2COMP_GetOrLoadCOF",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_UnlinkCompositeUnit",
+      "address": "00504100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504100"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_UnlinkCompositeUnit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "D2CharSelStrc"
+      ]
+    },
+    {
+      "name": "D2COMP_AllocSmallClientBlock",
+      "address": "00504170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504170"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_AllocSmallClientBlock",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_DestroyCompositeUnit",
+      "address": "005041b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005041b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_DestroyCompositeUnit",
+        "D2COMP_ReleaseCOFCacheEntry",
+        "FreeClientMemory",
+        "IMAGE_FreeImage",
+        "D2COMP_UnlinkCompositeUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_SetUnitDisplayStrings",
+      "address": "00504270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504270"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_SetUnitDisplayStrings",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_SetAnimationMode",
+      "address": "005042f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005042f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_SetAnimationMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_GetWeaponClassCodeIndex",
+      "address": "00504370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504370"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetWeaponClassCodeIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_FreeServerMemory",
+      "address": "005043b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005043b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_FreeServerMemory",
+        "FreeServerMemory"
+      ]
+    },
+    {
+      "name": "D2COMP_LoadExcelTxtFile",
+      "address": "005043e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005043e0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_LoadExcelTxtFile",
+        "D2FILE_AllocAndLoadD2File"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LoadTxt",
+      "address": "00504430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504430"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "LoadTxt",
+        "_stricmp",
+        "D2COMP_LoadExcelTxtFile",
+        "D2FILE_AllocAndLoadD2File",
+        "STRUCT_CreateBinFieldExcelAndFillData",
+        "TXT_GetLinesCountFromBinFieldExcel",
+        "AllocServerMemory",
+        "memset",
+        "TXT_ParseDataAndPutIntoStructure",
+        "TXT_FreeBinFieldExcel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2BinFieldExcelStrc",
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_AllocTxt_Items",
+      "address": "00504570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504570"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_AllocTxt_Items",
+        "LoadTxt",
+        "AllocServerMemory",
+        "memcpy",
+        "FreeServerMemory",
+        "memset",
+        "STRUCT_CreateTxtLinkStrc",
+        "FillUpTxtLinkSub0x08"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2ItemsTxt",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "D2COMP_LoadItemTypesTxt",
+      "address": "00504920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504920"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_LoadItemTypesTxt",
+        "STRUCT_CreateTxtLinkStrc",
+        "LoadTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "D2COMP_IsItemTypeDescendant",
+      "address": "00504a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504a20"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_IsItemTypeDescendant",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_ResolveWeaponClass",
+      "address": "00504af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504af0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_ResolveWeaponClass",
+        "D2COMP_IsItemTypeDescendant"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_SetSelectionAndAuraImages",
+      "address": "00504d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504d30"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_SetSelectionAndAuraImages",
+        "IMAGE_GetFramesCount"
+      ],
+      "usedTypes": [
+        "DC6"
+      ]
+    },
+    {
+      "name": "D2COMP_ValidateEquippedItemForClass",
+      "address": "00504d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504d60"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_ValidateEquippedItemForClass",
+        "D2COMP_IsItemTypeDescendant"
+      ],
+      "usedTypes": [
+        "D2CompCharacterCompositeItemStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_CreateCompositeUnit",
+      "address": "00504f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00504f80"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_CreateCompositeUnit",
+        "AllocClientMemory",
+        "D2COMP_ResolveWeaponClass",
+        "D2COMP_ValidateEquippedItemForClass",
+        "D2COMP_ValidateAndLoadCOFForUnit",
+        "D2COMP_SetAnimationMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_FreeAllCompositeUnits",
+      "address": "00505100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505100"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_FreeAllCompositeUnits",
+        "D2COMP_DestroyCompositeUnit",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "D2COMP_GetCompositeUnitListHead",
+      "address": "00505150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505150"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetCompositeUnitListHead"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_GetNextCompositeUnit",
+      "address": "00505160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505160"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetNextCompositeUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_SetAnimationSpeed",
+      "address": "005051a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005051a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_SetAnimationSpeed",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_GetNumDirections",
+      "address": "00505200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505200"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetNumDirections",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_GetNumFrames",
+      "address": "00505230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505230"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetNumFrames",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_SetCurrentFrame",
+      "address": "00505260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505260"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_SetCurrentFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_SetScreenX",
+      "address": "005052b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005052b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_SetScreenX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_SetScreenY",
+      "address": "005052f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005052f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_SetScreenY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_GetFlags",
+      "address": "00505330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505330"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_SetFlags",
+      "address": "00505360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505360"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_SetFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_LoadGuildEmblemIcon",
+      "address": "005053a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005053a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_LoadGuildEmblemIcon",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "IMAGE_LoadDC6"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_LoadItemPaletteFile",
+      "address": "00505470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505470"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_LoadItemPaletteFile",
+        "CheckIfFileExists",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_LoadAllItemPalettes",
+      "address": "00505550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505550"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_LoadAllItemPalettes",
+        "D2COMP_LoadItemPaletteFile"
+      ]
+    },
+    {
+      "name": "D2COMP_InitEmblemColorTables",
+      "address": "005055d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005055d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_InitEmblemColorTables",
+        "D2GFX_GetColorFromCurrentPallete"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2COMP_GetTitlePrefix",
+      "address": "00505640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505640"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_GetTitlePrefix"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2COMP_DrawUnitNameAndTitle",
+      "address": "00505810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505810"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_DrawUnitNameAndTitle",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRING_CopyWideString",
+        "D2COMP_GetTitlePrefix",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "memset",
+        "AppendToBuffer",
+        "STRING_GetWideStringLength",
+        "UTF8_ConvertToWideChar",
+        "SetAndReturnLastFont",
+        "D2COMP_TruncateStringToFitWidth",
+        "TEXT_CalcTextDimensions",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_OOG_ChannelPlayers",
+      "address": "00505a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00505a80"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "DRAW_OOG_ChannelPlayers",
+        "D2WINMAIN_TestMouseInRect",
+        "CONTAINER_InitializeBuffer",
+        "SetAndReturnLastFont",
+        "UTF8_ConvertToWideChar",
+        "D2COMP_AddTextLineToLayout",
+        "memset",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "AppendToBuffer",
+        "D2GFX_DrawSolidRectEx",
+        "DRAW_text",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MapAIStrc",
+        "D2QuestDataA3Q6Strc",
+        "WCHAR",
+        "int32_t",
+        "tagRECT",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t[520]"
+      ]
+    },
+    {
+      "name": "D2COMP_AllocTxt_EverythingItems",
+      "address": "00506000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506000"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "D2COMP_AllocTxt_EverythingItems",
+        "memset",
+        "STRUCT_CreateTxtLinkStrc",
+        "ReturnZero",
+        "LoadTxt",
+        "D2COMP_AllocTxt_Items",
+        "D2COMP_IsItemTypeDescendant"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2CompCharacterCompositeItemStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AllocCharSelectComponent",
+      "address": "005066c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005066c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2Comp",
+      "calledFunctions": [
+        "AllocCharSelectComponent",
+        "AllocClientMemory",
+        "memset",
+        "D2COMP_AllocTxt_EverythingItems",
+        "D2COMP_ResolveWeaponClass",
+        "D2COMP_ValidateEquippedItemForClass",
+        "D2COMP_ValidateAndLoadCOFForUnit",
+        "D2COMP_SetAnimationMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

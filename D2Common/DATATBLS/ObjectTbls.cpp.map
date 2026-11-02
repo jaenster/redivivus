@@ -1,0 +1,190 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/ObjectTbls.cpp",
+  "functions": [
+    {
+      "name": "TXT_AllocTxt_objects",
+      "address": "0063f690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063f690"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "CompileTxt",
+        "TXT_AllocTxt_objects",
+        "memset",
+        "STRTABLE_GetStringByKey",
+        "WSTRING_PutWideCharIntoBuffer"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "TXT_Objects_GetLine",
+      "address": "00640e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00640e90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "TXT_Objects_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_FreeTxt_Objects",
+      "address": "00640ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00640ee0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "TXT_FreeTxt_Objects",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "OBJECTTBLS_FreeObjGroupTxt",
+      "address": "00640f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00640f00"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "OBJECTTBLS_FreeObjGroupTxt",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_objgroup",
+      "address": "00640f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00640f20"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "CompileTxt",
+        "TXT_AllocTxt_objgroup"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DATATBLS_GetObjGroupTxtRecord",
+      "address": "006412f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006412f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "DATATBLS_GetObjGroupTxtRecord"
+      ],
+      "usedTypes": [
+        "D2ObjGroupTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_shrines",
+      "address": "00641320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00641320"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_shrines",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "TXT_Shrines_GetLine",
+      "address": "006414b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006414b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "TXT_Shrines_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ShrinesTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetShrinesSize",
+      "address": "00641500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00641500"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "GetShrinesSize"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Shrines_Free",
+      "address": "00641510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00641510"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ObjectTbls",
+      "calledFunctions": [
+        "TXT_Shrines_Free",
+        "UnloadBin"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/ComCallback.cpp",
+  "functions": [
+    {
+      "name": "COMCALLBACK_UpdateUserFlags",
+      "address": "004497f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004497f0"
+        }
+      ],
+      "namespace": "D2Client::ComCallback",
+      "calledFunctions": [
+        "COMCALLBACK_UpdateUserFlags",
+        "toupper"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

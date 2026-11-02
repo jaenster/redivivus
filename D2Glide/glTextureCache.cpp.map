@@ -1,0 +1,164 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Glide/glTextureCache.cpp",
+  "functions": [
+    {
+      "name": "GLTEXCACHE_Initialize",
+      "address": "0050e890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050e890"
+        }
+      ],
+      "namespace": "D2Glide::glTextureCache",
+      "calledFunctions": [
+        "GLTEXCACHE_Initialize",
+        "AllocClientMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "GlTextureCacheStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GLTEXCACHE_AppendNodeToTail",
+      "address": "0050ea40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050ea40"
+        }
+      ],
+      "namespace": "D2Glide::glTextureCache",
+      "calledFunctions": [
+        "GLTEXCACHE_AppendNodeToTail"
+      ],
+      "usedTypes": [
+        "GlTextureCacheNodeStrc",
+        "GlTextureCacheStrc"
+      ]
+    },
+    {
+      "name": "GLTEXCACHE_RemoveNodeByIndex",
+      "address": "0050eae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050eae0"
+        }
+      ],
+      "namespace": "D2Glide::glTextureCache",
+      "calledFunctions": [
+        "GLTEXCACHE_RemoveNodeByIndex"
+      ],
+      "usedTypes": [
+        "GlTextureCacheNodeStrc",
+        "GlTextureCacheStrc"
+      ]
+    },
+    {
+      "name": "GLTEXCACHE_AllocateNode",
+      "address": "0050eb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050eb60"
+        }
+      ],
+      "namespace": "D2Glide::glTextureCache",
+      "calledFunctions": [
+        "GLTEXCACHE_AllocateNode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlTextureCacheStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GLTEXCACHE_PromoteNodeToMRU",
+      "address": "0050ebe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050ebe0"
+        }
+      ],
+      "namespace": "D2Glide::glTextureCache",
+      "calledFunctions": [
+        "GLTEXCACHE_PromoteNodeToMRU",
+        "GLTEXCACHE_RemoveNodeByIndex",
+        "GLTEXCACHE_AppendNodeToTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlTextureCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLTEXCACHE_EvictLRU",
+      "address": "0050ec40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050ec40"
+        }
+      ],
+      "namespace": "D2Glide::glTextureCache",
+      "calledFunctions": [
+        "GLTEXCACHE_EvictLRU"
+      ],
+      "usedTypes": [
+        "GlTextureCacheStrc"
+      ]
+    },
+    {
+      "name": "GLTEXCACHE_Destroy",
+      "address": "0050ecb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050ecb0"
+        }
+      ],
+      "namespace": "D2Glide::glTextureCache",
+      "calledFunctions": [
+        "GLTEXCACHE_Destroy",
+        "GLTEXCACHE_EvictLRU",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "GlTextureCacheStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GLTEXCACHE_EnsureCapacity",
+      "address": "0050ed10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050ed10"
+        }
+      ],
+      "namespace": "D2Glide::glTextureCache",
+      "calledFunctions": [
+        "GLTEXCACHE_EnsureCapacity",
+        "GLTEXCACHE_AllocateNode"
+      ],
+      "usedTypes": [
+        "GlTextureCacheStrc",
+        "uint8_t"
+      ]
+    }
+  ]
+}

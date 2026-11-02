@@ -14,8 +14,8 @@
 
 namespace Fog::_3rdparty::crashy {
 
-void __fastcall CRT_LocalTime_Thunk(uint8_t * bParam, uint32_t * pnParam) {
-    /* MCP write-path test — safe to delete */ _localtime64_s((tm*)bParam, (__time64_t*)pnParam);
+void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime) {
+    /* MCP write-path test — safe to delete */ _localtime64_s((tm*)pLocalTime, (__time64_t*)pTime);
 }
 
 bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc) {

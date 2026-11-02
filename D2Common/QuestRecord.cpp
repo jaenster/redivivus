@@ -91,7 +91,7 @@ void __stdcall FreeQuestRecordPool(D2PoolManagerStrc * pMemory, D2BitBufferStrc 
 
 // Copies the 0x60-byte quest record from szText into pBitBuffer (0x18 dwords; halts if nSize != 0x60). If nParam is non-zero, for each 16-bit quest slot (bit offsets 0..0x2ae, stride 16) clears QUESTSTATE_JustCompleted (13) and QUESTSTATE_CannotCompleteQuestInGame (14) and sets QUESTSTATE_FinishedInPreviousGame (15) when QUESTSTATE_RewardAwaits (1) is set.
 // Bit numbers from the 1.14d asm 0065c50e-0065c54d (ESI = slot base + 14) and the program's eD2QuestState enum.
-void __stdcall ReadQuestRecordFromBuffer(D2BitBufferStrc * pBitBuffer, char * szText, int16_t nSize, int32_t nParam) {
+void __stdcall ReadQuestRecordFromBuffer(D2BitBufferStrc * pBitBuffer, char * szText, int16_t nSize, int32_t bResetQuestFlags) {
     BOOL bBitSet;
     int iCopyCount;
     if (nSize != 0x60) {
@@ -106,7 +106,7 @@ void __stdcall ReadQuestRecordFromBuffer(D2BitBufferStrc * pBitBuffer, char * sz
       pDstBuf += 4;
     }
 
-    if (!nParam) {
+    if (!bResetQuestFlags) {
       return;
     }
 

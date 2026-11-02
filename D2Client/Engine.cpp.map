@@ -1,0 +1,652 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Engine.cpp",
+  "functions": [
+    {
+      "name": "UI_IsMouseInRect",
+      "address": "0045fb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fb80"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "UI_IsMouseInRect",
+        "GetMouseX",
+        "GetMouseY"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawPopupOk",
+      "address": "0045fbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fbc0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "DrawPopupOk",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LOADER_CheckForInsertedDiscs",
+      "address": "0045fc60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fc60"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_CheckForInsertedDiscs",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "UI_DrawTextCentered",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawOkCancel",
+      "address": "0045fd20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fd20"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "DrawOkCancel",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LOADER_DrawInsertDiscMessage",
+      "address": "0045fd80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fd80"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_DrawInsertDiscMessage",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "UI_DrawTextCentered"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LOADER_DrawInsertDiscScreen",
+      "address": "0045fde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fde0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_DrawInsertDiscScreen",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_BeginScene",
+        "D2GFX_ClearScreen",
+        "DRAW_SetOrReloadPalleteMain",
+        "DrawPopupOk",
+        "LOADER_CheckForInsertedDiscs",
+        "DrawOkCancel",
+        "LOADER_DrawInsertDiscMessage",
+        "DrawCursor",
+        "D2GFX_EndScene"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_CharScreenOkDown",
+      "address": "0045fe30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fe30"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "INPUT_CharScreenOkDown",
+        "GetMouseX",
+        "GetMouseY",
+        "SOUND_PlaySound",
+        "SMsgBreakHandlerChain",
+        "GAMEDATA_ClearQueuedClicks"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_CharScreenOkUp",
+      "address": "0045fed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fed0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "INPUT_CharScreenOkUp",
+        "GetMouseX",
+        "GetMouseY",
+        "SMsgBreakHandlerChain",
+        "GAMEDATA_ClearQueuedClicks"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_CharScreenOkForce",
+      "address": "0045ff70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ff70"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "INPUT_CharScreenOkForce",
+        "GAMEDATA_ClearQueuedClicks",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_CharScreenOkCancel",
+      "address": "0045ffb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ffb0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "INPUT_CharScreenOkCancel"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "LOADER_DrawConnectionLostMessage",
+      "address": "0045ffc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ffc0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_DrawConnectionLostMessage",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "UI_DrawTextCentered"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "LOADER_DrawOkCancelButtons",
+      "address": "00460060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460060"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_DrawOkCancelButtons",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_OkCancel",
+      "address": "004600f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004600f0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "DRAW_UI_OkCancel",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "UI_DrawTextCentered"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LOADER_DrawConnectionLostScreen",
+      "address": "00460190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460190"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_DrawConnectionLostScreen",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_BeginScene",
+        "D2GFX_ClearScreen",
+        "DRAW_SetOrReloadPalleteMain",
+        "DrawPopupOk",
+        "LOADER_DrawConnectionLostMessage",
+        "LOADER_DrawOkCancelButtons",
+        "DRAW_UI_OkCancel",
+        "DrawCursor",
+        "D2GFX_EndScene"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_CharScreenDualButtonDown",
+      "address": "004601f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004601f0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "INPUT_CharScreenDualButtonDown",
+        "GetMouseX",
+        "GetMouseY",
+        "GAMEDATA_ClearQueuedClicks",
+        "SMsgBreakHandlerChain",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_CharScreenDualButtonUp",
+      "address": "004602e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004602e0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "INPUT_CharScreenDualButtonUp",
+        "GetMouseX",
+        "GetMouseY",
+        "SMsgBreakHandlerChain",
+        "GAMEDATA_ClearQueuedClicks"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_CharScreenDualButtonForce",
+      "address": "004603e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004603e0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "INPUT_CharScreenDualButtonForce",
+        "GAMEDATA_ClearQueuedClicks",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "INPUT_CharScreenDualButtonCancel",
+      "address": "00460420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460420"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "INPUT_CharScreenDualButtonCancel"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "LOADER_FreePopupImages",
+      "address": "00460430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460430"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_FreePopupImages",
+        "DC6_FreeAndDelete",
+        "PALETTE_LoadLoadingScreenPalette"
+      ]
+    },
+    {
+      "name": "LOADER_SetConnectionLostFlag",
+      "address": "00460480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460480"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "LOADER_SetConnectionLostFlag"
+      ]
+    },
+    {
+      "name": "fpGameLoopFunction",
+      "address": "00460490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460490"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "MessageGameLoop",
+        "fpGameLoopFunction",
+        "NET_D2GS_CLIENT_Send_0x6D_PING",
+        "D2GFX_EndCutSceneReturnSceneState",
+        "D2GFX_BeginScene",
+        "D2GFX_ClearScreen",
+        "DRAW_SetOrReloadPalleteMain",
+        "DrawPopupOk",
+        "LOADER_CheckForInsertedDiscs",
+        "DrawOkCancel",
+        "LOADER_DrawInsertDiscMessage",
+        "DrawCursor",
+        "D2GFX_EndScene",
+        "DRAW_AfterDraw"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "fpRequiredUserAction",
+      "address": "00460500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460500"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "fpRequiredUserAction",
+        "D2WINPALETTE_SetPaletteIndex",
+        "IMAGE_LoadDC6Ex",
+        "D2WINPAL_LoadActPalette",
+        "GAMEDATA_SetDrawFunction",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "MessageGameLoop",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "LOADER_FreePopupImages"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ENGINE_RunDrawModeGameLoop",
+      "address": "004605f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004605f0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "ENGINE_RunDrawModeGameLoop",
+        "GAMEDATA_SetDrawFunction",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "MessageGameLoop",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "LOADER_FreePopupImages"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ENGINE_RunDrawModeGameLoopAlt",
+      "address": "004606de",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004606de"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "ENGINE_RunDrawModeGameLoopAlt",
+        "GAMEDATA_SetDrawFunction",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "MessageGameLoop",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "LOADER_FreePopupImages"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SetUnitFlag",
+      "address": "00460730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460730"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "CLIENT_SetUnitFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "StoreLastSkillHit",
+      "address": "00460780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460780"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "StoreLastSkillHit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eSkillEType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SetAnimModeAndMoveToCurrentPos",
+      "address": "00460830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460830"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "CLIENT_SetAnimModeAndMoveToCurrentPos",
+        "UNITMODE_SetAnimMode",
+        "GetPlayerUnit_Net",
+        "GetXPos",
+        "GetYPos",
+        "PATH_MoveUnitToPoint"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "CLIENT_PreloadMonsterCofsInAdjacentRooms",
+      "address": "004608c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004608c0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "CLIENT_PreloadMonsterCofsInAdjacentRooms",
+        "GetPlayerUnit_Net",
+        "GetCurrentRoom",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "UNIT_GetUnitState",
+        "GFX_LoadUnitModeCof"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_UpdateUnitLightRadius",
+      "address": "00460930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460930"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "CLIENT_UpdateUnitLightRadius",
+        "TXT_MonStats_GetMonStats2",
+        "MONSTERS_GetMaxLightRadiusFromEquipment",
+        "LIGHTMAP_SetRadius"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SetUnitLightColor",
+      "address": "004609a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004609a0"
+        }
+      ],
+      "namespace": "D2Client::Engine",
+      "calledFunctions": [
+        "CLIENT_SetUnitLightColor",
+        "SetRGB"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

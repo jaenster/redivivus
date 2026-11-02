@@ -1,0 +1,664 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Lang/Unicode/UNISYS.cpp",
+  "functions": [
+    {
+      "name": "STRING_CompareWideStrings",
+      "address": "005264f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005264f0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "STRING_CompareWideStrings"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_CompareWideStringsN",
+      "address": "00526540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526540"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_CompareWideStringsN"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UNICODE_CompareWideStringsNoCase",
+      "address": "00526590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526590"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_CompareWideStringsNoCase"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UNICODE_CompareWideStringsNNoCase",
+      "address": "00526610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526610"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_CompareWideStringsNNoCase"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_FindWideChar",
+      "address": "005266c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005266c0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_FindWideChar"
+      ],
+      "usedTypes": [
+        "int16_t"
+      ]
+    },
+    {
+      "name": "AppendToBuffer",
+      "address": "00526700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526700"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "AppendToBuffer"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "UNICODE_AppendWideStringN",
+      "address": "00526740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526740"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_AppendWideStringN"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "WSTRING_PutWideCharIntoBuffer",
+      "address": "00526790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526790"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "WSTRING_PutWideCharIntoBuffer"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRING_CopyWideString",
+      "address": "005267e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005267e0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "STRING_GetWideStringLength",
+      "address": "00526800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526800"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "STRING_GetWideStringLength"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_FindSubstringNoCase",
+      "address": "00526820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526820"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_FindSubstringNoCase"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UNICODE_FindSubstring",
+      "address": "00526940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526940"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_FindSubstring"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UNICODE_FormatWideString",
+      "address": "005269d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005269d0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_FormatWideString",
+        "UNICODE_FindSubstring",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRING_CopyWideString",
+        "_itoa",
+        "_ultoa",
+        "UTF8_ConvertToWideChar",
+        "UNICODE_AppendWideStringN"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint16_t *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_CheckLineBreakPosition",
+      "address": "00526d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526d30"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_CheckLineBreakPosition",
+        "MISC_GetLanguageCode",
+        "isspace"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRING_ConvertCharToWchar",
+      "address": "00526e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526e40"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "STRING_ConvertCharToWchar",
+        "UTF8_ToUTF16",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STRING_CopyCharToWCharWithSetMaxSize",
+      "address": "00526f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526f20"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "STRING_CopyCharToWCharWithSetMaxSize"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_WideToMultiByte",
+      "address": "00526f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00526f70"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_WideToMultiByte"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UNICODE_CheckTrailingPunctuation",
+      "address": "00527090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527090"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_CheckTrailingPunctuation",
+        "STRING_GetWideStringLength",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_CheckLeadingPunctuation",
+      "address": "005271a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005271a0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_CheckLeadingPunctuation",
+        "STRING_GetWideStringLength",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_FormatPossessiveName",
+      "address": "005272b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005272b0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_FormatPossessiveName",
+        "STRING_GetWideStringLength",
+        "STRING_CopyWideString",
+        "__security_check_cookie",
+        "AppendToBuffer",
+        "UNICODE_CheckLeadingPunctuation",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "UNICODE_CheckTrailingPunctuation",
+        "CONTAINER_InitializeBuffer"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNICODE_FreeBuffer",
+      "address": "00527660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527660"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_FreeBuffer",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "UNICODE_AllocBuffer",
+      "address": "00527680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527680"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_AllocBuffer",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_ReadByteRange",
+      "address": "005276a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005276a0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_ReadByteRange"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNICODE_CheckByteInRange",
+      "address": "005276c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005276c0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_CheckByteInRange"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNICODE_IsControlChar",
+      "address": "005276e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005276e0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_IsControlChar"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNICODE_FreeKamapTables",
+      "address": "00527720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527720"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_FreeKamapTables",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "UNICODE_LoadKamapFile",
+      "address": "00527790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527790"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_LoadKamapFile",
+        "D2FILE_AllocAndLoadD2File",
+        "strncmp",
+        "FreeClientMemory",
+        "__security_check_cookie",
+        "strncpy",
+        "strtok",
+        "SMemFree",
+        "SMemAlloc",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNICODE_MapCharacterToCode",
+      "address": "00527a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527a50"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_MapCharacterToCode"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_CompareKamapEntry",
+      "address": "00527ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527ae0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_CompareKamapEntry"
+      ]
+    },
+    {
+      "name": "UNICODE_BinarySearchKamap",
+      "address": "00527b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527b00"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_BinarySearchKamap",
+        "bsearch"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_ConvertMultiByteToWide",
+      "address": "00527b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527b50"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_ConvertMultiByteToWide",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "UNICODE_IsControlChar",
+        "UNICODE_MapCharacterToCode"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNICODE_ConvertWideToMultiByte",
+      "address": "00527be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527be0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_ConvertWideToMultiByte",
+        "UNICODE_WideToMultiByte",
+        "UNICODE_IsControlChar",
+        "bsearch"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UNICODE_GetMultiByteLength",
+      "address": "00527ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527ca0"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_GetMultiByteLength",
+        "STRING_GetWideStringLength",
+        "UNICODE_IsControlChar",
+        "bsearch"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNICODE_GetWideCharCount",
+      "address": "00527d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00527d50"
+        }
+      ],
+      "namespace": "D2Lang::Unicode::UNISYS",
+      "calledFunctions": [
+        "UNICODE_GetWideCharCount",
+        "UNICODE_IsControlChar"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

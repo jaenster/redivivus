@@ -91,14 +91,14 @@ int32_t __stdcall GetMaxElemDamage(struct D2UnitStrc * pUnit, struct D2UnitStrc 
 int32_t __stdcall GetElementalLength(int32_t nUnused, struct D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel);
 // Resolves a numeric parameter from a missile's Missiles.txt row, selected by nParamId. Validates pUnit is a UNIT_MISSILE (or null) and nMissileId is in range, then switch(nParamId) returns either a raw txt column (Param1-5, CltParam1-5, sHitPar/cHitPar 1-3, dParam1-2, level), a computed elemental/physical min/max damage (via GetMin/MaxElemDamage / GetMin/MaxDamage, some >>8 fixed-point), a range (LevRange*level+Range), or a per-level scaling (linear param1+(lvl-1)*param2 or SKILLS_CalcDiminishingReturns). Returns 0 if validation fails or nParamId is unhandled. Used by missile damage/behavior calc.
 int32_t __stdcall GetSpecialParamValue(struct D2UnitStrc * pUnit, struct D2UnitStrc * pOwner, uint8_t nParamId, int32_t nMissileId, int32_t nLevel);
-int __fastcall MISSILE_Min(int nParam1, int nParam2, uint32_t dwParam3, uint32_t dwParam4);
-int __fastcall MISSILE_Max(int nParam1, int nParam2, uint32_t dwParam3, uint32_t dwParam4);
+int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4);
+int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t dwParam3, uint32_t dwParam4);
 int32_t __fastcall GetRandomNumberInRange(int32_t nMin, int32_t nMax, int32_t nUnused, struct D2MissileRandCalcStrc * pCalc);
 int32_t __fastcall GetSpecialParamValueForSkillMissile(eD2Skills eSkill, uint8_t nParamId, int32_t nUnused, struct D2MissileCalcContextStrc * pMissileCalc);
 // Evaluates missile calc expression using missile/owner context and resolved missile id/level; dispatches into the calc VM callback path.
 uint32_t __stdcall MISSILE_EvalMissileCalc(struct D2UnitStrc * pMissile, struct D2UnitStrc * pOwner, uint32_t nCalcExpression, int32_t nMissileId, int32_t nMissileLevel);
 // Computes the full damage profile for a missile into a D2MissileDamageDataStrc (zeroed first, 0x7c bytes). Resolves base/elemental damage either from missiles.txt fields (SrcDamage/SrcMissDmg, EType, GetMin/MaxDamage, mastery bonus) or, when the missile carries a skill, from that skill's calc functions (SKILL_CalcMin/MaxDamage, SERVER_Min/MaxDamage, synergy). When SrcDamage applies, folds in the owner's weapon-derived physical damage (mindamage/maxdamage scaled by SrcDamage%, two-handed halving, str/dex item bonuses, throwing/secondary/two-hand weapon-damage stats, blunt-vs-undead bonus) plus damage%, item min/max-damage%, demon/undead/targetAC% and skill bypass-undead/demon/beast flags. When SrcMissDmg applies instead, pulls those stats from pUnit2. Routes elemental min/max/length into the matching fire/light/magic/cold/poison/drain/stun/burning fields, then calls AddStatsToDamage + CalculateFinalDamage. Core server missile-damage calc; no output if the missile/owner is invalid.
-void __stdcall EvaluateMissileFormula(struct D2MissileDamageDataStrc * pMissileDamageData, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2UnitStrc * pMissile, int32_t nParam);
+void __stdcall EvaluateMissileFormula(struct D2MissileDamageDataStrc * pMissileDamageData, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2UnitStrc * pMissile, int32_t nLevel);
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2Common::Units::Missile

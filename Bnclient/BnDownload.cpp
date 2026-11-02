@@ -21,7 +21,6 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 
@@ -39,14 +38,14 @@ typedef int (__stdcall *pfnCheckRevision)(LPCSTR szFile1, LPCSTR szFile2, LPCSTR
 
 namespace Bnclient::BnDownload {
 
-static void __stdcall BNDOWNLOAD_WriteFileWithTimestamp(LPCSTR pThis, LPCVOID param_1, DWORD nNumberOfBytesToWrite, FILETIME * pFileTime) {
+static void __stdcall BNDOWNLOAD_WriteFileWithTimestamp(LPCSTR pThis, LPCVOID pData, DWORD nNumberOfBytesToWrite, FILETIME * pFileTime) {
     LPCSTR szFilePathCopy = pThis;
     HANDLE hFile = Fog::Source::SFile::thunk_CreateFileA(pThis, 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
     if (hFile == (HANDLE)-1) {
       return;
     }
 
-    Fog::Source::SFile::thunk_WriteFile(hFile, param_1, nNumberOfBytesToWrite, (LPDWORD)&szFilePathCopy, (LPOVERLAPPED)0x0);
+    Fog::Source::SFile::thunk_WriteFile(hFile, pData, nNumberOfBytesToWrite, (LPDWORD)&szFilePathCopy, (LPOVERLAPPED)0x0);
     /* FILETIME * lpLastWriteTime for SetFileTime */ /* FILETIME * lpLastAccessTime for SetFileTime */ /* FILETIME * lpCreationTime for SetFileTime */ /* HANDLE hFile for SetFileTime */ SetFileTime(hFile, pFileTime, pFileTime, pFileTime);
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
 }
@@ -153,8 +152,8 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       uint32_t dwAuthResult;
-      uint32_t* local_428;
-      uint32_t* local_424;
+      uint32_t* pdwVersionOutSaved;
+      uint32_t* pdwChecksumOutSaved;
       int nCheckResult;
       D2ArchiveStrc* pArchive;
       char szVersionString[260];
@@ -171,7 +170,7 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
     HMODULE hCheckRevDll;
     pfnCheckRevision pCheckRevision;
     HMODULE hGameModule;
-    int32_t iVar2;
+    int32_t nCheckRevResult;
     char* szGameExePathPtr;
     if (pdwVersionOut) {
       *pdwVersionOut = 0;
@@ -185,8 +184,8 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
 
     __frame0.pArchive = 0;
     __frame0.szDllPath[0] = '\0';
-    __frame0.local_428 = pdwVersionOut;
-    __frame0.local_424 = pdwChecksumOut;
+    __frame0.pdwVersionOutSaved = pdwVersionOut;
+    __frame0.pdwChecksumOutSaved = pdwChecksumOut;
     memset(__frame0.szDllPath + 1, 0, 0x103);
     __frame0.nCheckResult = 0;
     DWORD dwStartTick = GetTickCount();
@@ -217,7 +216,7 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
                   szGameExePathPtr = __frame0.szGameExePath;
                   /* LPSTR lpFilename for GetModuleFileNameA */ /* LPCSTR lpModuleName for GetModuleHandleA */ hGameModule = GetModuleHandleA((LPCSTR)0x0);
                   /* HMODULE hModule for GetModuleFileNameA */ GetModuleFileNameA(hGameModule, szGameExePathPtr, dwStartTick);
-                  __frame0.nCheckResult = (*pCheckRevision)(__frame0.szGameExePath, __frame0.szArchivePath, __frame0.szVersionString, gszBNetChatInputBuffer, (DWORD*)__frame0.local_428, (DWORD*)__frame0.local_424, pbResultOut);
+                  __frame0.nCheckResult = (*pCheckRevision)(__frame0.szGameExePath, __frame0.szArchivePath, __frame0.szVersionString, gszBNetChatInputBuffer, (DWORD*)__frame0.pdwVersionOutSaved, (DWORD*)__frame0.pdwChecksumOutSaved, pbResultOut);
                 }
 
                 /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hCheckRevDll);
@@ -235,8 +234,8 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
           /* LPCSTR lpFileName for DeleteFileA */ DeleteFileA(__frame0.szDllPath);
         }
 
-        iVar2 = __frame0.nCheckResult;
-        return iVar2;
+        nCheckRevResult = __frame0.nCheckResult;
+        return nCheckRevResult;
       }
 
       /* DWORD dwMilliseconds for Sleep */ Sleep(10);
@@ -428,7 +427,7 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     __frame1_t __frame1;
     int bArchiveOpened;
     DWORD nSize;
-    uint32_t uVar1;
+    uint32_t nStrLen;
     uint32_t nLineOffset;
     char* pbArchivePath;
     char* pListCursor;
@@ -570,8 +569,8 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
                 } else {
                   bArchiveOpened = _strnicmp(szLineBuffer, "execute ", 8);
                   if (!bArchiveOpened) {
-                    uVar1 = Storm::Source::SSTR::SStrCopy(pVerifySigResult, cDestPathBuf, 0x7fffffff);
-                    pVerifySigResult = pVerifySigResult + uVar1 + 1;
+                    nStrLen = Storm::Source::SSTR::SStrCopy(pVerifySigResult, cDestPathBuf, 0x7fffffff);
+                    pVerifySigResult = pVerifySigResult + nStrLen + 1;
                   }
                 }
               }
@@ -587,9 +586,9 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
       }
 
       Storm::Source::SFile::SFileCloseArchive(__frame0.pArchiveHandle);
-      uVar1 = Storm::Source::SSTR::SStrLen(lpFileName);
-      pbArchivePath = lpFileName + uVar1 + 1;
-      lpFileName = lpFileName + uVar1 + 1;
+      nStrLen = Storm::Source::SSTR::SStrLen(lpFileName);
+      pbArchivePath = lpFileName + nStrLen + 1;
+      lpFileName = lpFileName + nStrLen + 1;
     } while (*pbArchivePath != '\0');
 
     pbArchivePath = szRegistryPath;
@@ -608,8 +607,8 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     Storm::Source::SReg::SRegSaveString("Patch", "DstData", 2, szRegistryPath);
     if (szSourceFileName == cArchiveListBuf) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szSourceFileName, "%s\\bnupdate.exe", szModulePath);
-      uVar1 = Storm::Source::SSTR::SStrLen(szSourceFileName);
-      szSourceFileName = szSourceFileName + uVar1 + 1;
+      nStrLen = Storm::Source::SSTR::SStrLen(szSourceFileName);
+      szSourceFileName = szSourceFileName + nStrLen + 1;
       pVerifySigResult = szSourceFileName;
     }
 
@@ -624,12 +623,12 @@ void __fastcall BNDOWNLOAD_ProcessPrepatchList(uint32_t * pResultOut) {
     *__frame0.pOpenFileOut = -1;
 }
 
-int __fastcall BNDOWNLOAD_ApplyPrepatch(uint32_t * pdwParam) {
-    uint32_t* pResultLocal = pdwParam;
+int __fastcall BNDOWNLOAD_ApplyPrepatch(uint32_t * pbPatcherLaunched) {
+    uint32_t* pResultLocal = pbPatcherLaunched;
     BNDOWNLOAD_ProcessPrepatchList((uint32_t*)&pResultLocal);
     if (pResultLocal && pResultLocal != (uint32_t*)0x1) {
       if (pResultLocal == (uint32_t*)0x2) {
-        *pdwParam = 1;
+        *pbPatcherLaunched = 1;
       }
 
       return 0;
@@ -883,11 +882,11 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
     return 0;
 }
 
-void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownloadCtx, uint32_t nParam, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2) {
+void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownloadCtx, uint32_t dwDownloadFlags, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2) {
     FILETIME ftCacheTime;
     uint32_t nThreadId;
     uint32_t* pCachedBuf;
-    char cVar1;
+    char cNameChar;
     char* szBufferInput = szText1;
     if (!(szText1 && *szText1 != '\0')) {
       return;
@@ -897,7 +896,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownl
     }
 
     D2BnetDownloadStateStrc* pCacheData = pDownloadCtx;
-    uint32_t nDownloadFlags = nParam;
+    uint32_t nDownloadFlags = dwDownloadFlags;
     BOOL bCacheHit = BNGatewayAccess::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCachedBuf, (LPDWORD)&szText1);
     if (bCacheHit) {
       LONG nTimeCmp;
@@ -987,7 +986,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
     HMODULE hModule;
     FARPROC pExtraWorkProc;
     int32_t nOpenResult;
-    uint32_t uVar2;
+    uint32_t nIniLen;
     uint8_t* _Str1;
     FILETIME FStack_1224;
     D2ArchiveStrc* pArchiveHandle;
@@ -1185,9 +1184,9 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
         }
       case -0x7ffffffc:
         Debug::DEBUG_UnusedDebugFunction("Processing Bnserver.ini file");
-      uVar2 = Storm::Source::SSTR::SStrLen((char*)nSize);
-      pDestPtr = (char*)Storm::Source::SMem::SMemAlloc(uVar2 + 1, ".\\BnDownload.cpp", 0x23f, 0);
-      Storm::Source::SSTR::SStrCopy(pDestPtr, (char*)__frame1.archiveFileCtx, uVar2 + 1);
+      nIniLen = Storm::Source::SSTR::SStrLen((char*)nSize);
+      pDestPtr = (char*)Storm::Source::SMem::SMemAlloc(nIniLen + 1, ".\\BnDownload.cpp", 0x23f, 0);
+      Storm::Source::SSTR::SStrCopy(pDestPtr, (char*)__frame1.archiveFileCtx, nIniLen + 1);
       BNGatewayAccess::UpdateGatewaysFromIni(&ActualRealmInfo, pDestPtr);
       Storm::Source::SMem::SMemFree(pDestPtr, ".\\BnDownload.cpp", 0x245, 0);
       BNGatewayAccess::SaveAndUnload(&ActualRealmInfo);
@@ -1212,7 +1211,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881f64);
 }
 
-uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSize) {
+uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t nSize) {
     FILETIME ftCacheTime;
     FILETIME ftZero;
     uint32_t nThreadId;
@@ -1226,23 +1225,23 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSi
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ gnNetworkSendState = 0;
     EnterCriticalSection(&lpCriticalSection_00881f64);
-    Storm::Source::SSystem::SMemCopy(&gbBnetFtpFileTransferActive, pbParam, nSize);
+    Storm::Source::SMem::SMemCopy(&gbBnetFtpFileTransferActive, pPatchList, nSize);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnNetworkSendState = 0;
     LeaveCriticalSection(&lpCriticalSection_00881f64);
-    Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, pbParam, nSize + 1);
+    Storm::Source::SReg::SRegSaveData("Patch", "Patches", 0x82, pPatchList, nSize + 1);
     ftZero.dwLowDateTime = 0;
     ftZero.dwHighDateTime = 0;
-    if (!(pbParam && *pbParam != '\0')) {
+    if (!(pPatchList && *pPatchList != '\0')) {
       return 0;
     }
 
-    bCacheHit = BNGatewayAccess::CACHE_ReadData((char*)pbParam, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCacheData, &dwCachedSize);
+    bCacheHit = BNGatewayAccess::CACHE_ReadData((char*)pPatchList, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCacheData, &dwCachedSize);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(&ftZero, &ftCacheTime);
       if (!nTimeCmp) {
-        BNDOWNLOAD_WriteFileWithTimestamp((LPCSTR)pbParam, (LPCVOID)pCacheData, dwCachedSize, &ftZero);
-        NET_BNFTP_CLIENT_ProcessFile(-0x7ffffffe, 2, 0, nullptr, (LPCSTR)&ftZero, (char*)pbParam, nullptr, (size_t)pCacheData, dwCachedSize, 1);
+        BNDOWNLOAD_WriteFileWithTimestamp((LPCSTR)pPatchList, (LPCVOID)pCacheData, dwCachedSize, &ftZero);
+        NET_BNFTP_CLIENT_ProcessFile(-0x7ffffffe, 2, 0, nullptr, (LPCSTR)&ftZero, (char*)pPatchList, nullptr, (size_t)pCacheData, dwCachedSize, 1);
         BNGatewayAccess::CACHE_FreeMem(pCacheData, dwCachedSize);
         return 0;
       }
@@ -1256,9 +1255,9 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSi
     }
 
     memset(pThreadCtx, 0, 0x230);
-    uint8_t* pbNameEnd = pbParam;
+    uint8_t* pbNameEnd = pPatchList;
     pbNameEnd = pbNameEnd + strlen((char*)pbNameEnd) + 1;
-    *pThreadCtx = (short int)(uintptr_t)pbNameEnd - ((short int)(uintptr_t)pbParam + 1) + 0x21;
+    *pThreadCtx = (short int)(uintptr_t)pbNameEnd - ((short int)(uintptr_t)pPatchList + 1) + 0x21;
     *(uint8_t*)(pThreadCtx + 1) = 0;
     *(uint8_t*)((int)pThreadCtx + 3) = 1;
     pThreadCtx[2] = 0x3836;
@@ -1272,7 +1271,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pbParam, size_t nSi
     pThreadCtx[0x117] = 0;
     *(DWORD*)(pThreadCtx + 0xc) = ftZero.dwLowDateTime;
     *(DWORD*)(pThreadCtx + 0xe) = ftZero.dwHighDateTime;
-    Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x10), (char*)pbParam, 0x104);
+    Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x10), (char*)pPatchList, 0x104);
     Storm::Source::SSTR::SStrCopy((char*)(pThreadCtx + 0x92), "", 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00881d5c);
     uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);

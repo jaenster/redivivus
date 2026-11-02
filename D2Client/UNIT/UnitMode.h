@@ -24,7 +24,7 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID);
 void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, struct D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nParam, uint32_t dwUnused);
 // @sourcefile .\UNIT\UnitMode.cpp
 uint32_t UNITMODE_CanInterruptSkill(struct D2UnitStrc * pUnit);
-BOOL __fastcall HandleMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t nParam);
+BOOL __fastcall HandleMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode);
 // Client-side: when a player/monster unit enters a hit/death anim mode (player modes 0/4/0x13, monster modes 0/3/0xd), spawns the appropriate elemental-hit overlay graphic on the unit based on the high nibble of dwLastHitClass (provided the low nibble is also set). Maps element class 0x20->fire_hit, 0x30->ice_explode, 0x40->lightning, 0x10->doubledamage1, 0x70->bash, 0x80->hit_thorns, 0x90->sanctuaryknockback via GFX_AddOverlayToUnit. Visual only; no-op for other unit types or non-hit modes.
 void __fastcall UNITMODE_ShowElementalHitOverlay(struct D2UnitStrc * pUnit, int32_t nAnimMode);
 BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, struct D2UnitStrc * pUnit);

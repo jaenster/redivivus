@@ -49,10 +49,10 @@ void __fastcall FreePlayerList(D2PlayerListStrc * pPlayerList) {
 
     D2PlayerListSubStrc* pMemoryToFree = pPlayerList->pEntry;
     while (pMemoryToFree) {
-      D2PlayerListSubStrc* pvVar1;
-      pvVar1 = pMemoryToFree->pNext;
+      D2PlayerListSubStrc* pNextNode;
+      pNextNode = pMemoryToFree->pNext;
       D2_FREE_AT(pMemoryToFree, ".\\UNIT\\PlayerList.cpp", 0x3c);
-      pMemoryToFree = pvVar1;
+      pMemoryToFree = pNextNode;
     }
 
     D2_FREE_AT(pPlayerList, ".\\UNIT\\PlayerList.cpp", 0x40);

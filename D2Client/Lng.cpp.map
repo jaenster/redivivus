@@ -1,0 +1,52 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Lng.cpp",
+  "functions": [
+    {
+      "name": "LNG_FormatErrorMessageWithFallback",
+      "address": "004512c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004512c0"
+        }
+      ],
+      "namespace": "D2Client::Lng",
+      "calledFunctions": [
+        "LNG_FormatErrorMessageWithFallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SErrGetErrorStr",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_LoadLNG",
+      "address": "00451330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451330"
+        }
+      ],
+      "namespace": "D2Client::Lng",
+      "calledFunctions": [
+        "CLIENT_LoadLNG",
+        "SRegSaveString",
+        "SRegLoadString",
+        "FAULT_ShowErrorMessageBox",
+        "SErrRegisterMessageSource",
+        "FAULT_RegisterErrorHandler"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

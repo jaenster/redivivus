@@ -114,7 +114,7 @@ BOOL __fastcall D2WINACCOUNTLIST_RemoveAccount(::D2WinAccountList * pAccountList
 // Copies the name of the selected entry (+0x44, the one Draw highlights) into szDest; FALSE when none is selected. Halts (D2WinAccountList.cpp line 185, eType == D2WIN_ACCOUNTLIST) on a wrong control type.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __fastcall D2WINACCOUNTLIST_GetSelectedAccountName(::D2WinAccountList * pAccountList, char * szDest) {
-    char cVar1;
+    char cChar;
     if (pAccountList->sControl.neD2FormType != FORM_AccountList) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb9);
       exit(-1);
@@ -123,11 +123,11 @@ BOOL __fastcall D2WINACCOUNTLIST_GetSelectedAccountName(::D2WinAccountList * pAc
     char* pszSrc = pAccountList->pSelectedEntry->szAccountName;
     if (pszSrc) {
       do {
-        cVar1 = *pszSrc;
-        *szDest = cVar1;
+        cChar = *pszSrc;
+        *szDest = cChar;
         pszSrc++;
         szDest++;
-      } while (cVar1 != '\0');
+      } while (cChar != '\0');
 
       return 1;
     }
@@ -144,8 +144,8 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
       exit(-1);
     }
 
-    uint32_t uVar1 = pAccountList->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
+    uint32_t dwState = pAccountList->sControl.dwState;
+    if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
       pCurEntry = pAccountList->pFirstEntry;
       if (!pCurEntry) {
         return 0;
@@ -182,7 +182,7 @@ void __fastcall FORMS_DestroyD2WinAccountList(::D2WinAccountList * pAccountList)
 BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     uint32_t nFontHeight;
     int nEntryCount;
-    uint16_t local_214[256];
+    uint16_t wszAccountName[256];
     int nBaseY;
     int nPosX;
     int nEntryIdx;
@@ -195,10 +195,10 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
       exit(-1);
     }
 
-    uint32_t uVar1 = pAccountList->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1 && pAccountList->pFirstEntry) {
+    uint32_t dwControlState = pAccountList->sControl.dwState;
+    if (gadwBitMasks[2] & dwControlState && gadwBitMasks[0] & dwControlState && pAccountList->pFirstEntry) {
       D2WinFont::SetAndReturnLastFont(pAccountList->nFontId);
-      Fog::File::CONTAINER_InitializeBuffer(local_214, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x100, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
       nPosX = pAccountList->sControl.dwPosX;
       pSource = pAccountList->pFirstEntry;
       nEntryIdx = 0;
@@ -212,8 +212,8 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
           nYEnd = nBaseY + nEntryIdx / 6 * 0x14;
           nEntryIdx = nEntryCount;
           D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nPosXEntry, nYEnd - 0xe, nPosXEntry + 0x1c, nYEnd, 0x55, DRAW_SOLID);
-          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(local_214, pSource->szAccountName, 0x100);
-          D2WinFont::DRAW_text(local_214, nPosXEntry + 0x20, nYEnd, 0, 0);
+          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszAccountName, pSource->szAccountName, 0x100);
+          D2WinFont::DRAW_text(wszAccountName, nPosXEntry + 0x20, nYEnd, 0, 0);
           pAccountList = pAccountListSave;
           if (pSource == pAccountListSave->pSelectedEntry) {
             D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nPosXEntry - 1, nYEnd - 0x10, nPosXEntry + 0x76, nYEnd + 1, 0xff, DRAW_TRANSPARENT);
@@ -232,14 +232,14 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
 }
 
 ::D2WinAccountList * __fastcall D2WinAccountList(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int32_t nUserData, uint32_t * pdwFontData) {
-    uint32_t uVar1;
+    uint32_t dwControlState;
     ::D2WinAccountList* pNewList = D2_NEW_AT(::D2WinAccountList, ".\\Src\\D2WinAccountList.cpp", 0x24);
     memset(pNewList, 0, 0x58);
     pNewList->sControl.neD2FormType = FORM_AccountList;
     pNewList->sControl.dwState |= gadwBitMasks[0];
-    uVar1 = pNewList->sControl.dwState | gadwBitMasks[2];
+    dwControlState = pNewList->sControl.dwState | gadwBitMasks[2];
     pNewList->nUserData = nUserData;
-    pNewList->sControl.dwState = uVar1;
+    pNewList->sControl.dwState = dwControlState;
     pNewList->sControl.dwSizeX = nSizeX;
     pNewList->sControl.dwPosX = nPosX;
     pNewList->sControl.dwPosY = nPosY;

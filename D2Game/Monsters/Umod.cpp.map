@@ -1,0 +1,486 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monsters/Umod.cpp",
+  "functions": [
+    {
+      "name": "MONUMOD_RollNameSeed",
+      "address": "005a0ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0ce0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MONUMOD_RollNameSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UMOD_IncreaseMonsterHp",
+      "address": "005a0d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0d20"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "UMOD_IncreaseMonsterHp",
+        "GetTxtMaxHp",
+        "_alldiv",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_ApplyHpBonus",
+      "address": "005a0dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0dc0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MONUMOD_ApplyHpBonus",
+        "GetGamePointer",
+        "GetUmodConstant",
+        "UMOD_IncreaseMonsterHp",
+        "CheckMonsterType",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_ApplyChampionLevelBonus",
+      "address": "005a0e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0e40"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MONUMOD_ApplyChampionLevelBonus",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SERVER_GetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_ApplyChampionStats",
+      "address": "005a0e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a0e80"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MONUMOD_ApplyChampionStats",
+        "GetGamePointer",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SERVER_GetUnitStat",
+        "GetDifficultyLevels",
+        "TXT_MonStats_GetBaseId",
+        "ValidateClassId",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_ApplyColdEnchant",
+      "address": "005a1080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1080"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "GetUmodConstant",
+        "MONUMOD_ApplyColdEnchant",
+        "GetGamePointer",
+        "STATLIST_SetUnitStat",
+        "MONUMOD_ApplyChampionStats",
+        "STATSEX_GetCurrentStat",
+        "GetMonLvlTxt",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2MonLvlTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_ApplyBerserker",
+      "address": "005a11f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a11f0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MONUMOD_ApplyBerserker",
+        "STATLIST_SetUnitStat",
+        "MONUMOD_ApplyChampionStats"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_ApplyPossessed",
+      "address": "005a1230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1230"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MONUMOD_ApplyPossessed",
+        "UMOD_IncreaseMonsterHp",
+        "MONUMOD_ApplyChampionStats"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_ApplyFanatic",
+      "address": "005a1280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1280"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MONUMOD_ApplyFanatic",
+        "GetGamePointer",
+        "UMOD_IncreaseMonsterHp",
+        "GetDifficultyLevels",
+        "TXT_MonStats_GetBaseId",
+        "ValidateClassId",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONUMOD_SetEventTimer",
+      "address": "005a1330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1330"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MONUMOD_SetEventTimer",
+        "GetGamePointer",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MagicResist",
+      "address": "005a1370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1370"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "MagicResist",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TeleHeal",
+      "address": "005a1600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1600"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "TeleHeal",
+        "SetSkill",
+        "SKILLS_GetSkillByEnum",
+        "SetSkillMode",
+        "SetUnsetAiFlags0x20"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AuraEnchanted",
+      "address": "005a1650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1650"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "AuraEnchanted",
+        "STATSEX_GetCurrentStat",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "UNIT_GetModuloFromSeed",
+        "SetSkill",
+        "Server_SelectSkill"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ExtraStrong",
+      "address": "005a17e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a17e0"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "ExtraStrong",
+        "GetGamePointer",
+        "GetDifficultyLevels",
+        "TXT_MonStats_GetBaseId",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "D2MonUModTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ExtraFast",
+      "address": "005a1910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1910"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "ExtraFast",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FireEnchanted",
+      "address": "005a1990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1990"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "FireEnchanted",
+        "GetGamePointer",
+        "STATSEX_GetCurrentStat",
+        "GetUmodConstant",
+        "STATLIST_AddUnitStat",
+        "MagicResist"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LightningEnchanted",
+      "address": "005a1b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1b00"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "GetUmodConstant",
+        "LightningEnchanted",
+        "GetGamePointer",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_AddUnitStat",
+        "MagicResist"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ColdEnchanted",
+      "address": "005a1c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1c70"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "ColdEnchanted",
+        "GetGamePointer",
+        "STATSEX_GetCurrentStat",
+        "GetUmodConstant",
+        "STATLIST_AddUnitStat",
+        "MagicResist"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PoisonEnchanted",
+      "address": "005a1e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1e00"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "PoisonEnchanted",
+        "GetGamePointer",
+        "STATSEX_GetCurrentStat",
+        "GetUmodConstant",
+        "STATLIST_AddUnitStat",
+        "MagicResist"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ManaBurn",
+      "address": "005a1f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a1f90"
+        }
+      ],
+      "namespace": "D2Game::Monsters::Monsters::Umod",
+      "calledFunctions": [
+        "GetUmodConstant",
+        "ManaBurn",
+        "GetGamePointer",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_AddUnitStat",
+        "MagicResist"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

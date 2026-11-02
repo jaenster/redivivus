@@ -100,12 +100,12 @@ void __stdcall GLBLOCKS_RenderTileSubBlocks(D2TileLibraryEntryStrc * pTileEntry,
     }
 
     do {
-      short int* psVar1;
-      psVar1 = &pTileEntry->pSubTiles[nSubBlockIdx].nOffsetX;
-      pbDstRow = pbDstBuf + (int)*psVar1 + psVar1[1] * 0x100;
-      if (psVar1[4] & 1U) {
-        if (psVar1[4] & 4U) {
-          pbSrc = *(uint8_t**)(psVar1 + 8);
+      short int* pSubtile;
+      pSubtile = &pTileEntry->pSubTiles[nSubBlockIdx].nOffsetX;
+      pbDstRow = pbDstBuf + (int)*pSubtile + pSubtile[1] * 0x100;
+      if (pSubtile[4] & 1U) {
+        if (pSubtile[4] & 4U) {
+          pbSrc = *(uint8_t**)(pSubtile + 8);
           nRleRowsLeft = 0xf;
           pbRleRowStart = pbDstRow;
           do {
@@ -126,7 +126,7 @@ void __stdcall GLBLOCKS_RenderTileSubBlocks(D2TileLibraryEntryStrc * pTileEntry,
             }
           } while (nRleRowsLeft);
         } else {
-          nErrAddr = *(void**)(psVar1 + 8);
+          nErrAddr = *(void**)(pSubtile + 8);
           pbDstRow += 0xe;
           nCopyWidth = 4;
           if (!nErrAddr) {
@@ -173,16 +173,16 @@ BOOL __fastcall GLBLOCKS_LoadFloorTileTexture(D2TileLibraryEntryStrc * pTileLibr
       exit(-1);
     }
     if (!nCacheSlot) {
-      int iVar1;
+      int nNodeIndex;
       GLBLOCKS_RenderTileSubBlocks(pTileLibraryEntry, (uint8_t*)gpGlBlocksFloorBuffer);
       nCacheSlot = glFloorCache::GLFLOOR_EnsureCapacity(&gGlideFloorTextureCache);
       pTileLibraryEntry->nTextureCacheIndex = nCacheSlot;
-      iVar1 = nCacheSlot - 1;
-      if (iVar1 < 0) {
+      nNodeIndex = nCacheSlot - 1;
+      if (nNodeIndex < 0) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe5);
         exit(-1);
       }
-      if (iVar1 >= (int)gGlideFloorTextureCache.nMaxEntries) {
+      if (nNodeIndex >= (int)gGlideFloorTextureCache.nMaxEntries) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe6);
         exit(-1);
       }

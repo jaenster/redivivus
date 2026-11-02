@@ -1,0 +1,42 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Multi/OOG.cpp",
+  "functions": [
+    {
+      "name": "OOGUTIL_PrintCallback_SetFlag",
+      "address": "0043d9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043d9a0"
+        }
+      ],
+      "namespace": "D2Multi::OOG",
+      "calledFunctions": [
+        "OOGUTIL_PrintCallback_SetFlag"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_DrawCallback_SetModeAndClearMsgLoop",
+      "address": "0043e6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e6c0"
+        }
+      ],
+      "namespace": "D2Multi::OOG",
+      "calledFunctions": [
+        "OOGUTIL_DrawCallback_SetModeAndClearMsgLoop",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    }
+  ]
+}

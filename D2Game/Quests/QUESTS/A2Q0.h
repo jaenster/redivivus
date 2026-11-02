@@ -22,7 +22,7 @@ void __fastcall Q08_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x00 (gossip-select / NPC-talk entry). Branches on target NPC classId. Jerhyn (0xc9): if SpokeToJerhyn not yet Completed, queue his gossip line (string 0). Meshif (0xf4, boat to Act3): only if QUEST_TheSearchForCain is CannotCompleteQuestInGame (Cain already freed elsewhere) AND this player isn't already in the A2Q0 GUID list -> queue Meshif gossip (string 1) and remove player from the A1Q4 (Cain) list. Read-only quest gating; no state writes.
 void __fastcall Q08_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A2Q0 QUEST_SpokeToJerhyn — fpStatusFilter. Always returns false: this pseudo-quest has no journal/status entry to filter.
-bool __fastcall Q08_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q08_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // A2Q0 QUEST_SpokeToJerhyn — fpActiveFilter. For Jerhyn (nTargetClassId 0xc9): quest is "active" (return true) only while SpokeToJerhyn is not yet Completed. All other NPCs / completed -> false.
 bool __fastcall Q08_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x0a (player leave/cleanup). Removes the player's GUID (or -1) from the A2Q0 quest-GUID player list (counterpart to Callback_11's add-to-list).

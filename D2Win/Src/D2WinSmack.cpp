@@ -159,12 +159,12 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
       exit(-1);
     }
 
-    uint32_t uVar1 = pSmack->sControl.dwState;
-    if (gadwBitMasks[2] & uVar1 && gadwBitMasks[0] & uVar1) {
-      OnPress pOVar2;
-      pOVar2 = pSmack->sControl.fpOnPress;
-      if (pOVar2) {
-        bOnPressResult = (*pOVar2)(pControlMsg);
+    uint32_t dwState = pSmack->sControl.dwState;
+    if (gadwBitMasks[2] & dwState && gadwBitMasks[0] & dwState) {
+      OnPress pOVar1;
+      pOVar1 = pSmack->sControl.fpOnPress;
+      if (pOVar1) {
+        bOnPressResult = (*pOVar1)(pControlMsg);
         return bOnPressResult;
       }
     }
@@ -173,22 +173,22 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 }
 
 // @sourcefile .\Src\D2WinSmack.cpp
-::D2WinSmack * __fastcall D2WinSmack(int32_t nParam1, int32_t nParam2, int32_t nWidth, int32_t nHeight, OnPress pfnOnPress) {
-    uint32_t uVar1;
+::D2WinSmack * __fastcall D2WinSmack(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, OnPress pfnOnPress) {
+    uint32_t dwState;
     ::D2WinSmack* pSmack = D2_NEW_AT(::D2WinSmack, ".\\Src\\D2WinSmack.cpp", 0x23);
     memset(pSmack, 0, 0x150);
     pSmack->sControl.neD2FormType = FORM_Smack;
     pSmack->sControl.dwState |= gadwBitMasks[0];
-    uVar1 = pSmack->sControl.dwState | gadwBitMasks[2];
+    dwState = pSmack->sControl.dwState | gadwBitMasks[2];
     pSmack->sControl.dwSizeX = nWidth;
-    pSmack->sControl.dwState = uVar1;
+    pSmack->sControl.dwState = dwState;
     pSmack->sControl.pNext = 0;
     pSmack->sControl.fpMouse = 0;
     pSmack->sControl.fpListCheck = 0;
     pSmack->sControl.fpKey = 0;
     pSmack->sControl.fpOnPress = pfnOnPress;
-    pSmack->sControl.dwPosX = nParam1;
-    pSmack->sControl.dwPosY = nParam2;
+    pSmack->sControl.dwPosX = nPosX;
+    pSmack->sControl.dwPosY = nPosY;
     pSmack->sControl.dwSizeY = nHeight;
     pSmack->sControl.fpDraw = (::Draw)(BOOL (__fastcall *)(::D2WinSmack*))D2WinSmack::Draw;
     pSmack->sControl.fpPush = D2WinSmack::Push;
@@ -198,8 +198,8 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     pSmack->sSmackerCtx.nPad[0] = '\0';
     pSmack->sSmackerCtx.nPad[1] = '\0';
     pSmack->sSmackerCtx.nPad[2] = '\0';
-    pSmack->sSmackerCtx.nX = (nWidth - 0x1d4) / 2 + nParam1;
-    pSmack->sSmackerCtx.nY = (nHeight - 0x3c) / 2 + nParam2;
+    pSmack->sSmackerCtx.nX = (nWidth - 0x1d4) / 2 + nPosX;
+    pSmack->sSmackerCtx.nY = (nHeight - 0x3c) / 2 + nPosY;
     D2WinMain::FORMS_AddControlToGlobalList(&pSmack->sControl);
     return pSmack;
 }

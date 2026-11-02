@@ -1680,13 +1680,13 @@ void __fastcall PLRMODES_BroadcastAllyAndPartyInfo(::SGAMEDATA * pGame, D2UnitSt
 
 // Per-frame server mode tick for a player in Walk/Run mode. Refreshes target, runs Blaze trail if STATE_blaze is set, drains stamina (downgrading Run->Walk on empty), and advances movement via UNITS_ProcessUnitMovement. Maintains the anti-teleport-hack trail: every ~25ms it records the player's path coords into a ring of 20 slots and, if movement exceeded a distance threshold, advances the slot. When movement completes (mode==2) it resolves any pending interact/queued skill: with no queued skill -> idle + SERVER_InteractOrPick on the target unit; with a queued skill -> GetSkill/GetSkillMode then PLRMODES_StartModeID to begin the skill. Clears bHasPendingInteract. Returns the resulting mode code.
 int32_t __fastcall PLRMODES_ModeCallback_WalkRunBlock(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
-    BOOL nStaminaDrained;
     int nPosY;
     int32_t nDistance;
     eD2UnitType eTargetUnitType;
     uint32_t uuid;
     int32_t nPosX;
     uint8_t byPrevSlot;
+    uint8_t byHistoryIndex;
     UNIT::SUnit::GetTarget(pGame, pUnit);
     eD2States eState;
     eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blaze);
@@ -1694,6 +1694,7 @@ int32_t __fastcall PLRMODES_ModeCallback_WalkRunBlock(::SGAMEDATA * pGame, D2Uni
       SKILLS::SkillSor::BlazePath(pGame, pUnit);
     }
     if (pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
+      BOOL nStaminaDrained;
       nStaminaDrained = PLRMODES_DrainStamina(pUnit);
       if (!nStaminaDrained) {
         PLRMODES_StartPathAndChangeMode(pGame, Walk, pUnit);
@@ -1707,12 +1708,11 @@ int32_t __fastcall PLRMODES_ModeCallback_WalkRunBlock(::SGAMEDATA * pGame, D2Uni
     D2UnitDataPlayerStrc* pPlayerData;
     pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (dwTickCount > pPlayerData->dwPosHistoryTick + 0x19) {
-      uint8_t bVar1;
-      bVar1 = pPlayerData->nPosHistoryIndex;
-      if (!bVar1) {
+      byHistoryIndex = pPlayerData->nPosHistoryIndex;
+      if (!byHistoryIndex) {
         byPrevSlot = 0x13;
       } else {
-        byPrevSlot = bVar1 - 1;
+        byPrevSlot = byHistoryIndex - 1;
       }
 
       eTargetUnitType = pUnit->eUnitType;
@@ -1735,8 +1735,8 @@ int32_t __fastcall PLRMODES_ModeCallback_WalkRunBlock(::SGAMEDATA * pGame, D2Uni
 
       nDistance = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nPosX, nPosY, pPlayerData->aPosHistory[byPrevSlot].nX, pPlayerData->aPosHistory[byPrevSlot].nY);
       if (nDistance > 0x2d) {
-        pPlayerData->aPosHistory[bVar1].nX = nPosX;
-        pPlayerData->aPosHistory[bVar1].nY = nPosY;
+        pPlayerData->aPosHistory[byHistoryIndex].nX = nPosX;
+        pPlayerData->aPosHistory[byHistoryIndex].nY = nPosY;
         pPlayerData->nPosHistoryIndex += '\x01';
         pPlayerData->dwPosHistoryTick = dwTickCount;
         if (pPlayerData->nPosHistoryIndex >= 0x14) {

@@ -142,8 +142,8 @@ void __stdcall DRAW_UI_FPSStats() {
 
     int32_t nStatValue;
     eD2RendererMode eRendererMode_lcl;
-    int iVar1;
-    uint32_t uVar2;
+    int nMemory;
+    uint32_t dwSpriteCacheSize;
     int32_t nCacheTotal;
     int32_t nAsyncFiles;
     int32_t nCelCacheCurrent;
@@ -206,13 +206,13 @@ void __stdcall DRAW_UI_FPSStats() {
         return;
       }
 
-      iVar1 = Engine::Gfx::GFX_GetCofCacheFlags();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x78, "GFX Memory->%i", iVar1);
-      iVar1 = Engine::Gfx::GFX_GetGfxSystemFlags();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x84, "COF Memory->%i of %i", Engine::Gfx::GFX_GetCofCacheMemUsage(), iVar1);
-      uVar2 = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCacheSize();
+      nMemory = Engine::Gfx::GFX_GetCofCacheFlags();
+      D2gfx::D2GFX::D2GFX_DrawString(10, 0x78, "GFX Memory->%i", nMemory);
+      nMemory = Engine::Gfx::GFX_GetGfxSystemFlags();
+      D2gfx::D2GFX::D2GFX_DrawString(10, 0x84, "COF Memory->%i of %i", Engine::Gfx::GFX_GetCofCacheMemUsage(), nMemory);
+      dwSpriteCacheSize = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCacheSize();
       nCacheTotal = D2CMP::SRC::SpriteCache::SPRITECACHE_GetTotalEntries();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x90, "Sprite Cache Memory->%i of %i", nCacheTotal, uVar2);
+      D2gfx::D2GFX::D2GFX_DrawString(10, 0x90, "Sprite Cache Memory->%i of %i", nCacheTotal, dwSpriteCacheSize);
       nAsyncFiles = Fog::FOG_GetAsyncFileCount_ReturnZero();
       D2gfx::D2GFX::D2GFX_DrawString(10, 0x9c, "Async Files->%i", nAsyncFiles);
       nCelCacheCurrent = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCurrentSize();

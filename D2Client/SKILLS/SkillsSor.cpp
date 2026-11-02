@@ -146,8 +146,8 @@ BOOL __fastcall Skills_CltStFunc_ApplyInfernoState(D2UnitStrc * pUnit, eD2Skills
     return 1;
 }
 
-void __fastcall SKILLSSOR_SetInfernoFrames(D2UnitStrc * pUnit, int32_t nParam) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && nParam)) {
+void __fastcall SKILLSSOR_SetInfernoFrames(D2UnitStrc * pUnit, int32_t nTotalFrames) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && nTotalFrames)) {
       return;
     }
 
@@ -157,12 +157,12 @@ void __fastcall SKILLSSOR_SetInfernoFrames(D2UnitStrc * pUnit, int32_t nParam) {
       return;
     }
 
-    D2Common::Units::SetAnimationSpeed(pUnit, (int32_t)((int64_t)((uint64_t)(uint8_t)pMissilesTxt->AnimLen << 8) / (int64_t)nParam));
+    D2Common::Units::SetAnimationSpeed(pUnit, (int32_t)((int64_t)((uint64_t)(uint8_t)pMissilesTxt->AnimLen << 8) / (int64_t)nTotalFrames));
 }
 
 // Client-side: spawns an Inferno (or Hydra-fire variant) missile for the Sorceress. Looks up cltmissilea/cltmissileb from SkillsTxt; randomly picks between them using the unit seed (50/50). Reads target coords via GetCooordinates, evaluates calc[0] for frame count (min 1), fires MakeMissile with nFlags=0x8020. If the missile is created and the unit has STATE_inferno active: advances the animation sequence to frame 8 (or decrements nGfxCurrentFrame by 0x200 if no anim sequence).
 D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nParam;
+    int32_t nTotalFrames;
     D2UnitStrc* pMissile;
     eD2States eInfernoState;
     D2SkillArgStrc sSkillArg;
@@ -193,9 +193,9 @@ D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD
         }
       }
 
-      nParam = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-      if (nParam < 1) {
-        nParam = 1;
+      nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+      if (nTotalFrames < 1) {
+        nTotalFrames = 1;
       }
 
       memset(&sSkillArg, 0, 0x5c);
@@ -207,10 +207,10 @@ D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
       sSkillArg.eSkillNo = eSkill;
-      sSkillArg.nTotalFrames = nParam;
+      sSkillArg.nTotalFrames = nTotalFrames;
       pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
       if (pMissile) {
-        SKILLSSOR_SetInfernoFrames(pMissile, nParam);
+        SKILLSSOR_SetInfernoFrames(pMissile, nTotalFrames);
       }
 
       eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
@@ -662,7 +662,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_Blizzard(D2UnitStrc * pUnit, eD2Skills eSki
 }
 
 // Client missile collision event callback for Sorceress Blizzard/Frozen Orb ice shard spawning. Fires only on nParam1==0 (hit event). Validates pUnit can interact with the missile owner, checks missile flags2 bit 1 (piercing/spawning flag), then spawns a cltmissilea sub-missile at the owner's position and adds the cltoverlaya overlay to the struck unit.
-int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nUnused, eD2Skills eSkill, int32_t nParam2) {
+int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nUnused, eD2Skills eSkill, int32_t nSkillLevel) {
     uint32_t bCanInteract;
     D2MissilesTxt* pMissileTxt;
     D2SkillsTxt* pSkillTxt;
@@ -701,7 +701,7 @@ int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2
         sSkillArg.nFlags = 0x20;
         sSkillArg.pOwner = pUnit;
         sSkillArg.pMissile = pUnit;
-        sSkillArg.nSkillLevel = nParam2;
+        sSkillArg.nSkillLevel = nSkillLevel;
         sSkillArg.nMissileTxtNo = eMissileId;
         sSkillArg.nUnitX = Units::GetXPosFromDynamicPathUnit(pOwnerUnit);
         sSkillArg.nUnitY = Units::GetYPosFromDynamicPathUnit(pOwnerUnit);

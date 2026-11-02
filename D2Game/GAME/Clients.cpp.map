@@ -1,0 +1,2617 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/Clients.cpp",
+  "functions": [
+    {
+      "name": "QServerClearAll",
+      "address": "005376c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005376c0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "QServerClearAll"
+      ],
+      "usedTypes": [
+        "D2ClientStrc *"
+      ]
+    },
+    {
+      "name": "DeleteCriticalSections",
+      "address": "00537730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537730"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "DeleteCriticalSections"
+      ]
+    },
+    {
+      "name": "GetClientByToken",
+      "address": "00537760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537760"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetClientByToken"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LeaveCriticalSection_ClientById",
+      "address": "005377a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005377a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "LeaveCriticalSection_ClientById"
+      ]
+    },
+    {
+      "name": "SERVER_GetClientFromGmeByClientId",
+      "address": "00537810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537810"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SERVER_GetClientFromGmeByClientId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENTS_GetControlUnit",
+      "address": "00537860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537860"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENTS_GetControlUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_LinkServerPlayerUnitToClient",
+      "address": "005378e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005378e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SERVER_LinkServerPlayerUnitToClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SendHandshakePacket0x0B",
+      "address": "00537930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537930"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_SendHandshakePacket0x0B",
+        "NET_D2GS_SERVER_Send_CMD_BYTE_INT"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetCientFlag0x01",
+      "address": "00537970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537970"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetCientFlag0x01",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetGameDataHook",
+      "address": "005379a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005379a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetGameDataHook"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "AppearenceItems",
+      "address": "005379d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005379d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "AppearenceItems",
+        "SaveCharAppearance",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AppearenceItems2",
+      "address": "00537a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537a40"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "AppearenceItems2",
+        "SaveCharAppearance",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeClientList",
+      "address": "00537ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537ac0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "FreeClientList",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "GAME_OnClientRoomChange",
+      "address": "00537b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537b50"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GAME_OnClientRoomChange",
+        "DRLGROOM_SwapRoomDataForRoomEx",
+        "DRLGROOM_SwapActiveRoomExBetweenLevels",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "CLIENT_RevealRoomAndSendUnits",
+        "RoomClearForClientAndHideMap",
+        "FindUnitFromTable",
+        "PacketUpdateForClient",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetPlayerPortalFlags",
+        "GetPortalFlagFromLevelId",
+        "SetPlayerPortalFlags"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_AddUnitToProximitySortedList",
+      "address": "00537d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537d10"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_AddUnitToProximitySortedList",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitProximityNodeStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_PopulateVisibilityPacketBuffer",
+      "address": "00537ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537ee0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_PopulateVisibilityPacketBuffer",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitProximityNodeStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GAME_CollectNearbyUnitPositions",
+      "address": "00537fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537fd0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GAME_CollectNearbyUnitPositions",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "CLIENTS_GetControlUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CLIENT_AddUnitToProximitySortedList",
+        "CLIENT_PopulateVisibilityPacketBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc *",
+        "D2UnitProximityNodeStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UpdateSingleClient",
+      "address": "005380d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005380d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "UpdateSingleClient",
+        "CLIENTS_GetControlUnit",
+        "UNITS_GetRoom",
+        "GAME_SendRemoveObjectsForAdjacentRooms",
+        "SendAdjacentRoomUpdates",
+        "STATLIST_IterateChangedStats",
+        "ITEMS_RecalcAndRefreshInventory",
+        "ITEMMODE_ReturnZero3",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "QUEST_OnPlayerEnteredArea",
+        "IterateNpcIntroUnits",
+        "GAME_OnClientRoomChange",
+        "ARENA_UpdatePlayerKillState",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "IsClientInGame",
+      "address": "005381c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005381c0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "IsClientInGame"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SetRoom",
+      "address": "005381f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005381f0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_SetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GAME_OnClientRoomChange"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetRoom",
+      "address": "00538230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538230"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "AttachUnitType",
+      "address": "00538260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538260"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "AttachUnitType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetAct",
+      "address": "005382b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005382b0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SetAct",
+      "address": "005382e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005382e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_SetAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ClientSetDwSaveTo1",
+      "address": "00538320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538320"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "ClientSetDwSaveTo1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSavePacketList",
+      "address": "00538350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538350"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetSavePacketList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetSavePacketList",
+      "address": "00538380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538380"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetSavePacketList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetUnk0x1AD",
+      "address": "005383b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005383b0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetUnk0x1AD",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SetUnk0x1AD",
+      "address": "005383e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005383e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_SetUnk0x1AD",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "InitUnitForClient",
+      "address": "00538410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538410"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "InitUnitForClient",
+        "CLIENTS_GetControlUnit",
+        "UNITS_GetTargetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "SERVER_SendInitUnitPacket"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RemoveUnitForClient",
+      "address": "005384e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005384e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "RemoveUnitForClient",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "SendRemoveObject",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientNo",
+      "address": "00538590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538590"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetClientNo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ReturnFFFFFFFF",
+      "address": "005385c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005385c0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "ReturnFFFFFFFF"
+      ]
+    },
+    {
+      "name": "ReturnVoid",
+      "address": "005385d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005385d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "ReturnVoid"
+      ]
+    },
+    {
+      "name": "GetPlayerClassId",
+      "address": "005385f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005385f0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetPlayerClassId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetClassOfClient",
+      "address": "00538620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538620"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetClassOfClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetFileFlags",
+      "address": "00538630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538630"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetFileFlags"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "GetCharacterStatus",
+      "address": "00538640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538640"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetCharacterStatus"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetFlagIf",
+      "address": "00538650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538650"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetFlagIf"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CLIENT_TestFileFlags",
+      "address": "00538670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538670"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_TestFileFlags"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetClientStatus",
+      "address": "00538680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538680"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetClientStatus"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SetConnectionState",
+      "address": "005386d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005386d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_SetConnectionState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetGolem",
+      "address": "00538700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538700"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetGolem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetGolemGUID",
+      "address": "00538730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538730"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetGolemGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "SetCreateTime",
+      "address": "00538760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538760"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetCreateTime",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "__time32_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetCreateTime",
+      "address": "00538790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538790"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetCreateTime",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetGame",
+      "address": "005387c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005387c0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetGame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsUnitNearClient",
+      "address": "005387f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005387f0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "IsUnitNearClient",
+        "UNITS_GetRoom"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetCharName",
+      "address": "00538830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538830"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetCharName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARENA_SetClientDead",
+      "address": "00538860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538860"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "ARENA_SetClientDead",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ARENA_BroadcastScoreOnJoin"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ARENA_IsClientDead",
+      "address": "005388c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005388c0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "ARENA_IsClientDead",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetCharTemplate",
+      "address": "00538900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538900"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetCharTemplate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "QSERVER_IsClientAllowedToJoin",
+      "address": "00538930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538930"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "QSERVER_IsClientAllowedToJoin"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SendPongByClientId",
+      "address": "005389a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005389a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SendPongByClientId",
+        "NET_SERVER_FindGameByClientId",
+        "GetTickCount",
+        "_allmul",
+        "_alldiv",
+        "NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING",
+        "Unlock",
+        "_aulldiv"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2QServerClientStrcExt",
+        "SGAMEDATA",
+        "int32_t",
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_GetPlayerNameByClientId",
+      "address": "00538b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538b70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_GetPlayerNameByClientId",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetClientId",
+      "address": "00538bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538bf0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetClientId",
+        "HashForName",
+        "SStrCmpI"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVER_IsPlayerCharacterInGame",
+      "address": "00538c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538c60"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SERVER_IsPlayerCharacterInGame",
+        "HashForName",
+        "SStrCmpI",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_AccumulateSaveData",
+      "address": "00538ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538ce0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_AccumulateSaveData",
+        "AllocServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy",
+        "PLAYERSAVE_CRC32MissileTable"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SaveFileHeaderStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSaveGame",
+      "address": "00538e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538e00"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetSaveGame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SaveFileHeaderStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSaveGameSize",
+      "address": "00538e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538e30"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetSaveGameSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CopySafeBuffer",
+      "address": "00538e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538e60"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CopySafeBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory",
+        "AllocServerMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SaveFileHeaderStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DeleteCurrentSave",
+      "address": "00538f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538f10"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "DeleteCurrentSave",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENTS_ResetSaveTransferState",
+      "address": "00538f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538f80"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENTS_ResetSaveTransferState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_HasSaveData",
+      "address": "00538fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538fc0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_HasSaveData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GAMECLIENT_GetFlags0x20",
+      "address": "00539000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539000"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GAMECLIENT_GetFlags0x20",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetSaveCompleteFlag",
+      "address": "00539030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539030"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetSaveCompleteFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetFirstClientOfGame",
+      "address": "00539070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539070"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetFirstClientOfGame"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "GetNext",
+      "address": "00539080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539080"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetNext"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "SetGotkeyInfo",
+      "address": "005390a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005390a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetGotkeyInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetHotKey",
+      "address": "005390d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005390d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetHotKey"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetGuildFlags",
+      "address": "00539110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539110"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetGuildFlags"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SetGuildFlags",
+      "address": "00539120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539120"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetGuildFlags"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "GetGuildTag",
+      "address": "00539130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539130"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetGuildTag"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "SetGuildTag",
+      "address": "00539140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539140"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetGuildTag"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "GetGuildName",
+      "address": "00539150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539150"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetGuildName"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "SetGuildName",
+      "address": "00539170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539170"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetGuildName"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "GetGuildInfo",
+      "address": "00539190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539190"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetGuildInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetGuildInfo",
+      "address": "005391c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005391c0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetGuildInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetExperience",
+      "address": "005391e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005391e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetExperience",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetExperience",
+      "address": "00539210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539210"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetExperience"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "HasWeaponSwapped",
+      "address": "00539220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539220"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "HasWeaponSwapped"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "SetWeaponSwap",
+      "address": "00539230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539230"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetWeaponSwap"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVER_PutPacketInQueueList",
+      "address": "00539240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539240"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SERVER_PutPacketInQueueList"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PacketListStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_SetPacketList",
+      "address": "00539270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539270"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_SetPacketList"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_ClearDispatchList",
+      "address": "005392a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005392a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_ClearDispatchList"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PacketListStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_GetPacketList",
+      "address": "005392d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005392d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetPacketList"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PacketListStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_GetDispatchList",
+      "address": "005392e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005392e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetDispatchList"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PacketListStrc"
+      ]
+    },
+    {
+      "name": "GetAccountName",
+      "address": "005392f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005392f0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetAccountName",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "GetClientContainer",
+      "address": "00539300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539300"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetClientContainer"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "GetRealm",
+      "address": "00539310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539310"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GetRealm"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "SetRealm",
+      "address": "00539320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539320"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SetRealm"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_GetPlayerBasicsData",
+      "address": "00539330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539330"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetPlayerBasicsData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PlayerBasicsData",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RecordSyncWarpTimestamp",
+      "address": "00539360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539360"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "RecordSyncWarpTimestamp",
+        "SUNIT_GetClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckSyncWarpRateExceeded",
+      "address": "005393f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005393f0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CheckSyncWarpRateExceeded",
+        "SUNIT_GetClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetLangId",
+      "address": "00539470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539470"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetLangId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc"
+      ]
+    },
+    {
+      "name": "CLIENT_PlacePlayerInRoom",
+      "address": "005394a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005394a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_PlacePlayerInRoom",
+        "GetAct",
+        "GetTownLevelIdFromAct",
+        "GetUnitSizeX",
+        "SpawnUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "NET_D2GS_SERVER_Send_0x07_MapReveal",
+        "CLIENT_SetRoom",
+        "UNITS_PlaceUnitInRoom",
+        "NET_D2GS_SERVER_Send_0x15_WarpXY",
+        "NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof",
+        "INVENTORY_GetCorpse",
+        "ROOMCORPSE_GetGUID",
+        "CORPSE_GetData",
+        "CORPSE_GetMercClassId",
+        "INVENTORY_GetNextCorpse",
+        "INVENTORY_RemoveCorpse",
+        "CreateMerc",
+        "FindUnitFromTable",
+        "GetTownLevelIdFromActNo",
+        "PLAYER_PlaceCorpse",
+        "SUNITNPC_ValidateGambleItem",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "GetXPosFromDynamicPathUnit",
+        "SetXForStaticUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SetYForStaticUnit",
+        "SetTargetUnitForDynamicUnit",
+        "SKILL_SpawnMissileFunction"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DrlgActStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CLIENT_LoadCharacterAndSendGameData",
+      "address": "00539760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539760"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_LoadCharacterAndSendGameData",
+        "GetCharName",
+        "LOGMANAGER_TraceToModuleLog",
+        "CLIENT_LoadOrCreatePlayerUnit",
+        "ARENA_GetFlags",
+        "CLIENT_SendHandshakePacket0x0B",
+        "GetPlayerPortalFlags",
+        "NET_D2GS_SERVER_Send_0x5F_PortalFlags",
+        "STATLIST_IterateChangedStats",
+        "CheckFlagWithMask",
+        "SendUpdatedItemsToClient",
+        "NET_D2GS_SERVER_Send_0x7B_SYNCHOTKEYS",
+        "GetPlayerData",
+        "NET_D2GS_SERVER_Send_0x23_SetSkill",
+        "NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate",
+        "ITEM_ProcessInventoryUpdates",
+        "CalculateBonusResistances",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientHotKeyStrc",
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ArenaFlags",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CreateClient",
+      "address": "00539a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539a30"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CreateClient",
+        "AllocServerMemory",
+        "memset",
+        "GetTickCount",
+        "ARENA_IsArenaMode",
+        "ARENA_GetTemplate",
+        "GetClassFromCharTemplateTxt",
+        "SStrCopy",
+        "HashForName"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CleanUp",
+      "address": "00539be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539be0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CleanUp",
+        "SAVEFILE_WriteEncodedInt14Bit",
+        "CLIENTS_GetControlUnit",
+        "STATSEX_GetCurrentStat",
+        "SaveCharAppearance",
+        "SMemCopy",
+        "SStrLen",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CleanUpClient",
+      "address": "00539da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00539da0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CleanUpClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SERVER_GetClientFromGmeByClientId",
+        "CleanUp",
+        "SavePlayerOnCleanUp",
+        "HashForName",
+        "SStrCmpI",
+        "BroadcastPlayerLeave",
+        "CLIENTS_GetControlUnit",
+        "SERVER_GetUnitStat",
+        "PARTY_RemoveUnitFromParty",
+        "FreePets",
+        "SERVER_InitClassicTowns",
+        "QUEST_OnPlayerDisconnect",
+        "TRADE_CompleteTrade",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "DRLGROOM_SwapRoomDataForRoomEx",
+        "DRLGROOM_SwapActiveRoomExBetweenLevels",
+        "CLIENT_RemoveFromAdjacentRooms",
+        "FreeServerMemory",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2PacketListStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetAttachedUnit",
+      "address": "0053a280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a280"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_GetAttachedUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindUnitFromTable",
+        "IsUnitNearClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "UnusedClientJoinGame",
+      "address": "0053a2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a2f0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "UnusedClientJoinGame",
+        "CLIENTS_GetControlUnit",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "CLIENT_LoadCharacterAndSendGameData",
+        "CLIENT_PlacePlayerInRoom",
+        "GAME_OnClientRoomChange",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnusedClientJoinGame2",
+      "address": "0053a420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a420"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "UnusedClientJoinGame2",
+        "CLIENTS_GetControlUnit",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "CLIENT_LoadCharacterAndSendGameData",
+        "CLIENT_PlacePlayerInRoom"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DispatchUnitUpdate",
+      "address": "0053a500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a500"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "DispatchUnitUpdate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CLIENTS_GetControlUnit",
+        "SERVER_SendInitUnitPacket",
+        "PacketUpdateForClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SendRoomUnitUpdates",
+      "address": "0053a5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a5d0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SendRoomUnitUpdates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DispatchUnitUpdate"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SendAdjacentRoomUpdates",
+      "address": "0053a620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a620"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "SendAdjacentRoomUpdates",
+        "GetAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "SendRoomUnitUpdates"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CLIENT_SendRoomUnitUpdates",
+      "address": "0053a6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a6a0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_SendRoomUnitUpdates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_SendUnitUpdateToClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc"
+      ]
+    },
+    {
+      "name": "UnusedUpdateFunctionForUnits",
+      "address": "0053a6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a6f0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "UnusedUpdateFunctionForUnits",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "UNITS_SendUnitUpdateToClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAME_SendRemoveObjectsForAdjacentRooms",
+      "address": "0053a770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a770"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "GAME_SendRemoveObjectsForAdjacentRooms",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "CLIENTS_GetControlUnit",
+        "GetDrlgDeleteFromRoom",
+        "NET_D2GS_SERVER_Send_0x0A_REMOVEUNIT",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DrlgDeleteStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreePendingDrlgDeletes",
+      "address": "0053a820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a820"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "FreePendingDrlgDeletes",
+        "DRLGROOM_GetRoomFromAct",
+        "DRLGROOM_FreeDrlgDelete"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgActStrc *",
+        "D2RoomStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "CLIENT_RevealRoomAndSendUnits",
+      "address": "0053a8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a8e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_RevealRoomAndSendUnits",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "NET_D2GS_SERVER_Send_0x07_MapReveal",
+        "DRLGROOM_AddClientToRoom",
+        "MONSTERAI_TriggerMageThink",
+        "CLIENTS_GetControlUnit",
+        "SERVER_SendInitUnitPacket",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RoomClearForClientAndHideMap",
+      "address": "0053a9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a9b0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "RoomClearForClientAndHideMap",
+        "SendRemoveObject",
+        "DRLGROOM_RemoveClientFromRoom",
+        "MONSTER_StartAiAndRegenTimers",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "NET_D2GS_SERVER_Send_0x08_REMOVEROOM",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MovementUpdateForClient",
+      "address": "0053aaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053aaa0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "MovementUpdateForClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PLAYER_ClearTargetIfMatch",
+        "MONSTER_ClearTargetIfMatch"
+      ],
+      "usedTypes": [
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_BroadcastMovementToAdjacentRooms",
+      "address": "0053ab10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053ab10"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_BroadcastMovementToAdjacentRooms",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "MovementUpdateForClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_RemoveFromAdjacentRooms",
+      "address": "0053ab80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053ab80"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_RemoveFromAdjacentRooms",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "DRLGROOM_RemoveClientFromRoom"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TellClientToLoadAct",
+      "address": "0053abe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053abe0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "TellClientToLoadAct",
+        "GetAct",
+        "GetTownLevelIdFromAct",
+        "NET_D2GS_SERVER_Send_0x03_NEWACT",
+        "DRLGENV_GetCycleIndex_Ticks_EclipseFromAct",
+        "NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

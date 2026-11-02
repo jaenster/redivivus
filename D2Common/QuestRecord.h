@@ -27,7 +27,7 @@ struct D2BitBufferStrc * __stdcall CreateBitBuffer(struct D2PoolManagerStrc * pM
 void __stdcall FreeQuestRecordPool(struct D2PoolManagerStrc * pMemory, struct D2BitBufferStrc * pBitBuffer);
 // Copies the 0x60-byte quest record from szText into pBitBuffer (0x18 dwords; halts if nSize != 0x60). If nParam is non-zero, for each 16-bit quest slot (bit offsets 0..0x2ae, stride 16) clears QUESTSTATE_JustCompleted (13) and QUESTSTATE_CannotCompleteQuestInGame (14) and sets QUESTSTATE_FinishedInPreviousGame (15) when QUESTSTATE_RewardAwaits (1) is set.
 // Bit numbers from the 1.14d asm 0065c50e-0065c54d (ESI = slot base + 14) and the program's eD2QuestState enum.
-void __stdcall ReadQuestRecordFromBuffer(struct D2BitBufferStrc * pBitBuffer, char * szText, int16_t nSize, int32_t nParam);
+void __stdcall ReadQuestRecordFromBuffer(struct D2BitBufferStrc * pBitBuffer, char * szText, int16_t nSize, int32_t bResetQuestFlags);
 void __stdcall CopyQuestBitBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pOutputBuffer, int16_t nLength, uint32_t dwParam);
 
 } // namespace D2Common::QuestRecord

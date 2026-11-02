@@ -1,0 +1,843 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SSTR.cpp",
+  "functions": [
+    {
+      "name": "SStrChr",
+      "address": "00413490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413490"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrChr",
+        "SErrSetLastError"
+      ]
+    },
+    {
+      "name": "SStrChrR",
+      "address": "004134d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004134d0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrChrR",
+        "SErrSetLastError"
+      ]
+    },
+    {
+      "name": "SSTR_FindChar",
+      "address": "00413510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413510"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SSTR_FindChar",
+        "SErrSetLastError",
+        "SStrChrR",
+        "SStrChr"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SStrCmp",
+      "address": "00413550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413550"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrCmp",
+        "SErrSetLastError",
+        "strncmp"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SStrCmpI",
+      "address": "00413590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413590"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrCmpI",
+        "SErrSetLastError",
+        "_strnicmp"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SStrCopy",
+      "address": "004135d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004135d0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrCopy",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrLen",
+      "address": "00413750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413750"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrLen",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrPack",
+      "address": "00413800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413800"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrPack",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2vsprintf",
+      "address": "00413a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413a00"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "D2vsprintf",
+        "vsprintf",
+        "_vsnprintf"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "va_list"
+      ]
+    },
+    {
+      "name": "SStrPrintf",
+      "address": "00413a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413a40"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrPrintf",
+        "SErrSetLastError",
+        "D2vsprintf"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrVPrintf",
+      "address": "00413a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413a80"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrVPrintf",
+        "SErrSetLastError",
+        "D2vsprintf"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "va_list"
+      ]
+    },
+    {
+      "name": "SStrToInt",
+      "address": "00413ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413ac0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrToInt",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrToUnsigned",
+      "address": "00413b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413b30"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrToUnsigned",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrTokenize",
+      "address": "00413b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413b80"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrTokenize",
+        "SErrSetLastError",
+        "SStrChr"
+      ],
+      "usedTypes": [
+        "char *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrHash",
+      "address": "00413ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413ce0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrHash",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSTR_HashString64",
+      "address": "00413dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413dc0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SSTR_HashString64",
+        "_allmul",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "ULONGLONG",
+        "int64_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSTR_bjhash",
+      "address": "00413f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00413f30"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SSTR_bjhash"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrHashHT",
+      "address": "00414150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414150"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrHashHT",
+        "SSTR_bjhash",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SStrUpper",
+      "address": "004141e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004141e0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrUpper",
+        "_strupr"
+      ]
+    },
+    {
+      "name": "SStrLower",
+      "address": "00414200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414200"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrLower",
+        "_strlwr"
+      ]
+    },
+    {
+      "name": "SSTR_Pow10Helper",
+      "address": "00414220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414220"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SSTR_Pow10Helper"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSTR_PowDoubleInt",
+      "address": "00414260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414260"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SSTR_PowDoubleInt"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSTR_InitPow10Table",
+      "address": "004142a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004142a0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SSTR_InitPow10Table"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrDup",
+      "address": "00414310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414310"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrDup",
+        "SMemAlloc",
+        "SErrSetLastError",
+        "SStrLen",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSTR_InitConversionTables",
+      "address": "00414360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414360"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SSTR_InitConversionTables",
+        "SSTR_InitPow10Table"
+      ]
+    },
+    {
+      "name": "SStrToInt64",
+      "address": "00414370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00414370"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrToInt64",
+        "SErrSetLastError",
+        "_allmul",
+        "SSTR_PowDoubleInt"
+      ],
+      "usedTypes": [
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "SStrToDouble",
+      "address": "004144c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004144c0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrToDouble",
+        "SErrSetLastError",
+        "SSTR_InitConversionTables",
+        "SSTR_PowDoubleInt",
+        "SStrToInt"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SStrToFloat",
+      "address": "004146f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004146f0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SStrToFloat",
+        "SErrSetLastError",
+        "SSTR_InitConversionTables",
+        "SSTR_PowDoubleInt",
+        "SStrToInt"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UTF16_CalculateUTF8Length",
+      "address": "006c7030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7030"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF16_CalculateUTF8Length"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UTF16_ToUTF8",
+      "address": "006c7130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7130"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF16_ToUTF8"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_CalculateUTF16Length",
+      "address": "006c72f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c72f0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF8_CalculateUTF16Length"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UTF8_ToUTF16",
+      "address": "006c7410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7410"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF8_ToUTF16"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_DecodeNextChar",
+      "address": "006c75b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c75b0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF8_DecodeNextChar"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_EncodeChar",
+      "address": "006c76c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c76c0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF8_EncodeChar"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_AdvanceToCharBoundary",
+      "address": "006c7790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7790"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF8_AdvanceToCharBoundary"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_StepBackOneChar",
+      "address": "006c77b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c77b0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF8_StepBackOneChar",
+        "UTF8_AdvanceToCharBoundary"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UTF8_StepForwardOneChar",
+      "address": "006c77d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c77d0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "UTF8_StepForwardOneChar",
+        "UTF8_AdvanceToCharBoundary"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRANSTBL_UnicodeToSingleByte",
+      "address": "006c77f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c77f0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "TRANSTBL_UnicodeToSingleByte"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRANSTBL_SingleByteToUnicode",
+      "address": "006c78c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c78c0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "TRANSTBL_SingleByteToUnicode"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRANSTBL_UnicodeToLatin1",
+      "address": "006c7900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7900"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "TRANSTBL_UnicodeToLatin1",
+        "TRANSTBL_UnicodeToSingleByte"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRANSTBL_UnicodeToLatin2",
+      "address": "006c7920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7920"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "TRANSTBL_UnicodeToLatin2",
+        "TRANSTBL_UnicodeToSingleByte"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRANSTBL_UnicodeToKorean",
+      "address": "006c7940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7940"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "TRANSTBL_UnicodeToKorean",
+        "TRANSTBL_UnicodeToSingleByte"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRANSTBL_Latin1ToUnicode",
+      "address": "006c7960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7960"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "TRANSTBL_Latin1ToUnicode",
+        "TRANSTBL_SingleByteToUnicode"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRANSTBL_Latin2ToUnicode",
+      "address": "006c7980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7980"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "TRANSTBL_Latin2ToUnicode",
+        "TRANSTBL_SingleByteToUnicode"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TRANSTBL_KoreanToUnicode",
+      "address": "006c79a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c79a0"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "TRANSTBL_KoreanToUnicode",
+        "TRANSTBL_SingleByteToUnicode"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SSTR_StringLength",
+      "address": "006c9a38",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9a38"
+        }
+      ],
+      "namespace": "Storm::Source::SSTR",
+      "calledFunctions": [
+        "SSTR_StringLength"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Units.cpp",
+  "functions": [
+    {
+      "name": "GetType",
+      "address": "0044be50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be50"
+        }
+      ],
+      "namespace": "D2Client::Units",
+      "calledFunctions": [
+        "GetType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "GetXPosFromDynamicPathUnit",
+      "address": "0045adf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045adf0"
+        }
+      ],
+      "namespace": "D2Client::Units::Units",
+      "calledFunctions": [
+        "GetXPosFromDynamicPathUnit",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetYPosFromDynamicPathUnit",
+      "address": "0045ae20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ae20"
+        }
+      ],
+      "namespace": "D2Client::Units::Units",
+      "calledFunctions": [
+        "GetYPosFromDynamicPathUnit",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IfPlayer",
+      "address": "0046f950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f950"
+        }
+      ],
+      "namespace": "D2Client::Units",
+      "calledFunctions": [
+        "IfPlayer",
+        "IsActive",
+        "PlayerMessage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "IsUnitDistanceLowerThan700",
+      "address": "004b9e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004b9e10"
+        }
+      ],
+      "namespace": "D2Client::Units",
+      "calledFunctions": [
+        "IsUnitDistanceLowerThan700",
+        "GetPlayerUnit_UI",
+        "GetTargetCoords",
+        "CalculateHypotenusePowered"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "POINT"
+      ]
+    }
+  ]
+}

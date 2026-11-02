@@ -95,7 +95,7 @@ int32_t __fastcall MapMissilesTxtKeywordToNumber(char * szKey) {
 // Validates and resolves a calc-code string (szText) for a missile table column. For nCalcType==1: looks up the code in the skills link table (nLinkType==3) or missiles link table (nLinkType==4); sets *pdwParam=1 on a successful lookup, 0 on fallback via GetClassIdFromName on the misc-calc link. For other nCalcType values: packs the up-to-4-char string into a uint32 and calls GetClassIdFromName on the miss-calc link, always setting *pdwParam=0.
 int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolvedToConstant, int nAST, int nKeywordNumber) {
     char cFourthChar;
-    int32_t iVar1;
+    int32_t nCalcId;
     if (nAST == 1) {
       int nLinkIdx;
       if (nKeywordNumber == 3) {
@@ -103,9 +103,9 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
           nLinkIdx = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtSkillsHeaderLink, szText, 0);
           if (nLinkIdx < 0) {
             MISSILETBLS_PadCodeTo4Chars(szText, (char*)&nAST);
-            iVar1 = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtSkillCalcLink, nAST, 1);
+            nCalcId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtSkillCalcLink, nAST, 1);
             *pOutHasResolvedToConstant = 0;
-            return iVar1;
+            return nCalcId;
           }
 
           *pOutHasResolvedToConstant = 1;
@@ -121,9 +121,9 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
         }
 
         MISSILETBLS_PadCodeTo4Chars(szText, (char*)&nAST);
-        iVar1 = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMissCalcLink, nAST, 1);
+        nCalcId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMissCalcLink, nAST, 1);
         *pOutHasResolvedToConstant = 0;
-        return iVar1;
+        return nCalcId;
       }
     }
 
@@ -155,22 +155,22 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
 
     nAST = (uint32_t)((uint32_t)(uint8_t)cFourthChar << 24 | (uint32_t)((uint32_t)nAST & 0xffffffu));
     lookup_miss_calc:
-    iVar1 = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMissCalcLink, nAST, 1);
+    nCalcId = Fog::Src::Excel::GetClassIdFromName(sgtDataTable.pTxtMissCalcLink, nAST, 1);
     *pOutHasResolvedToConstant = 0;
-    return iVar1;
+    return nCalcId;
 }
 
 void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
-    size_t sVar1;
+    size_t nCalcCodeSize;
     int32_t nParsedLen;
     uint8_t byCalcBuf[1024];
     if (!pRecord) {
       return;
     }
     if (pSrc) {
-      sVar1 = Fog::Skills::SKILLS_ParseCalcExpression(pSrc, byCalcBuf, 0x400, (CalcGetKeyWordToNumber_t)MapMissilesTxtKeywordToNumber, nullptr, MISSILETBLS_ValidateCalcCode);
-      if ((int)sVar1 > 0) {
-        nParsedLen = DataTbls::DATATBLS_AppendDataToBuffer(&sgtDataTable.pMissCode, &sgtDataTable.nMissCodeSize, &sgtDataTable.nMissCodeCapacity, byCalcBuf, sVar1);
+      nCalcCodeSize = Fog::Skills::SKILLS_ParseCalcExpression(pSrc, byCalcBuf, 0x400, (CalcGetKeyWordToNumber_t)MapMissilesTxtKeywordToNumber, nullptr, MISSILETBLS_ValidateCalcCode);
+      if ((int)nCalcCodeSize > 0) {
+        nParsedLen = DataTbls::DATATBLS_AppendDataToBuffer(&sgtDataTable.pMissCode, &sgtDataTable.nMissCodeSize, &sgtDataTable.nMissCodeCapacity, byCalcBuf, nCalcCodeSize);
         *(int32_t*)(nOffset + (int)pRecord) = nParsedLen;
         return;
       }

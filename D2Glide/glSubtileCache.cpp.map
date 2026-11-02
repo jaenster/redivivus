@@ -1,0 +1,194 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Glide/glSubtileCache.cpp",
+  "functions": [
+    {
+      "name": "GLSUBTILE_Initialize",
+      "address": "0050ed90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050ed90"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_Initialize",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheNodeStrc",
+        "GlSubtileCacheStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GLSUBTILE_AppendNodeToTail",
+      "address": "0050ef40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050ef40"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_AppendNodeToTail"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheNodeStrc",
+        "GlSubtileCacheStrc"
+      ]
+    },
+    {
+      "name": "GLSUBTILE_RemoveNodeFromHead",
+      "address": "0050ef80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050ef80"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_RemoveNodeFromHead"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheNodeStrc",
+        "GlSubtileCacheStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GLSUBTILE_RemoveNodeByIndex",
+      "address": "0050efe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050efe0"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_RemoveNodeByIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GLSUBTILE_RemoveNodeFromHead"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheNodeStrc",
+        "GlSubtileCacheStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GLSUBTILE_AllocateNode",
+      "address": "0050f070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f070"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_AllocateNode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GLSUBTILE_PromoteNodeToMRU",
+      "address": "0050f0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f0f0"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_PromoteNodeToMRU",
+        "GLSUBTILE_RemoveNodeByIndex",
+        "GLSUBTILE_AppendNodeToTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GLSUBTILE_InvalidateByIndex",
+      "address": "0050f1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f1b0"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_InvalidateByIndex",
+        "GLSUBTILE_RemoveNodeByIndex"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheStrc"
+      ]
+    },
+    {
+      "name": "GLSUBTILE_Destroy",
+      "address": "0050f210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f210"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_Destroy",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheStrc"
+      ]
+    },
+    {
+      "name": "GLSUBTILE_EnsureCapacity",
+      "address": "0050f2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050f2b0"
+        }
+      ],
+      "namespace": "D2Glide::glSubtileCache",
+      "calledFunctions": [
+        "GLSUBTILE_EnsureCapacity",
+        "GLSUBTILE_AllocateNode"
+      ],
+      "usedTypes": [
+        "GlSubtileCacheNodeStrc",
+        "GlSubtileCacheStrc"
+      ]
+    }
+  ]
+}

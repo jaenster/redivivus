@@ -10,7 +10,6 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Chat.h"
 
@@ -21,16 +20,16 @@ namespace Bnclient::BNGatewayAccess {
 
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
 int32_t __thiscall GetSystemTimeZone(D2BNetGatewayAccessStr * pGatewayAccess) {
-    int32_t iVar1;
+    int32_t nTimeZoneBias;
     _TIME_ZONE_INFORMATION tziInfo;
-    Storm::Source::SSystem::SMemZero(&tziInfo, 0xac);
+    Storm::Source::SMem::SMemZero(&tziInfo, 0xac);
     /* LPTIME_ZONE_INFORMATION lpTimeZoneInformation for GetTimeZoneInformation */ GetTimeZoneInformation(&tziInfo);
     LANGID langId = GetUserDefaultLangID();
-    if ((langId & 0x3ff) != 9 || (iVar1 = 0x1e0 , (langId & 0xfc00) != 0xc00)) {
-      iVar1 = tziInfo.Bias;
+    if ((langId & 0x3ff) != 9 || (nTimeZoneBias = 0x1e0 , (langId & 0xfc00) != 0xc00)) {
+      nTimeZoneBias = tziInfo.Bias;
     }
 
-    return iVar1;
+    return nTimeZoneBias;
 }
 
 // @sourcefile .\BNetGW.cpp
@@ -129,9 +128,9 @@ char * __stdcall Name(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
     }
 
     uint32_t nFirstFieldLen = Storm::Source::SSTR::SStrLen(pEntry);
-    char* pcVar1 = pEntry + nFirstFieldLen + 1;
+    char* szZoneField = pEntry + nFirstFieldLen + 1;
     pEntry = pEntry + nFirstFieldLen + 1;
-    if (*pcVar1 != '\0') {
+    if (*szZoneField != '\0') {
       nFirstFieldLen = Storm::Source::SSTR::SStrLen(pEntry);
       return pEntry + nFirstFieldLen + 1;
     }
@@ -139,10 +138,10 @@ char * __stdcall Name(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
     return pEntry;
 }
 
-char * __stdcall Realm(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nParam) {
+char * __stdcall Realm(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nIndex) {
     uint32_t nRealmStrLen;
     char* szRealmNext;
-    char* pGatewayEntry = Nth(pGatewayAccess, nParam);
+    char* pGatewayEntry = Nth(pGatewayAccess, nIndex);
     char* szRealmsCursor = (char*)pGatewayAccess->pRealmsData;
     char cRealmChar = *szRealmsCursor;
     while (cRealmChar != '\0') {
@@ -167,16 +166,16 @@ char * __stdcall Realm(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nParam) 
     return "";
 }
 
-void __stdcall SetCurGateway(int32_t nParam1, int32_t nParam2) {
-    /* 0x118150  19  ?SetCurGateway@BNGatewayAccess@@QAGXH@Z */ if (!(*(int*)(nParam1 + 0x10) && nParam2 >= 1 && nParam2 <= *(int*)(nParam1 + 8))) {
+void __stdcall SetCurGateway(int32_t pGatewayAccess, int32_t nGatewayIdx) {
+    /* 0x118150  19  ?SetCurGateway@BNGatewayAccess@@QAGXH@Z */ if (!(*(int*)(pGatewayAccess + 0x10) && nGatewayIdx >= 1 && nGatewayIdx <= *(int*)(pGatewayAccess + 8))) {
       return;
     }
-    if (nParam2 > 99) {
-      nParam2 = 99;
+    if (nGatewayIdx > 99) {
+      nGatewayIdx = 99;
     }
 
-    *(int32_t*)(nParam1 + 0xc) = nParam2;
-    *(uint32_t*)(nParam1 + 4) = 1;
+    *(int32_t*)(pGatewayAccess + 0xc) = nGatewayIdx;
+    *(uint32_t*)(pGatewayAccess + 4) = 1;
 }
 
 // GetGatewayList(this=ECX, szValueName on stack) __thiscall, ret 4. Reads the gateway
@@ -418,15 +417,15 @@ void __thiscall PickClosestZone(void * pThis, int32_t nGmtMinutes) {
       } while (nCurGatewayIdx <= *(int*)((int)pThis + 8));
     }
 
-    char* pcVar1 = Nth(pThis, nBestGatewayIdx);
-    if (*pcVar1 != '\0') {
-      pGatewayEntry = Storm::Source::SSTR::SStrLen(pcVar1);
-      pcVar1 = pcVar1 + pGatewayEntry + 1;
+    char* szBestEntry = Nth(pThis, nBestGatewayIdx);
+    if (*szBestEntry != '\0') {
+      pGatewayEntry = Storm::Source::SSTR::SStrLen(szBestEntry);
+      szBestEntry = szBestEntry + pGatewayEntry + 1;
     }
 
-    nGmtOffset = strtol(pcVar1, &szStrtolEnd, 10);
-    pcVar1 = Nth(pThis, nBestGatewayIdx);
-    Bnet::BnetLog_WriteLine("Gateway %d (%s at GMT %02d) is closest to %02d.%02d", nBestGatewayIdx, pcVar1, nGmtOffset, nGmtMinutes / 0x3c, nMinutes);
+    nGmtOffset = strtol(szBestEntry, &szStrtolEnd, 10);
+    szBestEntry = Nth(pThis, nBestGatewayIdx);
+    Bnet::BnetLog_WriteLine("Gateway %d (%s at GMT %02d) is closest to %02d.%02d", nBestGatewayIdx, szBestEntry, nGmtOffset, nGmtMinutes / 0x3c, nMinutes);
     Bnet::BNET_LogIndent(2, -4);
     if (!(*(int*)((int)pThis + 0x10) && nBestGatewayIdx >= 1 && nBestGatewayIdx <= *(int*)((int)pThis + 8))) {
       return;
@@ -700,22 +699,22 @@ static void CACHE_DecryptBlock(uint32_t dwKey, uint32_t * pdwData, uint32_t nByt
     }
 }
 
-static void CACHE_EncryptBlock(uint32_t dwKey, uint32_t nByteLen, uint32_t * pnParam) {
+static void CACHE_EncryptBlock(uint32_t dwKey, uint32_t nByteLen, uint32_t * pdwData) {
     uint32_t nDwordCount;
     void* pCryptTableBase = g_pCacheCryptTable;
     int nEncSeed = -0x11111112;
     for (nDwordCount = nByteLen >> 2; nDwordCount; nDwordCount--) {
       uint32_t dwPlainDword;
       nEncSeed += *(int*)((int)pCryptTableBase + (dwKey & 0xff) * 4 + 0x1000);
-      dwPlainDword = *pnParam;
-      *pnParam = nEncSeed + dwKey ^ dwPlainDword;
+      dwPlainDword = *pdwData;
+      *pdwData = nEncSeed + dwKey ^ dwPlainDword;
       dwKey = dwKey >> 0xb | ~dwKey * 0x200000 + 0x11111111;
-      pnParam++;
+      pdwData++;
       nEncSeed = nEncSeed * 0x21 + 3 + dwPlainDword;
     }
 }
 
-static LPFILETIME * CACHE_GetFileTime(uint32_t nParam) {
+static LPFILETIME * CACHE_GetFileTime(uint32_t nSecondsFromNow) {
     // Static local variables (originally global data)
     static LPFILETIME lpFileTime_008818ac; D2_STATIC_GUARD_BSS(lpFileTime_008818ac, "Bnclient::BNGatewayAccess::CACHE_GetFileTime::lpFileTime_008818ac");
     static int gnCacheFileTimeHigh; D2_STATIC_GUARD_BSS(gnCacheFileTimeHigh, "Bnclient::BNGatewayAccess::CACHE_GetFileTime::gnCacheFileTimeHigh");
@@ -723,7 +722,7 @@ static LPFILETIME * CACHE_GetFileTime(uint32_t nParam) {
     static uint32_t gnCacheLastFileTimeParam; D2_STATIC_GUARD_BSS(gnCacheLastFileTimeParam, "Bnclient::BNGatewayAccess::CACHE_GetFileTime::gnCacheLastFileTimeParam");
 
     _SYSTEMTIME sSystemTime;
-    if (nParam == gnCacheLastFileTimeParam) {
+    if (nSecondsFromNow == gnCacheLastFileTimeParam) {
       DWORD dwCurTick;
       dwCurTick = GetTickCount();
       if (dwCurTick == gdwCacheLastTickCount) {
@@ -733,21 +732,21 @@ static LPFILETIME * CACHE_GetFileTime(uint32_t nParam) {
 
     /* LPSYSTEMTIME lpSystemTime for GetSystemTime */ GetSystemTime(&sSystemTime);
     /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ SystemTimeToFileTime(&sSystemTime, (LPFILETIME)&lpFileTime_008818ac);
-    int64_t llAdjustedFileTime = (uint64_t)nParam * 10000000 + (uint64_t)((uint64_t)(uint32_t)gnCacheFileTimeHigh << 32 | (uint64_t)(uint32_t)(uintptr_t)lpFileTime_008818ac);
+    int64_t llAdjustedFileTime = (uint64_t)nSecondsFromNow * 10000000 + (uint64_t)((uint64_t)(uint32_t)gnCacheFileTimeHigh << 32 | (uint64_t)(uint32_t)(uintptr_t)lpFileTime_008818ac);
     lpFileTime_008818ac = (LPFILETIME)llAdjustedFileTime;
-    gnCacheLastFileTimeParam = nParam;
+    gnCacheLastFileTimeParam = nSecondsFromNow;
     gnCacheFileTimeHigh = (int)((uint64_t)llAdjustedFileTime >> 0x20);
     gdwCacheLastTickCount = GetTickCount();
     return &lpFileTime_008818ac;
 }
 
-static uint32_t __stdcall CACHE_HashString(int32_t nParam, char * szText) {
+static uint32_t __stdcall CACHE_HashString(int32_t nHashType, char * szText) {
     uint32_t dwHash = 0x7fed7fed;
     int nHashSeed = -0x11111112;
     for (; szText && *szText != '\0'; szText++) {
       int nUpperChar;
       nUpperChar = toupper((int)*szText);
-      dwHash = dwHash + nHashSeed ^ *(uint32_t*)((int)g_pCacheCryptTable + (nParam * 0x100 + (int)(char)nUpperChar) * 4);
+      dwHash = dwHash + nHashSeed ^ *(uint32_t*)((int)g_pCacheCryptTable + (nHashType * 0x100 + (int)(char)nUpperChar) * 4);
       nHashSeed = nHashSeed * 0x21 + (int)(char)nUpperChar + 3 + dwHash;
     }
 
@@ -784,7 +783,7 @@ void __stdcall CACHE_InitCryptTable() {
     } while (nCount);
 }
 
-static uint32_t __stdcall CACHE_FindHashEntry(uint32_t nParam, char * szText) {
+static uint32_t __stdcall CACHE_FindHashEntry(uint32_t nLocale, char * szText) {
     uint32_t nHash0 = CACHE_HashString(0, szText);
     uint32_t nHash1 = CACHE_HashString(1, szText);
     uint32_t nHash2 = CACHE_HashString(2, szText);
@@ -802,7 +801,7 @@ static uint32_t __stdcall CACHE_FindHashEntry(uint32_t nParam, char * szText) {
 
       pdwHashEntry = (uint32_t*)(gpCacheBufferPoolFirst + nHashSlotOffset);
       if (*pdwHashEntry == nHash1 && pdwHashEntry[1] == nHash2 && nBlockIdx != -2) {
-        if (pdwHashEntry[2] == nParam) {
+        if (pdwHashEntry[2] == nLocale) {
           return nHash0;
         }
         if (!pdwHashEntry[2]) {
@@ -827,13 +826,13 @@ static void CACHE_RemoveEntry(char * szText) {
     uint32_t nHashSlot = CACHE_FindHashEntry(0, szText);
     void* pCacheBlockTable = gpCacheBlockTable;
     while (nHashSlot != -1) {
-      uint32_t uVar1;
+      uint32_t nBlockTableIdx;
       pBlockIdxField = (uint32_t*)(gpCacheBufferPoolFirst + nHashSlot * 0x10 + 0xc);
-      uVar1 = *pBlockIdxField;
+      nBlockTableIdx = *pBlockIdxField;
       gpCacheBlockTable = pCacheBlockTable;
-      if (uVar1 < gpCacheFileHeader->nBlockTableSize) {
-        *(uint32_t*)((int)pCacheBlockTable + uVar1 * 0x10 + 8) = 0;
-        *(uint32_t*)((int)pCacheBlockTable + uVar1 * 0x10 + 0xc) = 0;
+      if (nBlockTableIdx < gpCacheFileHeader->nBlockTableSize) {
+        *(uint32_t*)((int)pCacheBlockTable + nBlockTableIdx * 0x10 + 8) = 0;
+        *(uint32_t*)((int)pCacheBlockTable + nBlockTableIdx * 0x10 + 0xc) = 0;
       }
 
       *pBlockIdxField = -2;
@@ -902,12 +901,12 @@ void __stdcall CACHE_FreeAll() {
 
 // @sourcefile .\CACHE.CPP
 // EDX dwSize: callers pass the cached block's size; not read here.
-int __fastcall CACHE_FreeMem(void * pParam, uint32_t dwSize) {
-    if (!pParam) {
+int __fastcall CACHE_FreeMem(void * pMem, uint32_t dwSize) {
+    if (!pMem) {
       return 0;
     }
 
-    Storm::Source::SMem::SMemFree(pParam, ".\\CACHE.CPP", 0x16f, 0);
+    Storm::Source::SMem::SMemFree(pMem, ".\\CACHE.CPP", 0x16f, 0);
     return 1;
 }
 
@@ -1124,7 +1123,6 @@ void __stdcall CACHE_Rebuild() {
 // Reads cached data from bncache.dat using key lookup, validates CRC32, and returns decrypted data buffer
 // @sourcefile .\CACHE.CPP
 BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * ppDataBuf, LPDWORD pDataSizeOut) {
-    uint32_t nHashSlot;
     uint32_t nCrc32Computed;
     FILETIME* pCurrentFileTime;
     LONG nFileTimeCmp;
@@ -1140,6 +1138,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
     int nRebuildReason;
     D2BnCacheEntryHeaderStrc entryHeader;
     HANDLE hFile;
+    void* pBlockTable;
     if (pCrc32Out) {
       *pCrc32Out = 0;
       pCrc32Out[1] = 0;
@@ -1156,7 +1155,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
     char* szKeySaved;
     szKeySaved = szKey;
     if (!(!szKey || *szKey == '\0' || !ppDataBuf || !pDataSizeOut || !gbCacheIsOpen)) {
-      void* pvVar1;
+      uint32_t nHashSlot;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ nRebuildReason = 0;
       nCorruptReason = 0;
       EnterCriticalSection(&lpCriticalSection_00881894);
@@ -1274,10 +1273,10 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
           }
 
           pDataAlloc = (uint32_t*)Storm::Source::SMem::SMemAlloc(*(uint32_t*)(nBlockEntryOffset + 8 + (int)gpCacheBlockTable), ".\\CACHE.CPP", 0x2b5, 0);
-          pvVar1 = gpCacheBlockTable;
+          pBlockTable = gpCacheBlockTable;
           hFile = ghCacheFileHandle;
           *ppDataBuf = pDataAlloc;
-          /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, *(int*)(nBlockEntryOffset + (int)pvVar1) + entryHeader.dwHeaderSize, (PLONG)0x0, 0);
+          /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, *(int*)(nBlockEntryOffset + (int)pBlockTable) + entryHeader.dwHeaderSize, (PLONG)0x0, 0);
           /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(ghCacheFileHandle, *ppDataBuf, *(DWORD*)(nBlockEntryOffset + 8 + (int)gpCacheBlockTable), pDataSizeOut, (LPOVERLAPPED)0x0);
           if (*pDataSizeOut != *(DWORD*)(nBlockEntryOffset + 8 + (int)gpCacheBlockTable)) {
             nRebuildReason = 7;
@@ -1325,7 +1324,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
     char cKeyCh;
     HANDLE hFile;
     FILETIME* lpFileTime2;
-    void* pvVar2;
+    void* pBlockTable;
     uint32_t nBlockIdx;
     nBlockIdx = 0;
     if (!szCacheKey || *szCacheKey == '\0' || !pDataToWrite || !nDataSize || !pFileTime || !nCacheExpiry || !gbCacheIsOpen || nDataSize > 0x1000000) {
@@ -1432,12 +1431,12 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
       if (*(int*)(gpCacheBufferPoolFirst + nProbeSlot * 0x10 + 0xc) == -1 || *(int*)(gpCacheBufferPoolFirst + nProbeSlot * 0x10 + 0xc) == -2) {
         pHashEntry[1] = nHash2;
         *pHashEntry = nBytesReadWrite;
-        pvVar2 = gpCacheBlockTable;
+        pBlockTable = gpCacheBlockTable;
         pHashEntry[3] = nBlockIdx;
         pHashEntry[2] = 0;
         nBlockEntryOffset = nBlockIdx * 0x10;
-        *(uint32_t*)(nBlockEntryOffset + 8 + (int)pvVar2) = nDataSize;
-        *(uint32_t*)(nBlockEntryOffset + 0xc + (int)pvVar2) = 0xc0000000;
+        *(uint32_t*)(nBlockEntryOffset + 8 + (int)pBlockTable) = nDataSize;
+        *(uint32_t*)(nBlockEntryOffset + 0xc + (int)pBlockTable) = 0xc0000000;
         memset(&abEntryHeader, 0, 0x144);
         abEntryHeader.dwHeaderSize = 0x144;
         pFileTimePair = CACHE_GetFileTime(0);

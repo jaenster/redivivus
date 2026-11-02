@@ -1,0 +1,289 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinList.cpp",
+  "functions": [
+    {
+      "name": "FORMS_DestroyD2WinList",
+      "address": "00506e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506e60"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "FORMS_DestroyD2WinList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory",
+        "FORMS_DestroyControl"
+      ],
+      "usedTypes": [
+        "D2WinList",
+        "D2WinListEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINLIST_AddListItem",
+      "address": "00506ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00506ec0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "D2WINLIST_AddListItem",
+        "SetAndReturnLastFont",
+        "AllocClientMemory",
+        "STRING_GetWideStringLength",
+        "STRING_CopyWideString",
+        "TEXT_CalcTextDimensions",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinList",
+        "D2WinListEntry",
+        "WCHAR",
+        "fpListEntryCallback",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2WINLIST_GetSelectedIndex",
+      "address": "00507000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507000"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "D2WINLIST_GetSelectedIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinList"
+      ]
+    },
+    {
+      "name": "D2WINLIST_GetEntryByIndex",
+      "address": "00507050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507050"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "D2WINLIST_GetEntryByIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinList",
+        "D2WinListEntry"
+      ]
+    },
+    {
+      "name": "D2WINLIST_GetItemCount",
+      "address": "005070a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005070a0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "D2WINLIST_GetItemCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WinList"
+      ]
+    },
+    {
+      "name": "D2WINLIST_LoadPentSpinCursor",
+      "address": "005070d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005070d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "D2WINLIST_LoadPentSpinCursor",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "IMAGE_LoadDC6"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WINLIST_FreePentSpinCursor",
+      "address": "00507140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507140"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "D2WINLIST_FreePentSpinCursor",
+        "IMAGE_FreeImage"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "00507160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507160"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "Draw",
+        "SetAndReturnLastFont",
+        "memset",
+        "D2GFX_DrawImage",
+        "DRAW_text",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2WinList",
+        "D2WinListEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Push",
+      "address": "005072f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005072f0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "Push",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinList",
+        "D2WinListEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ListCheck",
+      "address": "005073b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005073b0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "ListCheck",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinList",
+        "D2WinListEntry",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Key",
+      "address": "00507420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00507420"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "Key",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2WINMAIN_SetFocusedControl"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "D2WinList",
+        "D2WinListEntry",
+        "fpListEntryCallback",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2WinList",
+      "address": "005075e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005075e0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinList",
+      "calledFunctions": [
+        "D2WinList",
+        "AllocClientMemory",
+        "memset",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "STRING_GetWideStringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRING_CopyWideString",
+        "TEXT_CalcTextDimensions",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinList",
+        "D2WinListEntry",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

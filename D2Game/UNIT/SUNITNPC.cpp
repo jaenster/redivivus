@@ -111,7 +111,7 @@ namespace D2Game::UNIT::SUNITNPC {
 
 // Server-side: allocates and initializes the NPC inventory/hireling-slot block (0x450 bytes) for a newly spawned NPC unit if not already initialized. Fills up to 10 hireling name slots drawn from GetHirelingNamesAndSize, seeding each slot via the NPC control RNG. Halts fatally if hireling name lookup fails.
 // @sourcefile .\UNIT\SUNITNPC.CPP
-void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nParam, uint32_t nNpcUnit) {
+void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClassId, uint32_t nNpcUnit) {
     uint32_t nCandidateSlot;
     uint32_t nSearchSlot;
     uint32_t* pSlotEntry;
@@ -132,7 +132,7 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nParam, u
     memset(nErrAddr, 0, 0x450);
     D2SeedStrc* pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame);
     int pNpcDataRaw = *(int*)(nHirelingCount + 0x10);
-    nHirelingCount = PLAYER::PlayerPets::GetHirelingNamesAndSize(pGame, nParam, &nNpcUnit, &nNameLast, nullptr);
+    nHirelingCount = PLAYER::PlayerPets::GetHirelingNamesAndSize(pGame, nNpcClassId, &nNpcUnit, &nNameLast, nullptr);
     if (nHirelingCount == -1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7a);
       exit(-1);
@@ -249,7 +249,7 @@ void __fastcall SUNITNPC_SetItemForNpc(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, 
 // Generates a single restocked NPC vendor item of a requested item code and stores it into the NPC's store inventory. Resolves the base item code, then on Nightmare/Hell difficulty (and high enough item level) may upgrade the code toward the item's uber/ultra/nightmare/hell upgrade variants via weighted RANDOM rolls against the NPC seed. Repeatedly calls ITEM_CreateFromTemplate until the generated item matches the target code and is not a 'Cracked' low-quality item (rejected items are deleted). On success picks the item's store page, attaches it to the NPC inventory grid via SERVER_ItemToInventory (falling back to the MERC page), or adds it to the NPC proxy if it doesn't fit. Returns the created item unit or NULL. Halts on null game/unit. Server-side D2Common SUnitNpc.
 // @sourcefile .\UNIT\SUNITNPC.CPP
 // Stack-slot reuse: the low byte of the nParam2 slot holds eStorePage (ItemTypes storepage of the created item, 00576571); then the whole slot holds pCreatedItem->nUnitGUID (005765ea), passed as the item GUID to SERVER_ItemToInventory.
-D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t nParam1, ::SGAMEDATA * pGame, int32_t bIsVendorItem, eD2ItemQuality eQuality, uint32_t nParam2, int32_t nParam) {
+D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t dwItemCode, ::SGAMEDATA * pGame, int32_t bIsVendorItem, eD2ItemQuality eQuality, uint32_t nItemLevel, int32_t nPlayerLevel) {
     D2ItemsTxt* pItemsTxt;
     D2SeedStrc* pNpcControl;
     uint32_t nRandVal;
@@ -272,13 +272,13 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t n
         exit(-1);
       }
 
-      pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nParam1, (int*)&pGame);
-      dwTargetItemCode = nParam1;
-      if (pGame_00->nDifficulty > 0 && nParam > 0x19) {
+      pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(dwItemCode, (int*)&pGame);
+      dwTargetItemCode = dwItemCode;
+      if (pGame_00->nDifficulty > 0 && nPlayerLevel > 0x19) {
         if (pGame_00->nDifficulty == 1) {
           pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame_00);
           nRandVal = D2Client::Archive::RANDOM_RandomNumberSelector(pNpcControl, 100000);
-          if (nRandVal < nParam2 * 0x40 + 4000 && (nRandVal = pItemsTxt->dwUberCode , nRandVal != 0) && nRandVal != 0x20202020) {
+          if (nRandVal < nItemLevel * 0x40 + 4000 && (nRandVal = pItemsTxt->dwUberCode , nRandVal != 0) && nRandVal != 0x20202020) {
             D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nRandVal, (int*)&pGame);
             dwTargetItemCode = pItemsTxt->dwUberCode;
           } else if (pItemsTxt->dwNightmareUpgrade != 0x20787878) {
@@ -288,8 +288,8 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t n
         } else {
           pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame_00);
           nRandVal = D2Client::Archive::RANDOM_RandomNumberSelector(pNpcControl, 100000);
-          if (!pGame_00->bExpansion || nRandVal >= nParam2 * 0x10 + 1000 || (nClassId = pItemsTxt->dwUltraCode , !nClassId) || nClassId == 0x20202020) {
-            if (nRandVal < nParam2 * 0x80 + 5000) {
+          if (!pGame_00->bExpansion || nRandVal >= nItemLevel * 0x10 + 1000 || (nClassId = pItemsTxt->dwUltraCode , !nClassId) || nClassId == 0x20202020) {
+            if (nRandVal < nItemLevel * 0x80 + 5000) {
               nRandVal = pItemsTxt->dwUberCode;
               if (nRandVal != 0x20202020 && nRandVal) {
                 D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(nRandVal, (int*)&pGame);
@@ -309,10 +309,10 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t n
 
       nRetryCount = 0;
       do {
-        nParam = 0;
+        nPlayerLevel = 0;
         while (true) {
           bItemAccepted = true;
-          pCreatedItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, (int32_t)pGame, pGame_00, 4, eQuality, 0, 1, nParam2, 0, 0, 0);
+          pCreatedItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, (int32_t)pGame, pGame_00, 4, eQuality, 0, 1, nItemLevel, 0, 0, 0);
           nItemQuality = D2Common::ITEMS::Items::GetItemQuality(pCreatedItem);
           if (nItemQuality == 1) {
             nItemQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pCreatedItem);
@@ -325,11 +325,11 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t n
             }
           }
 
-          nParam++;
+          nPlayerLevel++;
           if (bItemAccepted) {
             break;
           }
-          if (nParam >= 5) {
+          if (nPlayerLevel >= 5) {
             return nullptr;
           }
         }
@@ -351,7 +351,7 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t n
       }
 
       eStorePage = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_storepage(pCreatedItem);
-      nParam2 = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nParam2 + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eStorePage);
+      nItemLevel = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nItemLevel + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eStorePage);
       if (eStorePage == INVPAGE_None) {
         ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame_00, pCreatedItem);
         return nullptr;
@@ -362,14 +362,14 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t n
       nUnitGUID = pCreatedItem->nUnitGUID;
       nItemQuality = ITEMS::ItemMode::SERVER_ItemToInventory(".\\UNIT\\SUNITNPC.CPP", 0x16c, pGame_00, pUnit, nUnitGUID, D2Client::Units::GetXPosFromDynamicPathUnit(pCreatedItem), D2Client::Units::GetYPosFromDynamicPathUnit(pCreatedItem), 1, 1, 0);
       if (!nItemQuality) {
-        if ((char)nParam2 != '\x01') {
+        if ((char)nItemLevel != '\x01') {
           sunitproxy::SUNITPROXY_AddItemToNpcProxy(pUnit, pGame_00, pCreatedItem, 0);
           return nullptr;
         }
 
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pCreatedItem, INVPAGE_MERC);
-        nParam2 = pCreatedItem->nUnitGUID;
-        nItemQuality = ITEMS::ItemMode::SERVER_ItemToInventory(".\\UNIT\\SUNITNPC.CPP", 0x172, pGame_00, pUnit, nParam2, D2Client::Units::GetXPosFromDynamicPathUnit(pCreatedItem), D2Client::Units::GetYPosFromDynamicPathUnit(pCreatedItem), 1, 1, 0);
+        nItemLevel = pCreatedItem->nUnitGUID;
+        nItemQuality = ITEMS::ItemMode::SERVER_ItemToInventory(".\\UNIT\\SUNITNPC.CPP", 0x172, pGame_00, pUnit, nItemLevel, D2Client::Units::GetXPosFromDynamicPathUnit(pCreatedItem), D2Client::Units::GetYPosFromDynamicPathUnit(pCreatedItem), 1, 1, 0);
         if (!nItemQuality) {
           sunitproxy::SUNITPROXY_AddItemToNpcProxy(pUnit, pGame_00, pCreatedItem, 0);
           return nullptr;
@@ -450,11 +450,11 @@ void __fastcall SendMercForHireList(::SGAMEDATA * pGame, D2ClientStrc * pClient,
     }
 
     int32_t nLine = pUnit->nClassId;
-    if (!pGameNpc->sTrade.unk0x01) {
+    if (!pGameNpc->sTrade.bHirelingsInitialized) {
       SUNITNPC_InitNpcInventory(GAME::Clients::CLIENT_GetGame(pClient), nLine, (uint32_t)pGameNpc);
     }
 
-    nNpcClassIdOrErr = pGameNpc->unk0x10;
+    nNpcClassIdOrErr = pGameNpc->pHirelingSlots;
     D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingEntry(pGame->bExpansion, nLine, 0, 0);
     if (!pHirelingTxt) {
       *(volatile uint8_t*)0x0 = 0;
@@ -501,14 +501,14 @@ int32_t __fastcall SUNITNPC_GetActCappedLevel(::SGAMEDATA * pGame, D2UnitStrc * 
       return nEffectiveLevel;
     }
 
-    uint8_t bVar1 = pGameNpc->sTrade.nAct;
+    uint8_t nAct = pGameNpc->sTrade.nAct;
     aActLevels[0] = 12;
     aActLevels[1] = L'\x14';
     aActLevels[2] = L'\x1c';
     aActLevels[3] = 36;
     aActLevels[4] = 45;
-    if (bVar1 < 5) {
-      nEffectiveLevel = aActLevels[bVar1];
+    if (nAct < 5) {
+      nEffectiveLevel = aActLevels[nAct];
       if (nEffectiveLevel >= nLevel) {
         return nLevel;
       }
@@ -686,7 +686,7 @@ void __fastcall SUNITNPC_RepairAllItems(D2UnitStrc * pPlayer, D2InventoryStrc * 
 // Picks a random item code from the NPC's trade list 1. Finds the D2GameNpcStrc for pUnit (00535f10). If the list (sTrade +0xc, count +0x10) is non-empty it takes RANDOM_RandomNumberSelector(pSeed, nTradeList1), advances pSeed, resolves the 12-byte entry's code at +4 to its ItemsTxt line, writes the code to *pdwOutItemCode and returns 1. An empty list writes 0 to *pdwOutItemCode and returns 0. *pdwReservedOut is written back with its own entry value. No repair cost is computed.
 // Halts: line 0x389 if the NPC is not found, 0x383 if its trade block is null, 0x384 if trade byte +3 is 0.
 // Provenance: 1.14d asm 00576c90..00576d85.
-static int __stdcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SeedStrc * pSeed, uint32_t dwReserved, uint32_t * pdwOutItemCode, uint32_t * pdwReservedOut, uint32_t nParam) {
+static int __stdcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SeedStrc * pSeed, uint32_t dwReserved, uint32_t * pdwOutItemCode, uint32_t * pdwReservedOut, uint32_t nErrorLine) {
     uint8_t bVar1;
     uint32_t nModulo;
     int nNpcIndex;
@@ -695,7 +695,7 @@ static int __stdcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitS
     D2GameNpcStrc* pGameNpc = sunitproxy::GetGameNpcByUnit(pGame, pUnit, &nNpcIndex);
     D2SeedStrc* pSeedSave = pSeed;
     if (pGameNpc) {
-      if (pGameNpc != (D2GameNpcStrc*)-32 && (bVar1 = pGameNpc->sTrade.unk0x03 , bVar1 != 0)) {
+      if (pGameNpc != (D2GameNpcStrc*)-32 && (bVar1 = pGameNpc->sTrade.bHasStore , bVar1 != 0)) {
         nModulo = pGameNpc->sTrade.nTradeList1;
         if (nModulo && pGameNpc->sTrade.pTradeList1) {
           pSeed = (D2SeedStrc*)D2Client::Archive::RANDOM_RandomNumberSelector(pSeed, nModulo);
@@ -713,10 +713,10 @@ static int __stdcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitS
         }
       }
     } else {
-      nParam = 0x389;
+      nErrorLine = 0x389;
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nParam);
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
     exit(-1);
 }
 
@@ -804,9 +804,9 @@ bool __fastcall SUNITNPC_CheckNpcCanSellItem(::SGAMEDATA * pGame, D2UnitStrc * p
       return true;
     }
 
-    int iVar1 = pGameNpc->sTrade.nTradeList2;
+    int nTradeList2Count = pGameNpc->sTrade.nTradeList2;
     int nTradeIdx = 0;
-    if (iVar1 <= 0) {
+    if (nTradeList2Count <= 0) {
       return false;
     }
 
@@ -818,7 +818,7 @@ bool __fastcall SUNITNPC_CheckNpcCanSellItem(::SGAMEDATA * pGame, D2UnitStrc * p
 
       nTradeIdx++;
       pTradeList2Entry++;
-    } while (nTradeIdx < iVar1);
+    } while (nTradeIdx < nTradeList2Count);
 
     return false;
 }
@@ -828,7 +828,7 @@ void __fastcall SUNITNPC_GiveGoldOrDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Handles post-purchase NPC item refresh. For gamble mode (nBuyMode==2) with a personal NPC inventory, scans the player's carried items and refreshes the matching gamble item via SUNITNPC_RefreshNpcItem. Otherwise checks if the NPC can still sell the item; if not, refills the NPC's inventory slot via SUNITNPC_FillNpcInventory.
-void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * param_1, D2UnitStrc * pPlayerRaw, int32_t nBuyMode) {
+void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pPlayerRaw, int32_t nBuyMode) {
     D2UnitStrc* pFirstItem;
     D2UnitStrc* pCarriedItem;
     int nClientGUID;
@@ -861,8 +861,8 @@ void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, D2UnitStrc *
               pFirstItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pFirstItem);
               pUnit = pUnitSave;
               pGame = pGameSave;
-              if (pCarriedItem == param_1) {
-                SUNITNPC_RefreshNpcItem(pPlayerRaw, pUnitSave, param_1, pGameSave, 1);
+              if (pCarriedItem == pItem) {
+                SUNITNPC_RefreshNpcItem(pPlayerRaw, pUnitSave, pItem, pGameSave, 1);
                 return;
               }
             }
@@ -873,12 +873,12 @@ void __fastcall SUNITNPC_DeductGoldForPurchase(::SGAMEDATA * pGame, D2UnitStrc *
       }
     }
 
-    bool bVar2 = SUNITNPC_CheckNpcCanSellItem(pGame, pUnit, param_1);
+    bool bVar2 = SUNITNPC_CheckNpcCanSellItem(pGame, pUnit, pItem);
     if (bVar2) {
       return;
     }
 
-    SUNITNPC_FillNpcInventory(pUnit, param_1, pGame, 1);
+    SUNITNPC_FillNpcInventory(pUnit, pItem, pGame, 1);
 }
 
 // Checks the hireling slot array for an NPC (indexed by nNpcClassId via D2HirelingTxt name range). If all slots with valid entries are unfilled (count==0), frees the slot array, clears the pointer and a flags byte, then re-initialises the NPC's hireling inventory via SUNITNPC_InitNpcInventory. Halts if the hireling entry or name range is invalid.
@@ -1070,7 +1070,7 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
 void __fastcall SUNITNPC_ValidateGambleItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint16_t wPosY;
     int32_t nPosX;
-    int32_t iVar1;
+    int32_t nPosY;
     D2UnitStrc* pMerc = PLAYER::PlayerPets::SERVER_GetUnitPetByTypeId(pGame, pUnit, PETTYPE_hireable, 0);
     if (!pMerc) {
       return;
@@ -1080,8 +1080,8 @@ void __fastcall SUNITNPC_ValidateGambleItem(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       wPosY = (uint16_t)pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      iVar1 = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      wPosY = (uint16_t)iVar1;
+      nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      wPosY = (uint16_t)nPosY;
     } else {
       wPosY = 0;
     }
@@ -1167,8 +1167,8 @@ D2UnitStrc * __fastcall CreateMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
     }
 
     D2GameNpcStrc* pSellerNpc = sunitproxy::GetGameNpcbyClassId(pGame, pHirelingTxt->seller, &nSellerNpcIdx);
-    if (pSellerNpc->unk0x10) {
-      bIsExpansion = pSellerNpc->unk0x10 + (nMercNameId - nMercActBase) * 0x10;
+    if (pSellerNpc->pHirelingSlots) {
+      bIsExpansion = pSellerNpc->pHirelingSlots + (nMercNameId - nMercActBase) * 0x10;
       if (!*(int*)(bIsExpansion + 0xc)) {
         *(uint32_t*)(bIsExpansion + 8) = 1;
       }
@@ -1367,7 +1367,7 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
       nErrorCode = 0xc;
       nLine = 0x825;
     } else {
-      bool bVar1;
+      bool bNpcCanSell;
       __frame0.pPlayerInventory = pPlayer->pInventory;
       pCursorItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(__frame0.pPlayerInventory);
       if (pCursorItem) {
@@ -1382,8 +1382,8 @@ BOOL __fastcall SUNITNPC_BuyItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2Un
         return 1;
       }
 
-      bVar1 = SUNITNPC_CheckNpcCanSellItem(pGame, pBoughtItem, pClonedItem);
-      if (!bVar1) {
+      bNpcCanSell = SUNITNPC_CheckNpcCanSellItem(pGame, pBoughtItem, pClonedItem);
+      if (!bNpcCanSell) {
         bStackBuy = 0;
       }
 
@@ -2236,26 +2236,26 @@ void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if (nMode) {
       if (pNpcData->flags0x0C) {
         nGambleInteractNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayerUnit_lcl);
-        *(uint8_t*)&nGambleInteractNode->unk0x04 = 1;
+        *(uint8_t*)&nGambleInteractNode->bGambling = 1;
         SUNITNPC_ValidateNpcInteraction(pGame, pNpc, pPlayerUnit_lcl, (int32_t)pNpcData);
         return;
       }
     } else {
       D2NpcTradeStateStrc* pTradeState;
       pTradeState = &pNpcData->sTrade;
-      if (pTradeState && pNpcData->sTrade.unk0x03) {
+      if (pTradeState && pNpcData->sTrade.bHasStore) {
         nGambleInteractNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayerUnit_lcl);
-        *(uint8_t*)&nGambleInteractNode->unk0x04 = 0;
+        *(uint8_t*)&nGambleInteractNode->bGambling = 0;
         if (!pTradeState->bStoreFilled) {
           SUNITNPC_FillNpcStore(pGame, pPlayerUnit_lcl, pNpc, pTradeState);
           pTradeState->bStoreFilled = 1;
         }
-        if (!pNpcData->sTrade.unk0x01) {
+        if (!pNpcData->sTrade.bHirelingsInitialized) {
           if (nNpcClassId == 0x96 || nNpcClassId == 0x203 || nNpcClassId == 0xc6 || nNpcClassId == 0xfc) {
             SUNITNPC_InitNpcInventory(pGame, nNpcClassId, (uint32_t)pNpcData);
           }
 
-          pNpcData->sTrade.unk0x01 = 1;
+          pNpcData->sTrade.bHirelingsInitialized = 1;
         }
       }
     }
@@ -2523,7 +2523,7 @@ void __fastcall SUNITNPC_HandleResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     D2NpcTradeStateStrc* pTradeState = &pNpcData->sTrade;
-    if (!(pTradeState && pNpcData->sTrade.unk0x03)) {
+    if (!(pTradeState && pNpcData->sTrade.bHasStore)) {
       return;
     }
 
@@ -2532,10 +2532,10 @@ void __fastcall SUNITNPC_HandleResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     pTradeState->bStoreFilled = 1;
 }
 
-void __fastcall SUNITNPC_CloseNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * param_1) {
+void __fastcall SUNITNPC_CloseNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc) {
     SUnit::ClearInteractInfo(pUnit);
-    if (param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataMonster) {
-      D2Game::Monster::MonsterAI::FreeSpecificAiForUnit(pGame, pUnit, param_1->pUnitData.pUnitDataMonster->pMonsterAi);
+    if (pNpc && pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataMonster) {
+      D2Game::Monster::MonsterAI::FreeSpecificAiForUnit(pGame, pUnit, pNpc->pUnitData.pUnitDataMonster->pMonsterAi);
       return;
     }
 
@@ -2562,7 +2562,7 @@ void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
     pNpcData = sunitproxy::GetGameNpcbyClassId(pGame, nNpcClassId, &nNpcDataIdx);
     D2GameNpcStrc* pNpcDataSaved;
     pNpcDataSaved = pNpcData;
-    if (!pNpcData || (pHireList = pNpcData->unk0x10 , !pHireList)) {
+    if (!pNpcData || (pHireList = pNpcData->pHirelingSlots , !pHireList)) {
       return;
     }
     if (pGame->bExpansion) {
@@ -2656,7 +2656,7 @@ BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, D2UnitStrc * pPlay
     } else {
       nPlayerUnitGUID = pPlayer->nUnitGUID;
     }
-    if (!pInteractionNode || *(char*)&pInteractionNode->unk0x04 == '\0') {
+    if (!pInteractionNode || *(char*)&pInteractionNode->bGambling == '\0') {
       BOOL bIsIdentified;
       bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_IDENTIFIED, 0x100d, ".\\UNIT\\SUNITNPC.CPP");
       if (!bIsIdentified) {
@@ -2692,7 +2692,7 @@ BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, D2UnitStrc * pPlay
 }
 
 // Handles a player trade action with an NPC (buy/repair). Looks up the NPC's game proxy, marks it active, processes the NPC action, then conditionally resets the proxy and triggers item repair (single item if nParam!=0, all items if nParam==0) for repairable NPC types. Refreshes inventory after repair. Skips class IDs 0x96, 0xC6, and 0x203 (non-repairing NPCs).
-void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc, int32_t bIsRepair, int32_t nParam) {
+void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc, int32_t bIsRepair, int32_t nMode) {
     int nNpcDataIdx;
     if (!pNpc) {
       return;
@@ -2706,20 +2706,20 @@ void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     pNpcData->bTrading = 1;
     pNpcData->nNpcGUID = pNpc->nUnitGUID;
-    SUNITNPC_ProcessNpcAction(pGame, pPlayer, pNpc, nParam);
+    SUNITNPC_ProcessNpcAction(pGame, pPlayer, pNpc, nMode);
     int nNpcClassId = pNpc->nClassId;
     if (!(nNpcClassId != 0x96 && nNpcClassId != 0x203 && nNpcClassId != 0xc6)) {
       return;
     }
-    if (bIsRepair && !nParam && pNpcData->sTrade.unk0x07) {
-      pNpcData->sTrade.unk0x07 = 0;
+    if (bIsRepair && !nMode && pNpcData->sTrade.bRefillStorePending) {
+      pNpcData->sTrade.bRefillStorePending = 0;
       sunitproxy::SUNITPROXY_ResetNpcProxy(pGame, pNpcData, pNpc);
       SUNITNPC_FillNpcStore(pGame, pPlayer, pNpc, &pNpcData->sTrade);
       pNpcData->sTrade.bStoreFilled = 1;
     }
 
     D2Common::Units::RefreshInventory(pNpc, 1);
-    if (!nParam) {
+    if (!nMode) {
       SUNITNPC_RepairAllItems(pNpc, pNpc->pInventory);
       return;
     }
@@ -2736,7 +2736,7 @@ void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // @sourcefile .\UNIT\SUNITNPC.CPP
 eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32_t nNpcGUID, int32_t nItemGUID, int32_t nMode, int32_t nPrice) {
     eInventoryPage ePage;
-    uint16_t uVar2;
+    uint16_t uVar1;
     D2ClientStrc* pClient;
     D2BitBufferStrc* pQuestBuf;
     int eVar9;
@@ -2847,9 +2847,9 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
       bCanRepurchase = 0;
     }
 
-    uint32_t uVar3;
-    uVar3 = PLAYER::PlayerPets::GetCarry1FlagOfitem(pClonedItem);
-    if (uVar3) {
+    uint32_t uVar2;
+    uVar2 = PLAYER::PlayerPets::GetCarry1FlagOfitem(pClonedItem);
+    if (uVar2) {
       bCanRepurchase = 0;
     }
 
@@ -2863,9 +2863,9 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
 
     pClonedItem = 0;
     if (bCanRepurchase) {
-      bool bVar1;
-      bVar1 = SUNITNPC_CheckNpcCanSellItem(pGame, pDVar5, pItemSaved);
-      if (!bVar1) {
+      bool bNpcCanSell;
+      bNpcCanSell = SUNITNPC_CheckNpcCanSellItem(pGame, pDVar5, pItemSaved);
+      if (!bNpcCanSell) {
         pClonedItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pItemSaved, pDVar5, 1);
         if (!pClonedItem) {
           iVar14 = -1;
@@ -2930,20 +2930,20 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
 
     pDVar5 = pItemSaved;
     if (!(short int)nMode) {
-      uVar3 = D2Common::ITEMS::Items::ITEMS_IsA(pItemSaved, ITEMTYPE_Scroll);
-      if (uVar3) {
+      uVar2 = D2Common::ITEMS::Items::ITEMS_IsA(pItemSaved, ITEMTYPE_Scroll);
+      if (uVar2) {
         eVar9 = 1;
-        uVar2 = D2Common::ITEMS::Items::GetMagicSuffix(pDVar5, 0);
-        pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
+        uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pDVar5, 0);
+        pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
         eSkill = pBooksTxt->scrollskill;
         SUNITNPC_ApplyScrollSkill(pPlayer, eSkill, eVar9);
       } else {
-        uVar3 = D2Common::ITEMS::Items::ITEMS_IsA(pDVar5, ITEMTYPE_Book);
-        if (uVar3) {
+        uVar2 = D2Common::ITEMS::Items::ITEMS_IsA(pDVar5, ITEMTYPE_Book);
+        if (uVar2) {
           eVar9 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pDVar5, UNITSTAT_quantity, 0);
           if (eVar9 >= 0) {
-            uVar2 = D2Common::ITEMS::Items::GetMagicSuffix(pDVar5, 0);
-            pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar2);
+            uVar1 = D2Common::ITEMS::Items::GetMagicSuffix(pDVar5, 0);
+            pBooksTxt = D2Common::DATATBLS::ItemTbls::TXT_Books_GetLine((uint32_t)uVar1);
             eSkill = pBooksTxt->bookskill;
             SUNITNPC_ApplyScrollSkill(pPlayer, eSkill, eVar9);
           }
@@ -3141,7 +3141,6 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 240, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool bVar1;
     D2MonsterAiStrc* pMonsterAI;
     int32_t nMercCount;
     D2UnitStrc* pItem;
@@ -3159,6 +3158,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     int16_t awWaypointId[3];
     POINT PStack_108;
     POINT sUseMenuPkt;
+    bool bSrcHasPlayerName;
     eD2ItemFlag eD2ItemFlag2;
     eD2LevelId eLevel;
     eD2Quests eQuestId;
@@ -3284,10 +3284,10 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
         __frame0.sItemGenCtx.wItemFormat = pGame->wItemFormat;
         eD2ItemFlag2 = ITEMFLAG_PLAYERNAME;
         __frame0.sItemGenCtx.nFlags = __frame0.sItemGenCtx.nFlags | (nSockOrEtherFlag ? 2 : 0) + ITEMFLAG_BOUGHT | ITEMFLAG_REMOVED;
-        bVar1 = false;
+        bSrcHasPlayerName = false;
         nSockOrEtherFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem), eD2ItemFlag2);
         if (nSockOrEtherFlag) {
-          bVar1 = true;
+          bSrcHasPlayerName = true;
           pSrcName = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pItem);
           strcpy(__frame0.szPlayerName, pSrcName);
         }
@@ -3308,7 +3308,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
             SUNITNPC_UpdateNpcInventory(pGame, pClonedItem, nullptr);
             ITEMS::ItemMode::ITEMMODE_GetItemCursorMode(pGame, pClonedItem, pUnit);
             D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedItem, INVPAGE_INVENTORY);
-            if (bVar1) {
+            if (bSrcHasPlayerName) {
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedItem, ITEMFLAG_PLAYERNAME, 1);
               D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pClonedItem, __frame0.szPlayerName);
             }

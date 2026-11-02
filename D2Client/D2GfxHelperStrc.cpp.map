@@ -1,0 +1,185 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/D2GfxHelperStrc.cpp",
+  "functions": [
+    {
+      "name": "fpDrawVisTile",
+      "address": "004f7ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f7ea0"
+        }
+      ],
+      "namespace": "D2Client::D2GfxHelperStrc",
+      "calledFunctions": [
+        "fpDrawVisTile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_DrawWallTileWithLighting",
+      "address": "004f8050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8050"
+        }
+      ],
+      "namespace": "D2Client::D2GfxHelperStrc",
+      "calledFunctions": [
+        "DRAW_DrawWallTileWithLighting",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_DrawWallTileBasic",
+        "D2GFX_DrawGroundTileBasic"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fpDrawWallTile",
+      "address": "004f8120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8120"
+        }
+      ],
+      "namespace": "D2Client::D2GfxHelperStrc",
+      "calledFunctions": [
+        "fpDrawWallTile",
+        "fpDrawVisTile",
+        "DRAW_DrawWallTileWithLighting",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "D2GFX_DrawWallTileWithPerspective",
+        "D2GFX_DrawGroundTileWithPerspective"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fpDrawBlendedVisTile",
+      "address": "004f82d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f82d0"
+        }
+      ],
+      "namespace": "D2Client::D2GfxHelperStrc",
+      "calledFunctions": [
+        "fpDrawBlendedVisTile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fpDrawRoofTile",
+      "address": "004f84f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f84f0"
+        }
+      ],
+      "namespace": "D2Client::D2GfxHelperStrc",
+      "calledFunctions": [
+        "fpDrawRoofTile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t[32]"
+      ]
+    },
+    {
+      "name": "D2GFXHELPER_DrawGroundTileWithLight",
+      "address": "004f88b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f88b0"
+        }
+      ],
+      "namespace": "D2Client::D2GfxHelperStrc",
+      "calledFunctions": [
+        "D2GFXHELPER_DrawGroundTileWithLight",
+        "D2GFX_DrawGroundTileBasic"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2GFXHELPER_DrawGroundTileWithPerspectiveLight",
+      "address": "004f89f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f89f0"
+        }
+      ],
+      "namespace": "D2Client::D2GfxHelperStrc",
+      "calledFunctions": [
+        "D2GFXHELPER_DrawGroundTileWithPerspectiveLight",
+        "D2GFX_DrawGroundTileWithPerspective"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fpFillYBufferTable",
+      "address": "004f8de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8de0"
+        }
+      ],
+      "namespace": "D2Client::D2GfxHelperStrc",
+      "calledFunctions": [
+        "fpFillYBufferTable",
+        "D2GFX_ClearYBuffer",
+        "D2GFX_FillYBufferFast"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

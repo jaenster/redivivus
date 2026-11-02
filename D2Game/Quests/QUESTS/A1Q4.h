@@ -172,7 +172,7 @@ void __fastcall MakeTownPortalFromScroolTree(::SGAMEDATA * pGame, struct D2UnitS
 // yields the Scroll of Inifuss and advances the quest.
 BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(struct D2ObjectOperateFnArg * pOperation);
 // A1Q4 (Search for Cain) object init/refresh callback for the Cairn-Stones portal object (classId 0x11). If the quest is active and the portal object has not yet been armed, stores the object GUID and schedules Q04_SpawnTristramPortal via AddQuestTimer. Calls SetupUpdateFlag on the object unit to trigger a rendering update. Guards against re-entry via flag bytes on the quest-specific data struct.
-void __fastcall Objects_InitFn06(struct D2ObjectInitFnArg * pdwParam);
+void __fastcall Objects_InitFn06(struct D2ObjectInitFnArg * pInitArg);
 // A1Q4 — Q04_HandleNpcInteraction (party-member callback).
 // For each Act I party member not yet Completed/RewardAwaits, set their quest record
 // Step0x04 (the Cairn-stones-solved sub-step) so the journal reflects the puzzle
@@ -240,7 +240,7 @@ void __fastcall Objects_InitFn13(struct D2ObjectInitFnArg * pInitArg);
 // A1Q4 — Q04_InitializeCainGibbetObject: anim-init helper for the Cain cage/gibbet
 // object. Sets the active flag (0x48), captures the target unit GUID (or -1), and
 // pushes the cage's update flag. No quest-state transition.
-void __fastcall Q04_InitializeCainGibbetObject(int32_t nParam1, struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Q04_InitializeCainGibbetObject(int32_t pQuestData, struct D2ObjectInitFnArg * pInitArg);
 // A1Q4 — Q04_RemovePlayerFromList (per-player iterate callback): removes a player
 // (by GUID, or -1) from quest list1. Bookkeeping only.
 void __fastcall Q04_RemovePlayerFromList(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

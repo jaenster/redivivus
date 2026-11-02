@@ -1,0 +1,1338 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Panel.cpp",
+  "functions": [
+    {
+      "name": "LoadPanelImages",
+      "address": "004967f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004967f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "LoadPanelImages",
+        "ARCHIVE_LoadOverlayImageUsedInGame",
+        "MISC_GetLanguageCode",
+        "D2CheckExpansionGame",
+        "CLIENT_CheckExpansion",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "memset",
+        "SRegLoadValue"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreePanelImages",
+      "address": "00496990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00496990"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "FreePanelImages",
+        "DC6_FreeAndDelete",
+        "memset"
+      ]
+    },
+    {
+      "name": "PANEL_DrawHostileIndicator",
+      "address": "00496b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00496b10"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawHostileIndicator",
+        "memset",
+        "ROSTER_CheckAnyPlayerHostileToMe",
+        "GetUIFlag",
+        "TRADE_GetTradeStatus",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "SPELLSEL_DrawSkillIcon",
+      "address": "00496be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00496be0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "SPELLSEL_DrawSkillIcon",
+        "GetSkillsTxt",
+        "ARCHIVE_LoadSpellsClassSkillicon",
+        "SPELLSEL_GetSkillPalette",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SKILLS_GetSkillData",
+        "GetSkillLevel",
+        "SKILL_GetQuantity",
+        "SPELLSEL_DrawSkillIconWithQuantity",
+        "SPELLSEL_DrawSkillRequirementTooltip",
+        "SPELLSEL_DrawSkillTooltip"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "DC6",
+        "GLOBALPALLETE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawSkillIcons",
+      "address": "00496cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00496cf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawSkillIcons",
+        "GetPlayerUnit_UI",
+        "GetLeftSkill",
+        "GetSkillLevel",
+        "GetSkillId",
+        "SKILL_RemoveSkillCallback",
+        "SelectSkillLeft",
+        "SPELLSEL_DrawSkillIcon",
+        "GetRightSkill",
+        "SelectSkillRight"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PANEL_GetSmoothedStatValue",
+      "address": "00496dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00496dd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_GetSmoothedStatValue",
+        "GetPlayerUnit_UI",
+        "STATSEX_GetCurrentStat",
+        "GetTxtMaxHp",
+        "GetTxtMaxMana",
+        "GetTxtMaxStamina",
+        "GetEntryIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawHealthOrb",
+      "address": "00496f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00496f80"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawHealthOrb",
+        "GetPlayerUnit_UI",
+        "PANEL_GetSmoothedStatValue",
+        "GetTxtMaxHp",
+        "memset",
+        "UNIT_GetUnitState",
+        "STATSEX_GetCurrentStat",
+        "D2GFX_GetRendererMode",
+        "D2GFX_DrawVerticalCropImage",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2UnitStrc",
+        "eD2RendererMode",
+        "eD2States",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawManaOrb",
+      "address": "00497110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497110"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawManaOrb",
+        "GetPlayerUnit_UI",
+        "PANEL_GetSmoothedStatValue",
+        "GetTxtMaxMana",
+        "memset",
+        "UNIT_GetUnitState",
+        "STATSEX_GetCurrentStat",
+        "D2GFX_GetRendererMode",
+        "D2GFX_DrawVerticalCropImage",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2UnitStrc",
+        "eD2RendererMode",
+        "eD2States",
+        "eD2UnitStat",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "thunk_D2GFX_GetColorFromPalette_A",
+      "address": "00497250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497250"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "thunk_D2GFX_GetColorFromPalette_A",
+        "D2GFX_GetColorFromCurrentPallete"
+      ]
+    },
+    {
+      "name": "PANEL_InitGoldColor",
+      "address": "00497270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497270"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_InitGoldColor",
+        "D2GFX_GetColorFromCurrentPallete"
+      ]
+    },
+    {
+      "name": "thunk_D2GFX_GetColorFromPalette_B",
+      "address": "00497290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497290"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "thunk_D2GFX_GetColorFromPalette_B",
+        "D2GFX_GetColorFromCurrentPallete"
+      ]
+    },
+    {
+      "name": "PANEL_InitBeltColors",
+      "address": "004972b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004972b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_InitBeltColors",
+        "D2GFX_GetColorFromCurrentPallete"
+      ]
+    },
+    {
+      "name": "PANEL_ShowRunButtonTooltip",
+      "address": "00497300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497300"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_ShowRunButtonTooltip",
+        "GetLocaleString",
+        "STRING_CopyWideString",
+        "CMD_GetKeyForCommand",
+        "memset",
+        "CMD_GetKeyDescForCommand",
+        "UNICODE_FormatWideString",
+        "AppendToBuffer",
+        "TEXT_TooltipSetAttributes"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "PANEL_IsMouseInRunButton",
+      "address": "00497440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497440"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_IsMouseInRunButton"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawRunButton",
+      "address": "00497480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497480"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawRunButton",
+        "GetMouseX",
+        "GetMouseY",
+        "memset",
+        "GetGlobalAlwaysRun",
+        "D2GFX_DrawImage",
+        "PANEL_ShowRunButtonTooltip"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "PANEL_DrawStaminaBar",
+      "address": "004975b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004975b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawStaminaBar",
+        "GetPlayerUnit_UI",
+        "PANEL_GetSmoothedStatValue",
+        "GetTxtMaxStamina",
+        "D2GFX_GetColorFromCurrentPallete",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "D2GFX_DrawSolidRectExBySize",
+        "GetMouseX",
+        "GetMouseY",
+        "UNIT_GetUnitState",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "TEXT_TooltipSetAttributes"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR",
+        "eD2States",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PANEL_IsMouseInMenuButton",
+      "address": "00497780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497780"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_IsMouseInMenuButton"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawMenuButton",
+      "address": "004977c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004977c0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawMenuButton",
+        "memset",
+        "GetUIFlag",
+        "GetMouseY",
+        "GetMouseX",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "PANEL_HighlightBeltSlot",
+      "address": "004978d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004978d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_HighlightBeltSlot",
+        "PANEL_InitBeltColors",
+        "GetInvRectFromBeltsTxt",
+        "D2GFX_DrawSolidRectExBySize"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_HandleBeltSlotClick",
+      "address": "00497920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497920"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "CLIENT_HandleBeltSlotClick",
+        "INVENTORY_GetHandItem",
+        "GetBeltsLine",
+        "INVENTORY_GetItemInBeltSlot",
+        "ITEM_GetTxtItemTypes_beltable",
+        "PANEL_HighlightBeltSlot",
+        "INVENTORY_CheckBeltSlotAndGetItem"
+      ],
+      "usedTypes": [
+        "D2BeltsTxt",
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PANEL_GetBeltSlotHoverFlag",
+      "address": "004979e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004979e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_GetBeltSlotHoverFlag"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_CheckBeltUseBlocked",
+      "address": "004979f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004979f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_CheckBeltUseBlocked"
+      ]
+    },
+    {
+      "name": "PANEL_DrawExperienceBar",
+      "address": "00497a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497a40"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawExperienceBar",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetHandItem",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetItemName",
+        "GetItemQuality",
+        "SKILLDESC_AppendStatBuffText",
+        "AppendAsWideChar",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "MoveArgumentToEAX",
+        "INV_IsShopBuySellMode",
+        "CONTAINER_InitializeBuffer",
+        "NPCMENU_CalculateItemTransactionCost",
+        "GetLocaleString",
+        "TEXT_TooltipSetAttributes"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "wchar_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawBeltSlots",
+      "address": "00497c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497c50"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawBeltSlots",
+        "memset",
+        "GetUIFlag",
+        "ROSTER_CheckAnyPlayerHostileToMe",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Draw_EquipmentNeedToRepairBody_1",
+      "address": "00497cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497cf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "Draw_EquipmentNeedToRepairBody_1",
+        "memset",
+        "GetUIFlag",
+        "D2GFX_DrawImage",
+        "ROSTER_CheckAnyPlayerHostileToMe"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "eD2BodyLocDWORD",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_EquipmentNeedArrows",
+      "address": "00497e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497e00"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "DRAW_EquipmentNeedArrows",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_GetTxtItemTypes_shoots",
+        "ITEMS_IsA",
+        "PANEL_DrawBeltSlots",
+        "ITEM_GetItemsTxt_bQntWarning",
+        "GetClassId",
+        "TXT_Items_GetLine",
+        "STATSEX_GetCurrentStat",
+        "ITEM_CheckItemData_ItemQualityIsMagicOrBetter",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_GetContainingInventoryPage"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Draw_EquipmentNeedToRepairBody",
+      "address": "00497fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00497fe0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "Draw_EquipmentNeedToRepairBody",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CheckIfItemHasDurability",
+        "IsStackable",
+        "GetTxtMaxDurability",
+        "STATSEX_GetCurrentStat",
+        "ITEMS_IsA",
+        "ITEM_GetTxtItemTypes_quiver",
+        "Draw_EquipmentNeedToRepairBody_1"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawPanelLayout",
+      "address": "00498120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498120"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawPanelLayout",
+        "GetPlayerUnit_UI",
+        "GetMouseX",
+        "GetMouseY",
+        "PANEL_GetSmoothedStatValue",
+        "GetTxtMaxHp",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "AppendToBuffer",
+        "DRAW_text0",
+        "DRAW_text",
+        "GetTxtMaxMana"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawLife",
+      "address": "00498340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498340"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawLife",
+        "GetMouseX",
+        "GetMouseY",
+        "GetUIFlag",
+        "GetLocaleString",
+        "TEXT_TooltipSetAttributes"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawCharacterInfo",
+      "address": "004983d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004983d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawCharacterInfo",
+        "memset",
+        "D2GFX_GetResolutionMode",
+        "ARCHIVE_LoadOverlayImageUsedInGame",
+        "DC6_FreeAndDelete",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_BorderLeft",
+      "address": "00498630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498630"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "DRAW_UI_BorderLeft",
+        "memset",
+        "ARCHIVE_LoadOverlayImageUsedInGame",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "DRAW_UI_BorderRight",
+      "address": "00498700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498700"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "DRAW_UI_BorderRight",
+        "ARCHIVE_LoadOverlayImageUsedInGame",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "PANEL_GetPanelLayoutHeight",
+      "address": "004987e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004987e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_GetPanelLayoutHeight",
+        "GetBeltsLine",
+        "GetInvRectFromBeltsTxt"
+      ],
+      "usedTypes": [
+        "D2BeltsEntryStrc",
+        "D2BeltsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ClickBelt",
+      "address": "00498870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498870"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "ClickBelt",
+        "PANEL_GetPanelLayoutHeight",
+        "INVENTORY_GetHandItem",
+        "INVENTORY_GetItemInBeltSlot",
+        "GetItemType",
+        "ITEM_GetTxtItemTypes_beltable",
+        "PlayerIsUnInterruptable",
+        "NET_D2GS_CLIENT_Send_INT",
+        "ITEM_RemoveClientSide",
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "SOUND_GetIdFromUnit",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_HandleBeltMouseDown",
+      "address": "00498930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498930"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "CLIENT_HandleBeltMouseDown",
+        "PANEL_GetPanelLayoutHeight",
+        "INVENTORY_GetHandItem",
+        "GetItemType",
+        "INVENTORY_GetItemInBeltSlot",
+        "GetXPosFromDynamicPathUnit",
+        "GetInvRectFromBeltsTxt"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_CheckEquipmentClickable",
+      "address": "00498a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498a20"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_CheckEquipmentClickable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TEXT_OpenQuestScroll",
+        "UNITSND_PlayPlayerSound"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ClickBeltRight",
+      "address": "00498a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498a90"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "ClickBeltRight",
+        "CLIENT_CheckExpansion",
+        "INVENTORY_GetHandItem",
+        "GetUIFlag",
+        "GetInventoryPage",
+        "GetGridDimensions",
+        "INVENTORY_GetItemInBeltSlot",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PANEL_CheckEquipmentClickable",
+        "PlayerIsUnInterruptable",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT",
+        "ITEM_RemoveClientSide",
+        "GetRosterPetGUID",
+        "ITEMS_IsA",
+        "UNITSND_PlaySoundForMercenary",
+        "ITEM_PlayItemUseSound",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2GridScreenCoordinates",
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_UseBeltSlot1",
+      "address": "00498c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498c50"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "ClickBeltRight",
+        "CMD_UseBeltSlot1",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_UseBeltSlot2",
+      "address": "00498c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498c90"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "ClickBeltRight",
+        "CMD_UseBeltSlot2",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_UseBeltSlot3",
+      "address": "00498cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498cd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "ClickBeltRight",
+        "CMD_UseBeltSlot3",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CMD_UseBeltSlot4",
+      "address": "00498d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498d10"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "ClickBeltRight",
+        "CMD_UseBeltSlot4",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_SetBeltSlotHoverFlag",
+      "address": "00498d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498d50"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_SetBeltSlotHoverFlag"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_ClearBeltSlotHover",
+      "address": "00498d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498d60"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_ClearBeltSlotHover"
+      ]
+    },
+    {
+      "name": "PANEL_SetBeltPanelState",
+      "address": "00498d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498d90"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_SetBeltPanelState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "PANEL_CalculateBeltSlotIndex",
+      "address": "00498dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498dc0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_CalculateBeltSlotIndex",
+        "GetBeltsLine"
+      ],
+      "usedTypes": [
+        "D2BeltsTxt",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PANEL_SetBottomPanelGlobals1",
+      "address": "00498e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498e80"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_SetBottomPanelGlobals1"
+      ]
+    },
+    {
+      "name": "PANEL_SetBottomPanelGlobals2",
+      "address": "00498e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498e90"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_SetBottomPanelGlobals2"
+      ]
+    },
+    {
+      "name": "PANEL_DrawGoldAmount",
+      "address": "00498ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00498ea0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawGoldAmount",
+        "GetPlayerUnit_UI",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetUnitStat",
+        "TXT_Experience_GetLineLevel",
+        "GetMouseX",
+        "GetMouseY",
+        "GetLocaleString",
+        "UNICODE_FormatWideString",
+        "TEXT_TooltipSetAttributes",
+        "TXT_Experience_GetMaxLevel",
+        "D2GFX_DrawLine"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_DrawBottomPanel",
+      "address": "00499040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00499040"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_DrawBottomPanel",
+        "SetAndReturnLastFont",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_GetItemData_wType",
+        "GetBeltType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetUIFlag",
+        "memset",
+        "D2GFX_DrawImage",
+        "GetBeltsLine",
+        "INVENTORY_GetItemInBeltSlot",
+        "GetXPos",
+        "CheckItemFlag",
+        "IsUseable",
+        "PlayerIsUnInterruptable",
+        "PANEL_InitBeltColors",
+        "GetInvRectFromBeltsTxt",
+        "D2GFX_GetColorFromCurrentPallete",
+        "D2GFX_DrawSolidRectExBySize",
+        "DrawItemGfx",
+        "CMD_GetKeyForCommand",
+        "CMD_GetKeyDescForCommand",
+        "STRING_CopyWideString",
+        "STRING_GetWideStringLength",
+        "DRAW_text0",
+        "DRAW_text",
+        "CLIENT_HandleBeltSlotClick"
+      ],
+      "usedTypes": [
+        "D2BeltsTxt",
+        "D2GfxDataStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "WCHAR",
+        "eD2ItemTypes",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_UI_BordersAndOrbsAndFillers",
+      "address": "00499450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00499450"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "DRAW_UI_BordersAndOrbsAndFillers",
+        "D2GFX_GetRendererMode",
+        "D2GFX_GetResolutionMode",
+        "DRAW_GetTypeOfBorder",
+        "DRAW_UI_BorderLeft",
+        "DRAW_UI_BorderRight",
+        "PANEL_DrawCharacterInfo",
+        "PANEL_DrawHealthOrb",
+        "PANEL_DrawManaOrb",
+        "PANEL_DrawGoldAmount",
+        "PANEL_DrawRunButton",
+        "PANEL_DrawStaminaBar",
+        "PANEL_DrawMenuButton",
+        "PANEL_DrawBottomPanel",
+        "PANEL_DrawSkillIcons",
+        "PANEL_DrawExperienceBar",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "PANEL_DrawLife"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "eD2LevelId",
+        "eD2RendererMode",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_PanelLeftClickDown",
+      "address": "00499500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00499500"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "INPUT_PanelLeftClickDown",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "PANEL_CalculateBeltSlotIndex",
+        "SRegSaveValue",
+        "PANEL_IsMouseInMenuButton",
+        "PANEL_IsMouseInRunButton",
+        "SOUND_PlaySound",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_PanelLeftClickUp",
+      "address": "004996a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004996a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "INPUT_PanelLeftClickUp",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "GetPlayerUnit_UI",
+        "GetUIFlag",
+        "SetUIFlag",
+        "GetItemType",
+        "UI_DropCursorItemOnGround",
+        "NET_D2GS_CLIENT_Send_INT",
+        "SPELLSEL_SetMouseHandFlag",
+        "GetGlobalAlwaysRun",
+        "SetGlobalAlwaysRun",
+        "ClickBelt",
+        "SMsgBreakHandlerChain",
+        "PANEL_CalculateBeltSlotIndex"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "eD2UIvarsSetType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PANEL_UpdatePanelFromMode",
+      "address": "00499bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00499bb0"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "PANEL_UpdatePanelFromMode",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "GetPlayerUnit_UI",
+        "GAME_HasQueuedPrimaryClick",
+        "UI_GetFlag",
+        "CLIENT_HandleBeltMouseDown",
+        "PANEL_CalculateBeltSlotIndex",
+        "GetUIFlag"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_PanelRightClick",
+      "address": "00499d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00499d10"
+        }
+      ],
+      "namespace": "D2Client::UI::Panel",
+      "calledFunctions": [
+        "INPUT_PanelRightClick",
+        "GAMEDATA_GetExitFlag3",
+        "IsPlayerDead",
+        "GetPlayerUnit_UI",
+        "PANEL_CalculateBeltSlotIndex",
+        "GetItemType",
+        "UI_DropCursorItemOnGround",
+        "NET_D2GS_CLIENT_Send_INT",
+        "PANEL_GetPanelLayoutHeight",
+        "ClickBeltRight",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

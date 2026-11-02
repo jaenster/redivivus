@@ -362,14 +362,14 @@ bool __fastcall Q11_SequenceFilter(D2QuestDataStrc * pQuestData) {
 
     D2QuestDataStrc* pQuestData_00 = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
     if (pQuestData_00) {
-      BOOL BVar2 = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-      if (BVar2) {
+      BOOL BVar1 = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
+      if (BVar1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2a5);
         exit(-1);
       }
 
-      bool bVar1 = pQuestData_00->fpSequenceFilter(pQuestData_00);
-      return bVar1;
+      bool bResult = pQuestData_00->fpSequenceFilter(pQuestData_00);
+      return bResult;
     }
 
     return false;
@@ -765,10 +765,10 @@ void __fastcall Q11_InitTaintedSunForAct(::SGAMEDATA * pGame, char nActNo) {
 
 // A2Q3 - Q11_GetTaintedSunFlag: accessor returning the A2Q3 bTaintedSunStartedFailed flag (low byte) from the
 // quest-specific data, or 0 if quest data missing. Read-only.
-uint8_t __fastcall Q11_GetTaintedSunFlag(int32_t nParam) {
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(*(::SGAMEDATA**)(nParam + 4), QUESTINT_TheTaintedSun);
+uint8_t __fastcall Q11_GetTaintedSunFlag(int32_t pCallerQuestData) {
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(*(::SGAMEDATA**)(pCallerQuestData + 4), QUESTINT_TheTaintedSun);
     if (pQuestData) {
-      return pQuestData->pQuestSpecificData.pA2Q6->field_0x4;
+      return pQuestData->pQuestSpecificData.pA2Q6->bOrificeObjectPresent;
     }
 
     return 0;

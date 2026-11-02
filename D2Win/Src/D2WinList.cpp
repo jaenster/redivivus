@@ -145,25 +145,25 @@ int __fastcall D2WINLIST_GetSelectedIndex(::D2WinList * pList) {
       exit(-1);
     }
 
-    D2WinListEntry* pDVar2 = pList->sEntriesControl.pFirstEntry;
-    int iVar1 = 0;
-    if (!pDVar2) {
+    D2WinListEntry* pDVar1 = pList->sEntriesControl.pFirstEntry;
+    int nIndex = 0;
+    if (!pDVar1) {
       return -1;
     }
 
-    while (pList->sEntriesControl.pSelectedEntry != pDVar2) {
-      pDVar2 = pDVar2->pNext;
-      iVar1++;
-      if (!pDVar2) {
+    while (pList->sEntriesControl.pSelectedEntry != pDVar1) {
+      pDVar1 = pDVar1->pNext;
+      nIndex++;
+      if (!pDVar1) {
         return -1;
       }
     }
 
-    if (!pDVar2) {
+    if (!pDVar1) {
       return -1;
     }
 
-    return iVar1;
+    return nIndex;
 }
 
 // Returns entry nIndex of the list (walks pNext from pFirstEntry), or NULL; halts (D2WinList.cpp line 229, eType == D2WIN_LIST) on a non-list control.
@@ -175,14 +175,14 @@ D2WinListEntry * __fastcall D2WINLIST_GetEntryByIndex(::D2WinList * pList, int n
     }
 
     D2WinListEntry* pDVar1 = pList->sEntriesControl.pFirstEntry;
-    int iVar2 = 0;
+    int nCurIndex = 0;
     if (!pDVar1) {
       return nullptr;
     }
 
-    while (iVar2 != nIndex) {
+    while (nCurIndex != nIndex) {
       pDVar1 = pDVar1->pNext;
-      iVar2++;
+      nCurIndex++;
       if (!pDVar1) {
         return nullptr;
       }
@@ -354,14 +354,14 @@ BOOL __stdcall ListCheck(D2ControlMsg * pList) {
 }
 
 BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
-    int iVar3;
-    D2WinListEntry* pDVar4;
-    fpListEntryCallback pfVar5;
+    D2WinListEntry* pDVar2;
     int nKeyCode;
     D2WinListEntry* pCurrentEntry;
     BOOL bCallbackResult;
-    D2WinListEntry* pDVar6;
+    D2WinListEntry* pDVar3;
+    int nTopIndex;
     D2WinListEntry* pPrevEntry;
+    fpListEntryCallback pfnOnActivate;
     ::D2WinList* pList = (::D2WinList*)pControlMsg->pControl;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 399);
@@ -371,14 +371,14 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
       return 0;
     }
 
-    uint32_t WVar2 = pControlMsg->wParam;
-    switch (WVar2) {
+    uint32_t WVar1 = pControlMsg->wParam;
+    switch (WVar1) {
       case 0xd:
         {
           D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-          pfVar5 = pList->sEntriesControl.pSelectedEntry->pfnOnActivate;
-          if (pfVar5) {
-            bCallbackResult = (*pfVar5)(pControlMsg);
+          pfnOnActivate = pList->sEntriesControl.pSelectedEntry->pfnOnActivate;
+          if (pfnOnActivate) {
+            bCallbackResult = (*pfnOnActivate)(pControlMsg);
             return bCallbackResult;
           }
 
@@ -386,35 +386,35 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         }
       case 0x26:
         {
-          pDVar6 = pList->sEntriesControl.pFirstEntry;
+          pDVar3 = pList->sEntriesControl.pFirstEntry;
           pPrevEntry = pList->sEntriesControl.pSelectedEntry;
-          pDVar4 = pDVar6->pNext;
-          pCurrentEntry = pDVar6;
-          if (pDVar6 == pPrevEntry) {
-            for (; pDVar4; pDVar4 = pDVar4->pNext) {
-              pCurrentEntry = pDVar4;
+          pDVar2 = pDVar3->pNext;
+          pCurrentEntry = pDVar3;
+          if (pDVar3 == pPrevEntry) {
+            for (; pDVar2; pDVar2 = pDVar2->pNext) {
+              pCurrentEntry = pDVar2;
             }
           } else {
-            for (; pDVar4 != pPrevEntry; pDVar4 = pDVar4->pNext) {
-              pCurrentEntry = pDVar4;
+            for (; pDVar2 != pPrevEntry; pDVar2 = pDVar2->pNext) {
+              pCurrentEntry = pDVar2;
             }
           }
 
           pList->sEntriesControl.pSelectedEntry = pCurrentEntry;
           pList->sEntriesControl.nSelectedIndex = 0;
-          for (; pDVar6 != pCurrentEntry; pDVar6 = pDVar6->pNext) {
+          for (; pDVar3 != pCurrentEntry; pDVar3 = pDVar3->pNext) {
             pList->sEntriesControl.nSelectedIndex++;
           }
 
           nKeyCode = pList->sEntriesControl.nSelectedIndex;
-          iVar3 = pList->sEntriesControl.nTopIndex;
-          if (iVar3 > nKeyCode) {
+          nTopIndex = pList->sEntriesControl.nTopIndex;
+          if (nTopIndex > nKeyCode) {
             pList->sEntriesControl.nTopIndex = nKeyCode;
             D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
             return 1;
           }
 
-          nKeyCode -= iVar3;
+          nKeyCode -= nTopIndex;
           while (nKeyCode > pList->sEntriesControl.nMaxVisibleIndex) {
             pList->sEntriesControl.nTopIndex++;
             nKeyCode--;
@@ -425,27 +425,27 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         }
       case 0x28:
         {
-          pDVar6 = pList->sEntriesControl.pSelectedEntry->pNext;
-          if (!pDVar6) {
-            pDVar6 = pList->sEntriesControl.pFirstEntry;
+          pDVar3 = pList->sEntriesControl.pSelectedEntry->pNext;
+          if (!pDVar3) {
+            pDVar3 = pList->sEntriesControl.pFirstEntry;
           }
 
           pPrevEntry = pList->sEntriesControl.pFirstEntry;
-          pList->sEntriesControl.pSelectedEntry = pDVar6;
+          pList->sEntriesControl.pSelectedEntry = pDVar3;
           pList->sEntriesControl.nSelectedIndex = 0;
-          for (; pPrevEntry != pDVar6; pPrevEntry = pPrevEntry->pNext) {
+          for (; pPrevEntry != pDVar3; pPrevEntry = pPrevEntry->pNext) {
             pList->sEntriesControl.nSelectedIndex++;
           }
 
           nKeyCode = pList->sEntriesControl.nSelectedIndex;
-          iVar3 = pList->sEntriesControl.nTopIndex;
-          if (iVar3 > nKeyCode) {
+          nTopIndex = pList->sEntriesControl.nTopIndex;
+          if (nTopIndex > nKeyCode) {
             pList->sEntriesControl.nTopIndex = nKeyCode;
             D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
             return 1;
           }
 
-          nKeyCode -= iVar3;
+          nKeyCode -= nTopIndex;
           while (nKeyCode > pList->sEntriesControl.nMaxVisibleIndex) {
             pList->sEntriesControl.nTopIndex++;
             nKeyCode--;
@@ -456,14 +456,14 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         }
     }
 
-    pDVar6 = pList->sEntriesControl.pFirstEntry;
-    while (pDVar6) {
-      if ((uint32_t)(uint16_t)pDVar6->nUserData == pControlMsg->wParam && pDVar6->pfnOnActivate) {
-        bCallbackResult = pDVar6->pfnOnActivate(pControlMsg);
+    pDVar3 = pList->sEntriesControl.pFirstEntry;
+    while (pDVar3) {
+      if ((uint32_t)(uint16_t)pDVar3->nUserData == pControlMsg->wParam && pDVar3->pfnOnActivate) {
+        bCallbackResult = pDVar3->pfnOnActivate(pControlMsg);
         return bCallbackResult;
       }
 
-      pDVar6 = pDVar6->pNext;
+      pDVar3 = pDVar3->pNext;
     }
 
     return 0;
@@ -488,7 +488,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     0x0
 }; D2_STATIC_GUARD(INT_ARRAY_006dd024, "D2Win::Src::D2WinList::D2WinList::INT_ARRAY_006dd024");
 
-    uint32_t uVar2;
+    uint32_t dwState;
     D2WinListEntry* pNewEntry;
     uint16_t* wszLocaleStr;
     int32_t nStrLen;
@@ -499,9 +499,9 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     pList->sControl.neD2FormType = FORM_List;
     int* pItemCountPtr = &pList->sControl.dwState;
     *pItemCountPtr |= gadwBitMasks[0];
-    uVar2 = pList->sControl.dwState | gadwBitMasks[2];
+    dwState = pList->sControl.dwState | gadwBitMasks[2];
     pList->sControl.dwSizeX = (int)nSizeX;
-    pList->sControl.dwState = uVar2;
+    pList->sControl.dwState = dwState;
     pList->sControl.dwPosX = nPosX;
     pList->sControl.dwPosY = nPosY;
     pList->sControl.dwSizeY = nSizeY;

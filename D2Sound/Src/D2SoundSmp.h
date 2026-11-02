@@ -66,18 +66,18 @@ namespace D2Sound::Src::D2SoundSmp {
 struct D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSampleParam);
 BOOL __fastcall SOUNDSMP_LoadWavDataIntoBuffer(struct D2SoundSmpStrc * ppSoundSmp, int * pWavData, uint32_t nWavDataSize);
 BOOL __fastcall SOUNDSMP_Play(struct D2SoundSmpStrc * ppSoundSmp);
-int32_t __fastcall SOUNDSMP_IsPlaying(struct D2SoundSmpStrc * pnParam);
+int32_t __fastcall SOUNDSMP_IsPlaying(struct D2SoundSmpStrc * pSound);
 uint32_t __fastcall SOUNDSMP_GetStatus(struct D2SoundSmpStrc * ppSoundSmp);
 void __fastcall SOUNDSMP_SetVolume(struct D2SoundSmpStrc * ppSoundSmp, int nVolume);
 // Returns pSoundSmp->nVolume, the value SOUNDSMP_SetVolume stores; halts (line 740) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall SOUNDSMP_GetVolume(struct D2SoundSmpStrc * pSoundSmp);
 void __fastcall SOUNDSMP_SetPan(struct D2SoundSmpStrc * ppSoundSmp, int32_t nPan);
-void __thiscall SOUNDSMP_Set3DPosition(struct D2SoundSmpStrc * pThis, float nSoundHandle, float dwParam, float pD2SoundsTxt);
+void __thiscall SOUNDSMP_Set3DPosition(struct D2SoundSmpStrc * pThis, float nSoundHandle, float fY, float pD2SoundsTxt);
 uint32_t __fastcall SOUNDSMP_GetStreamProgress(struct D2SoundSmpStrc * pSound);
-void __fastcall SOUNDSMP_SetFrequency(int32_t nParam, uint32_t dwParam);
+void __fastcall SOUNDSMP_SetFrequency(int32_t pSound, uint32_t dwParam);
 void __fastcall SOUNDSMP_SetMinDistance(struct D2SoundSmpStrc * pSound, uint32_t dwParam);
-void __fastcall SOUNDSMP_SetEaxObstruction(struct D2SoundSmpStrc * pSoundSmp, float fParam);
+void __fastcall SOUNDSMP_SetEaxObstruction(struct D2SoundSmpStrc * pSoundSmp, float fObstruction);
 // Set the EAX room-level obstruction on the 3D sound buffer; clamps to -10000 for DS3D or passes a float to the EAX property set
 void __fastcall SOUNDSMP_SetEaxRoomLevel(struct D2SoundSmpStrc * pSoundSmp, float fParam);
 uint32_t __fastcall SOUNDSMP_IsStreaming(struct D2SoundSmpStrc * pSound);
@@ -87,7 +87,7 @@ uint32_t __stdcall SOUNDSMP_GetEffectiveVolume();
 BOOL __fastcall SOUNDSMP_OpenAndStreamFile(int * * ppnParam, char * szText, int32_t nLooping, int32_t bIsLooping);
 void __fastcall SOUNDSMP_CancelStream(struct D2SoundSmpStrc * ppnParam);
 void __fastcall SOUNDSMP_Stop(struct D2SoundSmpStrc * ppnParam);
-void __fastcall CleanupSoundBuffer(uint32_t nParam);
+void __fastcall CleanupSoundBuffer(uint32_t nFadeTimeMs);
 void __fastcall SOUNDSMP_CheckBufferLost(struct D2SoundSmpStrc * ppnParam);
 // @sourcefile .\Src\D2SoundSmp.cpp
 void __fastcall SOUNDSMP_Destroy(struct D2SoundSmpStrc * pSoundSmp);
@@ -100,8 +100,8 @@ float __stdcall SOUNDSMP_LinearToLogVolume(float dwLinearValue, float dwScale);
 float SOUNDSMP_LogToLinearNoParam(float fValue);
 float SOUNDSMP_LinearToLogNoParam(float fValue, float fValue2);
 // No register arguments: EAX is first written by FNSTSW AX at 00516607 and only carries the x87 status word (1.14d asm).
-float __stdcall SOUNDSMP_ClampVolume(float fValue, float fParam2, float fParam3);
-float __stdcall SOUNDSMP_ClampAttenuation(float fParam);
+float __stdcall SOUNDSMP_ClampVolume(float fValue, float fMax, float fInput);
+float __stdcall SOUNDSMP_ClampAttenuation(float fMillibels);
 void __fastcall SOUNDSMP_InitWaveFormat(WAVEFORMATEX * pWaveFormat, WORD nChannels);
 int * __fastcall SOUNDSMP_ParseWavHeader(int * pWavData, uint32_t * pDataSize, WAVEFORMATEX * pWavFormat);
 void __fastcall SOUNDSMP_CalculateVolumeAndPan(uint32_t * pnVolume, uint32_t * pnPan, float fDeltaX, float fDeltaY, float fDeltaZ);

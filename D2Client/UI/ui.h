@@ -69,8 +69,8 @@ struct DC6 * __fastcall ARCHIVE_LoadOverlayImageUsedInGame(char * pFilename);
 void __stdcall InitializeGlobalsWithColors();
 void * __fastcall MoveArgumentToEAX(void * pParam);
 void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText);
-uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int cParam);
-uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char cParam);
+uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int nColor);
+uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, char byColor);
 uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText);
 uint16_t * __fastcall UI_WrapStringWithColorCodes(uint16_t * wszText, char cStartColor, char cEndColor);
 void __fastcall UI_StoreGlobalTooltipText(uint16_t * wszText, int32_t nScreenX, int32_t nScreenY, int32_t nHpBarValue);
@@ -116,7 +116,7 @@ struct DC6 * __stdcall GetBuySellBtnDC6();
 // @sourcefile .\UI\ui.cpp
 void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize);
 void __stdcall PALETTE_LoadLoadingScreenPalette();
-void __fastcall SetActNo(int32_t nParam);
+void __fastcall SetActNo(int32_t nActNo);
 void __stdcall CleanupAfterLoadingAct();
 int32_t __stdcall DRAW_GetLastPanelId();
 BOOL __stdcall DRAW_CheckTickRateLimiter();
@@ -169,7 +169,7 @@ void __stdcall UI_InitializeStatDescriptionPointers();
 int64_t __stdcall UI_GetControlConfigRowCount();
 void __fastcall UI_ScrollConfigListVertical(int32_t nSteps);
 void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps);
-uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nParam);
+uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nMouseX);
 // Returns TRUE when (nMouseX, nMouseY) is over one of the control-config tabs: UI_GetControlConfigTabIndex(nMouseX@ESI, nMouseY@EDX) != 3 (SETNZ at 004a4a0a).
 // Was code outside any function; no direct reference reaches it in 1.14d.
 BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY);
@@ -217,7 +217,7 @@ void __stdcall INPUT_StatScreenButtonDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_SkillTreeButtonDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_StatScreenButtonUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_SkillTreeButtonUp(struct D2UIMouseMsgStrc * pMsg);
-bool __stdcall UI_CanAllocateStatPoint(int32_t nParam);
+bool __stdcall UI_CanAllocateStatPoint(int32_t nBorderType);
 void __stdcall UI_DrawLevelUpButtonLeft();
 void __stdcall DRAW_UI_NewStatPoints_II();
 // Returns a byte in AL (callers test AL); EAX is not an argument.
@@ -258,6 +258,8 @@ void StaticInit_6caa10();
 void StaticInit_6caa30();
 void StaticInit_6caa50();
 void StaticInit_6caa70();
+void StaticInit_6caa90();
+void StaticInit_6caaa0();
 void StaticInit_6cace0();
 // 26 internal functions (defined in .cpp)
 

@@ -42,7 +42,7 @@ BOOL __fastcall D2COMP_SetAnimationMode(struct D2CharSelCompStrc * pCompUnit, in
 // Returns the code index (1..13) paired with the four-character weapon-class code nWeaponClassCode ('bow '..'ht2 ') in gaCompWeaponClassCodeMap, or 0 when the code is not in the map; the index selects gaCompWeaponClassByCodeIndex.
 // Provenance: 1.14d asm 00504370 (pair scan over gnCompWeaponClassCodeMapCount entries); no callers, the same scan is inlined in D2COMP_AllocTxt_EverythingItems.
 int __stdcall D2COMP_GetWeaponClassCodeIndex(int32_t nWeaponClassCode);
-void __stdcall D2COMP_FreeServerMemory(void * pParam);
+void __stdcall D2COMP_FreeServerMemory(void * pMemory);
 void * __stdcall D2COMP_LoadExcelTxtFile(struct D2PoolManagerStrc * pMemory, char * szFileBaseName, char * szFileExt, uint32_t * pnSize);
 void * __stdcall LoadTxt(struct D2PoolManagerStrc * pMemory, char * szTxtName, struct D2BinFieldInputStrc * pBinFields, size_t * pSize, int32_t nLineLength);
 void __fastcall D2COMP_AllocTxt_Items(struct D2PoolManagerStrc * pMemory);
@@ -64,8 +64,8 @@ void __stdcall D2COMP_SetFlags(struct D2CharSelStrc * pCharSel, uint32_t dwFlags
 void __stdcall D2COMP_LoadGuildEmblemIcon(int32_t pCompUnit, uint8_t byEmblemIcon, uint8_t byPrimaryColor, uint8_t bySecondaryColor);
 void __stdcall D2COMP_LoadAllItemPalettes();
 void __stdcall D2COMP_InitEmblemColorTables();
-char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t nParam);
-int __fastcall D2COMP_DrawUnitNameAndTitle(uint32_t * pnParam);
+char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion);
+int __fastcall D2COMP_DrawUnitNameAndTitle(uint32_t * pCompUnit);
 void __fastcall DRAW_OOG_ChannelPlayers(struct D2QuestDataA3Q6Strc * pA3Q6Data);
 void __stdcall D2COMP_AllocTxt_EverythingItems();
 struct D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nClassicExpansion, uint8_t * pbyEquipSlots, char * szText);

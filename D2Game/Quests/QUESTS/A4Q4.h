@@ -28,7 +28,7 @@ namespace D2Game::Quests::QUESTS::A4Q4 {
 void __fastcall Q30_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Q30_StatusFilter — stub, always returns false. Q30 (internal "Spoke to Malachai") contributes no
 // entry to the in-game Quest Log status panel; its dialog is driven purely via the active-filter gossip path.
-bool __fastcall Q30_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q30_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // Q30_ActiveFilter — decides whether Tyrael (0x198) should currently offer the Q30 "Spoke to Malachai"
 // gossip option. Returns true (active/talkable) when EITHER:
 //  (a) Hell's Forge (Act4 Q3, id 0x1b) is NOT yet Completed/RewardAwaits/JustCompleted -> early pre-forge stage; OR

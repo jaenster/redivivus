@@ -50,7 +50,7 @@ void __fastcall Q20_Callback02_NpcDeactivate(struct D2QuestDataStrc * pQuestData
 // Step0x06 not set branch (still gathering): Step0x04->2(+field_0x00), Step0x03->2, Step0x02->1.
 // Step0x06 set branch (Will assembled, smashing orb): not Step0x08 ->6, not Step0x07 ->5.
 // The Step0x07/0x08 pair tracks the two outcomes after smashing the Compelling Orb.
-bool __fastcall Q20_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * nUnknown);
+bool __fastcall Q20_StatusFilter(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode);
 // A3Q3 "Khalim's Will" — active filter: decides whether an NPC/object interaction (by class id)
 // is currently "active" (true) for this quest. Returns false once Khalim's Will is Completed(0).
 //  - 0xfd (council boss): active if player lacks the quest item AND nStateFlag==1.

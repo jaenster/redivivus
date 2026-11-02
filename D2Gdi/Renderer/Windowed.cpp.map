@@ -1,0 +1,1259 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Gdi/Renderer/Windowed.cpp",
+  "functions": [
+    {
+      "name": "InitPerspective",
+      "address": "006c7a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7a70"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "InitPerspective",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2GfxHelperStrc",
+        "D2GfxSettingsStrc"
+      ]
+    },
+    {
+      "name": "Release",
+      "address": "006c7ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7ab0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "Release",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "ClearCaches",
+      "address": "006c7af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7af0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "ClearCaches"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_AllocateDIBSection",
+      "address": "006c7b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7b00"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_AllocateDIBSection",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "BITMAPINFO",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CreateWindow",
+      "address": "006c7c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7c10"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "CreateWindow",
+        "RENDERER_WINDOWED_AllocateDIBSection",
+        "memset",
+        "RENDERER_WINDOWED_CreateDebugFont",
+        "RENDERER_WINDOWED_UpdateScaleFactor"
+      ],
+      "usedTypes": [
+        "D2LogPalette256Strc"
+      ]
+    },
+    {
+      "name": "BeginCutScene",
+      "address": "006c7cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7cc0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "BeginCutScene"
+      ]
+    },
+    {
+      "name": "PlayCutScene",
+      "address": "006c7cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7cd0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "PlayCutScene"
+      ]
+    },
+    {
+      "name": "CheckCutScene",
+      "address": "006c7ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7ce0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "CheckCutScene"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_DestroyWindow",
+      "address": "006c7cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7cf0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_DestroyWindow",
+        "RENDERER_WINDOWED_DestroyDebugFont"
+      ]
+    },
+    {
+      "name": "EndCutScene",
+      "address": "006c7d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7d30"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "EndCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "BeginScene",
+      "address": "006c7d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7d80"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "BeginScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_WINDOWED_ClearScreen"
+      ]
+    },
+    {
+      "name": "EndScene1",
+      "address": "006c7df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7df0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "EndScene1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "EndScene2",
+      "address": "006c7e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7e30"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "EndScene2",
+        "GetHwnd"
+      ],
+      "usedTypes": [
+        "tagRECT"
+      ]
+    },
+    {
+      "name": "GetBackBuffer",
+      "address": "006c7ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7ef0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "GetBackBuffer"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetScreenSize",
+      "address": "006c7f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7f90"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "GetScreenSize"
+      ]
+    },
+    {
+      "name": "SetPalette",
+      "address": "006c7fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c7fa0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "SetPalette"
+      ],
+      "usedTypes": [
+        "LPPALETTEENTRY",
+        "RGBQUAD",
+        "tagPALETTEENTRY"
+      ]
+    },
+    {
+      "name": "SetPaletteTable",
+      "address": "006c8000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8000"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "SetPaletteTable"
+      ],
+      "usedTypes": [
+        "BYTE *"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_GetBitmapHandle",
+      "address": "006c8020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8020"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_GetBitmapHandle"
+      ],
+      "usedTypes": [
+        "HBITMAP"
+      ]
+    },
+    {
+      "name": "UpdateScaleFactor",
+      "address": "006c8030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8030"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "UpdateScaleFactor"
+      ]
+    },
+    {
+      "name": "SetGamma",
+      "address": "006c8040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8040"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "SetGamma"
+      ]
+    },
+    {
+      "name": "CheckGamma",
+      "address": "006c8050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8050"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "CheckGamma"
+      ]
+    },
+    {
+      "name": "SetGlobalLight",
+      "address": "006c8060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8060"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "SetGlobalLight"
+      ]
+    },
+    {
+      "name": "SetPerspectiveScale",
+      "address": "006c8070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8070"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "SetPerspectiveScale"
+      ]
+    },
+    {
+      "name": "AdjustPerspectivePosition",
+      "address": "006c8080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8080"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "AdjustPerspectivePosition"
+      ]
+    },
+    {
+      "name": "PerspecitveScalePosition",
+      "address": "006c8090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8090"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "PerspecitveScalePosition"
+      ]
+    },
+    {
+      "name": "SetDefaultPerspectiveFactor",
+      "address": "006c80a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c80a0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "SetDefaultPerspectiveFactor"
+      ]
+    },
+    {
+      "name": "ResizeWindow",
+      "address": "006c80b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c80b0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "ResizeWindow",
+        "RENDERER_WINDOWED_AllocateDIBSection",
+        "RENDERER_WINDOWED_UpdateScaleFactor"
+      ]
+    },
+    {
+      "name": "ActivateWindow",
+      "address": "006c80f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c80f0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "ActivateWindow"
+      ]
+    },
+    {
+      "name": "SetOption",
+      "address": "006c8100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8100"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "SetOption"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_FindNearestPaletteIndex",
+      "address": "006c8110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8110"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_FindNearestPaletteIndex"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetRendererStatistics",
+      "address": "006c8190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8190"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "GetRendererStatistics"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_GetPalette",
+      "address": "006c81a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c81a0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_GetPalette",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "HPALETTE",
+        "RGBQUAD *"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_GetFramebufferInfo",
+      "address": "006c81e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c81e0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_GetFramebufferInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_GetPalettePointer",
+      "address": "006c8250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8250"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_GetPalettePointer"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_UpdateScaleFactor",
+      "address": "006c82d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c82d0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_UpdateScaleFactor"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_ValidateDC6Visibility",
+      "address": "006c8310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8310"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_ValidateDC6Visibility",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_CalculateCropRect",
+      "address": "006c8380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8380"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_CalculateCropRect",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DrawImage",
+      "address": "006c84b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c84b0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawImage",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "RENDERER_WINDOWED_GetPalettePointer",
+        "CELCMP_DrawCelFrame"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DrawShiftedImage",
+      "address": "006c85a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c85a0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawShiftedImage",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "RENDERER_WINDOWED_GetPalettePointer",
+        "CELCMP_DrawCelFrame"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawVerticalCropImage",
+      "address": "006c86a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c86a0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawVerticalCropImage",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "RENDERER_WINDOWED_GetPalettePointer",
+        "CELCMP_DrawCelFrameFromGfxData"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawClippedImage",
+      "address": "006c8750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8750"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawClippedImage",
+        "SPRITECACHE_GetOrLoadSprite",
+        "RENDERER_WINDOWED_CalculateCropRect",
+        "RENDERER_WINDOWED_GetPalettePointer",
+        "CELCMP_DrawCelFrameFromGfxData"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DrawShadow",
+      "address": "006c87e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c87e0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawShadow",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "RENDERER_WINDOWED_CheckBlendedShadowsEnabled",
+        "CELCMP_DrawCelFrameCentered"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawImageFast",
+      "address": "006c88a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c88a0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawImageFast"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "DebugFillBackBuffer",
+      "address": "006c88b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c88b0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DebugFillBackBuffer",
+        "DRAW_DebugFillRect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "DrawPerspectiveImage",
+      "address": "006c8910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8910"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawPerspectiveImage",
+        "DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_CreateDebugFont",
+      "address": "006c8930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8930"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_CreateDebugFont"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_DestroyDebugFont",
+      "address": "006c8960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8960"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_DestroyDebugFont"
+      ]
+    },
+    {
+      "name": "DrawString",
+      "address": "006c8970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8970"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawString",
+        "RENDERER_WINDOWED_GetBitmapHandle"
+      ],
+      "usedTypes": [
+        "HBITMAP",
+        "HDC",
+        "tagRECT",
+        "va_list"
+      ]
+    },
+    {
+      "name": "DrawLight",
+      "address": "006c8a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8a40"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawLight"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_CheckBlendedShadowsEnabled",
+      "address": "006c8a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8a50"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_CheckBlendedShadowsEnabled"
+      ]
+    },
+    {
+      "name": "DrawSolidRectEx",
+      "address": "006c8a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8a60"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawSolidRectEx",
+        "RENDERER_WINDOWED_GetPalettePointer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DrawSolidRectAlpha",
+      "address": "006c8c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8c00"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawSolidRectAlpha",
+        "DrawSolidRectEx"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_DrawPixel",
+      "address": "006c8c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8c50"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_DrawPixel"
+      ]
+    },
+    {
+      "name": "DrawLine",
+      "address": "006c8c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8c80"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawLine"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_DrawLineBresenham",
+      "address": "006c8da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8da0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_DrawLineBresenham"
+      ],
+      "usedTypes": [
+        "POINT"
+      ]
+    },
+    {
+      "name": "DrawRect",
+      "address": "006c8f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c8f70"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawRect",
+        "RENDERER_WINDOWED_DrawLineBresenham",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "POINT",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DrawRectEx",
+      "address": "006c9030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9030"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawRectEx",
+        "RENDERER_WINDOWED_DrawLineBresenham",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawSolidRect",
+      "address": "006c90e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c90e0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawSolidRect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "DrawSolidRect_HaltTail"
+      ],
+      "usedTypes": [
+        "tagRECT",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DrawSolidRect_HaltTail",
+      "address": "006c90f5",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c90f5"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawSolidRect_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "DrawSolidSquare",
+      "address": "006c91d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c91d0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawSolidSquare",
+        "DrawSolidRect"
+      ],
+      "usedTypes": [
+        "POINT",
+        "tagRECT",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_ClearFramebuffer",
+      "address": "006c9220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9220"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_ClearFramebuffer",
+        "memset"
+      ]
+    },
+    {
+      "name": "ClearScreen",
+      "address": "006c9270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9270"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "ClearScreen",
+        "RENDERER_WINDOWED_ClearFramebuffer"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_ClearScreen",
+      "address": "006c9280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9280"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_ClearScreen",
+        "RENDERER_WINDOWED_ClearFramebuffer"
+      ]
+    },
+    {
+      "name": "DrawShadowTile",
+      "address": "006c9290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9290"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawShadowTile",
+        "SPRITECACHE_AllocEntry",
+        "RENDERER_WINDOWED_CheckBlendedShadowsEnabled"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DrawTransWallTile",
+      "address": "006c93a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c93a0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawTransWallTile",
+        "SPRITECACHE_AllocEntry"
+      ],
+      "usedTypes": [
+        "D2GfxLightStrc",
+        "D2TileLibraryEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DrawWallTile",
+      "address": "006c94b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c94b0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawWallTile",
+        "SPRITECACHE_AllocEntry"
+      ],
+      "usedTypes": [
+        "D2GfxLightStrc",
+        "D2TileLibraryEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DrawGroundTile",
+      "address": "006c95d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c95d0"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DrawGroundTile",
+        "SPRITECACHE_AllocEntry"
+      ],
+      "usedTypes": [
+        "D2GfxLightExStrc",
+        "D2TileLibraryEntryStrc"
+      ]
+    },
+    {
+      "name": "CloseSmacker",
+      "address": "006c9640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9640"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "CloseSmacker",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc"
+      ]
+    },
+    {
+      "name": "RENDERER_WINDOWED_BlitSmackerFrame",
+      "address": "006c9690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9690"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "RENDERER_WINDOWED_BlitSmackerFrame"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DecodeSmacker",
+      "address": "006c9710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9710"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "DecodeSmacker",
+        "AllocClientMemory",
+        "memset",
+        "SFileLoadFileEx",
+        "SBmpDecodeImage",
+        "SMemFree",
+        "D2GFX_GetColorWithAlphaFromPallete",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PlayerSmacker",
+      "address": "006c9900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9900"
+        }
+      ],
+      "namespace": "D2Gdi::Renderer::Windowed",
+      "calledFunctions": [
+        "PlayerSmacker",
+        "RENDERER_WINDOWED_BlitSmackerFrame",
+        "D2GFX_GetColorWithAlphaFromPallete",
+        "CloseSmacker"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc",
+        "uint8_t"
+      ]
+    }
+  ]
+}

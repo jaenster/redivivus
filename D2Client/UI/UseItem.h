@@ -32,7 +32,7 @@ namespace D2Client::UI::UseItem {
 
 // Function declarations
 void __stdcall TEXT_HandleMouseMove();
-void __fastcall TEXT_HandleItemUse(int32_t nParam1, int32_t nParam2);
+void __fastcall TEXT_HandleItemUse(int32_t nMouseX, int32_t nMouseY);
 // @sourcefile .\UI\UseItem.cpp
 void __stdcall INPUT_UseItemClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_UseItemPassthrough(struct D2UIMouseMsgStrc * pMsg);

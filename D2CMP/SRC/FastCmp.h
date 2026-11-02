@@ -27,18 +27,18 @@ void __fastcall FASTCMP_ConvertDCCWithPaletteRemap(struct DC6 * pDCC, struct DC6
 uint8_t * __fastcall FASTCMP_SkipRLERows(uint8_t * pbRLEData, int32_t nRowsToSkip);
 void __fastcall FASTCMP_DecompressRLE(uint8_t * pImageHeader, void * pbDstBuffer, int32_t nRowCount, int32_t nDstPitch);
 void __fastcall FASTCMP_DecompressRLEWithClip(uint8_t * pImageHeader, int32_t nDstPitch, int32_t nRowCount, int32_t pbDstBuffer, int32_t nDrawStartX, int32_t nDrawEndX, int32_t nImageWidth);
-void __fastcall FASTCMP_DecompressRLEWithBlend(uint8_t * pbParam1, uint8_t * pbParam2, int32_t nRows, int32_t nStride, int32_t nBlendTableBase, int32_t nBlendTableOffset);
-void __fastcall FASTCMP_DecompressRLEWithBlendAndClip(uint8_t * pbParam, int32_t nDstBase, int32_t nRows, int32_t nStride, int32_t nClipStartX, int32_t nDrawStartX, int32_t nDrawEndX, int32_t nParam5, int32_t nBlendTableOffset);
-void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable1, uint8_t * pLookupTable2);
-void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pLookupTable1, uint8_t * pLookupTable2);
-void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable);
-void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pLookupTable);
-void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbParam1, uint8_t * pbParam2, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable, uint8_t * pBlendTable);
-void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pLookupTable, uint8_t * pBlendTable);
-void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbParam, uint8_t * pParam, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable);
-void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pLookupTable);
-void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbParam1, uint8_t * pbParam2, int32_t nRowCount, int32_t nDstPitch, uint8_t * pBlendTable);
-void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbParam, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nParam2, int32_t nParam3, int32_t nParam4, uint8_t * pBlendTable);
+void __fastcall FASTCMP_DecompressRLEWithBlend(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRows, int32_t nStride, int32_t nBlendTableBase, int32_t nBlendTableOffset);
+void __fastcall FASTCMP_DecompressRLEWithBlendAndClip(uint8_t * pRLEData, int32_t nDstBase, int32_t nRows, int32_t nStride, int32_t nClipStartX, int32_t nDrawStartX, int32_t nDrawEndX, int32_t pPaletteTrans, int32_t nBlendTableOffset);
+void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbSrcStream, uint8_t * pDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable1, uint8_t * pLookupTable2);
+void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pLookupTable1, uint8_t * pLookupTable2);
+void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbSrcStream, uint8_t * pDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable);
+void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pLookupTable);
+void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable, uint8_t * pBlendTable);
+void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pLookupTable, uint8_t * pBlendTable);
+void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbSrcStream, uint8_t * pDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable);
+void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pLookupTable);
+void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pBlendTable);
+void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pBlendTable);
 // Decompress RLE image data - dispatcher to choose optimal decompression path
 void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t * pbDecompressedOutput, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nStartRow, int32_t nRowCount, int32_t pLookupTable1, int32_t pBlendTable, int32_t pLookupTable2);
 // Decompresses RLE-compressed image data with radial effect mapping for circular/radial patterns

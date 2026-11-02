@@ -47,7 +47,7 @@ struct D2AreaHitNextGUIDCtx {
 namespace D2Game {
 
 // Function declarations
-void __fastcall CLIENT_GetSaveCompleteClient(struct D2ClientStrc * pClient, uint32_t * pdwParam);
+void __fastcall CLIENT_GetSaveCompleteClient(struct D2ClientStrc * pClient, uint32_t * pdwClientOut);
 // Callback for iterating active clients: if *pnParam is 0 (not yet assigned), writes nParam into *pnParam. Used as a visitor to capture the first active client slot index.
 void __fastcall CLIENT_GetFirstActiveClient(int nParam, int * pnParam);
 int __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20();
@@ -66,30 +66,30 @@ void __stdcall nullsub(struct D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32
 void __fastcall nullsub_4Arg(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4);
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x1C (c2 1c 00) - seven dword arguments.
-void __stdcall nullsub_7Arg(struct D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4, uint32_t dwParam5, uint32_t dwParam6, uint32_t dwParam7);
+void __stdcall nullsub_7Arg(struct D2UnitStrc * pUnit, uint32_t dwParam2, uint32_t dwParam3, uint32_t dwParam4, uint32_t dwParam5, uint32_t dwParam6, uint32_t dwParam7);
 // One of four empty stubs at 005347b0/c0/d0/e0. 005347b0 and this one are both RET 0xC
 // (bytes c2 0c 00). The two 0xC stubs are byte-identical empty hooks with no recoverable semantics -
 // 005347b0 is called from D2Common::Unit::SUnitDmg::DAMAGE_RollAttackHit, this one from
 // D2Common::Unit::SUnitDmg::DAMAGE_ApplyElementalDamageWithResist, both __fastcall shaped
 // (ECX and EDX loaded, three dwords pushed). The _B suffix is a disambiguator, not a claim
 // about behaviour.
-void __stdcall nullsub_B(struct D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3);
+void __stdcall nullsub_B(struct D2UnitStrc * pUnit, uint32_t dwParam2, uint32_t dwParam3);
 int __stdcall QSERVER_CountClientsWithStatusFlag0x20();
 // Updates the player's portal-visited bitmask: gets the level ID of the player's current room, maps it to the corresponding portal flag, and OR's it into the player's persistent portal flags. No-op if room or player unit is null.
 void __stdcall CLIENT_UpdatePortalFlags(struct D2ClientStrc * gameContext);
 // Clears the global gbQuestReconnectMode flag (sets to 0), disabling quest-reconnect mode. Called during game teardown or after reconnect handling is complete.
 void __stdcall GAME_ClearGlobalFlag();
 void __fastcall IncrementObjectTypeCount(int * pThis, uint32_t nObjectType);
-void __fastcall PLRMODES_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+void __fastcall PLRMODES_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 void __fastcall PARTY_RefreshPlayerListRelationships(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __stdcall TASK_InitializeClock();
 void __stdcall thunk_QueryPerformanceFrequency_B();
 // Task queue: calculates time until next scheduled task. Enters critical section for task slot (nParam & 0x1F), reads first task timestamp from priority queue, and returns delta from current timestamp.
-int __fastcall TASK_GetTimeUntilNextTask(uint32_t nParam);
+int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot);
 uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
 uint32_t __fastcall SKILLS_AreaEffect_IncrementHitCount(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
 uint32_t __fastcall SKILLS_AreaEffect_TrackBestUnitByUnitId(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
-void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 uint32_t __fastcall UNIT_IsAlive(struct D2UnitStrc * pUnit, struct D2UnitFindArgStrc * pUnitFindArg);
 void __fastcall Q33_SetCompleteForPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q34_SetCompleteForPartyMember (Betrayal of Harrogath). Party-propagation worker (called by Q34_PropagateCompleteToParty for each member). Grants the kill to a party member who is in Act V and whose Betrayal isn't already Completed/CannotComplete/RewardAwaits/JustCompleted, provided Prison of Ice is done: sets their RewardAwaits + JustCompleted bits. Mirrors Q34_CheckNearNihlathak but keyed on party membership rather than room proximity.
@@ -109,7 +109,7 @@ uint8_t __fastcall Q11_OnEndCallback(::SGAMEDATA * pGame, struct D2QuestDataStrc
 void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 uint8_t __fastcall Q11_TimerCheckDarkness(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 void __fastcall MONSTER_ScheduleDeathIfRunningOrDead(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
-void __fastcall MISSILESMODE_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
+void __fastcall MISSILESMODE_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 BOOL __fastcall Q26_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 BOOL __fastcall Q26_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
@@ -123,10 +123,10 @@ BOOL __fastcall Q22_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2
 BOOL __fastcall Q22_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(struct D2UnitStrc * pUnit, void * pSkillData);
-void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
-void __fastcall SKILLSASS_StatExpireCallback_ClearState2(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
-void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
-void __fastcall MONSTERAI_FlagIfDeadOrNull(struct D2UnitStrc * pUnit, uint32_t * pdwParam, uint32_t dwArg1);
+void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
+void __fastcall SKILLSASS_StatExpireCallback_ClearState2(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
+void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
+void __fastcall MONSTERAI_FlagIfDeadOrNull(struct D2UnitStrc * pUnit, uint32_t * pdwDeadFlag, uint32_t dwArg1);
 BOOL __fastcall AI_SelectTarget_SameLevelFilter(struct D2UnitStrc * pSelf, struct D2UnitStrc * pTarget);
 
 } // namespace D2Game

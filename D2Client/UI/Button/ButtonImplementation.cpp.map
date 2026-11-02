@@ -1,0 +1,320 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Button/ButtonImplementation.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "004babf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004babf0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "ButtonImplementation"
+      ]
+    },
+    {
+      "name": "IsMouseInBounds",
+      "address": "004bac00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bac00"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "IsMouseInBounds"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetValue",
+      "address": "004bac50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bac50"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "GetValue"
+      ],
+      "usedTypes": [
+        "ButtonImplementation"
+      ]
+    },
+    {
+      "name": "SetAccelerator",
+      "address": "004bac60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bac60"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "SetAccelerator"
+      ],
+      "usedTypes": [
+        "ButtonImplementation"
+      ]
+    },
+    {
+      "name": "OnMouseDown",
+      "address": "004bac70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bac70"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnMouseDown",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OnMouseUp",
+      "address": "004bacd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bacd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnMouseUp"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "OnChar",
+      "address": "004bad40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bad40"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnChar"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnMouseMove",
+      "address": "004bad70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bad70"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnMouseMove"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnUpArrow",
+      "address": "004bad80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bad80"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnUpArrow"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnDownArrow",
+      "address": "004bad90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bad90"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnDownArrow"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnRightArrow",
+      "address": "004bada0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bada0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnRightArrow"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnLeftArrow",
+      "address": "004badb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004badb0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnLeftArrow"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "OnMouseWheel",
+      "address": "004badc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004badc0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "OnMouseWheel"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004baf20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004baf20"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "Constructor",
+        "memset",
+        "GetBuySellBtnDC6",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "GetDC6Height",
+        "GetDC6Width"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2GfxDataStrc",
+        "DC6Block",
+        "fpButtonOnActivate",
+        "int32_t",
+        "pfnEHHandlerRoutine",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004bafd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bafd0"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004bb000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb000"
+        }
+      ],
+      "namespace": "D2Client::UI::Button::ButtonImplementation",
+      "calledFunctions": [
+        "Draw",
+        "memset",
+        "GetBuySellBtnDC6",
+        "D2GFX_DrawImage",
+        "GetMouseX",
+        "GetMouseY",
+        "SetAndReturnLastFont",
+        "GetLocaleString",
+        "DRAW_text0",
+        "DRAW_text"
+      ],
+      "usedTypes": [
+        "ButtonImplementation",
+        "D2GfxDataStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

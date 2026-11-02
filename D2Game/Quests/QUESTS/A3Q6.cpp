@@ -780,8 +780,8 @@ void __fastcall Objects_InitFn45(D2ObjectInitFnArg * pInitArg) {
 // sets its update flag. No quest-state record writes. (bMalusTaken/nMalusGUID are union-alias artifacts.)
 void __fastcall Objects_InitFn44(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheGuardian);
-    eD2LevelId eVar3 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
-    if (eVar3 == LEVEL_OuterSteppes) {
+    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
+    if (eLevelId == LEVEL_OuterSteppes) {
       D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
       return;
     }

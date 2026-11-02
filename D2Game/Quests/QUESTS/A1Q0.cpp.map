@@ -1,0 +1,111 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/A1Q0.cpp",
+  "functions": [
+    {
+      "name": "Q00_Callback11_ScrollMessage",
+      "address": "0058fa90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058fa90"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q0",
+      "calledFunctions": [
+        "Q00_Callback11_ScrollMessage",
+        "GetPlayerData",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Q00_Callback00_NpcActivate",
+      "address": "0058fad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058fad0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q0",
+      "calledFunctions": [
+        "Q00_Callback00_NpcActivate",
+        "GetPlayerData",
+        "GetQuestState",
+        "AddGossipMessageOnMonster"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q00_StatusFilter",
+      "address": "0058fb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058fb40"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q0",
+      "calledFunctions": [
+        "Q00_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q00_ActiveFilter",
+      "address": "0058fb50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058fb50"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q0",
+      "calledFunctions": [
+        "Q00_ActiveFilter",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q00_InitData",
+      "address": "0058fb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058fb80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q0",
+      "calledFunctions": [
+        "Q00_InitData",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc"
+      ]
+    }
+  ]
+}

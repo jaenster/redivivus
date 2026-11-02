@@ -1,0 +1,281 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Message.cpp",
+  "functions": [
+    {
+      "name": "MESSAGE_OnQuitMessage",
+      "address": "00451a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451a90"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_OnQuitMessage"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "MESSAGE_OnActivate",
+      "address": "00451ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451ab0"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_OnActivate"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "WndProcD",
+      "address": "00451ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451ad0"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "WndProcD"
+      ]
+    },
+    {
+      "name": "MESSAGE_OnClose",
+      "address": "00451b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451b00"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_OnClose"
+      ]
+    },
+    {
+      "name": "WndProcB",
+      "address": "00451b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451b30"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "WndProcB",
+        "HandleWinProcMsg",
+        "IsPlaybackActive",
+        "SMsgDispatchMessage"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MessageGameLoop",
+      "address": "00451bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451bb0"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MessageGameLoop",
+        "GetHwnd"
+      ],
+      "usedTypes": [
+        "HACCEL",
+        "fpGameLoopFunction",
+        "int32_t",
+        "tagMSG",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MESSAGE_RegisterEventHandler",
+      "address": "00451c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451c70"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_RegisterEventHandler",
+        "SMsgRegisterCommand",
+        "SMsgRegisterKeyUp",
+        "SMsgRegisterKeyDown",
+        "SMsgRegisterMessage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MESSAGE_UnregisterEventHandler",
+      "address": "00451d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451d10"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_UnregisterEventHandler",
+        "SMsgUnregisterCommand",
+        "SMsgUnregisterKeyUp",
+        "SMsgUnregisterKeyDown",
+        "SMsgUnregisterMessage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MESSAGE_RegisterEventHandlerBatch",
+      "address": "00451db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451db0"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_RegisterEventHandlerBatch",
+        "MESSAGE_RegisterEventHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UIFlagInitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MESSAGE_UnregisterEventHandlerBatch",
+      "address": "00451e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451e10"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "MESSAGE_UnregisterEventHandler",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UIFlagInitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MESSAGE_RegisterWindowMessageHandlers",
+      "address": "00451e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451e70"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_RegisterWindowMessageHandlers",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "SMsgPushRegisterState"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MESSAGE_UnregisterWindowMessageHandlers",
+      "address": "00451eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451eb0"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_UnregisterWindowMessageHandlers",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "MESSAGE_UnregisterEventHandler",
+        "SMsgPopRegisterState"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MESSAGE_SnapshotEventHandlers",
+      "address": "00451f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f10"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_SnapshotEventHandlers",
+        "GetHwnd",
+        "SMsgPushRegisterState"
+      ]
+    },
+    {
+      "name": "MESSAGE_UndoLastEventRegistrations",
+      "address": "00451f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f20"
+        }
+      ],
+      "namespace": "D2Client::_Message",
+      "calledFunctions": [
+        "MESSAGE_UndoLastEventRegistrations",
+        "GetHwnd",
+        "SMsgPopRegisterState"
+      ]
+    }
+  ]
+}

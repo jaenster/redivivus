@@ -1,0 +1,400 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/D2QSSocket.cpp",
+  "functions": [
+    {
+      "name": "QSSOCKET_SetCallbackHandler1",
+      "address": "006bc010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc010"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "QSSOCKET_SetCallbackHandler1"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_SendPacketToSafesocket",
+      "address": "006bc030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc030"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_SendPacketToSafesocket",
+        "WSAGetLastError"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "LPCRITICAL_SECTION"
+      ]
+    },
+    {
+      "name": "QSSOCKET_SendWithTimeout",
+      "address": "006bc0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc0b0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "QSSOCKET_SendWithTimeout",
+        "SAFESOCK_EnterCriticalSection",
+        "WSASocket2_SendOrCloseOnTimeout",
+        "LeaveCriticalSection_Safesock"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "D2QSSocketStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ReadBytesFromSocket",
+      "address": "006bc120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc120"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "ReadBytesFromSocket",
+        "D2QSQUEUE_Dequeue"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ProcessReceivedData",
+      "address": "006bc150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc150"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "ProcessReceivedData",
+        "memcpy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FOG_EnqueueMessage",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "QSSOCKET_SetCallbackHandler2",
+      "address": "006bc290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc290"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "QSSOCKET_SetCallbackHandler2"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "QSSOCKET_BlockSocket",
+      "address": "006bc2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc2c0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "QSSOCKET_BlockSocket"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "CloseSocket",
+      "address": "006bc310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc310"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "CloseSocket",
+        "closeSocket"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "ReceiveLoopCallback",
+      "address": "006bc3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc3a0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "ReceiveLoopCallback",
+        "Safesock_PollReadReady",
+        "WSASocket2_Read",
+        "GetSocketStatusAndWsaResultToArguments",
+        "closeSocket",
+        "ProcessReceivedData",
+        "CloseSocket",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "D2QSSocketStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QSSOCKET_ThreadEntryPoint",
+      "address": "006bc560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc560"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "QSSOCKET_ThreadEntryPoint",
+        "Create_Flag0"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_CreateConnectionThread",
+      "address": "006bc5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc5a0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_CreateConnectionThread"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "QSSOCKET_Initialize",
+      "address": "006bc620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc620"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "QSSOCKET_Initialize"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "D2QSSOCKET_BlockSocketIfValid",
+      "address": "006bc680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc680"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "D2QSSOCKET_BlockSocketIfValid",
+        "QSSOCKET_BlockSocket"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "STRUCT_D2QSSocket_Init",
+      "address": "006bc6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc6a0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "STRUCT_D2QSSocket_Init",
+        "AllocClientMemory",
+        "memset",
+        "SStrCopy",
+        "D2QSQUEUE_Initialize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeD2QSSocket",
+      "address": "006bc780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc780"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "FreeD2QSSocket",
+        "QSSOCKET_BlockSocket",
+        "Free",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "QSSOCKET_WaitForEvent",
+      "address": "006bc7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc7e0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "QSSOCKET_WaitForEvent"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "NET_D2QSocket_GetSafesock",
+      "address": "006bc810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc810"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "NET_D2QSocket_GetSafesock"
+      ],
+      "usedTypes": [
+        "D2NetDataStrc",
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "QSSOCKET_SignalEvent",
+      "address": "006bc830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc830"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "QSSOCKET_SignalEvent",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_SendPacketToQSocket",
+      "address": "006bc860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc860"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_SendPacketToQSocket",
+        "NET_MCP_CLIENT_SendPacketToSafesocket"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc"
+      ]
+    },
+    {
+      "name": "NET_MCP_CLIENT_Send",
+      "address": "006bc8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bc8a0"
+        }
+      ],
+      "namespace": "Fog::Src::D2QSSocket",
+      "calledFunctions": [
+        "NET_MCP_CLIENT_Send",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SMemCopy",
+        "NET_MCP_CLIENT_SendPacketToQSocket"
+      ],
+      "usedTypes": [
+        "D2QSSocketStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,4987 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/Missile.cpp",
+  "functions": [
+    {
+      "name": "SEED_RollRangeInclusive",
+      "address": "004cc790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc790"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "SEED_RollRangeInclusive",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_GetBoltSpeed",
+      "address": "004cc7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc7c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_GetBoltSpeed"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CheckLineOfSight",
+      "address": "004cc800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc800"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CheckLineOfSight",
+        "TestCollision"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_InitializeVisual",
+      "address": "004cc870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc870"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_InitializeVisual",
+        "UNIT_GetModuloFromSeed",
+        "SetPosVectorShifted",
+        "GetDirection",
+        "SetDirectionAndNewDirection",
+        "SetUnsetFlags0x40",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_GetSpeedByRemainingFrames",
+      "address": "004cc910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc910"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_GetSpeedByRemainingFrames",
+        "GetRemainingFrames"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_GetPoisonNovaRadius",
+      "address": "004cc950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc950"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_GetPoisonNovaRadius"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn10_ProgOverlay",
+      "address": "004cc9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc9a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn10_ProgOverlay",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SetupHoming",
+      "address": "004cca00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cca00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SetupHoming",
+        "IsActive",
+        "GetLevel",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "GetTargetY",
+        "GetXPos",
+        "GetYPos",
+        "SetSP1",
+        "SetTargetX",
+        "GetDistanceToXY",
+        "SetTarget",
+        "GetCollisionDistance",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_RetargetClosest",
+      "address": "004ccb50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccb50"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_RetargetClosest",
+        "GetTargetX",
+        "MISSILE_GetOwnerUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SKILL_FindClosestTargetWithStats",
+        "MISSILE_SetupHoming"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn13_Homing",
+      "address": "004ccbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccbe0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn13_Homing",
+        "MISSILE_GetOwnerUnit",
+        "IsActive",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetTargetX",
+        "GetCurrentFrame",
+        "MISSILE_RetargetClosest",
+        "GetTargetUnit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn34_MephistoDoNotDraw",
+      "address": "004ccca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccca0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn34_MephistoDoNotDraw",
+        "MISSILE_GetOwnerUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall",
+      "address": "004cccc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cccc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall",
+        "GetTotalFrames",
+        "GetXSP1",
+        "InitSeed_Param_666",
+        "PATH_SetPathType",
+        "OverwriteDistanceAndMaxDistance",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn46_CatapultChargedBall",
+      "address": "004ccd20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccd20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn46_CatapultChargedBall",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "TXT_Skills_GetLine",
+        "D2GetSkillCalc",
+        "SKILLS_CreateMissileSpiralGrid"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn51_LightTrailJavelin",
+      "address": "004cce40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cce40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn51_LightTrailJavelin",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "MISSILE_GetOwnerUnit",
+        "GetLevel",
+        "SKILLS_CreateMissileSpiralGrid"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn61_WorldStoneShake",
+      "address": "004ccf00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccf00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn61_WorldStoneShake",
+        "SHAKE_Reset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_SetQualityLevel",
+      "address": "004ccf20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccf20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "LIGHTMAP_SetQualityLevel"
+      ]
+    },
+    {
+      "name": "LIGHTMAP_GetQualityLevel",
+      "address": "004ccf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccf30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "LIGHTMAP_GetQualityLevel"
+      ]
+    },
+    {
+      "name": "MISSILE_CanHitTarget",
+      "address": "004ccf40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccf40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CanHitTarget",
+        "UNIT_GetUnitState",
+        "CheckUnitIfOwner",
+        "CanInteractWith"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2States",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDoFuncData_02",
+      "address": "004ccfb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccfb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "Missiles_SrvDoFuncData_02",
+        "MISSILE_CanHitTarget"
+      ],
+      "usedTypes": [
+        "D2MissileCltCollideCtxStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDoFuncData_01",
+      "address": "004ccfe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ccfe0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "Missiles_SrvDoFuncData_01",
+        "STATSEX_GetAlignment",
+        "MISSILE_CanHitTarget"
+      ],
+      "usedTypes": [
+        "D2MissileCltCollideCtxStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDoFuncData_03",
+      "address": "004cd020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd020"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "Missiles_SrvDoFuncData_03",
+        "MISSILE_CanHitTarget"
+      ],
+      "usedTypes": [
+        "D2MissileCltCollideCtxStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Missiles_SrvDoFuncData_07",
+      "address": "004cd050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd050"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "Missiles_SrvDoFuncData_07"
+      ],
+      "usedTypes": [
+        "D2MissileCltCollideCtxStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_InitMissileUnit",
+      "address": "004cd0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd0a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_InitMissileUnit",
+        "AllocMissileData",
+        "SetupUpdateFlag",
+        "AllocDynamicPath",
+        "PATH_ChangeCollisionType",
+        "PATH_SetCollisionPattern"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_FreeClientMissile",
+      "address": "004cd170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd170"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_FreeClientMissile",
+        "FreeMissileStream",
+        "FreeMissileData",
+        "FreeParticle",
+        "FreeGfxInfo",
+        "PATH_RemoveCollision",
+        "RemoveUnitFromRoom",
+        "STRUCT_FreePath"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MISSILE_UpdateLightFlicker",
+      "address": "004cd1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd1c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_UpdateLightFlicker",
+        "GetRadiusX",
+        "RANDOM_RandomNumberSelector",
+        "SetRadiusY"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn40_HealingBolt",
+      "address": "004cd240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd240"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn40_HealingBolt",
+        "MISSILE_GetOwnerUnit",
+        "GetRosterOwnerGUID"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_GetSpeedTier",
+      "address": "004cd2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd2d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_GetSpeedTier"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CheckAndDecrementPierce",
+      "address": "004cd310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd310"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CheckAndDecrementPierce",
+        "GetClassId",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_RemoveClientSide",
+      "address": "004cd390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd390"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_RemoveClientSide",
+        "UNITSND_GetMissileSound",
+        "SOUND_StopUnitSoundByIndex",
+        "GetLightMap",
+        "LIGHTMAP_ValidateAndReset",
+        "UNITS_RemoveFromClientHashTable",
+        "RemoveObjectFromServerObjectTable"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CalculatePierceCount",
+      "address": "004cd420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd420"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CalculatePierceCount",
+        "GetClassId",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetMinimalStatValueShifted",
+        "GetPlayerUnit_UI",
+        "SERVER_GetUnitStat",
+        "InitSeed_Param_666",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MakeMissile",
+      "address": "004cd540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd540"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MakeMissile",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "FindRoomBySubtileCoordinates",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "D2ApplyPercent",
+        "_allmul",
+        "_alldiv",
+        "GetPositionNextToPlayerDirection",
+        "CreateMissileOrMonster",
+        "InitAnimMode",
+        "AllocStatListEx",
+        "SetAnimSpeed",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "SetActivateFrame",
+        "SetVelocities",
+        "SetSP1",
+        "SetTarget",
+        "PATH_CalculatePath",
+        "SetOwner",
+        "SetAcceleration",
+        "SetMaxVelocity",
+        "UNIT_GetModuloFromSeed",
+        "SetDirectionAndNewDirection",
+        "AllocParticle",
+        "PARTICLE_SetStoppedWithFade",
+        "GetDistanceToXY",
+        "GetTotalFrames",
+        "PARTICLE_InitProjectile",
+        "PARTICLE_UpdatePosition",
+        "SetUnsetFlags0x40",
+        "SetSkill",
+        "SetLevel",
+        "StoreOwner",
+        "MISSILE_CalculatePierceCount",
+        "FreeLightMap",
+        "AllocLightMap",
+        "SOUND_PlaySound",
+        "UNITSND_GetMissileSound",
+        "SOUND_StopById",
+        "MONUNIQUE_DispatchModAttack",
+        "UNITS_RemoveFromClientHashTable"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2LightMapStrc",
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eMissilesId",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CastAttack",
+      "address": "004cdb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cdb40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "CastAttack",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MakeMissileAtXY",
+      "address": "004cdba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cdba0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MakeMissileAtXY",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateFromUnitWithOffset",
+      "address": "004cdc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cdc30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateFromUnitWithOffset",
+        "MISSILE_GetOwnerUnit",
+        "GetCooordinates",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateAtOwnerCoords",
+      "address": "004cdd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cdd10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateAtOwnerCoords",
+        "MISSILE_GetOwnerUnit",
+        "GetCooordinates",
+        "memset",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SpawnAreaOfEffect",
+      "address": "004cddb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cddb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SpawnAreaOfEffect",
+        "UNITS_GetRoom",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "TestCollision",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "POINT",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateTrailMissile",
+      "address": "004ce050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ce050"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateTrailMissile",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetXPos",
+        "GetYPos",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SpawnRandomScatter",
+      "address": "004ce140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ce140"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SpawnRandomScatter",
+        "GetCurrentFrame",
+        "RANDOM_RandomNumberSelector",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreatePeriodicTrail",
+      "address": "004ce320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ce320"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreatePeriodicTrail",
+        "GetRemainingFrames",
+        "MISSILE_GetOwnerUnit",
+        "UNITS_GetRoom",
+        "GetXPosFromDynamicPathUnit",
+        "InitSeed_Param_666",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "RANDOM_RandomNumberSelector",
+        "GetYPosFromDynamicPathUnit",
+        "CheckCollision_BlockPlayerMissile",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SetupFallingZPos",
+      "address": "004ce420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ce420"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SetupFallingZPos",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MISSILE_SetupDescentAnim",
+      "address": "004ce4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ce4b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SetupDescentAnim",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateRandomOffset",
+      "address": "004ce530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ce530"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateRandomOffset",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "UNIT_GetModuloFromSeed",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateMultiShatter",
+      "address": "004ce650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ce650"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateMultiShatter",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "AllocParticle",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "PARTICLE_SetVelocityOffset"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateSubWithSound",
+      "address": "004ce850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ce850"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateSubWithSound",
+        "MISSILE_CreateMultiShatter",
+        "SOUND_PlaySound",
+        "RANDOM_RandomNumberSelector",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateRandomSubInRadius",
+      "address": "004cea00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cea00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateRandomSubInRadius",
+        "UNITS_GetRoom",
+        "RANDOM_RandomNumberSelector",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "CheckCollision_BlockPlayer_Type",
+        "MakeMissile",
+        "AllocParticle",
+        "SetPosVectorShifted",
+        "SetOffsetVector"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreatePeriodicAreaSub",
+      "address": "004cecc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cecc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreatePeriodicAreaSub",
+        "MISSILE_CreateRandomSubInRadius"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eMissilesId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateDirectionalSub",
+      "address": "004ced20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ced20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateDirectionalSub",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY",
+        "GetDirection",
+        "SetDirectionAndNewDirection"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SpawnMissilesInArea",
+      "address": "004ced60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ced60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SpawnMissilesInArea",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreatePatternAtUnitPos",
+      "address": "004cef50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cef50"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreatePatternAtUnitPos",
+        "GetYPos",
+        "GetXPos",
+        "MISSILE_SpawnMissilesInArea"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateRadialBurst",
+      "address": "004cefe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cefe0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateRadialBurst",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetXPos",
+        "GetYPos",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn64_Unused",
+      "address": "004cf150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf150"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn64_Unused",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn01_FireExplosion",
+      "address": "004cf250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf250"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn01_FireExplosion",
+        "GetLevel",
+        "GetSkillId",
+        "MISSILE_CreatePatternAtUnitPos"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn02_GasCloud",
+      "address": "004cf2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf2b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn02_GasCloud",
+        "MISSILE_CreateRadialBurst"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn03_PotionExplode",
+      "address": "004cf300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf300"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn03_PotionExplode",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY",
+        "SEED_RollRangeInclusive",
+        "SetDeadFlag"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn09_HolyBolt",
+      "address": "004cf3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf3c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn09_HolyBolt",
+        "MISSILE_GetOwnerUnit",
+        "SKILL_IsTargetOwnedPet",
+        "SKILL_IsTargetAlliedUnit",
+        "IsDemon",
+        "MONSTER_IsMonsterUndead",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn12_ImmolationArrow",
+      "address": "004cf500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf500"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn12_ImmolationArrow",
+        "GetSkillId",
+        "GetLevel",
+        "MISSILE_GetOwnerUnit",
+        "D2GetSkillCalc",
+        "MISSILE_EvalMissileCalc",
+        "MISSILE_SpawnAreaOfEffect"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn14_IceShatter",
+      "address": "004cf640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf640"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn14_IceShatter",
+        "GetXPos",
+        "GetYPos",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY",
+        "PATH_SetDirectionToTarget"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn16_ChainLightning",
+      "address": "004cf800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf800"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn16_ChainLightning",
+        "MISSILE_GetOwnerUnit",
+        "GFX_AddOverlayToUnit",
+        "GetTargetX",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "TXT_Skills_GetLine",
+        "D2GetSkillCalc",
+        "SKILL_FindClosestTargetWithStats",
+        "memset",
+        "MakeMissile",
+        "SetTargetX",
+        "SetOwner"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn18_MeteorCenter",
+      "address": "004cf9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cf9b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn18_MeteorCenter",
+        "GetSkillId",
+        "GetLevel",
+        "MISSILE_GetOwnerUnit",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MakeMissile",
+        "LIGHTMAP_SetRadius"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn19_RandomSubMissile",
+      "address": "004cfc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cfc80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn19_RandomSubMissile",
+        "RANDOM_RandomNumberSelector",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn24_BoneSpear",
+      "address": "004cfd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cfd00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn24_BoneSpear",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SkillFuncCreateAtTarget",
+      "address": "004cfd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cfd70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SkillFuncCreateAtTarget",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "D2fpSkillFuncArg",
+        "D2fpSkillFuncSub",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn25_LightningFury",
+      "address": "004cfe30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cfe30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn25_LightningFury",
+        "GetSkillId",
+        "GetLevel",
+        "MISSILE_GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "SKILL_ForEachUnitInRadius"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_SkillFuncCreateAtTargetB",
+      "address": "004cffa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cffa0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_SkillFuncCreateAtTargetB",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "D2fpSkillFuncArg",
+        "D2fpSkillFuncSub",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn26_FistOfHeavensDelay",
+      "address": "004d0060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0060"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn26_FistOfHeavensDelay",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetTargetX",
+        "GetTargetY",
+        "UNITS_FindClientSideUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "SKILL_ForEachUnitInRadius"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_Create8DirectionalClient",
+      "address": "004d01d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d01d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_Create8DirectionalClient",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn28_PantherPotGreen",
+      "address": "004d02e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d02e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn28_PantherPotGreen",
+        "MISSILE_GetOwnerUnit",
+        "GetLevel",
+        "GetSkillId",
+        "MISSILE_Create8DirectionalClient"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn29_GrimWard",
+      "address": "004d0380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0380"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn29_GrimWard",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "D2GetSkillCalc",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MakeMissile",
+        "GetDirection",
+        "SetDirectionAndNewDirection"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn30_FrozenOrb",
+      "address": "004d04d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d04d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn30_FrozenOrb",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn04_Unused",
+      "address": "004d05e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d05e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn04_Unused",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn32_FireHead",
+      "address": "004d06f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d06f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn32_FireHead",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissileAtXY",
+        "MISSILE_CreatePatternAtUnitPos",
+        "GFX_AddOverlayToUnit",
+        "MISSILE_GetOwnerUnit"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn33_MephistoFlyingRocks",
+      "address": "004d07e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d07e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn33_MephistoFlyingRocks",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetTargetX",
+        "UNIT_GetModuloFromSeed",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn36_HellMeteorDown",
+      "address": "004d0920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0920"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn36_HellMeteorDown",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "CheckCollision_BlockAll_Width",
+        "MISSILE_SpawnAreaOfEffect"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eD2CollisionUnitSize",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn44_InAirLanding",
+      "address": "004d09e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d09e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn44_InAirLanding",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY",
+        "GetDirection",
+        "SetDirectionAndNewDirection",
+        "SetUnsetFlags0x40",
+        "GetTargetX",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn47_CatapultSpikeBall",
+      "address": "004d0a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0a80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn47_CatapultSpikeBall",
+        "MISSILE_GetOwnerUnit",
+        "GetLevel",
+        "GetSkillId",
+        "TXT_Skills_GetLine",
+        "D2GetSkillCalc",
+        "SKILL_SpawnRandomMissilesInArea",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "MakeMissileAtXY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateFlyingRockDebris",
+      "address": "004d0b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0b90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateFlyingRockDebris",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "GetDistanceToXY",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn50_CatapultMeteorBall",
+      "address": "004d0db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0db0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn50_CatapultMeteorBall",
+        "MISSILE_CreateFlyingRockDebris"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn52_MoltenBoulder",
+      "address": "004d0e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0e00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn52_MoltenBoulder",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
+        "GetLevel",
+        "GetSkillId",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "MISSILE_GetOwnerUnit",
+        "CastAttack",
+        "MISSILE_CreateFlyingRockDebris"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn53_MoltenBoulderEmerge",
+      "address": "004d0eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0eb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn53_MoltenBoulderEmerge",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetXPos",
+        "GetYPos",
+        "GetSkillId",
+        "GetLevel",
+        "GetXSP1",
+        "GetYSP1",
+        "MakeMissile",
+        "PARTICLE_SetBounceParams",
+        "PARTICLE_InitProjectile",
+        "PARTICLE_ClearLifetimeFlag"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn54_VinesTrail",
+      "address": "004d0ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d0ff0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn54_VinesTrail",
+        "MISSILE_CreateDirectionalSub"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn55_FallingRock",
+      "address": "004d1040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1040"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn55_FallingRock",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn56_RecyclerVine",
+      "address": "004d1110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1110"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn56_RecyclerVine",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "GetDirection",
+        "SetDirectionAndNewDirection"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn57_BaalSpawnMonsters",
+      "address": "004d11d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d11d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn57_BaalSpawnMonsters",
+        "GetLevel",
+        "GetSkillId",
+        "MISSILE_CreatePatternAtUnitPos"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn60_Nihlithak",
+      "address": "004d1240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1240"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn60_Nihlithak",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetPosVectorShifted"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateRandomOffsetHit",
+      "address": "004d1300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1300"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateRandomOffsetHit",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetXPos",
+        "GetYPos",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn31_IceBreak",
+      "address": "004d14a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d14a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn31_IceBreak",
+        "GetClassId",
+        "GetYPos",
+        "GetXPos",
+        "GetLevel",
+        "GetSkillId",
+        "MISSILE_GetOwnerUnit",
+        "CastAttack",
+        "GetDirection",
+        "SetDirectionAndNewDirection",
+        "SetAnimationSpeed"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateFootprint",
+      "address": "004d1640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1640"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateFootprint",
+        "GetDirection",
+        "memset",
+        "MakeMissile",
+        "PATH_SetNewDirection",
+        "SetDeadFlag"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateTowardObject",
+      "address": "004d16c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d16c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateTowardObject",
+        "UNITS_FindClientSideUnit",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "AllocParticle",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "PARTICLE_SetVelocityOffset",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn42_HfFragment1",
+      "address": "004d1820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1820"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn42_HfFragment1",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "GetTargetX",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn43_HfFragment2",
+      "address": "004d1890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1890"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn43_HfFragment2",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile",
+        "GetTargetX",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateCircularRing",
+      "address": "004d19d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d19d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateCircularRing",
+        "MISSILE_GetOwnerUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn37_RadamentHandOfGod",
+      "address": "004d1bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1bd0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn37_RadamentHandOfGod",
+        "GetTargetY",
+        "InitSeed_Param_666",
+        "GetTargetX",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SKILLSMON_SetMissilePathLinear"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn38_TaintedSunFlash",
+      "address": "004d1d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1d70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn38_TaintedSunFlash",
+        "GetTargetX",
+        "UNITS_FindServerSideUnit",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetCurrentFrame",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn39_QueenDeathGlob",
+      "address": "004d1ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1ec0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn39_QueenDeathGlob",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY",
+        "GetDirection",
+        "SetDirectionAndNewDirection",
+        "SetUnsetFlags0x40"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn41_DurielDeathRock",
+      "address": "004d1f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1f50"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn41_DurielDeathRock",
+        "GetLevel",
+        "GetSkillId",
+        "SKILL_SpawnRandomMissilesInArea",
+        "MakeMissileAtXY"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateAtMonsterFacing",
+      "address": "004d1fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d1fa0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateAtMonsterFacing",
+        "MONSTERS_GetUpgradeSkillsAndCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile",
+        "CoordsMapToScreen",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "PARTICLE_UpdatePosition"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateRandomCardinal",
+      "address": "004d2190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2190"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateRandomCardinal",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetPosVectorShifted",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateBaalLightningBolt",
+      "address": "004d2400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2400"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateBaalLightningBolt",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY",
+        "SetPosVectorShifted"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateDebrisWithCollision",
+      "address": "004d2520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2520"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateDebrisWithCollision",
+        "UNITS_GetRoom",
+        "CheckCollision_BlockAll_Width",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "SetAnimSpeed"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eD2CollisionUnitSize",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn66_WorldStoneShake",
+      "address": "004d2610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2610"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn66_WorldStoneShake",
+        "MISSILE_GetOwnerUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "PATH_SetPathTarget",
+        "UpdateFrame",
+        "GetTargetX",
+        "SetShake",
+        "SetTargetX",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MISSILE_CreateDebrisWithCollision",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn48_CatapultColdBall",
+      "address": "004d2760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2760"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn48_CatapultColdBall",
+        "GetXPos",
+        "GetYPos",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY",
+        "PATH_SetDirectionToTarget",
+        "GetTotalFrames",
+        "SetTotalFrames",
+        "GetVelocity",
+        "SetVelocities",
+        "PARTICLE_InitProjectile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CreateSteamVent",
+      "address": "004d2990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2990"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateSteamVent",
+        "UNITS_GetRoom",
+        "CheckCollision_BlockPlayerMissile",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn62_BaalTauntLightning",
+      "address": "004d2af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2af0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn62_BaalTauntLightning",
+        "MISSILE_GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "InitSeed_Param_666",
+        "GetYPosFromDynamicPathUnit",
+        "UNIT_GetModuloFromSeed",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltHitFn63_BaalTauntPoison",
+      "address": "004d2c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2c10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltHitFn63_BaalTauntPoison",
+        "MISSILE_CreateRadialBurst"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_ClientFrameUpdate",
+      "address": "004d2c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2c70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_ClientFrameUpdate",
+        "MISSILE_RemoveClientSide",
+        "MISSILE_UpdateLightFlicker",
+        "UNITS_GetRoom",
+        "GetYPos",
+        "GetXPos",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_ClientHitExplode",
+      "address": "004d2d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d2d70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_ClientHitExplode",
+        "MISSILE_GetOwnerUnit",
+        "UNIT_GetUnitState",
+        "ITEM_GetMinimalStatValueShifted",
+        "MISSILE_CheckAndDecrementPierce",
+        "CheckUnitIfOwner",
+        "SetOwner",
+        "CanInteractWith",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "CUNITEVENT_DispatchCallbacks",
+        "SOUND_PlaySound",
+        "GetLevel",
+        "GetSkillId",
+        "MakeMissileAtXY",
+        "PARTICLE_GetPosZShifted",
+        "PARTICLE_GetPosYShifted",
+        "PARTICLE_GetPosXShifted",
+        "SetPosVectorShifted",
+        "PARTICLE_SetStopped",
+        "PARTICLE_SetStoppedWithFade",
+        "UNIT_GetModuloFromSeed",
+        "GetDirection",
+        "PATH_SetNewDirection",
+        "UNITSND_GetMissileSound",
+        "SOUND_StopUnitSoundByIndex",
+        "GetLightMap",
+        "LIGHTMAP_ValidateAndReset",
+        "UNITS_RemoveFromClientHashTable",
+        "RemoveObjectFromServerObjectTable"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2LightMapStrc",
+        "D2MissilesTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn43_FollowOwner",
+      "address": "004d3070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3070"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn43_FollowOwner",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_RemoveClientSide",
+        "IsActive",
+        "MISSILE_ClientHitExplode",
+        "PATH_SetPathTarget",
+        "UpdateFrame"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn01_BasicMissile",
+      "address": "004d30c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d30c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_GetOwnerUnit",
+        "GetPlayerUnit_UI",
+        "GetCurrentFrame",
+        "GetActivateFrame",
+        "GetRemainingFrames",
+        "PARTICLE_IsStoppedOrFading",
+        "IsAtEndOfFrameCycle",
+        "UpdateFrame",
+        "SetFrameNonRate",
+        "GetVelocity",
+        "GetStepsOfMissileMovement",
+        "PATH_AdvanceUnitAlongPath",
+        "SetCurrentFrame",
+        "MISSILE_ClientHitExplode",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetAnimMode",
+        "CheckAndGetCollisionFlag",
+        "GetInitCoords",
+        "GetUnitSizeX",
+        "CallCollisionFunction",
+        "IsActive"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissileCltCollideCtxStrc",
+        "D2PathPointStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn02_GroundSplat",
+      "address": "004d33e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d33e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn02_GroundSplat",
+        "IsAtEndOfFrameCycle",
+        "SetDeadFlag",
+        "SetVelocities",
+        "GetTargetX",
+        "DRAW_GetWorldOffsetX",
+        "GetTargetY",
+        "DRAW_GetWorldOffsetY",
+        "SetCurrentFrame",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_ClientHitExplode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn03_TrailOnStep",
+      "address": "004d3460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3460"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn03_TrailOnStep",
+        "Get8FlagsFromDynamicPath",
+        "GetLevel",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_EvalMissileCalc",
+        "MISSILE_CreateTrailMissile",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn04_PoisonCloud",
+      "address": "004d34e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d34e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn04_PoisonCloud",
+        "MISSILE_SpawnRandomScatter",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn05_FireWall",
+      "address": "004d3540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3540"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn05_FireWall",
+        "MISSILE_RemoveClientSide",
+        "RANDOM_RandomNumberSelector",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "GetCurrentFrame"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn06_FireWallMaker",
+      "address": "004d3630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3630"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn06_FireWallMaker",
+        "MISSILE_GetOwnerUnit",
+        "Get8FlagsFromDynamicPath",
+        "MISSILE_RemoveClientSide",
+        "GetXPosFromDynamicPathUnit",
+        "memset",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "UNIT_GetModuloFromSeed",
+        "MakeMissile",
+        "GetPrecisionX",
+        "GetPrecisionY",
+        "SetPrecisionX",
+        "SetPrecisionY",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn07_Homing",
+      "address": "004d37f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d37f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn07_Homing",
+        "MISSILE_GetOwnerUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetTargetX",
+        "ConfirmTarget",
+        "GetTargetUnit",
+        "IsActive",
+        "CanInteractWith",
+        "GetRemainingFrames",
+        "GetCollisionDistance",
+        "PATH_CalculatePath",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn08_LightningTrail",
+      "address": "004d38d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d38d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn08_LightningTrail",
+        "GetRemainingFrames",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn09_MeteorCenter",
+      "address": "004d39c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d39c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn09_MeteorCenter",
+        "GetSkillId",
+        "GetLevel",
+        "MISSILE_GetOwnerUnit",
+        "D2GetSkillCalc",
+        "GetRadiusX",
+        "GetRemainingFrames",
+        "LIGHTMAP_SetRadius",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MakeMissile",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "UNITSND_GetMissileLoopSound",
+        "SOUND_StopUnitSoundByIndex",
+        "SOUND_PlaySound",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn10_MonBlizzCenter",
+      "address": "004d3c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3c40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn10_MonBlizzCenter",
+        "RANDOM_RandomNumberSelector",
+        "GetLevel",
+        "MISSILE_CreatePeriodicTrail",
+        "MISSILE_SetupFallingZPos",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn11_DieAtAnimEnd",
+      "address": "004d3d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3d00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn11_DieAtAnimEnd",
+        "IsAtEndOfFrameCycle",
+        "SetDeadFlag",
+        "FreeLightMap",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn12_Unused",
+      "address": "004d3d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3d30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn12_Unused",
+        "GetRemainingFrames",
+        "SetShake",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn67_Unused",
+      "address": "004d3e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3e00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn67_Unused",
+        "GetRemainingFrames",
+        "GetLevel",
+        "GetSkillId",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "MISSILE_GetOwnerUnit",
+        "CastAttack",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn13_Blizzard",
+      "address": "004d3f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d3f10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn13_Blizzard",
+        "RANDOM_RandomNumberSelector",
+        "GetSkillId",
+        "MISSILE_GetOwnerUnit",
+        "GetLevel",
+        "D2GetSkillCalc",
+        "MISSILE_CreatePeriodicTrail",
+        "MISSILE_SetupFallingZPos",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn14_Unused",
+      "address": "004d4040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d4040"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn14_Unused",
+        "MISSILE_GetOwnerUnit",
+        "GetConfirmedTargetUnit",
+        "GetRemainingFrames",
+        "GetCollisionDistance",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn15_FingerMageSpider",
+      "address": "004d4180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d4180"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn15_FingerMageSpider",
+        "MISSILE_GetOwnerUnit",
+        "GetTargetX",
+        "MISSILE_RemoveClientSide",
+        "SetTargetX",
+        "GetVelocity",
+        "GetTargetUnit",
+        "GetConfirmedTargetUnit",
+        "GetCurrentFrame",
+        "GetCollisionDistance",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "memset",
+        "GetTotalFrames",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn16_DiabWallMaker",
+      "address": "004d43a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d43a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn16_DiabWallMaker",
+        "MISSILE_GetOwnerUnit",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "UNIT_GetModuloFromSeed",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn17_CurseCenter",
+      "address": "004d44b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d44b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn17_CurseCenter",
+        "GetStreamMissile",
+        "GetStreamRange",
+        "GetRemainingFrames",
+        "GetLevel",
+        "GetSkillId",
+        "MISSILE_CreatePatternAtUnitPos",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn18_BoneSpear",
+      "address": "004d4590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d4590"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn18_BoneSpear",
+        "GetRemainingFrames",
+        "Get8FlagsFromDynamicPath",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "GetDirection",
+        "SetDirectionAndNewDirection",
+        "GetPrecisionX",
+        "SetPrecisionX",
+        "GetPrecisionY",
+        "SetPrecisionY",
+        "PARTICLE_GetPosZShifted",
+        "SetPosVectorShifted",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn19_FrozenOrb",
+      "address": "004d46d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d46d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn19_FrozenOrb",
+        "MISSILE_GetOwnerUnit",
+        "GetRemainingFrames",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "GetTargetX",
+        "SetTargetX",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn20_FrozenOrbNova",
+      "address": "004d47f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d47f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn20_FrozenOrbNova",
+        "GetRemainingFrames",
+        "GetTargetX",
+        "GetTargetY",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "SetTargetX",
+        "SetTargetY",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn21_BrDeathControl",
+      "address": "004d48b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d48b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn21_BrDeathControl",
+        "MISSILE_GetOwnerUnit",
+        "GetTargetX",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "UNIT_GetModuloFromSeed",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY",
+        "MISSILE_GetSpeedByRemainingFrames",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn22_BrDeathLightningBolt",
+      "address": "004d49f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d49f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn22_BrDeathLightningBolt",
+        "MISSILE_GetOwnerUnit",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "PARTICLE_GetPosZShifted",
+        "SetPosVectorShifted",
+        "GetRemainingFrames",
+        "GetTargetX",
+        "GetTargetY",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "SetTargetX",
+        "SetTargetY",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn23_DenOfEvilLight",
+      "address": "004d4b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d4b80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn23_DenOfEvilLight",
+        "GetCurrentFrame",
+        "SetCurrentFrame",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn24_CairnStones",
+      "address": "004d4bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d4bb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn24_CairnStones",
+        "GetCurrentFrame",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_CreatePeriodicTrail",
+        "MISSILE_SetupDescentAnim",
+        "UNITS_GetRoom",
+        "GetLevel",
+        "GetSkillId",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "CastAttack",
+        "GetTargetX",
+        "UNITS_FindClientSideUnit",
+        "SetTargetX",
+        "memset",
+        "MakeMissile",
+        "UNIT_GetModuloFromSeed",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn25_Mist",
+      "address": "004d4dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d4dc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn25_Mist",
+        "GetRemainingFrames",
+        "RANDOM_RandomNumberSelector",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn26_MephistoDeathControl",
+      "address": "004d4f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d4f20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn26_MephistoDeathControl",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "GetTargetX",
+        "MISSILE_CreateRandomOffset",
+        "SetTargetX",
+        "GetTargetY",
+        "memset",
+        "GetSkillId",
+        "UNIT_GetModuloFromSeed",
+        "MakeMissile",
+        "SetTargetY",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn27_BossFireWallMaker",
+      "address": "004d5090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5090"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn27_BossFireWallMaker",
+        "MISSILE_RemoveClientSide",
+        "MISSILE_GetOwnerUnit",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "GetRemainingFrames",
+        "GetTargetX",
+        "GetTargetY",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "SetTargetX",
+        "SetTargetY",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn28_MephistoDoNotDraw",
+      "address": "004d5200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5200"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn28_MephistoDoNotDraw",
+        "MISSILE_GetOwnerUnit",
+        "GetRemainingFrames",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn29_AndyControl",
+      "address": "004d5310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5310"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn29_AndyControl",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "GetRemainingFrames",
+        "MISSILE_GetPoisonNovaRadius",
+        "MISSILE_CreateSubWithSound",
+        "MISSILE_CreateRandomOffset",
+        "SetShake",
+        "MISSILE_CreatePeriodicAreaSub",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn30_TowerChestSpawner",
+      "address": "004d5470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5470"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn30_TowerChestSpawner",
+        "GetRemainingFrames",
+        "SetTargetY",
+        "GetTargetY",
+        "RANDOM_RandomNumberSelector",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn44_Distraction",
+      "address": "004d55c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d55c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn44_Distraction",
+        "UNITS_RemoveFromClientHashTable",
+        "MISSILE_GetOwnerUnit",
+        "GetCurrentSkill",
+        "GetSkillId",
+        "Get8FlagsFromDynamicPath",
+        "GetLevel",
+        "MakeMissileAtXY",
+        "PATH_SetPathTarget",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn45_DistractionFog",
+      "address": "004d56b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d56b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn45_DistractionFog",
+        "MISSILE_SpawnRandomScatter",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn46_LightningTrailingJavelin",
+      "address": "004d5710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5710"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn46_LightningTrailingJavelin",
+        "UNITS_RemoveFromClientHashTable",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetRemainingFrames",
+        "GetXSP1",
+        "GetYSP1",
+        "SetTargetX",
+        "SetTargetY",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetTargetX",
+        "GetTargetY",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn68_SucFireball",
+      "address": "004d5880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5880"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn68_SucFireball",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn47_MoltenBoulder",
+      "address": "004d5950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5950"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn47_MoltenBoulder",
+        "GetTargetX",
+        "PARTICLE_GetBounceCount",
+        "SOUND_PlaySound",
+        "SetTargetX",
+        "MISSILE_CltDoFn06_FireWallMaker",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn48_EruptionCenter",
+      "address": "004d59e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d59e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn48_EruptionCenter",
+        "MISSILE_GetOwnerUnit",
+        "UNITS_GetRoom",
+        "GetSkillId",
+        "TXT_Skills_GetLine",
+        "GetLevel",
+        "D2GetSkillCalc",
+        "GetRemainingFrames",
+        "GetXPosFromDynamicPathUnit",
+        "InitSeed_Param_666",
+        "RANDOM_RandomNumberSelector",
+        "GetYPosFromDynamicPathUnit",
+        "CheckCollision_BlockPlayerMissile",
+        "memset",
+        "MakeMissile",
+        "SetDeadFlag",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn49_Vines",
+      "address": "004d5ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5ba0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn49_Vines",
+        "GetRemainingFrames",
+        "MISSILE_CreateDirectionalSub",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn50_Volcano",
+      "address": "004d5c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5c10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn50_Volcano",
+        "GetSkillId",
+        "GetLevel",
+        "MISSILE_GetOwnerUnit",
+        "D2GetSkillCalc",
+        "GetRemainingFrames",
+        "GetTargetX",
+        "InitSeed_Param_666",
+        "UNIT_GetModuloFromSeed",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetSeed_nSeedLow",
+        "SetTargetX",
+        "MISSILE_CreateFromUnitWithOffset",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn51_RecyclerDelay",
+      "address": "004d5dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5dd0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn51_RecyclerDelay",
+        "GetRemainingFrames",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "UNIT_GetModuloFromSeed",
+        "SOUND_PlaySound",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn52_WakeMaker",
+      "address": "004d5f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d5f80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn52_WakeMaker",
+        "MISSILE_GetOwnerUnit",
+        "Get8FlagsFromDynamicPath",
+        "GetTargetX",
+        "GetTargetY",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn53_TigerFury",
+      "address": "004d6080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6080"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn53_TigerFury",
+        "Get8FlagsFromDynamicPath",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn07_Homing",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn56_BaalTauntControl",
+      "address": "004d6130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6130"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn56_BaalTauntControl",
+        "GetRemainingFrames",
+        "MISSILE_ClientHitExplode",
+        "GetXPos",
+        "InitSeed_Param_666",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn57_BladeShield",
+      "address": "004d62b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d62b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn57_BladeShield",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_RemoveClientSide",
+        "MISSILE_CltDoFn43_FollowOwner",
+        "GetCooordinates",
+        "GetTargetY",
+        "GetTargetX",
+        "SetTargetY",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "PATH_SetPathType",
+        "PATH_CalculatePath",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn58_RoyalStrikeChaosIce",
+      "address": "004d63e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d63e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn58_RoyalStrikeChaosIce",
+        "MISSILE_RemoveClientSide",
+        "GetRemainingFrames",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "GetTargetX",
+        "InitSeed_Param_666",
+        "GetTargetY",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "GetSeed_nSeedLow",
+        "SetTargetX",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn37_DiabloAppears",
+      "address": "004d6540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6540"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn37_DiabloAppears",
+        "GetCurrentFrame",
+        "SetShake",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn41_HfSpirit",
+      "address": "004d6590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6590"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn41_HfSpirit",
+        "GetRemainingFrames",
+        "PARTICLE_SetVelocityOffset",
+        "SetAnimationSpeed",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn40_HfFragment3",
+      "address": "004d65e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d65e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn40_HfFragment3",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "GetTargetY",
+        "GetTargetX",
+        "MISSILE_CreateTowardObject",
+        "SetTargetY"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn39_HfFragment",
+      "address": "004d6660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6660"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn39_HfFragment",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn38_HfControl",
+      "address": "004d6680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6680"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn38_HfControl",
+        "GetTargetX",
+        "GetRemainingFrames",
+        "UNITS_FindClientSideUnit",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_CreateCircularRing",
+        "SetShake"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn42_IzualControl",
+      "address": "004d66e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d66e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CreateRandomOffsetHit",
+        "MISSILE_CltDoFn42_IzualControl",
+        "GetCurrentFrame",
+        "MISSILE_GetOwnerUnit",
+        "UNIT_GetModuloFromSeed",
+        "GetXPosFromDynamicPathUnit",
+        "memset",
+        "GetYPosFromDynamicPathUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "PARTICLE_SetVelocityOffset",
+        "PARTICLE_InitProjectile",
+        "PARTICLE_ClearLifetimeFlag",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn31_HoradricStaff",
+      "address": "004d6820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6820"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn31_HoradricStaff",
+        "GetCurrentFrame",
+        "MISSILE_GetOwnerUnit",
+        "SetShake",
+        "GetYPos",
+        "GetXPos",
+        "GetLevel",
+        "GetSkillId",
+        "memset",
+        "MakeMissile",
+        "SetDirectionAndNewDirection",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "SetUnsetFlags0x40",
+        "SetAnimationSpeed",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint64_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn32_RadamentDeath",
+      "address": "004d6c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6c00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn32_RadamentDeath",
+        "GetCurrentFrame",
+        "MISSILE_GetOwnerUnit",
+        "GetYPos",
+        "GetXPos",
+        "GetLevel",
+        "GetSkillId",
+        "memset",
+        "MakeMissile",
+        "SetTargetX",
+        "SetTargetY",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn33_TaintedSunControl",
+      "address": "004d6d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6d40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn33_TaintedSunControl",
+        "GetCurrentFrame",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "GetGUID",
+        "SetTargetX",
+        "GetTargetY",
+        "UNITS_FindClientSideUnit",
+        "GFX_AddOverlayToUnit",
+        "AllocLightMap",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn34_TaintedSunBall",
+      "address": "004d6fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d6fa0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn34_TaintedSunBall",
+        "GetTargetY",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "GetTargetX",
+        "UNITS_FindServerSideUnit",
+        "GetCollisionDistance",
+        "SetTargetY",
+        "PARTICLE_SetStoppedWithFade",
+        "SetOffsetVector",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SetSP1",
+        "SetVelocities",
+        "PATH_CalculatePath",
+        "UNIT_GetModuloFromSeed",
+        "PARTICLE_SetBoundsOffset",
+        "PARTICLE_SetReverseDirection"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn35_QueenDeathCenter",
+      "address": "004d72c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d72c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn35_QueenDeathCenter",
+        "GetCurrentFrame",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn36_DurielDeathControl",
+      "address": "004d7400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d7400"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn36_DurielDeathControl",
+        "GetCurrentFrame",
+        "SetShake",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "SetAnimSpeed",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn61_OverseerControl",
+      "address": "004d7690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d7690"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn61_OverseerControl",
+        "MISSILE_GetOwnerUnit",
+        "GetTargetX",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_CreateAtMonsterFacing",
+        "GetRemainingFrames",
+        "MISSILE_GetSpeedTier",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn62_NehlithakControl",
+      "address": "004d7710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d7710"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn62_NehlithakControl",
+        "MISSILE_GetOwnerUnit",
+        "GetRemainingFrames",
+        "MISSILE_CreateRandomCardinal",
+        "MISSILE_CreateBaalLightningBolt",
+        "GetYPos",
+        "GetXPos",
+        "GetLevel",
+        "GetSkillId",
+        "CastAttack",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn63_NehlithakOrbit",
+      "address": "004d7880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d7880"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn63_NehlithakOrbit",
+        "GetXPos",
+        "GetYPos",
+        "GetTargetX",
+        "GetTargetY",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn64_BaalFxControl",
+      "address": "004d7930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d7930"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn64_BaalFxControl",
+        "MISSILE_GetOwnerUnit",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "GetCurrentFrame",
+        "memset",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "SetTargetX",
+        "GetYPos",
+        "GetXPos",
+        "CastAttack",
+        "GetTargetY",
+        "UNITS_GetRoom",
+        "FindUnitInNeighboredRooms",
+        "MISSILE_CreateDebrisWithCollision"
+      ],
+      "usedTypes": [
+        "D2BaalFxSpiritSpawnStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn65_BaalFxSpirit",
+      "address": "004d7e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d7e00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn65_BaalFxSpirit",
+        "GetTargetY",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "GetTargetX",
+        "UNITS_FindServerSideUnit",
+        "UNIT_GetModuloFromSeed",
+        "SetTargetY",
+        "PARTICLE_SetStoppedWithFade",
+        "SetVelocities",
+        "SetOffsetVector",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SetSP1",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn59_WorldStoneChip",
+      "address": "004d7fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d7fc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn59_WorldStoneChip",
+        "GetTargetX",
+        "GetTargetY",
+        "PARTICLE_GetPosZShifted",
+        "MISSILE_CltDoFn01_BasicMissile",
+        "MISSILE_RemoveClientSide"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn54_AnyaCenter",
+      "address": "004d8000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8000"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn54_AnyaCenter",
+        "MISSILE_GetOwnerUnit",
+        "GetRemainingFrames",
+        "GetXPos",
+        "GetYPos",
+        "GetLevel",
+        "GetSkillId",
+        "CastAttack",
+        "memset",
+        "MakeMissile",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "SetShake",
+        "MISSILE_CreateSteamVent",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn55_AncientDeathCenter",
+      "address": "004d8260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8260"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn55_AncientDeathCenter",
+        "GetRemainingFrames",
+        "GetXPos",
+        "GetYPos",
+        "memset",
+        "MISSILE_GetOwnerUnit",
+        "GetSkillId",
+        "GetLevel",
+        "MakeMissile",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "MISSILE_CltDoFn60_Hurricane",
+      "address": "004d8400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004d8400"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Missile",
+      "calledFunctions": [
+        "MISSILE_CltDoFn60_Hurricane",
+        "GetRemainingFrames",
+        "GetXPos",
+        "GetYPos",
+        "GetTargetX",
+        "GetTargetY",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "MISSILE_CltDoFn01_BasicMissile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

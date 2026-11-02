@@ -1,0 +1,283 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Units/UnitFinds.cpp",
+  "functions": [
+    {
+      "name": "AreUnitsInNeighboredRooms",
+      "address": "0065a590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a590"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "AreUnitsInNeighboredRooms",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindUnitInNeighboredRooms",
+      "address": "0065a620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a620"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "FindUnitInNeighboredRooms",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetAdjacentRoomsList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckRoomIfNotInRange",
+      "address": "0065a6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a6b0"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "CheckRoomIfNotInRange",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckRoomIfInRange",
+      "address": "0065a710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a710"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "CheckRoomIfInRange",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetTestedUnitsFromRoom",
+      "address": "0065a790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a790"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "GetTestedUnitsFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitFindArgStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "UNITFINDTEST",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetNearestTestedUnit",
+      "address": "0065a800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a800"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "GetNearestTestedUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "CheckRoomIfInRange",
+        "GetDistanceToXY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "fpUnitTest",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ExpandUnitFinds",
+      "address": "0065a900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a900"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "ExpandUnitFinds",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ReAllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitFindDataStrc",
+        "D2UnitFindsStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "InitializeUnitFindData",
+      "address": "0065a950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065a950"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "InitializeUnitFindData",
+        "AllocServerMemory",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2RoomStrc",
+        "D2UnitFindArgStrc",
+        "D2UnitFindDataStrc",
+        "D2UnitFindsStrc",
+        "UNITFINDTEST",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeUnitFindData",
+      "address": "0065aa00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065aa00"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "FreeUnitFindData",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitFindDataStrc"
+      ]
+    },
+    {
+      "name": "TestUnit",
+      "address": "0065aa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065aa40"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "TestUnit",
+        "GetXPos",
+        "GetYPos",
+        "MONSTER_IsMonsterUndead",
+        "GetMissleById",
+        "CheckFlags",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "FIELDTBLS_StepFieldTowardsPoint",
+        "CheckCollision_BlockPlayerMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2UnitFindArgStrc",
+        "D2UnitStrc",
+        "eCollisionFlags",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITFINDS_FindCullRange",
+      "address": "0065ac70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065ac70"
+        }
+      ],
+      "namespace": "D2Common::Units::UnitFinds",
+      "calledFunctions": [
+        "UNITFINDS_FindCullRange",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CheckRoomIfNotInRange",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "DRLGROOM_IsRoomInTown",
+        "CheckRoomIfInRange",
+        "TestUnit",
+        "ExpandUnitFinds"
+      ],
+      "usedTypes": [
+        "D2RoomStrc *",
+        "D2UnitFindDataStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

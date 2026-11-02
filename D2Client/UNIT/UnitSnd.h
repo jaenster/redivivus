@@ -26,15 +26,15 @@ void __fastcall UNITSND_ResolveSoundFromFlags(struct D2UnitStrc * pUnit, uint32_
 int __fastcall UNITSND_GetHitSound(int32_t pSoundTable, uint32_t nAnimMode);
 void __fastcall AllocUnitSfxData(struct D2UnitStrc * pUnit, int32_t nChannelHandle);
 void __fastcall FreeSfxData(struct D2UnitStrc * pUnit, int32_t nSearchValue);
-int32_t __fastcall UNITSND_GetMissileSound(struct D2UnitStrc * pUnit, int32_t nParam2);
+int32_t __fastcall UNITSND_GetMissileSound(struct D2UnitStrc * pUnit, int32_t nSound);
 int __fastcall UNITSND_GetMissileLoopSound(struct D2UnitStrc * pUnit);
 void __fastcall IterateUnitSfxData(struct D2UnitStrc * pUnit, int32_t bForceStop);
 void __fastcall UNITSND_UpdatePositionalAudio(struct D2UnitStrc * pUnit);
-void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, int32_t nParam);
+void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, int32_t pUnit);
 // Returns pUnit's client-side nSfxMode (+0x74); halts (UnitSnd.cpp line 3237) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __stdcall UNITSND_GetSfxMode(struct D2UnitStrc * pUnit);
-void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, int32_t nParam);
+void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, int32_t pUnit);
 // Returns pUnit's client-side dwSfxStepTicks (+0x84, the field SetSfxStepTicks writes); halts (UnitSnd.cpp line 3303) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __stdcall UNITSND_GetSfxStepTicks(struct D2UnitStrc * pUnit);
@@ -65,7 +65,7 @@ void __fastcall MuteOrUnmuteUnitSounds(struct D2UnitStrc * pUnit, int32_t nMuteD
 void __stdcall SOUND_UpdateAmbientMusic();
 void __fastcall PlayUnitInitSound(struct D2UnitStrc * pUnit);
 // Dispatches the appropriate sound event when a unit changes animation mode. For players: plays mode-change, attack, or get-hit sounds keyed on mode and class (e.g. Druid kick at mode 0xF, Assassin at 0x10). For monsters: applies MonSounds CvtMo/CvtTgt remapping, then plays mode-change, attack, skill, or stop-combat sound. nMode==0 uses the unit's current mode.
-void __fastcall UNITSND_DispatchModeChangeSound(struct D2UnitStrc * pUnit, int32_t pnParam, int32_t nMode);
+void __fastcall UNITSND_DispatchModeChangeSound(struct D2UnitStrc * pUnit, int32_t nAnimMode, int32_t nMode);
 // 21 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT::UnitSnd

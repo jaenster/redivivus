@@ -301,12 +301,12 @@ uint32_t __stdcall GetCpuBrandId() {
     return nBrandId;
 }
 
-uint32_t __fastcall DispatchCpuidCall(int32_t nParam) {
+uint32_t __fastcall DispatchCpuidCall(int32_t nLeaf) {
     int pCpuidResult;
-    if (!nParam) {
+    if (!nLeaf) {
       pCpuidResult = D2_Cpuid(0);
     } else {
-      switch (nParam) {
+      switch (nLeaf) {
         case 1:
           {
             pCpuidResult = D2_Cpuid(1);
@@ -323,7 +323,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nParam) {
             break;
           }
         default:
-          switch (nParam) {
+          switch (nLeaf) {
             case 4:
               {
                 pCpuidResult = D2_Cpuid(4);
@@ -340,7 +340,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nParam) {
                 break;
               }
             default:
-              switch (nParam) {
+              switch (nLeaf) {
                 case 7:
                   {
                     pCpuidResult = D2_Cpuid(7);
@@ -357,7 +357,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nParam) {
                     break;
                   }
                 default:
-                  switch (nParam) {
+                  switch (nLeaf) {
                     case 0xb:
                       {
                         pCpuidResult = D2_Cpuid(0xb);
@@ -374,7 +374,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nParam) {
                         break;
                       }
                     default:
-                      switch (nParam) {
+                      switch (nLeaf) {
                         case -0x7ffffffe:
                           {
                             pCpuidResult = D2_Cpuid(0x80000002);
@@ -392,7 +392,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nParam) {
                           }
                         default:
                           {
-                            pCpuidResult = D2_Cpuid(nParam);
+                            pCpuidResult = D2_Cpuid(nLeaf);
                           }
                       }
                   }
@@ -1377,15 +1377,15 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDat
     pNode[4] = (int*)0x1;
     GetLocalTime((LPSYSTEMTIME)(pNode + 5));
     nLen1 = Storm::Source::SSTR::SStrCopy((char*)(pNode + 9), szText1, 0x7fffffff);
-    char* pcVar1 = (char*)(nLen1 + 1 + (int)(pNode + 9));
-    *(size_t*)(pcVar1 + 4) = nDataLen;
-    *(void**)pcVar1 = (void*)pData;
-    *(void**)(pcVar1 + 8) = (void*)pCategory;
-    *(BOOL*)(pcVar1 + 0xc) = bSkipData;
-    *(uint32_t*)(pcVar1 + 0x10) = (uint32_t)!nVerbose;
-    nLen1 = Storm::Source::SSTR::SStrCopy(pcVar1 + 0x14, szText2, 0x7fffffff);
+    char* pMessageFields = (char*)(nLen1 + 1 + (int)(pNode + 9));
+    *(size_t*)(pMessageFields + 4) = nDataLen;
+    *(void**)pMessageFields = (void*)pData;
+    *(void**)(pMessageFields + 8) = (void*)pCategory;
+    *(BOOL*)(pMessageFields + 0xc) = bSkipData;
+    *(uint32_t*)(pMessageFields + 0x10) = (uint32_t)!nVerbose;
+    nLen1 = Storm::Source::SSTR::SStrCopy(pMessageFields + 0x14, szText2, 0x7fffffff);
     if (!bSkipData) {
-      memcpy(pcVar1 + nLen1 + 0x15, pData, nDataLen);
+      memcpy(pMessageFields + nLen1 + 0x15, pData, nDataLen);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
@@ -1716,7 +1716,7 @@ void __stdcall GetFreeDiskSpaceForSavePath() {
     ULONGLONG uTotalFreeBytes;
     ULONGLONG uTotalBytes;
     ULONGLONG uFreeBytesAvailable;
-    DWORD local_414[3];
+    DWORD adwDiskFreeSpaceInfo[3];
     char szSavePath[1024];
     Source::SFile::GetAndCreateSavePath(szSavePath, 0x400);
     HMODULE hModule = LoadLibraryA("kernel32.dll");
@@ -1742,11 +1742,11 @@ void __stdcall GetFreeDiskSpaceForSavePath() {
       nCharIndex++;
     } while (nCharIndex < 0x400);
 
-    /* LPDWORD lpTotalNumberOfClusters for GetDiskFreeSpaceA */ /* LPDWORD lpNumberOfFreeClusters for GetDiskFreeSpaceA */ /* LPDWORD lpBytesPerSector for GetDiskFreeSpaceA */ /* LPDWORD lpSectorsPerCluster for GetDiskFreeSpaceA */ /* LPCSTR lpRootPathName for GetDiskFreeSpaceA */ local_414[2] = 0;
-    local_414[0] = 0;
-    local_414[1] = 0;
+    /* LPDWORD lpTotalNumberOfClusters for GetDiskFreeSpaceA */ /* LPDWORD lpNumberOfFreeClusters for GetDiskFreeSpaceA */ /* LPDWORD lpBytesPerSector for GetDiskFreeSpaceA */ /* LPDWORD lpSectorsPerCluster for GetDiskFreeSpaceA */ /* LPCSTR lpRootPathName for GetDiskFreeSpaceA */ adwDiskFreeSpaceInfo[2] = 0;
+    adwDiskFreeSpaceInfo[0] = 0;
+    adwDiskFreeSpaceInfo[1] = 0;
     DWORD dwBytesPerSector = 0;
-    GetDiskFreeSpaceA(szSavePath, local_414 + 2, local_414, local_414 + 1, &dwBytesPerSector);
+    GetDiskFreeSpaceA(szSavePath, adwDiskFreeSpaceInfo + 2, adwDiskFreeSpaceInfo, adwDiskFreeSpaceInfo + 1, &dwBytesPerSector);
 }
 
 void GetGlobalMemoryStatus(LPMEMORYSTATUS pMemoryStatus) {

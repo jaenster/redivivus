@@ -18,14 +18,14 @@ namespace D2Common::DATATBLS::OverlayTbls {
 // Compiles Overlay.txt into the in-memory overlay table during data-table init. Declares the column schema (overlay name, filename, version, Frames, PreDraw, 1ofN, Dir, animrate, Beta, X/Yoffset, height/range/light fields, Trans, RGB color, NumDirections, LocalBlood) with field types and struct offsets, creates the overlay TxtLink lookup (STRUCT_CreateTxtLinkStrc) into sgtDataTable.pTxtOverlayLink, then calls DataTbls::CompileTxt (record size 0x84) storing the result in sgtDataTable.pTxtOverlay / nTxtOverlaySize. Allocates from pMemory. (Several column-name string literals decompile as raw global addresses; they are the in-binary .rdata column names.)
 void __fastcall TXT_AllocTxt_overlay(struct D2PoolManagerStrc * pMemory);
 void __stdcall OVERLAYTBLS_FreeOverlayTables();
-int32_t __stdcall OVERLAYTBLS_GetFrames(int32_t nParam);
-uint32_t __stdcall OVERLAYTBLS_GetPreDraw(int32_t nParam);
-int32_t __stdcall OVERLAYTBLS_GetXOffset(int32_t nParam);
-int32_t __stdcall OVERLAYTBLS_GetYOffset(int32_t nParam);
-uint32_t __stdcall OVERLAYTBLS_GetTrans(int32_t nParam);
+int32_t __stdcall OVERLAYTBLS_GetFrames(int32_t nOverlayId);
+uint32_t __stdcall OVERLAYTBLS_GetPreDraw(int32_t nOverlayId);
+int32_t __stdcall OVERLAYTBLS_GetXOffset(int32_t nOverlayId);
+int32_t __stdcall OVERLAYTBLS_GetYOffset(int32_t nOverlayId);
+uint32_t __stdcall OVERLAYTBLS_GetTrans(int32_t nOverlayId);
 uint32_t __stdcall OVERLAYTBLS_GetLightRadiusAndRGB(int32_t nOverlayId, int * pnInitRadius, int * pnRadius, char * pbyRed, char * pbyGreen, char * pbyBlue);
 int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nOverlayId);
-uint32_t __stdcall OVERLAYTBLS_GetDir(int32_t nParam);
+uint32_t __stdcall OVERLAYTBLS_GetDir(int32_t nOverlayId);
 // 2022.01.09 - dzik
 uint32_t __stdcall GetComponentsData(struct D2UnitStrc * pUnit, uint32_t nIndex);
 // Resolves the graphic-component (DCC/COF token) for one of a monster's render components by index and variant. Validates the unit is a monster, reads its MonStats2 component table, bounds-checks the variant, and looks up the base comp-code via DATATBLS_GetCompCodeByIndex. For Act II monsters it may override the component from the gnOverlayTblsCount / gnOverlayTblsMaxId tables depending on the monster's validated base class id (special-cases base id 0xaa). Returns the resolved component token (cast as D2UnitStrc*), or NULL for non-monsters / out-of-range component or variant.

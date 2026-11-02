@@ -49,12 +49,12 @@ typedef void (__fastcall *fpTimerFunctionUnit)(::SGAMEDATA * pGame, D2UnitStrc *
 
 namespace D2Game::GAME::Event {
 
-D2TimerStrc * * __stdcall _UnusedGetFromList(eD2UnitType eUnitType, uint32_t nParam, ::SGAMEDATA * pGame) {
-    if (nParam == -1) {
+D2TimerStrc * * __stdcall _UnusedGetFromList(eD2UnitType eUnitType, uint32_t nUnitGUID, ::SGAMEDATA * pGame) {
+    if (nUnitGUID == -1) {
       return nullptr;
     }
 
-    uint32_t nBucketIndex = nParam & 0x8000003f;
+    uint32_t nBucketIndex = nUnitGUID & 0x8000003f;
     if ((int)nBucketIndex >= 0) {
       return pGame->pTimerQueue->pDispatchedTimersByType[Dispatch::aTimerIndexUnitTypeLookupTable[eUnitType]] + nBucketIndex;
     }

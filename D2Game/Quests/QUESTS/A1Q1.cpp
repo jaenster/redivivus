@@ -551,8 +551,8 @@ bool __fastcall Q01_SequenceFilter(D2QuestDataStrc * pQuestData) {
         exit(-1);
       }
 
-      bool uVar1 = pNextQuestData->fpSequenceFilter(pNextQuestData);
-      return uVar1;
+      bool bResult = pNextQuestData->fpSequenceFilter(pNextQuestData);
+      return bResult;
     }
 
     return false;

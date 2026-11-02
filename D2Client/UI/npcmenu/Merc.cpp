@@ -71,10 +71,10 @@ D2BitBufferStrc * __stdcall NPCMENU_GetMercHireCost() {
     return gpNpcMenuDialogOptions;
 }
 
-void __fastcall NPCMENU_SetSelectedMercIndex(int16_t nParam) {
+void __fastcall NPCMENU_SetSelectedMercIndex(int16_t wMercNameId) {
     D2MercForHire* pMercEntry = D2Client::Merc::D2MercForHire;
     do {
-      if (pMercEntry->nNameStringId == nParam) {
+      if (pMercEntry->nNameStringId == wMercNameId) {
         break;
       }
 

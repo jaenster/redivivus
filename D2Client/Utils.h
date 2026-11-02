@@ -13,11 +13,11 @@ namespace D2Client::_Utils {
 // Function declarations
 void __stdcall UTILS_OnUnitModeChange_NoOp();
 void __stdcall ANIM_OnSkillCastStub();
-float __stdcall UTILS_SqrtFloat(float dwParam);
+float __stdcall UTILS_SqrtFloat(float fInput);
 float thunk___CIsqrt(float fValue);
 uint32_t __fastcall RollRandomNumerUpToArgument(uint32_t nNumber);
 int32_t __fastcall RollRandomNumber(int32_t nMin, int32_t nMax);
-int32_t __fastcall RollRandomNumberTimesTwo(int32_t nParam);
+int32_t __fastcall RollRandomNumberTimesTwo(int32_t nRange);
 float __stdcall CalculateHypotenuse(float a, float b);
 float __stdcall CalculateHypotenusePowered(float fX, float fY);
 

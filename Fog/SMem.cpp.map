@@ -1,0 +1,82 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/SMem.cpp",
+  "functions": [
+    {
+      "name": "SMemSizeClassBucketLookup",
+      "address": "004111a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004111a0"
+        }
+      ],
+      "namespace": "Fog::SMem",
+      "calledFunctions": [
+        "SMemSizeClassBucketLookup"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SMemInitPerfCounters",
+      "address": "00411210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411210"
+        }
+      ],
+      "namespace": "Fog::SMem",
+      "calledFunctions": [
+        "SMemInitPerfCounters",
+        "_alldiv",
+        "memset",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "LARGE_INTEGER",
+        "int64_t"
+      ]
+    },
+    {
+      "name": "SMemResetHeapStats",
+      "address": "00411280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00411280"
+        }
+      ],
+      "namespace": "Fog::SMem",
+      "calledFunctions": [
+        "SMemResetHeapStats",
+        "GetTickCount"
+      ]
+    },
+    {
+      "name": "HashForName",
+      "address": "004112c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004112c0"
+        }
+      ],
+      "namespace": "Fog::SMem",
+      "calledFunctions": [
+        "HashForName",
+        "tolower"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

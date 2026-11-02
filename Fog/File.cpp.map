@@ -1,0 +1,413 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/File.cpp",
+  "functions": [
+    {
+      "name": "CONTAINER_InitializeBuffer",
+      "address": "00403040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403040"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "CONTAINER_InitializeBuffer"
+      ],
+      "usedTypes": [
+        "CONTAINER_TypeInitialValue",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CRASH_DumpThreadContext",
+      "address": "00403070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403070"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "CRASH_DumpThreadContext",
+        "DEBUG_UnwindStackFrames",
+        "CRASH_FormatStackTrace"
+      ],
+      "usedTypes": [
+        "D2CrashFrameStrc",
+        "Report",
+        "fnCrashOutputLine",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CRASH_FormatStackTrace",
+      "address": "00403100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403100"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "CRASH_FormatStackTrace",
+        "strncpy_s",
+        "SYSTEM_CaptureThreadContext",
+        "__snprintf_s",
+        "DEBUG_FormatAddressInfo",
+        "FormatAddressDebugString",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2CrashFrameStrc",
+        "Report",
+        "fnCrashOutputLine",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CRASH_DumpRegisters",
+      "address": "004032f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004032f0"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "CRASH_DumpRegisters",
+        "DEBUG_CaptureThreadContext",
+        "__snprintf_s",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "CONTEXT",
+        "Report",
+        "fnCrashOutputLine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CRASH_EnumerateThreads",
+      "address": "00403a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403a20"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "CRASH_EnumerateThreads",
+        "CRASH_DumpThreadContext"
+      ],
+      "usedTypes": [
+        "Report",
+        "THREADENTRY",
+        "fnCrashOutputLine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CRASH_GetExceptionName",
+      "address": "00403ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403ac0"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "CRASH_GetExceptionName",
+        "strncpy_s"
+      ]
+    },
+    {
+      "name": "ERRORMANAGER_UnhandledExceptionFilter",
+      "address": "00403e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403e90"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "ERRORMANAGER_UnhandledExceptionFilter",
+        "CRASH_GetExceptionName",
+        "GetCurrentThreadId",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2CrashReportStrc",
+        "_EXCEPTION_POINTERS",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CRASH_SetExceptionHandler",
+      "address": "00403f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403f60"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "CRASH_SetExceptionHandler"
+      ],
+      "usedTypes": [
+        "pfnFogExceptionFilter"
+      ]
+    },
+    {
+      "name": "FILETOOLS_ExtractDirectory",
+      "address": "00403fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00403fa0"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_ExtractDirectory",
+        "strrchr",
+        "STRING_CopyStringBounded"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FILETOOLS_ExtractFilename",
+      "address": "00404010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404010"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_ExtractFilename",
+        "strrchr"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "STRING_AppendBlizzardErrorSubfolderToPath",
+      "address": "004040b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004040b0"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "STRING_AppendBlizzardErrorSubfolderToPath",
+        "STRING_CopyStringBounded"
+      ]
+    },
+    {
+      "name": "STRING_CopyStringBounded",
+      "address": "00404110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404110"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "STRING_CopyStringBounded"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STRING_AppendStringToString",
+      "address": "00404150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404150"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "STRING_AppendStringToString"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "STRING_FormatVarArgs",
+      "address": "004041f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004041f0"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "STRING_FormatVarArgs",
+        "_vsnprintf"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FILETOOLS_StartApplicationWithCommandLine_UTF8",
+      "address": "00404210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404210"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_StartApplicationWithCommandLine_UTF8",
+        "memset",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "_PROCESS_INFORMATION",
+        "_STARTUPINFOW",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FILETOOLS_CheckIfFileExists_UTF8",
+      "address": "00404330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404330"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_CheckIfFileExists_UTF8",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "_WIN32_FIND_DATAW",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FILETOOLS_OpenFile_WriteMode_UTF8",
+      "address": "004043c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004043c0"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_OpenFile_WriteMode_UTF8",
+        "_wfopen",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "FILE",
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FILETOOLS_CopyFile_UTF8",
+      "address": "00404450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404450"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_CopyFile_UTF8",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FILETOOLS_GetTempPath_UTF8",
+      "address": "004044f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004044f0"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_GetTempPath_UTF8",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FILETOOLS_CreateDirectoryW",
+      "address": "00404560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404560"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_CreateDirectoryW",
+        "wcsrchr"
+      ]
+    },
+    {
+      "name": "FILETOOLS_CreateFolder_UTF8",
+      "address": "004045f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004045f0"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "FILETOOLS_CreateFolder_UTF8",
+        "__security_check_cookie",
+        "FILETOOLS_CreateDirectoryW"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    }
+  ]
+}

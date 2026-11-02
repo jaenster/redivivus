@@ -119,7 +119,7 @@ int __stdcall COMPOSIT_GetItemTypeIndex(int32_t iItemType) {
 }
 
 // Resolves a unit's weapon-class token - the hth/1hs/2hs four-character code that forms the last component of every COF and AnimData name. Returns the token itself and writes the matching weapon-class INDEX through pnParam. Monsters take BaseW from MonStats2, objects and unarmed units take hth, and a player's is resolved from the equipped weapons: dual-wield pairs for the Assassin and Barbarian get the 1js/1jt/1st/1ss/2ht combinations, everything else comes from the item's own WClass or 2HandedWClass by handedness. The two by-handedness returns save the token in EDX across the GetItemTypeIndex call, which is why this function needs its callee typed __stdcall_edxsafe.
-uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnitType, int32_t nClassIndex, int32_t nMode, D2InventoryStrc * pInventory, int32_t * pnParam) {
+uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnitType, int32_t nClassIndex, int32_t nMode, D2InventoryStrc * pInventory, int32_t * pnWeaponClassIndex) {
     int16_t nRightAnimClass;
     int16_t nLeftAnimClass;
     D2MonStats2Txt* pMonStats2;
@@ -143,24 +143,24 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
                 pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2(nClassIndex);
                 if (!pMonStats2) {
                   nHandedness = COMPOSIT_GetItemTypeIndex(0x20687468);
-                  *pnParam = nHandedness;
+                  *pnWeaponClassIndex = nHandedness;
                   return 0x20687468;
                 }
                 if (nMode && nMode != 0xc || *((uint8_t*)pMonStats2 + 0x6) & (uint8_t)gadwBitMasks[0]) {
                   nHandedness = COMPOSIT_GetItemTypeIndex(pMonStats2->BaseW);
-                  *pnParam = nHandedness;
+                  *pnWeaponClassIndex = nHandedness;
                   return pMonStats2->BaseW;
                 }
               }
             case 2:
               {
                 nHandedness = COMPOSIT_GetItemTypeIndex(0x20687468);
-                *pnParam = nHandedness;
+                *pnWeaponClassIndex = nHandedness;
                 return 0x20687468;
               }
             default:
               {
-                *pnParam = 0;
+                *pnWeaponClassIndex = 0;
                 return 0;
               }
           }
@@ -203,7 +203,7 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
           }
           if (!nMode || nMode == 0x11 || !pEquippedItem || bHasComponent != '\x05' && bHasComponent != '\x06') {
             nHandedness = COMPOSIT_GetItemTypeIndex(*(int32_t*)pCharStatsTxt->basewclass);
-            *pnParam = nHandedness;
+            *pnWeaponClassIndex = nHandedness;
             return *(uint32_t*)pCharStatsTxt->basewclass;
           }
 
@@ -238,30 +238,30 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
                 if (nRightAnimClass == 2) {
                   if (nLeftAnimClass != 2 && nLeftAnimClass == 3) {
                     nHandedness = COMPOSIT_GetItemTypeIndex(0x20736a31);
-                    *pnParam = nHandedness;
+                    *pnWeaponClassIndex = nHandedness;
                     return 0x20736a31;
                   }
                 } else if (nRightAnimClass == 3) {
                   if (nLeftAnimClass == 3) {
                     nHandedness = COMPOSIT_GetItemTypeIndex(0x20746a31);
-                    *pnParam = nHandedness;
+                    *pnWeaponClassIndex = nHandedness;
                     return 0x20746a31;
                   }
                   if (nLeftAnimClass == 2) {
                     nHandedness = COMPOSIT_GetItemTypeIndex(0x20747331);
-                    *pnParam = nHandedness;
+                    *pnWeaponClassIndex = nHandedness;
                     return 0x20747331;
                   }
                 }
 
                 nHandedness = COMPOSIT_GetItemTypeIndex(0x20737331);
-                *pnParam = nHandedness;
+                *pnWeaponClassIndex = nHandedness;
                 return 0x20737331;
               }
             }
           } else if (nClassIndex == 6 && (bIsWeapon = ITEMS::Items::ITEMS_IsA(pRightArmItem, ITEMTYPE_Weapon) , bIsWeapon != 0) && (bIsWeapon = ITEMS::Items::ITEMS_IsA(pLeftArmItem, ITEMTYPE_Weapon) , bIsWeapon != 0)) {
             nHandedness = COMPOSIT_GetItemTypeIndex(0x20327468);
-            *pnParam = nHandedness;
+            *pnWeaponClassIndex = nHandedness;
             return 0x20327468;
           }
 
@@ -269,20 +269,20 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
           if (nHandedness == 2) {
             bIsWeapon = ITEMS::Items::ITEM_GetItemsTxt_dw2HandedWClass(pEquippedItem);
             nHandedness = COMPOSIT_GetItemTypeIndex(bIsWeapon);
-            *pnParam = nHandedness;
+            *pnWeaponClassIndex = nHandedness;
             return bIsWeapon;
           }
 
           bIsWeapon = ITEMS::Items::ITEM_GetItemsTxt_dwWClass(pEquippedItem);
           nHandedness = COMPOSIT_GetItemTypeIndex(bIsWeapon);
-          *pnParam = nHandedness;
+          *pnWeaponClassIndex = nHandedness;
           return bIsWeapon;
         }
     }
 }
 
 // @sourcefile .\COMPOSIT\Composit.cpp
-uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t * pdwParam, int32_t nMode, int32_t bIgnoreTransform) {
+uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t * pnWeaponClassIndex, int32_t nMode, int32_t bIgnoreTransform) {
     D2UnitStrc* pOrigUnit = pUnit;
     if (!pUnit) {
       return 0x20687468;
@@ -303,7 +303,7 @@ uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2In
       }
     }
 
-    uint32_t nWeaponClassCode = COMPOSIT_ResolveWeaponClass(pOrigUnit, eUnitType, (int32_t)pUnit, nMode, pInventory, (int32_t*)pdwParam);
+    uint32_t nWeaponClassCode = COMPOSIT_ResolveWeaponClass(pOrigUnit, eUnitType, (int32_t)pUnit, nMode, pInventory, (int32_t*)pnWeaponClassIndex);
     return nWeaponClassCode;
 }
 
@@ -336,7 +336,7 @@ BOOL __stdcall COMPOSIT_HasWeaponDrawn(D2UnitStrc * pUnit) {
     return 1;
 }
 
-uint32_t __stdcall COMPOSIT_GetBodyPartTransform(eD2BodyLocDWORD nBodyIndex, uint8_t * pbParam) {
+uint32_t __stdcall COMPOSIT_GetBodyPartTransform(eD2BodyLocDWORD nBodyIndex, uint8_t * pbyTransforms) {
     if ((int)nBodyIndex >= 0x10) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x265);
       exit(-1);
@@ -344,17 +344,17 @@ uint32_t __stdcall COMPOSIT_GetBodyPartTransform(eD2BodyLocDWORD nBodyIndex, uin
 
     switch (nBodyIndex) {
       case BODYLOC_HEAD:
-        return (uint32_t)pbParam[2];
+        return (uint32_t)pbyTransforms[2];
       case BODYLOC_NECK:
-        return (uint32_t)pbParam[3];
+        return (uint32_t)pbyTransforms[3];
       case BODYLOC_TORSO:
-        return (uint32_t)*pbParam;
+        return (uint32_t)*pbyTransforms;
       case BODYLOC_R_ARM:
-        return (uint32_t)pbParam[1];
+        return (uint32_t)pbyTransforms[1];
       case BODYLOC_BELT:
-        return (uint32_t)pbParam[4];
+        return (uint32_t)pbyTransforms[4];
       case BODYLOC_FEET:
-        return (uint32_t)pbParam[5];
+        return (uint32_t)pbyTransforms[5];
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x274);
@@ -388,7 +388,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
     D2ObjTypeTxt* pObjModeLine;
     D2MonModeTxt* pMonModeLine;
     BOOL bHasCompositeDeath;
-    uint32_t uVar1;
+    uint32_t nWeaponClass;
     D2PlrTypeModeTxt* pPlrModeLine;
     uint32_t i;
     uint32_t* pszModeToken;
@@ -425,8 +425,8 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
             if (!nResolvedClass || nResolvedClass == 0x11) {
               *pOutWeaponClass = 0x20687468;
             } else {
-              uVar1 = COMPOSIT_ResolveWeaponClass(pUnit, 0, nPlrClass, nResolvedClass, pInventory, (int32_t*)&pOutWeaponClass);
-              *pnWeaponClass = uVar1;
+              nWeaponClass = COMPOSIT_ResolveWeaponClass(pUnit, 0, nPlrClass, nResolvedClass, pInventory, (int32_t*)&pOutWeaponClass);
+              *pnWeaponClass = nWeaponClass;
             }
           }
 
@@ -491,8 +491,8 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
           if ((!nResolvedClass || nResolvedClass == 0xc) && (bHasCompositeDeath = D2Client::UNIT::Player::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nItemCodeCopy, compositeDeath) , !bHasCompositeDeath)) {
             *pOutWeaponClass = 0x20687468;
           } else {
-            uVar1 = COMPOSIT_ResolveWeaponClass(pUnit, 1, nItemCodeCopy, nResolvedClass, pInventory, (int32_t*)&pInventory);
-            *pOutWeaponClass = uVar1;
+            nWeaponClass = COMPOSIT_ResolveWeaponClass(pUnit, 1, nItemCodeCopy, nResolvedClass, pInventory, (int32_t*)&pInventory);
+            *pOutWeaponClass = nWeaponClass;
           }
 
           for (i = 0; i < gnMonsterCompositeOverrideCount; i++) {

@@ -142,14 +142,14 @@ short * __fastcall FOG_GetDataArrayEntry(D2DataArrayStrc * pDataArray, int nHand
 // Returns FOG_GetDataArrayEntry(pDataArray, nHandle); halts (line 253) when that returns NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 short * __fastcall FOG_GetDataArrayEntryOrHalt(D2DataArrayStrc * pDataArray, int nHandle) {
-    short int* psVar1 = FOG_GetDataArrayEntry(pDataArray, nHandle);
-    if (!psVar1) {
+    short int* pEntry = FOG_GetDataArrayEntry(pDataArray, nHandle);
+    if (!pEntry) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xfd);
       exit(-1);
     }
 
-    return psVar1;
-    return psVar1;
+    return pEntry;
+    return pEntry;
 }
 
 void __fastcall FOG_CloseDataArray(D2DataArrayStrc * pDataArray) {
@@ -184,7 +184,7 @@ void __fastcall FOG_ArrayFreeAtIndex(D2DataArrayStrc * pDataArray, int nHandle) 
     pDataArray->nUsedCount--;
 }
 
-void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * pdwParam, int nParam, int nMaxValue) {
+void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayData, double fParam, uint32_t * pdwParam, int nCount, int nMaxValue) {
     uint32_t* pByteOut;
     long double fParamF10;
     long double fHundredF10;
@@ -206,7 +206,7 @@ void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayD
         if (fVar2 <= fParamF10) {
           fHundredF10 = (long double)100.0;
           if (fParamF10 <= fHundredF10) {
-            fCountMinus1 = (long double)nParam - (long double)1.0;
+            fCountMinus1 = (long double)nCount - (long double)1.0;
             dCountMinus1 = (double)fCountMinus1;
             pByteOut = pArrayData;
             pdwParam = pArrayData;

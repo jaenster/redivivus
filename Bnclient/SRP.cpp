@@ -46,10 +46,10 @@ void __thiscall SRP_InitializeRandomState(D2Srp * pThis, uint32_t dwSeed) {
     *(uint32_t*)pThis->aRandomPoolB = *(uint32_t*)pThis->aRandomPoolA;
     uint32_t dwPoolCopy3 = *(uint32_t*)(pThis->aRandomPoolA + 0xc);
     *(uint32_t*)(pThis->aRandomPoolB + 4) = dwPoolCopy1;
-    uint32_t uVar1 = *(uint32_t*)(pThis->aRandomPoolA + 0x10);
+    uint32_t dwPoolCopy4 = *(uint32_t*)(pThis->aRandomPoolA + 0x10);
     *(uint32_t*)(pThis->aRandomPoolB + 8) = dwPoolCopy2;
     *(uint32_t*)(pThis->aRandomPoolB + 0xc) = dwPoolCopy3;
-    *(uint32_t*)(pThis->aRandomPoolB + 0x10) = uVar1;
+    *(uint32_t*)(pThis->aRandomPoolB + 0x10) = dwPoolCopy4;
     memset(pThis->aOutputBuffer, 0, 20 * sizeof(pThis->aOutputBuffer[0]));
     pThis->nBytesAvailable = 0;
 }
@@ -83,7 +83,7 @@ void __thiscall SRP_ExtractSessionKeyBytes(void * pThis, void * pDst, uint32_t n
 }
 
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
-void __thiscall SRP_ComputePasswordHash(D2Srp * pSrp, void * pParam, char * szText1, char * szText2, int * pnParam) {
+void __thiscall SRP_ComputePasswordHash(D2Srp * pSrp, void * pSalt, char * szText1, char * szText2, int * ppPasswordHash) {
     // Static local variables (originally global data)
     static char * g_pColonSeparator = (char *)&s_ColonSeparator; D2_STATIC_GUARD(g_pColonSeparator, "Bnclient::SRP::SRP_ComputePasswordHash::g_pColonSeparator");
 
@@ -98,15 +98,15 @@ void __thiscall SRP_ComputePasswordHash(D2Srp * pSrp, void * pParam, char * szTe
     SHA::SHA1_Update(sha1Ctx, szText2, nStrLen);
     SHA::SHA1_Final(hashBuf, sha1Ctx);
     SHA::SHA1_Init(sha1Ctx);
-    SHA::SHA1_Update(sha1Ctx, pParam, 0x20);
+    SHA::SHA1_Update(sha1Ctx, pSalt, 0x20);
     SHA::SHA1_Update(sha1Ctx, hashBuf, 0x14);
     SHA::SHA1_Final(hashBuf, sha1Ctx);
     BigData* nHashResult = SHA::SHA1_FromBigIntBytes(hashBuf, 0x14);
-    *pnParam = (int)nHashResult;
+    *ppPasswordHash = (int)nHashResult;
 }
 
-void __thiscall SRP_ComputeScramblingParam(int32_t pThis, BigData * * ppBase, BigData * * pnParam) {
-    SHA::SHA1_BigIntPowMod(*pnParam, *(BigData**)(pThis + 4), *ppBase, *(BigData**)(pThis + 8));
+void __thiscall SRP_ComputeScramblingParam(int32_t pThis, BigData * * ppBase, BigData * * ppResult) {
+    SHA::SHA1_BigIntPowMod(*ppResult, *(BigData**)(pThis + 4), *ppBase, *(BigData**)(pThis + 8));
 }
 
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
@@ -121,43 +121,43 @@ void __thiscall SRP_HashBigNumToU32(D2Srp * pSrp, BigData * * ppBigNum, uint32_t
     *pdwOut = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)aHash[0] << 8 | (uint16_t)(uint8_t)aHash[1]) << 8 | (uint32_t)(uint8_t)aHash[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)aHash[3]);
 }
 
-int __thiscall SRP_ClientComputeSharedSecret(int32_t pSrp, BigData * * pPrivateKey, BigData * * pnParam1, BigData * * pnParam2, BigData * * pnParam3) {
+int __thiscall SRP_ClientComputeSharedSecret(int32_t pSrp, BigData * * pPrivateKey, BigData * * ppServerPublic, BigData * * ppPasswordHash, BigData * * ppSharedSecret) {
     BigData* pExponentBase;
     BigData* pExponent;
     BigData* pBase;
     BigData* pScramblingLocal;
     uint32_t nMultiplierU;
     int32_t pThis = pSrp;
-    int32_t nCmpResult = SHA::SHA1_CompareBigInt(*pnParam1, *(BigData**)(pSrp + 8));
+    int32_t nCmpResult = SHA::SHA1_CompareBigInt(*ppServerPublic, *(BigData**)(pSrp + 8));
     if (nCmpResult >= 0) {
       return 0;
     }
 
-    nCmpResult = SHA::SHA1_BigIntCompareValue(*pnParam1, 0);
+    nCmpResult = SHA::SHA1_BigIntCompareValue(*ppServerPublic, 0);
     if (!nCmpResult) {
       return 0;
     }
 
-    SRP_HashBigNumToU32((D2Srp*)pSrp, pnParam1, &nMultiplierU);
+    SRP_HashBigNumToU32((D2Srp*)pSrp, ppServerPublic, &nMultiplierU);
     if (nMultiplierU) {
       BigData* pScramblingParam;
       pScramblingParam = SHA::SHA1_BigIntFromUnsigned(0);
       pScramblingLocal = pScramblingParam;
-      SRP_ComputeScramblingParam(pSrp, pnParam2, &pScramblingLocal);
+      SRP_ComputeScramblingParam(pSrp, ppPasswordHash, &pScramblingLocal);
       pExponentBase = SHA::SHA1_BigIntFromUnsigned(0);
       pExponent = SHA::SHA1_BigIntFromUnsigned(0);
-      nCmpResult = SHA::SHA1_CompareBigInt(*pnParam1, pScramblingParam);
+      nCmpResult = SHA::SHA1_CompareBigInt(*ppServerPublic, pScramblingParam);
       if (nCmpResult < 0) {
-        SHA::SHA1_BigIntAdd(pExponent, *pnParam1, *(BigData**)(pThis + 8));
+        SHA::SHA1_BigIntAdd(pExponent, *ppServerPublic, *(BigData**)(pThis + 8));
         pBase = pExponent;
       } else {
-        pBase = *pnParam1;
+        pBase = *ppServerPublic;
       }
 
       SHA::SHA1_BigIntSub(pExponentBase, pBase, pScramblingParam);
-      SHA::SHA1_BigIntMulValue(pExponent, *pnParam2, nMultiplierU);
+      SHA::SHA1_BigIntMulValue(pExponent, *ppPasswordHash, nMultiplierU);
       SHA::SHA1_BigIntAdd(pExponent, pExponent, *pPrivateKey);
-      SHA::SHA1_BigIntPowMod(*pnParam3, pExponentBase, pExponent, *(BigData**)(pThis + 8));
+      SHA::SHA1_BigIntPowMod(*ppSharedSecret, pExponentBase, pExponent, *(BigData**)(pThis + 8));
       SHA::SHA1_BigIntFree(pExponent);
       SHA::SHA1_BigIntFree(pExponentBase);
       SHA::SHA1_BigIntFree(pScramblingParam);
@@ -167,15 +167,15 @@ int __thiscall SRP_ClientComputeSharedSecret(int32_t pSrp, BigData * * pPrivateK
     return 0;
 }
 
-int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClientPublic, int * pnParam, BigData * * pnParam1, BigData * * pnParam2, BigData * * pnParam3) {
-    SRP_HashBigNumToU32(pThis, (BigData**)pnParam, (uint32_t*)&pnParam);
-    int* pScramblingHash = pnParam;
-    if (!pnParam) {
+int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClientPublic, int * ppServerPublic, BigData * * ppPrivateKey, BigData * * ppVerifier, BigData * * ppSharedSecret) {
+    SRP_HashBigNumToU32(pThis, (BigData**)ppServerPublic, (uint32_t*)&ppServerPublic);
+    int* pScramblingHash = ppServerPublic;
+    if (!ppServerPublic) {
       return 0;
     }
 
     BigData* pSharedBase = SHA::SHA1_BigIntFromUnsigned(0);
-    SHA::SHA1_BigIntPowModValue(pSharedBase, *pnParam2, (uint32_t)pScramblingHash, pThis->pModulusN);
+    SHA::SHA1_BigIntPowModValue(pSharedBase, *ppVerifier, (uint32_t)pScramblingHash, pThis->pModulusN);
     SHA::SHA1_BigIntMulMod(pSharedBase, *ppClientPublic, pSharedBase, pThis->pModulusN);
     int32_t nCmpResult = SHA::SHA1_BigIntCompareValue(pSharedBase, 1);
     if (nCmpResult > 0) {
@@ -185,7 +185,7 @@ int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClient
       nCmpResult = SHA::SHA1_CompareBigInt(pModCheck, pThis->pModulusN);
       if (nCmpResult) {
         SHA::SHA1_BigIntFree(pModCheck);
-        SHA::SHA1_BigIntPowMod(*pnParam3, pSharedBase, *pnParam1, pThis->pModulusN);
+        SHA::SHA1_BigIntPowMod(*ppSharedSecret, pSharedBase, *ppPrivateKey, pThis->pModulusN);
         SHA::SHA1_BigIntFree(pSharedBase);
         return 1;
       }
@@ -197,7 +197,7 @@ int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClient
     return 0;
 }
 
-void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * pParam1, void * pParam2, void * pParam3, void * pParam4, int32_t nParam) {
+void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * pSalt, void * pClientPublic, void * pServerPublic, void * pSessionKey, int32_t pClientProofOut) {
     uint32_t sha1Ctx[23];
     uint8_t hashG[20];
     uint8_t xorHashNPrime[32];
@@ -239,20 +239,20 @@ void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * 
     SHA::SHA1_Init(sha1Ctx);
     SHA::SHA1_Update(sha1Ctx, xorHashNPrime, 0x14);
     SHA::SHA1_Update(sha1Ctx, hashN, 0x14);
-    SHA::SHA1_Update(sha1Ctx, pParam1, 0x20);
-    SHA::SHA1_Update(sha1Ctx, pParam2, 0x20);
-    SHA::SHA1_Update(sha1Ctx, pParam3, 0x20);
-    SHA::SHA1_Update(sha1Ctx, pParam4, 0x28);
-    SHA::SHA1_Final((uint8_t*)nParam, sha1Ctx);
+    SHA::SHA1_Update(sha1Ctx, pSalt, 0x20);
+    SHA::SHA1_Update(sha1Ctx, pClientPublic, 0x20);
+    SHA::SHA1_Update(sha1Ctx, pServerPublic, 0x20);
+    SHA::SHA1_Update(sha1Ctx, pSessionKey, 0x28);
+    SHA::SHA1_Final((uint8_t*)pClientProofOut, sha1Ctx);
 }
 
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
-void __thiscall SRP_ComputeServerProof(D2Srp * pSrp, void * pParam1, void * pParam2, void * pParam3, uint8_t * pHashOut) {
+void __thiscall SRP_ComputeServerProof(D2Srp * pSrp, void * pClientPublic, void * pClientProof, void * pSessionKey, uint8_t * pHashOut) {
     uint32_t sha1Ctx[23];
     SHA::SHA1_Init(sha1Ctx);
-    SHA::SHA1_Update(sha1Ctx, pParam1, 0x20);
-    SHA::SHA1_Update(sha1Ctx, pParam2, 0x14);
-    SHA::SHA1_Update(sha1Ctx, pParam3, 0x28);
+    SHA::SHA1_Update(sha1Ctx, pClientPublic, 0x20);
+    SHA::SHA1_Update(sha1Ctx, pClientProof, 0x14);
+    SHA::SHA1_Update(sha1Ctx, pSessionKey, 0x28);
     SHA::SHA1_Final(pHashOut, sha1Ctx);
 }
 
@@ -326,15 +326,15 @@ void __fastcall SRP_FreeParameters(D2Srp * * ppSrp) {
     pDVar1->bInitialized = 0;
 }
 
-void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint32_t * pnParam1, uint32_t * pnParam2, void * pParam) {
-    uint32_t* pParam_00 = pnParam2;
-    SRP_ExtractSessionKeyBytes(pThis, pnParam2, 0x20);
-    SRP_ComputePasswordHash(*(D2Srp**)pThis, pParam_00, szUsername, (char*)pnParam1, (int*)&pnParam2);
+void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint32_t * szPassword, uint32_t * pSaltOut, void * pVerifierOut) {
+    uint32_t* pSalt = pSaltOut;
+    SRP_ExtractSessionKeyBytes(pThis, pSaltOut, 0x20);
+    SRP_ComputePasswordHash(*(D2Srp**)pThis, pSalt, szUsername, (char*)szPassword, (int*)&pSaltOut);
     BigData* pVerifier = SHA::SHA1_BigIntFromUnsigned(0);
-    pnParam1 = (uint32_t*)pVerifier;
-    SRP_ComputeScramblingParam(*(int32_t*)pThis, (BigData**)&pnParam2, (BigData**)&pnParam1);
-    SHA::SHA1_ToBigIntBytes(pVerifier, pParam, 0x20);
-    SHA::SHA1_BigIntFree((BigData*)pnParam2);
+    szPassword = (uint32_t*)pVerifier;
+    SRP_ComputeScramblingParam(*(int32_t*)pThis, (BigData**)&pSaltOut, (BigData**)&szPassword);
+    SHA::SHA1_ToBigIntBytes(pVerifier, pVerifierOut, 0x20);
+    SHA::SHA1_BigIntFree((BigData*)pSaltOut);
     SHA::SHA1_BigIntFree(pVerifier);
 }
 
@@ -350,15 +350,15 @@ void __thiscall SRP_GenerateAccountCredentials(void * pThis, char * pCredsBuf, c
     SHA::SHA1_BigIntFree(pVerifier);
 }
 
-BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pContext, void * pParam1, void * pParam2) {
+BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pContext, void * pSaltBytes, void * pServerPublicBytes) {
     int bSharedSecretOk;
-    uint32_t uVar3;
+    uint32_t nSecretByteLen;
     BigData* pServerPublicB;
     BigData* pPasswordHash;
     BigData* pSharedSecretOut;
     char sessionKeyBytes[32];
-    void* pSalt = pParam1;
-    BigData* pSharedSecret = SHA::SHA1_FromBigIntBytes(pParam2, 0x20);
+    void* pSalt = pSaltBytes;
+    BigData* pSharedSecret = SHA::SHA1_FromBigIntBytes(pServerPublicBytes, 0x20);
     BigData* pClientPublicA = pSharedSecret;
     int32_t nCompareResult = SHA::SHA1_BigIntCompareValue(pSharedSecret, 0);
     if (nCompareResult == 1) {
@@ -371,10 +371,10 @@ BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pCont
       SHA::SHA1_BigIntFree(pClientPublicA);
       SHA::SHA1_BigIntFree(pPasswordHash);
       if (bSharedSecretOk) {
-        uVar3 = SHA::SHA1_ToBigIntBytes(pSharedSecret, sessionKeyBytes, 0x20);
-        SHA::SHA1_HashWideString(pContext->aSessionKey_K, sessionKeyBytes, uVar3);
+        nSecretByteLen = SHA::SHA1_ToBigIntBytes(pSharedSecret, sessionKeyBytes, 0x20);
+        SHA::SHA1_HashWideString(pContext->aSessionKey_K, sessionKeyBytes, nSecretByteLen);
         SHA::SHA1_BigIntFree(pSharedSecretOut);
-        SRP_ComputeClientProof(*(int32_t*)pThis, pContext->szUsername, pSalt, pContext->aClientPublicKey_A, pParam2, pContext->aSessionKey_K, (int32_t)pContext->aClientProof_M1);
+        SRP_ComputeClientProof(*(int32_t*)pThis, pContext->szUsername, pSalt, pContext->aClientPublicKey_A, pServerPublicBytes, pContext->aSessionKey_K, (int32_t)pContext->aClientProof_M1);
         return 1;
       }
     }

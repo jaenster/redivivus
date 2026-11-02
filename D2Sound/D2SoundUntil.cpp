@@ -134,10 +134,10 @@ void __fastcall SOUNDUTIL_AppendToLinkedList(void * * ppListHead, uint32_t dwNod
 
 // Maps file szText read-only and copies the size-prefixed blob located at image base + the dword at e_lfanew header (signature dword 0x454c 'LE', checked at 00516b61) +0xb8 (size at +8, data at +0xc) into pBuffer; returns TRUE on success, last error 0x7a when *pnBufferSize is too small.
 BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBufferSize, void * pBuffer) {
-    int* pPeHeader;
     uint32_t* pnBufferSizeSaved;
     HANDLE hFileSaved;
     EH3_EXCEPTION_REGISTRATION tSehFrame;
+    int nResourceOffset;
     uint32_t nResourceSize;
     volatile HANDLE hMapping = (HANDLE)0x0;
     volatile LPVOID pView = (LPVOID)0x0;
@@ -148,7 +148,7 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
     __try {
       hFile = CreateFileA(szText, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0, (HANDLE)0x0);
       /* LPCSTR lpName for CreateFileMappingA */ /* DWORD dwMaximumSizeLow for CreateFileMappingA */ /* DWORD dwMaximumSizeHigh for CreateFileMappingA */ /* DWORD flProtect for CreateFileMappingA */ /* LPSECURITY_ATTRIBUTES lpFileMappingAttributes for CreateFileMappingA */ /* HANDLE hFile for CreateFileMappingA */ /* SIZE_T dwNumberOfBytesToMap for MapViewOfFile */ /* DWORD dwFileOffsetLow for MapViewOfFile */ /* DWORD dwFileOffsetHigh for MapViewOfFile */ /* DWORD dwDesiredAccess for MapViewOfFile */ /* HANDLE hFileMappingObject for MapViewOfFile */ if (hFile != (HANDLE)-1) {
-        int iVar1;
+        int* pPeHeader;
         hMapping = CreateFileMappingA(hFile, (LPSECURITY_ATTRIBUTES)0x0, 2, 0, 0, (LPCSTR)0x0);
         if (hMapping) {
           pView = MapViewOfFile(hMapping, 4, 0, 0, 0);
@@ -158,14 +158,14 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
                 *pnBufferSize = 0;
                 /* DWORD dwErrCode for SetLastError */ SetLastError(0x714);
               } else {
-                iVar1 = pPeHeader[0x2e];
-                nResourceSize = *(uint32_t*)((int)pView + iVar1 + 8);
+                nResourceOffset = pPeHeader[0x2e];
+                nResourceSize = *(uint32_t*)((int)pView + nResourceOffset + 8);
                 if (!pBuffer || *pnBufferSize < nResourceSize) {
                   *pnBufferSize = nResourceSize;
                   /* DWORD dwErrCode for SetLastError */ SetLastError(0x7a);
                 } else {
                   memset(pBuffer, 0, *pnBufferSize);
-                  memcpy(pBuffer, (void*)((int)pView + iVar1 + 0xc), nResourceSize);
+                  memcpy(pBuffer, (void*)((int)pView + nResourceOffset + 0xc), nResourceSize);
                   *pnBufferSize = nResourceSize;
                   /* DWORD dwErrCode for SetLastError */ SetLastError(0);
                   bSuccess = 1;
@@ -214,7 +214,7 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
       hFile = CreateFileA(szText, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0, (HANDLE)0x0);
       D2_SEH_FENCE();
       /* LPCSTR lpName for CreateFileMappingA */ /* DWORD dwMaximumSizeLow for CreateFileMappingA */ /* DWORD dwMaximumSizeHigh for CreateFileMappingA */ /* DWORD flProtect for CreateFileMappingA */ /* LPSECURITY_ATTRIBUTES lpFileMappingAttributes for CreateFileMappingA */ /* HANDLE hFile for CreateFileMappingA */ /* SIZE_T dwNumberOfBytesToMap for MapViewOfFile */ /* DWORD dwFileOffsetLow for MapViewOfFile */ /* DWORD dwFileOffsetHigh for MapViewOfFile */ /* DWORD dwDesiredAccess for MapViewOfFile */ /* HANDLE hFileMappingObject for MapViewOfFile */ if (hFile != (HANDLE)-1) {
-        int iVar1;
+        int* pPeHeader;
         D2_SEH_FENCE();
         hMapping = CreateFileMappingA(hFile, (LPSECURITY_ATTRIBUTES)0x0, 2, 0, 0, (LPCSTR)0x0);
         D2_SEH_FENCE();
@@ -230,8 +230,8 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
                 D2_SEH_FENCE();
                 /* DWORD dwErrCode for SetLastError */ SetLastError(0x714);
               } else {
-                iVar1 = pPeHeader[0x2e];
-                nResourceSize = *(uint32_t*)((int)pView + iVar1 + 8);
+                nResourceOffset = pPeHeader[0x2e];
+                nResourceSize = *(uint32_t*)((int)pView + nResourceOffset + 8);
                 if (!pBuffer || *pnBufferSize < nResourceSize) {
                   D2_SEH_FENCE();
                   *pnBufferSize = nResourceSize;
@@ -241,7 +241,7 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
                   D2_SEH_FENCE();
                   memset(pBuffer, 0, *pnBufferSize);
                   D2_SEH_FENCE();
-                  memcpy(pBuffer, (void*)((int)pView + iVar1 + 0xc), nResourceSize);
+                  memcpy(pBuffer, (void*)((int)pView + nResourceOffset + 0xc), nResourceSize);
                   D2_SEH_FENCE();
                   *pnBufferSize = nResourceSize;
                   D2_SEH_FENCE();

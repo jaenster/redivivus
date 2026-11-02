@@ -1,0 +1,332 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/Event/Dispatch/Monster.cpp",
+  "functions": [
+    {
+      "name": "RemoveStatListFromUnit",
+      "address": "005a7ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a7ef0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "RemoveStatListFromUnit",
+        "RemoveStatListAfterTimeout"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONMODE_UpdateHoverTextExpiry",
+      "address": "005a7f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a7f00"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MONMODE_UpdateHoverTextExpiry",
+        "GetExpireFrame",
+        "Free",
+        "ROOM_LinkUnitToUpdateList",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2HoverTextStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AI_ClearSwitchAiTargetParamsCallback",
+      "address": "005a7f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a7f70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "AI_ClearSwitchAiTargetParamsCallback",
+        "AI_ClearSwitchAiTargetParams"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTEREVENT_DefaultCallback",
+      "address": "005a7f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a7f80"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MONSTEREVENT_DefaultCallback",
+        "UNIT_GetUnitState",
+        "CheckForModeZeroDeath"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "eD2TimerTypeDWORD",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BarbFindItemSkill",
+      "address": "005a8000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8000"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "BarbFindItemSkill",
+        "SERVER_ITEM_DecideDrops"
+      ],
+      "usedTypes": [
+        "D2ObjectOperateFnArg",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_EndOfFrameAiDispatch",
+      "address": "005a8030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8030"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MONSTER_EndOfFrameAiDispatch",
+        "UNIT_GetUnitState",
+        "CheckForModeZeroDeath",
+        "MONSTERAI_ExecuteAiFunction",
+        "SetUninterruptableState",
+        "SetCurrentSkill",
+        "GetTargetEx",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "SetupUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "MonsterKilledBySystem",
+      "address": "005a8330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8330"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MonsterKilledBySystem",
+        "SetCurrentSkill",
+        "TXT_MonStats_GetMonStats2",
+        "GetTargetEx",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "UNIT_GetUnitState",
+        "CheckForModeZeroDeath",
+        "MONSTERAI_ExecuteAiFunction"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MonsterKilledByTarget",
+      "address": "005a83e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a83e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MonsterKilledByTarget",
+        "SetCurrentSkill",
+        "TXT_MonStats_GetMonStats2",
+        "GetTargetEx",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "UNIT_GetUnitState",
+        "CheckForModeZeroDeath",
+        "MONSTERAI_ExecuteAiFunction"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONMODE_ProcessWalkWithTrails",
+      "address": "005a8490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8490"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MONMODE_ProcessWalkWithTrails",
+        "UNIT_GetUnitState",
+        "BlazePath",
+        "SKILLMONST_SpiderLayTrail",
+        "UNITS_ProcessUnitMovement",
+        "MONSTER_EndOfFrameAiDispatch"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONMODE_ProcessRunMovement",
+      "address": "005a84f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a84f0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MONMODE_ProcessRunMovement",
+        "UNITS_ProcessUnitMovement",
+        "MONSTER_EndOfFrameAiDispatch"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ProcessGetHitRecovery",
+      "address": "005a8520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8520"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MONSTER_ProcessGetHitRecovery",
+        "PATH_RestoreVelocityAndPathType",
+        "GetSomeMonsterStatFlag",
+        "SetEvent",
+        "UNIT_GetUnitState",
+        "SetCurrentSkill",
+        "MONSTERAI_ExecuteLifecycleTransition"
+      ],
+      "usedTypes": [
+        "D2MonsterKillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_UpdateGetHitAnimation",
+      "address": "005a8630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8630"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MONSTER_UpdateGetHitAnimation",
+        "UNITS_ProcessUnitMovement",
+        "AdvanceAnimFrame",
+        "IsAtEndOfFrameCycle",
+        "MONSTER_ProcessGetHitRecovery"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_UpdateSkillCastAnimation",
+      "address": "005a8670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a8670"
+        }
+      ],
+      "namespace": "D2Game::GAME::Event::Dispatch::Monster",
+      "calledFunctions": [
+        "MONSTER_UpdateSkillCastAnimation",
+        "IsAtEndOfFrameCycle",
+        "MONSTER_EndOfFrameAiDispatch",
+        "GetCurrentSkill",
+        "SKILL_GetFlags",
+        "GetTarget",
+        "UNITS_ProcessUnitMovement",
+        "SKILL_SetFlags",
+        "SKILLS_PeriodicSkillSpawnAndTimer",
+        "AdvanceAnimFrame"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

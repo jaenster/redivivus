@@ -1,0 +1,1236 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/D2Game.cpp",
+  "functions": [
+    {
+      "name": "CLIENT_GetSaveCompleteClient",
+      "address": "0052cbb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052cbb0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "CLIENT_GetSaveCompleteClient",
+        "CLIENT_GetSaveCompleteFlag"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_GetFirstActiveClient",
+      "address": "0052cbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052cbd0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "CLIENT_GetFirstActiveClient"
+      ]
+    },
+    {
+      "name": "GAME_SetNoSaveFlag",
+      "address": "00530f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00530f30"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "GAME_SetNoSaveFlag"
+      ]
+    },
+    {
+      "name": "QSERVER_FindUnitInFirstActiveGame",
+      "address": "00534650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534650"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "QSERVER_FindUnitInFirstActiveGame",
+        "QSERVER_GetFirstActiveGame",
+        "FindUnitFromTable",
+        "LeaveCriticalSectionLastGameServer"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType"
+      ]
+    },
+    {
+      "name": "QSERVER_GetActFromFirstActiveGame",
+      "address": "00534680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534680"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "QSERVER_GetActFromFirstActiveGame",
+        "QSERVER_GetFirstActiveGame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "LeaveCriticalSectionLastGameServer"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QSERVER_CountMonstersInFirstActiveGame",
+      "address": "005346c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005346c0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "QSERVER_CountMonstersInFirstActiveGame",
+        "QSERVER_GetFirstActiveGame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetNextUnit",
+        "LeaveCriticalSectionLastGameServer"
+      ],
+      "usedTypes": [
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "QSERVER_FindRoomInFirstActiveGame",
+      "address": "00534730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00534730"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "QSERVER_FindRoomInFirstActiveGame",
+        "QSERVER_GetFirstActiveGame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindRoomBySubtileCoordinates",
+        "LeaveCriticalSectionLastGameServer"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "nullsub",
+      "address": "005347b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005347b0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "nullsub"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "nullsub_4Arg",
+      "address": "005347c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005347c0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "nullsub_4Arg"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "nullsub_7Arg",
+      "address": "005347d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005347d0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "nullsub_7Arg"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "nullsub_B",
+      "address": "005347e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005347e0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "nullsub_B"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "QSERVER_CountClientsWithStatusFlag0x20",
+      "address": "005377b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005377b0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "QSERVER_CountClientsWithStatusFlag0x20"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ClientStrc *"
+      ]
+    },
+    {
+      "name": "CLIENT_UpdatePortalFlags",
+      "address": "00537b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537b00"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "CLIENT_UpdatePortalFlags",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetPlayerPortalFlags",
+        "GetPortalFlagFromLevelId",
+        "SetPlayerPortalFlags"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GAME_ClearGlobalFlag",
+      "address": "005449d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005449d0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "GAME_ClearGlobalFlag"
+      ]
+    },
+    {
+      "name": "IncrementObjectTypeCount",
+      "address": "00546fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00546fc0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "IncrementObjectTypeCount"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLRMODES_StatExpireCallback_ClearState",
+      "address": "0054cc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054cc30"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "PLRMODES_StatExpireCallback_ClearState",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PARTY_RefreshPlayerListRelationships",
+      "address": "0055b650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b650"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "PARTY_RefreshPlayerListRelationships",
+        "GetPlayerData",
+        "FindUnitFromTable",
+        "GetPartyIdFromUnit",
+        "Send0x8bRelationshipStatus"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "TASK_InitializeClock",
+      "address": "00564320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564320"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "TASK_InitializeClock"
+      ]
+    },
+    {
+      "name": "thunk_QueryPerformanceFrequency_B",
+      "address": "00564870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564870"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "thunk_QueryPerformanceFrequency_B"
+      ]
+    },
+    {
+      "name": "TASK_GetTimeUntilNextTask",
+      "address": "00564be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00564be0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "TASK_GetTimeUntilNextTask",
+        "TASK_GetTimestamp",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TaskQueueSlotStrc",
+        "PD2TaskNodeLink",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_AreaEffect_FindNearestUnit",
+      "address": "0056bb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056bb20"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "SKILLS_AreaEffect_FindNearestUnit",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2AreaHitNearestCtx",
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_AreaEffect_IncrementHitCount",
+      "address": "0056bc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056bc70"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "SKILLS_AreaEffect_IncrementHitCount"
+      ],
+      "usedTypes": [
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_AreaEffect_TrackBestUnitByUnitId",
+      "address": "0056bcd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056bcd0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "SKILLS_AreaEffect_TrackBestUnitByUnitId"
+      ],
+      "usedTypes": [
+        "D2AreaHitNextGUIDCtx",
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITDMG_StatExpireCallback_ResumeAI",
+      "address": "0057b170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057b170"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "SUNITDMG_StatExpireCallback_ResumeAI",
+        "CheckForModeZeroDeath",
+        "STATES_IsStateActive",
+        "SetState",
+        "GetGamePointer",
+        "FreeCombatAndChangeAnimMode",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNIT_IsAlive",
+      "address": "00582710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00582710"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "UNIT_IsAlive",
+        "CheckIfMonsterIsDead"
+      ],
+      "usedTypes": [
+        "D2UnitFindArgStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Q33_SetCompleteForPartyMember",
+      "address": "00589000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00589000"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q33_SetCompleteForPartyMember",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q34_SetCompleteForPartyMember",
+      "address": "0058b5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b5b0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q34_SetCompleteForPartyMember",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q02_TimerNotifyCompletion",
+      "address": "00590bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00590bf0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q02_TimerNotifyCompletion",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fpExecuteOnUnitFunction",
+      "address": "00590d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00590d60"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "fpExecuteOnUnitFunction",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q03_AutoCompleteIfHighLevel",
+      "address": "00591430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00591430"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q03_AutoCompleteIfHighLevel",
+        "GetPlayerData",
+        "GetQuestState",
+        "SERVER_GetUnitStat",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q05_SetPartyMemberRewardStates",
+      "address": "00595370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00595370"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q05_SetPartyMemberRewardStates",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q05_TimerNotifyCompletion",
+      "address": "005954c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005954c0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q05_TimerNotifyCompletion",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataA1Q5Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q6_DenOfEvil_OnComplete_ClearGUIDs",
+      "address": "005961c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005961c0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q6_DenOfEvil_OnComplete_ClearGUIDs",
+        "SetRewardAndFinishFlags",
+        "QUESTGUID_RemovePlayerFromList"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
+      "name": "Q09_OnEndCallback",
+      "address": "00598f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00598f70"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q09_OnEndCallback",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataA2Q1Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q11_SetTaintedSunRewardOnPartyMember",
+      "address": "0059a040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a040"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q11_SetTaintedSunRewardOnPartyMember",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q11_OnEndCallback",
+      "address": "0059a700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059a700"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q11_OnEndCallback",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "Q12_SetArcaneCompleteOnPartyMember",
+      "address": "0059b360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059b360"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q12_SetArcaneCompleteOnPartyMember",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState",
+        "UnsetQuestStepStates"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q11_TimerCheckDarkness",
+      "address": "0059ed80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059ed80"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q11_TimerCheckDarkness",
+        "Q11_BeginTaintedSun",
+        "IteratePlayerOrMonsterUnits"
+      ],
+      "usedTypes": [
+        "D2QuestDataA2Q3Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ScheduleDeathIfRunningOrDead",
+      "address": "005a2eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005a2eb0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "MONSTER_ScheduleDeathIfRunningOrDead",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MISSILESMODE_StatExpireCallback_ClearState",
+      "address": "005adaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005adaf0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "MISSILESMODE_StatExpireCallback_ClearState",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q26_PartyMember_SetCannotComplete",
+      "address": "005b3cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3cd0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q26_PartyMember_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q26_PartyMember_PlayCompleteSound",
+      "address": "005b3d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3d30"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q26_PartyMember_PlayCompleteSound",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q26_PartyMember_SetCompleted",
+      "address": "005b3d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3d70"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q26_PartyMember_SetCompleted",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState",
+        "UnsetQuestStepStates"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q26_PropagateCompletionToParty",
+      "address": "005b3de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3de0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q26_PropagateCompletionToParty",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Objects_InitFn56",
+      "address": "005b5620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b5620"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Objects_InitFn56"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg"
+      ]
+    },
+    {
+      "name": "Q28_PartyMember_SetCannotComplete",
+      "address": "005b5bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b5bb0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q28_PartyMember_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "QUEST_StateHandler_PlayTomeHandInSound",
+      "address": "005b76e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b76e0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "QUEST_StateHandler_PlayTomeHandInSound",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA3Q1Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q22_PartyMember_SetCompleted",
+      "address": "005bb640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bb640"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q22_PartyMember_SetCompleted",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q22_PropagateCompletionToParty",
+      "address": "005bb6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bb6c0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q22_PropagateCompletionToParty",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q22_PartyMember_SetCannotComplete",
+      "address": "005bb710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bb710"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q22_PartyMember_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q22_PartyMember_PlayCompleteSound",
+      "address": "005bb770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bb770"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q22_PartyMember_PlayCompleteSound",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q24_PartyMember_SetAbleGoToAct4",
+      "address": "005bd260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bd260"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "Q24_PartyMember_SetAbleGoToAct4",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "SKILLNEC_CorpseTarget_ValidateAndScheduleEvent",
+      "address": "005c3b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3b30"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "SKILLNEC_CorpseTarget_ValidateAndScheduleEvent",
+        "SKILLNEC_ValidateCorpseTarget",
+        "AI_SetSwitchAiTargetParams",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLSSOR_StatExpireCallback_ClearStateSetFlag",
+      "address": "005c8bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c8bf0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "SKILLSSOR_StatExpireCallback_ClearStateSetFlag",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSASS_StatExpireCallback_ClearState2",
+      "address": "005d3310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d3310"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "SKILLSASS_StatExpireCallback_ClearState2",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSASS_StatExpireCallback_ClearStateSetFlag",
+      "address": "005d69b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d69b0"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "SKILLSASS_StatExpireCallback_ClearStateSetFlag",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTERAI_FlagIfDeadOrNull",
+      "address": "005e5710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005e5710"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "MONSTERAI_FlagIfDeadOrNull",
+        "CheckIfMonsterIsDead"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "AI_SelectTarget_SameLevelFilter",
+      "address": "005eeb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005eeb10"
+        }
+      ],
+      "namespace": "D2Game",
+      "calledFunctions": [
+        "AI_SelectTarget_SameLevelFilter",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,422 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat/stpl_StringEntryNode.cpp",
+  "functions": [
+    {
+      "name": "OperatorIndex",
+      "address": "0060e0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e0e0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
+      "calledFunctions": [
+        "OperatorIndex"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NextLink",
+      "address": "0060e170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e170"
+        }
+      ],
+      "namespace": "TSLink<StringEntryNode>",
+      "calledFunctions": [
+        "NextLink"
+      ],
+      "usedTypes": [
+        "TSLink<StringEntryNode>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ComputeSlot",
+      "address": "0060e1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e1f0"
+        }
+      ],
+      "namespace": "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "ComputeSlot"
+      ],
+      "usedTypes": [
+        "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CalcChunkSize",
+      "address": "0060e2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e2a0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
+      "calledFunctions": [
+        "CalcChunkSize"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RoundToMultiple",
+      "address": "0060e2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e2e0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
+      "calledFunctions": [
+        "RoundToMultiple"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Assign",
+      "address": "0060e370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e370"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "Assign"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Link",
+      "address": "0060e450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e450"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "Link"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "TSLink<StringEntryNode>"
+      ]
+    },
+    {
+      "name": "SetLinkOffset",
+      "address": "0060e470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e470"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "SetLinkOffset"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LinkNode",
+      "address": "0060e490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e490"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "TSLink<StringEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RawNext",
+      "address": "0060e540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e540"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "RawNext"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "TSExplicitList<StringEntryNode, -572662307>"
+      ]
+    },
+    {
+      "name": "UnlinkNode",
+      "address": "0060e560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e560"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "UnlinkNode"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "TSLink<StringEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Next",
+      "address": "0060e650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e650"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "Next"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Unlink",
+      "address": "0060e6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e6e0"
+        }
+      ],
+      "namespace": "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Unlink"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+        "TSLink<StringEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Delete",
+      "address": "0060e7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e7a0"
+        }
+      ],
+      "namespace": "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Delete",
+        "Unlink"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "TSHashTable<StringEntryNode, HASHKEY_STRI>"
+      ]
+    },
+    {
+      "name": "UnlinkAll",
+      "address": "0060e820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e820"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopyConstructor",
+      "address": "0060e9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e9b0"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "CopyConstructor"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopyConstructor_Unreferenced",
+      "address": "0060e9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e9e0"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "CopyConstructor_Unreferenced"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Next",
+      "address": "0060eaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060eaa0"
+        }
+      ],
+      "namespace": "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Next"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "0060eae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060eae0"
+        }
+      ],
+      "namespace": "TSHashObject<StringEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSHashObject<StringEntryNode, HASHKEY_STRI>",
+        "TSLink<StringEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InternalClear",
+      "address": "0060eb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060eb70"
+        }
+      ],
+      "namespace": "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "InternalClear",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTable<StringEntryNode, HASHKEY_STRI>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor_Unreferenced",
+      "address": "0060ec40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ec40"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "Destructor_Unreferenced",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "TSLink<StringEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ChangeLinkOffset",
+      "address": "0060ec80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ec80"
+        }
+      ],
+      "namespace": "TSExplicitList<StringEntryNode, -572662307>",
+      "calledFunctions": [
+        "ChangeLinkOffset",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<StringEntryNode, -572662307>",
+        "int32_t"
+      ]
+    }
+  ]
+}

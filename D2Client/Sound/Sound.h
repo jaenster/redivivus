@@ -61,11 +61,11 @@ struct D2ClientSoundChannelStrc {
     /* 0x00 */ struct D2SoundSmpStrc * pSoundSmp; // sample instance
     /* 0x04 */ int32_t nChannelType; // 0/1/2/6 speaker-config channel type
     /* 0x08 */ struct D2SoundChannelStrc * pActiveSound; // active sound request; +4 sound id, +0x2c/+0x30 state, +0x34 priority, +0x41 stream progress
-    /* 0x0C */ uint32_t field_0x0c;
-    /* 0x10 */ uint32_t field_0x10;
-    /* 0x14 */ uint32_t field_0x14;
-    /* 0x18 */ uint32_t field_0x18;
-    /* 0x1C */ uint32_t field_0x1c;
+    /* 0x0C */ uint32_t dwLastPosX;
+    /* 0x10 */ uint32_t dwLastPosY;
+    /* 0x14 */ uint32_t dwLastPosZ;
+    /* 0x18 */ uint32_t nLastVolume;
+    /* 0x1C */ uint32_t dwLastEaxObstruction;
 };
 
 struct D2SoundChannelNodeStrc {
@@ -85,7 +85,7 @@ struct __attribute__((packed)) D2SoundChannelStrc {
     /* 0x20 */ float fUnitDistance; // unit distance (pChannel[8])
     /* 0x24 */ int nParam; // extra param (pChannel[9])
     /* 0x28 */ int * pGlobal3Ref; // ptr to global3 timing struct (checked non-null + [4]!=0)
-    /* 0x2C */ struct D2ClientSoundChannelStrc * undefined_0x2c; // unknown
+    /* 0x2C */ struct D2ClientSoundChannelStrc * pClientChannel; // unknown
     /* 0x30 */ int nPlayMode; // 1=streaming
     /* 0x34 */ uint32_t nScheduledTime; // global3+delay scheduled start time (pChannel[0xd])
     /* 0x38 */ int nVolume; // volume (pChannel[0xe])
@@ -144,11 +144,11 @@ struct D2SoundSmpStrc {
     /* 0x40 */ int bLooping; // was pDS3DBufferAlt; never called through - zeroed by SOUNDSMP_Reset, gates write-pos wraparound in SOUNDSMP_WriteToBuffer
     /* 0x44 */ uint32_t nMinBufSize; // minimum buffer size threshold
     /* 0x48 */ struct D2MPQFileStrc * pStreamFile; // SFile async-stream handle; SFILE_CancelAsyncRequestsForHandle/CloseFileWrapper/GetStreamInfo
-    /* 0x4C */ uint32_t field_0x4c; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
-    /* 0x50 */ int32_t field_0x50; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
-    /* 0x54 */ int32_t field_0x54; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
-    /* 0x58 */ int32_t field_0x58; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
-    /* 0x5C */ int32_t field_0x5c; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
+    /* 0x4C */ uint32_t bFadeActive; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
+    /* 0x50 */ int32_t nFadeStartVolume; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
+    /* 0x54 */ int32_t nFadeTargetVolume; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
+    /* 0x58 */ int32_t nFadeStartTick; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
+    /* 0x5C */ int32_t nFadeEndTick; // size 0x60 established by memset(this,0,0x60) in SOUNDSMP_ReleaseInterfaces
 };
 
 struct __attribute__((packed)) D2SoundsTxt {
@@ -177,7 +177,7 @@ struct __attribute__((packed)) D2SoundsTxt {
     /* 0x64 */ int32_t aRecentSoundHistory[2]; // Recent sound indices for group randomization dedup
     /* 0x6C */ void * pSoundDataBuffer; // Loaded WAV data pointer (FreeClientMemory)
     /* 0x70 */ int32_t nSoundDataBytes; // Loaded buffer size in bytes
-    /* 0x74 */ int32_t field_0x74[2]; // Unknown
+    /* 0x74 */ int32_t aWavDataPtrAndSize[2]; // Unknown
     /* 0x7C */ uint32_t nLRUTimestamp; // LRU eviction tick (gnCurrentGameAudioVolume)
     /* 0x80 */ uint8_t nBlockCount; // Unknown
     /* 0x81 */ uint8_t bFileNotFound; // Set to 1 when file open fails
@@ -262,16 +262,16 @@ int __fastcall SOUND_StopChannelById(int32_t nSoundId);
 void __stdcall SOUND_PauseAll();
 void __stdcall SOUND_ResumeAll();
 uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId);
-BOOL __fastcall SOUND_IsChannelAvailable(struct D2SoundChannelStrc * pChanA, struct D2SoundChannelStrc * pChanB, int32_t nParam1, int32_t nParam2);
+BOOL __fastcall SOUND_IsChannelAvailable(struct D2SoundChannelStrc * pChanA, struct D2SoundChannelStrc * pChanB, int32_t bComparePan, int32_t bCompareTime);
 uint32_t __fastcall SOUND_FindChannelForSound(int32_t nSoundId);
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration);
 void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime);
-void __fastcall SOUND_StopUnitSoundByIndex(int32_t nParam, struct D2UnitStrc * pUnit, int32_t bForceStop);
+void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, struct D2UnitStrc * pUnit, int32_t bForceStop);
 void __fastcall SOUND_StopById(int32_t nChannelHandle);
-void __fastcall SOUND_FadeOutMusic(int32_t nParam);
+void __fastcall SOUND_FadeOutMusic(int32_t nSoundId);
 void __stdcall SOUND_StopMusic();
-void __fastcall SOUND_SetLeftVolume(int32_t nParam1, int32_t nParam2);
-void __fastcall SOUND_SetRightVolume(int32_t nParam1, int32_t nParam2);
+void __fastcall SOUND_SetLeftVolume(int32_t nKeepGroup1, int32_t nKeepGroup2);
+void __fastcall SOUND_SetRightVolume(int32_t nKeepGroup1, int32_t nKeepGroup2);
 void __stdcall SOUND_DebugPrintChannels();
 void __stdcall SOUND_ShutdownSystem();
 void __stdcall SoundChaosDebug();

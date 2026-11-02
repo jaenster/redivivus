@@ -1,0 +1,1311 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/EscMenu.cpp",
+  "functions": [
+    {
+      "name": "UI_SLIDER_GetValueFromPosition",
+      "address": "0047cc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cc90"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_GetValueFromPosition"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_GetPositionFromValue",
+      "address": "0047cd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cd00"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_GetPositionFromValue"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyMasterVolumeFromSlider",
+      "address": "0047cda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cda0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyMasterVolumeFromSlider",
+        "UI_SLIDER_GetPositionFromValue",
+        "SOUND_SetMasterVolume"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyMasterVolume",
+      "address": "0047cdc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cdc0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyMasterVolume",
+        "SOUND_GetMasterVolume",
+        "UI_SLIDER_GetValueFromPosition"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyMusicVolumeFromSlider",
+      "address": "0047cdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cdf0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyMusicVolumeFromSlider",
+        "UI_SLIDER_GetPositionFromValue",
+        "SOUND_SetMusicVolume"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyMusicVolume",
+      "address": "0047ce10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ce10"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyMusicVolume",
+        "SOUND_GetMusicVolume",
+        "UI_SLIDER_GetValueFromPosition"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_Init3DSoundItem",
+      "address": "0047ce50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ce50"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_Init3DSoundItem",
+        "SOUND_Is3DMixerActive"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyPositionalBiasFromSlider",
+      "address": "0047ce70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ce70"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyPositionalBiasFromSlider",
+        "UI_SLIDER_GetPositionFromValue",
+        "SOUND_SetPositionalBias"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyPositionalBias",
+      "address": "0047ce90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ce90"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyPositionalBias",
+        "SOUND_GetPositionalBias",
+        "UI_SLIDER_GetValueFromPosition"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_InitEaxSoundItem",
+      "address": "0047ced0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047ced0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_InitEaxSoundItem",
+        "SOUND_IsEaxMixerActive"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyNpcSpeech",
+      "address": "0047cef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cef0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyNpcSpeech",
+        "SOUND_SetNpcSpeech",
+        "WARDEN_SetGlobalFlag",
+        "TEXT_SetTextDisplayMode"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_LoadAndApplyNpcSpeech",
+      "address": "0047cf50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cf50"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_LoadAndApplyNpcSpeech",
+        "SOUND_GetNpcSpeech",
+        "SOUND_IsInitializedDup",
+        "UI_SLIDER_ApplyNpcSpeech"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyLightQuality",
+      "address": "0047cf80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cf80"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyLightQuality",
+        "SRegSaveValue",
+        "D2GFX_SetLowQuality",
+        "LIGHTMAP_SetQualityLevel"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_InitLightQuality",
+      "address": "0047cfe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047cfe0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_InitLightQuality",
+        "SRegLoadValue",
+        "D2GFX_SetLowQuality",
+        "LIGHTMAP_SetQualityLevel"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyBlendedShadows",
+      "address": "0047d040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d040"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyBlendedShadows",
+        "SRegSaveValue",
+        "D2GFX_SetBlendedShadows"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_InitBlendedShadows",
+      "address": "0047d070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d070"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_InitBlendedShadows",
+        "SRegLoadValue",
+        "D2GFX_SetBlendedShadows"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyResolution",
+      "address": "0047d0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d0a0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyResolution",
+        "SRegSaveValue",
+        "CLIENT_SetScreenResolution"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_LoadAndApplyResolution",
+      "address": "0047d0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d0e0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_LoadAndApplyResolution",
+        "SRegLoadValue",
+        "CLIENT_SetScreenResolution"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyPerspective",
+      "address": "0047d130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d130"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyPerspective",
+        "SRegSaveValue",
+        "D2GFX_SetPerspective",
+        "SetViewRectangleSize"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_LoadAndApplyPerspective",
+      "address": "0047d180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d180"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_LoadAndApplyPerspective",
+        "SRegLoadValue",
+        "D2GFX_GetPerspectiveCapable",
+        "SRegSaveValue",
+        "D2GFX_SetPerspective",
+        "SetViewRectangleSize"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "StoreGamma",
+      "address": "0047d200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d200"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "StoreGamma",
+        "UI_SLIDER_GetPositionFromValue",
+        "SRegSaveValue",
+        "SetupGamma"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_InitGamma",
+      "address": "0047d230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d230"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_InitGamma",
+        "SRegLoadValue",
+        "UI_SLIDER_GetValueFromPosition",
+        "D2GFX_CheckGamma",
+        "UI_SLIDER_GetPositionFromValue",
+        "SRegSaveValue",
+        "SetupGamma"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyContrast",
+      "address": "0047d2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d2b0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyContrast",
+        "UI_SLIDER_GetPositionFromValue",
+        "SRegSaveValue",
+        "D2GFX_SetOption",
+        "D2GFX_SetGamma"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_InitContrast",
+      "address": "0047d2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d2f0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_InitContrast",
+        "D2GFX_GetRendererMode",
+        "SRegLoadValue",
+        "UI_SLIDER_GetValueFromPosition",
+        "UI_SLIDER_GetPositionFromValue",
+        "SRegSaveValue",
+        "D2GFX_SetOption",
+        "D2GFX_SetGamma"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "eD2RendererMode",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyAutomapMode",
+      "address": "0047d370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d370"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyAutomapMode",
+        "AUTOMAP_SetMiniMapType",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_InitAutomapMode",
+      "address": "0047d3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d3b0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_InitAutomapMode",
+        "SRegLoadValue",
+        "AUTOMAP_SetMiniMapType",
+        "AUTOMAP_GetMiniMapType"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyAutomapFade",
+      "address": "0047d3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d3f0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyAutomapFade",
+        "AUTOMAP_SetFade",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_InitAutomapFade",
+      "address": "0047d430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d430"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_InitAutomapFade",
+        "SRegLoadValue",
+        "AUTOMAP_SetFade",
+        "AUTOMAP_GetFade"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyAutomapCenters",
+      "address": "0047d470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d470"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyAutomapCenters",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_InitAutomapCenterItem",
+      "address": "0047d480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d480"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_InitAutomapCenterItem",
+        "AUTOMAP_GetCenters"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_ApplyAutomapParty",
+      "address": "0047d490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d490"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_ApplyAutomapParty",
+        "SRegSaveValue"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_InitAutomapPartyItem",
+      "address": "0047d4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d4a0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_InitAutomapPartyItem",
+        "AUTOMAP_GetParty"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_SLIDER_InitAutomapParty",
+      "address": "0047d4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d4d0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "UI_SLIDER_InitAutomapParty",
+        "AUTOMAP_GetParty",
+        "AUTOMAP_GetPartyNames"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_GetItemIndexFromMouseY",
+      "address": "0047d520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d520"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_GetItemIndexFromMouseY"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnEscMenuItemVisible"
+      ]
+    },
+    {
+      "name": "ESCMENU_ClickMenuItem",
+      "address": "0047d5c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d5c0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_ClickMenuItem",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_HandleSliderDrag",
+      "address": "0047d670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d670"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_HandleSliderDrag",
+        "ESCMENU_GetItemIndexFromMouseY",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnEscMenuItemAction"
+      ]
+    },
+    {
+      "name": "INPUT_EscMenuMouseDown",
+      "address": "0047d7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d7f0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "INPUT_EscMenuMouseDown",
+        "ESCMENU_GetItemIndexFromMouseY",
+        "ESCMENU_HandleSliderDrag",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_EscMenuMouseUp",
+      "address": "0047d840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d840"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "INPUT_EscMenuMouseUp",
+        "ESCMENU_GetItemIndexFromMouseY",
+        "ESCMENU_ClickMenuItem",
+        "UI_ResetInputState",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "INPUT_EscMenuNavigateNext",
+      "address": "0047d8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d8a0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "INPUT_EscMenuNavigateNext",
+        "SOUND_PlaySound",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "pfnEscMenuItemVisible"
+      ]
+    },
+    {
+      "name": "INPUT_EscMenuNavigatePrev",
+      "address": "0047d920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d920"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "INPUT_EscMenuNavigatePrev",
+        "SOUND_PlaySound",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "pfnEscMenuItemVisible"
+      ]
+    },
+    {
+      "name": "INPUT_EscMenuOptionDecrease",
+      "address": "0047d9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047d9a0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "INPUT_EscMenuOptionDecrease",
+        "SOUND_PlaySound",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_EscMenuOptionIncrease",
+      "address": "0047da90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047da90"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "INPUT_EscMenuOptionIncrease",
+        "SOUND_PlaySound",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_EscMenuExecuteSelection",
+      "address": "0047db80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047db80"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "INPUT_EscMenuExecuteSelection",
+        "ESCMENU_ClickMenuItem",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_LoadLocalizedImages",
+      "address": "0047dbb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047dbb0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_LoadLocalizedImages",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "TABLES_GetLangAbbreviation",
+        "D2CheckExpansionGame",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "ESCMENU_LoadLocalizedImages_HaltTail"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "DC6",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_LoadLocalizedImages_HaltTail",
+      "address": "0047dbce",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047dbce"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ERROR_UnrecoverableInternalError_Halt",
+        "ESCMENU_LoadLocalizedImages_HaltTail",
+        "GetInstructionPointer",
+        "exit"
+      ]
+    },
+    {
+      "name": "ESCMENU_Initialize",
+      "address": "0047dd70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047dd70"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_Initialize",
+        "ESCMENU_LoadLocalizedImages",
+        "D2CheckExpansionGame",
+        "memset",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "UI_GetCursorIconIndex",
+        "IMAGE_GetFramesCount",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "GetDC6Width"
+      ],
+      "usedTypes": [
+        "D2EscMenuHeaderStrc",
+        "D2EscMenuItemStrc",
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_FreeLoadedImages",
+      "address": "0047df00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047df00"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_FreeLoadedImages",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DC6_FreeAndDelete",
+        "ESCMENU_FreeLoadedImages_HaltTail"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "DC6 *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_FreeLoadedImages_HaltTail",
+      "address": "0047df15",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047df15"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ERROR_UnrecoverableInternalError_Halt",
+        "ESCMENU_FreeLoadedImages_HaltTail",
+        "GetInstructionPointer",
+        "exit"
+      ]
+    },
+    {
+      "name": "ESCMENU_Shutdown",
+      "address": "0047dfd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047dfd0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_Shutdown",
+        "ESCMENU_FreeLoadedImages",
+        "D2CheckExpansionGame",
+        "DC6_FreeAndDelete"
+      ],
+      "usedTypes": [
+        "D2EscMenuHeaderStrc",
+        "D2EscMenuItemStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_ShowMenu",
+      "address": "0047e090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047e090"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_ShowMenu",
+        "GetUIFlag",
+        "SetUIFlag",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "eD2UIvars",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_RestoreUIState",
+      "address": "0047e200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047e200"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_RestoreUIState",
+        "GetUIFlag",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "eD2UIvars",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_DrawProgressBar",
+      "address": "0047e260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047e260"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_DrawProgressBar",
+        "D2GFX_DrawSolidRectExBySize",
+        "IMAGE_DrawDC6ImageOnScreen",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2GfxDataStrc",
+        "DC6",
+        "DRAWMODE",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRAW_EscMenu",
+      "address": "0047e3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047e3d0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "DRAW_EscMenu",
+        "GetMouseX",
+        "GetMouseY",
+        "ESCMENU_GetItemIndexFromMouseY",
+        "ESCMENU_HandleSliderDrag",
+        "D2CheckExpansionGame",
+        "IMAGE_DrawDC6ImageOnScreen",
+        "ESCMENU_DrawProgressBar",
+        "memset",
+        "UI_GetCursorIconIndex",
+        "D2GFX_DrawImage",
+        "DRAW_CheckTickRateLimiter",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2GfxDataStrc",
+        "DRAWMODE",
+        "int32_t",
+        "pfnEscMenuItemVisible",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ESCMENU_SwitchToMainMenu",
+      "address": "0047f2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f2a0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_SwitchToMainMenu",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_CloseWindowAndRestoreUI",
+      "address": "0047f2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f2d0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_CloseWindowAndRestoreUI",
+        "D2CLIENT_SetExitVar1",
+        "D2CLIENT_SetExitVar2",
+        "ESCMENU_RestoreUIState"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_BackToGame",
+      "address": "0047f300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f300"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_BackToGame",
+        "ESCMENU_RestoreUIState"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_SwitchToSaveExitMenu",
+      "address": "0047f310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f310"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_SwitchToSaveExitMenu",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_SwitchToDeleteCharMenu",
+      "address": "0047f340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f340"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_SwitchToDeleteCharMenu",
+        "SetUIFlag",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_SwitchToExpansionSaveExitMenu",
+      "address": "0047f3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f3a0"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_SwitchToExpansionSaveExitMenu",
+        "SetUIFlag",
+        "D2CheckExpansionGame"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_ShowControlConfig",
+      "address": "0047f400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f400"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_ShowControlConfig",
+        "GetUIFlag",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_SwitchToMainMenu_alt",
+      "address": "0047f430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f430"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_SwitchToMainMenu_alt",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "ESCMENU_SwitchToOptionsMenu",
+      "address": "0047f460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f460"
+        }
+      ],
+      "namespace": "D2Client::UI::EscMenu",
+      "calledFunctions": [
+        "ESCMENU_SwitchToOptionsMenu",
+        "SetUIFlag"
+      ],
+      "usedTypes": [
+        "D2EscMenuItemStrc",
+        "D2UIMouseMsgStrc"
+      ]
+    }
+  ]
+}

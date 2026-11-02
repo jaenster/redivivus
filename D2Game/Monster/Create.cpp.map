@@ -1,0 +1,602 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monster/Create.cpp",
+  "functions": [
+    {
+      "name": "MONSTER_FindUnitInPartySlot",
+      "address": "005b1bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1bc0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "MONSTER_FindUnitInPartySlot"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SetClearPartyFlags",
+      "address": "005b1c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1c00"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "MONSTER_SetClearPartyFlags",
+        "MONSTER_FindUnitInPartySlot"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_EquipFromClassTable",
+      "address": "005b1c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1c50"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "MONSTER_EquipFromClassTable",
+        "GetGamePointer",
+        "STATSEX_GetCurrentStat",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "MONSTER_CreateAndEquipItem"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2MonEquipEntryStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_OnCreateAttachQuests",
+      "address": "005b1cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1cf0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "MONSTER_OnCreateAttachQuests",
+        "QUEST_AttachToUnitByQuestId",
+        "MONSTER_EquipFromClassTable",
+        "InitUmods",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "QUEST_DispatchMonsterDeathToQ12",
+        "SetUnsetSummonerFlags",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ApplySpecialUmods",
+      "address": "005b21b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b21b0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "MONSTER_ApplySpecialUmods",
+        "InitUmods"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterAtUnit",
+      "address": "005b23c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b23c0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMonsterAtUnit",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "CreateMonster"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterBase",
+      "address": "005b2490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b2490"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMonsterBase",
+        "UNITS_GetRoom",
+        "GetLevelIdFromPopulatedRoom",
+        "GetMonsterBaseId",
+        "SpawnMonsterAtUnit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2MonsterAnimMode",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMinions_BySlot",
+      "address": "005b24e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b24e0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMinions_BySlot",
+        "SpawnMonsterAtUnit",
+        "AssignMinionOwner",
+        "AddMinionToList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMinions_ByPattern",
+      "address": "005b2570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b2570"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMinions_ByPattern",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "CreateMonster",
+        "AssignMinionOwner",
+        "AddMinionToList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FindDiagonalNonCollisionCoords",
+      "address": "005b2700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b2700"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "FindDiagonalNonCollisionCoords",
+        "DRLGROOM_GetFloorTilesFromRoom",
+        "RANDOM_RandomNumberSelector",
+        "DRLGROOM_GetRoomCoordinates",
+        "TILEPROJECT_GetTileCount",
+        "CheckCollision_BlockPlayerMissile",
+        "CheckCollision_BlockAll_Width"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "POINT",
+        "eCollisionFlags",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SpawnMinionGroup",
+      "address": "005b2830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b2830"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "MONSTER_SpawnMinionGroup",
+        "MONSTERTBLS_GetUpgradeDataByMonStatsId",
+        "TXT_MonStats_GetBaseId_NoChecks",
+        "AssignMinionOwner",
+        "SEED_RollRangeInclusive",
+        "SpawnMinions_ByPattern",
+        "SpawnMonsterAtUnit",
+        "GetGUID",
+        "AddMinionToList"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CreateMonster",
+      "address": "005b2a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b2a00"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "CreateMonster",
+        "CoordsRoomToWorld",
+        "DRLGROOM_GetRoomCoordinates",
+        "FindDiagonalNonCollisionCoords",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "RANDOM_RandomNumberSelector",
+        "GetGridIndex",
+        "MONSTERAI_CanSpawnMonsterAt",
+        "CheckCollision_BlockAll_Width",
+        "CreateUnit",
+        "IncreaseMonsterSpawnCount",
+        "DRLGROOM_GetCoordListFromSubtilePos",
+        "MONSTER_SetSpawnCoordList",
+        "SetAlignment",
+        "MONSTER_ApplySpecialUmods",
+        "MONSTER_OnCreateAttachQuests",
+        "MONSTER_SpawnMinionGroup"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2MonStats2Txt",
+        "D2MonStatsTxt",
+        "D2RoomCoordListStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "RECT",
+        "eCollisionFlags",
+        "int32_t",
+        "int64_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterAtRoomPos",
+      "address": "005b2f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b2f20"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMonsterAtRoomPos",
+        "CreateMonster"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterAtCoordList",
+      "address": "005b2f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b2f70"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMonsterAtCoordList",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "CreateMonster"
+      ],
+      "usedTypes": [
+        "D2RoomCoordListStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterInRoomCoordList",
+      "address": "005b3040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3040"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "CreateMonster",
+        "SpawnMonsterInRoomCoordList"
+      ],
+      "usedTypes": [
+        "D2RoomCoordListStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterAtRoomPosSimple",
+      "address": "005b3090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3090"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "CreateMonster",
+        "SpawnMonsterAtRoomPosSimple"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterAtRoomPosGuid",
+      "address": "005b30e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b30e0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "CreateMonster",
+        "SpawnMonsterAtRoomPosGuid"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterSetOwnOwner",
+      "address": "005b3130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3130"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMonsterSetOwnOwner",
+        "CreateMonster",
+        "AssignMinionOwner"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMinions_AtXY",
+      "address": "005b31b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b31b0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMinions_AtXY",
+        "UNITS_GetRoom",
+        "CreateMonster",
+        "AssignMinionOwner",
+        "AddMinionToList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SpawnMonsterAtUnitOffset",
+      "address": "005b3270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3270"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnMonsterAtUnitOffset",
+        "CreateMonster",
+        "SpawnMonsterSetOwnOwner",
+        "SpawnMinions_AtXY",
+        "SpawnMonsterAtRoomPos",
+        "GetType",
+        "GetGUID",
+        "AssignMinionOwner"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_SpawnPredefinedAtUnit",
+      "address": "005b34c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b34c0"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "MONSTER_SpawnPredefinedAtUnit",
+        "GetXPos",
+        "GetYPos",
+        "SpawnMonsterAtUnitOffset"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SpawnRandomMonster",
+      "address": "005b3570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3570"
+        }
+      ],
+      "namespace": "D2Game::Monster::Monster::Create",
+      "calledFunctions": [
+        "SpawnRandomMonster",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RANDOM_RandomNumberSelector",
+        "CreateMonster"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "D2MonStatsTxt",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "D2UnknownCreateMonsterStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

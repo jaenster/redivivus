@@ -1,0 +1,438 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Monsters/MONSTERS.cpp",
+  "functions": [
+    {
+      "name": "MONSTER_GetMissileForAnimEvent",
+      "address": "0063e6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e6b0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTER_GetMissileForAnimEvent",
+        "GetFrameMetrics",
+        "GetEventFrameInfo"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2MonsterAnimMode",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTERS_GetGfxOffsetTable1",
+      "address": "0063e780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e780"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_GetGfxOffsetTable1"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTERS_GetGfxOffsetTable2",
+      "address": "0063e7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e7a0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_GetGfxOffsetTable2"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTERS_GetGfxOffsetTable3",
+      "address": "0063e7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e7c0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_GetGfxOffsetTable3"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTERS_GetCompositeDimensions",
+      "address": "0063e7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e7e0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_GetCompositeDimensions"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SetSuperUniqueName",
+      "address": "0063e810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e810"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "SetSuperUniqueName",
+        "STRING_GetWideStringLength",
+        "AllocClientMemory",
+        "STRING_CopyWideString"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_IsBossOrChampion",
+      "address": "0063e860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e860"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTER_IsBossOrChampion"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_IsAndarielNormal",
+      "address": "0063e8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e8d0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTER_IsAndarielNormal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IsDemon",
+      "address": "0063e940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e940"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "IsDemon"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_IsMonsterUndead",
+      "address": "0063e990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e990"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTER_IsMonsterUndead"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnitIsMarkedBoss",
+      "address": "0063e9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063e9f0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "UnitIsMarkedBoss"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckIfMonsterIsDead",
+      "address": "0063ea40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ea40"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "CheckIfMonsterIsDead"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SummonOrSpawnMode",
+      "address": "0063ea70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ea70"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "SummonOrSpawnMode",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "MONSTERS_OnInitMonster_NoOp",
+      "address": "0063ebc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ebc0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_OnInitMonster_NoOp"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "MONSTERS_GetMaxLightRadiusFromEquipment",
+      "address": "0063ebd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ebd0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_GetMaxLightRadiusFromEquipment",
+        "MONSTER_GetComponentOverlay",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetMonsterBaseId",
+      "address": "0063ec70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ec70"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "GetMonsterBaseId",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetLine",
+        "MONSTERTBLS_GetUpgradeDataByMonStatsId"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "D2MonStatsTxt",
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTERS_CheckMonStatFlag0xc_Bit7",
+      "address": "0063edc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063edc0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_CheckMonStatFlag0xc_Bit7"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTERS_GetUpgradeSkillsAndCount",
+      "address": "0063ee10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ee10"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTERS_GetUpgradeSkillsAndCount",
+        "MONSTERTBLS_GetUpgradeDataByMonStatsId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_GetMercType",
+      "address": "0063ee90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063ee90"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTER_GetMercType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MONSTER_ApplyDifficultyScaling",
+      "address": "0063eef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063eef0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTER_ApplyDifficultyScaling",
+        "TXT_MonStats_GetLine",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MONSTER_GetSpawnParameters",
+      "address": "0063efa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0063efa0"
+        }
+      ],
+      "namespace": "D2Common::Monsters::MONSTERS",
+      "calledFunctions": [
+        "MONSTER_GetSpawnParameters",
+        "MONSTERTBLS_GetUpgradeDataByMonStatsId",
+        "MONSTER_GetMonsterClassByDifficulty",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetState",
+        "UNIT_GetModuloFromSeed",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "GetMonsterBaseId",
+        "GetXSP1",
+        "GetYSP1"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "eD2MonsterClassId",
+        "eD2UnitType",
+        "int32_t",
+        "pfnMonsterSpawnClassIdCb",
+        "uint32_t"
+      ]
+    }
+  ]
+}

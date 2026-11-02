@@ -1,0 +1,667 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/UNIT/sunitproxy.cpp",
+  "functions": [
+    {
+      "name": "GetMonsterAI",
+      "address": "00535e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535e80"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "GetMonsterAI"
+      ],
+      "usedTypes": [
+        "D2MonsterAiStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetGameNpcbyClassId",
+      "address": "00535ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535ea0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "GetGameNpcbyClassId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GameNpcArrayStrc",
+        "D2GameNpcStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetGameNpcByUnit",
+      "address": "00535f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535f10"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "GetGameNpcByUnit",
+        "GetGameNpcbyClassId"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_AddItemToNpcProxy",
+      "address": "00535f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535f30"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_AddItemToNpcProxy",
+        "AllocServerMemory",
+        "GetGameNpcbyClassId",
+        "ITEM_DeleteItemAndFreeUnit"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2SUnitProxyStrc_Line0x85",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_InitNpcTradeItems",
+      "address": "00535fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00535fb0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_InitNpcTradeItems",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "SGAMEDATA",
+        "int32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_AllocNpcControl",
+      "address": "00536070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536070"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_AllocNpcControl",
+        "AllocServerMemory",
+        "memset",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine",
+        "TXT_Items_GetSize",
+        "STRUCT_CreatePlayerInventory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SUNITPROXY_InitNpcTradeItems"
+      ],
+      "usedTypes": [
+        "D2DataTableTxtStrc",
+        "D2GameNpcArrayStrc",
+        "D2GameNpcControlStrc",
+        "D2InventoryStrc",
+        "D2SeedStrc",
+        "PD2GameNpcProxyQueue",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_FreeInventoryItems",
+      "address": "00536510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536510"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_FreeInventoryItems",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_FreeNpcProxyData",
+      "address": "00536580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536580"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_FreeNpcProxyData",
+        "SUNITPROXY_FreeInventoryItems",
+        "STRUCT_FreeInventory",
+        "FreeServerMemory",
+        "ITEM_DeleteItemAndFreeUnit"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2NpcProxyInventoryStrc",
+        "D2SUnitProxyStrc_Line0x85",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "FreeNpcControl",
+      "address": "00536640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536640"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "FreeNpcControl",
+        "FreeServerMemory",
+        "SUNITPROXY_FreeNpcProxyData"
+      ],
+      "usedTypes": [
+        "D2GameNpcControlStrc",
+        "SGAMEDATA",
+        "void *"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_AddTradeQueueEntry",
+      "address": "00536760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536760"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_AddTradeQueueEntry",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2SUnitProxyStrc_Line0x85",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_QueueTradeAction",
+      "address": "005367b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005367b0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_QueueTradeAction",
+        "GetTickCount",
+        "GetGameNpcbyClassId",
+        "SUNITPROXY_AddTradeQueueEntry"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_CountPlayerInLevel",
+      "address": "00536820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536820"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_CountPlayerInLevel",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom"
+      ],
+      "usedTypes": [
+        "D2LevelPlayerCountArgStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_RefreshGambleForAllNpcs",
+      "address": "00536850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536850"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_RefreshGambleForAllNpcs",
+        "GetTickCount",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2GameNpcControlStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_ProcessNpcItemQueue",
+      "address": "005368f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005368f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITNPC_DiscardTradeListRolls",
+        "SUNITPROXY_ProcessNpcItemQueue",
+        "GetGameNpcbyClassId",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "GetItemQuality",
+        "SUNITNPC_FillNpcInventory",
+        "SERVER_ItemToInventory",
+        "ITEM_GetContainingInventoryPage",
+        "ITEM_SetItemData_ePage",
+        "SUNITNPC_SetItemForNpc",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2SUnitProxyStrc_Line0x85",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eInventoryPage",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_GetNpcInventory",
+      "address": "00536b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536b20"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_GetNpcInventory",
+        "GetGameNpcbyClassId"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2InventoryStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_GetNpcControl",
+      "address": "00536b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536b40"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_GetNpcControl"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_RemovePlayerFromNpc",
+      "address": "00536b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536b50"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_RemovePlayerFromNpc",
+        "GetGameNpcbyClassId",
+        "SUNITPROXY_FreeInventoryItems",
+        "STRUCT_FreeInventory",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2NpcPlayerInteractionStrc",
+        "D2NpcPlayerInteractionStrc *",
+        "D2NpcProxyInventoryStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_GetPlayerProxyInventory",
+      "address": "00536c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536c50"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_GetPlayerProxyInventory",
+        "GetGameNpcbyClassId"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2InventoryStrc",
+        "D2NpcProxyInventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_AddPlayerInteraction",
+      "address": "00536cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536cb0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_AddPlayerInteraction",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2NpcPlayerInteractionStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_ResetNpcProxy",
+      "address": "00536d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536d10"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_ResetNpcProxy",
+        "SUNITPROXY_FreeNpcProxyData",
+        "STRUCT_CreatePlayerInventory"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_BuildNpcItemTables",
+      "address": "00536d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536d50"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_BuildNpcItemTables",
+        "TXT_Items_GetSize",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2ItemsTableStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_InitAllNpcItemTables",
+      "address": "00536f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00536f80"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_InitAllNpcItemTables",
+        "SUNITPROXY_BuildNpcItemTables"
+      ],
+      "usedTypes": [
+        "eD2MonsterClassId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_FreeAllNpcItemTables",
+      "address": "00537120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537120"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_FreeAllNpcItemTables",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "void *"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_RemovePlayerProxyInventory",
+      "address": "00537190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537190"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_RemovePlayerProxyInventory",
+        "GetGameNpcbyClassId",
+        "SUNITPROXY_FreeInventoryItems",
+        "STRUCT_FreeInventory",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2GameNpcStrc",
+        "D2NpcProxyInventoryStrc",
+        "D2NpcProxyInventoryStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_UpdateNpcProxiesForAct",
+      "address": "00537230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537230"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_UpdateNpcProxiesForAct",
+        "GetTickCount",
+        "FindUnitFromTable",
+        "SUNITPROXY_FreeNpcProxyData",
+        "STRUCT_CreatePlayerInventory",
+        "GetMonsterAI",
+        "CountMonstersByAi",
+        "SUNITPROXY_ResetNpcProxy"
+      ],
+      "usedTypes": [
+        "D2GameNpcArrayStrc",
+        "D2GameNpcControlStrc",
+        "D2InventoryStrc",
+        "D2MonsterAiStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "IterateNpcIntroUnits",
+      "address": "00537340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537340"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "IterateNpcIntroUnits",
+        "IterateAllUnits",
+        "SUNITPROXY_UpdateNpcProxiesForAct",
+        "INTRONPC_FillInPacketWithIntroNpcIdsInAct",
+        "ForceStartQuest"
+      ],
+      "usedTypes": [
+        "D2LevelPlayerCountArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "SERVER_InitClassicTowns",
+      "address": "00537580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537580"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SERVER_InitClassicTowns",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "IterateAllUnits",
+        "SUNITPROXY_UpdateNpcProxiesForAct"
+      ],
+      "usedTypes": [
+        "D2LevelPlayerCountArgStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SUNITPROXY_SendProxyItemsToClient",
+      "address": "00537680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537680"
+        }
+      ],
+      "namespace": "D2Game::UNIT::sunitproxy",
+      "calledFunctions": [
+        "SUNITPROXY_SendProxyItemsToClient",
+        "SendUpdatedItemsToClient",
+        "SUNITPROXY_GetPlayerProxyInventory"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

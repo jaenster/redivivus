@@ -21,10 +21,10 @@ struct D2QSQueueEntryStrc {
 namespace Fog::Src::D2QSQueue {
 
 // Function declarations
-void __fastcall D2QSQUEUE_Initialize(struct D2QSQueueStrc * pdwParam);
+void __fastcall D2QSQUEUE_Initialize(struct D2QSQueueStrc * pQueue);
 void __fastcall Free(struct D2QSQueueStrc * pPoolManager);
-uint32_t __fastcall GetAddress(uint32_t * pdwParam);
-void __fastcall FOG_EnqueueMessage(struct D2QSQueueStrc * pClientSideData, void * pParam, uint16_t wMsgSize);
-uint32_t __fastcall D2QSQUEUE_Dequeue(struct D2QSQueueStrc * pdwParam, void * pParam, int nMaxSize);
+uint32_t __fastcall GetAddress(uint32_t * pQueue);
+void __fastcall FOG_EnqueueMessage(struct D2QSQueueStrc * pClientSideData, void * pMessage, uint16_t wMsgSize);
+uint32_t __fastcall D2QSQUEUE_Dequeue(struct D2QSQueueStrc * pQueue, void * pOutBuffer, int nMaxSize);
 
 } // namespace Fog::Src::D2QSQueue

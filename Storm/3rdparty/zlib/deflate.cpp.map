@@ -1,0 +1,566 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/3rdparty/zlib/deflate.cpp",
+  "functions": [
+    {
+      "name": "deflateResetKeep",
+      "address": "00427160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427160"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateResetKeep",
+        "crc32",
+        "_tr_init",
+        "ZLIB_Adler32"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint32_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateSetHeader",
+      "address": "00427200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427200"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateSetHeader"
+      ],
+      "usedTypes": [
+        "gz_header",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflatePending",
+      "address": "00427220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427220"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflatePending"
+      ],
+      "usedTypes": [
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflatePrime",
+      "address": "00427260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427260"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflatePrime",
+        "_tr_flush_bits"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateTune",
+      "address": "004272f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004272f0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateTune"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateBound",
+      "address": "00427330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427330"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateBound"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "gz_header",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "putShortMSB",
+      "address": "00427420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427420"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "putShortMSB"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "flush_pending",
+      "address": "00427450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427450"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "flush_pending",
+        "_tr_flush_bits",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint32_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateEnd",
+      "address": "004274a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004274a0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateEnd"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint32_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateCopy",
+      "address": "00427560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427560"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateCopy",
+        "memcpy",
+        "deflateEnd"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint16_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "read_buf",
+      "address": "00427700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427700"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "read_buf",
+        "memcpy",
+        "ZLIB_Adler32",
+        "crc32"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "lm_init",
+      "address": "00427770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427770"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "lm_init",
+        "memset"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "longest_match",
+      "address": "00427800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427800"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "longest_match"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "fill_window",
+      "address": "00427980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427980"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "fill_window",
+        "memcpy",
+        "ZLIB_Adler32",
+        "crc32",
+        "memset"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflate_stored",
+      "address": "00427bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427bb0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflate_stored",
+        "fill_window",
+        "_tr_flush_block",
+        "flush_pending",
+        "_tr_flush_bits",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflate_fast",
+      "address": "00427dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00427dd0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflate_fast",
+        "fill_window",
+        "_tr_flush_block",
+        "flush_pending",
+        "longest_match",
+        "_tr_flush_bits",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflate_slow",
+      "address": "00428150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00428150"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflate_slow",
+        "fill_window",
+        "_tr_flush_block",
+        "flush_pending",
+        "longest_match",
+        "_tr_flush_bits",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflate_rle",
+      "address": "004285f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004285f0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflate_rle",
+        "fill_window",
+        "_tr_flush_block",
+        "flush_pending",
+        "_tr_flush_bits",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "block_state",
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflate_huff",
+      "address": "00428900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00428900"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflate_huff",
+        "fill_window",
+        "_tr_flush_block",
+        "_tr_flush_bits",
+        "memcpy",
+        "flush_pending"
+      ],
+      "usedTypes": [
+        "block_state",
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateSetDictionary",
+      "address": "00428ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00428ab0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateSetDictionary",
+        "ZLIB_Adler32",
+        "memset",
+        "fill_window"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateReset",
+      "address": "00428c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00428c40"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateReset",
+        "deflateResetKeep",
+        "lm_init"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflate",
+      "address": "00428c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00428c60"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflate",
+        "crc32",
+        "ZLIB_Adler32",
+        "flush_pending",
+        "deflate_huff",
+        "deflate_rle",
+        "_tr_align",
+        "_tr_stored_block",
+        "memset"
+      ],
+      "usedTypes": [
+        "block_state",
+        "deflate_state",
+        "gz_header",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateInit2_",
+      "address": "004294c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004294c0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateInit2_",
+        "deflateReset",
+        "deflateEnd"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateParams",
+      "address": "00429700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429700"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateParams",
+        "deflate"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "deflateInit_",
+      "address": "004297f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004297f0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::deflate",
+      "calledFunctions": [
+        "deflateInit_",
+        "deflateInit2_"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "z_stream"
+      ]
+    }
+  ]
+}

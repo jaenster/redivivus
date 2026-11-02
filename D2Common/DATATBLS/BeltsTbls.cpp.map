@@ -1,0 +1,108 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/BeltsTbls.cpp",
+  "functions": [
+    {
+      "name": "LoadBeltsTxt",
+      "address": "00660290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660290"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::BeltsTbls",
+      "calledFunctions": [
+        "LoadBeltsTxt",
+        "CompileTxt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeBeltsTxt",
+      "address": "00660c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660c60"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::BeltsTbls",
+      "calledFunctions": [
+        "FreeBeltsTxt",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "TXT_Belts_GetLine",
+      "address": "00660c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660c70"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::BeltsTbls",
+      "calledFunctions": [
+        "TXT_Belts_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BeltsTxt"
+      ]
+    },
+    {
+      "name": "GetBeltsLine",
+      "address": "00660cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660cb0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::BeltsTbls",
+      "calledFunctions": [
+        "GetBeltsLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BeltsTxt",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetInvRectFromBeltsTxt",
+      "address": "00660d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660d10"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::BeltsTbls",
+      "calledFunctions": [
+        "GetInvRectFromBeltsTxt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BeltsEntryStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

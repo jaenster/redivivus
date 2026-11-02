@@ -1,0 +1,443 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/RosterPets.cpp",
+  "functions": [
+    {
+      "name": "GetPetTypeTxtById",
+      "address": "00478a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478a20"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "GetPetTypeTxtById"
+      ],
+      "usedTypes": [
+        "D2PetTypeTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeRosterPet",
+      "address": "00478a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478a50"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "FreeRosterPet",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc"
+      ]
+    },
+    {
+      "name": "ROSTERPETS_RemoveRosterPetsBySkillID",
+      "address": "00478ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478ab0"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "ROSTERPETS_RemoveRosterPetsBySkillID",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2RosterPetStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddRosterPet",
+      "address": "00478b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478b10"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "AddRosterPet",
+        "ROSTERPETS_RemoveRosterPetsBySkillID",
+        "AllocClientMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AddRosterPetMerc",
+      "address": "00478bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478bb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "AddRosterPetMerc",
+        "ROSTERPETS_RemoveRosterPetsBySkillID",
+        "AddRosterPet",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_FindClientSideUnit",
+        "MERC_InitializeFromPacket",
+        "IsAttackable",
+        "MONSTER_InitLightMap",
+        "SetupUpdateFlag"
+      ],
+      "usedTypes": [
+        "D2MercInitArgStrc",
+        "D2RosterMercArg",
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "RemoveRosterPet",
+      "address": "00478c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478c90"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "RemoveRosterPet",
+        "GetPlayerUnit_UI",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_GetPetOwnershipRelation",
+      "address": "00478d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478d90"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "ROSTER_GetPetOwnershipRelation",
+        "GetPlayerUnit_UI",
+        "GetRosterByGUID",
+        "GetRosterPartyId"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2RosterStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetSeed",
+      "address": "00478e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478e40"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "GetSeed"
+      ],
+      "usedTypes": [
+        "D2RosterPetSeedStrc",
+        "D2RosterPetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_AreUnitsHostile",
+      "address": "00478e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478e70"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "ROSTER_AreUnitsHostile",
+        "IsAllyOf",
+        "CheckRostersArePartied"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CountRostersForUnitFilterBySkill",
+      "address": "00478ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478ee0"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "CountRostersForUnitFilterBySkill"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRosterPetGUID",
+      "address": "00478f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478f20"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "GetRosterPetGUID"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CheckIfUnitHasRosterPet",
+      "address": "00478f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478f70"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "CheckIfUnitHasRosterPet"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "ROSTER_UpdateHostileColors",
+      "address": "00478fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478fa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "ROSTER_UpdateHostileColors",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "ROSTER_AreUnitsHostile",
+        "SetGfxSequenceData",
+        "SetPalShiftIndex"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UpdateLifeAndArea",
+      "address": "00479010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479010"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "UpdateLifeAndArea",
+        "UNITS_FindClientSideUnit",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetRosterPerHPPercent",
+      "address": "00479080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479080"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "GetRosterPerHPPercent"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTERPETS_GetPetData",
+      "address": "004790b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004790b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "ROSTERPETS_GetPetData"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRosterClass",
+      "address": "00479120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479120"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "GetRosterClass"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetRosterOwnerGUID",
+      "address": "00479150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479150"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "GetRosterOwnerGUID"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc"
+      ]
+    },
+    {
+      "name": "GetSkillId",
+      "address": "00479180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479180"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "GetSkillId"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_IsUnitHostileToPlayer",
+      "address": "004791b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004791b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "ROSTER_IsUnitHostileToPlayer",
+        "GetPlayerUnit_UI",
+        "GetFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ROSTER_UpdateMercHostileColors",
+      "address": "00479230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00479230"
+        }
+      ],
+      "namespace": "D2Client::GAME::RosterPets",
+      "calledFunctions": [
+        "ROSTER_UpdateMercHostileColors",
+        "UNITS_FindClientSideUnit",
+        "GetPalShiftIndex",
+        "ROSTER_IsUnitHostileToPlayer",
+        "GetGfxSequenceData",
+        "SetPalShiftIndex",
+        "SetGfxSequenceData"
+      ],
+      "usedTypes": [
+        "D2RosterPetStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

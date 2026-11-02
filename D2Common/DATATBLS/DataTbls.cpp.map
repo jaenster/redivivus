@@ -1,0 +1,1057 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/DataTbls.cpp",
+  "functions": [
+    {
+      "name": "CheckIfFileExists",
+      "address": "00516e46",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516e46"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "CheckIfFileExists",
+        "ARCHIVE_OpenD2FileWrap",
+        "LOGFILE_WriteStringToFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc *",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_NormalizeCodeTo4Chars",
+      "address": "00611760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611760"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_NormalizeCodeTo4Chars"
+      ]
+    },
+    {
+      "name": "DATATBLS_LookupStringId",
+      "address": "006117b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006117b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_LookupStringId",
+        "STRTABLE_LookupString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_GetCompCodeByIndex",
+      "address": "006117d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006117d0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_GetCompCodeByIndex"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_Experience_GetLineLevel",
+      "address": "00611800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611800"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_Experience_GetLineLevel"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Experience_GetMaxLevel",
+      "address": "00611830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611830"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_Experience_GetMaxLevel"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_GetLevelFromExperience",
+      "address": "00611860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611860"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_GetLevelFromExperience"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_AppendDataToBuffer",
+      "address": "006118b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006118b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_AppendDataToBuffer",
+        "ReAllocServerMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "DATATBLS_LookupCalcCode",
+      "address": "006119f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006119f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_LookupCalcCode",
+        "GetLinkNodeIndex",
+        "DATATBLS_NormalizeCodeTo4Chars",
+        "GetClassIdFromName",
+        "SStrCmpI"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_CompileSkillCode",
+      "address": "00611bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611bd0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_CompileSkillCode",
+        "__security_check_cookie",
+        "SKILLS_ParseCalcExpression",
+        "DATATBLS_AppendDataToBuffer"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_CompileSkillDescCode",
+      "address": "00611c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611c70"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_CompileSkillDescCode",
+        "__security_check_cookie",
+        "SKILLS_ParseCalcExpression",
+        "DATATBLS_AppendDataToBuffer"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TXT_AnimTbls_Get",
+      "address": "00611d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611d20"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AnimTbls_Get"
+      ],
+      "usedTypes": [
+        "D2AnimDataStrc"
+      ]
+    },
+    {
+      "name": "GetDifficultyLevels",
+      "address": "00611d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611d30"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "GetDifficultyLevels"
+      ],
+      "usedTypes": [
+        "D2DifficultyLevelsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_BuildStatesDataBitMask",
+      "address": "00611d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611d60"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_BuildStatesDataBitMask"
+      ],
+      "usedTypes": [
+        "D2StatesDataTbls",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_BuildStatesDataList",
+      "address": "00611dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611dc0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_BuildStatesDataList",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2AllStatesDataTbl",
+        "D2AllStatesDataTbl *",
+        "D2StatesTxt",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TXT_States_AllocItemTypesStateDataTable",
+      "address": "00611e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611e60"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_States_AllocItemTypesStateDataTable",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2AllStatesDataTbl",
+        "D2AllStatesDataTbl *",
+        "D2StatesTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetPlayerClassIdToName",
+      "address": "00611ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611ee0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "GetPlayerClassIdToName",
+        "strncpy",
+        "_snprintf"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetMonsterClassIdToName",
+      "address": "00611f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611f40"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "GetMonsterClassIdToName",
+        "GetLocaleString",
+        "UNICODE_WideToMultiByte",
+        "_snprintf"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetObjectClassIdToName",
+      "address": "00611fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611fa0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "GetObjectClassIdToName",
+        "TXT_Objects_GetLine",
+        "strncpy",
+        "_snprintf"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetItemClassIdToName",
+      "address": "00611fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611fe0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "GetItemClassIdToName",
+        "TXT_Items_GetLine",
+        "GetLocaleString",
+        "UNICODE_WideToMultiByte",
+        "_snprintf"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetMissileClassIdToName",
+      "address": "00612030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00612030"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "GetMissileClassIdToName",
+        "_snprintf"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetUnitClassIdToName",
+      "address": "00612050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00612050"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "GetUnitClassIdToName",
+        "GetPlayerClassIdToName",
+        "GetMonsterClassIdToName",
+        "GetObjectClassIdToName",
+        "GetMissileClassIdToName",
+        "GetItemClassIdToName",
+        "printf"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetNameByClassIdAndType",
+      "address": "00612120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00612120"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "GetNameByClassIdAndType",
+        "GetPlayerClassIdToName",
+        "GetMonsterClassIdToName",
+        "GetObjectClassIdToName",
+        "_snprintf",
+        "GetItemClassIdToName",
+        "printf"
+      ],
+      "usedTypes": [
+        "eD2UnitType",
+        "int16_t"
+      ]
+    },
+    {
+      "name": "StoreDataTables",
+      "address": "006121f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006121f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "StoreDataTables",
+        "fopen",
+        "fwrite",
+        "fclose",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2InventoryToBeUpdatedStrc",
+        "FILE",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ARCHIVE_LoadDataTables",
+      "address": "00612280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00612280"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "ARCHIVE_LoadDataTables",
+        "D2FILE_AllocAndLoadD2File",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CompileTxt",
+      "address": "006122f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006122f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "ARCHIVE_LoadDataTables",
+        "CompileTxt",
+        "_stricmp",
+        "STRUCT_CreateBinFieldExcelAndFillData",
+        "TXT_GetLinesCountFromBinFieldExcel",
+        "AllocServerMemory",
+        "memset",
+        "TXT_ParseDataAndPutIntoStructure",
+        "TXT_FreeBinFieldExcel",
+        "StoreDataTables",
+        "FreeServerMemory",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *",
+        "D2BinFieldExcelStrc",
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "sgtDataTableSetupIfUseTxt",
+      "address": "006125a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006125a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "sgtDataTableSetupIfUseTxt"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UnloadBin",
+      "address": "006125c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006125c0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "UnloadBin",
+        "FreeServerMemory"
+      ]
+    },
+    {
+      "name": "TXT_CharStats_DefineWideStringClass",
+      "address": "00612600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00612600"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_CharStats_DefineWideStringClass",
+        "UTF8_ConvertToWideChar",
+        "memset",
+        "STRTABLE_GetStringByKey",
+        "STRING_CopyWideString",
+        "AppendToBuffer",
+        "WSTRING_PutWideCharIntoBuffer",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_VariousSmallTables",
+      "address": "00612750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00612750"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_VariousSmallTables",
+        "STRUCT_CreateTxtLinkStrc",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DATATBLS_FreeMiscTxtTables",
+      "address": "00612ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00612ea0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_FreeMiscTxtTables",
+        "FreeServerMemory",
+        "STRUCT_FreeTxtLink"
+      ],
+      "usedTypes": [
+        "D2BodyLocsTxt",
+        "D2ColorsTxt",
+        "D2CompCodeTxt",
+        "D2ElemTypesTxt",
+        "D2EventsTxt",
+        "D2HireDescTxt",
+        "D2HitClassTxt",
+        "D2MissCalcTxt",
+        "D2MonAiTxt",
+        "D2MonModeTxtSmall",
+        "D2MonPlaceTxt",
+        "D2PlayerClassTxt",
+        "D2PlrModeTxt",
+        "D2SkillCalcTxt",
+        "D2SkillsHeaderTxt",
+        "D2StorePageTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_charstats",
+      "address": "00613260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00613260"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_charstats",
+        "CompileTxt",
+        "TXT_CharStats_DefineWideStringClass"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_experience",
+      "address": "00613d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00613d30"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_experience",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "TXT_Experience_GetExpRatio",
+      "address": "00613e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00613e60"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_Experience_GetExpRatio"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_SaveTableToBinFile",
+      "address": "00613e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00613e90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_SaveTableToBinFile",
+        "fopen",
+        "fwrite",
+        "fclose",
+        "FreeServerMemory",
+        "ARCHIVE_LoadDataTables",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ArchiveStrc",
+        "D2ArchiveStrc *",
+        "D2PoolManagerStrc",
+        "FILE",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_skill_skilldesc",
+      "address": "00613f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00613f80"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_skill_skilldesc",
+        "STRUCT_CreateTxtLinkStrc",
+        "FillUpTxtLinkSub0x08",
+        "CompileTxt",
+        "STRUCT_FreeTxtLink",
+        "UnloadBin",
+        "TXT_SaveTableToBinFile",
+        "AllocServerMemory",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PetTypeTxt",
+        "D2PoolManagerStrc",
+        "D2SkillsTxt",
+        "D2TxtLinkStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_FreeSkillsTxtTables",
+      "address": "00617c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00617c30"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_FreeSkillsTxtTables",
+        "FreeServerMemory",
+        "STRUCT_FreeTxtLink"
+      ],
+      "usedTypes": [
+        "D2SkillDescTxt",
+        "D2SkillsTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_difficultylevels",
+      "address": "00617d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00617d90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "CompileTxt",
+        "TXT_AllocTxt_difficultylevels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_states",
+      "address": "00618100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00618100"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_states",
+        "STRUCT_CreateTxtLinkStrc",
+        "CompileTxt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory",
+        "memset",
+        "DATATBLS_BuildStatesDataBitMask",
+        "DATATBLS_BuildStatesDataList",
+        "TXT_States_AllocItemTypesStateDataTable"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "D2StatesDataTbls",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_FreeStatesTxtTables",
+      "address": "00618c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00618c90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_FreeStatesTxtTables",
+        "FreeServerMemory",
+        "memset",
+        "STRUCT_FreeTxtLink"
+      ],
+      "usedTypes": [
+        "D2StatesTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_pettype",
+      "address": "00618d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00618d90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_pettype",
+        "STRUCT_CreateTxtLinkStrc",
+        "CompileTxt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_FreePetTypeTxtTables",
+      "address": "00619100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619100"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_FreePetTypeTxtTables",
+        "FreeServerMemory",
+        "STRUCT_FreeTxtLink"
+      ],
+      "usedTypes": [
+        "D2PetTypeTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeTables",
+      "address": "00619140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619140"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "FreeTables",
+        "DATATBLS_FreeMiscTxtTables",
+        "FreeServerMemory",
+        "MISSILETBLS_FreeTxt",
+        "OVERLAYTBLS_FreeOverlayTables",
+        "DATATBLS_FreeSkillsTxtTables",
+        "ITEMTBLS_FreeItemStatCost",
+        "DATATBLS_FreeStatesTxtTables",
+        "STRUCT_FreeTxtLink",
+        "TXT_FreeTxt_Items",
+        "ITEMTBLS_FreeProperties",
+        "ITEMTBLS_FreeMagicAffixes",
+        "ITEMTBLS_FreeRareAffixes",
+        "ITEMTBLS_FreeUniqueItems",
+        "ITEMTBLS_FreeSetsAndSetItems",
+        "thunk_UnloadBin_Lvl",
+        "thunk_UnloadBin_LvlPrest",
+        "thunk_UnloadBin_LvlType",
+        "thunk_UnloadBin_LvlWarp",
+        "thunk_UnloadBin_LvlMaze",
+        "FreeGambleTable",
+        "ITEMTBLS_FreeItemTypes",
+        "MONSTERTBLS_FreeMonPlaceTxt",
+        "FreeTokenTables",
+        "ANIMDATA_FreeAnimDataRecord",
+        "MONSTERTBLS_FreeMonUModTxt",
+        "LVLTBLS_FreeLevelsTxt",
+        "LVLTBLS_FreeLevelDefsTxt",
+        "thunk_UnloadBin_DataTbls",
+        "TXT_LvlTbls_Free",
+        "TXT_LvlWarp_Free",
+        "TXT_FreeTxt_LvlMaze",
+        "TXT_FreeExpansionLvlTbls",
+        "TXT_FreeTxt_LvlSub",
+        "FreeAutoMapLvlTbls",
+        "TXT_FreeTxt_Objects",
+        "OBJECTTBLS_FreeObjGroupTxt",
+        "TXT_Shrines_Free",
+        "FreeInventoryTable",
+        "ITEMTBLS_FreeRunes",
+        "FIELDTBLS_FreeFieldData",
+        "FreeBeltsTxt",
+        "thunk_UnloadBin_MonStats",
+        "FreeArenaTxt",
+        "CUBE_FreeCubeMainTable",
+        "FreeCharTemplateTxt",
+        "FIELDTBLS_FreeTables_NoOp"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2ExperienceTxt",
+        "D2PetTypeTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_InitTxtFiles",
+      "address": "00619300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00619300"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "TXT_InitTxtFiles",
+        "TXT_AllocTxt_VariousSmallTables",
+        "TXT_AllocTxt_itemtypes",
+        "TXT_AllocTxt_montype",
+        "TXT_AllocTxt_sounds",
+        "TXT_AllocTxt_pettype",
+        "TXT_AllocTxt_overlay",
+        "TXT_AllocTxt_itemstatcost",
+        "TXT_AllocTxt_properties",
+        "TXT_AllocTxt_missiles",
+        "TXT_AllocTxt_states",
+        "TXT_AllocTxt_skill_skilldesc",
+        "TXT_AllocTxt_charstats",
+        "TXT_LoadArenaTxt",
+        "TXT_LoadCharTemplateTxt",
+        "TXT_AllocTxt_items",
+        "TXT_AllocTxt_MagicAffixes",
+        "TXT_AllocTxt_RareAffixes",
+        "TXT_AllocTxt_uniqueitems",
+        "TXT_AllocTxt_setitems",
+        "TXT_AllocTxt_gems",
+        "TXT_AllocTxt_books",
+        "TXT_AllocTxt_qualityitems",
+        "TXT_AllocTxt_lowqualityitems",
+        "TXT_AllocTxt_runes",
+        "TXT_AllocTxt_itemratio",
+        "TXT_AllocTxt_gamble",
+        "TXT_AllocTxt_plrmode_plrtype",
+        "TXT_AllocTxt_monmode",
+        "TXT_AllocTxt_objtype_objmode",
+        "TXT_AllocTxt_composit",
+        "TXT_AllocTxt_armtype",
+        "TXT_AllocTxt_experience",
+        "TXT_AllocTxt_AnimTbls",
+        "TXT_AllocMonsterTables",
+        "TXT_AllocTxt_levels",
+        "TXT_AllocTxt_leveldefs",
+        "TXT_AllocTxt_lvltypes",
+        "TXT_LoadExpansionLvlTbls",
+        "TXT_AllocTxt_lvlprest",
+        "TXT_AllocTxt_lvlwarp",
+        "TXT_AllocTxt_lvlmaze",
+        "TXT_AllocTxt_lvlsub",
+        "TXT_AllocTxt_automap",
+        "TXT_AllocTxt_objects",
+        "TXT_AllocTxt_objgroup",
+        "TXT_AllocTxt_shrines",
+        "TXT_AllocTxt_inventory",
+        "FIELDTBLS_LoadExpFieldFile",
+        "LoadBeltsTxt",
+        "DATATBLS_CompileBodyLocsTxt",
+        "FIELDTBLS_InitTxtFiles_NoOp",
+        "CUBE_LoadCubeMainTable",
+        "TXT_AllocTxt_difficultylevels",
+        "TXT_FreeTxt_sounds"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

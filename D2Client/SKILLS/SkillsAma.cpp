@@ -47,8 +47,8 @@
 
 namespace D2Client::SKILLS::SkillsAma {
 
-int32_t __fastcall GetTxtSkillParam5(int32_t nParam) {
-    D2SkillsTxt* pSkillsTxt = nParam >= 0 && nParam < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nParam : nullptr;
+int32_t __fastcall GetTxtSkillParam5(int32_t nSkillId) {
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -430,7 +430,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(D2UnitStrc * pUnit, eD2S
 // Client-side do-function for the Amazon Strafe skill. Each call fires one missile (cltmissilea or cltmissileb based on weapon class) toward the current or nearest valid target within aura range, decrements the remaining shot counter (SKILL_GetParam1), and if shots remain, finds the next closest target (excluding the one just shot), redirects the unit's dynamic path toward it, and updates the stored target GUID/type in skill params 2/3. Returns FALSE when no target or no shots left.
 BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int pCltMissileId;
-    eMissilesId eVar1;
+    eMissilesId eMissileId;
     D2SkillArgStrc sSkillArg;
     int nTargetX2;
     int nTargetY;
@@ -465,10 +465,10 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
 
     nPrevTargetGUID = (eMissilesId)pSkillsTxt->cltmissile[1];
     uint32_t nWeaponClass = D2Common::Units::GetWeaponClass(pUnit);
-    if (nWeaponClass == 1 || (eVar1 = (int)pSkillsTxt->cltmissile[2] , pSkillsTxt->cltmissile[2] < 0)) {
-      eVar1 = nPrevTargetGUID;
+    if (nWeaponClass == 1 || (eMissileId = (int)pSkillsTxt->cltmissile[2] , pSkillsTxt->cltmissile[2] < 0)) {
+      eMissileId = nPrevTargetGUID;
     }
-    if (!((int)eVar1 >= 0 && (int)eVar1 < sgptDataTable->nTxtMissilesSize)) {
+    if (!((int)eMissileId >= 0 && (int)eMissileId < sgptDataTable->nTxtMissilesSize)) {
       return 0;
     }
 
@@ -481,7 +481,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
     sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nUnitX = nTargetY;
     sSkillArg.nUnitY = nTargetX2;
-    sSkillArg.nMissileTxtNo = eVar1;
+    sSkillArg.nMissileTxtNo = eMissileId;
     UNIT::Missile::MakeMissile(&sSkillArg);
     D2Common::Skills::SKILL_SetParam1(pSkill, nShotsLeft - 1);
     if (!(nShotsLeft - 1 > 0)) {

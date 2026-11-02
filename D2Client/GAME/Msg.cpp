@@ -20,6 +20,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Inv.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -67,9 +68,9 @@ void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName) {
 
     uint32_t bIsArena = CLIENT_IsArenaMode();
     if (bIsArena) {
-      eD2PlayerClassIDDWORD eVar1;
-      eVar1 = CLIENT_GetDefaultCharClass();
-      packet.nCharClass = (uint8_t)eVar1;
+      eD2PlayerClassIDDWORD eCharClass;
+      eCharClass = CLIENT_GetDefaultCharClass();
+      packet.nCharClass = (uint8_t)eCharClass;
     } else {
       packet.nCharClass = nD2PlayerClassID;
     }
@@ -214,9 +215,9 @@ void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash)
     packet.nLanguageCode = (uint8_t)nLangOrArena;
     nLangOrArena = CLIENT_IsArenaMode();
     if (nLangOrArena) {
-      eD2PlayerClassIDDWORD eVar1;
-      eVar1 = CLIENT_GetDefaultCharClass();
-      packet.nCharClass = (uint8_t)eVar1;
+      eD2PlayerClassIDDWORD eCharClass;
+      eCharClass = CLIENT_GetDefaultCharClass();
+      packet.nCharClass = (uint8_t)eCharClass;
     } else {
       packet.nCharClass = nD2PlayerClassID;
     }
@@ -270,13 +271,13 @@ static uint8_t * MSG_ReadSaveFileToBuffer(size_t * pnFileSize) {
     return (uint8_t*)pBuffer;
 }
 
-void __fastcall LOADING_SetProgressRatio(int32_t nParam1, int32_t nParam2) {
-    if (!nParam2) {
-      gnLoadingProgressRatio = nParam2;
+void __fastcall LOADING_SetProgressRatio(int32_t nProgress, int32_t nTotal) {
+    if (!nTotal) {
+      gnLoadingProgressRatio = nTotal;
       return;
     }
 
-    gnLoadingProgressRatio = (nParam1 << 8) / nParam2;
+    gnLoadingProgressRatio = (nProgress << 8) / nTotal;
 }
 
 int __stdcall LOADING_GetProgressRatio() {
@@ -318,7 +319,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
     size_t nFileSize = nChunkIndex;
     int nTotalChunks = (int)nChunkIndex / 0xff;
     nChunkIndex = 0;
-    uint8_t* pbVar1 = pReadPtr;
+    uint8_t* pSrcByte = pReadPtr;
     if (nTotalChunks > 0) {
       do {
         sPacket.nId = 'l';
@@ -326,9 +327,9 @@ void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
         sPacket.nChunkSize = 0xff;
         nBytesCopied = 0;
         do {
-          sPacket.aData[nBytesCopied] = *pbVar1;
+          sPacket.aData[nBytesCopied] = *pSrcByte;
           nBytesCopied++;
-          pbVar1++;
+          pSrcByte++;
         } while (nBytesCopied < 0xff);
 
         D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(0x106, 0, (char*)&sPacket);
@@ -349,9 +350,9 @@ void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
     sPacket.nChunkSize = (uint8_t)nBytesCopied;
     if (nBytesCopied > 0) {
       do {
-        sPacket.aData[nTailBytes] = *pbVar1;
+        sPacket.aData[nTailBytes] = *pSrcByte;
         nTailBytes++;
-        pbVar1++;
+        pSrcByte++;
       } while (nTailBytes < nBytesCopied);
     }
 
@@ -572,28 +573,28 @@ void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT_SHORT(uint8_t nPacketId, 
     NET_D2GS_CLIENT_Send(&packet.nId, 9);
 }
 
-void __fastcall NET_D2GS_CLIENT_Send_INT(uint8_t nId, int32_t nParam) {
-    D2GSPacketClt_CMD_INT local_c;
-    local_c.nId = nId;
-    local_c.nArg1 = nParam;
-    NET_D2GS_CLIENT_Send(&local_c.nId, 5);
+void __fastcall NET_D2GS_CLIENT_Send_INT(uint8_t nId, int32_t nArg1) {
+    D2GSPacketClt_CMD_INT sPacket;
+    sPacket.nId = nId;
+    sPacket.nArg1 = nArg1;
+    NET_D2GS_CLIENT_Send(&sPacket.nId, 5);
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT(uint8_t nPacketId, int32_t nArg1, int32_t nArg2) {
-    D2GSPacketClt_CMD_INT_INT local_10;
-    local_10.nId = nPacketId;
-    local_10.nArg1 = nArg1;
-    local_10.nArg2 = nArg2;
-    NET_D2GS_CLIENT_Send(&local_10.nId, 9);
+    D2GSPacketClt_CMD_INT_INT sPacket;
+    sPacket.nId = nPacketId;
+    sPacket.nArg1 = nArg1;
+    sPacket.nArg2 = nArg2;
+    NET_D2GS_CLIENT_Send(&sPacket.nId, 9);
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT(uint8_t nPacketId, int32_t nArg1, int32_t nArg2, int32_t nArg3) {
-    D2GSPacketClt_CMD_INT_INT_INT local_14;
-    local_14.nArg1 = nArg1;
-    local_14.nId = nPacketId;
-    local_14.nArg2 = nArg2;
-    local_14.nArg3 = nArg3;
-    NET_D2GS_CLIENT_Send(&local_14.nId, 0xd);
+    D2GSPacketClt_CMD_INT_INT_INT sPacket;
+    sPacket.nArg1 = nArg1;
+    sPacket.nId = nPacketId;
+    sPacket.nArg2 = nArg2;
+    sPacket.nArg3 = nArg3;
+    NET_D2GS_CLIENT_Send(&sPacket.nId, 0xd);
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT_INT(uint8_t nPacketId, int32_t nUnitType, int32_t nUnitGUID, int32_t nTargetX, int32_t nTargetY) {
@@ -607,26 +608,26 @@ void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT_INT(uint8_t nPacketId, int32_t 
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_0x5D(int nActionType, uint32_t nPlayerGUID, int32_t bToggle) {
-    D2GSPacketClt0x5D local_c;
-    local_c.bToggle = bToggle != 0;
-    local_c.nId = 0x5d;
-    local_c.nActionType = (uint8_t)nActionType;
-    *(uint8_t*)(char*)&local_c.nPlayerGUID = (uint8_t)nPlayerGUID;
-    *(uint16_t*)((char*)&local_c.nPlayerGUID + 1) = (uint16_t)(nPlayerGUID >> 8);
-    *(uint8_t*)((char*)&local_c.nPlayerGUID + 3) = (uint8_t)(nPlayerGUID >> 0x18);
-    NET_D2GS_CLIENT_Send(&local_c.nId, 7);
+    D2GSPacketClt0x5D sPacket;
+    sPacket.bToggle = bToggle != 0;
+    sPacket.nId = 0x5d;
+    sPacket.nActionType = (uint8_t)nActionType;
+    *(uint8_t*)(char*)&sPacket.nPlayerGUID = (uint8_t)nPlayerGUID;
+    *(uint16_t*)((char*)&sPacket.nPlayerGUID + 1) = (uint16_t)(nPlayerGUID >> 8);
+    *(uint8_t*)((char*)&sPacket.nPlayerGUID + 3) = (uint8_t)(nPlayerGUID >> 0x18);
+    NET_D2GS_CLIENT_Send(&sPacket.nId, 7);
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_0x5E(int nActionType, int32_t nPlayerGUID) {
-    D2GSPacketClt0x5E local_c;
-    local_c.nId = 0x5e;
-    local_c.nActionType = (uint8_t)nActionType;
-    local_c.nPlayerGUID = nPlayerGUID;
-    NET_D2GS_CLIENT_Send(&local_c.nId, 6);
+    D2GSPacketClt0x5E sPacket;
+    sPacket.nId = 0x5e;
+    sPacket.nActionType = (uint8_t)nActionType;
+    sPacket.nPlayerGUID = nPlayerGUID;
+    NET_D2GS_CLIENT_Send(&sPacket.nId, 6);
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_Chat(D2ChatPacketBuildStrc * pChatPacket) {
-    char* pcVar1;
+    char* pTerminator;
     D2ChatPacketSendStrc sPacket;
     sPacket.nCmd = pChatPacket->nCmd;
     sPacket.nMsgType = pChatPacket->nMsgType;
@@ -635,14 +636,14 @@ void __fastcall NET_D2GS_CLIENT_Send_Chat(D2ChatPacketBuildStrc * pChatPacket) {
     if (pChatPacket->szTarget) {
       uint32_t nTargetLen;
       nTargetLen = Storm::Source::SSTR::SStrCopy(sPacket.abData + nMsgLen + 1, pChatPacket->szTarget, 0x10);
-      pcVar1 = sPacket.abData + nTargetLen + nMsgLen + 2;
+      pTerminator = sPacket.abData + nTargetLen + nMsgLen + 2;
     } else {
       sPacket.abData[nMsgLen + 1] = '\0';
-      pcVar1 = sPacket.abData + nMsgLen + 2;
+      pTerminator = sPacket.abData + nMsgLen + 2;
     }
 
-    *pcVar1 = '\0';
-    NET_D2GS_CLIENT_Send(&sPacket.nCmd, (int32_t)(pcVar1 + (1 - (uintptr_t)&sPacket)));
+    *pTerminator = '\0';
+    NET_D2GS_CLIENT_Send(&sPacket.nCmd, (int32_t)(pTerminator + (1 - (uintptr_t)&sPacket)));
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_0x66(void * pData, uint32_t nLen) {

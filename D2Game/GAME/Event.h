@@ -2661,7 +2661,7 @@ struct __attribute__((packed)) D2EventStrc {
 namespace D2Game::GAME::Event {
 
 // Function declarations
-struct D2TimerStrc * * __stdcall _UnusedGetFromList(eD2UnitType eUnitType, uint32_t nParam, ::SGAMEDATA * pGame);
+struct D2TimerStrc * * __stdcall _UnusedGetFromList(eD2UnitType eUnitType, uint32_t nUnitGUID, ::SGAMEDATA * pGame);
 // Walks pUnit's timer list (UNIT::SUnit::GetTimerList, then pNextTimerOnUnit) and
 // removes and recycles (EVENT_RemoveAndRecycleTimer) every timer whose nTimerType equals
 // nTimerType and, when nArg1 != 0, whose nArg1 (D2TimerStrc+0x14) equals nArg1. It fires

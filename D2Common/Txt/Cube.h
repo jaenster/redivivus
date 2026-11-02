@@ -46,7 +46,7 @@ struct D2CubeOutputStrc {
     /* 0x0B */ uint8_t nILvl;
     /* 0x0C */ uint16_t wPrefixId[3];
     /* 0x12 */ uint16_t wSuffixId[3];
-    /* 0x18 */ uint8_t unk0x18[60];
+    /* 0x18 */ uint8_t aMods[60];
 };
 
 #pragma pack(push, 1)
@@ -83,7 +83,7 @@ void __stdcall CUBE_FreeCubeMainTable();
 struct D2CubeMainTxt * __stdcall CUBE_GetRecipeByIndex(int32_t nIndex);
 // Returns the total number of cube recipes loaded from CubMain.txt. Returns nTxtCubeMainSize global.
 int32_t __stdcall CUBE_GetRecipeCount();
-void __stdcall nullsub(struct D2UnitStrc * dwParam1, uint32_t dwParam2);
+void __stdcall nullsub(struct D2UnitStrc * pUnit, uint32_t dwParam2);
 void __stdcall FIELDTBLS_AllocPlayerData_NoOp(struct D2UnitStrc * dwUnused);
 void __fastcall FIELDTBLS_FreePlayerData_STUB(struct D2UnitStrc * pUnit);
 void __fastcall FIELDTBLS_InitTxtFiles_NoOp(struct D2PoolManagerStrc * pMemory);

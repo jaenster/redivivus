@@ -20,7 +20,6 @@
 #include "D2Client/ClientModeInGame.h"
 #include "D2Client/Cursor.h"
 #include "D2Client/D2BNetGatewayAccessStr.h"
-#include "D2Client/D2Client.h"
 #include "D2Client/D2GSPacketSrv0x2A.h"
 #include "D2Client/D2GfxMemoryStrc.h"
 #include "D2Client/D2GfxSettingsStrc.h"
@@ -44,6 +43,7 @@
 #include "D2Client/UI/Panel.h"
 #include "D2Client/UI/Path.h"
 #include "D2Client/UI/QuestLog.h"
+#include "D2Client/UI/ShowItems.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/SpellSel.h"
 #include "D2Client/UI/Text.h"
@@ -119,7 +119,6 @@
 #include "Storm/Source/SErr.h"
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
-#include "Storm/_unnamespaced.h"
 #include "Storm/H/stpl.h"
 
 // Forward declarations
@@ -1239,8 +1238,6 @@ extern char s_English_006cc81c[8];
 extern char gszHeapTagOperatorNew[4];
 // lpDefault parameter of GetPrivateProfileStringA
 extern char lpDefault_006cc837[1];
-// lpCaption parameter of MessageBoxA
-extern LPCSTR lpCaption_006cc848;
 extern uint8_t gbChatDlgUpdateMarker;
 extern char gbCompressionDecoderMarker[2];
 extern char s_Dec_006ccb00[4];

@@ -1,0 +1,107 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/D2GFX.cpp",
+  "functions": [
+    {
+      "name": "UI_Init",
+      "address": "004f8fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f8fe0"
+        }
+      ],
+      "namespace": "D2Win::D2GFX",
+      "calledFunctions": [
+        "UI_Init",
+        "D2WINFONT_InitFontSystem",
+        "SetAndReturnLastFont",
+        "D2WINLIST_LoadPentSpinCursor",
+        "D2COMP_LoadAllItemPalettes",
+        "GetHwnd",
+        "D2WIN_RegisterWindowHandlerArray",
+        "D2WINPAL_LoadActPalette"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_CheckVideoMode",
+      "address": "004f9030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9030"
+        }
+      ],
+      "namespace": "D2Win::D2GFX",
+      "calledFunctions": [
+        "D2GFX_CheckVideoMode",
+        "SPRITECACHE_Shutdown",
+        "D2GFX_DestroyWindow"
+      ]
+    },
+    {
+      "name": "BeginCutSceneAtResolutionMode0",
+      "address": "004f9050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9050"
+        }
+      ],
+      "namespace": "D2Win::D2GFX",
+      "calledFunctions": [
+        "BeginCutSceneAtResolutionMode0",
+        "D2GFX_BeginCutScene"
+      ]
+    },
+    {
+      "name": "SetResolutionModeWithEndCutScene",
+      "address": "004f9060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f9060"
+        }
+      ],
+      "namespace": "D2Win::D2GFX",
+      "calledFunctions": [
+        "SetResolutionModeWithEndCutScene",
+        "SPRITECACHE_Shutdown",
+        "EndCutScene",
+        "GFX_InitCelDataCache"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_SetVideoMode",
+      "address": "004f90a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f90a0"
+        }
+      ],
+      "namespace": "D2Win::D2GFX",
+      "calledFunctions": [
+        "D2GFX_SetVideoMode",
+        "GetHwnd",
+        "D2GFX_GetScreenSize",
+        "SPRITECACHE_Shutdown",
+        "D2GFX_ResizeWindow",
+        "LOGFILE_WriteStringToFile",
+        "exit",
+        "D2WINPALETTE_SetPaletteIndex",
+        "GFX_InitCelDataCache"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    }
+  ]
+}

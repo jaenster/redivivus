@@ -44,7 +44,7 @@ namespace D2Client::Draw::LightMap {
 // Function declarations
 struct D2LightMapStrc * __fastcall AllocLightMap(struct D2UnitStrc * pUnit, int32_t nLightType, int32_t nDiameter, uint8_t nGamma, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 void __fastcall SetRadiusY(struct D2LightMapStrc * pLightMap, int32_t nValue);
-void __fastcall LIGHTMAP_SetRadius(struct D2LightMapStrc * pLightMap, int32_t nParam);
+void __fastcall LIGHTMAP_SetRadius(struct D2LightMapStrc * pLightMap, int32_t nDiameter);
 int32_t __fastcall GetRadiusX(struct D2LightMapStrc * pLightMap);
 void __fastcall SetRGB(struct D2LightMapStrc * pLightMap, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 void __fastcall FreeLightMap(struct D2LightMapStrc * pLightMap);

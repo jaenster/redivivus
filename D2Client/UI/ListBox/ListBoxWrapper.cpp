@@ -52,48 +52,48 @@ void __thiscall Destructor(::ListBoxWrapper * pThis) {
 }
 
 int __thiscall OnDownArrow(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnDownArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnDownArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnUpArrow(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnUpArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnUpArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnRightArrow(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnRightArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnRightArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnLeftArrow(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnLeftArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnLeftArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseDown(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseDown(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseDown(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseUp(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseUp(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseUp(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseMove(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseMove(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseMove(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnChar(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnChar(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnChar(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall GetValue(::ListBoxWrapper * pThis) {
-    int iVar1 = pThis->pImplementation->pVtable->GetValue(pThis->pImplementation);
-    return iVar1;
+    int nValue = pThis->pImplementation->pVtable->GetValue(pThis->pImplementation);
+    return nValue;
 }
 
 void __thiscall Draw(::ListBoxWrapper * pThis) {
@@ -105,13 +105,13 @@ void __thiscall AddItem(::ListBoxWrapper * pThis, uint16_t * wszLine0, uint16_t 
 }
 
 uint32_t __thiscall GetItemUserData(::ListBoxWrapper * pThis, int nIndex) {
-    uint32_t uVar1 = ListBoxImplementation::GetItemUserData(pThis->pImplementation, nIndex);
-    return uVar1;
+    uint32_t dwUserData = ListBoxImplementation::GetItemUserData(pThis->pImplementation, nIndex);
+    return dwUserData;
 }
 
 int __thiscall GetItemCount(::ListBoxWrapper * pThis) {
-    int iVar1 = pThis->pImplementation->pVtable->GetItemCount(pThis->pImplementation);
-    return iVar1;
+    int nItemCount = pThis->pImplementation->pVtable->GetItemCount(pThis->pImplementation);
+    return nItemCount;
 }
 
 void __thiscall Clear(::ListBoxWrapper * pThis) {
@@ -119,8 +119,8 @@ void __thiscall Clear(::ListBoxWrapper * pThis) {
 }
 
 int __thiscall OnMouseWheel(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseWheel(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseWheel(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 ::ListBoxWrapper * __thiscall Constructor(::ListBoxWrapper * pThis, int nPosX, int nPosY, int nWidth, int nHeight, int nItemSpacing, int nDefaultColor, int nDefaultFont, fpListBoxItemActivated pfnOnItemActivated, bool bTallRows) {

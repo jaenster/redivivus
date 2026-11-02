@@ -478,9 +478,9 @@ template<> void TSExportTableSimple<CELLIST, HCELLIST__*, 0>::Delete(::CELLIST *
 template<> void TSHashTable<CELLIST, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly) {
     TSExplicitList<::CELLIST, -572662307>* pTVar1;
     ::CELLIST* ptr;
-    int iVar2;
     int* pNode;
     int* pBackLink;
+    int nLinkOffset;
     int nNext;
     uint32_t uLinkOffset;
     this->nFullnessIndicator = 0;
@@ -498,9 +498,9 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::InternalClear(int32_t bUnlin
           break;
         }
         if (bUnlinkOnly) {
-          iVar2 = pTVar1[nBucketIdx].m_linkoffset;
-          nNext = *(int*)((uintptr_t)&ptr->m_hashval + iVar2);
-          pNode = (int*)((uintptr_t)&ptr->m_hashval + iVar2);
+          nLinkOffset = pTVar1[nBucketIdx].m_linkoffset;
+          nNext = *(int*)((uintptr_t)&ptr->m_hashval + nLinkOffset);
+          pNode = (int*)((uintptr_t)&ptr->m_hashval + nLinkOffset);
           if (nNext) {
             uLinkOffset = pNode[1];
             if ((int)uLinkOffset < 0) {

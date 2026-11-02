@@ -15,7 +15,7 @@ typedef uint32_t eD2UnitType;
 struct __attribute__((packed)) D2LightMapStrc {
     /* 0x00 */ eD2UnitType eUnitType;
     /* 0x04 */ DWORD nUnitGUID;
-    /* 0x08 */ uint8_t bUnknown;
+    /* 0x08 */ uint8_t bServerSideUnit;
     /* 0x09 */ uint8_t field_0x9;
     /* 0x0A */ uint8_t field_0xa;
     /* 0x0B */ uint8_t field_0xb;

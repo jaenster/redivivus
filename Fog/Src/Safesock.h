@@ -60,7 +60,7 @@ int __fastcall closeSocket(SOCKET hSocket);
 BOOL __stdcall StartUp();
 int __stdcall WSACleanup();
 // @sourcefile .\Src\Safesock.cpp
-struct D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szConnectionAlias, uint32_t nParam);
+struct D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szConnectionAlias, uint32_t dwFlags);
 // @sourcefile .\Src\Safesock.cpp
 void __fastcall Free(struct D2NetDataStrc * pNetData);
 int32_t __fastcall WSASocket2_Read(struct D2NetDataStrc * pNetData, char * pBuffer, size_t nSize);

@@ -50,7 +50,7 @@ void __stdcall thunk_CMD_UseBeltSlot4();
 void __stdcall LoadPanelImages();
 void __stdcall FreePanelImages();
 void __stdcall PANEL_DrawHostileIndicator();
-void __fastcall SPELLSEL_DrawSkillIcon(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, int32_t nScreenX, int32_t nScreenY, int32_t nParam);
+void __fastcall SPELLSEL_DrawSkillIcon(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, int32_t nScreenX, int32_t nScreenY, int32_t bIsLeftHand);
 void __stdcall PANEL_DrawSkillIcons();
 void __stdcall PANEL_DrawHealthOrb();
 void __stdcall PANEL_DrawManaOrb();

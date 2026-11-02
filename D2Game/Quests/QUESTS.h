@@ -264,7 +264,7 @@ uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, struct
 struct D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, POINT * pPoint, int32_t nAct, int32_t nSuperUnique);
 void __fastcall QUEST_DispatchPresetObjectLoad(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2MapAIStrc * pMapAI);
 void __fastcall AttachToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, BOOL bExpectedResult);
-void __stdcall QUEST_InitializeQuestDataStruct(uint32_t dwParam1, uint32_t dwParam2, bool bIsNotIntroduction, struct D2QuestDataStrc * pQuestData);
+void __stdcall QUEST_InitializeQuestDataStruct(uint32_t pGame, uint32_t nQuestNoInternal, bool bIsNotIntroduction, struct D2QuestDataStrc * pQuestData);
 // Builds the game's quest-state object graph at game creation. Allocates one 0xF8-byte D2QuestDataStrc per entry in aQuestInitDataExtended (the real act quests) and per entry in QuestInitDataSimple (sub-quests/QUESTINT_SimpleQuest1+), linking them into a singly-linked list via pPrev, stamping nAct/nQuestNoInternal/pGame and calling each entry's fpQuestInit/fpQuestData callback (validated with IsBadCodePtr). Then allocates the 0x24-byte D2QuestControlStrc head (pQuestData=list, fresh seed derived from the game seed with nSeedHigh=0x29A, a quest-flag BitBuffer) and stores it in pGame->pQuestControl. Halts via ERROR_UnrecoverableInternalError on a bad callback pointer.
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall AllocQuestControl(::SGAMEDATA * pGame);
@@ -285,7 +285,7 @@ struct D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, s
 void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonster, int32_t nDestinationAct, int32_t nUnused);
 // Handles the two completion paths for A3Q7 Khalim's Will. For event code 0x66 (player assembled the flail): if not already allowed into Act 4, marks QUEST_KhalimsWill Completed+JustCompleted, removes all five Khalim's-body-part quest items from inventory, grants the Act 3 transition reward, and sends a 0x28 quest-info packet plus a 0x61 CanGoToAct(4) packet to the client. For any other code delegates to Q24_HandleKhalimsWillCompletion (game-wide broadcast path).
 // @sourcefile .\QUESTS\QUESTS.CPP
-void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t param_1, uint32_t nEventCode);
+void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nLevelId, uint32_t nEventCode);
 BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnitFallback);
 // Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
 void __stdcall QUEST_AddPlayerGUIDToTrackingList(uint32_t nPlayerGUID, int32_t nParam1, int32_t nParam2);
@@ -299,7 +299,7 @@ BYTE __fastcall QUEST_CheckJerhynShouldBlock(::SGAMEDATA * pGame);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 BOOL __fastcall QUEST_ShouldBlockJerhyn(::SGAMEDATA * pGame);
 // A2Q7 server AI logic for the Jerhyn NPC, gating his movement to the palace and the Duriel reveal. Out-params *pdwParam1/*pdwParam2 tell the caller the desired idle/move outcome. Bails (idle: 1,0) unless the Arcane Sanctuary quest is in progress and Seven Tombs is appropriately staged. When conditions hold it walks Jerhyn toward the recorded target coords (WalkToCoords), and once close locates the Duriel-tomb portal object, finds free neighbouring-room coordinates and relocates Jerhyn there (SUNIT_RelocateUnit), updating the A2Q4 quest-specific data flag bytes that track his progress.
-void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pdwParam1, uint32_t * pdwParam2);
+void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pbRunDefaultAi, uint32_t * pbDelayNextMove);
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(struct D2ObjectOperateFnArg * pOperation);
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(struct D2ObjectOperateFnArg * pOperation);
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(struct D2ObjectOperateFnArg * pOperation);

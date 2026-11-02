@@ -192,7 +192,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf);
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef);
 void __fastcall LINKEDLIST_UnlinkAll(int32_t pList);
 void __fastcall LINKEDLIST_LinkBefore(void * pNode);
-void __fastcall LINKEDLIST_NodeDestructor(void * pnParam);
+void __fastcall LINKEDLIST_NodeDestructor(void * pNode);
 int * * __thiscall HUFFMAN_AllocateNode(int32_t pThis, int32_t nInsertMode);
 void __thiscall COMPRESS_InitEncoderContext(struct D2CompressEncoderStrc * pEncoder, int * * pTableSel);
 void __thiscall COMPRESS_UpdateFrequencies(struct D2CompressEncoderStrc * pEncoder, struct D2CompressHuffNodeStrc * pSymbolNode);
@@ -210,14 +210,14 @@ void __fastcall SCOMP_HuffmanCompress(uint8_t * pBitStreamCtx, uint32_t * pnByte
 // @blizzard HuffmanDecompress (SCOMP.CPP)
 void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_t * pBitStreamCtx, uint32_t dwFlags, uint32_t dwParam);
 // PKWARE Data Compression Library explode(): callback-driven decompressor.
-uint8_t PKWARE_explode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, struct TDcmpStruct * pWorkBuf, void * pParam);
+uint8_t PKWARE_explode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, struct TDcmpStruct * pWorkBuf, void * pUserData);
 uint32_t PKWARE_ExplodeStream(struct TDcmpStruct * pItemData);
 uint32_t PKWARE_ProcessItemInventory(struct TDcmpStruct * pDcmp);
-int PKWARE_GetItemDataValue(struct TDcmpStruct * pClientSideData, int nParam);
-BOOL PKWARE_CheckItemDataRange(struct TDcmpStruct * pClientSideData, uint32_t nParam);
+int PKWARE_GetItemDataValue(struct TDcmpStruct * pClientSideData, int nMatchLength);
+BOOL PKWARE_CheckItemDataRange(struct TDcmpStruct * pClientSideData, uint32_t nBitCount);
 void PKWARE_CompareItemValues(int nCount, uint8_t * pBitsTable, uint8_t * pBaseTable, char * pOutTable);
 void PKWARE_IterateItemData(struct TDcmpStruct * pState);
-void PKWARE_SetMemoryValue(uint32_t * pdwParam1, uint32_t * pdwParam2, uint32_t nParam);
+void PKWARE_SetMemoryValue(uint32_t * pDst, uint32_t * pSrc, uint32_t nSize);
 // PKWARE Data Compression Library implode(): the callback-driven compressor, sibling of
 // PKWARE_explode at 006b01b0.
 // @basis six parameters in DCL implode order - (read callback, write callback, work buffer, user param,
@@ -228,12 +228,12 @@ void PKWARE_SetMemoryValue(uint32_t * pdwParam1, uint32_t * pdwParam2, uint32_t 
 // belongs to no other function in the DCL.
 // @note Still filed under compiler:: for the same reason as PKWARE_explode - the DCL is third-party
 // code statically linked into several modules and which translation unit owns it is not established.
-uint32_t PKWARE_implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, struct TCmpStruct * pWorkBuf, void * pParam, uint32_t * pnType, uint32_t * pnDictSize);
-void PKWARE_ProcessMemoryBlock(struct TCmpStruct * pnParam);
+uint32_t PKWARE_implode(pfnPkwareRead pfnRead, pfnPkwareWrite pfnWrite, struct TCmpStruct * pWorkBuf, void * pUserData, uint32_t * pnType, uint32_t * pnDictSize);
+void PKWARE_ProcessMemoryBlock(struct TCmpStruct * pCmp);
 int PKWARE_ParseByteStream(struct TCmpStruct * pCmpState, uint8_t * pbSrcPos);
 void PKWARE_CalculateOffset(struct TCmpStruct * pCmp, uint32_t nBitCount, uint32_t nBitValue);
-void PKWARE_CopyMemoryValue(uint32_t * pdwParam1, uint32_t * pdwParam2, uint32_t nParam);
-void PKWARE_SetByteValue(uint32_t * pnParam, uint8_t bParam, uint32_t nParam);
+void PKWARE_CopyMemoryValue(uint32_t * pDst, uint32_t * pSrc, uint32_t nSize);
+void PKWARE_SetByteValue(uint32_t * pDst, uint8_t byFill, uint32_t nSize);
 void PKWARE_ProcessBuffer(struct TCmpStruct * pCmp);
 void PKWARE_CopyBufferData(struct TCmpStruct * pCmp, uint8_t * pbStart, uint8_t * pbEnd);
 void StaticInit_6ca8c0();

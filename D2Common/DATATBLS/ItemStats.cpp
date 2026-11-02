@@ -117,12 +117,12 @@ int * __stdcall STATES_AssertGetGfxFlags(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    int* piVar1 = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
-    return piVar1;
+    int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
+    return pGfxFlags;
 }
 
 // Splits a unit's active state bitmask into server-side and GFX-side halves based on context. Uses pSingleStateDataTbl[0xd] (player) or [0xe] (non-player) when nParam==0, and [0xf] when nParam!=0, masking the state flags array so only context-relevant states remain in the server copy while visual-only states are ORed into the GFX flags. Calls ROOM_LinkUnitToUpdateList after filtering (unless non-player with nParam==0).
-void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t nParam) {
+void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t bIsBoss) {
     int i;
     int j;
     int nGfxOffset;
@@ -135,7 +135,7 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t nParam) 
 
     int nDwordCount = sgptDataTable->nTxtStatesSize + 0x1f;
     nDwordCount = nDwordCount / 32;
-    if (nParam) {
+    if (bIsBoss) {
       if (nDwordCount > 0) {
         nGfxOffset = (int)pGfxFlags - (int)pStateFlags;
         j = 0;
@@ -186,8 +186,8 @@ void __stdcall STATES_FilterStatesByContext(D2UnitStrc * pUnit, int32_t nParam) 
 }
 
 int * __stdcall thunk_UNIT_GetStateList_StateFlags(D2UnitStrc * pUnit) {
-    int* piVar1 = Stats::StatsEx::GetStateFlags(pUnit);
-    return piVar1;
+    int* pStateFlags = Stats::StatsEx::GetStateFlags(pUnit);
+    return pStateFlags;
 }
 
 static BOOL STATES_HasMatchingStateFlag(D2UnitStrc * pUnit, D2StatesDataTbls * pStatesData) {
@@ -228,12 +228,12 @@ void __stdcall STATES_MoveToGfxFlags(D2UnitStrc * pUnit, uint32_t * pMaskWords) 
     int nGfxOffset = sgptDataTable->nTxtStatesSize + 0x1f;
     int i = 0;
     if (nGfxOffset / 32 > 0) {
-      int iVar1;
-      iVar1 = (int)pGfxFlags - (int)pMaskWords;
+      int nGfxFlagsDelta;
+      nGfxFlagsDelta = (int)pGfxFlags - (int)pMaskWords;
       nGfxOffset = (int)nStateOffset - (int)pMaskWords;
       do {
         i++;
-        pGfxWord = (uint32_t*)(iVar1 + (int)pMaskWords);
+        pGfxWord = (uint32_t*)(nGfxFlagsDelta + (int)pMaskWords);
         *pGfxWord |= *pMaskWords & *(uint32_t*)(nGfxOffset + (int)pMaskWords);
         pGfxWord = (uint32_t*)(nGfxOffset + (int)pMaskWords);
         *pGfxWord &= ~*pMaskWords;
@@ -331,9 +331,9 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray11(eD2States eState) {
     return 0;
 }
 
-uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nParam) {
-    if ((int)nParam >= 0 && (int)nParam < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[0xc]->nStateBitmask[(int)nParam >> 5] & gadwBitMasks[nParam & 0x1f];
+uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nStateId) {
+    if ((int)nStateId >= 0 && (int)nStateId < sgptDataTable->nTxtStatesSize) {
+      return sgptDataTable->pSingleStateDataTbl[0xc]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
     }
 
     return 0;
@@ -415,9 +415,9 @@ BOOL __stdcall STATES_HasCurseState(D2UnitStrc * pUnit) {
     return BVar1;
 }
 
-uint32_t __stdcall ITEMSTATS_CheckStateFlagArray30(uint32_t nParam) {
-    if ((int)nParam >= 0 && (int)nParam < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[0x1e]->nStateBitmask[(int)nParam >> 5] & gadwBitMasks[nParam & 0x1f];
+uint32_t __stdcall ITEMSTATS_CheckStateFlagArray30(uint32_t nStateId) {
+    if ((int)nStateId >= 0 && (int)nStateId < sgptDataTable->nTxtStatesSize) {
+      return sgptDataTable->pSingleStateDataTbl[0x1e]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
     }
 
     return 0;
@@ -428,9 +428,9 @@ BOOL __stdcall STATES_HasMaxState(D2UnitStrc * pUnit) {
     return BVar1;
 }
 
-uint32_t __stdcall ITEMSTATS_CheckStateFlagArray31(uint32_t nParam) {
-    if ((int)nParam >= 0 && (int)nParam < sgptDataTable->nTxtStatesSize) {
-      return sgptDataTable->pSingleStateDataTbl[0x1f]->nStateBitmask[(int)nParam >> 5] & gadwBitMasks[nParam & 0x1f];
+uint32_t __stdcall ITEMSTATS_CheckStateFlagArray31(uint32_t nStateId) {
+    if ((int)nStateId >= 0 && (int)nStateId < sgptDataTable->nTxtStatesSize) {
+      return sgptDataTable->pSingleStateDataTbl[0x1f]->nStateBitmask[(int)nStateId >> 5] & gadwBitMasks[nStateId & 0x1f];
     }
 
     return 0;

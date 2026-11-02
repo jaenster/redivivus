@@ -1,0 +1,24 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/Warden/NWardenClient/Library.cpp",
+  "functions": [
+    {
+      "name": "Constructor",
+      "address": "0047fc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047fc30"
+        }
+      ],
+      "namespace": "D2Client::Warden::NWardenClient::Library",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "Library"
+      ]
+    }
+  ]
+}

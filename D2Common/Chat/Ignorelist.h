@@ -17,7 +17,7 @@ namespace D2Common::Chat::Ignorelist {
 void __stdcall IGNORELIST_Shutdown();
 void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, char * pszDstBuf, int32_t nBufLen);
 void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, int32_t nDstBuf, int32_t nBufLen);
-void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nParam);
+void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize);
 // @sourcefile .\Chat\Ignorelist.cpp
 void __stdcall MISC_InitIgnorelist();
 // Lazy accessor - returns ppIgnoreListVTable, and only when that global is null

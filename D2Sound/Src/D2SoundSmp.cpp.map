@@ -1,0 +1,812 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Sound/Src/D2SoundSmp.cpp",
+  "functions": [
+    {
+      "name": "CallSounds",
+      "address": "00515530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515530"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "CallSounds",
+        "SOUND_GetDirectSoundInitializedFlag",
+        "AllocClientMemory",
+        "memset",
+        "SOUNDSMP_CreateSoundBuffer",
+        "SOUND_sD2SoundSmp_Alloc",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_LoadWavDataIntoBuffer",
+      "address": "005155d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005155d0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_LoadWavDataIntoBuffer",
+        "SOUNDSMP_ParseWavHeader",
+        "SOUNDSMP_WriteToBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "WAVEFORMATEX",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_Play",
+      "address": "005156a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005156a0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_Play",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_IsPlaying",
+      "address": "00515710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515710"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_IsPlaying",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_GetStatus",
+      "address": "00515740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515740"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_GetStatus",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_SetVolume",
+      "address": "005157b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005157b0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_SetVolume",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_GetSoundQualityFlag",
+        "SOUNDSMP_ClampVolume"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_GetVolume",
+      "address": "00515860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515860"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_GetVolume",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_SetPan",
+      "address": "00515890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515890"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_SetPan",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUNDSMP_ClampVolume"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_Set3DPosition",
+      "address": "00515950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515950"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_Set3DPosition",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_GetStreamProgress",
+      "address": "005159b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005159b0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_GetStreamProgress",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SFileDdaGetPos"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_SetFrequency",
+      "address": "00515a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515a30"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_SetFrequency",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_SetMinDistance",
+      "address": "00515a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515a60"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_SetMinDistance",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_SetEaxObstruction",
+      "address": "00515a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515a90"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_SetEaxObstruction",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_GetSoundQualityFlag",
+        "SOUNDSMP_ClampVolume"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_SetEaxRoomLevel",
+      "address": "00515b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515b40"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_SetEaxRoomLevel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_GetEAXEnabledFlag",
+        "SOUND_GetSoundQualityFlag",
+        "SOUNDSMP_ClampVolume"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_IsStreaming",
+      "address": "00515c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515c30"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_IsStreaming",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_StartFade",
+      "address": "00515c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515c60"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_StartFade",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_GetSpeakerConfigFlag",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_SetGlobalVolume",
+      "address": "00515ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515ce0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_SetGlobalVolume",
+        "SOUND_GetSpeakerConfigFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUNDSMP_SetVolume"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "IDirectSound",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_GetEffectiveVolume",
+      "address": "00515d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515d60"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_GetEffectiveVolume",
+        "SOUND_GetSpeakerConfigFlag"
+      ],
+      "usedTypes": [
+        "IDirectSound",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_OpenAndStreamFile",
+      "address": "00515d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515d70"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_OpenAndStreamFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ARCHIVE_OpenD2FileWrap",
+        "SFileDdaBeginEx",
+        "ERRORMANAGER_FCloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_CancelStream",
+      "address": "00515e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515e40"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_CancelStream",
+        "SFileDdaEnd",
+        "ERRORMANAGER_FCloseFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_Stop",
+      "address": "00515ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515ee0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_Stop",
+        "SOUNDSMP_CancelStream",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CleanupSoundBuffer",
+      "address": "00515f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515f50"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "CleanupSoundBuffer",
+        "SOUND_GetSpeakerConfigFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUNDSMP_SetGlobalVolume"
+      ],
+      "usedTypes": [
+        "IDirectSound",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_CheckBufferLost",
+      "address": "00515fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00515fd0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_CheckBufferLost",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUNDSMP_Stop"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_ReleaseInterfaces",
+      "address": "00516070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516070"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_ReleaseInterfaces",
+        "SOUNDSMP_Stop",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "IKsPropertySet"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_Destroy",
+      "address": "005160d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005160d0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_Destroy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUNDSMP_ReleaseInterfaces",
+        "SOUND_sD2SoundSmp_Free",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_Reset",
+      "address": "00516140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516140"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_Reset",
+        "SOUND_GetHardwareAccelerationFlag",
+        "SOUNDSMP_ReleaseInterfaces",
+        "SOUNDSMP_CreateSoundBuffer",
+        "SOUNDSMP_Set3DPosition",
+        "SOUNDSMP_SetEaxObstruction",
+        "SOUNDSMP_SetVolume",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2SOUNDSMP_SoundUpdateThreadProc",
+      "address": "00516250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516250"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "D2SOUNDSMP_SoundUpdateThreadProc",
+        "GetHwnd",
+        "SOUND_GetMusicEnabled",
+        "SOUND_IsAmbientStreaming",
+        "SOUND_PlayNextAmbientSound",
+        "SOUNDSMP_CheckBufferLost",
+        "SOUNDSMP_SetVolume",
+        "GetTickCount",
+        "SOUNDSMP_CancelStream",
+        "SOUNDSMP_WriteToBuffer",
+        "SOUNDSMP_ClearBuffer",
+        "SFileDdaGetPos",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SoundSmpStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_CreateSoundThread",
+      "address": "00516510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516510"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_CreateSoundThread",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_LogVolumeToLinear",
+      "address": "00516570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516570"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_LogVolumeToLinear",
+        "CRT_CILog"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_LinearToLogVolume",
+      "address": "00516590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516590"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_LinearToLogVolume",
+        "CRT_CIPow"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_LogToLinearNoParam",
+      "address": "005165b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005165b0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_LogToLinearNoParam",
+        "CRT_CILog"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_LinearToLogNoParam",
+      "address": "005165d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005165d0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_LinearToLogNoParam",
+        "CRT_CIPow"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_ClampVolume",
+      "address": "005165f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005165f0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_ClampVolume",
+        "CRT_CILog10"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_ClampAttenuation",
+      "address": "00516670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516670"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_ClampAttenuation",
+        "CRT_CIPow"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_FindWavChunk",
+      "address": "005166d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005166d0"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_FindWavChunk"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_InitWaveFormat",
+      "address": "00516720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516720"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_InitWaveFormat"
+      ],
+      "usedTypes": [
+        "WAVEFORMATEX"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_ParseWavHeader",
+      "address": "00516760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516760"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_ParseWavHeader",
+        "SOUNDSMP_FindWavChunk"
+      ],
+      "usedTypes": [
+        "WAVEFORMATEX",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SOUNDSMP_CalculateVolumeAndPan",
+      "address": "00516830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516830"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundSmp",
+      "calledFunctions": [
+        "SOUNDSMP_CalculateVolumeAndPan",
+        "__CIsqrt",
+        "CRT_CILog",
+        "CRT_CIPow"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    }
+  ]
+}

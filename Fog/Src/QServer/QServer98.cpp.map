@@ -1,0 +1,130 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/QServer/QServer98.cpp",
+  "functions": [
+    {
+      "name": "QSERVER_CloseAllConnections",
+      "address": "006c33d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c33d0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer98",
+      "calledFunctions": [
+        "QSERVER_CloseAllConnections"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "SendToClientOnline",
+      "address": "006c3410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3410"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer98",
+      "calledFunctions": [
+        "SendToClientOnline",
+        "WSAGetLastError"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "QSERVER_AllocateConnectionStruct",
+      "address": "006c3440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3440"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer98",
+      "calledFunctions": [
+        "QSERVER_AllocateConnectionStruct",
+        "AddClient"
+      ],
+      "usedTypes": [
+        "D2QServerClientContainerStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SocketThreadMain",
+      "address": "006c3470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3470"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer98",
+      "calledFunctions": [
+        "SocketThreadMain",
+        "SweepExpiredHackEntries",
+        "IncrementClientRefCount",
+        "RemoveClientAndClearLog",
+        "StubHook2",
+        "WSAGetLastError",
+        "sprintf",
+        "HACKL_CheckAndResetHacklistEntry",
+        "IsPerIpLimitReached",
+        "CheckIpConnectionRate",
+        "LOGMANAGER_TraceToModuleLog",
+        "BanIpAddress",
+        "closeSocket",
+        "AddClient",
+        "CheckIfPlayerIsBannedByAddress",
+        "FindClientBySocket",
+        "CloseRemoteConnection",
+        "RecvForClient",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerClientContainerStrc",
+        "D2QServerStrc",
+        "LPCRITICAL_SECTION",
+        "SOCKET",
+        "fd_set",
+        "sockaddr_in",
+        "timeval",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CreateSocketOnline",
+      "address": "006c3b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c3b50"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer98",
+      "calledFunctions": [
+        "CreateSocketOnline",
+        "closeSocket",
+        "StubHook1",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "sockaddr",
+        "u_long",
+        "u_short",
+        "uint32_t"
+      ]
+    }
+  ]
+}

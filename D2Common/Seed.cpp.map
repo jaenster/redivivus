@@ -1,0 +1,134 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Seed.cpp",
+  "functions": [
+    {
+      "name": "SEED_GetTime32",
+      "address": "00650dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650dd0"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "calledFunctions": [
+        "_time32",
+        "SEED_GetTime32"
+      ],
+      "usedTypes": [
+        "__time32_t"
+      ]
+    },
+    {
+      "name": "SEED_GenerateRandomSeed",
+      "address": "00650de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650de0"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "calledFunctions": [
+        "SEED_GenerateRandomSeed",
+        "_time32",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SEED_InitDefault",
+      "address": "00650e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650e30"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "calledFunctions": [
+        "SEED_InitDefault"
+      ],
+      "usedTypes": [
+        "D2SeedStrc"
+      ]
+    },
+    {
+      "name": "InitSeed_Param_666",
+      "address": "00650e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650e40"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "calledFunctions": [
+        "InitSeed_Param_666"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSeed_nSeedLow",
+      "address": "00650e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650e50"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "calledFunctions": [
+        "GetSeed_nSeedLow"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetSeed",
+      "address": "00650e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650e60"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "calledFunctions": [
+        "SetSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSeed",
+      "address": "00650e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00650e70"
+        }
+      ],
+      "namespace": "D2Common::Seed",
+      "calledFunctions": [
+        "GetSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,452 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Editbox/EditBoxImplementation.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "004bb170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb170"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "Destructor",
+        "FreeClientMemory",
+        "DC6_FreeAndDelete"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation",
+        "PFN_CrtExceptionFilter",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetNumericOnly",
+      "address": "004bb200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb200"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "SetNumericOnly"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "Draw",
+      "address": "004bb210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb210"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "Draw",
+        "D2GFX_DrawSolidRectExBySize",
+        "SetAndReturnLastFont",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "DRAW_text0",
+        "STRING_GetWideStringLength",
+        "DRAW_text",
+        "STRING_CopyWideString",
+        "D2WINFONT_WordWrapString",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc",
+        "EditBoxImplementation",
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetNumber",
+      "address": "004bb4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb4d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "SetNumber",
+        "sprintf",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "STRING_GetWideStringLength"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetText",
+      "address": "004bb530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb530"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "SetText",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "STRING_GetWideStringLength"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetValue",
+      "address": "004bb560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb560"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "GetValue",
+        "STRING_GetWideStringLength",
+        "WideCharToUTF8"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetText",
+      "address": "004bb5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb5b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "GetText",
+        "WideCharToUTF8"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "GetRepeatDelta",
+      "address": "004bb5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb5d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "GetRepeatDelta"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnMouseDown",
+      "address": "004bb5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb5e0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnMouseDown"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnMouseWheel",
+      "address": "004bb5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb5f0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnMouseWheel"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnMouseUp",
+      "address": "004bb600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb600"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnMouseUp"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnChar",
+      "address": "004bb620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb620"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnChar",
+        "SMsgBreakHandlerChain",
+        "isdigit",
+        "D2WINFONT_IsFontCharacterValid",
+        "SetAndReturnLastFont",
+        "D2WINFONT_WordWrapString",
+        "FreeClientMemory",
+        "STRING_GetWideStringLength",
+        "WideCharToUTF8",
+        "sprintf",
+        "memset",
+        "STRING_CopyCharToWCharWithSetMaxSize"
+      ],
+      "usedTypes": [
+        "D2TextLineStrc",
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OnMouseMove",
+      "address": "004bb950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb950"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnMouseMove"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnUpArrow",
+      "address": "004bb960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb960"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnUpArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnDownArrow",
+      "address": "004bb970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb970"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnDownArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "SetCharFilter",
+      "address": "004bb980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb980"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "SetCharFilter"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation",
+        "fpUIWidgetCharFilter"
+      ]
+    },
+    {
+      "name": "SetWidth",
+      "address": "004bb990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb990"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "SetWidth"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "SetKeyRepeat",
+      "address": "004bb9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb9a0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "SetKeyRepeat"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnRightArrow",
+      "address": "004bb9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb9b0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnRightArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "OnLeftArrow",
+      "address": "004bb9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bb9d0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "OnLeftArrow"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "EditBoxImplementation"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "004bbbb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbbb0"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "Constructor",
+        "sprintf",
+        "IMAGE_LoadDC6Ex",
+        "AllocClientMemory",
+        "memset",
+        "SetAndReturnLastFont",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "DRAW_text0"
+      ],
+      "usedTypes": [
+        "DC6",
+        "EditBoxImplementation",
+        "WCHAR",
+        "fpEditBoxOnEnter",
+        "int32_t",
+        "pfnEHHandlerRoutine",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "004bbd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bbd50"
+        }
+      ],
+      "namespace": "D2Client::UI::Editbox::EditBoxImplementation",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "EditBoxImplementation",
+        "uint32_t"
+      ]
+    }
+  ]
+}

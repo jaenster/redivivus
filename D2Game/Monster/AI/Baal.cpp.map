@@ -1,0 +1,553 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Monster/AI/Baal.cpp",
+  "functions": [
+    {
+      "name": "AI_Baal_IsPortalInRange",
+      "address": "005ef5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ef5e0"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_Baal_IsPortalInRange",
+        "GetCollisionDistance"
+      ],
+      "usedTypes": [
+        "D2MonsterAiParameterStruct",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RiskAssignmentBaal",
+      "address": "005fbb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fbb00"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "RiskAssignmentBaal",
+        "IsInMeleeRange",
+        "AI_GetWeightedDistanceToPoint",
+        "STATSEX_GetCurrentStat",
+        "UNIT_GetUnitState",
+        "GetCurrentLifePercentage",
+        "GetLeftSkill",
+        "GetSkillLevel",
+        "GetSkillId",
+        "GetRightSkill",
+        "CollisionWithWall"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SelectTargetBaal",
+      "address": "005fbdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fbdd0"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "SelectTargetBaal",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetXPos",
+        "GetYPos",
+        "RiskAssignmentBaal",
+        "GetCollisionDistanceFromXY",
+        "IsInMeleeRange",
+        "SetTarget",
+        "PATH_SetPathType",
+        "PATH_CalculatePath",
+        "GetPathPointsSize"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitNodeStrc",
+        "D2UnitNodeStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2UnitType",
+        "fpAiTargetPredicate",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AI_BAAL_IsUnitInRange",
+      "address": "005fc000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc000"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_BAAL_IsUnitInRange",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetCollisionDistanceFromXY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AI_BAAL_IsSkillPowerful",
+      "address": "005fc070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc070"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_BAAL_IsSkillPowerful",
+        "GetSkillId",
+        "GetSkillLevel"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "AI_BAAL_HasPowerfulSkill",
+      "address": "005fc0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc0c0"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_BAAL_HasPowerfulSkill",
+        "GetRightSkill",
+        "GetSkillId",
+        "GetSkillLevel",
+        "GetLeftSkill",
+        "AI_BAAL_IsSkillPowerful"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills"
+      ]
+    },
+    {
+      "name": "AI_BAAL_SelectWeightedAction",
+      "address": "005fc130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc130"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_BAAL_SelectWeightedAction"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "AI_BAAL_CloneChooseAction",
+      "address": "005fc1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc1c0"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_BAAL_CloneChooseAction",
+        "GetCurrentLifePercentage",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "AI_BAAL_ThroneRoomChooseAction",
+      "address": "005fc300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc300"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_BAAL_ThroneRoomChooseAction",
+        "GetCurrentLifePercentage",
+        "AI_BAAL_HasPowerfulSkill"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AI_Baal_SelectActionWeighted",
+      "address": "005fc450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc450"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_Baal_SelectActionWeighted",
+        "GetDistance",
+        "GetCurrentLifePercentage",
+        "UNITS_GetRoom",
+        "MONSTER_InitLevelDifficultyScaling",
+        "AI_BAAL_HasPowerfulSkill"
+      ],
+      "usedTypes": [
+        "D2MonsterLevelDataStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "AI_BaalEvaluateCombatAction",
+      "address": "005fc630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc630"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_BAAL_CloneChooseAction",
+        "AI_Baal_SelectActionWeighted",
+        "AI_BaalEvaluateCombatAction",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "CheckCollision_BlockPlayer_Type",
+        "GetGamePointer",
+        "GetPlayerUniqueId",
+        "FindUnitFromTable",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetDistanceToXY",
+        "AI_GetWeightedDistanceToPoint",
+        "IsInMeleeRange",
+        "CollisionWithWall",
+        "AI_BAAL_ThroneRoomChooseAction"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2CollisionShapeType",
+        "eD2LevelId",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AI_BAAL_CountPowerfulSkills",
+      "address": "005fc830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc830"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_BAAL_CountPowerfulSkills"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AI_Baal_SpawnClone",
+      "address": "005fc860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fc860"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_Baal_SpawnClone",
+        "CallForEachMinion",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "MONSTER_GetSpawnParameters",
+        "GetTargetEx",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "SpawnMonsterAtRoomPos",
+        "RestartAiThink",
+        "AssignMinionOwner",
+        "AddMinionToList",
+        "GetTxtMaxHp",
+        "STATLIST_SetUnitStat",
+        "STATSEX_GetCurrentStat",
+        "StoreOwner",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "AI_Baal_ExecuteAction",
+      "address": "005fcb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fcb60"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_Baal_ExecuteAction",
+        "PlanNextAiMove",
+        "CastSkillWithDistanceOffset",
+        "SetCombatStateAndApproachTarget",
+        "WalkRandomOffset",
+        "WalkToCoords",
+        "SERVER_UNIT_CastSkill",
+        "AI_ChangeModeAndTargetUnit",
+        "AddSkill",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetCollisionDistance",
+        "UNITS_GetRoom",
+        "SPAWN_FindRandomPositionForMonster",
+        "AI_Baal_SpawnClone",
+        "GetTxtMaxHp",
+        "GetTxtMaxMana"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2MonsterAiCmdStrc",
+        "D2RoomCoordListStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BaalCrabAi_ResetInfernoAndReattach",
+      "address": "005fcf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fcf30"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "BaalCrabAi_ResetInfernoAndReattach",
+        "FindMonsterAiCmd",
+        "UNIT_GetUnitState",
+        "SetState",
+        "AttachCorrectAiFunctionToMonster",
+        "CreateAiCmdAndFill",
+        "PlanNextAiMove"
+      ],
+      "usedTypes": [
+        "D2AiCmdArgumentsStrc",
+        "D2AiGeneralStrc",
+        "D2AiParamStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States"
+      ]
+    },
+    {
+      "name": "AI_Fn1_BaalCrab",
+      "address": "005fcfe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fcfe0"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_Fn1_BaalCrab",
+        "SelectTargetBaal",
+        "FindMonsterAiCmd",
+        "GetXPos",
+        "GetYPos",
+        "CreateAiCmdAndFill",
+        "AI_BaalEvaluateCombatAction",
+        "AI_Baal_ExecuteAction",
+        "RestartAiThink"
+      ],
+      "usedTypes": [
+        "D2AiCmdArgumentsStrc",
+        "D2AiGeneralStrc",
+        "D2AiParamStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "AI_Baal_SpawnTentacle",
+      "address": "005fd0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fd0f0"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_Baal_SpawnTentacle",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "SpawnMonsterAtRoomPos",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AI_Fn1_UberBaal",
+      "address": "005fd200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fd200"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_Fn1_UberBaal"
+      ],
+      "usedTypes": [
+        "D2AiParamStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "AI_Fn1_BaalCrabClone",
+      "address": "005fd210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fd210"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI::Baal",
+      "calledFunctions": [
+        "AI_Fn1_BaalCrabClone",
+        "GetOwnerUnit",
+        "CheckForModeZeroDeath",
+        "SelectTargetBaal",
+        "FindMonsterAiCmd",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CreateAiCmdAndFill",
+        "AI_BaalEvaluateCombatAction",
+        "AI_Baal_ExecuteAction",
+        "RestartAiThink",
+        "PlanNextAiMove",
+        "SERVER_KillMonster"
+      ],
+      "usedTypes": [
+        "D2AiCmdArgumentsStrc",
+        "D2AiGeneralStrc",
+        "D2AiParamStrc",
+        "D2MonsterAiCmdStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

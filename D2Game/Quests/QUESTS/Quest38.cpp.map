@@ -1,0 +1,107 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/Quests/QUESTS/Quest38.cpp",
+  "functions": [
+    {
+      "name": "Q38_Callback11_ScrollMessage",
+      "address": "005983e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005983e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest38",
+      "calledFunctions": [
+        "Q38_Callback11_ScrollMessage",
+        "PLAYER_SetSpokenWithNPC"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "eD2MonsterClassId",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Q38_Callback00_NpcActivate",
+      "address": "005984c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005984c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest38",
+      "calledFunctions": [
+        "Q38_Callback00_NpcActivate",
+        "PLAYER_CheckIfSpokenWithNPC",
+        "AddGossipMessageOnMonster"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "eD2MonsterClassId"
+      ]
+    },
+    {
+      "name": "Q38_StatusFilter",
+      "address": "005985b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005985b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest38",
+      "calledFunctions": [
+        "Q38_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "Q38_ActiveFilter",
+      "address": "005985c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005985c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest38",
+      "calledFunctions": [
+        "Q38_ActiveFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Q38_InitData",
+      "address": "005985d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005985d0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::Quest38",
+      "calledFunctions": [
+        "Q38_InitData",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc"
+      ]
+    }
+  ]
+}

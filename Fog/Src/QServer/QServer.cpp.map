@@ -1,0 +1,1470 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Src/QServer/QServer.cpp",
+  "functions": [
+    {
+      "name": "_NullSubTrace",
+      "address": "006be2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be2f0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "_NullSubTrace"
+      ]
+    },
+    {
+      "name": "QSERVER_LOG",
+      "address": "006be300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be300"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "QSERVER_LOG"
+      ]
+    },
+    {
+      "name": "_unused_SetupDefaultValues",
+      "address": "006be310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be310"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "_unused_SetupDefaultValues"
+      ]
+    },
+    {
+      "name": "StartListening",
+      "address": "006be350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be350"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "StartListening",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "SwapWorkerSlotValue",
+      "address": "006be390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be390"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SwapWorkerSlotValue"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "ClearModePacketQueues",
+      "address": "006be3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be3c0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "ClearModePacketQueues",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "GetConnectedClients",
+      "address": "006be450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be450"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetConnectedClients"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "IsSingleplayer",
+      "address": "006be470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be470"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "IsSingleplayer"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "SetPerIpConnectionLimit",
+      "address": "006be4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be4a0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SetPerIpConnectionLimit"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "WaitForEmptyEvent",
+      "address": "006be4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be4e0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "WaitForEmptyEvent"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "_unused_broken",
+      "address": "006be510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be510"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "_unused_broken"
+      ],
+      "usedTypes": [
+        "FogCritSectLockStrc",
+        "LPCRITICAL_SECTION"
+      ]
+    },
+    {
+      "name": "LeaveCriticalSection_QServer",
+      "address": "006be530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be530"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "LeaveCriticalSection_QServer"
+      ],
+      "usedTypes": [
+        "FogCritSectLockStrc"
+      ]
+    },
+    {
+      "name": "FindClientByClientId",
+      "address": "006be540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be540"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "FindClientByClientId"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FindClientBySocket",
+      "address": "006be5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be5b0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "FindClientBySocket"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "SOCKET",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IncrementClientRefCount",
+      "address": "006be640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be640"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "IncrementClientRefCount"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "NET_QServerClientPacket_FreeAllPackets",
+      "address": "006be650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be650"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "NET_QServerClientPacket_FreeAllPackets",
+        "QSERVER_LOG",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerClientPacketStrc"
+      ]
+    },
+    {
+      "name": "LogHackList",
+      "address": "006be6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be6c0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "LogHackList",
+        "GetTickCount",
+        "LOGMANAGER_TraceToModuleLog"
+      ]
+    },
+    {
+      "name": "SweepExpiredHackEntries",
+      "address": "006be700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be700"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SweepExpiredHackEntries",
+        "GetTickCount",
+        "LOGMANAGER_TraceToModuleLog"
+      ],
+      "usedTypes": [
+        "D2QServerHacklistEntryStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HACKL_RemoveIpFromHacklist",
+      "address": "006be890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be890"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "HACKL_RemoveIpFromHacklist",
+        "FreeClientMemory",
+        "GetTickCount",
+        "LOGMANAGER_TraceToModuleLog"
+      ],
+      "usedTypes": [
+        "D2QServerHacklistEntryStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HACKL_CheckAndResetHacklistEntry",
+      "address": "006be980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be980"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "HACKL_CheckAndResetHacklistEntry"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IsPerIpLimitReached",
+      "address": "006be9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006be9f0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "IsPerIpLimitReached"
+      ],
+      "usedTypes": [
+        "D2QServerIpConnCountEntryStrc",
+        "D2QServerStrc",
+        "in_addr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CountQueuedPacketsInMode",
+      "address": "006bea70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bea70"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "CountQueuedPacketsInMode"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "DequeueModePacket",
+      "address": "006bead0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bead0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "DequeueModePacket",
+        "memcpy",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "WaitForEmptyEventOrPumpIo",
+      "address": "006bebc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bebc0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "PumpIoCompletionQueues",
+        "WaitForEmptyEventOrPumpIo"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetTokenHashMapByTokenId",
+      "address": "006bec00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bec00"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetTokenHashMapByTokenId"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "D2TSExplicitListHeadStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientLocalIpByToken",
+      "address": "006bec70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bec70"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetClientLocalIpByToken",
+        "GetTokenHashMapByTokenId"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "D2TSExplicitListHeadStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientLocalPortByToken",
+      "address": "006becb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006becb0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetClientLocalPortByToken",
+        "GetTokenHashMapByTokenId"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "LPCRITICAL_SECTION",
+        "u_short",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientPeerIpByToken",
+      "address": "006bed00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bed00"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetClientPeerIpByToken",
+        "GetTokenHashMapByTokenId"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "LPCRITICAL_SECTION",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientPeerPortByToken",
+      "address": "006bed40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bed40"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetClientPeerPortByToken",
+        "GetTokenHashMapByTokenId"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "LPCRITICAL_SECTION",
+        "u_short",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientIpStringByClientId",
+      "address": "006bed90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bed90"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetClientIpStringByClientId",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientIpByToken",
+      "address": "006bee20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bee20"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetClientIpByToken"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "_union_",
+        "in_addr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ProbePeerNameByToken",
+      "address": "006bee90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bee90"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "ProbePeerNameByToken",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "sockaddr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientSocketByToken",
+      "address": "006bef40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bef40"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetClientSocketByToken"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QSHackUnlistIP",
+      "address": "006befb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006befb0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "QSHackUnlistIP",
+        "LOGMANAGER_TraceToModuleLog",
+        "HACKL_RemoveIpFromHacklist"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "in_addr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "QSHackListSize",
+      "address": "006bf000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf000"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "QSHackListSize",
+        "LOGMANAGER_TraceToModuleLog"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "SetHacklistLineHook",
+      "address": "006bf040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf040"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SetHacklistLineHook",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "fpD2QServerLineHook"
+      ]
+    },
+    {
+      "name": "SetReservedHook",
+      "address": "006bf080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf080"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SetReservedHook"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "SetClientServerTokenByClientId",
+      "address": "006bf0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf0a0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SetClientServerTokenByClientId",
+        "FindClientByClientId"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetClientServerTokenByClientId",
+      "address": "006bf0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf0c0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "GetClientServerTokenByClientId",
+        "FindClientByClientId"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeHacklistBuckets",
+      "address": "006bf0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf0f0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "FreeHacklistBuckets",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerHacklistEntryStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "IncrementPerIpConnCount",
+      "address": "006bf180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf180"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "IncrementPerIpConnCount",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerIpConnCountEntryStrc",
+        "D2QServerStrc",
+        "in_addr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_QServer_DecrementPerIpConnectionCount",
+      "address": "006bf1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf1f0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "NET_QServer_DecrementPerIpConnectionCount",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "in_addr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PruneIpRateList",
+      "address": "006bf260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf260"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "PruneIpRateList",
+        "GetTickCount",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerIpRateEntryStrc",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "FreeIpRateList",
+      "address": "006bf320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf320"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "FreeIpRateList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerIpRateEntryStrc",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "SendPacketToClient",
+      "address": "006bf370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf370"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SendPacketToClient",
+        "AllocClientMemory",
+        "memcpy",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2QServerModePacketNodeStrc",
+        "D2QServerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetHackMode",
+      "address": "006bf4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf4e0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SetHackMode"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "Listen98Nt",
+      "address": "006bf520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf520"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "Listen98Nt",
+        "CreateSocketLocal",
+        "__security_check_cookie",
+        "CreateSocketOnline"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "WSADATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CountAllQueuedPackets",
+      "address": "006bf580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf580"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "CountAllQueuedPackets"
+      ],
+      "usedTypes": [
+        "D2QServerModePacketNodeStrc",
+        "D2QServerModePacketNodeStrc *",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "_NullSubRet4",
+      "address": "006bf5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf5f0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "_NullSubRet4"
+      ]
+    },
+    {
+      "name": "_NullSubRet8",
+      "address": "006bf600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf600"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "_NullSubRet8"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "AddGameTokenFilter",
+      "address": "006bf610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf610"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "AddGameTokenFilter"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "D2QServerTokenFilterEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MatchesGameTokenFilter",
+      "address": "006bf660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf660"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "MatchesGameTokenFilter"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MatchesGameTokenFilter_Thunk",
+      "address": "006bf6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf6c0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "MatchesGameTokenFilter_Thunk",
+        "MatchesGameTokenFilter"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopyWorkerTelemetrySnapshot",
+      "address": "006bf6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf6d0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "CopyWorkerTelemetrySnapshot",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "D2QServerWorkerTelemetryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "_NullSub",
+      "address": "006bf750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf750"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "_NullSub"
+      ]
+    },
+    {
+      "name": "NET_QServer_Init",
+      "address": "006bf760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bf760"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "NET_QServer_Init",
+        "AllocClientMemory",
+        "memset",
+        "QSERVER_LOG",
+        "IsWindowsNT",
+        "CreateSocketOnline",
+        "CreateSocketLocal",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2QServerClientConnectionStrc *",
+        "D2QServerClientIpHashBucketTable",
+        "D2QServerHacklistEntryStrc *",
+        "D2QServerIpConnCountEntryStrc *",
+        "D2QServerModePacketNodeStrc *",
+        "D2QServerStrc",
+        "WSADATA",
+        "eD2GSConnectionType",
+        "eD2GSGameType",
+        "fpD2QServerPacketClassifier",
+        "fpD2QServerSinglePlayerSendHook",
+        "fpD2QServerSourceLineHook",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BroadcastToAllClients",
+      "address": "006bfad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bfad0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "BroadcastToAllClients",
+        "SendToClientOnline",
+        "SendToClientLocal"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "AddClient",
+      "address": "006bfb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bfb70"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "AddClient",
+        "AllocClientMemory",
+        "memset",
+        "LOGMGR_GetHighResolutionTime",
+        "IncrementPerIpConnCount",
+        "QSERVER_LOG"
+      ],
+      "usedTypes": [
+        "D2QServerClientContainerStrc",
+        "D2QServerStrc",
+        "SOCKET",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RemoveClient",
+      "address": "006bfcd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bfcd0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "RemoveClient",
+        "_NullSubTrace",
+        "QSERVER_LOG",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "LOGMGR_GetHighResolutionTime",
+        "NET_QServer_DecrementPerIpConnectionCount"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerClientIpHashBucketTable",
+        "D2QServerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BanIpAddress",
+      "address": "006bfea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bfea0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "BanIpAddress",
+        "MatchesGameTokenFilter",
+        "AllocClientMemory",
+        "LogHackList"
+      ],
+      "usedTypes": [
+        "D2QServerHacklistEntryStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckIpConnectionRate",
+      "address": "006bffa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bffa0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "CheckIpConnectionRate",
+        "GetTickCount",
+        "PruneIpRateList",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerIpRateEntryStrc",
+        "D2QServerStrc",
+        "_struct_",
+        "in_addr"
+      ]
+    },
+    {
+      "name": "QSSpamCheck",
+      "address": "006c00a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c00a0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "QSSpamCheck",
+        "GetTickCount",
+        "MatchesGameTokenFilter"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "Shutdown",
+      "address": "006c0170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0170"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "Shutdown",
+        "BroadcastToAllClients",
+        "QSERVER_CloseAllConnections",
+        "AwaitAndClose",
+        "FreeIpRateList",
+        "FreeHacklistBuckets",
+        "ClearModePacketQueues",
+        "closeSocket",
+        "WSACleanup",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2QServerHacklistEntryStrc",
+        "D2QServerModePacketNodeStrc",
+        "D2QServerStrc",
+        "SOCKET"
+      ]
+    },
+    {
+      "name": "RemoveClientAndClearLog",
+      "address": "006c0360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0360"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "RemoveClientAndClearLog",
+        "RemoveClient",
+        "NET_QServerClientPacket_FreeAllPackets"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "SendPacketByClientId",
+      "address": "006c03a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c03a0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "SendPacketByClientId",
+        "FindClientByClientId",
+        "SendToClientLocal",
+        "SendToClientOnline"
+      ],
+      "usedTypes": [
+        "D2QServerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CloseRemoteConnection",
+      "address": "006c0420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0420"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "CloseRemoteConnection",
+        "FindClientByClientId",
+        "closeSocket",
+        "WSAGetLastError",
+        "LOGMANAGER_TraceToModuleLog",
+        "RemoveClientAndClearLog"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "BanClient",
+      "address": "006c0530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0530"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "BanClient",
+        "LOGMANAGER_TraceToModuleLog",
+        "CloseRemoteConnection",
+        "BanIpAddress"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "_struct_",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DisconnectAndBanIp",
+      "address": "006c0600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0600"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "DisconnectAndBanIp",
+        "LOGMANAGER_TraceToModuleLog",
+        "CloseRemoteConnection",
+        "BanIpAddress"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "thunk_CloseRemoteConnection",
+      "address": "006c06b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c06b0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "thunk_CloseRemoteConnection",
+        "CloseRemoteConnection"
+      ],
+      "usedTypes": [
+        "D2QServerStrc"
+      ]
+    },
+    {
+      "name": "QSDisconnectIP",
+      "address": "006c06d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c06d0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "QSDisconnectIP",
+        "LOGMANAGER_TraceToModuleLog",
+        "CloseRemoteConnection"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "in_addr",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HACKL_DisconnectAndBanClient",
+      "address": "006c0770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0770"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "HACKL_DisconnectAndBanClient",
+        "CloseRemoteConnection",
+        "BanIpAddress"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CheckIfPlayerIsBannedByAddress",
+      "address": "006c0800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c0800"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "CheckIfPlayerIsBannedByAddress",
+        "MatchesGameTokenFilter",
+        "LOGMANAGER_TraceToModuleLog",
+        "HACKL_DisconnectAndBanClient"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerStrc",
+        "in_addr",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RecvForClient",
+      "address": "006c08a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c08a0"
+        }
+      ],
+      "namespace": "Fog::Src::QServer::QServer",
+      "calledFunctions": [
+        "RecvForClient",
+        "QSSpamCheck",
+        "LOGMANAGER_TraceToModuleLog",
+        "HACKL_DisconnectAndBanClient",
+        "AllocClientMemory",
+        "memcpy",
+        "GetTickCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memmove"
+      ],
+      "usedTypes": [
+        "D2QServerClientConnectionStrc",
+        "D2QServerModePacketNodeStrc",
+        "D2QServerStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

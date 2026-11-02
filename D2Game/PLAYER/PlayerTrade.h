@@ -52,7 +52,7 @@ struct D2UnitDataPlayerPetsStrc {
 struct D2UnknownStructure0x18 {
     /* 0x00 */ int32_t pCopyInventory;
     /* 0x04 */ void * pSaveBuffer;
-    /* 0x08 */ struct D2UnknownStructure0xc * pUnknownStruct;
+    /* 0x08 */ struct D2UnknownStructure0xc * pUidPairList;
     /* 0x0C */ uint32_t nTradeStatus;
     /* 0x10 */ uint32_t nGold;
     /* 0x14 */ uint32_t field5_0x14;
@@ -61,7 +61,7 @@ struct D2UnknownStructure0x18 {
 struct D2UnknownStructure0xc {
     /* 0x00 */ int nUID; // CreateStructure0xc stores its nUID argument
     /* 0x04 */ uint32_t nUIDOther;
-    /* 0x08 */ struct D2UnknownStructure0xc * pUnknownStruct; // next node; SetUidOther and PLRTRADE_FreeTradeCopyInventory walk it
+    /* 0x08 */ struct D2UnknownStructure0xc * pNext; // next node; SetUidOther and PLRTRADE_FreeTradeCopyInventory walk it
 };
 
 struct D2CubeSetupStrc {
@@ -74,7 +74,7 @@ namespace D2Game::PLAYER::PlayerTrade {
 // Object operate callback (fn index 32) for the player stash (class ID 0x10B). Validates that both the player and the stash object are in town, then sets the player's interact info to the stash GUID, sends trade-action packet 0x10 (open stash) to the client, and checks item levels. Returns 0 always.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 BOOL __fastcall Objects_OperateFn32_OpenStash(struct D2ObjectOperateFnArg * pOperation);
-uint32_t PLAYERTRADE_CompareUint32(uint32_t * pnParam1, uint32_t * pnParam2);
+uint32_t PLAYERTRADE_CompareUint32(uint32_t * pnLeft, uint32_t * pnRight);
 // Matches a single input descriptor (D2CubeInputStrc) against cube items. Checks flags (item code, item type, quality, unique ID, sockets, ethereal, normal/exceptional/elite tier, runeword), applies per-item stat requirements (op 15-26), and fills pMatchedItems entries with matched items. The usage array pItemUsedFlags tracks which items have been consumed. Returns 1 if the required quantity of matching items was found, 0 otherwise. Handles special output type 0xff (use-item) and 0xfe (use-type) by storing item pointers and upgrade class IDs in pMatchedItems for GenerateCubingResult.
 uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, struct D2InventoryStrc * pInventory, struct D2CubeMainTxt * pRecipe, int32_t nInputSlotIndex, struct D2CubeSetupStrc * pMatchedItems, int32_t pItemUsedFlags);
 // Two explicit GuardStack tails carrying a packed 16-bit item class id (aCandidateIds[nEndId]) on success, 0 on no-candidates-found. Own doc comment: "Returns class ID in EAX."
@@ -87,7 +87,7 @@ BOOL __fastcall CUBE_SpecialOutput_Unused3(::SGAMEDATA * pGame, struct D2UnitStr
 // Generates cube recipe outputs. For each of 3 output slots: computes item level from nLvl/nPLvl/nILvl, calls special output hooks (cow portal, token respec), spawns or transforms items based on output type (0xff=use-item, 0xfe=use-type with upgrade, 0xfc=fixed classID, 0xfd=random by type), applies quality/affixes/mods/sockets, removes cube items, transfers outputs to inventory, and triggers quest hooks (Staff of Kings, Khalim's Will). Handles ethereal item socketing, runeword property removal, and nested cube item extraction.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2CubeMainTxt * pRecipe, struct D2CubeSetupStrc * pMatchedItems, uint32_t nUnused);
-void __stdcall GetDateUnused(int * pnParam);
+void __stdcall GetDateUnused(int * pnDate);
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall PLRTRADE_FreeTradeCopyInventory(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // @sourcefile .\PLAYER\PlrTrade.cpp
@@ -117,7 +117,7 @@ void __fastcall RemoveTradeItemMabye(::SGAMEDATA * pGame, struct D2UnitStrc * pU
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall PLRTRADE_CancelTradeAndCleanup(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2UnitDataPlayerStrc * pPlayerData, struct D2UnitDataPlayerStrc * pPlayerData2, uint32_t dwTradeStateForUnit);
 // Several exits go through GuardStack tails with the status (0, 1 or 3) in AL.
-eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t nButtonId, uint32_t dwParam);
+eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t nButtonId, uint32_t nGoldAmount);
 // Finalises a mutual player-to-player trade. Verifies pUnit is interacting with a player partner who is also interacting back with pUnit (mutual lock). If valid: sets dwTradeState=9 on pUnit, fires update event, calls RemoveTradeItemMaybe for both sides, frees both trade-copy inventories, sends trade-action 0xC (accept/complete) to the partner's client, and clears both interact infos.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall TRADE_CompleteTrade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

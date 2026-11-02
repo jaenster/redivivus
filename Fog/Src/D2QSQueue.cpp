@@ -19,11 +19,11 @@
 
 namespace Fog::Src::D2QSQueue {
 
-void __fastcall D2QSQUEUE_Initialize(D2QSQueueStrc * pdwParam) {
-    pdwParam->pHead = 0;
-    pdwParam->pTail = 0;
-    pdwParam->bOverflow = 0;
-    /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&pdwParam->csLock);
+void __fastcall D2QSQUEUE_Initialize(D2QSQueueStrc * pQueue) {
+    pQueue->pHead = 0;
+    pQueue->pTail = 0;
+    pQueue->bOverflow = 0;
+    /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&pQueue->csLock);
 }
 
 void __fastcall Free(D2QSQueueStrc * pPoolManager) {
@@ -39,14 +39,14 @@ void __fastcall Free(D2QSQueueStrc * pPoolManager) {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pPoolManager->csLock);
 }
 
-uint32_t __fastcall GetAddress(uint32_t * pdwParam) {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)(pdwParam + 1));
-    uint32_t uVar1 = *pdwParam;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)(pdwParam + 1));
-    return uVar1;
+uint32_t __fastcall GetAddress(uint32_t * pQueue) {
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)(pQueue + 1));
+    uint32_t dwHead = *pQueue;
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)(pQueue + 1));
+    return dwHead;
 }
 
-void __fastcall FOG_EnqueueMessage(D2QSQueueStrc * pClientSideData, void * pParam, uint16_t wMsgSize) {
+void __fastcall FOG_EnqueueMessage(D2QSQueueStrc * pClientSideData, void * pMessage, uint16_t wMsgSize) {
     if (wMsgSize <= 0) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x4a);
       exit(-1);
@@ -56,7 +56,7 @@ void __fastcall FOG_EnqueueMessage(D2QSQueueStrc * pClientSideData, void * pPara
     D2QSQueueEntryStrc* puMsgEntry = (D2QSQueueEntryStrc*)D2_ALLOC_AT(wMsgSize + 8, ".\\Src\\D2QSQueue.cpp", 0x4e);
     puMsgEntry->wMsgSize = wMsgSize;
     puMsgEntry->pNext = 0;
-    memcpy(puMsgEntry + 1, pParam, (uint32_t)wMsgSize);
+    memcpy(puMsgEntry + 1, pMessage, (uint32_t)wMsgSize);
     if (!pClientSideData->pHead) {
       pClientSideData->pHead = puMsgEntry;
     } else {
@@ -67,30 +67,30 @@ void __fastcall FOG_EnqueueMessage(D2QSQueueStrc * pClientSideData, void * pPara
     LeaveCriticalSection(&pClientSideData->csLock);
 }
 
-uint32_t __fastcall D2QSQUEUE_Dequeue(D2QSQueueStrc * pdwParam, void * pParam, int nMaxSize) {
+uint32_t __fastcall D2QSQUEUE_Dequeue(D2QSQueueStrc * pQueue, void * pOutBuffer, int nMaxSize) {
     uint32_t uBytesRead;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pdwParam->csLock);
-    D2QSQueueEntryStrc* iNextEntry = pdwParam->pHead;
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQueue->csLock);
+    D2QSQueueEntryStrc* iNextEntry = pQueue->pHead;
     if (iNextEntry) {
       if (iNextEntry->wMsgSize > (uint16_t)nMaxSize) {
-        pdwParam->bOverflow = 1;
+        pQueue->bOverflow = 1;
         uBytesRead = 0;
       } else {
-        memcpy(pParam, iNextEntry + 1, (uint32_t)iNextEntry->wMsgSize);
+        memcpy(pOutBuffer, iNextEntry + 1, (uint32_t)iNextEntry->wMsgSize);
         uBytesRead = (uint32_t)iNextEntry->wMsgSize;
       }
 
       iNextEntry = iNextEntry->pNext;
-      D2_FREE_AT(pdwParam->pHead, ".\\Src\\D2QSQueue.cpp", 0x78);
-      pdwParam->pHead = iNextEntry;
+      D2_FREE_AT(pQueue->pHead, ".\\Src\\D2QSQueue.cpp", 0x78);
+      pQueue->pHead = iNextEntry;
       if (!iNextEntry) {
-        pdwParam->pTail = 0;
+        pQueue->pTail = 0;
       }
     } else {
       uBytesRead = 0;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pdwParam->csLock);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQueue->csLock);
     return uBytesRead;
 }
 

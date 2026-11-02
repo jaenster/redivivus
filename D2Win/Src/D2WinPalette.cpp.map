@@ -1,0 +1,191 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Win/Src/D2WinPalette.cpp",
+  "functions": [
+    {
+      "name": "D2WINPALETTE_LoadPalettes",
+      "address": "004fb010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb010"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2WINPALETTE_LoadPalettes",
+        "D2GFX_SetPaletteTable"
+      ],
+      "usedTypes": [
+        "uint8_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "D2WINPAL_GetActPalettePointer",
+      "address": "004fb0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb0c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2WINPAL_GetActPalettePointer"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRAW_SetOrReloadPalleteMain",
+      "address": "004fb0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb0d0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "DRAW_SetOrReloadPalleteMain",
+        "GetTickCount",
+        "D2GFX_SetPalette"
+      ]
+    },
+    {
+      "name": "D2WINPALETTE_SetPaletteIndex",
+      "address": "004fb130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb130"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2WINPALETTE_SetPaletteIndex",
+        "GetTickCount",
+        "D2GFX_SetPalette"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "D2GFX_GetColorFromCurrentPallete",
+      "address": "004fb180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb180"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2GFX_GetColorFromCurrentPallete",
+        "D2GFX_GetColorWithAlphaFromPallete"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2WINPAL_CopyPalette",
+      "address": "004fb1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb1c0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2WINPAL_CopyPalette",
+        "memcpy"
+      ]
+    },
+    {
+      "name": "D2WINPAL_LoadPaletteFiles",
+      "address": "004fb1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb1e0"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2WINPAL_LoadPaletteFiles",
+        "ReturnZero",
+        "D2FILE_AllocAndLoadD2File",
+        "memcpy",
+        "D2GFX_GetColorWithAlphaFromPallete",
+        "D2WINPALETTE_LoadPalettes",
+        "D2GFX_SetPalette",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "PALETTEENTRY",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "D2WINPAL_LoadActPalette",
+      "address": "004fb480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb480"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2WINPAL_LoadActPalette",
+        "sprintf",
+        "D2WINPAL_LoadPaletteFiles",
+        "D2GFX_SetPalette"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LoadPalette",
+      "address": "004fb500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb500"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "LoadPalette",
+        "D2WINPAL_LoadPaletteFiles",
+        "D2COMP_InitEmblemColorTables"
+      ]
+    },
+    {
+      "name": "D2WINPAL_SetGammaRamp",
+      "address": "004fb590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fb590"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinPalette",
+      "calledFunctions": [
+        "D2WINPAL_SetGammaRamp"
+      ]
+    }
+  ]
+}

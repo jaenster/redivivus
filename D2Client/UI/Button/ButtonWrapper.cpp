@@ -63,23 +63,23 @@ void __thiscall Destructor(::ButtonWrapper * pThis) {
 }
 
 int __thiscall OnMouseWheel(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseWheel(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseWheel(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseDown(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseDown(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseDown(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseUp(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseUp(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseUp(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseMove(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseMove(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseMove(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 void __thiscall Draw(::ButtonWrapper * pThis) {
@@ -87,33 +87,33 @@ void __thiscall Draw(::ButtonWrapper * pThis) {
 }
 
 int __thiscall OnChar(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnChar(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnChar(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnDownArrow(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnDownArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnDownArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnUpArrow(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnUpArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnUpArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnRightArrow(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnRightArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnRightArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnLeftArrow(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnLeftArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnLeftArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall GetValue(::ButtonWrapper * pThis) {
-    int iVar1 = pThis->pImplementation->pVtable->GetValue(pThis->pImplementation);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->GetValue(pThis->pImplementation);
+    return nResult;
 }
 
 void __thiscall SetAccelerator(::ButtonWrapper * pThis, BOOL bEnable) {

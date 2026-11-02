@@ -1,0 +1,123 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/GAME/Server/ServerCmd.cpp",
+  "functions": [
+    {
+      "name": "WriteValueBySize",
+      "address": "0053b0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b0e0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server::ServerCmd",
+      "calledFunctions": [
+        "WriteValueBySize",
+        "WriteValueToBitBuffer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "thunk_NET_D2GS_SERVER_SendPacketToClient",
+      "address": "0053b1a3",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b1a3"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server::ServerCmd",
+      "calledFunctions": [
+        "thunk_NET_D2GS_SERVER_SendPacketToClient",
+        "NET_D2GS_SERVER_SendPacketToClient"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERVERCMD_SendBufferToClient",
+      "address": "0053b1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b1b0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server::ServerCmd",
+      "calledFunctions": [
+        "SERVERCMD_SendBufferToClient",
+        "SStrCopy",
+        "NET_D2GS_SERVER_SendPacketToClient",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xB",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated",
+      "address": "0053b220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b220"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server::ServerCmd",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated",
+        "NET_D2GS_SERVER_SendPacketToClient"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SERVERCMD_SendSingleBytePacket",
+      "address": "0053b240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b240"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server::ServerCmd",
+      "calledFunctions": [
+        "SERVERCMD_SendSingleBytePacket",
+        "NET_D2GS_SERVER_SendPacketToClient"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_SERVER_Send_0xB4_ConnectionRefused",
+      "address": "0053b260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053b260"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server::ServerCmd",
+      "calledFunctions": [
+        "NET_D2GS_SERVER_Send_0xB4_ConnectionRefused",
+        "NET_D2GS_SERVER_SendPacketToClient"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xB",
+        "int32_t"
+      ]
+    }
+  ]
+}

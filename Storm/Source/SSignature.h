@@ -72,16 +72,16 @@ int __fastcall SSignatureVerifyStream_Finish(struct D2SsigContextStrc * pContext
 int __fastcall SSignatureVerify(uint8_t * pData, size_t nDataLen, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round1, filed under SBig. CONFIRMED CORRECT as to operation and ordering - one of the few Storm names in this database that survived checking. Body: E += rol(A,5) + ((~B & D) | (B & C)) + 0x5A827999 + W; B = rol(B,30). That is Ch with K1, i.e. SHA-1 rounds 0..19. No PPC counterpart: MWCC inlined every round into Sha1::Pump, so these four are MSVC out-of-line COMDAT copies with zero callers in this build. Kept the descriptive name (uppercase SHA1_, deliberately unlike the oracle-derived Sha1_ methods) and moved to the SSignature module.
-void __fastcall SHA1_Round1(uint32_t nParam, uint32_t * pnParam, uint32_t nC, uint32_t nD, int * pnParam1, int * pnParam2);
+void __fastcall SHA1_Round1(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round2. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0x6ED9EBA1 + W - Parity with K2, SHA-1 rounds 20..39. See SHA1_Round1's plate for provenance.
-void __fastcall SHA1_Round2(uint32_t nParam, uint32_t * pnParam, uint32_t nC, uint32_t nD, int * pnParam1, int * pnParam2);
+void __fastcall SHA1_Round2(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round3. Confirmed: E += rol(A,5) + ((B & C) | (B & D) | (C & D)) + 0x8F1BBCDC + W - Maj with K3, SHA-1 rounds 40..59. See SHA1_Round1's plate.
-void __fastcall SHA1_Round3(uint32_t nParam, uint32_t * pnParam, uint32_t nC, uint32_t nD, int * pnParam1, int * pnParam2);
+void __fastcall SHA1_Round3(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round4. Confirmed: E += rol(A,5) + (B ^ C ^ D) + 0xCA62C1D6 + W - Parity with K4, SHA-1 rounds 60..79. See SHA1_Round1's plate.
-void __fastcall SHA1_Round4(uint32_t nParam, uint32_t * pnParam, uint32_t nC, uint32_t nD, int * pnParam1, int * pnParam2);
+void __fastcall SHA1_Round4(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW);
 // SHA-1 cryptographic hash transform. Processes 512-bit message block in 80 rounds (4 phases with different functions). Updates 5 hash state variables (A,B,C,D,E).
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Transform, and filed under Storm::Source::SBig. Oracle name is the class method Sha1::Pump, PPC mangled symbol ".Pump__4Sha1FPUlPCUc" @100a2ee0 = Pump(unsigned long*, const unsigned char*). Basis: same two arguments (state array, 64-byte block), no callees in either build, and it is the sole callee of Sha1_Append/Sha1::Append. PPC body 1680 bytes vs 1339 here - both fully unrolled. NOT part of SBig: it is a client of SBig's file, not a member; module fixed to SSignature.
@@ -92,20 +92,20 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer);
 void __thiscall Sha1_Append(struct D2Sha1ContextStrc * pCtx, uint8_t * pData, uint32_t nLen);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_PackTwoIntsToBytes. DESCRIPTIVE, not an oracle name. Writes 8 bytes big-endian: out[0..3] = the SECOND stack argument, out[4..7] = the first. The old parameter names (dwHighWord first) are therefore inverted with respect to the byte order it produces. This is the 64-bit bit-length encoder that Sha1_Finalize / Sha1::Finalize both emit inline (cf. Sha1_Finalize's byLen0..byLen7 stack bytes and the PPC's rlwimi/stb chain at 100a2b00). Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pParam, uint32_t dwHighWord, uint32_t dwParam);
+uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pbOut, uint32_t dwHighWord, uint32_t dwParam);
 // Storm SBig SHA-1 implementation - init, update, and finalize functions
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1Final. Oracle ".Finalize__4Sha1FPUc" @100a2ae0 = Finalize(unsigned char*). Basis: this+1 arg in both; sole callee is Sha1_Append / Sha1::Append in both; both emit the 8-byte big-endian bit length and then the 5 state words.
 int __thiscall Sha1_Finalize(struct D2Sha1ContextStrc * pCtx, uint8_t * pDigest);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_ModPowWrapper. DESCRIPTIVE, not an oracle name. Body = SBigPowMod(*p4, *p1, *p2, *p3) and nothing else - the middle of Crypt::RSA::Process, which the PPC emits inline. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-struct BigData * * __thiscall SSIGNATURE_RsaPowMod(struct BigData * * pnParam3, struct BigData * * ppBase, struct BigData * * pnParam1, struct BigData * * pnParam2);
+struct BigData * * __thiscall SSIGNATURE_RsaPowMod(struct BigData * * ppResult, struct BigData * * ppBase, struct BigData * * ppExponent, struct BigData * * ppModulus);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_ExportBytesWithPadding. DESCRIPTIVE, not an oracle name. Body = SBigToBinaryBuffer into the caller's buffer, then zero-fill the remainder to the requested length - the exact tail of Crypt::RSA::Process. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-void * __thiscall SSIGNATURE_RsaExportZeroPadded(struct BigData * * pnParam, void * pOutBuf, uint32_t nParam);
+void * __thiscall SSIGNATURE_RsaExportZeroPadded(struct BigData * * ppBig, void * pOutBuf, uint32_t nBufLen);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadComponent. DESCRIPTIVE, not an oracle name - no PPC counterpart exists. Body is a single SBigFromBinary(this[0], bytes, len), i.e. one half of CryptRSA_Prepare. Zero callers in the whole program: an MSVC out-of-line COMDAT copy of a helper that was inlined at every use. Moved out of SBig into SSignature because that is the translation unit it belongs to.
-void __thiscall SSIGNATURE_RsaLoadComponent(struct BigData * * pnParam, void * pBytes, uint32_t nByteCount);
+void __thiscall SSIGNATURE_RsaLoadComponent(struct BigData * * ppBig, void * pBytes, uint32_t nByteCount);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_RSA_LoadKeyPair. Oracle: ".Prepare__Q25Crypt3RSAFPCvUlPCvUl" @100a2a50 = Crypt::RSA::Prepare(const void*, unsigned long, const void*, unsigned long). Basis: PPC body is exactly two bl .SBigFromBinary calls on this[0] and this[4], and reads r3..r7 = this+4 args; this function is byte-for-byte the same shape with this+4 params. So the object is a pair of BigBuffer handles at +0 and +4.
 // ppKey[0] is the modulus and ppKey[1] the exponent: CryptRSA_Process calls SBigPowMod(out, in, ppKey[1], ppKey[0]). SSignatureGenerate passes one modulus with its private then its public exponent, so neither pair is 'public' or 'private' as a whole.

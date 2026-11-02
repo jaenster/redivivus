@@ -86,7 +86,7 @@ struct __attribute__((packed)) D2InactiveUnitRecordStrc {
     /* 0x1C */ int eUnitFlagsEx;
     /* 0x20 */ int nUnitGUID;
     /* 0x24 */ int nDropItemCode;
-    /* 0x28 */ uint8_t field_0x28;
+    /* 0x28 */ uint8_t nShrineId;
     /* 0x29 */ uint8_t field_0x29;
     /* 0x2A */ uint8_t field_0x2a;
     /* 0x2B */ uint8_t field_0x2b;
@@ -99,9 +99,9 @@ namespace D2Game::UNIT::SUnitInactive {
 // Function declarations
 // @sourcefile .\UNIT\SUnitInactive.cpp
 void SUNITINACTIVE_FreeInactiveMonster(::SGAMEDATA * pGame, struct D2InventoryToBeUpdatedStrc * pUnit);
-void __stdcall SUNITINACTIVE_AllocInactiveListForRoom(::SGAMEDATA * pGame, int32_t nParam, struct D2RoomStrc * pRoom);
+void __stdcall SUNITINACTIVE_AllocInactiveListForRoom(::SGAMEDATA * pGame, int32_t bCreate, struct D2RoomStrc * pRoom);
 // Returns 1 if a monster of class nParam is dead at the given subtile coordinates. First searches live units in the best nearby room for mode-0/death state; then searches the inactive monster record list (flag bit 2 = dead) for the coordinate bucket. Returns 0 if not found. Halts on null pGame/pRoom or zero coordinates.
-BOOL __fastcall SUNITINACTIVE_CheckDeadMonsterAtCoords(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int32_t nParam);
+BOOL __fastcall SUNITINACTIVE_CheckDeadMonsterAtCoords(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int32_t nClassId);
 // @sourcefile .\UNIT\SUnitInactive.cpp
 void __fastcall SUNITINACTIVE_FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct);
 // Re-activates a room's saved inactive units when the room is brought into play. First re-inits inactive monsters and restores the inactive item list, then walks the per-room inactive-unit record list. For each record either reattaches an existing unit (flag 0x100: FindUnitFromTable + relocate into room) or recreates it via CreateUnit using the saved type/class/pos/animMode. Objects (type 2) get special restore: shrines (SetEvent respawn timer + SetShrineTxtRecord) and growable objects (replant: compute grown stage from elapsed game frames, set animMode/component, queue grow SetEvents). Frees each consumed record from the game memory pool. Side effects: spawns/relocates units, schedules object events. Server-side D2Common SUnitInactive.

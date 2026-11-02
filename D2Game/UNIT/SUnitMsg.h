@@ -33,25 +33,25 @@ struct __attribute__((packed)) D2GSPacketSrv0xAA {
 };
 
 struct __attribute__((packed)) D2SUnitMsg23Strc {
-    /* 0x00 */ uint32_t field_0x0;
-    /* 0x04 */ uint16_t field_0x4;
-    /* 0x06 */ uint8_t field_0x6;
+    /* 0x00 */ uint32_t dwSkillOwnerGUID;
+    /* 0x04 */ uint16_t nSkillId;
+    /* 0x06 */ uint8_t nSkillSlot;
 };
 
 struct __attribute__((packed)) D2SUnitMsg99Strc {
-    /* 0x00 */ uint16_t field_0x0;
-    /* 0x02 */ uint8_t field_0x2;
-    /* 0x03 */ uint8_t field_0x3;
-    /* 0x04 */ uint32_t field_0x4;
+    /* 0x00 */ uint16_t nSkillId;
+    /* 0x02 */ uint8_t nSkillLevel;
+    /* 0x03 */ uint8_t nTargetType;
+    /* 0x04 */ uint32_t dwTargetGUID;
     /* 0x08 */ uint8_t field_0x8;
 };
 
 struct __attribute__((packed)) D2SUnitMsg9AStrc {
-    /* 0x00 */ uint16_t field_0x0;
-    /* 0x02 */ uint8_t field_0x2;
+    /* 0x00 */ uint16_t nSkillId;
+    /* 0x02 */ uint8_t nSkillLevel;
     /* 0x03 */ uint8_t field_0x3;
-    /* 0x04 */ uint16_t field_0x4;
-    /* 0x06 */ uint16_t field_0x6;
+    /* 0x04 */ uint16_t nTargetX;
+    /* 0x06 */ uint16_t nTargetY;
     /* 0x08 */ uint8_t field_0x8;
 };
 
@@ -66,7 +66,7 @@ struct D2SUnitMsg9EStrc {
 
 struct D2SUnitMsgA1Strc {
     /* 0x00 */ int32_t nUnitGUID;
-    /* 0x04 */ uint8_t field_0x4;
+    /* 0x04 */ uint8_t nStatId;
     /* 0x05 */ uint8_t field_0x5;
     /* 0x06 */ uint8_t field_0x6;
     /* 0x07 */ uint8_t field_0x7;
@@ -77,8 +77,8 @@ struct D2SUnitMsgA1Strc {
 struct __attribute__((packed)) D2SUnitMsgA3Strc {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ uint8_t field_0x1;
-    /* 0x02 */ uint16_t field_0x2;
-    /* 0x04 */ uint16_t field_0x4;
+    /* 0x02 */ uint16_t nSkillId;
+    /* 0x04 */ uint16_t nSkillLevel;
     /* 0x06 */ uint8_t field_0x6;
     /* 0x07 */ uint8_t field_0x7;
     /* 0x08 */ eD2UnitType eUnitType;
@@ -101,7 +101,7 @@ struct __attribute__((packed)) D2SUnitMsgA5Strc {
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ int32_t nUnitGUID;
-    /* 0x08 */ uint16_t field_0x8;
+    /* 0x08 */ uint16_t nSkillId;
 };
 
 struct __attribute__((packed)) D2SUnitMsgABStrc {
@@ -110,7 +110,7 @@ struct __attribute__((packed)) D2SUnitMsgABStrc {
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ int32_t nUnitGUID;
-    /* 0x08 */ uint8_t field_0x8;
+    /* 0x08 */ uint8_t nHpPercent128;
 };
 
 union D2SUnitMsgArgsUnion {
@@ -154,9 +154,9 @@ void __fastcall SendRemoveObject(struct D2UnitStrc * pItem, struct D2ClientStrc 
 void __fastcall PLAYER_SendHoverTextToClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 void __fastcall UNITMSG_SendSoundPacketToClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0x99(struct D2UnitStrc * pUnit, uint16_t wParam, uint8_t byArg1, uint8_t byArg2, uint32_t dwParam, uint8_t bParam);
+void __fastcall UnitQueuePacket0x99(struct D2UnitStrc * pUnit, uint16_t wSkillId, uint8_t byArg1, uint8_t byArg2, uint32_t dwTargetGUID, uint8_t bParam);
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0x9A(struct D2UnitStrc * pUnit, uint16_t wParam1, uint8_t byArg1, uint16_t wArg2, uint16_t wParam2, uint8_t bParam);
+void __fastcall UnitQueuePacket0x9A(struct D2UnitStrc * pUnit, uint16_t wSkillId, uint8_t byArg1, uint16_t wArg2, uint16_t wTargetY, uint8_t bParam);
 // Allocates a 0x14-byte D2SUnitMsgStrc with packet id 0x9E (stat update) and enqueues it on pUnit's message list. Payload: unit GUID (4B), stat id (1B), new stat value (4B). Asserts eUnitStat <= 0xFE. Calls ROOM_LinkUnitToUpdateList to mark unit dirty.
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall UnitQueuePacket0x9E(struct D2UnitStrc * pUnit, uint16_t eUnitStat, uint32_t dwStatValue);
@@ -170,7 +170,7 @@ void __fastcall UnitQueuePacket0xAB(struct D2UnitStrc * pUnit, uint8_t nHpPercen
 void __fastcall SERVER_SendUnitMessagePacket(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint16_t wArg1, uint16_t wArg2, uint32_t dwParam1, uint32_t dwParam2, uint8_t byParam);
 // Clears STATE_skill_move on pUnit, allocates a D2SUnitMsgStrc (packet 0xA5) from the unit's memory pool, fills in the unit type, GUID, and wParam, appends it to the unit's message queue (pMsgFirst/pMsgLast), then calls ROOM_LinkUnitToUpdateList to schedule the unit for a network update.
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0xA5(struct D2UnitStrc * pUnit, uint16_t wParam);
+void __fastcall UnitQueuePacket0xA5(struct D2UnitStrc * pUnit, uint16_t wSkillId);
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall SERVER_UnitQueuePacket0xA4(struct D2UnitStrc * pUnit, int16_t nClassId);
 // @sourcefile .\UNIT\SUnitMsg.cpp

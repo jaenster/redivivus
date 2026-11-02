@@ -60,23 +60,23 @@ void __stdcall STRUCT_FreeTxtMessageForPacket0x27(D2GSPacketSrv0x27_TextStrc * p
 // @sourcefile .\Text\Text.cpp
 void __stdcall AddNewGossipText(D2GSPacketSrv0x27_TextStrc * pGossipText, int32_t nStringIndex, int32_t bMenu) {
     D2GSPacketSrv0x27_EntryStrc* pOldHead = pGossipText->pMessage;
-    D2GSPacketSrv0x27_EntryStrc* psVar2 = D2_NEW_POOL_AT(pGossipText->pMemory, D2GSPacketSrv0x27_EntryStrc, ".\\Text\\Text.cpp", 0x5a);
-    psVar2->pPrev = pOldHead;
-    psVar2->nMessage = (short int)nStringIndex;
-    psVar2->nType = bMenu;
+    D2GSPacketSrv0x27_EntryStrc* pNewEntry = D2_NEW_POOL_AT(pGossipText->pMemory, D2GSPacketSrv0x27_EntryStrc, ".\\Text\\Text.cpp", 0x5a);
+    pNewEntry->pPrev = pOldHead;
+    pNewEntry->nMessage = (short int)nStringIndex;
+    pNewEntry->nType = bMenu;
     pGossipText->nCount++;
-    pGossipText->pMessage = psVar2;
+    pGossipText->pMessage = pNewEntry;
 }
 
 // @sourcefile .\Text\Text.cpp
-void __stdcall TEXT_RemoveMessageById(D2GSPacketSrv0x27_TextStrc * ppPoolManager, int16_t nParam) {
+void __stdcall TEXT_RemoveMessageById(D2GSPacketSrv0x27_TextStrc * ppPoolManager, int16_t nMessageId) {
     D2GSPacketSrv0x27_EntryStrc* pMemoryToFree = ppPoolManager->pMessage;
     D2GSPacketSrv0x27_EntryStrc* pDVar2 = 0;
     if (!pMemoryToFree) {
       return;
     }
 
-    while (pMemoryToFree->nMessage != nParam) {
+    while (pMemoryToFree->nMessage != nMessageId) {
       D2GSPacketSrv0x27_EntryStrc** ppDVar1;
       ppDVar1 = &pMemoryToFree->pPrev;
       pDVar2 = pMemoryToFree;

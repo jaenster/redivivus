@@ -136,7 +136,7 @@ uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, void * * p
 // @rename-basis Decisive, positive, cross-architecture. The PPC export vector for SBmpSaveImage does NOT point at the big extension-dispatching writer .SBmpSaveImageEx @100047c0; it points at 10004a90, an 80-byte function whose entire body is "li r9, 0x0; bl .SBmpSaveImageEx" - pass the six incoming argument registers straight through and supply 0 as the seventh. This function is that wrapper, instruction for instruction. Which of the pair is exported was the one thing that could not be settled from the Windows side (both are unreferenced in Game.exe); the PPC export table settles it by publishing an address.
 // @former-name SBMP_SaveImageSimple
 // @namespace-fix moved Global -> Storm::Source::SBMP
-void __stdcall SBmpSaveImage(LPCSTR szText, int nParam1, uint8_t * pbParam, int32_t pParam, int nParam2, int nParam3);
+void __stdcall SBmpSaveImage(LPCSTR szText, int nPalette, uint8_t * pbPixels, int32_t nWidth, int nHeight, int nBpp);
 // 21 internal functions (defined in .cpp)
 
 } // namespace Storm::Source::SBMP

@@ -68,26 +68,26 @@ D2AnimDataStrc * __fastcall TXT_AllocTxt_AnimTbls(D2PoolManagerStrc * pMemory) {
 // and server memory (record struct itself).
 // Source: .\\DATATBLS\\AnimTbls.cpp
 // @sourcefile .\DATATBLS\AnimTbls.cpp
-void __fastcall ANIMDATA_FreeAnimDataRecord(D2AnimDataStrc * pParam) {
-    if (!pParam) {
+void __fastcall ANIMDATA_FreeAnimDataRecord(D2AnimDataStrc * pAnimData) {
+    if (!pAnimData) {
       return;
     }
 
-    D2_FREE_AT(pParam->pRecords, ".\\DATATBLS\\AnimTbls.cpp", 0xbe);
-    D2_FREE_POOL_AT(nullptr, pParam, ".\\DATATBLS\\AnimTbls.cpp", 0xbf);
+    D2_FREE_AT(pAnimData->pRecords, ".\\DATATBLS\\AnimTbls.cpp", 0xbe);
+    D2_FREE_POOL_AT(nullptr, pAnimData, ".\\DATATBLS\\AnimTbls.cpp", 0xbf);
 }
 
 // pdwName1 in EDI, pdwName2 in ESI: TRUE when both 8-byte names match as two dwords. Halts (AnimTbls.cpp lines 217/218, StringLength((LPCTSTR)pdwName2) <= 8) on a name longer than 8.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __stdcall ANIMDATA_CompareNames(uint32_t * pdwName1, uint32_t * pdwName2) {
-    uint32_t uVar1 = Storm::Source::SSTR::SSTR_StringLength((char*)pdwName1);
-    if (uVar1 > 8) {
+    uint32_t nNameLen = Storm::Source::SSTR::SSTR_StringLength((char*)pdwName1);
+    if (nNameLen > 8) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd9);
       exit(-1);
     }
 
-    uVar1 = Storm::Source::SSTR::SSTR_StringLength((char*)pdwName2);
-    if (!(uVar1 <= 8)) {
+    nNameLen = Storm::Source::SSTR::SSTR_StringLength((char*)pdwName2);
+    if (!(nNameLen <= 8)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda);
       exit(-1);
     }
@@ -102,9 +102,9 @@ BOOL __stdcall ANIMDATA_CompareNames(uint32_t * pdwName1, uint32_t * pdwName2) {
 // byte-sum hash, then walks the hash bucket comparing 8-byte names.
 // Returns pointer to the matching record or NULL.
 // Source: .\\DATATBLS\\AnimTbls.cpp
-static int * ANIMDATA_GetRecordByNameHash(LPSTR pnParam) {
-    char cChar = *pnParam;
-    char* pszChar = pnParam;
+static int * ANIMDATA_GetRecordByNameHash(LPSTR szCofName) {
+    char cChar = *szCofName;
+    char* pszChar = szCofName;
     while (cChar != '\0') {
       cChar = *pszChar;
       if (cChar >= 'a' && cChar <= 'z') {
@@ -117,8 +117,8 @@ static int * ANIMDATA_GetRecordByNameHash(LPSTR pnParam) {
 
     D2AnimDataStrc* pAnimTbls = DataTbls::TXT_AnimTbls_Get();
     uint32_t nHashValue = 0;
-    uint8_t bCharValue = *pnParam;
-    uint8_t* pbCursor = (uint8_t*)pnParam;
+    uint8_t bCharValue = *szCofName;
+    uint8_t* pbCursor = (uint8_t*)szCofName;
     while (bCharValue) {
       pbCursor++;
       nHashValue += bCharValue;
@@ -132,7 +132,7 @@ static int * ANIMDATA_GetRecordByNameHash(LPSTR pnParam) {
         return nullptr;
       }
 
-      nHashValue = Storm::Source::SSTR::SSTR_StringLength(pnParam);
+      nHashValue = Storm::Source::SSTR::SSTR_StringLength(szCofName);
       if (nHashValue > 8) {
         break;
       }
@@ -142,7 +142,7 @@ static int * ANIMDATA_GetRecordByNameHash(LPSTR pnParam) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda);
         exit(-1);
       }
-      if (*(int*)pnParam == *(int*)szRecordName->szAnimDataName && *(int*)(pnParam + 4) == *(int*)(szRecordName->szAnimDataName + 4)) {
+      if (*(int*)szCofName == *(int*)szRecordName->szAnimDataName && *(int*)(szCofName + 4) == *(int*)(szRecordName->szAnimDataName + 4)) {
         return (int*)szRecordName;
       }
 
@@ -157,12 +157,12 @@ static int * ANIMDATA_GetRecordByNameHash(LPSTR pnParam) {
 // Gets the AnimData record for a unit. Builds the composit animation
 // name via COMPOSIT_BuildCofPath, then looks it up via ANIMDATA_GetRecordByNameHash.
 // Called by SetAnimData and composit rendering code.
-D2AnimDataRecordStrc * __fastcall ANIMDATA_GetAnimDataForUnit(D2UnitStrc * pUnit, uint32_t nParam, uint32_t nCofMode, uint32_t nWeaponClass, D2InventoryStrc * pInventory) {
+D2AnimDataRecordStrc * __fastcall ANIMDATA_GetAnimDataForUnit(D2UnitStrc * pUnit, uint32_t nClassId, uint32_t nCofMode, uint32_t nWeaponClass, D2InventoryStrc * pInventory) {
     D2AnimDataStrc* pDVar1;
     char szCofName[8];
     memset(szCofName, 0, 8 * sizeof(szCofName[0]));
     int32_t nCofNameLen = 0;
-    COMPOSIT::Composit::COMPOSIT_BuildCofPath(pUnit, nParam, nCofMode, nWeaponClass, pInventory, szCofName, &nCofNameLen, 0, 1);
+    COMPOSIT::Composit::COMPOSIT_BuildCofPath(pUnit, nClassId, nCofMode, nWeaponClass, pInventory, szCofName, &nCofNameLen, 0, 1);
     D2AnimDataRecordStrc* pRecord = (D2AnimDataRecordStrc*)ANIMDATA_GetRecordByNameHash(szCofName);
     if (!pRecord) {
       pDVar1 = DataTbls::TXT_AnimTbls_Get();
@@ -174,14 +174,14 @@ D2AnimDataRecordStrc * __fastcall ANIMDATA_GetAnimDataForUnit(D2UnitStrc * pUnit
 
 // Sets the animation speed value in an AnimData record for a unit.
 // Builds composit name, looks up record, writes nParam to the speed field.
-void __stdcall ANIMDATA_SetAnimSpeedForUnit(D2UnitStrc * pUnit, int32_t nParam) {
+void __stdcall ANIMDATA_SetAnimSpeedForUnit(D2UnitStrc * pUnit, int32_t nAnimSpeed) {
     char szCofName[8];
     memset(szCofName, 0, 8 * sizeof(szCofName[0]));
     int nCofNameLen = 0;
     COMPOSIT::Composit::COMPOSIT_GetCofPathWithTransform(pUnit, szCofName, &nCofNameLen, 0, 1, pUnit->pInventory, -1);
     int* pRecord = ANIMDATA_GetRecordByNameHash(szCofName);
     if (pRecord) {
-      pRecord[3] = nParam;
+      pRecord[3] = nAnimSpeed;
     }
 }
 

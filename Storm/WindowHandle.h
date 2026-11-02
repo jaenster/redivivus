@@ -32,7 +32,7 @@ HWND __stdcall WND_GetActiveWindow();
 int __stdcall SMsgPopRegisterState(char * szText);
 // @blizzard SMsgPushRegisterState (SMSG.CPP)
 uint32_t __stdcall SMsgPushRegisterState(uint32_t nSubId);
-uint32_t __stdcall WND_SetActiveWindow(uint32_t dwParam);
+uint32_t __stdcall WND_SetActiveWindow(uint32_t pWindow);
 uint32_t __thiscall WND_ResolveListOffset(int * pNode, int * pBase);
 int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode);
 void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode, int * * ppAnchor);
@@ -66,7 +66,9 @@ void __stdcall SMsgUnregisterKeyDown(uint32_t hWnd, char * szText1, char * szTex
 void __stdcall SMsgUnregisterKeyUp(uint32_t hWnd, char * szText1, char * szText2);
 // @blizzard SMsgUnregisterMessage (SMSG.CPP)
 void __stdcall SMsgUnregisterMessage(uint32_t hWnd, char * szText1, char * szText2);
-LRESULT __stdcall WndProcC(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPARAM lParam);
+// Storm's registered window procedure; dispatches through SMsgDispatchMessage.
+// Name from the PowerPC 1.13c Storm traceback table (GenericWndProc @10026f30).
+LRESULT __stdcall GenericWndProc(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPARAM lParam);
 uint8_t * __stdcall WND_GetWndProc(int32_t nResourceId);
 uint32_t __thiscall WND_ByteBuffer_HasRoom(int32_t pThis, int32_t nAddBytes);
 int32_t __thiscall WND_EntryArray_AllocNext(int32_t pThis, int * pnCount);

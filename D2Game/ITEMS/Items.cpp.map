@@ -1,0 +1,28 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/ITEMS/Items.cpp",
+  "functions": [
+    {
+      "name": "FreeItems",
+      "address": "0059f840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059f840"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::Items",
+      "calledFunctions": [
+        "FreeItems",
+        "GetNextUnit",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

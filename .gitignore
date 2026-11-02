@@ -3,5 +3,4 @@
 metrics/
 compile-errors.txt
 sites2.tsv
-*.cpp.map
 /build/

@@ -1,0 +1,401 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Drlg/OutPlace.cpp",
+  "functions": [
+    {
+      "name": "DRLGOUTPLACE_GetRoadPresetId",
+      "address": "006755c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006755c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGOUTPLACE_GetRoadPresetId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTPLACE_GetAdjacentRoadPresetId",
+      "address": "00675600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00675600"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGOUTPLACE_GetAdjacentRoadPresetId"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetBlankBorderGridCells",
+      "address": "00675670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00675670"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "SetBlankBorderGridCells",
+        "GetGridFlags",
+        "AlterGridFlag"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2DrlgLevelStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetOutGridLinkFlags",
+      "address": "00675770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00675770"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "SetOutGridLinkFlags",
+        "GetOutLinkVisFlag",
+        "DRLGGRID_SetEdgeGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2DrlgVertexStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PlaceAct1245OutdoorBorders",
+      "address": "00675850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00675850"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "PlaceAct1245OutdoorBorders",
+        "GetActNoFromLevelNumber",
+        "GetCoordDiff",
+        "DRLGOUTROOM_GetGridDivisionSize",
+        "SpawnOutdoorLevelPresetEx",
+        "AlterGridFlag",
+        "SetBlankBorderGridCells"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2DrlgVertexStrc",
+        "D2DrlgVertexStrc *",
+        "eAct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGACT_SetWarpConnectionsBetweenTwoAreas",
+      "address": "006775c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006775c0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGCOORDS_IsAdjacentOrOverlapping",
+        "DRLGACT_SetWarpConnection",
+        "DRLGACT_SetWarpConnectionsBetweenTwoAreas",
+        "GetLevelAndAlloc",
+        "DRLGACT_AllocWarpsInfo"
+      ],
+      "usedTypes": [
+        "D2DrlgActWarpsInfoStrc",
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "DRLGLEVEL_AllocOrthForAdjacentLevel",
+      "address": "00677647",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00677647"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGLEVEL_AllocOrthForAdjacentLevel",
+        "GetLevelAndAlloc",
+        "GetDirectionFromCoordinates",
+        "AllocDrlgOrth"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "eD2LevelId",
+        "eDrlgDirection"
+      ]
+    },
+    {
+      "name": "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId",
+      "address": "00677680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00677680"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId",
+        "GetLevelAndAlloc",
+        "DRLGWARP_GetVisArrayFromLevelId",
+        "DRLGACTMISC_GetWarpsIdIfExists",
+        "GetDirectionFromCoordinates",
+        "AllocDrlgOrth"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "eD2LevelId",
+        "eDrlgDirection"
+      ]
+    },
+    {
+      "name": "DRLGOUTPLACE_CalcSubLevelPlacement",
+      "address": "006777d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006777d0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGOUTPLACE_CalcSubLevelPlacement"
+      ],
+      "usedTypes": [
+        "D2DrlgSubLevelPlaceStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGLEVEL_FixDrlgLevelForSpiderForest",
+      "address": "00677880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00677880"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGLEVEL_FixDrlgLevelForSpiderForest",
+        "TXT_LevelDefs_GetLine",
+        "memset",
+        "DRLGOUTPLACE_CalcSubLevelPlacement",
+        "DRLGROOM_CoordsWithinDistance",
+        "AllocServerMemory",
+        "GetLevelAndAlloc",
+        "FreeServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgSubLevelPlaceStrc",
+        "D2DrlgSubLevelPlaceStrc *",
+        "D2LevelDefsTxt",
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ]
+    },
+    {
+      "name": "DRLGLEVEL_FixDrlgLevelForLowerKurast",
+      "address": "00678910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678910"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGLEVEL_FixDrlgLevelForLowerKurast",
+        "TXT_LevelDefs_GetLine",
+        "GetLevelAndAlloc"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "D2LevelDefsTxt",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGActMisc_InitAct3",
+      "address": "006789b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006789b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGActMisc_InitAct3",
+        "GetLevelAndAlloc",
+        "TXT_LevelDefs_GetLine",
+        "DRLGLEVEL_FixDrlgLevelForSpiderForest",
+        "DRLGLEVEL_FixDrlgLevelForLowerKurast",
+        "DRLGACT_SetWarpConnectionsBetweenTwoAreas",
+        "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "D2LevelDefsTxt"
+      ]
+    },
+    {
+      "name": "DRLGACTMISC_AllocDrlgLevelForAct",
+      "address": "00678ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00678ad0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGACTMISC_AllocDrlgLevelForAct",
+        "DRLGLEVEL_ParseLevelData",
+        "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId",
+        "DRLGActMisc_InitAct3",
+        "GetLevelAndAlloc",
+        "DRLGACT_SetWarpConnectionsBetweenTwoAreas"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgStrc",
+        "eAct"
+      ]
+    },
+    {
+      "name": "DRLGOUTROOM_CreateOutdoorRoomEx",
+      "address": "0067d540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067d540"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "DRLGOUTROOM_CreateOutdoorRoomEx",
+        "DRLGROOMEX_AllocRoomEx",
+        "AddRoomExToLevel",
+        "TXT_LevelDefs_GetLine",
+        "DRLGROOMEX_RollLevelSubstitutionMask"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "D2DrlgRoomExDataMazeStrc",
+        "D2LevelDefsTxt",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BuildKurast",
+      "address": "0067f190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067f190"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "BuildKurast",
+        "DRLGOUTJUNG_BuildKurastDocktownBorders",
+        "DRLGOUTJUNG_BuildKurastUpperBorders",
+        "DRLGOUTJUNG_BuildKurastCausewayBorders",
+        "SpawnOutdoorLevelPreset",
+        "SpawnRandomPreset",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "BuildTravincal",
+      "address": "0067f3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067f3b0"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "BuildTravincal",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    },
+    {
+      "name": "InitAct3OutdoorLevel",
+      "address": "0067f450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067f450"
+        }
+      ],
+      "namespace": "D2Common::Drlg::OutPlace",
+      "calledFunctions": [
+        "InitAct3OutdoorLevel",
+        "SetOutGridLinkFlags",
+        "BuildJungle",
+        "BuildKurast",
+        "BuildTravincal"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ]
+    }
+  ]
+}

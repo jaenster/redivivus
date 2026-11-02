@@ -1,0 +1,253 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Unit.cpp",
+  "functions": [
+    {
+      "name": "DRLGROOM_ValidateUnitPosition",
+      "address": "0064bf60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064bf60"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "DRLGROOM_ValidateUnitPosition",
+        "DRLGROOM_GetRoomCoordinates",
+        "GetXPos",
+        "GetYPos",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROOM_LinkUnitToUpdateList",
+      "address": "0064c040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c040"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "ROOM_LinkUnitToUpdateList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsUpdateLocked",
+        "DRLGROOM_GetUnitUpdateListFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SortUnitListByTargetY",
+      "address": "0064c0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c0c0"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "SortUnitListByTargetY",
+        "DRLGROOM_GetUnitListFromRoom",
+        "GetTargetY"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ROOM_ClearUnitUpdateList",
+      "address": "0064c160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c160"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "ROOM_ClearUnitUpdateList",
+        "DRLGROOM_GetUnitUpdateListFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *"
+      ]
+    },
+    {
+      "name": "DRLGROOM_RemoveUnitFromUpdateList",
+      "address": "0064c1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c1b0"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "DRLGROOM_RemoveUnitFromUpdateList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetUnitUpdateListFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_IsUnitInRoom",
+      "address": "0064c260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c260"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "DRLGROOM_IsUnitInRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetUnitListFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_AddUnitToRoomList",
+      "address": "0064c2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c2c0"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "DRLGROOM_AddUnitToRoomList",
+        "DRLGROOM_ValidateUnitPosition",
+        "DRLGROOM_GetUnitListFromRoom",
+        "ROOM_LinkUnitToUpdateList",
+        "STATSEX_GetAlignment",
+        "DRLGROOM_IncreaseAlliedCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_AddUnitToRoom",
+      "address": "0064c350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c350"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "DRLGROOM_AddUnitToRoom",
+        "DRLGROOM_AddUnitToRoomList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "RemoveUnitFromRoom",
+      "address": "0064c370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c370"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "RemoveUnitFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetUnitListFromRoom",
+        "STATSEX_GetAlignment",
+        "DRLGROOM_DecreaseAlliedCount",
+        "DRLGROOM_RemoveUnitFromUpdateList",
+        "ResetRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGROOM_ClearUnitRoomLink",
+      "address": "0064c450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064c450"
+        }
+      ],
+      "namespace": "D2Common::Unit",
+      "calledFunctions": [
+        "DRLGROOM_ClearUnitRoomLink",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGPATH_ClearPathPosition",
+        "RemoveUnitFromRoom"
+      ],
+      "usedTypes": [
+        "D2StaticPathStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    }
+  ]
+}

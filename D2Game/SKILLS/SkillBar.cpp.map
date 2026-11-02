@@ -1,0 +1,1198 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/SKILLS/SkillBar.cpp",
+  "functions": [
+    {
+      "name": "SKILLBAR_SrvStFn32_StrikeWithAuraState",
+      "address": "005d7ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d7ea0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_SrvStFn32_StrikeWithAuraState",
+        "GetTargetEx",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "D2GetSkillCalc",
+        "SKILLS_ApplyAttackRateBuff",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_FindCombatEntry",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_SetExpireFunction",
+        "D2SetAurastatsFromSkills"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_SrvStFn33_TargetRevivableCorpse",
+      "address": "005d80c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d80c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_SrvStFn33_TargetRevivableCorpse",
+        "GetTargetEx",
+        "SKILLS_IsCorpseValidForRevive",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMZ_CreateLightningFuryBolts",
+      "address": "005d8100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8100"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLAMZ_CreateLightningFuryBolts",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetSkilParam2",
+        "GetSkilParam3"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_069_FindPotion",
+      "address": "005d81c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d81c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_069_FindPotion",
+        "GetTargetEx",
+        "SKILLS_IsCorpseValidForRevive",
+        "UNIT_GetUnitState",
+        "SetState",
+        "ROOM_LinkUnitToUpdateList",
+        "D2GetSkillCalc",
+        "UNIT_GetModuloFromSeed",
+        "SKILLAMZ_CreateLightningFuryBolts",
+        "SKILLS_DropItemByCode"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_ApplyWarCryBuff",
+      "address": "005d8290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8290"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_ApplyWarCryBuff",
+        "D2GetSkillCalc",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "D2StatesTogglegfx",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent",
+        "D2SetAurastatsFromSkills",
+        "SKILLS_UpdatePassivesAndPets"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_068_WarCry",
+      "address": "005d83e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d83e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_068_WarCry",
+        "SKILLASS_GetChargeUpMissile",
+        "SKILLS_CreateMissileRing",
+        "SKILLBAR_ApplyWarCryBuff"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_070_DoubleSwing",
+      "address": "005d8470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8470"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_070_DoubleSwing",
+        "GetTargetEx",
+        "GetMeleeRangePlusFour",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "SetTargetUnitForDynamicUnit",
+        "SKILLBAR_SrvStFn32_StrikeWithAuraState",
+        "DAMAGE_ProcessCombatQueueEntry"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_CheckCorpseCanBeConsumed",
+      "address": "005d8510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8510"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILL_CheckCorpseCanBeConsumed",
+        "D2CheckCorpseConsumed",
+        "CheckForModeZeroDeath",
+        "GetMonsterNameAndAi"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_071_IronMaiden_GenericCurse",
+      "address": "005d8570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8570"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_071_IronMaiden_GenericCurse",
+        "GetTargetEx",
+        "SKILL_CheckCorpseCanBeConsumed",
+        "UNITS_CheckIfCanAttackTarget",
+        "SKILLS_ApplyAreaHitAtUnit",
+        "D2GetSkillCalc",
+        "memset",
+        "TXT_ItemStatCost_GetLine",
+        "SKILLNEC_ApplyCurseToUnit",
+        "SetDwArgsIfNotNeg0x29a",
+        "MONSTERAI_SetTargetUnit",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SetTargetUnitForDynamicUnit"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2NecroSkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_SrvStFn34_FindItem",
+      "address": "005d8760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8760"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_SrvStFn34_FindItem",
+        "GetTargetEx",
+        "SKILLS_IsSelectableCorpse"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_072_FindItem",
+      "address": "005d8780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8780"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_072_FindItem",
+        "GetTargetEx",
+        "SKILLS_IsSelectableCorpse",
+        "UNIT_GetUnitState",
+        "SetState",
+        "ROOM_LinkUnitToUpdateList",
+        "D2GetSkillCalc",
+        "UNIT_GetModuloFromSeed",
+        "BarbFindItemSkill"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_074_DoubleThrow",
+      "address": "005d88b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d88b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "CreatingAMissile",
+        "Skills_SrvDoFunc_074_DoubleThrow",
+        "PLAYER_GetActiveWeaponForSkill",
+        "ITEM_GetItemsTxt_wMissileType",
+        "ITEMS_IsA",
+        "SKILLS_CreateMissileFromUnit",
+        "SKILLS_CalcToHit",
+        "STATLIST_AddUnitStat",
+        "D2GetSkillCalc"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_075_GrimWard",
+      "address": "005d89b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d89b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_075_GrimWard",
+        "GetTargetEx",
+        "SKILLS_IsCorpseValidForRevive",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "TXT_MonStats_GetMonStats2",
+        "memset",
+        "CreatingMissile",
+        "SetState",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_SkillMeleeAttack",
+      "address": "005d8b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8b10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_SkillMeleeAttack",
+        "SetTargetUnitForDynamicUnit",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "GetCurrentSkill",
+        "SKILL_SetParam1"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_ApplyFrenzyStack",
+      "address": "005d8c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8c70"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_ApplyFrenzyStack",
+        "GetCurrentSkill",
+        "SKILL_GetParam1",
+        "D2GetSkillCalc",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "D2AddStatToStatsListEx",
+        "STATLIST_AttachStatListToUnit",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent",
+        "D2StatesTogglegfx",
+        "STATLIST_GetBaseStatValue",
+        "D2SetAurastatsFromSkills"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_009_FrenzyMeleeHit",
+      "address": "005d8e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8e00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_009_FrenzyMeleeHit",
+        "GetTargetEx",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "DAMAGE_RemoveDamageListEntry",
+        "PLRMODES_CheckWeaponQuantityAndDurability",
+        "PLRMODES_BreakZeroDurabilityWeapons",
+        "SKILLBAR_ApplyFrenzyStack",
+        "SKILLBAR_SkillMeleeAttack",
+        "GetMeleeRangePlusFour",
+        "SKILLS_FindNextUnitInAreaByGUID"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_OnWarCryExpire",
+      "address": "005d8ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8ef0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_OnWarCryExpire",
+        "GetGamePointer",
+        "SUNITEVENT_RemoveEventsByQueueAndOwner",
+        "CheckForModeZeroDeath",
+        "STATES_IsStateActive",
+        "SetState",
+        "UpdateAnimSpeed",
+        "SKILLS_UpdatePassivesAndPets"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_SrvStFn38_Whirlwind",
+      "address": "005d8f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d8f50"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SetStateWithExpiryTime",
+        "SKILLBAR_SrvStFn38_Whirlwind",
+        "SKILLS_GetSkillByEnum",
+        "SKILLS_GetTargetOrCursorPos",
+        "UnitQueuePacket0xA5",
+        "UNIT_GetUnitState",
+        "GetTargetEx",
+        "IsInMeleeRange",
+        "SKILLS_ForceAttackTarget",
+        "PATH_SetCollisionPattern",
+        "PATH_SetPathType",
+        "PATH_CalculatePath",
+        "SKILLS_GetUnitWalkVelocity",
+        "SetVelocities",
+        "GetPathPoint",
+        "GetUnitWidth",
+        "UNITS_GetRoom",
+        "AddCollision_Type",
+        "SetUninterruptableState",
+        "SetState",
+        "SKILL_SetFlags",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "SKILL_SetParam4",
+        "D2UpdateState",
+        "D2GetSkillCalc",
+        "D2SetAurastatsFromSkills",
+        "D2SetPassiveStatsFromSkills",
+        "D2AddStatToStatsListEx",
+        "SUNITEVENT_RemoveEventsByQueueAndOwner",
+        "D2SetAuraEvent",
+        "D2StatesTogglegfx"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMZ_GetPlagueJavelinCloudCount",
+      "address": "005d92d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d92d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLAMZ_GetPlagueJavelinCloudCount",
+        "INVENTORY_FindWornItemByType",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLAMZ_CreatePlagueJavelinClouds",
+      "address": "005d9320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d9320"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLAMZ_CreatePlagueJavelinClouds",
+        "SKILL_GetParam4",
+        "SKILL_SetParam4",
+        "PLAYER_GetActiveWeaponForSkill",
+        "ITEM_CalcWeaponAttackSpeed",
+        "SKILLAMZ_GetPlagueJavelinCloudCount"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILL_DeactivateAndRestoreCollision",
+      "address": "005d9460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d9460"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILL_DeactivateAndRestoreCollision",
+        "SKILL_SetFlags",
+        "SetUninterruptableState",
+        "UnitQueuePacket0xA5",
+        "GetUnitWidth",
+        "UNITS_GetRoom",
+        "RemoveCollision_Type",
+        "PATH_ChangeCollisionType",
+        "PATH_SetCollisionPattern",
+        "SetState",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2CollisionShapeType",
+        "eD2Skills",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_076_Whirlwind",
+      "address": "005d9580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d9580"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_076_Whirlwind",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "SKILL_DeactivateAndRestoreCollision",
+        "SKILL_GetFlags",
+        "CheckForModeZeroDeath",
+        "SetSequenceFrame",
+        "UNITS_SetupAnimTimerEventsFromFrame",
+        "SKILLAMZ_CreatePlagueJavelinClouds",
+        "SKILL_GetParam3",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "SKILL_SetParam3",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "SKILL_SetFlags"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_SrvStFn39_Berserk",
+      "address": "005d97f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d97f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_SrvStFn39_Berserk",
+        "GetTargetEx",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent",
+        "D2SetAurastatsFromSkills"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_FindValidLeapTarget",
+      "address": "005d9a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d9a10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_FindValidLeapTarget",
+        "GetXPos",
+        "GetYPos",
+        "D2GetSkillCalc",
+        "GetDistanceToXY",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetUnitSizeX",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "GetUnitWidth",
+        "CheckCollision_BlockPlayer_Type",
+        "SKILLS_HasLineOfSight"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "POINT",
+        "eD2CollisionShapeType",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_InitChargeTarget",
+      "address": "005d9c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d9c80"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_InitChargeTarget",
+        "MONSTER_RecalculateCombatStats",
+        "MONSTER_AttackTarget",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "SKILL_SetParam3",
+        "SKILL_SetParam4"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SKILLBAR_CanTargetPosition",
+      "address": "005d9ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d9ce0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_CanTargetPosition",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_SrvStFn40_Leap",
+      "address": "005d9d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d9d50"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_SrvStFn40_Leap",
+        "GetCurrentSkill",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLBAR_CanTargetPosition",
+        "SKILLBAR_FindValidLeapTarget",
+        "GetTargetEx",
+        "SKILL_SetParam4",
+        "SKILLBAR_InitChargeTarget",
+        "CheckForModeZeroDeath",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetUnitSizeX",
+        "UNITS_GetRoom",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "SetCurrentSkill",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetUnitWidth",
+        "AddCollision_Type",
+        "SetUninterruptableState",
+        "SetState",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "SKILL_SetFlags"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "POINT",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILL_InitTransportPath",
+      "address": "005d9f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d9f70"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILL_InitTransportPath",
+        "SKILL_SetFlags",
+        "PATH_SetCollisionPattern",
+        "PATH_ChangeCollisionType",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "SetSP1",
+        "PATH_SetPathType",
+        "TXT_MonStats_GetLine",
+        "INV_GetCharStatsTxtLine",
+        "SetVelocities",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2DynamicPathStrc",
+        "D2MonStatsTxt",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_CalculateChargePath",
+      "address": "005da020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da020"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_CalculateChargePath",
+        "SKILL_GetParam4",
+        "SKILL_GetParam3",
+        "FindUnitFromTable",
+        "SKILL_SetFlags",
+        "SetSequenceFrame",
+        "PATH_SnapPositionToTile",
+        "OverwriteDistanceAndMaxDistance",
+        "SetStepNum",
+        "SetTarget",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown",
+        "SetSP1",
+        "PATH_SetPathType",
+        "SetDistance",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_ArriveAtChargeTarget",
+      "address": "005da120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da120"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_ArriveAtChargeTarget",
+        "UNITS_GetRoom",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "TXT_MonStats_GetBaseId",
+        "GetXPos",
+        "GetYPosFromDynamicPathUnit",
+        "GetUnitWidth",
+        "RemoveCollision_Type",
+        "PATH_ChangeCollisionType",
+        "PATH_SetCollisionPattern",
+        "PATH_SetPathType",
+        "SKILL_SetFlags",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SKILLBAR_CalculateChargePath",
+        "SetUninterruptableState",
+        "GetSkillId",
+        "UnitQueuePacket0xA5",
+        "UNITS_SetupAnimTimerEventsFromFrame",
+        "GetDistanceToXY",
+        "SetSequenceFrame"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_077_Leap",
+      "address": "005da370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da370"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_077_Leap",
+        "SKILLS_GetSkillByEnum",
+        "EVENT_RemoveUnitTimersByType",
+        "SKILL_GetFlags",
+        "SKILL_InitTransportPath",
+        "SKILL_SetFlags",
+        "SKILLBAR_ArriveAtChargeTarget",
+        "memset",
+        "D2GetSkillCalc",
+        "SKILLS_ApplyAreaDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_AcquireNextTarget",
+      "address": "005da490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da490"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_AcquireNextTarget",
+        "GetTargetEx",
+        "IsInMeleeRange",
+        "SKILL_GetParam3",
+        "SKILL_GetParam4",
+        "FindUnitFromTable",
+        "GetMeleeRangePlusFour",
+        "SKILLS_FindNextUnitInAreaByGUID",
+        "SKILL_SetParam3",
+        "SKILL_SetParam4"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_SrvStFn41_LeapAttack",
+      "address": "005da540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da540"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_SrvStFn41_LeapAttack",
+        "SKILLS_GetSkillByEnum",
+        "GetTargetEx",
+        "SKILL_FindTeleportPosition",
+        "IsInMeleeRange",
+        "SKILLS_ForceAttackTarget",
+        "UNITS_GetRoom",
+        "GetUnitWidth",
+        "AddCollision_Type",
+        "SetUninterruptableState",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "SKILL_SetParam4",
+        "SKILL_SetFlags",
+        "SetState",
+        "UNIT_GetUnitState",
+        "SKILL_ApplyStunState"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2CollisionShapeType",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLBAR_WhirlwindHitCycle",
+      "address": "005da660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da660"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "SKILLBAR_WhirlwindHitCycle",
+        "SKILLS_GetSkillByEnum",
+        "SKILLBAR_AcquireNextTarget",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "GetHitClassForPlayerOrMonster",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "SetOverlay",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_078_LeapAttack",
+      "address": "005da7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005da7e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillBar",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_078_LeapAttack",
+        "SKILLS_GetSkillByEnum",
+        "SKILL_GetFlags",
+        "SKILL_InitTransportPath",
+        "SKILLBAR_WhirlwindHitCycle",
+        "SKILL_SetFlags",
+        "SKILLBAR_ArriveAtChargeTarget",
+        "SKILLBAR_AcquireNextTarget",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "UNITS_SetupAnimTimerEventsFromFrame"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

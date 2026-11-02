@@ -1,0 +1,31 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Engine/Application.cpp",
+  "functions": [
+    {
+      "name": "LIB_LoadAdvapi32",
+      "address": "004061c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004061c0"
+        }
+      ],
+      "namespace": "Storm::Engine::Application",
+      "calledFunctions": [
+        "LIB_LoadAdvapi32",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "PSID",
+        "_SID_IDENTIFIER_AUTHORITY",
+        "pfnAddAccessDeniedAce",
+        "pfnAllocateAndInitializeSid",
+        "pfnInitializeAcl",
+        "pfnSetSecurityInfo",
+        "uint32_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1747 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Multi/ChatDlg.cpp",
+  "functions": [
+    {
+      "name": "CHATDLG_OnPressUserListPrevPage",
+      "address": "0043d9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043d9e0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "COMCALLBACK_ScrollChannelUserList",
+        "CHATDLG_OnPressUserListPrevPage"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressUserListNextPage",
+      "address": "0043da00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043da00"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "COMCALLBACK_ScrollChannelUserList",
+        "CHATDLG_OnPressUserListNextPage"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressUserListPrevLine",
+      "address": "0043da20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043da20"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "COMCALLBACK_ScrollChannelUserList",
+        "CHATDLG_OnPressUserListPrevLine"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressUserListNextLine",
+      "address": "0043da30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043da30"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "COMCALLBACK_ScrollChannelUserList",
+        "CHATDLG_OnPressUserListNextLine"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_AddMultiLineText",
+      "address": "0043e1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e1a0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_AddMultiLineText",
+        "D2WINTEXTBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "StoreChatMsg",
+      "address": "0043e250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e250"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "StoreChatMsg",
+        "AllocClientMemory",
+        "SStrLen",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "D2ChatDlgUnknown_0x10",
+        "LPRECT",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_FreeChatMsgNode",
+      "address": "0043e2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e2e0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_FreeChatMsgNode",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "void *"
+      ]
+    },
+    {
+      "name": "StoreData",
+      "address": "0043e310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e310"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "StoreData",
+        "StoreChatMsg"
+      ],
+      "usedTypes": [
+        "D2ChatDlgUnknown_0x10",
+        "LPRECT",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_ProcessPendingMessages",
+      "address": "0043e3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e3a0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_ProcessPendingMessages",
+        "D2WINTEXTBOX_ClearAllLines",
+        "CHATDLG_AddMultiLineText",
+        "FreeClientMemory",
+        "D2WINTEXTBOX_ScrollToLine"
+      ]
+    },
+    {
+      "name": "CHATDLG_FormatFileTimeToDate",
+      "address": "0043e450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e450"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_FormatFileTimeToDate",
+        "WideCharToUTF8"
+      ],
+      "usedTypes": [
+        "FILETIME",
+        "WCHAR",
+        "_SYSTEMTIME",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_DisplayTimestampedMessage",
+      "address": "0043e4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e4c0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_DisplayTimestampedMessage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "_allmul",
+        "CHATDLG_FormatFileTimeToDate",
+        "StoreData"
+      ],
+      "usedTypes": [
+        "FILETIME",
+        "_FILETIME",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_EnqueueClearMessage",
+      "address": "0043e570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e570"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_EnqueueClearMessage",
+        "AllocClientMemory"
+      ]
+    },
+    {
+      "name": "CHATDLG_AppendTextToTextBox",
+      "address": "0043e5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e5f0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_AppendTextToTextBox",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_AppendTextToTextBox_ForComCallback",
+      "address": "0043e610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e610"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_AppendTextToTextBox_ForComCallback",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FORMS_DisplayBattleNetNews",
+      "address": "0043e630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e630"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "FORMS_DisplayBattleNetNews",
+        "D2WINTEXTBOX_ClearAllLines",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHATDLG_UpdateChannelOkButtonState",
+      "address": "0043e660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e660"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "D2WINMAIN_SetControlVisible",
+        "CHATDLG_UpdateChannelOkButtonState",
+        "FORMS_TextInput_GetValue",
+        "UNICODE_WideToMultiByte"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "someStrCompare",
+      "address": "0043e6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e6e0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "someStrCompare",
+        "toupper"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_HandleNotifyCommand",
+      "address": "0043e780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e780"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_HandleNotifyCommand",
+        "someStrCompare",
+        "UTF8_ConvertToWideChar",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_FindSubstringMatch",
+      "address": "0043e860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e860"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_FindSubstringMatch",
+        "SStrLen",
+        "isalnum",
+        "SStrHashHT"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_DetectCDKeyInString",
+      "address": "0043e900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e900"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_DetectCDKeyInString",
+        "SStrLen",
+        "COMCALLBACK_DetectCDKeyInMessage"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FORMS_CreateAnyFormFromListEx",
+      "address": "0043e9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043e9d0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "FORMS_CreateAnyFormFromListEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FORMS_CreateAnyForm"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FORMS_DestroyListEx",
+      "address": "0043ea20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ea20"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "FORMS_DestroyListEx",
+        "FORMS_DestroyAnyForm",
+        "D2WINMAIN_SetFormFourth"
+      ],
+      "usedTypes": [
+        "D2ControlStrc *"
+      ]
+    },
+    {
+      "name": "UIMENU_DrawTitleAndSubtitleOnCenterScreen",
+      "address": "0043ea70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ea70"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "UIMENU_DrawTitleAndSubtitleOnCenterScreen",
+        "FORMS_DestroyListEx",
+        "FORMS_CreateAnyFormFromListEx",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "SetText"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHATDLG_DestroyListCallback",
+      "address": "0043eb00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043eb00"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_DestroyListCallback",
+        "FORMS_DestroyListEx"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_InvokeCallbackIfSet",
+      "address": "0043eb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043eb10"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_InvokeCallbackIfSet"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_OpenLadderTypeMenu",
+      "address": "0043eb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043eb30"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_DestroyFormsAndShowLadder",
+        "CHATDLG_OpenLadderTypeMenu",
+        "FORMS_CreateAnyFormFromListEx",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINMAIN_SetFormFourth"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHATDLG_UpdateButtonVisibility",
+      "address": "0043eba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043eba0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_UpdateButtonVisibility",
+        "D2WINBUTTON_SetPressed",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_SetLadderFilterAndRank",
+      "address": "0043ec50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ec50"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_SetLadderFilterAndRank"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_RequestLadderRank",
+      "address": "0043ec60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ec60"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_RequestLadderRank",
+        "SStrCopy",
+        "NET_MCP_CLIENT_Send_0x16_CharRank",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderPageUp",
+      "address": "0043ece0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ece0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnPressLadderPageUp"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderPageDown",
+      "address": "0043ed10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ed10"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnPressLadderPageDown"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_LadderBoard_PrintClassButtonLabels",
+      "address": "0043ed60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ed60"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "FORMS_CreateAnyFormFromListEx",
+        "D2WINBUTTON_SetPressed",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHATDLG_DisableAllLadderButtons",
+      "address": "0043f060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f060"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed"
+      ]
+    },
+    {
+      "name": "CHATDLG_ClearLadderBoard",
+      "address": "0043f0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f0e0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_ClearLadderBoard",
+        "D2WINTEXTBOX_ClearAllLines",
+        "sprintf",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "D2WINTEXTBOX_AddLines",
+        "D2WINTEXTBOX_ScrollToLine"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHATDLG_GetLadderFilterForTab",
+      "address": "0043f150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f150"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderOverall",
+      "address": "0043f1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f1d0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "CHATDLG_OnPressLadderOverall",
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ClearLadderBoard"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderAmazon",
+      "address": "0043f230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f230"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "CHATDLG_OnPressLadderAmazon",
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ClearLadderBoard"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderSorceress",
+      "address": "0043f290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f290"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "CHATDLG_OnPressLadderSorceress",
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ClearLadderBoard"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderNecromancer",
+      "address": "0043f2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f2f0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "CHATDLG_OnPressLadderNecromancer",
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ClearLadderBoard"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderPaladin",
+      "address": "0043f350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f350"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "CHATDLG_OnPressLadderPaladin",
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ClearLadderBoard"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderBarbarian",
+      "address": "0043f3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f3b0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "CHATDLG_OnPressLadderBarbarian",
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ClearLadderBoard"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderDruid",
+      "address": "0043f410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f410"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "CHATDLG_OnPressLadderDruid",
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ClearLadderBoard"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderAssassin",
+      "address": "0043f470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f470"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_GetLadderFilterForTab",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "CHATDLG_OnPressLadderAssassin",
+        "CHATDLG_DisableAllLadderButtons",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_ClearLadderBoard"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_ClearChatHistory",
+      "address": "0043f4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f4d0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_ClearChatHistory"
+      ],
+      "usedTypes": [
+        "char[256]"
+      ]
+    },
+    {
+      "name": "CHATDLG_AppendChatToHistory",
+      "address": "0043f510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f510"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_AppendChatToHistory",
+        "memmove"
+      ]
+    },
+    {
+      "name": "CHATDLG_SetControlParent",
+      "address": "0043f560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f560"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_SetControlParent",
+        "D2WINMAIN_SetControlField4",
+        "D2WINMAIN_SetControlVisible"
+      ],
+      "usedTypes": [
+        "D2ControlStrc"
+      ]
+    },
+    {
+      "name": "CHATDLG_PollUserProfileReply",
+      "address": "0043f590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f590"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_PollUserProfileReply",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ]
+    },
+    {
+      "name": "CHATDLG_SendProfileData",
+      "address": "0043f5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f5f0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_SendProfileData"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_ToggleLadderNews",
+      "address": "0043f630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f630"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_ToggleLadderNews",
+        "D2WINBUTTON_SetImageIndex",
+        "rand",
+        "CONTAINER_InitializeBuffer",
+        "UTF8_ConvertToWideChar",
+        "SetText",
+        "GetLocaleString"
+      ],
+      "usedTypes": [
+        "D2ControlMsg",
+        "WCHAR",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressChatCommandsOK",
+      "address": "0043f720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f720"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnPressChatCommandsOK",
+        "OOGUTIL_DestroyChatCommandsDialog"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_RefreshGameNameDisplay",
+      "address": "0043f730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f730"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_RefreshGameNameDisplay",
+        "strncat",
+        "D2WINMAIN_SetControlActive",
+        "STRING_ConvertCharToWchar",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHATDLG_FreePlayerNameList",
+      "address": "0043f800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f800"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_FreePlayerNameList",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "CHATDLG_CancelGameCreate",
+      "address": "0043f850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f850"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_CancelGameCreate",
+        "NET_MCP_CLIENT_Send_0x13_CancelGameCreate",
+        "SetIsMPCJoinSuccesfull"
+      ]
+    },
+    {
+      "name": "CHATDLG_ParseCommandArgument",
+      "address": "0043f870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f870"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_ParseCommandArgument",
+        "SStrChr",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SafeDefaultChannel",
+      "address": "0043f8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f8a0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "SafeDefaultChannel",
+        "SRegSaveString"
+      ]
+    },
+    {
+      "name": "CHATDLG_DestroyAllForms",
+      "address": "0043f8c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f8c0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_DestroyAllForms",
+        "OOGUTIL_UpdateGameListFilter",
+        "UIMENU_DestroyLobbyAndJoinGameForms",
+        "LAUNCHER_DestroyLauncherForms",
+        "FORMS_DestroyListEx",
+        "OOGUTIL_CloseProfileDialog",
+        "FORMS_DestroyAnyForm",
+        "OOGUTIL_DestroyChatCommandsDialog",
+        "D2WINMAIN_SetControlActive"
+      ]
+    },
+    {
+      "name": "CHATDLG_SetDestroyCallback",
+      "address": "0043f930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f930"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_SetDestroyCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CHATDLG_DestroyAllForms"
+      ],
+      "usedTypes": [
+        "ChatDlgCallback",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_HandleTabCompletion",
+      "address": "0043f9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043f9b0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_HandleTabCompletion",
+        "FORMS_TextInput_GetValue",
+        "OOGUTIL_CopyChannelName",
+        "CONTAINER_InitializeBuffer",
+        "UNICODE_WideToMultiByte",
+        "strncpy",
+        "sprintf",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "D2WINEDITBOX_SetTextWide",
+        "D2WINEDITBOX_SetTextFromAnsi"
+      ],
+      "usedTypes": [
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "UIMENU_DrawSpecificJoinGameError",
+      "address": "0043fb50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043fb50"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "UIMENU_DrawSpecificJoinGameError",
+        "CHATDLG_DestroyAllForms",
+        "D2WINMAIN_SetControlActive",
+        "D2WINBUTTON_SetPressed",
+        "FORMS_CreateAnyForm",
+        "D2WINTEXTBOX_SetTextW"
+      ],
+      "usedTypes": [
+        "ChatDlgCallback",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHATDLG_ResetButtonsAndForms",
+      "address": "0043fbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043fbd0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_ResetButtonsAndForms",
+        "CHATDLG_DestroyAllForms",
+        "D2WINBUTTON_SetPressed"
+      ]
+    },
+    {
+      "name": "CHATDLG_CreateAllForms",
+      "address": "0043fc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043fc20"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_CreateAllForms",
+        "sprintf",
+        "CHATDLG_DestroyAllForms",
+        "D2COMP_DestroyCompositeUnit",
+        "D2WINMAIN_SetBackgroundDC6",
+        "FORMS_CreateAnyForm",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_SetPasswordMode",
+        "COMCALLBACK_ClearChannelUserList",
+        "SetUnsetFlag0x08",
+        "D2WinButton",
+        "D2WINMAIN_SetControlActive",
+        "D2WINBUTTON_SetImageIndex"
+      ],
+      "usedTypes": [
+        "D2WinButton",
+        "D2WinButton *"
+      ]
+    },
+    {
+      "name": "OOGMENU_CreateGame",
+      "address": "0043fe40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043fe40"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "OOGMENU_CreateGame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CHATDLG_DestroyAllForms",
+        "HasPeerName",
+        "SetIsMPCJoinSuccesfull",
+        "NET_MCP_CLIENT_Send_0x03_CreateGame",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "D2WINMAIN_SetCursorDC6",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "mcp0x03data",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGMENU_JoinGame",
+      "address": "0043ffa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0043ffa0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "OOGMENU_JoinGame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CHATDLG_DestroyAllForms",
+        "HasPeerName",
+        "NET_MCP_CLIENT_Send_0x04_JoinGame",
+        "D2WINMAIN_SetControlActive",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "D2WINMAIN_SetCursorDC6",
+        "D2WINMAIN_ClearMessageLoopFlag"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int16_t",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState",
+      "address": "00440110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440110"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState",
+        "CHATDLG_UpdateChannelOkButtonState"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressChatWarningCancel",
+      "address": "00440120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440120"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnPressChatWarningCancel",
+        "D2WINEDITBOX_SetTextWide",
+        "FORMS_DestroyListEx"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "UIMENU_DrawTitleOnCenterSmaller",
+      "address": "00440140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440140"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "FORMS_DestroyListEx",
+        "FORMS_CreateAnyFormFromListEx",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "SetText"
+      ],
+      "usedTypes": [
+        "ChatDlgCallback",
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "UIMENU_PrintSmallTitleOnCenterScreen",
+      "address": "004401c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004401c0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "UIMENU_PrintSmallTitleOnCenterScreen",
+        "FORMS_DestroyListEx",
+        "FORMS_CreateAnyFormFromListEx",
+        "FORMS_SetGlobalFormImage",
+        "SetUnsetFlag0x08",
+        "SetText",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "ChatDlgCallback",
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressCloseDialog",
+      "address": "00440240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440240"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OpenLadderTypeMenu",
+        "CHATDLG_OnPressCloseDialog",
+        "CHATDLG_UpdateButtonVisibility",
+        "CHATDLG_DestroyAllForms"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressCloseLadderBoard",
+      "address": "00440260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440260"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "FORMS_CreateAnyFormFromListEx",
+        "CHATDLG_OnPressCloseLadderBoard",
+        "D2WINBUTTON_SetPressed",
+        "CHATDLG_DestroyAllForms",
+        "CHATDLG_OpenLadderTypeMenu"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_UpdateChatRoomList",
+      "address": "004402a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004402a0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_UpdateChatRoomList",
+        "D2WINTEXTBOX_GetScrollPosition",
+        "D2WINTEXTBOX_GetVisibleLineCount",
+        "D2WINTEXTBOX_GetLineCellValue",
+        "UNICODE_WideToMultiByte"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnTimerRequestLadderData",
+      "address": "00440350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440350"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnTimerRequestLadderData",
+        "GetTickCount",
+        "CHATDLG_UpdateChatRoomList",
+        "NET_MCP_CLIENT_Send_0x11_RequestLadderData"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_HandleChatListClick",
+      "address": "004403f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004403f0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_HandleChatListClick",
+        "OOGUTIL_GetProfileCharacterName",
+        "STRING_CopyCharToWCharWithSetMaxSize",
+        "UNICODE_FormatWideString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "D2WINTEXTBOX_ScrollToLine",
+        "D2WINTEXTBOX_ClearLineRow",
+        "D2WINTEXTBOX_SetLineColor",
+        "_itoa",
+        "D2WINTEXTBOX_SetLineCellTextA",
+        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "STRTABLE_FormatUInt64WithAbbrev",
+        "D2WINTEXTBOX_SetLineCellTextWDirect"
+      ],
+      "usedTypes": [
+        "D2LadderRowBufStrc",
+        "WCHAR",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UIMENU_LadderBoard_PrintClassesAndTableHeaders",
+      "address": "004406f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004406f0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "UIMENU_LadderBoard_PrintClassesAndTableHeaders",
+        "UIMENU_LadderBoard_PrintClassButtonLabels",
+        "FORMS_CreateAnyFormFromListEx",
+        "D2WINMAIN_SetFormFourth",
+        "MISC_GetLanguageCode",
+        "GetLocaleString",
+        "D2WINTEXTBOX_SetTextW",
+        "D2WINTEXTBOX_SetScrollbarStyle",
+        "D2WINTEXTBOX_SetColumnCount",
+        "D2WINTEXTBOX_SetLinePadding",
+        "D2WINTEXTBOX_SetColumnWidth",
+        "D2WINTEXTBOX_SetColumnAlignment",
+        "CHATDLG_ClearLadderBoard",
+        "D2WINTIMER_Start",
+        "D2WINEDITBOX_Destroy"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2WinTextBox",
+        "WCHAR",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OpenLadderClassicSoftcore",
+      "address": "004408b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004408b0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OpenLadderClassicSoftcore",
+        "HasPeerName",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "FORMS_CreateAnyFormFromListEx",
+        "D2WINTEXTBOX_SetTextW",
+        "UIMENU_LadderBoard_PrintClassesAndTableHeaders",
+        "MCPCONNECT_SetGameListCallbacks"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OpenLadderClassicHardcore",
+      "address": "00440980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440980"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OpenLadderClassicHardcore",
+        "HasPeerName",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "FORMS_CreateAnyFormFromListEx",
+        "D2WINTEXTBOX_SetTextW",
+        "UIMENU_LadderBoard_PrintClassesAndTableHeaders",
+        "MCPCONNECT_SetGameListCallbacks"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OpenLadderExpansionSoftcore",
+      "address": "00440a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440a50"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OpenLadderExpansionSoftcore",
+        "HasPeerName",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "FORMS_CreateAnyFormFromListEx",
+        "D2WINTEXTBOX_SetTextW",
+        "UIMENU_LadderBoard_PrintClassesAndTableHeaders",
+        "MCPCONNECT_SetGameListCallbacks"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OpenLadderExpansionHardcore",
+      "address": "00440b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440b30"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OpenLadderExpansionHardcore",
+        "HasPeerName",
+        "GetLocaleString",
+        "UIMENU_DrawSpecificJoinGameError",
+        "FORMS_CreateAnyFormFromListEx",
+        "D2WINTEXTBOX_SetTextW",
+        "UIMENU_LadderBoard_PrintClassesAndTableHeaders",
+        "MCPCONNECT_SetGameListCallbacks"
+      ],
+      "usedTypes": [
+        "D2WinTextBox",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderClassicSoftcore",
+      "address": "00440c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440c10"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnPressLadderClassicSoftcore",
+        "CHATDLG_DestroyAllForms",
+        "CHATDLG_OpenLadderClassicSoftcore"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderExpansionSoftcore",
+      "address": "00440c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440c40"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnPressLadderExpansionSoftcore",
+        "CHATDLG_DestroyAllForms",
+        "CHATDLG_OpenLadderExpansionSoftcore"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderExpansionHardcore",
+      "address": "00440c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440c70"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnPressLadderExpansionHardcore",
+        "CHATDLG_DestroyAllForms",
+        "CHATDLG_OpenLadderExpansionHardcore"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "CHATDLG_ReadUserProfile",
+      "address": "00440ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440ca0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_ReadUserProfile",
+        "GetLocaleString",
+        "UIMENU_PrintSmallTitleOnCenterScreen",
+        "MessagePump",
+        "FORMS_DestroyListEx"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_StorePlayerName",
+      "address": "00440d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00440d10"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_StorePlayerName",
+        "AllocClientMemory",
+        "SStrCopy",
+        "CHATDLG_RefreshGameNameDisplay"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CHATDLG_OnPressLadderClassicHardcore",
+      "address": "00442350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442350"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_OnPressLadderClassicHardcore",
+        "CHATDLG_DestroyAllForms",
+        "CHATDLG_OpenLadderClassicHardcore"
+      ],
+      "usedTypes": [
+        "D2ControlMsg"
+      ]
+    }
+  ]
+}

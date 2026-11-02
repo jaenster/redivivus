@@ -1,0 +1,614 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat/Ignorelist/stpl_MappingEntryNode.cpp",
+  "functions": [
+    {
+      "name": "InternalClear",
+      "address": "0060ee60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ee60"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "InternalClear",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor_Unreferenced",
+      "address": "0060eef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060eef0"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "Destructor_Unreferenced",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ChangeLinkOffset",
+      "address": "0060ef30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ef30"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "ChangeLinkOffset",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DeleteNode",
+      "address": "0060ef60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ef60"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "DeleteNode",
+        "SMemFree",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "MappingEntryNode",
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CopyConstructor_Unreferenced",
+      "address": "0060f070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f070"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "CopyConstructor_Unreferenced"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "0060f150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f150"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Clear",
+        "InternalClear"
+      ],
+      "usedTypes": [
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "0060f190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f190"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Ptr",
+      "address": "0060f1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f1d0"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Ptr",
+        "SStrCmpI"
+      ],
+      "usedTypes": [
+        "HASHKEY_STRI",
+        "MappingEntryNode",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "0060f300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f300"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "UnlinkAll",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Ptr",
+      "address": "0060f510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f510"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Ptr",
+        "SStrDup",
+        "SStrHash",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "HASHKEY_STRI",
+        "MappingEntryNode",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor_UnreferencedCopy",
+      "address": "0060f690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f690"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "Destructor_UnreferencedCopy",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ReallocData",
+      "address": "0060f720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f720"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+      "calledFunctions": [
+        "ReallocData",
+        "UnlinkAll",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "0060f950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f950"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Reserve",
+      "address": "0060fad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060fad0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+      "calledFunctions": [
+        "Reserve",
+        "CalcChunkSize",
+        "ReallocData"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetCount",
+      "address": "006100b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006100b0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+      "calledFunctions": [
+        "SetCount",
+        "CalcChunkSize",
+        "ReallocData",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00610550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610550"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Destructor",
+        "InternalClear",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "TSLink<MappingEntryNode>",
+        "int32_t",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NewNode",
+      "address": "00610630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610630"
+        }
+      ],
+      "namespace": "TSExplicitList<MappingEntryNode, -572662307>",
+      "calledFunctions": [
+        "NewNode",
+        "SMemAlloc",
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "MappingEntryNode",
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InternalDelete",
+      "address": "00610690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610690"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "InternalDelete",
+        "SMemFree",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "MappingEntryNode",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
+      ]
+    },
+    {
+      "name": "InternalNew",
+      "address": "006106d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006106d0"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "InternalNew",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "MappingEntryNode",
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00610780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610780"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "006107b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006107b0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+      "calledFunctions": [
+        "Clear",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>"
+      ]
+    },
+    {
+      "name": "Destroy",
+      "address": "006107d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006107d0"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Destroy",
+        "InternalClear",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00610800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610800"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetCount_Unreferenced",
+      "address": "00610830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610830"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+      "calledFunctions": [
+        "SetCount_Unreferenced",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GrowListArray",
+      "address": "006108d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006108d0"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "GrowListArray",
+        "UnlinkAll",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "TSLink<MappingEntryNode>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "00610b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610b30"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "Constructor",
+        "UnlinkAll",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MonitorFullness",
+      "address": "00610ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610ca0"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "MonitorFullness",
+        "GrowListArray"
+      ],
+      "usedTypes": [
+        "TSExplicitList<MappingEntryNode, -572662307>",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "New",
+      "address": "00610df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00610df0"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "New",
+        "MonitorFullness",
+        "SMemFree",
+        "SStrDup"
+      ],
+      "usedTypes": [
+        "HASHKEY_STRI",
+        "MappingEntryNode",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "TSLink<MappingEntryNode>",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "New",
+      "address": "00611170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611170"
+        }
+      ],
+      "namespace": "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+      "calledFunctions": [
+        "New",
+        "SStrDup",
+        "SStrHash",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "MappingEntryNode",
+        "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    }
+  ]
+}

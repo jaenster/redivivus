@@ -541,9 +541,13 @@ static void LAUNCHER_GetDifficultyNameStringId(int32_t nDifficulty, uint16_t * w
 void __stdcall UIMENU_CantTestItBeacuseItCrash() {
     uint16_t wDifficultyStrId;
     int nDifficultyDone;
+    uint32_t nCopyCount;
+    char* pszCopyCur;
     uint16_t wszClassName[100];
     D2UiLevelLineTextStrc sLevelLineText;
     uint16_t wszLevelStr[10];
+    uint32_t nCopyBytes;
+    char cCur;
     gpLobbyForm0.pLobbyForm0 = 0;
     gpLobbyForm0.pLobbyForm1 = 0;
     gpLobbyForm0.pLobbyForm2 = 0;
@@ -589,27 +593,45 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
     char* pszTitlePrefix = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, ePlayerStatus >> 8 & 0x1f, ePlayerStatus & 4, ePlayerStatus & 0x20);
     char* pszDst = pszTitlePrefix;
     if (pszTitlePrefix) {
-      strcat(sLevelLineText.szNameAndTitle, pszTitlePrefix);
+      pszDst = pszDst + strlen(pszDst) + 1;
+      nCopyBytes = (int)pszDst - (int)pszTitlePrefix;
+      pszDst = (char*)((int)sLevelLineText.wszLevelLine + 199);
+      do {
+        pszCopyCur = pszDst + 1;
+        pszDst++;
+      } while (*pszCopyCur != '\0');
+
+      for (nCopyCount = nCopyBytes >> 2; nCopyCount; nCopyCount--) {
+        *(uint32_t*)pszDst = *(uint32_t*)pszTitlePrefix;
+        pszTitlePrefix += 4;
+        pszDst += 4;
+      }
+
+      for (nCopyCount = nCopyBytes & 3; nCopyCount; nCopyCount--) {
+        *pszDst = *pszTitlePrefix;
+        pszTitlePrefix++;
+        pszDst++;
+      }
     }
 
     pszDst = D2IniData_multiplayer->szNAME;
     strcat(sLevelLineText.szNameAndTitle, D2IniData_multiplayer->szNAME);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpCtlConfirmDialog, sLevelLineText.szNameAndTitle, (uint8_t)(char)D2IniData_multiplayer->neD2PlayerStatus >> 2 & 1);
     LAUNCHER_GetDifficultyNameStringId((uint32_t)D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, wszClassName);
-    D2UiLevelLineTextStrc* pDVar2 = &sLevelLineText;
+    D2UiLevelLineTextStrc* pDVar1 = &sLevelLineText;
     for (nDifficultyDone = 0x32; nDifficultyDone; nDifficultyDone--) {
-      pDVar2->wszLevelLine[0] = L'\0';
-      pDVar2->wszLevelLine[1] = L'\0';
-      pDVar2 = (D2UiLevelLineTextStrc*)(pDVar2->wszLevelLine + 2);
+      pDVar1->wszLevelLine[0] = L'\0';
+      pDVar1->wszLevelLine[1] = L'\0';
+      pDVar1 = (D2UiLevelLineTextStrc*)(pDVar1->wszLevelLine + 2);
     }
 
     memset(wszLevelStr, 0, 10 * sizeof(wszLevelStr[0]));
-    uint32_t uVar1 = (uint32_t)D2IniData_multiplayer->padding_0x35F[0x62];
+    uint32_t nCharLevel = (uint32_t)D2IniData_multiplayer->padding_0x35F[0x62];
     if (!D2IniData_multiplayer->padding_0x35F[0x62]) {
-      uVar1 = 1;
+      nCharLevel = 1;
     }
 
-    sprintf(sLevelLineText.szNameAndTitle, " %d ", uVar1);
+    sprintf(sLevelLineText.szNameAndTitle, " %d ", nCharLevel);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLevelStr, sLevelLineText.szNameAndTitle, 9);
     uint16_t* pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfd9);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(sLevelLineText.wszLevelLine, pwszLocaleStr);

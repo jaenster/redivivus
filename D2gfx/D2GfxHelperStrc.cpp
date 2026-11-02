@@ -41,10 +41,10 @@ BOOL __fastcall fpDrawGroundTile(int32_t nTileBlockPtr, int32_t nScreenX, int32_
     uint8_t byLightVal;
     int nScreenX_00;
     uint32_t nLightIndex;
+    uint32_t uVar3;
     uint32_t uVar4;
-    uint32_t uVar5;
-    int iVar6;
-    int iVar7;
+    int nLightDiff1;
+    int nLightDiff2;
     int nLightTableIdx;
     int nScreenY_00;
     uint32_t nLightTableBase;
@@ -53,7 +53,7 @@ BOOL __fastcall fpDrawGroundTile(int32_t nTileBlockPtr, int32_t nScreenX, int32_
     uint32_t nSubTileIdx;
     bool bFlatShaded;
     uint32_t nLightShiftedHi;
-    int iVar3 = gRenderBufferPitch * nScreenY + pRenderSurfaceBuffer;
+    int nDstRowBase = gRenderBufferPitch * nScreenY + pRenderSurfaceBuffer;
     BOOL BVar2 = 0;
     int nSubTileCount = 0;
     if (*(int*)(nTileBlockPtr + 0x50) <= 0) {
@@ -64,7 +64,7 @@ BOOL __fastcall fpDrawGroundTile(int32_t nTileBlockPtr, int32_t nScreenX, int32_
     do {
       uint8_t* pDst_00;
       pSubTile = (D2GroundSubTileStrc*)(*(int*)(nTileBlockPtr + 0x54) + nSubTileY);
-      pDst_00 = (uint8_t*)(pSubTile->nOffsetY * gRenderBufferPitch + (int)pSubTile->nOffsetX + iVar3 + nScreenX);
+      pDst_00 = (uint8_t*)(pSubTile->nOffsetY * gRenderBufferPitch + (int)pSubTile->nOffsetX + nDstRowBase + nScreenX);
       if (pSubTile->wFormat & 1) {
         nScreenX_00 = pSubTile->nOffsetX + nScreenX;
         nScreenY_00 = nScreenY + pSubTile->nOffsetY;
@@ -77,34 +77,34 @@ BOOL __fastcall fpDrawGroundTile(int32_t nTileBlockPtr, int32_t nScreenX, int32_
             bFlatShaded = true;
           } else {
             iVar1 = (uint32_t)pSubTile->nSubIdxLo + (uint32_t)pSubTile->nSubIdxHi * 8;
-            uVar5 = (uint32_t)*(uint8_t*)(nLightTablePtr + 0xd8 + iVar1 * 0xc);
-            uVar4 = (uint32_t)*(uint8_t*)(nLightTablePtr + 0x78 + iVar1 * 0xc);
+            uVar4 = (uint32_t)*(uint8_t*)(nLightTablePtr + 0xd8 + iVar1 * 0xc);
+            uVar3 = (uint32_t)*(uint8_t*)(nLightTablePtr + 0x78 + iVar1 * 0xc);
             nLightTableBase = (uint32_t)*(uint8_t*)(nLightTablePtr + 0xcc + iVar1 * 0xc);
             iVar1 = nLightTablePtr + iVar1 * 0xc;
             byLightVal = *(uint8_t*)(iVar1 + 0x6c);
             nLightIndex = (uint32_t)byLightVal;
-            iVar6 = uVar4 - nLightIndex;
-            if (iVar6 < 0) {
-              iVar6 = -iVar6;
+            nLightDiff1 = uVar3 - nLightIndex;
+            if (nLightDiff1 < 0) {
+              nLightDiff1 = -nLightDiff1;
             }
 
-            iVar7 = nLightTableBase - nLightIndex;
-            if (iVar7 < 0) {
-              iVar7 = -iVar7;
+            nLightDiff2 = nLightTableBase - nLightIndex;
+            if (nLightDiff2 < 0) {
+              nLightDiff2 = -nLightDiff2;
             }
 
-            nLightTableIdx = uVar5 - uVar4;
+            nLightTableIdx = uVar4 - uVar3;
             if (nLightTableIdx < 0) {
               nLightTableIdx = -nLightTableIdx;
             }
-            if (D2GFXRenderedData.bLowQuality || nLightTableIdx + iVar7 + iVar6 < 10) {
+            if (D2GFXRenderedData.bLowQuality || nLightTableIdx + nLightDiff2 + nLightDiff1 < 10) {
               nSubTileIdx = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)nLightShiftedHi << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byLightVal);
               bFlatShaded = true;
             } else {
               aLightCorners[0] = (int)(nLightTableBase + *(uint8_t*)(iVar1 + 0xc0) + nLightIndex + (uint32_t)*(uint8_t*)(iVar1 + 0x60)) >> 2;
-              aLightCorners[2] = (int)(*(uint8_t*)(iVar1 + 0xe4) + nLightTableBase + (uint32_t)*(uint8_t*)(iVar1 + 0x84) + uVar4) >> 2;
-              aLightCorners[1] = (int)((uint32_t)*(uint8_t*)(iVar1 + 0xc) + *(uint8_t*)(iVar1 + 0x18) + uVar4 + nLightIndex) >> 2;
-              aLightCorners[3] = (int)((uint32_t)*(uint8_t*)(iVar1 + 300) + *(uint8_t*)(iVar1 + 0x138) + uVar5 + nLightTableBase) >> 2;
+              aLightCorners[2] = (int)(*(uint8_t*)(iVar1 + 0xe4) + nLightTableBase + (uint32_t)*(uint8_t*)(iVar1 + 0x84) + uVar3) >> 2;
+              aLightCorners[1] = (int)((uint32_t)*(uint8_t*)(iVar1 + 0xc) + *(uint8_t*)(iVar1 + 0x18) + uVar3 + nLightIndex) >> 2;
+              aLightCorners[3] = (int)((uint32_t)*(uint8_t*)(iVar1 + 300) + *(uint8_t*)(iVar1 + 0x138) + uVar4 + nLightTableBase) >> 2;
               bFlatShaded = false;
             }
           }

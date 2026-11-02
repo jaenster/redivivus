@@ -1,0 +1,1056 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/SpriteCache.cpp",
+  "functions": [
+    {
+      "name": "SPRITECACHE_Init",
+      "address": "005fde10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fde10"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_Init",
+        "LRUCACHE_FreeAll",
+        "memset",
+        "Free"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_AllocEntry",
+      "address": "005fdea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fdea0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_AllocEntry",
+        "LRUCACHE_MoveToFront",
+        "LRUCACHE_GetOrAlloc",
+        "memset",
+        "CheckIfFileExists",
+        "D2FILE_SeekFile",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile",
+        "TILECMP_RelocateSubTilePixelData"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "D2LRUCacheNodeStrc",
+        "D2TileLibraryEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_FreeEntry",
+      "address": "005fdf50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fdf50"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_FreeEntry",
+        "LRUCACHE_FreeEntry"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadFromFile",
+      "address": "005fdf80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fdf80"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadFromFile",
+        "CheckIfFileExists",
+        "__security_check_cookie",
+        "D2FILE_ReadFile",
+        "D2FILE_CloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_SetMaxSize",
+      "address": "005fe000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe000"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_SetMaxSize"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_GetStats",
+      "address": "005fe010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe010"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_GetStats"
+      ],
+      "usedTypes": [
+        "ULONG_PTR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_Lock",
+      "address": "005fe060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe060"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_Lock"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_Unlock",
+      "address": "005fe070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe070"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_Unlock",
+        "LRUCACHE_FreeAll"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_TouchEntry",
+      "address": "005fe080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe080"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_TouchEntry",
+        "LRUCACHE_FreeEntry"
+      ],
+      "usedTypes": [
+        "D2TileLibraryHeaderStrc"
+      ]
+    },
+    {
+      "name": "GFX_InitLRUCache",
+      "address": "005fe120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe120"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "GFX_InitLRUCache",
+        "memset",
+        "LRUCACHE_Init"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_ReleaseHashEntry",
+      "address": "005fe170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe170"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_ReleaseHashEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFX_UnlinkCacheEntry"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IMAGE_ReturnImageExtension",
+      "address": "005fe1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe1f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "IMAGE_ReturnImageExtension"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_BuildPath",
+      "address": "005fe210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe210"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_BuildPath",
+        "vsprintf"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "va_list"
+      ]
+    },
+    {
+      "name": "SetCompressedDataGlobalAndSaveItToRegistry",
+      "address": "005fe280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe280"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SetCompressedDataGlobalAndSaveItToRegistry",
+        "SRegLoadValue"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_FindOrLoad",
+      "address": "005fe2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe2b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_FindOrLoad"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadDC6",
+      "address": "005fe610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe610"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadDC6",
+        "SStrCmpI"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadDCC",
+      "address": "005fe990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe990"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadDCC",
+        "SPRITECACHE_FindOrLoad",
+        "CELDATAHASH_FindByFilename",
+        "LRUCACHE_MoveToFront",
+        "SPRITECACHE_LoadDC6",
+        "CELDATAHASH_AllocEntry",
+        "LRUCACHE_GetOrAlloc",
+        "memset",
+        "ARCHIVE_OpenD2FileWrap",
+        "ERRORMANAGER_FReadFile",
+        "ERRORMANAGER_FGetFileSize",
+        "ERRORMANAGER_FCloseFile",
+        "CODEC_LoadPaletteFromFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "D2LRUCacheNodeStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_FindFrameBlock",
+      "address": "005feb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005feb80"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_FindFrameBlock",
+        "CELCMP_GetDirectionFrameTableIndex"
+      ],
+      "usedTypes": [
+        "D2CelDecodeStateStrc",
+        "D2GfxDataStrc",
+        "DC6Block",
+        "eD2UnitType",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_GetFrameBlock",
+      "address": "005fec50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fec50"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_GetFrameBlock",
+        "ASYNCDATA_GetResult",
+        "SPRITECACHE_FindFrameBlock"
+      ],
+      "usedTypes": [
+        "D2CelCacheBlockStrc",
+        "D2GfxDataStrc",
+        "DC6Block",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadAndCacheDC6",
+      "address": "005fec90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fec90"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadAndCacheDC6",
+        "AllocServerMemory",
+        "memset",
+        "ASYNCDATA_GetResult",
+        "SPRITECACHE_FindOrLoad",
+        "SPRITECACHE_LoadDC6",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CelCacheBlockStrc",
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_GetTotalEntries",
+      "address": "005fee10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fee10"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_GetTotalEntries"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_GetCacheSize",
+      "address": "005fee40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fee40"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_GetCacheSize"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_GetMaxSize",
+      "address": "005fee60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fee60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_GetMaxSize"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_GetCurrentSize",
+      "address": "005fee70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fee70"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_GetCurrentSize"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_AllocSpriteCache",
+      "address": "005fee90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fee90"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "GFX_AllocSpriteCache",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2GfxMemoryStrc",
+        "D2PoolManagerStrc",
+        "D2SpriteCache",
+        "fnSpriteCacheEntryRelease"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_EvictOldest",
+      "address": "005ff060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff060"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_EvictOldest",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_AddToLRU",
+      "address": "005ff0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff0f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_AddToLRU"
+      ],
+      "usedTypes": [
+        "D2GfxMemoryStrc",
+        "D2SpriteCacheEntryStrc",
+        "D2SpriteCacheEntryStrc *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_RemoveFromLRU",
+      "address": "005ff1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff1b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_RemoveFromLRU",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_CountPendingLoads",
+      "address": "005ff2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff2a0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_CountPendingLoads",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ASYNCDATA_IsComplete"
+      ],
+      "usedTypes": [
+        "D2CelCacheBlockStrc",
+        "D2SpriteCacheEntryStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_IsLoadPending",
+      "address": "005ff300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff300"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_IsLoadPending",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ASYNCDATA_IsComplete"
+      ],
+      "usedTypes": [
+        "D2CelCacheBlockStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_CancelPendingLoads",
+      "address": "005ff3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff3a0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_CancelPendingLoads",
+        "ASYNCDATA_IsComplete",
+        "ASYNCDATA_Free"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "D2CelCacheBlockStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_Query",
+      "address": "005ff3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff3f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_Query",
+        "SPRITECACHE_EvictOldest",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxMemoryStrc",
+        "D2SpriteCacheEntryStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_EvictEntry",
+      "address": "005ff4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff4a0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_EvictEntry",
+        "SPRITECACHE_AddToLRU",
+        "FreeServerMemory",
+        "SPRITECACHE_RemoveFromLRU"
+      ],
+      "usedTypes": [
+        "D2GfxMemoryStrc",
+        "D2SpriteCacheEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_AllocateMemory",
+      "address": "005ff5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff5b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_AllocateMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SPRITECACHE_RemoveFromLRU",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_FreeMemory",
+      "address": "005ff630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff630"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_FreeMemory",
+        "SPRITECACHE_EvictEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2GfxMemoryStrc",
+        "D2SpriteCacheEntryStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_DecodeFrameByIndex",
+      "address": "005ff6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff6e0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_DecodeFrameByIndex",
+        "CODEC_DecompressAllFrames",
+        "SPRITECACHE_FreeMemory"
+      ],
+      "usedTypes": [
+        "D2SpriteCacheEntryStrc",
+        "D2SpriteDecodeRequestStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadCelFileAndCache",
+      "address": "005ff760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ff760"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadCelFileAndCache",
+        "CELCMP_GetDirectionFrameTableIndex",
+        "SPRITECACHE_FindOrLoad",
+        "SPRITECACHE_LoadDC6",
+        "STRUCT_AllocAsyncData_Line0x128",
+        "ASYNCDATA_GetReadSize",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "D2CelCacheBlockStrc",
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "D2SpriteDecodeRequestStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadFromArchive",
+      "address": "005ffa20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ffa20"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadFromArchive",
+        "STRUCT_AllocAsyncData_Line0x128",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "D2CelCacheBlockStrc",
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "D2SpriteDecodeRequestStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_ReleaseMemory",
+      "address": "005ffbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ffbe0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_ReleaseMemory",
+        "SPRITECACHE_EvictEntry",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2GfxMemoryStrc",
+        "D2SpriteCacheEntryStrc"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_AllocEntry2",
+      "address": "005ffc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ffc40"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_AllocEntry2",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SPRITECACHE_Query",
+        "AllocServerMemory",
+        "GetTickCount",
+        "SPRITECACHE_EvictEntry"
+      ],
+      "usedTypes": [
+        "D2GfxMemoryStrc",
+        "D2SpriteCacheEntryStrc",
+        "int32_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "GFX_InitCelDataCache",
+      "address": "005ffd40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ffd40"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "GFX_InitCelDataCache",
+        "GFX_InitGlobalCriticalSection",
+        "SFILE_GetGlobalPointer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CELDATAHASH_InitHashTable",
+        "LRUCACHE_FreeAll",
+        "memset",
+        "LRUCACHE_Init",
+        "GFXHASH_InitHashTable",
+        "SPRITECACHE_ReleaseMemory",
+        "GFX_AllocSpriteCache"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_Shutdown",
+      "address": "005ffe30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ffe30"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_Shutdown",
+        "SPRITECACHE_ReleaseMemory",
+        "memset",
+        "LRUCACHE_FreeAll",
+        "GFX_DestroyGlobalCriticalSection"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadDCCAndCache",
+      "address": "005ffe90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ffe90"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadDCCAndCache",
+        "SPRITECACHE_AllocEntry2",
+        "memset",
+        "SPRITECACHE_LoadCelFileAndCache",
+        "GFX_AllocCacheEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SPRITECACHE_LoadAndCacheDC6",
+        "SPRITECACHE_GetFrameBlock"
+      ],
+      "usedTypes": [
+        "D2CelCacheBlockStrc",
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "D2SpriteCacheEntryStrc",
+        "DC6Block",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadCelAndCache",
+      "address": "005fffa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fffa0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadCelAndCache",
+        "SPRITECACHE_AllocEntry2",
+        "memset",
+        "SPRITECACHE_LoadFromArchive",
+        "SPRITECACHE_EvictEntry",
+        "SPRITECACHE_FreeMemory",
+        "GFX_AllocCacheEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CelCacheBlockStrc",
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "D2SpriteCacheEntryStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_LoadSpriteWithConversion",
+      "address": "006000b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006000b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_LoadSpriteWithConversion",
+        "CELCMP_CanConvertFormat",
+        "GFXHASH_FindEntryByGfxData",
+        "SPRITECACHE_FindOrLoad",
+        "SPRITECACHE_LoadDC6",
+        "SPRITECACHE_LoadDCCAndCache",
+        "SPRITECACHE_LoadCelAndCache",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_GetOrLoadSprite",
+      "address": "006001f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006001f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_GetOrLoadSprite",
+        "__security_check_cookie",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "SPRITECACHE_LoadDCC",
+        "GFXHASH_FindEntryByGfxData",
+        "ASYNCDATA_IsComplete",
+        "CELCMP_GetPaletteShiftValue",
+        "SPRITECACHE_LoadDC6",
+        "SPRITECACHE_LoadDCCAndCache",
+        "SPRITECACHE_AllocateMemory",
+        "SPRITECACHE_LoadAndCacheDC6",
+        "SPRITECACHE_GetFrameBlock",
+        "SPRITECACHE_LoadSpriteWithConversion"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "D2CelCacheBlockStrc",
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SPRITECACHE_PrecacheSpriteSync",
+      "address": "006004e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006004e0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SpriteCache",
+      "calledFunctions": [
+        "SPRITECACHE_PrecacheSpriteSync",
+        "CELCMP_GetDC6BlockFromGfxData",
+        "__security_check_cookie",
+        "SPRITECACHE_LoadDCC",
+        "GFXHASH_FindEntryByGfxData",
+        "CELCMP_GetPaletteShiftValue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SPRITECACHE_LoadDC6",
+        "SPRITECACHE_LoadCelAndCache"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

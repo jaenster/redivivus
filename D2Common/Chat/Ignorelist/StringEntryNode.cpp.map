@@ -1,0 +1,27 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Chat/Ignorelist/StringEntryNode.cpp",
+  "functions": [
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "0060f160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060f160"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist::StringEntryNode",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "StringEntryNode",
+        "uint32_t"
+      ]
+    }
+  ]
+}

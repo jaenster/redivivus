@@ -1,0 +1,1281 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UNIT/UnitSnd.cpp",
+  "functions": [
+    {
+      "name": "GetSndUnitClassId",
+      "address": "004ca2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca2c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "GetSndUnitClassId",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSndUnitType",
+      "address": "004ca320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca320"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "GetSndUnitType",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetSndUnitMode",
+      "address": "004ca380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca380"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "GetSndUnitMode",
+        "GetAnimOrSeqMode",
+        "SKILLS_GetStateTransformGfx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetBaseSoundId",
+      "address": "004ca3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca3e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetBaseSoundId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TxtGetSoundIdLineFromUnit",
+      "address": "004ca410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca410"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "TxtGetSoundIdLineFromUnit",
+        "TxtGetMonSoundsLine",
+        "GetSndUnitClassId",
+        "IsMonsterSuperUnique",
+        "GetBossId",
+        "TXT_SuperUniques_GetLine",
+        "IsMonsterUnique",
+        "IsMonsterMinion",
+        "TXT_MonStats_GetLine",
+        "MONSTERTBLS_GetMonSoundsTxtRecord"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2MonStatsTxt",
+        "D2SuperUniquesTxt",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetSkillCastSound",
+      "address": "004ca4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca4c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetSkillCastSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetSkillStartSound",
+      "address": "004ca500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca500"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetSkillStartSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_ResolveSoundFromFlags",
+      "address": "004ca560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca560"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_ResolveSoundFromFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetSndUnitType",
+        "GetSndUnitClassId",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetHitSound",
+      "address": "004ca810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca810"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetHitSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetSfxDataListHead",
+      "address": "004ca870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca870"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetSfxDataListHead",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "void *"
+      ]
+    },
+    {
+      "name": "AllocUnitSfxData",
+      "address": "004ca8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca8a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "AllocUnitSfxData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_sD2SoundSmp_Alloc"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "FreeSfxData",
+      "address": "004ca8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca8d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "FreeSfxData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_sD2SoundSmp_Free"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetMissileSound",
+      "address": "004ca900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca900"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetMissileSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_IsInitializedDup",
+        "SOUNDHDR_GetSoundField0x60",
+        "SOUNDHDR_GetSoundGroupSize",
+        "SOUND_StopChannelById"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetMissileLoopSound",
+      "address": "004ca990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca990"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetMissileLoopSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IterateUnitSfxData",
+      "address": "004ca9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ca9c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "IterateUnitSfxData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_StopUnitSoundByIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_UpdatePositionalAudio",
+      "address": "004caa10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004caa10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_UpdatePositionalAudio",
+        "SOUND_StopChannelById",
+        "SOUNDHDR_GetSoundLoopFlag",
+        "SOUND_StopUnitSoundByIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetUnitSfxFlag",
+      "address": "004caa70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004caa70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetUnitSfxFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "UNITSND_Unused_Placeholder_3",
+      "address": "004caaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004caaa0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_Unused_Placeholder_3",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetSfxMode",
+      "address": "004caad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004caad0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetSfxMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_Unused_Placeholder_4",
+      "address": "004cab00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cab00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_Unused_Placeholder_4",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSfxTicks",
+      "address": "004cab30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cab30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "GetSfxTicks",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetSfxTicks",
+      "address": "004cab60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cab60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "SetSfxTicks",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSfxAsyncTicks",
+      "address": "004cab90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cab90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "GetSfxAsyncTicks",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetSfxAsyncTicks",
+      "address": "004cabc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cabc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "SetSfxAsyncTicks",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetSfxStepTicks",
+      "address": "004cac00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cac00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetSfxStepTicks",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetSfxStepTicks",
+      "address": "004cac30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cac30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "SetSfxStepTicks",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_HasActiveSound",
+      "address": "004cac70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cac70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_HasActiveSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "SetHasActiveSound",
+      "address": "004caca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004caca0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "SetHasActiveSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetTileDataAtPosition",
+      "address": "004cace0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cace0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetTileDataAtPosition",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_GetFloorTilesFromRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetGroundMaterialType",
+      "address": "004cad60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cad60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetGroundMaterialType"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetGroundMaterial",
+      "address": "004cadb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cadb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetGroundMaterial",
+        "GetSoundEnv",
+        "GetSoundEnvironLine",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "UNITSND_GetTileDataAtPosition",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "UNITSND_GetGroundMaterialType"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2SoundEnvironTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetFootstepSound",
+      "address": "004caeb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004caeb0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetFootstepSound",
+        "GetSndUnitType",
+        "GetSndUnitClassId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TxtGetSoundIdLineFromUnit",
+        "UNITSND_GetGroundMaterial"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PlayUnitFootstepSound",
+      "address": "004caf60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004caf60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "PlayUnitFootstepSound",
+        "GetSndUnitType",
+        "GetSndUnitMode",
+        "GetSndUnitClassId",
+        "TxtGetSoundIdLineFromUnit",
+        "gnRecordingIndex",
+        "SOUND_PlayFootstepSound",
+        "UNITSND_GetFootstepSound",
+        "SOUND_PlaySound",
+        "GetPlayerUnit_UI",
+        "SOUND_SetChannelPriority",
+        "RollRandomNumerUpToArgument",
+        "SetSfxStepTicks"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_StopAllSkillSounds",
+      "address": "004cb190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb190"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_StopAllSkillSounds",
+        "GetSndUnitType",
+        "TxtGetSoundIdLineFromUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_StopChannelById",
+        "SOUNDHDR_GetSoundField0x60",
+        "SOUND_StopUnitSoundByIndex"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_UpdateNeutralSound",
+      "address": "004cb220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb220"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_UpdateNeutralSound",
+        "TxtGetSoundIdLineFromUnit",
+        "SOUND_StopChannelById",
+        "SOUNDHDR_GetSoundField0x60",
+        "SOUND_GetSoundChannel",
+        "SOUND_StopUnitSoundByIndex",
+        "SOUND_StopChannelGracefully",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_StopAllCombatSounds",
+      "address": "004cb2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb2c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_StopAllCombatSounds",
+        "GetSndUnitType",
+        "TxtGetSoundIdLineFromUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUND_StopChannelById",
+        "SOUNDHDR_GetSoundField0x60",
+        "SOUND_StopUnitSoundByIndex"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetModeChangeSound",
+      "address": "004cb380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb380"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetModeChangeSound",
+        "GetSndUnitClassId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Sounds",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_GetSpecialSoundByMode",
+      "address": "004cb3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb3e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_GetSpecialSoundByMode",
+        "GetSndUnitClassId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Sounds",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UpdateUnitSfxOnModeChange",
+      "address": "004cb460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb460"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UpdateUnitSfxOnModeChange",
+        "GetSndUnitMode",
+        "GetSndUnitType",
+        "GetSndUnitClassId",
+        "GetSfxAsyncTicks",
+        "GetPlayerUnit_UI",
+        "GetCollisionDistance",
+        "SOUND_PlaySound",
+        "gnRecordingIndex",
+        "SetSfxAsyncTicks",
+        "UNITSND_GetSpecialSoundByMode",
+        "UNITSND_UpdatePositionalAudio",
+        "UNITSND_GetMissileSound",
+        "UNITSND_GetModeChangeSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_MonStats_GetBaseId",
+        "TxtGetSoundIdLineFromUnit",
+        "GetSfxTicks",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "IsUnitDistanceLowerThan700",
+        "RollRandomNumerUpToArgument",
+        "RollRandomNumber"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_PlayAttackSound",
+      "address": "004cb6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb6a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_PlayAttackSound",
+        "GetSndUnitType",
+        "GetHitClassForPlayerOrMonster",
+        "UNITSND_GetSkillStartSound",
+        "SOUND_PlaySound",
+        "gnRecordingIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TxtGetSoundIdLineFromUnit",
+        "SOUND_FindChannelForSound",
+        "RollRandomNumerUpToArgument",
+        "UNITSND_UpdateNeutralSound",
+        "SetSfxTicks",
+        "SOUND_SetChannelPriority"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_PlayGetHitSound",
+      "address": "004cb860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb860"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_PlayGetHitSound",
+        "UNITSND_GetHitSound",
+        "SOUND_PlaySound",
+        "gnRecordingIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Sounds",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_PlayMonsterSkillSound",
+      "address": "004cb890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb890"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_PlayMonsterSkillSound",
+        "GetSndUnitType",
+        "TxtGetSoundIdLineFromUnit",
+        "gnRecordingIndex",
+        "SOUND_PlaySound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2MonsterAnimMode",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_PlayFleeSound",
+      "address": "004cb950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb950"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_PlayFleeSound",
+        "GetSndUnitType",
+        "TxtGetSoundIdLineFromUnit",
+        "gnRecordingIndex",
+        "RollRandomNumerUpToArgument",
+        "SOUND_PlaySound",
+        "SetSfxTicks"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_PlayPlayerSound",
+      "address": "004cb9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cb9c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_PlayPlayerSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetPlayerUnit_UI",
+        "IsPlayerDead",
+        "SOUND_FindChannelForSound",
+        "WALL2_ScheduleSoundSequence",
+        "SOUND_PlaySound",
+        "SOUND_StopChannelById",
+        "TEXT_SetUnitOverheadFromSoundTable",
+        "gnRecordingIndex"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Sounds",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_PlaySoundForMercenary",
+      "address": "004cbde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cbde0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_PlaySoundForMercenary",
+        "UNITS_FindClientSideUnit",
+        "SOUND_PlaySound",
+        "SOUND_SetChannelPriority",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "SKILLS_GetSkillByEnum",
+        "TXT_Skills_GetLine",
+        "GetSndUnitClassId",
+        "GetSndUnitType",
+        "TxtGetSoundIdLineFromUnit",
+        "UNITSND_PlayFleeSound",
+        "GetPlayerUnit_UI",
+        "SOUND_SelectNpcGreetingSound",
+        "WALL2_UpdateScheduledSound",
+        "TEXT_SetUnitOverheadFromSoundTable",
+        "UNITSND_PlayPlayerSound"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MuteOrUnmuteUnitSounds",
+      "address": "004cc160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc160"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "MuteOrUnmuteUnitSounds",
+        "GetSndUnitType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TxtGetSoundIdLineFromUnit",
+        "SOUNDHDR_AdjustReferenceCount",
+        "GetSndUnitClassId"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SOUND_UpdateAmbientMusic",
+      "address": "004cc270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc270"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "SOUND_UpdateAmbientMusic",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "QUESTLOG_IsQuestAvailableForInteraction",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "gnRecordingIndex",
+        "SOUND_IsMusicPlaying",
+        "UNITSND_PlayPlayerSound"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "PlayUnitInitSound",
+      "address": "004cc380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc380"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "PlayUnitInitSound",
+        "GetSndUnitType",
+        "gnRecordingIndex",
+        "TxtGetSoundIdLineFromUnit",
+        "IsActive",
+        "GetSfxAsyncTicks",
+        "SOUND_PlaySound",
+        "SetSfxAsyncTicks",
+        "RollRandomNumber",
+        "GetSndUnitMode",
+        "UNITSND_PlayMonsterSkillSound"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_PlayModeChangeSound",
+      "address": "004cc410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc410"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_PlayModeChangeSound",
+        "GetSndUnitType",
+        "UNIT_GetUnitState",
+        "UNITSND_ResolveSoundFromFlags",
+        "SOUND_PlaySound",
+        "GetPlayerUnit_UI",
+        "SOUND_SetChannelPriority",
+        "UNITSND_StopAllCombatSounds",
+        "MuteOrUnmuteUnitSounds",
+        "TxtGetSoundIdLineFromUnit",
+        "SOUND_FindChannelForSound",
+        "GetSndUnitClassId",
+        "UNITSND_GetBaseSoundId",
+        "gnRecordingIndex"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UNITSND_DispatchModeChangeSound",
+      "address": "004cc5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cc5b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::UnitSnd",
+      "calledFunctions": [
+        "UNITSND_DispatchModeChangeSound",
+        "GetSndUnitType",
+        "GetSndUnitClassId",
+        "GetSndUnitMode",
+        "UNITSND_PlayModeChangeSound",
+        "UNITSND_PlayAttackSound",
+        "UNITSND_PlayGetHitSound",
+        "SOUND_PlaySound",
+        "TxtGetSoundIdLineFromUnit",
+        "UNITSND_PlayMonsterSkillSound",
+        "UNITSND_StopAllCombatSounds"
+      ],
+      "usedTypes": [
+        "D2MonSoundsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    }
+  ]
+}

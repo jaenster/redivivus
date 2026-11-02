@@ -1,0 +1,460 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Environment.cpp",
+  "functions": [
+    {
+      "name": "DRLGENV_UpdateLightIntensity",
+      "address": "0061bb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bb80"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_UpdateLightIntensity",
+        "CRT_CICos",
+        "CRT_CISin"
+      ],
+      "usedTypes": [
+        "D2DrlgEnvironmentStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_UpdateLightColor",
+      "address": "0061bce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bce0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_UpdateLightColor"
+      ],
+      "usedTypes": [
+        "D2DrlgActEnvironmentData",
+        "D2DrlgEnvironmentStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_InitEnvironmentCycle",
+      "address": "0061bdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bdf0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_InitEnvironmentCycle"
+      ],
+      "usedTypes": [
+        "D2DrlgEnvironmentStrc"
+      ]
+    },
+    {
+      "name": "DRLGENV_AllocEnvironment",
+      "address": "0061be40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061be40"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_AllocEnvironment",
+        "AllocServerMemory",
+        "memset",
+        "DRLGENV_UpdateLightIntensity",
+        "DRLGENV_UpdateLightColor",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2DrlgActEnvironmentData",
+        "D2DrlgEnvironmentStrc",
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_FreeEnvironment",
+      "address": "0061bec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bec0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_FreeEnvironment",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2DrlgEnvironmentStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "DRLGENV_UpdateEnvironmentCycle",
+      "address": "0061bee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bee0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_UpdateEnvironmentCycle"
+      ],
+      "usedTypes": [
+        "D2DrlgActEnvironmentData",
+        "D2DrlgEnvironmentStrc"
+      ]
+    },
+    {
+      "name": "DRLGENV_UpdatePeriodOfDay",
+      "address": "0061bfc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061bfc0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_UpdatePeriodOfDay",
+        "DRLGENV_GetEnvironmentFromAct",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "DRLGENV_UpdateEnvironmentCycle",
+        "DRLGENV_UpdateLightIntensity",
+        "DRLGENV_UpdateLightColor"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "D2RoomStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_UpdateCycleIndex",
+      "address": "0061c040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c040"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_UpdateCycleIndex",
+        "DRLGENV_GetEnvironmentFromAct",
+        "DRLGENV_UpdateEnvironmentCycle"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetLightColorFromAct",
+      "address": "0061c0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c0b0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_GetLightColorFromAct",
+        "DRLGENV_GetEnvironmentFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetIntensityFromAct",
+      "address": "0061c0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c0e0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_GetIntensityFromAct",
+        "DRLGENV_GetEnvironmentFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetPeriodOfDayFromAct",
+      "address": "0061c100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c100"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_GetPeriodOfDayFromAct",
+        "DRLGENV_GetEnvironmentFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetUnusedMember",
+      "address": "0061c160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c160"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_GetUnusedMember",
+        "DRLGENV_GetEnvironmentFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_NextEnvCycle",
+      "address": "0061c180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c180"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_NextEnvCycle",
+        "DRLGENV_GetEnvironmentFromAct",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "DRLGENV_UpdateLightIntensity",
+        "DRLGENV_UpdateLightColor"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "D2RoomStrc",
+        "eAct"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetCycleIndexFromAct",
+      "address": "0061c220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c220"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_GetCycleIndexFromAct",
+        "DRLGENV_GetEnvironmentFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_InitializeEnvironment",
+      "address": "0061c240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c240"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_InitializeEnvironment",
+        "DRLGENV_GetEnvironmentFromAct",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "DRLGENV_UpdateLightIntensity",
+        "DRLGENV_InitEnvironmentCycle",
+        "DRLGENV_UpdateLightColor",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "D2RoomStrc",
+        "eAct",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetCycleIndex_Ticks_EclipseFromAct",
+      "address": "0061c330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c330"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_GetCycleIndex_Ticks_EclipseFromAct",
+        "DRLGENV_GetEnvironmentFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetStatistics",
+      "address": "0061c360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c360"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_GetStatistics",
+        "DRLGENV_GetEnvironmentFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc"
+      ]
+    },
+    {
+      "name": "DRLGENV_GetTimeRateFromAct",
+      "address": "0061c390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c390"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_GetTimeRateFromAct",
+        "DRLGENV_GetEnvironmentFromAct"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_SetNextTimeRate",
+      "address": "0061c3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c3b0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_SetNextTimeRate",
+        "DRLGENV_GetEnvironmentFromAct",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "DRLGENV_UpdateLightIntensity",
+        "DRLGENV_UpdateLightColor"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "D2RoomStrc",
+        "eAct",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGENV_TaintedSunBegin",
+      "address": "0061c450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c450"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_TaintedSunBegin",
+        "DRLGENV_GetEnvironmentFromAct",
+        "GetActNoFromLevelNumber",
+        "DRLGENV_UpdateLightIntensity",
+        "DRLGENV_InitEnvironmentCycle",
+        "DRLGENV_UpdateLightColor"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "eAct"
+      ]
+    },
+    {
+      "name": "DRLGENV_TaintedSunEnd",
+      "address": "0061c4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c4d0"
+        }
+      ],
+      "namespace": "D2Common::Environment::Environment",
+      "calledFunctions": [
+        "DRLGENV_TaintedSunEnd",
+        "DRLGENV_GetEnvironmentFromAct",
+        "GetActNoFromLevelNumber",
+        "DRLGENV_UpdateLightIntensity"
+      ],
+      "usedTypes": [
+        "D2DrlgActStrc",
+        "D2DrlgEnvironmentStrc",
+        "eAct"
+      ]
+    }
+  ]
+}

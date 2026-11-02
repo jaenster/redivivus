@@ -1,0 +1,562 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Msg.cpp",
+  "functions": [
+    {
+      "name": "NET_SendPacket0x3f_0x1a",
+      "address": "00468f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468f90"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_SendPacket0x3f_0x1a",
+        "NET_D2GS_CLIENT_Send_SHORT"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x67",
+      "address": "00477ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477ca0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x67",
+        "SStrCopy",
+        "CLIENT_IsArenaMode",
+        "CLIENT_GetDefaultCharClass",
+        "MISC_GetLanguageCode",
+        "NET_D2GS_CLIENT_SendPacketAfterChecks"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x",
+        "eD2PlayerClassIDDWORD",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x6B",
+      "address": "00477da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477da0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x6B",
+        "NET_D2GS_CLIENT_SendPacketAfterChecks"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x6D_PING",
+      "address": "00477dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477dd0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x6D_PING",
+        "GetTickCount",
+        "GAME_GetAveragePing",
+        "NET_D2GS_CLIENT_SendPacketAfterChecks"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x6D",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x69",
+      "address": "00477ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477ee0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x69",
+        "NET_D2GS_CLIENT_SendPacketAfterChecks",
+        "CLIENT_GetGameVersionInfo"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x68",
+      "address": "00477f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00477f70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x68",
+        "GetGameVersionInfo",
+        "D2CheckExpansionGame",
+        "MISC_GetLanguageCode",
+        "CLIENT_IsArenaMode",
+        "CLIENT_GetDefaultCharClass",
+        "SStrCopy",
+        "NET_D2GS_CLIENT_SendPacketAfterChecks"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc",
+        "D2GSPacketClt0x",
+        "eD2PlayerClassIDDWORD",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x6A",
+      "address": "00478010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478010"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x6A",
+        "NET_D2GS_CLIENT_SendPacketAfterChecks"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "MSG_ReadSaveFileToBuffer",
+      "address": "00478040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478040"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "MSG_ReadSaveFileToBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetAndCreateSavePath",
+        "sprintf",
+        "fopen",
+        "fseek",
+        "ftell",
+        "AllocClientMemory",
+        "fread",
+        "fclose"
+      ],
+      "usedTypes": [
+        "D2CharSelCompStrc",
+        "FILE",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LOADING_SetProgressRatio",
+      "address": "00478130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478130"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "LOADING_SetProgressRatio"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LOADING_GetProgressRatio",
+      "address": "00478150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478150"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "LOADING_GetProgressRatio"
+      ]
+    },
+    {
+      "name": "LOADING_AnimateProgressBar",
+      "address": "00478160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478160"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "LOADING_AnimateProgressBar",
+        "Draw_UI_LoadGame"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x6C",
+      "address": "004781d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004781d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x6C",
+        "MSG_ReadSaveFileToBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "LOADING_AnimateProgressBar",
+        "NET_D2GS_CLIENT_SendPacketAfterChecks",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x6C",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send",
+      "address": "00478350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478350"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTickCount",
+        "memcpy",
+        "NET_D2GS_CLIENT_SendPacketAfterChecks"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_CMD",
+      "address": "00478590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478590"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_CMD",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_SHORT",
+      "address": "004785b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004785b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_SHORT",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt_CMD_SHORT",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_SHORT_SHORT",
+      "address": "004785d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004785d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt_CMD_SHORT_SHORT",
+        "int16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT",
+      "address": "00478600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478600"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt_CMD_SHORT_SHORT_SHORT",
+        "int16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT_SHORT",
+      "address": "00478640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478640"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT_SHORT",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt_CMD_SHORT_SHORT_SHORT_SHORT",
+        "int16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_INT",
+      "address": "00478680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478680"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_INT",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt_CMD_INT",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_INT_INT",
+      "address": "004786a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004786a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_INT_INT",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt_CMD_INT_INT",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_INT_INT_INT",
+      "address": "004786d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004786d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_INT_INT_INT",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt_CMD_INT_INT_INT",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_INT_INT_INT_INT",
+      "address": "00478700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478700"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_INT_INT_INT_INT",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt_CMD_INT_INT_INT_INT",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x5D",
+      "address": "00478740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478740"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x5D",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x5D",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x5E",
+      "address": "00478780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478780"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x5E",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x5E",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_Chat",
+      "address": "004787b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004787b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_Chat",
+        "SStrCopy",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2ChatPacketBuildStrc",
+        "D2ChatPacketSendStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x66",
+      "address": "00478830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478830"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x66",
+        "NET_D2GS_CLIENT_Send_0x66_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy",
+        "NET_D2GS_CLIENT_Send"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Send_0x66_HaltTail",
+      "address": "00478852",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00478852"
+        }
+      ],
+      "namespace": "D2Client::GAME::Msg",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x66_HaltTail",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    }
+  ]
+}

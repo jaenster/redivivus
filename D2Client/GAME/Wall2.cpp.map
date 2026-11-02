@@ -1,0 +1,597 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/GAME/Wall2.cpp",
+  "functions": [
+    {
+      "name": "WALL2_InitUnitGfx",
+      "address": "004dc510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc510"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_InitUnitGfx",
+        "AllocGfxInfo",
+        "GFX_LoadUnitModeCof",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxInfoStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WALL2_DrawDebugUnitDiamond",
+      "address": "004dc580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc580"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_DrawDebugUnitDiamond",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CoordsMapToScreen",
+        "DRAW_GetWorldOffsetY",
+        "DRAW_GetWorldOffsetX",
+        "D2GFX_DrawLine",
+        "GetTargetX",
+        "GetTargetY",
+        "D2GFX_DrawSolidRectEx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_WORLD_IsUnitInLineOfSight",
+      "address": "004dc710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc710"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "DRAW_WORLD_IsUnitInLineOfSight",
+        "GetPlayerUnit_Net",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_LevelDefs_GetLOSDraw",
+        "TestCollisionWithUnit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_WORLD_Unit",
+      "address": "004dc7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc7b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "DRAW_WORLD_Unit",
+        "UNIT_GetUnitState",
+        "D2GFX_IsPerspectiveActive",
+        "GetPrecisionX",
+        "GetPrecisionY",
+        "D2GFX_IsInPerspectiveBounds",
+        "DRAW_WORLD_IsUnitInLineOfSight",
+        "GetTargetX",
+        "GetTargetY",
+        "TXT_Objects_GetLine",
+        "GetAnimOrSeqMode",
+        "D2GFX_PerspecitveScalePosition",
+        "DRAW_GetWorldOffsetX",
+        "DRAW_GetWorldOffsetY",
+        "PLRSKILLS_CheckSkillWhipAndLeap",
+        "DRAW_WORLD_Unit_1",
+        "PLRSKILLS_DrawSkillTrail_Secondary",
+        "IsMonsterGhostly",
+        "PLRSKILLS_DrawChargeTrailIfPrimary",
+        "PLRSKILLS_DrawChargeTrailIfSecondary",
+        "GetMissleById",
+        "D2GFX_SetDefaultPerspectiveFactor"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "DRAWMODE",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_ResetAmbientSound",
+      "address": "004dca30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dca30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_ResetAmbientSound",
+        "SOUNDHDR_GetGlobal2",
+        "SOUNDHDR_GetGlobal0",
+        "SOUNDHDR_GetGlobal1",
+        "memset"
+      ]
+    },
+    {
+      "name": "WALL2_UpdateAmbientMusic",
+      "address": "004dcaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dcaa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_UpdateAmbientMusic",
+        "SOUND_GetCurrentLevelId",
+        "GetSoundEnv",
+        "GetSoundEnvironLine",
+        "SOUNDHDR_GetGlobal0",
+        "SOUNDHDR_GetGlobal1",
+        "SOUND_GetMasterVolume",
+        "SOUND_GetMusicVolume",
+        "SOUND_StopMusic",
+        "gnRecordingIndex",
+        "SOUND_PlaySound",
+        "GetPlayerUnit_UI",
+        "IsActive",
+        "SOUND_FadeOutMusic",
+        "SOUND_StopSound",
+        "SOUNDHDR_GetGlobal2",
+        "SOUND_GetAmbientMusicState",
+        "SOUND_UpdateAmbientMusic",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_GetSoundId",
+        "SOUND_GetCurrentMusic"
+      ],
+      "usedTypes": [
+        "D2SoundEnvironTxt",
+        "D2SoundsTxt",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_ScheduleSoundSequence",
+      "address": "004dcd40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dcd40"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_ScheduleSoundSequence",
+        "TXT_sounds_GetLineBySoundId",
+        "SOUND_StopSound",
+        "SOUND_GetSoundId",
+        "SOUNDHDR_GetGlobal0",
+        "SOUNDHDR_GetGlobal2",
+        "SOUNDHDR_GetGlobal3",
+        "SOUND_StopMusic",
+        "gnRecordingIndex"
+      ],
+      "usedTypes": [
+        "D2SoundsTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_UpdateScheduledSound",
+      "address": "004dce10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dce10"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_UpdateScheduledSound",
+        "gnRecordingIndex"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WALL2_AllocDrawList",
+      "address": "004dce60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dce60"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_AllocDrawList",
+        "FreeClientMemory",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "D2Wall2CellStrc"
+      ]
+    },
+    {
+      "name": "ResetWall2Data",
+      "address": "004dcf10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dcf10"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "ResetWall2Data"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc"
+      ]
+    },
+    {
+      "name": "FreeWall2",
+      "address": "004dcf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dcf30"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "FreeWall2",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc"
+      ]
+    },
+    {
+      "name": "WALL2_IsInDrawGrid",
+      "address": "004dcf70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dcf70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_IsInDrawGrid"
+      ],
+      "usedTypes": [
+        "D2Wall2DrawListStrc"
+      ]
+    },
+    {
+      "name": "WALL2_InsertUnitDrawBelow",
+      "address": "004dcfa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dcfa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_InsertUnitDrawBelow",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawListStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_IsTileOccludingPlayer",
+      "address": "004dd060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dd060"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_IsTileOccludingPlayer",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "WALL2_AddWallTile",
+      "address": "004dd180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dd180"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_AddWallTile",
+        "GetTickCount",
+        "WALL2_IsTileOccludingPlayer",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawListStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_AddLowerWallTile",
+      "address": "004dd350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dd350"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_AddLowerWallTile",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawListStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_AddRoofTile",
+      "address": "004dd460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dd460"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_AddRoofTile",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawListStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_AddShadowPassTile",
+      "address": "004dd550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dd550"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_AddShadowPassTile",
+        "DRLGROOM_GetRoomCoordinates"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2RoomStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawListStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_InsertUnitDraw",
+      "address": "004dd600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dd600"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_InsertUnitDraw",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawListStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_InsertUnitShadowDraw",
+      "address": "004dd6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dd6e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_InsertUnitShadowDraw",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawListStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_CollectRoomTilesAndUnits",
+      "address": "004dd7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dd7c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_CollectRoomTilesAndUnits",
+        "DRLGROOM_GetMinimapRect",
+        "DRLGROOM_GetWallTilesFromRoom",
+        "TILEPROJECT_GetRoofHeightIndex",
+        "DRLG_OrthToIsoCoordsDiv160",
+        "WALL2_IsInDrawGrid",
+        "WALL2_AddShadowPassTile",
+        "WALL2_AddRoofTile",
+        "WALL2_AddLowerWallTile",
+        "WALL2_AddWallTile",
+        "DRLGROOM_GetRoofTilesFromRoom",
+        "DRLGROOM_GetFirstUnitInRoom",
+        "GetTargetX",
+        "GetTargetY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "IsAlive",
+        "WALL2_InsertUnitDrawBelow",
+        "WALL2_InsertUnitShadowDraw",
+        "WALL2_InsertUnitDraw"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2GameViewStrc",
+        "D2RoomStrc",
+        "D2TileLibraryEntryStrc",
+        "D2UnitStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawContextStrc",
+        "D2Wall2DrawListStrc",
+        "RECT",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_BuildSceneDrawList",
+      "address": "004ddb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ddb70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "CallRoomCallback",
+        "WALL2_BuildSceneDrawList",
+        "WALL2_AllocDrawList",
+        "D2GFX_IsPerspectiveActive",
+        "memset",
+        "DRLG_OrthToIsoCoordsDiv160",
+        "GetPlayerUnit_UI",
+        "GetCurrentRoom",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "GetGridIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawContextStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WALL2_OnAllocGameView_NoOp",
+      "address": "004dddf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dddf0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Wall2",
+      "calledFunctions": [
+        "WALL2_OnAllocGameView_NoOp"
+      ]
+    }
+  ]
+}

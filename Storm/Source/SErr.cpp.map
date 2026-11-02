@@ -1,0 +1,406 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SErr.cpp",
+  "functions": [
+    {
+      "name": "SErrSetBlizzardErrorFunction",
+      "address": "0041c0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c0e0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrSetBlizzardErrorFunction"
+      ],
+      "usedTypes": [
+        "pfnBlizzardError"
+      ]
+    },
+    {
+      "name": "SERR_AddStormFacility",
+      "address": "0041c0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c0f0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrRegisterMessageSource",
+        "SERR_AddStormFacility",
+        "StormGetInstance"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SERR_AddStormMessages",
+      "address": "0041c140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c140"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_AddStormMessages",
+        "SERR_AddStormFacility"
+      ]
+    },
+    {
+      "name": "SERR_GetString",
+      "address": "0041c170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c170"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_GetString",
+        "StormGetInstance"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SERR_InternalEnterCriticalSection",
+      "address": "0041c1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c1a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_InternalEnterCriticalSection"
+      ]
+    },
+    {
+      "name": "SERR_InternalLeaveCriticalSection",
+      "address": "0041c1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c1e0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_InternalLeaveCriticalSection"
+      ]
+    },
+    {
+      "name": "SERR_UndecorateObjectName",
+      "address": "0041c1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c1f0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_UndecorateObjectName",
+        "SStrLen",
+        "strpbrk",
+        "SStrCopy",
+        "SStrPack"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SErrPrepareAppFatal",
+      "address": "0041c2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c2c0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrPrepareAppFatal",
+        "SERR_InternalEnterCriticalSection",
+        "GetCurrentThreadId",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SErrRegisterMessageSource",
+      "address": "0041c2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c2f0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrRegisterMessageSource",
+        "SERR_InternalEnterCriticalSection",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SErrSetLastError",
+      "address": "0041c340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c340"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrSetLastError"
+      ]
+    },
+    {
+      "name": "SErrGetErrorStr",
+      "address": "0041c430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c430"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrGetErrorStr",
+        "SErrSetLastError",
+        "SERR_InternalEnterCriticalSection",
+        "SERR_AddStormMessages",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SErrRegisterHandler",
+      "address": "0041c900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c900"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrRegisterHandler",
+        "SERR_InternalEnterCriticalSection",
+        "SMemAlloc",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "int32_t",
+        "pfnSErrDisplayCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListRemoveAndFree",
+      "address": "0041ca10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ca10"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListRemoveAndFree",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SErrDisplayError",
+      "address": "0041caf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041caf0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrDisplayError",
+        "__security_check_cookie",
+        "SERR_InternalEnterCriticalSection",
+        "SMemZero",
+        "SStrCopy",
+        "SStrChrR",
+        "SErrGetErrorStr",
+        "SERR_GetString",
+        "SERR_UndecorateObjectName",
+        "SStrLen",
+        "SStrPrintf",
+        "WND_GetActiveWindow",
+        "SERR_InternalLeaveCriticalSection",
+        "__break",
+        "SSYSTEM_SetShutdownFlag"
+      ],
+      "usedTypes": [
+        "LPDWORD",
+        "StormSErrHandlerNode",
+        "_WIN32_FIND_DATAA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SErrDisplayErrorFmt",
+      "address": "0041cfb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041cfb0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrDisplayErrorFmt",
+        "vsprintf",
+        "SErrDisplayError",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SErrReportNamedResourceLeak",
+      "address": "0041d010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d010"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SRegLoadValue",
+        "SErrReportNamedResourceLeak",
+        "SStrPrintf",
+        "SErrDisplayError",
+        "__security_check_cookie"
+      ]
+    },
+    {
+      "name": "SErrUnregisterHandler",
+      "address": "0041d110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d110"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrUnregisterHandler",
+        "SERR_InternalEnterCriticalSection",
+        "SSYSTEM_ListRemoveAndFree",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SErrDisplayAppFatal",
+      "address": "0041d160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d160"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrDisplayAppFatal",
+        "SERR_InternalEnterCriticalSection",
+        "GetCurrentThreadId",
+        "SMemZero",
+        "SERR_InternalLeaveCriticalSection",
+        "vsprintf",
+        "SErrDisplayError"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SErrReportResourceLeak",
+      "address": "0041d1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d1e0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrReportResourceLeak",
+        "SErrReportNamedResourceLeak"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca8a0",
+      "address": "006ca8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca8a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "StaticInit_6ca8a0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_gStormErrorCallbackList",
+      "address": "006cb2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb2a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "StaticFini_gStormErrorCallbackList",
+        "TSList_HANDLER_UnlinkAll"
+      ]
+    }
+  ]
+}

@@ -27,7 +27,7 @@ namespace Fog {
 
 // Function declarations
 BOOL __stdcall D2CheckExpansionGame();
-int32_t __fastcall BitScanReverse(uint32_t nParam);
+int32_t __fastcall BitScanReverse(uint32_t dwBits);
 int32_t __stdcall FOG_GetAsyncFileCount_ReturnZero();
 void __stdcall Return();
 float __stdcall MATH_sinTable_f32_LookupOffset(int32_t findex);

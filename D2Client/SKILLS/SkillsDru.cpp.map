@@ -1,0 +1,133 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/SKILLS/SkillsDru.cpp",
+  "functions": [
+    {
+      "name": "Skills_CltStFunc_AddAuraToggleOverlay",
+      "address": "004f1640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f1640"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsDru",
+      "calledFunctions": [
+        "Skills_CltStFunc_AddAuraToggleOverlay",
+        "UNIT_GetUnitState",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "eOverlayId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SKILLSDRU_CltCreateShapeShiftMissile",
+      "address": "004f16f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f16f0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsDru",
+      "calledFunctions": [
+        "SKILLSDRU_CltCreateShapeShiftMissile",
+        "GetCooordinates",
+        "MakeMissileAtSkillTarget",
+        "SetUnsetFlags0x40",
+        "SetAnimationSpeed",
+        "memset",
+        "GetXPos",
+        "GetYPos",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Dru_ShapeShift_FwdArc",
+      "address": "004f1850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f1850"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsDru",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Dru_ShapeShift_FwdArc",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "D2GetSkillCalc",
+        "SKILLSDRU_CltCreateShapeShiftMissile"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Dru_ShapeShift_SideArc",
+      "address": "004f18f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f18f0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsDru",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Dru_ShapeShift_SideArc",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "D2GetSkillCalc",
+        "SKILLSDRU_CltCreateShapeShiftMissile"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Dru_ShapeShift_BackArc",
+      "address": "004f1990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f1990"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsDru",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Dru_ShapeShift_BackArc",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "D2GetSkillCalc",
+        "SKILLSDRU_CltCreateShapeShiftMissile"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ]
+    }
+  ]
+}

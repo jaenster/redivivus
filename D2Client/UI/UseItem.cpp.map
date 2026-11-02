@@ -1,0 +1,196 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/UseItem.cpp",
+  "functions": [
+    {
+      "name": "ITEM_ToggleHandState",
+      "address": "004bfa70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bfa70"
+        }
+      ],
+      "namespace": "D2Client::UI::UseItem",
+      "calledFunctions": [
+        "ITEM_ToggleHandState",
+        "ITEM_SetItemOnHand",
+        "SOUND_GetIdFromUnit",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Sounds",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TEXT_HandleMouseMove",
+      "address": "004bfaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bfaf0"
+        }
+      ],
+      "namespace": "D2Client::UI::UseItem",
+      "calledFunctions": [
+        "TEXT_HandleMouseMove",
+        "SOUND_PlaySound",
+        "AllocDialogStrc",
+        "DIALOG_SetHighlightStyle",
+        "GetLocaleString",
+        "AddStringData",
+        "GetPlayerUnit_UI",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT_INT",
+        "SubmitItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR",
+        "fpDialogFunc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TEXT_HandleItemUse",
+      "address": "004bfbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bfbc0"
+        }
+      ],
+      "namespace": "D2Client::UI::UseItem",
+      "calledFunctions": [
+        "TEXT_HandleItemUse",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "INPUT_UseItemClick",
+      "address": "004bfc50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bfc50"
+        }
+      ],
+      "namespace": "D2Client::UI::UseItem",
+      "calledFunctions": [
+        "INPUT_UseItemClick",
+        "SMsgBreakHandlerChain",
+        "GetTickCount",
+        "INPUT_InventoryMouseMove",
+        "TEXT_HandleItemUse",
+        "INV_HandleInventoryLeftDown",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetHandItem",
+        "TXT_Items_GetLine",
+        "CheckItemFlag",
+        "GetInteractedUnitClassId",
+        "IsValidImbumeItem",
+        "ITEM_CheckIfItemCanHaveSockets",
+        "ITEM_CheckIfItemCanBeNamed",
+        "ITEM_ToggleHandState",
+        "SOUND_PlaySound"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UIMouseMsgStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "INPUT_UseItemPassthrough",
+      "address": "004bfdb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bfdb0"
+        }
+      ],
+      "namespace": "D2Client::UI::UseItem",
+      "calledFunctions": [
+        "INPUT_UseItemPassthrough",
+        "SMsgBreakHandlerChain"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "TEXT_DrawCashDisplay",
+      "address": "004bfdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bfdd0"
+        }
+      ],
+      "namespace": "D2Client::UI::UseItem",
+      "calledFunctions": [
+        "TEXT_DrawCashDisplay",
+        "SetAndReturnLastFont",
+        "memset",
+        "D2GFX_DrawImage",
+        "GetBuySellBtnDC6",
+        "GetMouseX",
+        "GetMouseY",
+        "GetInteractedUnitClassId",
+        "GetLocaleString",
+        "DRAW_text0",
+        "D2WINFONT_GetCurrentFontHeight",
+        "D2GFX_DrawSolidRectExBySize",
+        "DRAW_text",
+        "D2WINFONT_WordWrapString",
+        "FreeClientMemory",
+        "DIALOG_DrawBackground"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2TextLineStrc",
+        "DRAWMODE",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UI_CloseHoradricCubeWindow",
+      "address": "004c0090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0090"
+        }
+      ],
+      "namespace": "D2Client::UI::UseItem",
+      "calledFunctions": [
+        "UI_CloseHoradricCubeWindow",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetHandItem",
+        "ITEM_ToggleHandState",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "FreeDialogStrc",
+        "SetUIFlag",
+        "SELECT_SetExclusionRect"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,485 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/FastCmp.cpp",
+  "functions": [
+    {
+      "name": "FASTCMP_CompressToRLE",
+      "address": "00606a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00606a10"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_CompressToRLE",
+        "AllocClientMemory",
+        "SUBTILE_CountRunLength",
+        "SUBTILE_CountRunLengthForByte"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ]
+    },
+    {
+      "name": "FASTCMP_RemapFramePaletteIndices",
+      "address": "00606b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00606b00"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_RemapFramePaletteIndices"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_ConvertDCCWithPaletteRemap",
+      "address": "00606b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00606b50"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_ConvertDCCWithPaletteRemap",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory",
+        "FASTCMP_CompressToRLE",
+        "FreeClientMemory",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t",
+        "pfnRGBToPaletteIndex",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_SkipRLERows",
+      "address": "00606d10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00606d10"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_SkipRLERows"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLE",
+      "address": "00606d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00606d40"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLE",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithClip",
+      "address": "00606da0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00606da0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithClip",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithBlend",
+      "address": "00606e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00606e40"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithBlend"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithBlendAndClip",
+      "address": "00607060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00607060"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithBlendAndClip"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithLookup2",
+      "address": "006072f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006072f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithLookup2"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithLookup2AndClip",
+      "address": "00607480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00607480"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithLookup2AndClip"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithLookup1",
+      "address": "00607680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00607680"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithLookup1"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithLookup1AndClip",
+      "address": "006077c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006077c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithLookup1AndClip"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithBlend2",
+      "address": "00607970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00607970"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithBlend2"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithBlend2AndClip",
+      "address": "00607b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00607b90"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithBlend2AndClip"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithLookup1_v2",
+      "address": "00607e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00607e20"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithLookup1_v2"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithLookup1AndClip_v2",
+      "address": "00607f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00607f60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithLookup1AndClip_v2"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithBlend3",
+      "address": "00608110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00608110"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithBlend3"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithBlend3AndClip",
+      "address": "006082e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006082e0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithBlend3AndClip"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEDispatcher",
+      "address": "00608540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00608540"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEDispatcher",
+        "FASTCMP_SkipRLERows",
+        "FASTCMP_DecompressRLEWithBlendAndClip",
+        "FASTCMP_DecompressRLEWithBlend",
+        "FASTCMP_DecompressRLEWithLookup2AndClip",
+        "FASTCMP_DecompressRLEWithLookup2",
+        "FASTCMP_DecompressRLEWithLookup1AndClip",
+        "FASTCMP_DecompressRLEWithLookup1",
+        "FASTCMP_DecompressRLEWithLookup1AndClip_v2",
+        "FASTCMP_DecompressRLEWithLookup1_v2",
+        "FASTCMP_DecompressRLEWithBlend2AndClip",
+        "FASTCMP_DecompressRLEWithBlend2",
+        "FASTCMP_DecompressRLEWithClip",
+        "FASTCMP_DecompressRLE",
+        "FASTCMP_DecompressRLEWithBlend3AndClip",
+        "FASTCMP_DecompressRLEWithBlend3",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithEffect",
+      "address": "006089f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006089f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithEffect",
+        "__CIsqrt"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRAW_DebugFillRect",
+      "address": "00608c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00608c00"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "DRAW_DebugFillRect"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithAlpha",
+      "address": "00608d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00608d60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithAlpha",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "FASTCMP_DecompressRLEWithPaletteConversion",
+      "address": "00608ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00608ee0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::FastCmp",
+      "calledFunctions": [
+        "FASTCMP_DecompressRLEWithPaletteConversion",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FASTCMP_CompressToRLE",
+        "AllocClientMemory",
+        "memcpy",
+        "FreeClientMemory",
+        "CELCMP_GetDirectionFrameTableIndex"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

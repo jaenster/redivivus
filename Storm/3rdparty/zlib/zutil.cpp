@@ -23,8 +23,8 @@ char * __fastcall zError(int nErr) {
 // zlib allocation hook (z_alloc_func): returns _malloc(items * size); opaque is unused.
 // @library zcalloc (zlib zutil.c)
 void * __fastcall zcalloc(void * opaque, uint32_t items, uint32_t size) {
-    void* pvVar1 = malloc(items * size);
-    return pvVar1;
+    void* pMem = malloc(items * size);
+    return pMem;
 }
 
 // @library zcfree (zlib zutil.c)

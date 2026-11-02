@@ -1,0 +1,1390 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/Source/SComp.cpp",
+  "functions": [
+    {
+      "name": "LINKEDLIST_Unlink",
+      "address": "0041d880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d880"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_Unlink"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BITBUFFER_PeekBits",
+      "address": "0041d8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d8d0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "BITBUFFER_PeekBits"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint16_t *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_Clear",
+      "address": "0041d900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d900"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_Clear"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_InsertAfter",
+      "address": "0041d920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d920"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_InsertAfter"
+      ],
+      "usedTypes": [
+        "D2BitStreamWriterStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BITBUFFER_GetRemainingBits",
+      "address": "0041d940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d940"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "BITBUFFER_GetRemainingBits"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BITSTREAM_WriteBits",
+      "address": "0041d950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d950"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "BITSTREAM_WriteBits"
+      ],
+      "usedTypes": [
+        "D2BitStreamWriterStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BITSTREAM_Flush",
+      "address": "0041d9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d9a0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "BITSTREAM_Flush"
+      ],
+      "usedTypes": [
+        "D2BitStreamWriterStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BITSTREAM_WriteLiteralByte",
+      "address": "0041d9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d9e0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "BITSTREAM_WriteLiteralByte",
+        "BITSTREAM_WriteBits"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_SelectADPCMParams",
+      "address": "0041da30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041da30"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_SelectADPCMParams"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_ADPCMEncode",
+      "address": "0041da60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041da60"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_ADPCMEncode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_ADPCMDecode",
+      "address": "0041dce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041dce0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_ADPCMDecode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_PkwareBufferRead",
+      "address": "0041dec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041dec0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_PkwareBufferRead",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "PKWARE_STREAM",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_PkwareBufferWrite",
+      "address": "0041df00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041df00"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_PkwareBufferWrite",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "PKWARE_STREAM",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_PkwareCompress",
+      "address": "0041df40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041df40"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_PkwareCompress",
+        "SMemAlloc",
+        "PKWARE_implode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "PKWARE_STREAM",
+        "TCmpStruct",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_PkwareDecompress",
+      "address": "0041e000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e000"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_PkwareDecompress",
+        "SMemAlloc",
+        "PKWARE_explode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "PKWARE_STREAM",
+        "TDcmpStruct",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_ArenaAlloc",
+      "address": "0041e080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e080"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_ArenaAlloc",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "D2ScompArenaStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_ArenaFree",
+      "address": "0041e0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e0d0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_ArenaFree",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2ScompArenaStrc"
+      ]
+    },
+    {
+      "name": "SCOMP_ZlibCompress",
+      "address": "0041e100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e100"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_ZlibCompress",
+        "deflateInit_",
+        "deflate",
+        "deflateEnd",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ScompArenaStrc",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "SCOMP_ZlibCompressWithLevel",
+      "address": "0041e1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e1f0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_ZlibCompressWithLevel",
+        "SCOMP_ZlibCompress"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_InflateZlibStackArena",
+      "address": "0041e250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e250"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_InflateZlibStackArena",
+        "inflateInit_",
+        "inflate",
+        "inflateEnd",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ScompArenaStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ]
+    },
+    {
+      "name": "SCOMP_Bzip2Decompress",
+      "address": "0041e340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e340"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_Bzip2Decompress",
+        "SCOMP_InflateZlibStackArena"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_AdpcmMonoCompress",
+      "address": "0041e360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e360"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_AdpcmMonoCompress",
+        "SCOMP_SelectADPCMParams",
+        "SCOMP_ADPCMEncode"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_AdpcmMonoDecompress",
+      "address": "0041e3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e3a0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_AdpcmMonoDecompress",
+        "SCOMP_ADPCMDecode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_AdpcmStereoCompress",
+      "address": "0041e3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e3c0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_AdpcmStereoCompress",
+        "SCOMP_SelectADPCMParams",
+        "SCOMP_ADPCMEncode"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_AdpcmStereoDecompress",
+      "address": "0041e400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e400"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_AdpcmStereoDecompress",
+        "SCOMP_ADPCMDecode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_s_AllocDecompressBuffer",
+      "address": "0041e440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e440"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_s_AllocDecompressBuffer",
+        "GetCurrentThreadId",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_ReleaseTempBuffer",
+      "address": "0041e510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e510"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_ReleaseTempBuffer",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SCompCompress",
+      "address": "0041e570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e570"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCompCompress",
+        "SErrSetLastError",
+        "SCOMP_s_AllocDecompressBuffer",
+        "SMemCopy",
+        "SCOMP_ReleaseTempBuffer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCompDecompress",
+      "address": "0041e720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e720"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCompDecompress",
+        "SErrSetLastError",
+        "SMemCopy",
+        "SCOMP_s_AllocDecompressBuffer",
+        "SCOMP_ReleaseTempBuffer"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnSCompCodec *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_CleanupTempBuffer",
+      "address": "0041e8c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e8c0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_CleanupTempBuffer",
+        "SMemFree"
+      ]
+    },
+    {
+      "name": "HUFFMAN_GetDecodedOffset",
+      "address": "0041e900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e900"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "HUFFMAN_GetDecodedOffset"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BITBUFFER_ReadBits",
+      "address": "0041e9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041e9e0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "BITBUFFER_ReadBits"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint16_t *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_DecompressSimple",
+      "address": "0041ea20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ea20"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_DecompressSimple",
+        "SCompDecompress"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HUFFMAN_GetNextNodeOrDefault",
+      "address": "0041eb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041eb40"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "HUFFMAN_GetNextNodeOrDefault"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkNode",
+      "address": "0041eb60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041eb60"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkNode"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HUFFMAN_DecodeSymbol",
+      "address": "0041ebc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ebc0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "HUFFMAN_DecodeSymbol"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint16_t *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_MoveNode",
+      "address": "0041ed90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ed90"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_MoveNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkAll",
+      "address": "0041ee40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ee40"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkAll"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_LinkBefore",
+      "address": "0041ee80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ee80"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_LinkBefore"
+      ]
+    },
+    {
+      "name": "LINKEDLIST_NodeDestructor",
+      "address": "0041ee90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ee90"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "LINKEDLIST_NodeDestructor"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HUFFMAN_AllocateNode",
+      "address": "0041eed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041eed0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "HUFFMAN_AllocateNode",
+        "LINKEDLIST_MoveNode"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_InitEncoderContext",
+      "address": "0041ef20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ef20"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "COMPRESS_InitEncoderContext",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "D2CompressEncoderStrc",
+        "D2CompressHuffNodeStrc",
+        "D2CompressHuffNodeStrc *",
+        "int *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_UpdateFrequencies",
+      "address": "0041f350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f350"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "COMPRESS_UpdateFrequencies"
+      ],
+      "usedTypes": [
+        "D2CompressEncoderStrc",
+        "D2CompressHuffNodeStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_FlushEncoderState",
+      "address": "0041f460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f460"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "COMPRESS_FlushEncoderState",
+        "LINKEDLIST_UnlinkAll"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HUFFMAN_InitContext",
+      "address": "0041f4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f4a0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "HUFFMAN_InitContext"
+      ],
+      "usedTypes": [
+        "D2CompressEncoderStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_EncodeSymbol",
+      "address": "0041f510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f510"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "COMPRESS_EncodeSymbol",
+        "COMPRESS_UpdateFrequencies"
+      ],
+      "usedTypes": [
+        "D2CompressEncoderStrc",
+        "D2CompressHuffNodeStrc",
+        "D2CompressHuffNodeStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_DestroyEncoderContext",
+      "address": "0041f6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f6a0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "COMPRESS_DestroyEncoderContext",
+        "LINKEDLIST_UnlinkAll"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "HUFFMAN_DecompressBlock",
+      "address": "0041f740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f740"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "HUFFMAN_DecompressBlock",
+        "COMPRESS_InitEncoderContext",
+        "HUFFMAN_DecodeSymbol",
+        "COMPRESS_EncodeSymbol",
+        "COMPRESS_UpdateFrequencies"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint16_t *",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_EncodeBuffer",
+      "address": "0041f850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f850"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "COMPRESS_EncodeBuffer",
+        "COMPRESS_InitEncoderContext",
+        "BITSTREAM_WriteBits",
+        "BITSTREAM_WriteLiteralByte",
+        "BITBUFFER_GetRemainingBits",
+        "COMPRESS_UpdateFrequencies",
+        "COMPRESS_EncodeSymbol"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "HUFFMAN_Constructor",
+      "address": "0041f920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f920"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "HUFFMAN_Constructor",
+        "HUFFMAN_InitContext"
+      ],
+      "usedTypes": [
+        "D2CompressEncoderStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "HUFFMAN_ConstructorWithTable",
+      "address": "0041f950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f950"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "HUFFMAN_ConstructorWithTable",
+        "HUFFMAN_InitContext"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SCOMP_HuffmanCompress",
+      "address": "0041f980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f980"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_HuffmanCompress",
+        "LINKEDLIST_InsertAfter",
+        "HUFFMAN_InitContext",
+        "COMPRESS_EncodeBuffer",
+        "COMPRESS_DestroyEncoderContext"
+      ],
+      "usedTypes": [
+        "D2BitStreamWriterStrc",
+        "D2CompressEncoderStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "SCOMP_HuffmanDecompress",
+      "address": "0041f9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041f9e0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "SCOMP_HuffmanDecompress",
+        "LINKEDLIST_Unlink",
+        "HUFFMAN_ConstructorWithTable",
+        "HUFFMAN_DecompressBlock",
+        "COMPRESS_DestroyEncoderContext"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PKWARE_explode",
+      "address": "006b01b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b01b0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_explode",
+        "PKWARE_SetMemoryValue",
+        "PKWARE_IterateItemData",
+        "PKWARE_CompareItemValues",
+        "PKWARE_ExplodeStream"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "pfnPkwareRead",
+        "pfnPkwareWrite",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_ExplodeStream",
+      "address": "006b0330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0330"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_ExplodeStream",
+        "PKWARE_ProcessItemInventory",
+        "PKWARE_GetItemDataValue",
+        "PKWARE_SetMemoryValue"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_ProcessItemInventory",
+      "address": "006b0430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0430"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_ProcessItemInventory",
+        "PKWARE_CheckItemDataRange"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_GetItemDataValue",
+      "address": "006b05e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b05e0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_GetItemDataValue",
+        "PKWARE_CheckItemDataRange"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PKWARE_CheckItemDataRange",
+      "address": "006b0660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0660"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_CheckItemDataRange"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_CompareItemValues",
+      "address": "006b06f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b06f0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_CompareItemValues"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_IterateItemData",
+      "address": "006b0730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0730"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_IterateItemData"
+      ],
+      "usedTypes": [
+        "TDcmpStruct",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_SetMemoryValue",
+      "address": "006b0830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0830"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_SetMemoryValue"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PKWARE_implode",
+      "address": "006b0870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0870"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_implode",
+        "PKWARE_CopyMemoryValue",
+        "PKWARE_ProcessMemoryBlock"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "pfnPkwareRead",
+        "pfnPkwareWrite",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PKWARE_ProcessMemoryBlock",
+      "address": "006b0a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0a10"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_ProcessMemoryBlock",
+        "PKWARE_SetByteValue",
+        "PKWARE_CalculateOffset",
+        "PKWARE_CopyBufferData",
+        "PKWARE_ParseByteStream",
+        "PKWARE_CopyMemoryValue"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_ParseByteStream",
+      "address": "006b0d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b0d90"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_ParseByteStream"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_CalculateOffset",
+      "address": "006b10d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b10d0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_CalculateOffset",
+        "PKWARE_ProcessBuffer"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_CopyMemoryValue",
+      "address": "006b1160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1160"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_CopyMemoryValue"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PKWARE_SetByteValue",
+      "address": "006b11a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b11a0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_SetByteValue"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_ProcessBuffer",
+      "address": "006b1210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1210"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_ProcessBuffer",
+        "PKWARE_SetByteValue"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "PKWARE_CopyBufferData",
+      "address": "006b1290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b1290"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "PKWARE_CopyBufferData"
+      ],
+      "usedTypes": [
+        "TCmpStruct",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "StaticInit_6ca8c0",
+      "address": "006ca8c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca8c0"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "StaticInit_6ca8c0",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_CriticalSection_00779214",
+      "address": "006cb300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb300"
+        }
+      ],
+      "namespace": "Storm::Source::SComp",
+      "calledFunctions": [
+        "StaticFini_CriticalSection_00779214"
+      ]
+    }
+  ]
+}

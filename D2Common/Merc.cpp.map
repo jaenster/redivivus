@@ -1,0 +1,283 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/Merc.cpp",
+  "functions": [
+    {
+      "name": "MERC_GetWeaponAnimIndex",
+      "address": "006632c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006632c0"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "MERC_GetWeaponAnimIndex",
+        "COMPOSIT_GetWeaponClassWithTransform"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetMonsterSequenceTable",
+      "address": "00663310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663310"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "GetMonsterSequenceTable",
+        "GetCurrentSkill",
+        "GetSequenceId",
+        "MERC_GetWeaponAnimIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_MonStats_GetLine",
+        "GetMonsterSequenceTableByIndex"
+      ],
+      "usedTypes": [
+        "D2MonSeqMonsterTbls",
+        "D2MonStatsTxt",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MERC_GetSequenceTxt",
+      "address": "006633b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006633b0"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "MERC_GetSequenceTxt",
+        "GetMonsterSequenceTable"
+      ],
+      "usedTypes": [
+        "D2MonSeqMonsterTbls",
+        "D2MonSeqTxt",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetCounter1",
+      "address": "006633d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006633d0"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "GetCounter1",
+        "GetMonsterSequenceTable"
+      ],
+      "usedTypes": [
+        "D2MonSeqMonsterTbls",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetCounter2",
+      "address": "006633f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006633f0"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "GetCounter2",
+        "GetMonsterSequenceTable"
+      ],
+      "usedTypes": [
+        "D2MonSeqMonsterTbls",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ANIM_GetSequenceFrameInfo",
+      "address": "00663410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663410"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "ANIM_GetSequenceFrameInfo"
+      ],
+      "usedTypes": [
+        "D2MonSeqTxt",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "ANIM_GetEventFrame",
+      "address": "006634c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006634c0"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "ANIM_GetEventFrame"
+      ],
+      "usedTypes": [
+        "D2MonSeqTxt",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "MERC_GenerateStatsFromSeed",
+      "address": "006634f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006634f0"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "MERC_GenerateStatsFromSeed",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2MercRolledStatsStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetMercTypeString",
+      "address": "00663720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663720"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "GetMercTypeString",
+        "GetLocaleString"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetMercAct",
+      "address": "00663750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663750"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "GetMercAct",
+        "GetHirelingEntryByClassId",
+        "GetHirelingEntryByNameId"
+      ],
+      "usedTypes": [
+        "D2HirelingTxt",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "GetBaseExperience",
+      "address": "00663790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00663790"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "GetBaseExperience"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetReviveCost",
+      "address": "006637b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006637b0"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "GetReviveCost",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "RollMercStats",
+      "address": "006637f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006637f0"
+        }
+      ],
+      "namespace": "D2Common::Merc",
+      "calledFunctions": [
+        "RollMercStats",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "GetHirelingDataTable",
+        "RANDOM_RandomNumberSelector",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2HirelingHireData",
+        "D2HirelingTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    }
+  ]
+}

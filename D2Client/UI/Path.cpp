@@ -115,8 +115,8 @@ void __fastcall ConvertCoordToPerspectiveView(int * pX, int * pY) {
 }
 
 void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
+    int32_t nCoord;
     int nYStart;
-    int32_t iVar4;
     int nYEnd;
     uint32_t i;
     int nScreenX;
@@ -130,20 +130,20 @@ void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
     for (i = 0; i < nRoomCount; i++) {
       for (pUnit = pRoom->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
-        iVar4 = D2Common::Units::GetTargetX(pUnit);
-        nScreenX = iVar4 - MouseXOffset;
-        iVar4 = D2Common::Units::GetTargetY(pUnit);
-        D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nScreenX, iVar4 - MouseYOffset, nScreenX + 4, iVar4 - MouseYOffset + 4, 0xff, DRAW_SOLID);
+        nCoord = D2Common::Units::GetTargetX(pUnit);
+        nScreenX = nCoord - MouseXOffset;
+        nCoord = D2Common::Units::GetTargetY(pUnit);
+        D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nScreenX, nCoord - MouseYOffset, nScreenX + 4, nCoord - MouseYOffset + 4, 0xff, DRAW_SOLID);
         if (pUnit && pUnit->eUnitType == UNIT_WARP) {
           for (pGfxInfo = pUnit->pGfxInfo; pGfxInfo; pGfxInfo = *(D2GfxInfoStrc**)(pGfxInfo->nComponentFlags + 0x20)) {
             nYEnd = *(int*)(pGfxInfo->nComponentFlags + 4) - MouseYOffset;
             nScreenX = *(int*)pGfxInfo->nComponentFlags - MouseXOffset;
             nLineAlpha = 0xff;
             nColor_lcl = 0xff;
-            iVar4 = D2Common::Units::GetTargetY(pUnit);
-            nYStart = iVar4 - MouseYOffset;
-            iVar4 = D2Common::Units::GetTargetX(pUnit);
-            D2gfx::D2GFX::D2GFX_DrawLine(iVar4 - MouseXOffset, nYStart, nScreenX, nYEnd, nColor_lcl, nLineAlpha);
+            nCoord = D2Common::Units::GetTargetY(pUnit);
+            nYStart = nCoord - MouseYOffset;
+            nCoord = D2Common::Units::GetTargetX(pUnit);
+            D2gfx::D2GFX::D2GFX_DrawLine(nCoord - MouseXOffset, nYStart, nScreenX, nYEnd, nColor_lcl, nLineAlpha);
           }
         }
 

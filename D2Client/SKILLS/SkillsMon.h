@@ -47,7 +47,7 @@ void __fastcall SKILLSMON_SetMonsterDeathFrame(struct D2SkillsTxt * pSkillsTxt, 
 BOOL __fastcall Skills_CltDoFunc_Mon_PeriodicMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side skill-do function for monster directional-beam attacks. Validates the skill and its cltmissilea missile entry, sets UNITFLAG_SKSRVDOFUNC on the caster, builds a D2SkillArgStrc with origin coords and calc[0] as sub-loop multiplier, then aims at the confirmed target unit (or SP1 vector if no target) and spawns the missile via MakeMissile. Sets target X on the resulting missile. Returns 1 on success, 0 if skill/missile is invalid.
 BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLSMON_SetMissilePathRandom(struct D2UnitStrc * pUnit, int32_t nParam);
+void __fastcall SKILLSMON_SetMissilePathRandom(struct D2UnitStrc * pUnit, int32_t nSeedOffset);
 // Client do-func that spawns N randomly-directed missiles (N = calc[0]) from the caster's position toward the target area. Fills a shared D2SkillArgStrc with flag 0x21, owner, position, skill level, and SKILLSMON_SetMissilePathRandom callback, then calls MakeMissile once per missile index. Sets UNITFLAG_SKSRVDOFUNC.
 BOOL __fastcall Skills_CltDoFunc_Mon_RandomScatterMissiles(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltStFunc_ClearSkillFlags(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

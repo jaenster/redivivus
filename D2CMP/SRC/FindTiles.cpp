@@ -33,8 +33,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHashNodeStrc) == 0x14,
 namespace D2CMP::SRC::FindTiles {
 
 // Computes a 0-127 hash byte in AL/EAX (masked and range-checked before the halt-on-overflow guard); the caller reads it as a hash-table index (nHashIdx).
-int __fastcall FINDTILE_ComputeHash(char cParam1, char cParam2, char cTileSubType) {
-    uint32_t uVar1 = (uint8_t)(cParam1 * '\x02' - cTileSubType + cParam2) & 0x8000007f;
+int __fastcall FINDTILE_ComputeHash(char cSubIndex, char cIndex, char cTileSubType) {
+    uint32_t uVar1 = (uint8_t)(cSubIndex * '\x02' - cTileSubType + cIndex) & 0x8000007f;
     if (!((uint8_t)uVar1 < 0x80)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e);
       exit(-1);
@@ -185,7 +185,7 @@ void __fastcall FINDTILE_Register(D2TileLibraryHashStrc * pHashTable, D2TileLibr
     }
 }
 
-int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nParam4) {
+int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex) {
     uint32_t i;
     void* pChainNode;
     bool bMatched;
@@ -204,7 +204,7 @@ int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uin
         return 0;
       }
 
-      i = FINDTILE_ComputeHash((char)nParam4, (char)nTileSubType, (char)nTileType);
+      i = FINDTILE_ComputeHash((char)nSubIndex, (char)nTileSubType, (char)nTileType);
       pEntry = pHashTable[(uint8_t)i];
       if (!pEntry) {
         return nResultCount;
@@ -215,7 +215,7 @@ int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uin
         if (bMatched) {
           goto copy_matches;
         }
-        if (pEntry[1] == nParam4 && *pEntry == nTileSubType && pEntry[2] == nTileType) {
+        if (pEntry[1] == nSubIndex && *pEntry == nTileSubType && pEntry[2] == nTileType) {
           bMatched = true;
         } else {
           pEntry = (int*)pEntry[4];

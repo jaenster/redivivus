@@ -111,15 +111,15 @@ size_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBuff
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     ::BnMessQueue* pBVar2 = nLobbyChatCurrentMessage;
     if (nLobbyChatCurrentMessage) {
-      size_t sVar1;
+      size_t nMessageSize;
       memcpy(pBufferOut, nLobbyChatCurrentMessage->bBuffer, nLobbyChatCurrentMessage->nDataSize);
       *pMessageTypeOut = pBVar2->nZero;
-      sVar1 = pBVar2->nDataSize;
+      nMessageSize = pBVar2->nDataSize;
       pBVar2 = pBVar2->pNext;
       D2_FREE_AT(nLobbyChatCurrentMessage, ".\\BnMessQueue.cpp", 0x86);
       nLobbyChatCurrentMessage = pBVar2;
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);
-      return sVar1;
+      return nMessageSize;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);

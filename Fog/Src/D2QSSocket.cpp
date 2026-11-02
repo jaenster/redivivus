@@ -9,8 +9,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/QServer/QServer.h"
 #include "Fog/Src/Safesock.h"
+#include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -106,7 +106,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
     BOOL bBadHandlerPtr;
     int iVar2;
     uint16_t wMsgSize;
-    void* pParam;
+    void* pMessage;
     uint32_t uVar3;
     size_t _Size;
     uint16_t wPacketSize;
@@ -128,7 +128,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
       }
 
       wMsgSize = wPacketSize - (short int)iVar2;
-      pParam = (void*)(iVar2 + (int)pvVar4);
+      pMessage = (void*)(iVar2 + (int)pvVar4);
       if (pQServerStrc->pfnPacketHandler) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadHandlerPtr = IsBadCodePtr((FARPROC)pQServerStrc->pfnPacketHandler);
         if (bBadHandlerPtr) {
@@ -139,17 +139,17 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
         iVar2 = pQServerStrc->pfnPacketHandler(pQServerStrc->pHandlerContext);
         if (!iVar2) {
           if (pQServerStrc->nSizeFieldOffset > 0) {
-            pParam = pvVar4;
+            pMessage = pvVar4;
             wMsgSize = wPacketSize;
           }
 
-          D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pParam, wMsgSize);
+          D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pMessage, wMsgSize);
           /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
           pvVar4 = (void*)((int)pvVar4 + uVar3);
           continue;
         }
       } else {
-        D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pParam, wMsgSize);
+        D2QSQueue::FOG_EnqueueMessage(&pQServerStrc->aQueue, pMessage, wMsgSize);
         /* HANDLE hEvent for SetEvent */ SetEvent(pQServerStrc->pEvent);
       }
 
@@ -157,14 +157,14 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
     } while (true);
 }
 
-void __stdcall QSSOCKET_SetCallbackHandler2(D2QSSocketStrc * pQSSocket, int nHeaderSize, int nSizeFieldOffset, int nUnknown0x120) {
+void __stdcall QSSOCKET_SetCallbackHandler2(D2QSSocketStrc * pQSSocket, int nHeaderSize, int nSizeFieldOffset, int nHeaderLeadByte) {
     if (!pQSSocket) {
       return;
     }
 
     pQSSocket->nHeaderSize = nHeaderSize;
     pQSSocket->nSizeFieldOffset = nSizeFieldOffset;
-    pQSSocket->nHeaderLeadByte = nUnknown0x120;
+    pQSSocket->nHeaderLeadByte = nHeaderLeadByte;
 }
 
 // NOTE: Register param types inferred (medium confidence): pQSSocketStrc (ESI): D2QSSocketStrc *
@@ -419,13 +419,13 @@ void __stdcall QSSOCKET_SignalEvent(D2QSSocketStrc * pQSSocket) {
 }
 
 int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(D2QSSocketStrc * pQSocket, char * pBytes, short nSize) {
-    int iVar1;
+    int nResult;
     if (pQSocket) {
       D2NetDataStrc* pSafesocket;
       pSafesocket = pQSocket->pSafesock;
       if (pSafesocket && pSafesocket->bConnected) {
-        iVar1 = NET_MCP_CLIENT_SendPacketToSafesocket(pSafesocket, pBytes, (uint32_t)(uint16_t)nSize);
-        return iVar1;
+        nResult = NET_MCP_CLIENT_SendPacketToSafesocket(pSafesocket, pBytes, (uint32_t)(uint16_t)nSize);
+        return nResult;
       }
     }
 
@@ -449,11 +449,11 @@ int32_t __stdcall NET_MCP_CLIENT_Send(D2QSSocketStrc * pQSocket, char * pBytes, 
       }
 
       _nDataSizeNoHeader = (uint32_t)nDataSize;
-      Storm::Source::SSystem::SMemCopy(aSendBuf + 3, pBytes, _nDataSizeNoHeader - 1);
+      Storm::Source::SMem::SMemCopy(aSendBuf + 3, pBytes, _nDataSizeNoHeader - 1);
       *(uint16_t*)((char*)&abLenHeader + 2) = nDataSize + 3;
       abLenHeader[1] = *pBytes;
       abLenHeader[0] = (uint8_t)pQSocket->nHeaderLeadByte;
-      Storm::Source::SSystem::SMemCopy(aSendBuf, abLenHeader, 4);
+      Storm::Source::SMem::SMemCopy(aSendBuf, abLenHeader, 4);
       nTotalSendSize = _nDataSizeNoHeader + 3;
     } else {
       *(uint16_t*)(char*)&abLenHeader = nDataSize + 2;
@@ -462,14 +462,14 @@ int32_t __stdcall NET_MCP_CLIENT_Send(D2QSSocketStrc * pQSocket, char * pBytes, 
         exit(-1);
       }
 
-      Storm::Source::SSystem::SMemCopy(aSendBuf, abLenHeader, 2);
+      Storm::Source::SMem::SMemCopy(aSendBuf, abLenHeader, 2);
       if (!pBytes) {
         _nDataSizeNoHeader = 0;
       }
 
       nTotalSendSize = _nDataSizeNoHeader + 2;
       if (pBytes && nTotalSendSize < 0x2064) {
-        Storm::Source::SSystem::SMemCopy(aSendBuf + 2, pBytes, _nDataSizeNoHeader);
+        Storm::Source::SMem::SMemCopy(aSendBuf + 2, pBytes, _nDataSizeNoHeader);
       }
     }
 

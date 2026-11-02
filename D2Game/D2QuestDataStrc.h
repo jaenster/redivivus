@@ -93,7 +93,7 @@ struct __attribute__((packed)) D2QuestDataA1Q4Strc {
     /* 0x010 */ int32_t field_0x10;
     /* 0x014 */ int32_t field_0x14;
     /* 0x018 */ D2QuestDataA1Q4SubStrc sSub; // Cairn stones, tree, portal state
-    /* 0x098 */ int32_t field_0x98;
+    /* 0x098 */ int32_t nCainPortalGUID;
     /* 0x09C */ POINT ptCainPos;
     /* 0x0A4 */ int32_t nCageObjectGUID;
     /* 0x0A8 */ int32_t nPortalX;
@@ -148,7 +148,7 @@ struct D2QuestDataA2Q1Strc {
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ struct D2RoomStrc * pRadamentRoom; // struct D2RoomStrc* where Radament was killed
     /* 0x08 */ uint8_t bSpokeToAtma; // Set when player talked to Atma after killing Radament
-    /* 0x09 */ uint8_t field_0x9;
+    /* 0x09 */ uint8_t bRadamentCompleteNotified;
     /* 0x0A */ bool bEndCallbackScheduled; // Set when Q09_OnEndCallback timer is scheduled
     /* 0x0B */ uint8_t field_0xB;
     /* 0x0C */ int32_t nBookOfSkillDropCount; // Number of Book of Skill items to drop for party members
@@ -178,7 +178,7 @@ struct D2QuestDataA2Q2Strc {
 
 struct __attribute__((packed)) D2QuestDataA2Q3Strc {
     /* 0x00 */ uint8_t field_0x00;
-    /* 0x01 */ uint8_t field_0x01;
+    /* 0x01 */ uint8_t bDarknessTimerArmed;
     /* 0x02 */ bool bSunDarkened; // Set when sun goes dark, cleared when sun restored
     /* 0x03 */ uint8_t bViperAmuletInitPending; // Set when viper amulet chest initialized but not yet triggered
     /* 0x04 */ bool bTaintedSunStartedFailed; // Set when BeginTaintedSun returns false (no act2 DRLG)
@@ -209,9 +209,9 @@ struct D2QuestDataA2Q4Strc {
     /* 0x0F */ uint8_t bJerhynInitial; // Jerhyn initial state flag (checked in CheckJerhynGateOpen)
     /* 0x10 */ bool bJerhynGateOpened; // Set when Jerhyn palace gate is opened
     /* 0x11 */ uint8_t bPortalJerhynSpawned; // Set when Jerhyn should be spawned at portal location
-    /* 0x12 */ uint8_t field_0x12;
-    /* 0x13 */ uint8_t field_0x13;
-    /* 0x14 */ uint8_t field_0x14;
+    /* 0x12 */ uint8_t bJerhynWalkPending;
+    /* 0x13 */ uint8_t bJerhynWalkIssued;
+    /* 0x14 */ uint8_t bJerhynRelocated;
     /* 0x15 */ uint8_t bJerhynCoordsStored;
     /* 0x16 */ bool bPortalSpawned; // Set after Canyon of the Magi portal is spawned
     /* 0x17 */ uint8_t field_0x17;
@@ -220,7 +220,7 @@ struct D2QuestDataA2Q4Strc {
     /* 0x1A */ uint8_t bDurielProximity; // set=1 in Q14_CheckDurielProximity when player is within ~31 units of Duriel coords
     /* 0x1B */ uint8_t field_0x1B;
     /* 0x1C */ int32_t nDurielProximityPlayerGUID; // GUID of the player near Duriel (-1 if no unit); set in Q14_CheckDurielProximity
-    /* 0x20 */ int32_t field_0x20;
+    /* 0x20 */ int32_t nHaremBlockerX;
     /* 0x24 */ int32_t nHaremBlockerY;
     /* 0x28 */ int32_t nJerhynX;
     /* 0x2C */ int32_t nJerhynY;
@@ -237,12 +237,12 @@ struct D2QuestDataA2Q4Strc {
 
 struct D2QuestDataA2Q5Strc {
     /* 0x00 */ uint8_t bSummonerKilled;
-    /* 0x01 */ uint8_t field_0x1;
+    /* 0x01 */ uint8_t bSummonerAiActivated;
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ struct D2RoomStrc * pSummonerRoom; // struct D2RoomStrc*
     /* 0x08 */ uint8_t bEndCallbackScheduled;
-    /* 0x09 */ uint8_t field_0x9;
+    /* 0x09 */ uint8_t bCompletionSoundPlayed;
     /* 0x0A */ uint8_t field_0xA;
     /* 0x0B */ uint8_t field_0xB;
 };
@@ -252,7 +252,7 @@ struct D2QuestDataA2Q6Strc {
     /* 0x01 */ uint8_t bTombEntered; // set=1 in Callback_08 when player enters Duriel's chamber; gating Cain ActiveFilter
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t bPortalTimerArmed; // set=1 in OnStaffUsedInOrifice to prevent duplicate Q14_TimerCreatePortal
-    /* 0x04 */ uint8_t field_0x4;
+    /* 0x04 */ uint8_t bOrificeObjectPresent;
     /* 0x05 */ uint8_t bTyraelObjectPresent; // checked in Callback_08 for Tyrael anim
     /* 0x06 */ uint8_t bChamberObjectPresent; // set=1 in Objects_InitFn37 when the Tal Rasha chamber quest object spawns
     /* 0x07 */ uint8_t field_0x7;
@@ -271,7 +271,7 @@ struct D2QuestDataA2Q6Strc {
     /* 0x14 */ int nStatusCode;
     /* 0x18 */ int nDurielState; // 0=alive, 2=killed; checked in Callback_00 for Tyrael
     /* 0x1C */ int field_0x1C;
-    /* 0x20 */ int field_0x20;
+    /* 0x20 */ int nOrificeObjectGUID;
     /* 0x24 */ int field_0x24;
     /* 0x28 */ int nChamberObjectGUID; // GUID of the Tal Rasha chamber quest object; set in Objects_InitFn37
     /* 0x2C */ int nTyraelObjectGUID; // FindUnitFromTable(OBJECT, guid) in Callback_08
@@ -387,7 +387,7 @@ struct D2QuestDataA3Q3Strc {
     /* 0x1A */ uint8_t field_0x1A;
     /* 0x1B */ uint8_t field_0x1B;
     /* 0x1C */ int32_t nBladeItemCount; // Gidbinn item tracking (decremented on give, incremented on pickup)
-    /* 0x20 */ uint8_t field_0x20;
+    /* 0x20 */ uint8_t bQuestItemLost;
     /* 0x21 */ uint8_t field_0x21;
     /* 0x22 */ uint8_t field_0x22;
     /* 0x23 */ uint8_t field_0x23;
@@ -422,7 +422,7 @@ struct D2QuestDataA3Q5Strc {
     /* 0x00 */ bool bLastKilledCouncilByte0; // Low byte of council tracking
     /* 0x01 */ bool bCouncilMemberKillNotify; // Set in OnCouncilMemberKilled
     /* 0x02 */ uint8_t bCouncilMemberTracking; // Council member being tracked
-    /* 0x03 */ bool field_0x3;
+    /* 0x03 */ bool byLastKilledCouncilGUIDByte3;
     /* 0x04 */ uint8_t nTrackedCouncilByte0; // Byte 0 of tracked council GUID / notify flag from Callback_11
     /* 0x05 */ bool bCouncilTrackingActive; // Council-kill / Compelling-Orb sequence active. Set in Q22_TrackCouncilKill; read (as bViperAmuletInitialized) by Q22_PlayerUpdateBlackenedTempleState to advance log to Step0x03
     /* 0x06 */ uint8_t field_0x6;
@@ -433,7 +433,7 @@ struct D2QuestDataA3Q5Strc {
     /* 0x0E */ bool bBoxDropped; // Box dropped from council
     /* 0x0F */ uint8_t field_0x0F;
     /* 0x10 */ int32_t anCouncilKillerGUIDs[6]; // Council killer GUID 0
-    /* 0x28 */ int32_t field_0x28;
+    /* 0x28 */ int32_t bCompellingOrbSpawned;
     /* 0x2C */ int32_t nCompellingOrbGUID;
     /* 0x30 */ int32_t nCouncilKillCount; // Council members killed (max 6)
     /* 0x34 */ int32_t nCouncilKillsRemaining; // Council kills remaining
@@ -537,7 +537,7 @@ struct __attribute__((packed)) D2QuestDataA4Q2Strc {
 
 struct D2QuestDataA4Q3Strc {
     /* 0x00 */ uint8_t nForgeStage; // Hellforge object stage: 0 untouched, 2 when the soulstone is placed, 3 when the 3rd hammer strike smashes it (OBJOP_A4Q3_HellforgeSmash 0x005b5c10)
-    /* 0x01 */ uint8_t field_0x01; // reserved
+    /* 0x01 */ uint8_t byForgeStageHigh; // reserved
     /* 0x02 */ uint8_t bForgeQuestAccepted; // Cain talked - quest accepted
     /* 0x03 */ uint8_t bDropActive; // Forge rune drop sequence active
     /* 0x04 */ uint8_t bSetupUpdateFlag; // Unit setup update flag set
@@ -702,7 +702,7 @@ struct D2QuestDataA5Q5Strc {
     /* 0x4C */ int nAltarObjectMode; // reserved
     /* 0x50 */ int nAltarGUID; // reserved
     /* 0x54 */ int nPlayersOnSummit; // Count of living players currently on Arreat Summit; zeroed then re-counted by ResurrectAncients to decide arena reset
-    /* 0x58 */ uint8_t field_0x58; // reserved
+    /* 0x58 */ uint8_t bSummitDoorInitialized; // reserved
     /* 0x59 */ uint8_t field_0x59;
     /* 0x5A */ uint8_t field_0x5a;
     /* 0x5B */ uint8_t field_0x5b;

@@ -410,7 +410,7 @@ void __fastcall PLRSKILLS_StateRemFn03_BoneArmor(D2UnitStrc * pUnit, eD2States e
 
 // Bone Armor state update callback. Computes a 3-tier armor tier from current vs. max bone armor values (UNITSTAT_bonearmor/bonearmormax), stores the new tier in shortparam1, then adds or removes tier-keyed overlays via GFX_AddOverlayToUnit / STATES_RemoveOverlayById. Called each tick while Bone Armor state is active.
 void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States eState) {
-    int iVar2;
+    int nTierDrop;
     eOverlayId eCastOverlay;
     eOverlayId eOverlay4;
     eOverlayId eOverlay3;
@@ -477,12 +477,12 @@ void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States e
         return;
       }
     } else if (nNewTier < nPrevTier) {
-      iVar2 = nPrevTier - nNewTier;
+      nTierDrop = nPrevTier - nNewTier;
       do {
         STATES_RemoveOverlayById(pUnit, eOverlay1);
         STATES_RemoveOverlayById(pUnit, nOverlay2);
-        iVar2--;
-      } while (iVar2);
+        nTierDrop--;
+      } while (nTierDrop);
     }
 }
 
@@ -782,14 +782,16 @@ void __fastcall PLRSKILLS_StateSetFn14_Shapeshift(D2UnitStrc * pUnit, eD2States 
     }
 
     eUnitType = pUnit->eUnitType;
+    uint32_t nItemIdValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosX.nItemId = pUnit->pPath.pStaticPath->nPosY;
+      nItemIdValue = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      nPosX.nItemId = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      nItemIdValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
-      nPosX.nItemId = 0;
+      nItemIdValue = 0;
     }
 
+    nPosX.nItemId = nItemIdValue;
     UnitMode::HandleMessage(0x19, pUnit, &nPosX, 0);
     D2Common::PATH::DynamicPath::PATH_SetNewDirection(pUnit->pPath.pDynamicPath, 0);
 }
@@ -918,12 +920,14 @@ void __fastcall PLRSKILLS_StateSetFn17_RestInPeace(D2UnitStrc * pUnit, eD2States
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nMissileTxtNo = (eMissilesId)pDVar1->missile;
+    eD2Skills eSkillNoValue;
     if (pDVar1->skill >= 0) {
-      sSkillArg.eSkillNo = (eD2Skills)pDVar1->skill;
+      eSkillNoValue = (eD2Skills)pDVar1->skill;
     } else {
-      sSkillArg.eSkillNo = SKILL_Attack;
+      eSkillNoValue = SKILL_Attack;
     }
 
+    sSkillArg.eSkillNo = eSkillNoValue;
     sSkillArg.nSkillLevel = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -940,12 +944,14 @@ void __fastcall PLRSKILLS_StateSetFn18_CorpseExp(D2UnitStrc * pUnit, eD2States e
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nMissileTxtNo = (eMissilesId)pDVar1->missile;
+    eD2Skills eSkillNoValue;
     if (pDVar1->skill >= 0) {
-      sSkillArg.eSkillNo = (eD2Skills)pDVar1->skill;
+      eSkillNoValue = (eD2Skills)pDVar1->skill;
     } else {
-      sSkillArg.eSkillNo = SKILL_Attack;
+      eSkillNoValue = SKILL_Attack;
     }
 
+    sSkillArg.eSkillNo = eSkillNoValue;
     sSkillArg.nSkillLevel = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -1242,7 +1248,7 @@ void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eSta
 }
 
 // @sourcefile .\UNIT\PlrSkills.cpp
-D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, D2UnitDataUnion * param_1, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nParam) {
+D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, D2UnitDataUnion * eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer) {
     int byOldAlignment;
     if (!pUnit) {
       return nullptr;
@@ -1254,19 +1260,19 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
     }
     if (!pStatList) {
       int nBaseStatVal;
-      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (eD2States)param_1);
+      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (eD2States)eState);
       if (!pStatList) {
         pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0, 0, pUnit->eUnitType, pUnit->nUnitGUID);
-        D2Common::Stats::StatsEx::SetState(pStatList, (eD2States)param_1);
+        D2Common::Stats::StatsEx::SetState(pStatList, (eD2States)eState);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       } else {
-        nBaseStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eUnitStat, nParam);
+        nBaseStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eUnitStat, nLayer);
         nBaseStatVal = (int)((uint32_t)nBaseStatVal & 0xffffff00u | (uint32_t)(uint8_t)(char)nBaseStatVal);
         *(uint8_t*)(char*)&byOldAlignment = (char)nBaseStatVal;
       }
     }
 
-    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, eSkill, nParam);
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, eSkill, nLayer);
     if (eUnitStat == UNITSTAT_alignment) {
       Player::CLIENT_UpdateMonsterAllegiance(pUnit, (char)byOldAlignment, (char)eSkill);
     } else if ((int)eUnitStat < 0) {

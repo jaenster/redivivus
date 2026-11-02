@@ -1,0 +1,181 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/BnMessQueue.cpp",
+  "functions": [
+    {
+      "name": "BNMESSQUEUE_Initialize",
+      "address": "005201e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005201e0"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_Initialize"
+      ]
+    },
+    {
+      "name": "BNMESSQUEUE_Shutdown",
+      "address": "00520200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520200"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_Shutdown"
+      ]
+    },
+    {
+      "name": "BNMESSQUEUE_EnqueueBytes",
+      "address": "00520210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520210"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_EnqueueBytes",
+        "AllocClientMemory",
+        "memcpy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "BnMessQueue",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BNMESSQUEUE_EnqueueString",
+      "address": "005202f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005202f0"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_EnqueueString",
+        "AllocClientMemory",
+        "SStrCopy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "BnMessQueue",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BNMESSQUEUE_DequeueMessage",
+      "address": "005203b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005203b0"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_DequeueMessage",
+        "memcpy",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "BnMessQueue"
+      ]
+    },
+    {
+      "name": "BNMESSQUEUE_ClearAll",
+      "address": "00520440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520440"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_ClearAll",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "BnMessQueue"
+      ]
+    },
+    {
+      "name": "BNMESSQUEUE_SetStateIfZero",
+      "address": "005204a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005204a0"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_SetStateIfZero"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BNMESSQUEUE_SetStateWithString",
+      "address": "005204d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005204d0"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "BNMESSQUEUE_SetStateWithString",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SID_SetStateFlag1",
+      "address": "00520520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520520"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "SID_SetStateFlag1"
+      ]
+    },
+    {
+      "name": "SID_SetStateFlag2",
+      "address": "00520550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520550"
+        }
+      ],
+      "namespace": "Bnclient::BnMessQueue",
+      "calledFunctions": [
+        "SID_SetStateFlag2"
+      ]
+    }
+  ]
+}

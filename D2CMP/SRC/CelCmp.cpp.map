@@ -1,0 +1,953 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2CMP/SRC/CelCmp.cpp",
+  "functions": [
+    {
+      "name": "CELCMP_GetDirectionFrameTableIndex",
+      "address": "00600c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600c90"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetDirectionFrameTableIndex",
+        "D2MEM_FindLowestSetBit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_GetPaletteShiftValue",
+      "address": "00600cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600cb0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetPaletteShiftValue",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_CanConvertFormat",
+      "address": "00600d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600d30"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_CanConvertFormat"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_GetFrameDecodeHandlerForward",
+      "address": "00600d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600d60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetFrameDecodeHandlerForward",
+        "D2MEM_FindLowestSetBit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_GetFrameDecodeHandlerReverse",
+      "address": "00600e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600e20"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetFrameDecodeHandlerReverse",
+        "D2MEM_FindLowestSetBit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_ValidateCelFilePointer",
+      "address": "00600ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600ee0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_ValidateCelFilePointer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_AllocateDecodedCelFile",
+      "address": "00600f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600f10"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_AllocateDecodedCelFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_FixupOffsetsAndSerialize",
+      "address": "00600fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00600fb0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_FixupOffsetsAndSerialize",
+        "AllocClientMemory",
+        "memcpy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_ApplyPaletteToAllFrames",
+      "address": "00601180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601180"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_ApplyPaletteToAllFrames",
+        "CELCMP_ApplyColorKeyToAllPixels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_SerializeCelFileToMemory",
+      "address": "006011f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006011f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_SerializeCelFileToMemory",
+        "AllocClientMemory",
+        "memcpy",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2InventoryGridStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_FixupPointersAndPrepare",
+      "address": "00601340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601340"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_FixupPointersAndPrepare",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "DC6",
+        "DC6 *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_FreeCelFileMemory",
+      "address": "00601410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601410"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_FreeCelFileMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_InvokeFormatSpecificCleanup",
+      "address": "00601450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601450"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_InvokeFormatSpecificCleanup",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_DrawCelFrame",
+      "address": "006014c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006014c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_DrawCelFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_CopyCelDataToBuffer",
+      "address": "006015d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006015d0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_CopyCelDataToBuffer",
+        "CELCMP_GetDirectionFrameTableIndex",
+        "memcpy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_DrawCelFrameFromGfxData",
+      "address": "00601650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601650"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_DrawCelFrameFromGfxData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_DrawCelFrameCentered",
+      "address": "00601730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601730"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_DrawCelFrameCentered",
+        "FASTCMP_DecompressRLEWithAlpha",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CELCMP_ValidateGfxDataIndexInRange",
+      "address": "00601810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601810"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_ValidateGfxDataIndexInRange"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_GetDC6BlockFromGfxData",
+      "address": "00601840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601840"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetDC6BlockFromGfxData",
+        "D2MEM_FindLowestSetBit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetDC6Width",
+      "address": "006018c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006018c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "GetDC6Width",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetDC6Height",
+      "address": "006018f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006018f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "GetDC6Height",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetDC6OffsetX",
+      "address": "00601920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601920"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "GetDC6OffsetX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetDC6OffsetY",
+      "address": "00601950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601950"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "GetDC6OffsetY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_GetDC6BlockDataPointer",
+      "address": "00601980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601980"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetDC6BlockDataPointer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_GetDC6DirectionCount",
+      "address": "006019b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006019b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetDC6DirectionCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "IMAGE_GetFramesCount",
+      "address": "006019f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006019f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "IMAGE_GetFramesCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_SetPixelDataFreeCallback",
+      "address": "00601a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601a30"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_SetPixelDataFreeCallback"
+      ],
+      "usedTypes": [
+        "pfnCelPixelDataFree"
+      ]
+    },
+    {
+      "name": "CELCMP_GetPixelDataFreeCallback",
+      "address": "00601a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601a40"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetPixelDataFreeCallback"
+      ],
+      "usedTypes": [
+        "pfnCelPixelDataFree"
+      ]
+    },
+    {
+      "name": "DeleteCellFile",
+      "address": "00601a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601a50"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "DeleteCellFile",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t",
+        "pfnCelPixelDataFree",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_GetDC6BlockPixelData",
+      "address": "00601b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601b10"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_GetDC6BlockPixelData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_RoundUpToMultiple",
+      "address": "00601e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601e60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_RoundUpToMultiple"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_FreeCelFileAndData",
+      "address": "00601ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601ea0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_FreeCelFileAndData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DeleteCellFile",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "DC6",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_AddCelFrameToCache",
+      "address": "00603860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603860"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_AddCelFrameToCache",
+        "Ptr",
+        "SMemAlloc",
+        "AllocClientMemory",
+        "D2MEM_CopyRows",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TCELENTRY",
+        "TSLink<TCELENTRY>",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "CELCMP_FreeCachedCelFrame",
+      "address": "006039c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006039c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_FreeCachedCelFrame",
+        "Ptr",
+        "FreeClientMemory",
+        "Clear",
+        "Unlink"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_CreateCelFileFromCache",
+      "address": "00603a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603a70"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_CreateCelFileFromCache",
+        "Ptr",
+        "AllocClientMemory",
+        "RAW_CreateCelFrames"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "DC6",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CELCMP_RoundUpToMultiple_Unreferenced",
+      "address": "00603f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603f20"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_RoundUpToMultiple_Unreferenced"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_SetSpriteCacheMaxSize",
+      "address": "00604a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604a30"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "GFX_SetSpriteCacheMaxSize",
+        "SPRITECACHE_SetMaxSize"
+      ]
+    },
+    {
+      "name": "BITSTREAM_InitWriter",
+      "address": "0060b140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b140"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "BITSTREAM_InitWriter"
+      ],
+      "usedTypes": [
+        "D2CodecBitStateStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BITSTREAM_CopyState",
+      "address": "0060b16a",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b16a"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "BITSTREAM_CopyState"
+      ]
+    },
+    {
+      "name": "BITSTREAM_GetByteOffset",
+      "address": "0060b180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b180"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "BITSTREAM_GetByteOffset"
+      ]
+    },
+    {
+      "name": "BITSTREAM_AdvanceBits",
+      "address": "0060b1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b1a0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "BITSTREAM_AdvanceBits"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GFX_InitGlobalCriticalSection",
+      "address": "0060cd30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060cd30"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "GFX_InitGlobalCriticalSection"
+      ]
+    },
+    {
+      "name": "GFX_DestroyGlobalCriticalSection",
+      "address": "0060cd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060cd50"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "GFX_DestroyGlobalCriticalSection"
+      ]
+    },
+    {
+      "name": "CELCMP_ApplyColorKeyToAllPixels",
+      "address": "0060d110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d110"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "CELCMP_ApplyColorKeyToAllPixels"
+      ],
+      "usedTypes": [
+        "pfnTilecmpPixelCallback",
+        "uint3",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca286",
+      "address": "006ca286",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca286"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca286",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "StaticInit_6cafc0",
+      "address": "006cafc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cafc0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "StaticInit_6cafc0",
+        "Constructor",
+        "atexit"
+      ]
+    },
+    {
+      "name": "StaticFini_gCelCmpCacheHandler",
+      "address": "006cb4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb4c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp",
+      "calledFunctions": [
+        "StaticFini_gCelCmpCacheHandler",
+        "Destructor"
+      ]
+    }
+  ]
+}

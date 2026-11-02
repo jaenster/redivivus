@@ -1,0 +1,68 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Net/SRC/D2Net.cpp",
+  "functions": [
+    {
+      "name": "NET_GetLocalIPAddressString",
+      "address": "0052afe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052afe0"
+        }
+      ],
+      "namespace": "D2Net::SRC::D2Net",
+      "calledFunctions": [
+        "NET_GetLocalIPAddressString",
+        "SStrCopy",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "sockaddr_in"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_ExtractPacketSize",
+      "address": "0052b820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b820"
+        }
+      ],
+      "namespace": "D2Net::SRC::D2Net",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_ExtractPacketSize",
+        "GetTickCount",
+        "memcpy",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2OnePacketClientStrc",
+        "D2OnePacketClientStrc *",
+        "LPCRITICAL_SECTION"
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_FreeAllClientD2Packets",
+      "address": "0052b8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052b8b0"
+        }
+      ],
+      "namespace": "D2Net::SRC::D2Net",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_FreeAllClientD2Packets",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2OnePacketClientStrc",
+        "D2OnePacketClientStrc *",
+        "LPCRITICAL_SECTION"
+      ]
+    }
+  ]
+}

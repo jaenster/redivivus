@@ -6,11 +6,11 @@
 #include "D2CMP/SRC/TileProjects.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/DATATBLS/DataTbls.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
-#include "Storm/_unnamespaced.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -77,7 +77,7 @@ D2TileLibraryHeaderStrc * __stdcall TILEPROJECT_FindLibraryOfTile(D2TileLibraryE
     } while (true);
 }
 
-void __fastcall PALETTE_LoadFromFile(char * pdwParam, int32_t nPaletteSet) {
+void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet) {
     int nPrefixWords;
     char nStrEndOffset1[260];
     D2MPQFileStrc* pArchive;
@@ -91,18 +91,18 @@ void __fastcall PALETTE_LoadFromFile(char * pdwParam, int32_t nPaletteSet) {
 
     *(uint16_t*)szPathDst = *(uint16_t*)pSrcWord;
     szPathDst[2] = pSrcWord[2];
-    strcat(nStrEndOffset1, pdwParam);
+    strcat(nStrEndOffset1, szPaletteName);
     strcat(nStrEndOffset1, ".dat");
-    uint32_t local_8 = 0x1500;
-    char* szInlineNameBuf = pdwParam;
+    uint32_t nPaletteDataSize = 0x1500;
+    char* szInlineNameBuf = szPaletteName;
     BOOL bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, nStrEndOffset1, &pArchive, 1);
     if (!bFileExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39);
       exit(-1);
-      memset(gaItemPaletteData + nPaletteSet * 0x6900, 0, local_8);
+      memset(gaItemPaletteData + nPaletteSet * 0x6900, 0, nPaletteDataSize);
     } else {
-      D2FILE_ReadFile(nullptr, pArchive, gaItemPaletteData + nPaletteSet * 0x6900, local_8);
-      D2FILE_CloseFile(nullptr, pArchive);
+      D2Hell::D2FILE_ReadFile(nullptr, pArchive, gaItemPaletteData + nPaletteSet * 0x6900, nPaletteDataSize);
+      D2Hell::D2FILE_CloseFile(nullptr, pArchive);
     }
 }
 
@@ -117,15 +117,15 @@ void __stdcall PALETTE_InitItemPalettes() {
     PALETTE_LoadFromFile("invgreybrown", 8);
 }
 
-void __stdcall PALETTE_SetAct(int32_t nParam) {
+void __stdcall PALETTE_SetAct(int32_t nAct) {
     // Static local variables (originally global data)
     static uint32_t nPalleteAct = 0x1; D2_STATIC_GUARD(nPalleteAct, "D2CMP::Pallete::PALETTE_SetAct::nPalleteAct");
 
-    if (!(nParam - 1U <= 4)) {
+    if (!(nAct - 1U <= 4)) {
       return;
     }
 
-    nPalleteAct = nParam;
+    nPalleteAct = nAct;
 }
 
 uint8_t * __stdcall PALETTE_GetItemPalette(int32_t nPaletteSet, int32_t nRow) {
@@ -877,7 +877,7 @@ uint32_t __stdcall PALETTE_GetColorShiftIndex(int32_t nParam, uint32_t nParam2) 
     0x3f
 }; D2_STATIC_GUARD(gdwPaletteTableSize, "D2CMP::Pallete::PALETTE_GetColorShiftIndex::gdwPaletteTableSize");
 
-    int32_t nLowestBit = D2MEM_FindLowestSetBit(nParam2);
+    int32_t nLowestBit = D2Hell::D2MEM_FindLowestSetBit(nParam2);
     return gdwPaletteTableSize[nLowestBit * 0x20 + nParam];
 }
 

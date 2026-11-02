@@ -162,13 +162,13 @@ static uint32_t __stdcall ZLIB_Adler32Combine(uint32_t nAdler1, uint32_t nLen2Lo
 }
 
 uint32_t __fastcall ZLIB_Adler32Combine32(uint32_t nAdler1, uint32_t nAdler2, uint32_t nLen2) {
-    uint32_t uVar1 = ZLIB_Adler32Combine(nAdler1, nLen2, (int)nLen2 >> 0x1f, nAdler2);
-    return uVar1;
+    uint32_t nAdlerResult = ZLIB_Adler32Combine(nAdler1, nLen2, (int)nLen2 >> 0x1f, nAdler2);
+    return nAdlerResult;
 }
 
 uint32_t __fastcall ZLIB_Adler32Combine64(uint32_t nAdler1, uint32_t nAdler2, uint32_t nLen2Lo, uint32_t nLen2Hi) {
-    uint32_t uVar1 = ZLIB_Adler32Combine(nAdler1, nLen2Lo, nLen2Hi, nAdler2);
-    return uVar1;
+    uint32_t nAdlerResult = ZLIB_Adler32Combine(nAdler1, nLen2Lo, nLen2Hi, nAdler2);
+    return nAdlerResult;
 }
 
 // Fast-path inflate decompression main loop. Processes compressed data using precomputed Huffman tables with 15-bit lookahead for literal/distance pairs. Copies match data with optimized 3-byte blocking pattern.
@@ -590,7 +590,6 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
     0x40
 }; D2_STATIC_GUARD(gaZlibDistExtraBitsTable, "D2Client::Source::SSComp::ZLIB_InflateTable::gaZlibDistExtraBitsTable");
 
-    uint16_t uVar1;
     uint8_t byOpBits;
     uint32_t nFillIdx;
     inflate_code* pFillEntry;
@@ -609,6 +608,8 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
     uint32_t dwTableEntry;
     uint16_t aOffset[16];
     uint16_t aCount[16];
+    uint16_t wCodeCount;
+    uint16_t wSymbol;
     uint32_t nMaxBits;
     nMaxBits = 0;
     memset(aCount, 0, 16 * sizeof(aCount[0]));
@@ -740,10 +741,10 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
         byCurLength = (char)nCurLength;
         byCurBits = (uint8_t)nCurBits;
         byOpBits = byCurLength - byCurBits;
-        uVar1 = *pSortedCode;
-        if ((int)(uint32_t)uVar1 < nMatchLimit) {
-          dwTableEntry = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint16_t)uVar1 << 8 | (uint32_t)(uint8_t)byOpBits) & 0xffffffu) << 8;
-        } else if (nMatchLimit < (int)(uint32_t)uVar1) {
+        wSymbol = *pSortedCode;
+        if ((int)(uint32_t)wSymbol < nMatchLimit) {
+          dwTableEntry = (uint32_t)(uint32_t)((uint32_t)((uint32_t)(uint16_t)wSymbol << 8 | (uint32_t)(uint8_t)byOpBits) & 0xffffffu) << 8;
+        } else if (nMatchLimit < (int)(uint32_t)wSymbol) {
           dwTableEntry = (uint32_t)((uint32_t)(uint16_t)pBaseTable[*pSortedCode] << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)byOpBits << 8 | (uint16_t)(uint8_t)(char)pExtraTable[*pSortedCode]));
         } else {
           dwTableEntry = (uint32_t)((uint32_t)((uint32_t)byOpBits & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x60);
@@ -800,15 +801,15 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
       if (nLenIndex < nMaxBits) {
         pCountEntry = aCount + nLenIndex;
         do {
-          uVar1 = *pCountEntry;
-          if ((int)(nLeft - (uint32_t)uVar1) <= 0) {
+          wCodeCount = *pCountEntry;
+          if ((int)(nLeft - (uint32_t)wCodeCount) <= 0) {
             break;
           }
 
           nLenIndex++;
           nCurExtraBits++;
           pCountEntry++;
-          nLeft = (nLeft - (uint32_t)uVar1) * 2;
+          nLeft = (nLeft - (uint32_t)wCodeCount) * 2;
         } while (nLenIndex < nMaxBits);
       }
 

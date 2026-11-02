@@ -110,7 +110,7 @@ static void GLTEXCACHE_AppendNodeToTail(GlTextureCacheStrc * pCache, GlTextureCa
 
 // Removes a texture cache node from the active LRU list by index. Returns pointer to removed node, or NULL if active list empty. Handles head, tail, and middle removal cases.
 GlTextureCacheNodeStrc * __fastcall GLTEXCACHE_RemoveNodeByIndex(GlTextureCacheStrc * pCache, int nNodeIndex) {
-    uint8_t* puVar1;
+    uint8_t* pNeighbourNode;
     GlTextureCacheNodeStrc* pHead = (GlTextureCacheNodeStrc*)pCache->pActiveHead;
     if (!pHead) {
       return nullptr;
@@ -118,10 +118,10 @@ GlTextureCacheNodeStrc * __fastcall GLTEXCACHE_RemoveNodeByIndex(GlTextureCacheS
 
     GlTextureCacheNodeStrc* pTargetNode = (GlTextureCacheNodeStrc*)(pCache->pNodes + nNodeIndex * 0x1c);
     if (pTargetNode == pHead) {
-      puVar1 = pHead->pNext;
-      pCache->pActiveHead = puVar1;
-      if (puVar1) {
-        *(uint32_t*)(puVar1 + 0x18) = 0;
+      pNeighbourNode = pHead->pNext;
+      pCache->pActiveHead = pNeighbourNode;
+      if (pNeighbourNode) {
+        *(uint32_t*)(pNeighbourNode + 0x18) = 0;
         pHead->pNext = 0;
         pHead->pPrev = 0;
         return pHead;
@@ -133,9 +133,9 @@ GlTextureCacheNodeStrc * __fastcall GLTEXCACHE_RemoveNodeByIndex(GlTextureCacheS
       return pHead;
     }
     if (pTargetNode == (GlTextureCacheNodeStrc*)pCache->pActiveTail) {
-      puVar1 = ((GlTextureCacheNodeStrc*)pCache->pActiveTail)->pPrev;
-      pCache->pActiveTail = puVar1;
-      *(uint32_t*)(puVar1 + 0x14) = 0;
+      pNeighbourNode = ((GlTextureCacheNodeStrc*)pCache->pActiveTail)->pPrev;
+      pCache->pActiveTail = pNeighbourNode;
+      *(uint32_t*)(pNeighbourNode + 0x14) = 0;
       pTargetNode->pNext = 0;
       pTargetNode->pPrev = 0;
       return pTargetNode;

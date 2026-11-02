@@ -1,0 +1,367 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Game/UNIT/PlayerList.cpp",
+  "functions": [
+    {
+      "name": "PLAYERLIST_FindEntry",
+      "address": "0055b110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b110"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_FindEntry",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PLAYERLIST_AddPlayerEntry",
+      "address": "0055b140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b140"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_AddPlayerEntry",
+        "GetPlayerData",
+        "UNIT_GetUnitState",
+        "PLAYERLIST_FindEntry",
+        "AllocServerMemory",
+        "GetPartyId"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "PLAYERLIST_RemoveFromList",
+      "address": "0055b1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b1e0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_RemoveFromList",
+        "GetPlayerData",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitPlayerListStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "SendRelationshipStatus",
+      "address": "0055b260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b260"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "SendRelationshipStatus",
+        "GetPlayerData",
+        "NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYERLIST_GetFlagsMasked",
+      "address": "0055b300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b300"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_GetFlagsMasked",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PLAYERLIST_GetFlags",
+      "address": "0055b350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b350"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_GetFlags",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetPlayerRelationship",
+      "address": "0055b3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b3a0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "SetPlayerRelationship",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYERLIST_IsPartied",
+      "address": "0055b3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b3f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_IsPartied",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "Send0x8bRelationshipStatus",
+      "address": "0055b440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b440"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "Send0x8bRelationshipStatus",
+        "GetPlayerData",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x8B_PlayerRelationship"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PARTY_SendRelationshipForPlayer",
+      "address": "0055b4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b4c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PARTY_SendRelationshipForPlayer",
+        "GetPlayerData",
+        "NET_D2GS_SERVER_Send_0x8C_RelationshipUpdate_Sender"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLAYERLIST_AddBothWays",
+      "address": "0055b540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b540"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_AddBothWays",
+        "PLAYERLIST_AddPlayerEntry",
+        "NET_D2GS_SERVER_Send_0x8D_PLAYERPARTY",
+        "GetPlayerData",
+        "GetPartyId",
+        "SetPlayerRelationship",
+        "Send0x8bRelationshipStatus",
+        "NET_D2GS_SERVER_Send_0x8C_PLAYERFLAGS"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "PARTY_BroadcastPlayerToAllUnits",
+      "address": "0055b620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b620"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PARTY_BroadcastPlayerToAllUnits",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "IterateAllUnits"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "GetHostileDelay",
+      "address": "0055b6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b6c0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "GetHostileDelay",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "PLAYERLIST_SetHostileDelay",
+      "address": "0055b720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b720"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_SetHostileDelay",
+        "GetPlayerData",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "PLAYERLIST_RemoveFromListCallback",
+      "address": "0055b780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b780"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERLIST_RemoveFromListCallback",
+        "PLAYERLIST_RemoveFromList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "PLAYERDATA_FreePlayerList",
+      "address": "0055b790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b790"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PLAYERDATA_FreePlayerList",
+        "GetPlayerData",
+        "IterateAllUnits",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    }
+  ]
+}

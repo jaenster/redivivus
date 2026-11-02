@@ -93,23 +93,23 @@ static uint16_t * __stdcall STRTABLE_GetStringByIndex(D2StringTableTblFileStrc *
 }
 
 // @sourcefile .\StrTable\strtable.cpp
-void __fastcall STRTABLE_FreeMemory(void * pParam) {
-    D2_FREE_AT(pParam, ".\\StrTable\\strtable.cpp", 0x121);
+void __fastcall STRTABLE_FreeMemory(void * pMemory) {
+    D2_FREE_AT(pMemory, ".\\StrTable\\strtable.cpp", 0x121);
 }
 
 uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount) {
     uint32_t nHash = 0;
     char cCurrent = *szText;
     while (cCurrent != '\0') {
-      char* pcVar1;
+      char* pcNext;
       nHash = nHash * 0x10 + (int)cCurrent;
       if (nHash & -268435456) {
         nHash = ((nHash & -268435456) >> 0x18 ^ nHash) & 0xfffffff;
       }
 
-      pcVar1 = szText + 1;
+      pcNext = szText + 1;
       szText++;
-      cCurrent = *pcVar1;
+      cCurrent = *pcNext;
     }
 
     return nHash % nBucketCount;
@@ -147,7 +147,7 @@ uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex) {
 }
 
 // @sourcefile .\StrTable\strtable.cpp
-uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbParam) {
+uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey) {
     int nCmp;
     uint8_t* pbKeyCopy;
     char* pcVar1;
@@ -165,12 +165,12 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbParam) {
       if (!pCacheNode) {
         pCacheNode = (uint32_t*)D2_ALLOC_AT(0xc, ".\\StrTable\\strtable.cpp", 0x259);
         pCacheNode[2] = (uint32_t)(uintptr_t)gpUntranslatedStringCacheHead;
-        pbSrc = pbParam;
+        pbSrc = pbKey;
         pbSrc = pbSrc + strlen((char*)pbSrc) + 1;
         gpUntranslatedStringCacheHead = pCacheNode;
-        pbKeyCopy = (uint8_t*)D2_ALLOC_AT((size_t)(pbSrc + (1 - (int)(pbParam + 1))), ".\\StrTable\\strtable.cpp", 0x264);
+        pbKeyCopy = (uint8_t*)D2_ALLOC_AT((size_t)(pbSrc + (1 - (int)(pbKey + 1))), ".\\StrTable\\strtable.cpp", 0x264);
         pCacheNode[1] = (uint32_t)(uintptr_t)pbKeyCopy;
-        pbSrc = pbParam;
+        pbSrc = pbKey;
         do {
           bByte = *pbSrc;
           *pbKeyCopy = bByte;
@@ -178,18 +178,18 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbParam) {
           pbKeyCopy++;
         } while (bByte);
 
-        pbSrc = pbParam + 1;
-        pbKeyCopy = pbParam;
+        pbSrc = pbKey + 1;
+        pbKeyCopy = pbKey;
         pbKeyCopy = pbKeyCopy + strlen((char*)pbKeyCopy) + 1;
         pcFormatted = s__not_xlated_call_ken_w_00730520;
         pcVar1 = pcFormatted + strlen(pcFormatted);
         pcFormatted = pcVar1 + 1;
         pcFormatted = (char*)D2_ALLOC_AT((size_t)(pcVar1 + (int)(pbKeyCopy + (-(int)s__not_xlated_call_ken_w_00730520 - (int)pbSrc)) + 1), ".\\StrTable\\strtable.cpp", 0x26c);
-        nCmp = (int)pcFormatted - (int)pbParam;
+        nCmp = (int)pcFormatted - (int)pbKey;
         do {
-          bByte = *pbParam;
-          pbParam[nCmp] = bByte;
-          pbParam++;
+          bByte = *pbKey;
+          pbKey[nCmp] = bByte;
+          pbKey++;
         } while (bByte);
 
         pcSuffixDst = s__not_xlated_call_ken_w_00730520;
@@ -222,7 +222,7 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbParam) {
         return (uint16_t*)*pCacheNode;
       }
 
-      nCmp = strcmp((char*)pbParam, (char*)(uint8_t*)pCacheNode[1]);
+      nCmp = strcmp((char*)pbKey, (char*)(uint8_t*)pCacheNode[1]);
       if (!nCmp) {
         return (uint16_t*)*pCacheNode;
       }
@@ -231,29 +231,29 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbParam) {
     } while (true);
 }
 
-static uint16_t __stdcall STRTABLE_FindStringByKey(uint16_t * * ppHashTable, uint8_t * pbParam, int * pnParam, D2StringTableTblFileStrc * pStrTable) {
+static uint16_t __stdcall STRTABLE_FindStringByKey(uint16_t * * ppHashTable, uint8_t * pbKey, int * pnTextOut, D2StringTableTblFileStrc * pStrTable) {
     int nCmp;
-    int iVar1 = (uint32_t)pStrTable->wIndexCount * 2;
+    int nIndexBytes = (uint32_t)pStrTable->wIndexCount * 2;
     uint32_t nProbeCount = 0;
-    uint32_t nHashIdx = STRTABLE_HashString((char*)pbParam, pStrTable->nNodeCount);
+    uint32_t nHashIdx = STRTABLE_HashString((char*)pbKey, pStrTable->nNodeCount);
     if ((uint32_t)pStrTable->nHashMaxTries <= 0) {
       return 0xffff;
     }
 
     do {
       char* pcSlot;
-      pcSlot = (char*)((uintptr_t)&pStrTable[1].wCRC + nHashIdx * 0x11 + iVar1);
+      pcSlot = (char*)((uintptr_t)&pStrTable[1].wCRC + nHashIdx * 0x11 + nIndexBytes);
       nProbeCount++;
       if (*pcSlot == '\x01') {
-        nCmp = strcmp((char*)(uint8_t*)((uintptr_t)&pStrTable->wCRC + *(int*)(pcSlot + 7)), (char*)pbParam);
+        nCmp = strcmp((char*)(uint8_t*)((uintptr_t)&pStrTable->wCRC + *(int*)(pcSlot + 7)), (char*)pbKey);
         if (!nCmp) {
           if (!ppHashTable[nHashIdx]) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x296);
             exit(-1);
           }
 
-          *pnParam = (int)ppHashTable[nHashIdx];
-          return *(uint16_t*)((uintptr_t)&pStrTable[1].wCRC + nHashIdx * 0x11 + 1 + iVar1);
+          *pnTextOut = (int)ppHashTable[nHashIdx];
+          return *(uint16_t*)((uintptr_t)&pStrTable[1].wCRC + nHashIdx * 0x11 + 1 + nIndexBytes);
         }
       }
 
@@ -263,7 +263,7 @@ static uint16_t __stdcall STRTABLE_FindStringByKey(uint16_t * * ppHashTable, uin
     return 0xffff;
 }
 
-uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbParam, uint16_t * * ppwszText) {
+uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText) {
     // Static local variables (originally global data)
     static uint16_t gwStrTableLanguageCode; D2_STATIC_GUARD_BSS(gwStrTableLanguageCode, "D2Lang::StrTable::strtable::STRTABLE_LookupString::gwStrTableLanguageCode");
 
@@ -275,33 +275,33 @@ uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbParam, uint16_t * * ppwszTe
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 699);
         exit(-1);
       } else {
-        if (!pbParam) {
+        if (!pbKey) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c0);
           exit(-1);
         }
-        if (!*pbParam) {
+        if (!*pbKey) {
           *ppwszText = (uint16_t*)&gwStrTableLanguageCode;
           return (uint32_t)ppwszText & -65536;
         }
 
-        uVar1 = STRTABLE_FindStringByKey(gpStringIndexPatchD2, pbParam, (int*)ppwszText, gpStringTablePatchD2);
+        uVar1 = STRTABLE_FindStringByKey(gpStringIndexPatchD2, pbKey, (int*)ppwszText, gpStringTablePatchD2);
         if (uVar1 != 0xffff) {
           return uVar1 + 10000;
         }
         if (gpStringTableExpansion) {
-          uVar1 = STRTABLE_FindStringByKey(gpStringIndexExpansion, pbParam, (int*)ppwszText, gpStringTableExpansion);
+          uVar1 = STRTABLE_FindStringByKey(gpStringIndexExpansion, pbKey, (int*)ppwszText, gpStringTableExpansion);
           if (uVar1 != 0xffff) {
             return uVar1 + 20000;
           }
         }
 
-        uVar1 = STRTABLE_FindStringByKey(gpStringIndexBase, pbParam, (int*)ppwszText, gpStringTableBase);
+        uVar1 = STRTABLE_FindStringByKey(gpStringIndexBase, pbKey, (int*)ppwszText, gpStringTableBase);
         nBaseResult = (uint32_t)uVar1;
         if (uVar1 != 0xffff) {
           return nBaseResult;
         }
 
-        pTranslated = STRTABLE_GetTranslatedString(pbParam);
+        pTranslated = STRTABLE_GetTranslatedString(pbKey);
         *ppwszText = pTranslated;
         nBaseResult = (uint32_t)pTranslated & -65536;
         return nBaseResult;
@@ -312,9 +312,9 @@ uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbParam, uint16_t * * ppwszTe
     }
 }
 
-uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * pbParam) {
+uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * szKey) {
     uint16_t* pwszText = 0;
-    STRTABLE_LookupString(pbParam, &pwszText);
+    STRTABLE_LookupString(szKey, &pwszText);
     return pwszText;
 }
 
@@ -367,17 +367,17 @@ void __stdcall STRINGTABLE_FreeStringTables() {
     }
 
     while (true) {
-      uint32_t* ppvVar1;
+      uint32_t* pNextCacheEntry;
       gpStringTableExpansion = pDVar1;
       if (!pMemoryToFree) {
         break;
       }
 
-      ppvVar1 = (uint32_t*)pMemoryToFree[2];
+      pNextCacheEntry = (uint32_t*)pMemoryToFree[2];
       D2_FREE_AT((void*)*pMemoryToFree, ".\\StrTable\\strtable.cpp", 0x377);
       D2_FREE_AT((void*)pMemoryToFree[1], ".\\StrTable\\strtable.cpp", 0x378);
       D2_FREE_AT(pMemoryToFree, ".\\StrTable\\strtable.cpp", 0x379);
-      pMemoryToFree = ppvVar1;
+      pMemoryToFree = pNextCacheEntry;
       pDVar1 = gpStringTableExpansion;
     }
 
@@ -385,8 +385,8 @@ void __stdcall STRINGTABLE_FreeStringTables() {
     Unicode::UNISYS::UNICODE_FreeKamapTables();
 }
 
-void STRTABLE_InitCRC(uint16_t * wParam) {
-    *wParam = 0xffff;
+void STRTABLE_InitCRC(uint16_t * pwCRC) {
+    *pwCRC = 0xffff;
 }
 
 void STRTABLE_UpdateCRC(uint16_t * pwCRC, uint8_t byData) {
@@ -641,40 +641,40 @@ void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_
     Unicode::UNISYS::STRING_CopyWideString(pwszOut, wszFallback);
 }
 
-void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nParam1, int32_t nParam2, int32_t nParam3) {
-    int nOutPos;
+void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nValueLo, int32_t nValueHi, int32_t nMaxLen) {
     int nOutPos2;
     bool bNeedNeg;
     uint16_t wszFallback[2];
     char szDigitBuf[64];
     char cChar;
+    int nDigitBufIdx;
     int nCommaCounter = 0;
-    if (nParam3 <= 2) {
+    if (nMaxLen <= 2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x519);
       exit(-1);
     }
-    if (nParam2 <= 0 && (nParam2 < 0 || false)) {
+    if (nValueHi <= 0 && (nValueHi < 0 || false)) {
       *wszText = L'-';
       wszText++;
-      nParam3--;
-      bNeedNeg = nParam1 != 0;
-      nParam1 = -nParam1;
-      nParam2 = -(nParam2 + (uint32_t)bNeedNeg);
+      nMaxLen--;
+      bNeedNeg = nValueLo != 0;
+      nValueLo = -nValueLo;
+      nValueHi = -(nValueHi + (uint32_t)bNeedNeg);
     }
 
-    _i64toa((uint64_t)((uint64_t)(uint32_t)nParam2 << 32 | (uint64_t)(uint32_t)nParam1), szDigitBuf, 10);
+    _i64toa((uint64_t)((uint64_t)(uint32_t)nValueHi << 32 | (uint64_t)(uint32_t)nValueLo), szDigitBuf, 10);
     int nDigitCount = (int)strlen(szDigitBuf);
     if (nDigitCount) {
-      int iVar1;
+      int nOutPos;
       nOutPos = (nDigitCount - 1) / 3 + nDigitCount;
-      if (nOutPos >= 1 && nOutPos < nParam3 - 1) {
+      if (nOutPos >= 1 && nOutPos < nMaxLen - 1) {
         wszText[nOutPos] = L'\0';
         while (nOutPos) {
-          iVar1 = nDigitCount + 3;
+          nDigitBufIdx = nDigitCount + 3;
           nDigitCount--;
           nOutPos2 = nOutPos - 1;
           nCommaCounter++;
-          wszText[nOutPos2] = (short int)*(char*)((int)wszFallback + iVar1);
+          wszText[nOutPos2] = (short int)*(char*)((int)wszFallback + nDigitBufIdx);
           if (nCommaCounter >= 3) {
             nCommaCounter = 0;
             if (nOutPos2 > 0) {
@@ -700,8 +700,8 @@ void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nParam1, int32_t
     Unicode::UNISYS::STRING_CopyWideString(wszText, wszFallback);
 }
 
-void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwParam1, uint32_t dwParam2, int32_t nParam) {
-    int pcVar4;
+void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwValueLo, uint32_t dwValueHi, int32_t nMaxLen) {
+    int nNextOutPos;
     uint16_t wAbbrevChar;
     int nMagnitude;
     uint16_t wszFallback[2];
@@ -709,12 +709,12 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwPa
     char cChar;
     int nCommaCounter;
     nCommaCounter = 0;
-    if (nParam <= 2) {
+    if (nMaxLen <= 2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x54b);
       exit(-1);
     }
 
-    _ui64toa((uint64_t)((uint64_t)(uint32_t)dwParam2 << 32 | (uint64_t)(uint32_t)dwParam1), szDigitBuf, 10);
+    _ui64toa((uint64_t)((uint64_t)(uint32_t)dwValueHi << 32 | (uint64_t)(uint32_t)dwValueLo), szDigitBuf, 10);
     int nDigitCount;
     nDigitCount = (int)strlen(szDigitBuf);
     if (!nDigitCount) {
@@ -736,7 +736,7 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwPa
 
       nDigitCount += nMagnitude * -3;
       nOutPos = (nDigitCount - 1) / 3 + nDigitCount;
-      if (nOutPos < 1 || nOutPos >= nParam - 2) {
+      if (nOutPos < 1 || nOutPos >= nMaxLen - 2) {
         goto write_placeholder;
       }
 
@@ -767,18 +767,18 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwPa
         while (nOutPos) {
           nMagnitude = nDigitCount + 3;
           nDigitCount--;
-          pcVar4 = nOutPos - 1;
+          nNextOutPos = nOutPos - 1;
           nCommaCounter++;
-          wszText[pcVar4] = (short int)*(char*)((int)wszFallback + nMagnitude);
+          wszText[nNextOutPos] = (short int)*(char*)((int)wszFallback + nMagnitude);
           if (nCommaCounter >= 3) {
             nCommaCounter = 0;
-            if (pcVar4 > 0) {
-              pcVar4 = nOutPos - 2;
-              wszText[pcVar4] = L',';
+            if (nNextOutPos > 0) {
+              nNextOutPos = nOutPos - 2;
+              wszText[nNextOutPos] = L',';
             }
           }
 
-          nOutPos = pcVar4;
+          nOutPos = nNextOutPos;
           if (!nDigitCount) {
             return;
           }
@@ -988,12 +988,12 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
     }
 
     {
-      int iVar1;
+      int nCountEntryIdx;
       pnEntryCount = &gpStringTablePatchD2->nNodeCount;
       gpStringIndexPatchD2 = (uint16_t**)D2_ALLOC_AT(gpStringTablePatchD2->nNodeCount * 4, ".\\StrTable\\strtable.cpp", 0x1c5);
       memset(gpStringIndexPatchD2, 0, *pnEntryCount * 4);
       nEntryIdx = (uintptr_t)&gpStringTablePatchD2->nNodeCount;
-      iVar1 = 0;
+      nCountEntryIdx = 0;
       j = &gpStringTablePatchD2[1].wCRC + gpStringTablePatchD2->wIndexCount;
       i = 0;
       if (*(int*)nEntryIdx > 0) {
@@ -1001,9 +1001,9 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
         do {
           pszUtf8Chars = Unicode::UNISYS::UNICODE_GetWideCharCount((char*)((uintptr_t)&gpStringTablePatchD2->wCRC + *(int*)(puEntryHdr - 2)), (uint32_t)*puEntryHdr);
           i = i + 1 + pszUtf8Chars;
-          iVar1++;
+          nCountEntryIdx++;
           puEntryHdr = (uint16_t*)((int)puEntryHdr + 0x11);
-        } while (iVar1 < *(int*)nEntryIdx);
+        } while (nCountEntryIdx < *(int*)nEntryIdx);
       }
 
       pEntryData = (char*)nEntryIdx;
@@ -1036,17 +1036,17 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
         gpStringIndexExpansion = (uint16_t**)D2_ALLOC_AT(gpStringTableExpansion->nNodeCount * 4, ".\\StrTable\\strtable.cpp", 0x1f8);
         memset(gpStringIndexExpansion, 0, *pnEntryCount * 4);
         nEntryIdx = (uintptr_t)&gpStringTableExpansion->nNodeCount;
-        iVar1 = 0;
+        nCountEntryIdx = 0;
         j = &gpStringTableExpansion[1].wCRC + gpStringTableExpansion->wIndexCount;
         i = 0;
         if (*(int*)nEntryIdx > 0) {
           puEntryHdr = (uint16_t*)((int)j + 0xf);
           do {
             pszUtf8Chars = Unicode::UNISYS::UNICODE_GetWideCharCount((char*)((uintptr_t)&gpStringTableExpansion->wCRC + *(int*)(puEntryHdr - 2)), (uint32_t)*puEntryHdr);
-            iVar1++;
+            nCountEntryIdx++;
             puEntryHdr = (uint16_t*)((int)puEntryHdr + 0x11);
             i = i + 1 + pszUtf8Chars;
-          } while (iVar1 < *(int*)nEntryIdx);
+          } while (nCountEntryIdx < *(int*)nEntryIdx);
         }
 
         pEntryData = (char*)nEntryIdx;

@@ -236,9 +236,9 @@ void __stdcall PANEL_DrawHostileIndicator() {
 
     bUIFlag = ui::GetUIFlag(UI_MPTRADE);
     if (bUIFlag) {
-      int iVar1;
-      iVar1 = ui::TRADE_GetTradeStatus();
-      if (!iVar1) {
+      int nTradeStatus;
+      nTradeStatus = ui::TRADE_GetTradeStatus();
+      if (!nTradeStatus) {
         return;
       }
     }
@@ -257,7 +257,7 @@ void __stdcall PANEL_DrawHostileIndicator() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - 0x3a, nYOffset + 0x2d, -1, DRAW_TRANSPARENT, nullptr);
 }
 
-void __fastcall SPELLSEL_DrawSkillIcon(D2UnitStrc * pUnit, D2SkillStrc * pSkill, int32_t nScreenX, int32_t nScreenY, int32_t nParam) {
+void __fastcall SPELLSEL_DrawSkillIcon(D2UnitStrc * pUnit, D2SkillStrc * pSkill, int32_t nScreenX, int32_t nScreenY, int32_t bIsLeftHand) {
     BOOL bInTown;
     if (!(pUnit && pSkill)) {
       return;
@@ -294,7 +294,7 @@ void __fastcall SPELLSEL_DrawSkillIcon(D2UnitStrc * pUnit, D2SkillStrc * pSkill,
       nQuantity = D2Common::Skills::SKILL_GetQuantity(pSkill);
     }
 
-    SpellSel::SPELLSEL_DrawSkillIconWithQuantity(pSkillIconDC6, &pSkillTxt->skill, nIconCell, nReqLevel, ePalette, nScreenX, nScreenY, nParam);
+    SpellSel::SPELLSEL_DrawSkillIconWithQuantity(pSkillIconDC6, &pSkillTxt->skill, nIconCell, nReqLevel, ePalette, nScreenX, nScreenY, bIsLeftHand);
     if (nQuantity) {
       SpellSel::SPELLSEL_DrawSkillRequirementTooltip(&pSkillTxt->skill, ePalette, nQuantity, nScreenX, nScreenY);
       return;
@@ -392,9 +392,9 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
       gaPanelImageLoadFlags[nSlotOffset * 4 + 3] = nNow;
     }
 
-    int iVar2 = gaPanelImageLoadFlags[nSlotOffset * 4];
-    if (iVar2 != nCurValue) {
-      nAbsDiff = iVar2 - nCurValue;
+    int nPrevValue = gaPanelImageLoadFlags[nSlotOffset * 4];
+    if (nPrevValue != nCurValue) {
+      nAbsDiff = nPrevValue - nCurValue;
       if (nAbsDiff < 0) {
         nAbsDiff = -nAbsDiff;
       }
@@ -407,7 +407,7 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
         if (nCurValue == nMaxValue) {
           gaPanelImageLoadFlags[nSlotOffset * 4 + 2] = nCurValue;
         } else {
-          gaPanelImageLoadFlags[nSlotOffset * 4 + 2] = iVar2;
+          gaPanelImageLoadFlags[nSlotOffset * 4 + 2] = nPrevValue;
         }
       }
 
@@ -416,20 +416,20 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
       gaPanelImageLoadFlags[nSlotOffset * 4 + 1] = nNow;
     }
 
-    iVar2 = gaPanelImageLoadFlags[nSlotOffset * 4 + 1];
+    int nStartTime = gaPanelImageLoadFlags[nSlotOffset * 4 + 1];
     nNow = GAME::Game::GetEntryIndex();
-    nAbsDiff = nNow - iVar2;
-    iVar2 -= gaPanelImageLoadFlags[nSlotOffset * 4 + 3];
-    if (iVar2 < 7) {
-      iVar2 = 7;
-    } else if (iVar2 > 0xf) {
-      iVar2 = 0xf;
+    nAbsDiff = nNow - nStartTime;
+    int nDuration = nStartTime - gaPanelImageLoadFlags[nSlotOffset * 4 + 3];
+    if (nDuration < 7) {
+      nDuration = 7;
+    } else if (nDuration > 0xf) {
+      nDuration = 0xf;
     }
-    if (nCurValue > 0 && nAbsDiff < iVar2) {
+    if (nCurValue > 0 && nAbsDiff < nDuration) {
       int iVar1;
       iVar1 = gaPanelImageLoadFlags[nSlotOffset * 4] - gaPanelImageLoadFlags[nSlotOffset * 4 + 2];
       if (iVar1) {
-        nCurValue = (int)((long double)(nAbsDiff + 1) / (long double)iVar2 * (long double)iVar1) + gaPanelImageLoadFlags[nSlotOffset * 4 + 2];
+        nCurValue = (int)((long double)(nAbsDiff + 1) / (long double)nDuration * (long double)iVar1) + gaPanelImageLoadFlags[nSlotOffset * 4 + 2];
       }
     }
     if (nCurValue < 0) {
@@ -643,7 +643,7 @@ void __stdcall PANEL_DrawRunButton() {
 
 void __stdcall PANEL_DrawStaminaBar() {
     BOOL nTmp;
-    int iVar1;
+    int nClearCount;
     uint16_t* pwszCursor;
     uint16_t wszTooltip[100];
     D2UnitStrc* pUnit;
@@ -698,7 +698,7 @@ void __stdcall PANEL_DrawStaminaBar() {
     nCurStaminaUnits = nMaxStaminaUnits;
     show_stamina_tooltip:
     pwszCursor = wszTooltip;
-    for (iVar1 = 0x32; iVar1; iVar1--) {
+    for (nClearCount = 0x32; nClearCount; nClearCount--) {
       pwszCursor[0] = L'\0';
       pwszCursor[1] = L'\0';
       pwszCursor += 2;
@@ -948,48 +948,48 @@ void __stdcall PANEL_DrawBeltSlots(int32_t nFrameNumber) {
 
 static void __stdcall Draw_EquipmentNeedToRepairBody_1(int32_t bIsLeftSide, int32_t nSlotVariant, eD2BodyLocDWORD eEquipSlot, int32_t nRowBase) {
     D2GfxDataStrc sGfxData;
-    int iVar1 = nRowBase * 0xb;
+    int nIconFrame = nRowBase * 0xb;
     switch (eEquipSlot) {
       case BODYLOC_HEAD:
-        iVar1++;
+        nIconFrame++;
       break;
       case BODYLOC_TORSO:
-        iVar1 += 4;
+        nIconFrame += 4;
       break;
       case BODYLOC_R_ARM:
         if (!bIsLeftSide) {
           if (nSlotVariant) {
-            iVar1 += 7;
+            nIconFrame += 7;
           } else {
-            iVar1 += 6;
+            nIconFrame += 6;
           }
         } else {
-          iVar1 += 10;
+          nIconFrame += 10;
         }
       break;
       case BODYLOC_L_ARM:
         if (!bIsLeftSide) {
           if (nSlotVariant) {
-            iVar1 += 5;
+            nIconFrame += 5;
           } else {
-            iVar1 += 8;
+            nIconFrame += 8;
           }
         } else {
-          iVar1 += 9;
+          nIconFrame += 9;
         }
       break;
       case BODYLOC_BELT:
-        iVar1 += 2;
+        nIconFrame += 2;
       break;
       case BODYLOC_FEET:
-        iVar1 += 3;
+        nIconFrame += 3;
     }
 
     int nOffsetY = 0;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = DuroIcon;
     sGfxData.nDirection = 0;
-    sGfxData.nFrameNumber = iVar1;
+    sGfxData.nFrameNumber = nIconFrame;
     BOOL bAutomapShown = ui::GetUIFlag(UI_AUTOMAP);
     if (!bAutomapShown) {
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - 0x3c, 0x6e, -1, DRAW_TRANSPARENT, nullptr);
@@ -1017,7 +1017,7 @@ void __stdcall DRAW_EquipmentNeedArrows() {
 }; D2_STATIC_GUARD(gaInventoryWarningItems_nWarningKind_col, "D2Client::UI::Panel::DRAW_EquipmentNeedArrows::gaInventoryWarningItems_nWarningKind_col");
     static unsigned int gnInventoryWarningItemCount = 0x5; D2_STATIC_GUARD(gnInventoryWarningItemCount, "D2Client::UI::Panel::DRAW_EquipmentNeedArrows::gnInventoryWarningItemCount");
 
-    bool bVar1;
+    bool bQntWarning;
     eInventoryPage eCarriedItemPage;
     int32_t bShoots;
     eD2ItemTypes eAmmoType;
@@ -1068,8 +1068,8 @@ void __stdcall DRAW_EquipmentNeedArrows() {
     do {
       pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, gaInventoryWarningBodyLocs[nSlotIndex]);
       if (pItem) {
-        bVar1 = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bQntWarning(pItem);
-        if (bVar1) {
+        bQntWarning = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bQntWarning(pItem);
+        if (bQntWarning) {
           nWarningItemIndex = 0;
           if (gnInventoryWarningItemCount > 0) {
             for (pWarningEntry = gaInventoryWarningItems_nWarningKind_col[0] + 4; nWarningItemIndex < gnInventoryWarningItemCount; nWarningItemIndex++ , pWarningEntry += 5) {
@@ -1824,7 +1824,7 @@ void __stdcall PANEL_DrawBottomPanel() {
     int nBeltState;
     uint16_t* pwsKeyDesc;
     int32_t nRectXorLen;
-    int32_t iVar2;
+    int32_t nTextWidth;
     int nRectYorW;
     int nDrawY;
     char* pbRowVisible;
@@ -1968,8 +1968,8 @@ void __stdcall PANEL_DrawBottomPanel() {
                 pwsKeyDesc = CmdTbl::CMD_GetKeyDescForCommand(gaaBeltSlotHotkeyCommands[nSlotIndex], 1);
                 D2Lang::Unicode::UNISYS::STRING_CopyWideString(awsHotkeyText, pwsKeyDesc);
                 nRectXorLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(awsHotkeyText);
-                iVar2 = D2Win::Src::D2WinFont::DRAW_text0(awsHotkeyText);
-                if (iVar2 > 0x1c) {
+                nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(awsHotkeyText);
+                if (nTextWidth > 0x1c) {
                   pwsKeyDesc = awsHotkeyText + nRectXorLen;
                   do {
                     *pwsKeyDesc = L'\0';
@@ -2365,7 +2365,7 @@ void __stdcall PANEL_UpdatePanelFromMode(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
     D2UnitStrc* pPlayer;
-    int iVar1;
+    int nCursorItemType;
     uint16_t wMouseX;
     uint16_t wMouseY;
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
@@ -2380,12 +2380,12 @@ void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
         if (bExitFlag) {
           pMsg->bHandled = 1;
           pMsg->dwResult = 0;
-          iVar1 = ui::GetItemType();
-          if (iVar1 == 6) {
+          nCursorItemType = ui::GetItemType();
+          if (nCursorItemType == 6) {
             ui::UI_DropCursorItemOnGround();
           } else {
-            iVar1 = ui::GetItemType();
-            if (iVar1 == 8) {
+            nCursorItemType = ui::GetItemType();
+            if (nCursorItemType == 8) {
               GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
             }
           }

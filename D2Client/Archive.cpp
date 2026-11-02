@@ -316,7 +316,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         ppWalk++;
       }
 
-      if ((int)__frame0.pListPrev <= 0 || (ppWalk = (int****)__frame0.pListPrev , (uintptr_t)__frame0.pListPrev[0x4b] < sHeapDetails.dwUnknown124)) {
+      if ((int)__frame0.pListPrev <= 0 || (ppWalk = (int****)__frame0.pListPrev , (uintptr_t)__frame0.pListPrev[0x4b] < sHeapDetails.dwAllocatedBytes)) {
         pNextNode = *pNewRec;
         if (pNextNode) {
           pNextLink = pNewRec[1];
@@ -354,7 +354,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
           if ((int)ppWalk <= 0) {
             break;
           }
-        } while ((uintptr_t)ppWalk[0x4b] > sHeapDetails.dwUnknown124);
+        } while ((uintptr_t)ppWalk[0x4b] > sHeapDetails.dwAllocatedBytes);
 
         ARCHIVE_LinkNode(&__frame0.pListTail, (int**)pNewRec, 1, (int**)ppInsertAfter);
       }
@@ -464,22 +464,22 @@ void __fastcall ReadByteOrShort(D2BitBufferStrc * pBitBuffer) {
 }
 
 uint32_t __fastcall UNIT_GetModuloFromSeed(D2SeedStrc * pSeed, uint32_t nModulo) {
-    D2SeedStrc DVar2;
+    D2SeedStrc DVar1;
     if ((int)nModulo <= 0) {
       return 0;
     }
 
-    int64_t lVar1 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
+    int64_t nSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
     if (nModulo & nModulo - 1) {
-      DVar2 = (D2SeedStrc)(lVar1 + (uint64_t)pSeed->nSeedHigh);
-      pSeed->nSeedHigh = DVar2.nSeedHigh;
-      pSeed->nSeedLow = DVar2.nSeedLow;
-      return (uint32_t)(DVar2.nSeedLow % nModulo);
+      DVar1 = (D2SeedStrc)(nSeedProduct + (uint64_t)pSeed->nSeedHigh);
+      pSeed->nSeedHigh = DVar1.nSeedHigh;
+      pSeed->nSeedLow = DVar1.nSeedLow;
+      return (uint32_t)(DVar1.nSeedLow % nModulo);
     }
 
-    DVar2 = (D2SeedStrc)(lVar1 + (uint64_t)pSeed->nSeedHigh);
-    *pSeed = DVar2;
-    return nModulo - 1 & DVar2.nSeedLow;
+    DVar1 = (D2SeedStrc)(nSeedProduct + (uint64_t)pSeed->nSeedHigh);
+    *pSeed = DVar1;
+    return nModulo - 1 & DVar1.nSeedLow;
 }
 
 uint32_t __fastcall RANDOM_RandomNumberSelector(D2SeedStrc * pSeed, uint32_t nModulo) {

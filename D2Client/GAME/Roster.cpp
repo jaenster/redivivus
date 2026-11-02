@@ -147,10 +147,10 @@ static void __stdcall ROSTER_InitializeFields(D2RosterStrc * pRoster, char * szP
       pSrcCursor++;
     } while (cChar != '\0');
 
-    int iVar1 = 0x4a - (int)szGuildTag;
+    int nDstDelta = 0x4a - (int)szGuildTag;
     do {
       cChar = *szGuildTag;
-      szGuildTag[(int)pRoster + iVar1] = cChar;
+      szGuildTag[(int)pRoster + nDstDelta] = cChar;
       szGuildTag++;
     } while (cChar != '\0');
 
@@ -159,10 +159,10 @@ static void __stdcall ROSTER_InitializeFields(D2RosterStrc * pRoster, char * szP
       return;
     }
 
-    iVar1 = 0x66 - (int)szPlayerName;
+    nDstDelta = 0x66 - (int)szPlayerName;
     do {
       cChar = *szPlayerName;
-      szPlayerName[(int)pRoster + iVar1] = cChar;
+      szPlayerName[(int)pRoster + nDstDelta] = cChar;
       szPlayerName++;
     } while (cChar != '\0');
 }
@@ -860,7 +860,6 @@ void __fastcall ROSTER_ToggleMuteAndSend(D2RosterStrc * pRoster) {
 
 // Handles a UI party-button click for a roster entry. Transitions bInParty state: 0→4 sends invite (NET 0x5E action 6), 4→0 cancels invite (action 7), 2/3 send accept/decline actions (8/9). State 1 (pending) is an internal error that halts. Always calls ROSTER_RebuildPlayerParty and ResetPartyUi after any state change.
 void __fastcall ClickParty_i(D2RosterStrc * pRoster) {
-    int32_t nLine;
     int nActionType;
     nActionType = 0;
     if (!pRoster) {
@@ -875,8 +874,7 @@ void __fastcall ClickParty_i(D2RosterStrc * pRoster) {
       UI::Party::ResetPartyUi();
       return;
       case 1:
-        nLine = 0x4c7;
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4c7);
       exit(-1);
       case 2:
         nActionType = 8;

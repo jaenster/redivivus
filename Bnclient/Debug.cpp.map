@@ -1,0 +1,68 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/Debug.cpp",
+  "functions": [
+    {
+      "name": "DEBUG_LogFormattedMessage",
+      "address": "00518ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518ba0"
+        }
+      ],
+      "namespace": "Bnclient::Debug",
+      "calledFunctions": [
+        "DEBUG_LogFormattedMessage",
+        "SLogWrite"
+      ]
+    },
+    {
+      "name": "DEBUG_SetLoggingFlag",
+      "address": "00518bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518bc0"
+        }
+      ],
+      "namespace": "Bnclient::Debug",
+      "calledFunctions": [
+        "DEBUG_SetLoggingFlag"
+      ]
+    },
+    {
+      "name": "DEBUG_GetTime32",
+      "address": "0051a470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a470"
+        }
+      ],
+      "namespace": "Bnclient::Debug",
+      "calledFunctions": [
+        "_time32",
+        "DEBUG_GetTime32"
+      ],
+      "usedTypes": [
+        "__time32_t"
+      ]
+    },
+    {
+      "name": "DEBUG_UnusedDebugFunction",
+      "address": "0051a480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051a480"
+        }
+      ],
+      "namespace": "Bnclient::Debug",
+      "calledFunctions": [
+        "DEBUG_UnusedDebugFunction"
+      ]
+    }
+  ]
+}

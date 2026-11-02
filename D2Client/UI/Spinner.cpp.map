@@ -1,0 +1,87 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Client/UI/Spinner.cpp",
+  "functions": [
+    {
+      "name": "SehHandler_6ca198",
+      "address": "006ca198",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca198"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner",
+      "calledFunctions": [
+        "SehHandler_6ca198"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "SehHandler_6ca1b8",
+      "address": "006ca1b8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca1b8"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner",
+      "calledFunctions": [
+        "SehHandler_6ca1b8"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "SehHandler_6ca1d8",
+      "address": "006ca1d8",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca1d8"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner",
+      "calledFunctions": [
+        "SehHandler_6ca1d8"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "SehHandler_6ca203",
+      "address": "006ca203",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca203"
+        }
+      ],
+      "namespace": "D2Client::UI::Spinner",
+      "calledFunctions": [
+        "SehHandler_6ca203"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

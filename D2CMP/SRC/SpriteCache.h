@@ -98,7 +98,7 @@ void __stdcall SPRITECACHE_FreeEntry(struct D2TileLibraryEntryStrc * pTile);
 // Reads the 0x114-byte DT1 header of szFilename and returns the size of its minimal form: numTiles (dword at header offset 0x10c) * 0x60 + 0x114, or 0 when the file cannot be opened. Frame is SUB ESP,0x11c: [EBP-0x11c] holds the archive handle CheckIfFileExists writes back, [EBP-0x118..EBP-0x5] the 0x114 header buffer, [EBP-0x4] the /GS cookie. The former ESI parameter dwParam was a phantom: no instruction between 005fdf80 and 005fdff8 reads or writes ESI, so it was never an incoming argument; it only forwarded into D2FILE_ReadFile's own phantom ESI slot. Removed 2026.09.08. Return storage is pinned to EAX because the tail CALL 00681a48 (GuardStack, MSVC __security_check_cookie) preserves EAX and the computed size is the return value.
 int __fastcall SPRITECACHE_LoadFromFile(char * szFilename);
 void __fastcall SPRITECACHE_SetMaxSize(size_t nSize);
-void __stdcall SPRITECACHE_GetStats(size_t * pnSize, HANDLE * phHandle, ULONG_PTR * pnParam2, uint32_t * pnParam);
+void __stdcall SPRITECACHE_GetStats(size_t * pnSize, HANDLE * phHandle, ULONG_PTR * pnHitCount, uint32_t * pnUsedPercent);
 void __stdcall SPRITECACHE_Lock();
 void __stdcall SPRITECACHE_Unlock();
 void __fastcall SPRITECACHE_TouchEntry(struct D2TileLibraryHeaderStrc * pTileLibrary);
@@ -106,8 +106,8 @@ void __stdcall GFX_InitLRUCache(struct D2PoolManagerStrc * pMemory, struct D2Poo
 // Sprite-cache release callback: when gpfnSpriteCacheValidateCallback is set, calls it with the entry's descriptor (pHashEntry[8], halts at line 0xb5 if NULL), then unlinks the entry from gaGfxHashTable with GFX_UnlinkCacheEntry.
 // @provenance 1.14d asm 005fe170; formerly named SPRITECACHE_Validate.
 void __fastcall SPRITECACHE_ReleaseHashEntry(int * pHashEntry);
-char * __stdcall IMAGE_ReturnImageExtension(int32_t nParam);
-void __stdcall SPRITECACHE_BuildPath(char * szText1, int32_t nParam, char * szText2, va_list vaArgs);
+char * __stdcall IMAGE_ReturnImageExtension(int32_t bUseDcc);
+void __stdcall SPRITECACHE_BuildPath(char * szText1, int32_t bUseDcc, char * szText2, va_list vaArgs);
 void __stdcall SetCompressedDataGlobalAndSaveItToRegistry(BOOL bUseCompressedData);
 uint32_t __stdcall SPRITECACHE_GetTotalEntries();
 uint32_t __stdcall SPRITECACHE_GetCacheSize();
@@ -126,16 +126,16 @@ BOOL __stdcall SPRITECACHE_IsLoadPending(eD2UnitType eUnitType, int32_t nMode, i
 void __stdcall SPRITECACHE_CancelPendingLoads();
 // @sourcefile .\SRC\SpriteCache.cpp
 struct D2SpriteCacheEntryStrc * __fastcall SPRITECACHE_EvictEntry(struct D2GfxMemoryStrc * pGfxMemory, struct D2SpriteCacheEntryStrc * pCandidate, uint32_t bPreferOld);
-void __fastcall SPRITECACHE_AllocateMemory(void * pCache, int32_t nParam2);
-void __fastcall SPRITECACHE_FreeMemory(struct D2GfxMemoryStrc * pGfxMemory, void * pParam, int32_t nFreedSize, uint32_t bEvictPriority);
+void __fastcall SPRITECACHE_AllocateMemory(void * pCache, int32_t pEntry);
+void __fastcall SPRITECACHE_FreeMemory(struct D2GfxMemoryStrc * pGfxMemory, void * pCacheEntry, int32_t nFreedSize, uint32_t bEvictPriority);
 uint32_t __stdcall SPRITECACHE_DecodeFrameByIndex(uint32_t * pReadBuffer, size_t nReadSize, struct D2SpriteDecodeRequestStrc * pRequest);
 // @sourcefile .\SRC\SpriteCache.cpp
 void __fastcall SPRITECACHE_ReleaseMemory(struct D2GfxMemoryStrc * pGfxMemory);
 // @sourcefile .\SRC\SpriteCache.cpp
-void * * __fastcall SPRITECACHE_AllocEntry2(struct D2GfxMemoryStrc * pGfxMemory, void * pParam, void * pInitData, int32_t bPriority);
+void * * __fastcall SPRITECACHE_AllocEntry2(struct D2GfxMemoryStrc * pGfxMemory, void * nSize, void * pInitData, int32_t bPriority);
 // Initialises the sprite/CEL data cache. All four parameters are stack scalars, none a pointer: dwCacheBytes (0x800000) and dwUnitCacheBytes (0x7d000) are byte counts, the latter forwarded as a size to 00609020. dwAvailMemOverride, when 0, makes the function query system memory and apply SUB EAX,0xb00000 / CMP EAX,0x4000000. Typed as pointers, the 0x800000 byte count was emitted as a pointer into whatever object happened to contain that address.
 void __stdcall GFX_InitCelDataCache(uint32_t nFlags, uint32_t dwCacheBytes, uint32_t dwUnitCacheBytes, uint32_t dwAvailMemOverride);
-void __stdcall SPRITECACHE_Shutdown(int32_t nParam);
+void __stdcall SPRITECACHE_Shutdown(int32_t bReleaseMemory);
 int __stdcall SPRITECACHE_GetOrLoadSprite(struct D2GfxDataStrc * pGfxData, int32_t bCheckOnly, int32_t nParam2);
 // Server sprite precache sync. GuardStack tail confirms BOOL return: GuardStack(1) on two early-out success paths, GuardStack(nLoadResult) on the cache-and-load path, GuardStack(0) on failure.
 BOOL __stdcall SPRITECACHE_PrecacheSpriteSync(struct D2GfxDataStrc * pGfxData);

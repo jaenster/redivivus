@@ -59,23 +59,23 @@ void __thiscall Destructor(::EditBoxWrapper * pThis) {
 }
 
 int __thiscall OnMouseWheel(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseWheel(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseWheel(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseDown(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseDown(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseDown(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseUp(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseUp(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseUp(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnMouseMove(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnMouseMove(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnMouseMove(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 void __thiscall Draw(::EditBoxWrapper * pThis) {
@@ -83,38 +83,38 @@ void __thiscall Draw(::EditBoxWrapper * pThis) {
 }
 
 int __thiscall OnChar(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnChar(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnChar(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnDownArrow(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnDownArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnDownArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnUpArrow(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnUpArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnUpArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnRightArrow(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnRightArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnRightArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall OnLeftArrow(::EditBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
-    int iVar1 = pThis->pImplementation->pVtable->OnLeftArrow(pThis->pImplementation, pMsg);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->OnLeftArrow(pThis->pImplementation, pMsg);
+    return nResult;
 }
 
 int __thiscall GetValue(::EditBoxWrapper * pThis) {
-    int iVar1 = pThis->pImplementation->pVtable->GetValue(pThis->pImplementation);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->GetValue(pThis->pImplementation);
+    return nResult;
 }
 
 int __thiscall GetRepeatDelta(::EditBoxWrapper * pThis, int nUnused) {
-    int iVar1 = pThis->pImplementation->pVtable->GetRepeatDelta(pThis->pImplementation);
-    return iVar1;
+    int nResult = pThis->pImplementation->pVtable->GetRepeatDelta(pThis->pImplementation);
+    return nResult;
 }
 
 // Forwards SetNumber to the wrapped EditBoxImplementation through vtable slot 15.

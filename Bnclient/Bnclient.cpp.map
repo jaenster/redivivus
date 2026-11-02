@@ -1,0 +1,254 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/Bnclient.cpp",
+  "functions": [
+    {
+      "name": "D2FILE_VerifyFileSignature",
+      "address": "00516de1",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00516de1"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "D2FILE_VerifyFileSignature",
+        "D2FILE_VerifySignatureWinTrust",
+        "D2FILE_GetSignerOrganization",
+        "_strnicmp",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2FILE_VerifySignatureWinTrust",
+      "address": "00517ad6",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517ad6"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "D2FILE_VerifySignatureWinTrust",
+        "MISC_OperatorNewShim",
+        "memset",
+        "MISC_OperatorDeleteShim",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2WinTrustData",
+        "D2WinTrustFileInfo",
+        "GUID",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "D2FILE_GetSignerOrganization",
+      "address": "00517c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00517c30"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "D2FILE_GetSignerOrganization",
+        "MISC_OperatorNewShim",
+        "MISC_OperatorDeleteShim",
+        "D2FILE_CleanupCryptHandles"
+      ],
+      "usedTypes": [
+        "HCERTSTORE",
+        "HCRYPTMSG",
+        "HLOCAL",
+        "PCCERT_CONTEXT",
+        "_CERT_INFO",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "BNCLIENT_InitFilestream",
+      "address": "00518b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518b60"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "BNCLIENT_InitFilestream",
+        "SLogCreate"
+      ]
+    },
+    {
+      "name": "BNCLIENT_DestroyCompressor",
+      "address": "00518bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518bd0"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "BNCLIENT_DestroyCompressor",
+        "SLogClose",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "NET_InitAndGetLobbyChatQueue",
+      "address": "00518c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518c00"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "NET_InitAndGetLobbyChatQueue",
+        "BNMESSQUEUE_Initialize"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc"
+      ]
+    },
+    {
+      "name": "NET_GetLobbyChatQueue",
+      "address": "00518c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518c10"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "NET_GetLobbyChatQueue"
+      ],
+      "usedTypes": [
+        "D2BNetClientCallbacksStrc"
+      ]
+    },
+    {
+      "name": "BNCLIENT_GetBnetLogFilestream",
+      "address": "00518c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00518c30"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "BNCLIENT_GetBnetLogFilestream",
+        "SLogCreate",
+        "atexit"
+      ]
+    },
+    {
+      "name": "BNSEND_FreeRealmQueryData",
+      "address": "0051ab80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ab80"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "BNSEND_FreeRealmQueryData",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "BNSEND_FreeUserProfileData",
+      "address": "0051b3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051b3b0"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "BNSEND_FreeUserProfileData",
+        "FreeClientMemory"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_IDEAEncryptDecrypt",
+      "address": "00524760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524760"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IDEAEncryptDecrypt",
+        "NET_SID_CLIENT_IDEACrypt"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_SetupIDEAKey",
+      "address": "00524780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524780"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "NET_SID_CLIENT_SetupIDEAKey",
+        "NET_SID_CLIENT_IDEAExpandKey",
+        "__security_check_cookie",
+        "NET_SID_CLIENT_IDEAInvertKey"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "SRP_DestroyContext",
+      "address": "00528530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528530"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "SRP_DestroyContext",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2Srp *"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1221 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Fog/Debug.cpp",
+  "functions": [
+    {
+      "name": "DEBUG_LoadDbgHelp64Apis",
+      "address": "00401b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401b00"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "DEBUG_LoadDbgHelp64Apis"
+      ]
+    },
+    {
+      "name": "InitializeDebugSymbols",
+      "address": "00401cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401cb0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "InitializeDebugSymbols",
+        "__security_check_cookie",
+        "strrchr",
+        "strncpy_s"
+      ]
+    },
+    {
+      "name": "GetModuleInfoForAddress",
+      "address": "00401df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401df0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "GetModuleInfoForAddress",
+        "DEBUG_LoadDbgHelp64Apis",
+        "InitializeDebugSymbols",
+        "memset",
+        "strncpy_s",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IMAGEHLP_MODULE",
+        "pfnEHHandlerRoutine",
+        "pfnSymGetModuleInfo64",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSymbolNameForAddress",
+      "address": "00401f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00401f10"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "GetSymbolNameForAddress",
+        "DEBUG_LoadDbgHelp64Apis",
+        "InitializeDebugSymbols",
+        "memset",
+        "strncpy_s",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2ImagehlpSymbol64BufStrc",
+        "IMAGEHLP_MODULE",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetSourceLineForAddress",
+      "address": "004020d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004020d0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "GetSourceLineForAddress",
+        "DEBUG_LoadDbgHelp64Apis",
+        "InitializeDebugSymbols",
+        "strncpy_s"
+      ],
+      "usedTypes": [
+        "IMAGEHLP_LINE",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EnumerateLoadedModules",
+      "address": "004021d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004021d0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "EnumerateLoadedModules",
+        "DEBUG_LoadDbgHelp64Apis"
+      ],
+      "usedTypes": [
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SetSymbolSearchPath",
+      "address": "00402280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402280"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "SetSymbolSearchPath",
+        "strncpy_s",
+        "DEBUG_LoadDbgHelp64Apis",
+        "InitializeDebugSymbols"
+      ],
+      "usedTypes": [
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "FindSymbolFile",
+      "address": "00402380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402380"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "FindSymbolFile",
+        "DEBUG_LoadDbgHelp64Apis",
+        "InitializeDebugSymbols"
+      ],
+      "usedTypes": [
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LoadModuleSymbols",
+      "address": "00402460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402460"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "LoadModuleSymbols",
+        "DEBUG_LoadDbgHelp64Apis",
+        "InitializeDebugSymbols"
+      ],
+      "usedTypes": [
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UnloadModuleSymbols",
+      "address": "00402530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402530"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "UnloadModuleSymbols",
+        "DEBUG_LoadDbgHelp64Apis",
+        "InitializeDebugSymbols"
+      ],
+      "usedTypes": [
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WalkStackFrame",
+      "address": "004025f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004025f0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "WalkStackFrame",
+        "DEBUG_LoadDbgHelp64Apis",
+        "InitializeDebugSymbols"
+      ],
+      "usedTypes": [
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WriteCrashDumpViaThread",
+      "address": "004026d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004026d0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "WriteCrashDumpViaThread"
+      ],
+      "usedTypes": [
+        "MINIDUMP_EXCEPTION_INFORMATION",
+        "pfnEHHandlerRoutine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DEBUG_CrashDumpRequestThreadProc",
+      "address": "004027c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004027c0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "DEBUG_CrashDumpRequestThreadProc",
+        "DebugThread",
+        "WriteCrashDumpViaThread",
+        "SetEvent"
+      ]
+    },
+    {
+      "name": "CrashDumpWriterThread",
+      "address": "00402820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402820"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "CrashDumpWriterThread",
+        "__security_check_cookie",
+        "DEBUG_LoadDbgHelp64Apis",
+        "GetCurrentThreadId",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2CrashDumpRequestStrc",
+        "WCHAR",
+        "_EXCEPTION_POINTERS",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "InitializeDebugSubsystem",
+      "address": "00402980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402980"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "InitializeDebugSubsystem"
+      ]
+    },
+    {
+      "name": "DEBUG_GetDbgHelpModuleRange",
+      "address": "00402a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402a90"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "DEBUG_GetDbgHelpModuleRange"
+      ],
+      "usedTypes": [
+        "_MODULEINFO",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "CleanupDebugSymbols",
+      "address": "00402ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402ae0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "CleanupDebugSymbols"
+      ],
+      "usedTypes": [
+        "pfnEHHandlerRoutine"
+      ]
+    },
+    {
+      "name": "ZeroStruct36Bytes",
+      "address": "00402b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402b60"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "ZeroStruct36Bytes"
+      ]
+    },
+    {
+      "name": "ZeroStruct16Bytes",
+      "address": "00402b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402b80"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "ZeroStruct16Bytes"
+      ]
+    },
+    {
+      "name": "ZeroStruct16BytesDuplicate",
+      "address": "00402ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402ba0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "ZeroStruct16BytesDuplicate"
+      ]
+    },
+    {
+      "name": "SKILLSTXT_ZeroOutFields",
+      "address": "00402bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402bc0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "SKILLSTXT_ZeroOutFields"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt"
+      ]
+    },
+    {
+      "name": "CompareUintDescending",
+      "address": "00402c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402c10"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "CompareUintDescending"
+      ]
+    },
+    {
+      "name": "FormatModuleDebugString",
+      "address": "00402c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402c60"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "FormatModuleDebugString",
+        "__snprintf_s",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2FogDebugModuleEntryStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FormatAddressDebugString",
+      "address": "00402d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402d60"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "FormatAddressDebugString",
+        "__snprintf_s",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EnumerateAndDumpAllFunctions",
+      "address": "00402ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402ee0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "EnumerateAndDumpAllFunctions",
+        "InitializeDebugInfoTable",
+        "DEBUG_EnumerateModulesViaPsapi",
+        "DEBUG_EnumerateModulesViaToolhelp32",
+        "DEBUG_EnumerateModulesViaPEB",
+        "qsort",
+        "FormatModuleDebugString",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2FogDebugModuleEntryStrc",
+        "D2FogDebugModuleTableStrc",
+        "Report",
+        "fnCrashOutputLine",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "InitializeDebugInfoTable",
+      "address": "00402fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00402fe0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "InitializeDebugInfoTable"
+      ],
+      "usedTypes": [
+        "D2FogDebugModuleEntryStrc",
+        "D2FogDebugModuleTableStrc",
+        "uint16_t"
+      ]
+    },
+    {
+      "name": "DEBUG_UnloadStackCrawlDbgHelp",
+      "address": "0040b500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b500"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "DEBUG_UnloadStackCrawlDbgHelp"
+      ]
+    },
+    {
+      "name": "DumpThreadContext",
+      "address": "0040b540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b540"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "DumpThreadContext",
+        "memset",
+        "LogWithCategoryVarArgs",
+        "EnqueueLogMessage",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "CONTEXT"
+      ]
+    },
+    {
+      "name": "GetSourceLineWithRetry",
+      "address": "0040b600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b600"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "GetSourceLineWithRetry"
+      ]
+    },
+    {
+      "name": "FOG_FreeModuleList",
+      "address": "0040b660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b660"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "FOG_FreeModuleList",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2FogModuleNodeStrc"
+      ]
+    },
+    {
+      "name": "EnumerateModulesToolhelp32",
+      "address": "0040b690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b690"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "EnumerateModulesToolhelp32",
+        "LOGMANAGER_TraceToModuleLog",
+        "__security_check_cookie",
+        "AllocClientMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2FogModuleNodeStrc",
+        "MODULEENTRY",
+        "pfnCreateToolhelp32Snapshot",
+        "pfnModule32First",
+        "pfnModule32Next",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EnumerateModulesPsapi",
+      "address": "0040b920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040b920"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "EnumerateModulesPsapi",
+        "__security_check_cookie",
+        "LOGMANAGER_TraceToModuleLog",
+        "AllocClientMemory",
+        "memset",
+        "FOG_FreeModuleList"
+      ],
+      "usedTypes": [
+        "D2FogModuleNodeStrc",
+        "_MODULEINFO",
+        "pfnEnumProcessModules",
+        "pfnGetModuleBaseNameA",
+        "pfnGetModuleFileNameExA",
+        "pfnGetModuleInformation",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "EnumerateAndLogModules",
+      "address": "0040bc50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040bc50"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "EnumerateAndLogModules",
+        "EnumerateModulesToolhelp32",
+        "EnumerateModulesPsapi",
+        "LOGMANAGER_TraceToModuleLog"
+      ],
+      "usedTypes": [
+        "D2FogModuleNodeStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FindModuleContainingAddress",
+      "address": "0040bcb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040bcb0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "FindModuleContainingAddress"
+      ],
+      "usedTypes": [
+        "D2FogModuleNodeStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DumpAnnotatedStackMemory",
+      "address": "0040bcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040bcf0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "DumpAnnotatedStackMemory",
+        "LOGMANAGER_TraceToModuleLog",
+        "FindModuleContainingAddress",
+        "LogWithCategoryVarArgs",
+        "SStrCopy",
+        "SStrPrintf",
+        "SStrPack",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "_stricmp",
+        "SMemEscapeString",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "CONTEXT",
+        "D2FogModuleNodeStrc",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LoadSymbolsForAllModules",
+      "address": "0040c0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040c0f0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "LoadSymbolsForAllModules",
+        "EnumerateAndLogModules",
+        "LOGMANAGER_TraceToModuleLog",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2FogModuleNodeStrc",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FILETOOLS_GetExecutableFolderPath",
+      "address": "0040c220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040c220"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "FILETOOLS_GetExecutableFolderPath"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "BuildSymbolSearchPath",
+      "address": "0040c290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040c290"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "BuildSymbolSearchPath",
+        "FILETOOLS_GetExecutableFolderPath",
+        "_stricmp",
+        "LOGMANAGER_TraceToModuleLog",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "COMPRESS_Implode",
+      "address": "0040c520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040c520"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "COMPRESS_Implode",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "void *"
+      ]
+    },
+    {
+      "name": "InitializeSymbolsWithRefcount",
+      "address": "0040c620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040c620"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "InitializeSymbolsWithRefcount",
+        "BuildSymbolSearchPath",
+        "LOGMANAGER_TraceToModuleLog",
+        "LoadSymbolsForAllModules",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2FogModuleNodeStrc"
+      ]
+    },
+    {
+      "name": "CleanupSymbolsWithRefcount",
+      "address": "0040c720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040c720"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "CleanupSymbolsWithRefcount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "QuickStackWalkWithSymbols",
+      "address": "0040c7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040c7a0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "QuickStackWalkWithSymbols",
+        "__security_check_cookie",
+        "InitializeSymbolsWithRefcount",
+        "memset",
+        "GetSourceLineWithRetry",
+        "LOGMANAGER_TraceToModuleLog",
+        "StripPathPrefixToRelative",
+        "SStrLen",
+        "CleanupSymbolsWithRefcount",
+        "_alldiv"
+      ],
+      "usedTypes": [
+        "CONTEXT",
+        "D2ImagehlpSymbolBufStrc",
+        "IMAGEHLP_MODULE",
+        "ULONGLONG",
+        "int64_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FullStackWalkWithAnnotations",
+      "address": "0040cc10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040cc10"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "FullStackWalkWithAnnotations",
+        "SRegLoadValue",
+        "LOGMANAGER_TraceToModuleLog",
+        "__security_check_cookie",
+        "BuildSymbolSearchPath",
+        "LoadSymbolsForAllModules",
+        "DumpAnnotatedStackMemory",
+        "FOG_FreeModuleList",
+        "ExitOrCrashCleanUpJmp",
+        "memset",
+        "GetSourceLineWithRetry",
+        "COMPRESS_Implode",
+        "strrchr",
+        "LogWithCategory",
+        "LogWithCategoryVarArgs",
+        "SStrLen"
+      ],
+      "usedTypes": [
+        "CONTEXT",
+        "D2FogModuleNodeStrc",
+        "D2ImagehlpSymbolBufStrc",
+        "STACKFRAME",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "WriteCrashDump",
+      "address": "0040d1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d1c0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "WriteCrashDump",
+        "FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder",
+        "SStrPack",
+        "fopen",
+        "SMemCopy",
+        "fwrite",
+        "fclose",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2CrashDumpRecordStrc",
+        "FILE",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "LoadPreviousCrashDump",
+      "address": "0040d290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d290"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "LoadPreviousCrashDump",
+        "FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder",
+        "SStrPack",
+        "__security_check_cookie",
+        "fopen",
+        "fseek",
+        "ftell",
+        "AllocClientMemory",
+        "fread",
+        "fclose",
+        "SMemCopy",
+        "SMemCmp"
+      ],
+      "usedTypes": [
+        "D2CharSelCompFlags",
+        "D2CharSelCompStrc",
+        "FILE",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "HandleExceptionWithStackDump",
+      "address": "0040d540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d540"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "HandleExceptionWithStackDump",
+        "LOGMANAGER_TraceToModuleLog",
+        "FullStackWalkWithAnnotations"
+      ],
+      "usedTypes": [
+        "_EXCEPTION_POINTERS"
+      ]
+    },
+    {
+      "name": "DEBUG_LoadStackCrawlDbgHelp",
+      "address": "0040d5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d5b0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "DEBUG_LoadStackCrawlDbgHelp",
+        "_set_se_translator",
+        "LOGFILE_WriteStringToFile"
+      ]
+    },
+    {
+      "name": "TriggerManualStackDump",
+      "address": "0040d7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0040d7d0"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "TriggerManualStackDump",
+        "memset",
+        "QuickStackWalkWithSymbols",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca575",
+      "address": "006ca575",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca575"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca575",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca595",
+      "address": "006ca595",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca595"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca595",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca5b5",
+      "address": "006ca5b5",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca5b5"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca5b5",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca5d5",
+      "address": "006ca5d5",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca5d5"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca5d5",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca5f5",
+      "address": "006ca5f5",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca5f5"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca5f5",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca615",
+      "address": "006ca615",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca615"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca615",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca635",
+      "address": "006ca635",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca635"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca635",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca655",
+      "address": "006ca655",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca655"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca655",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca675",
+      "address": "006ca675",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca675"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca675",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca695",
+      "address": "006ca695",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca695"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca695",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6ca6c5",
+      "address": "006ca6c5",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca6c5"
+        }
+      ],
+      "namespace": "Fog::Debug",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6ca6c5",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ]
+    }
+  ]
+}

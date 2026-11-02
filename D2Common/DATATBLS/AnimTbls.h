@@ -24,17 +24,17 @@ struct D2AnimDataStrc * __fastcall TXT_AllocTxt_AnimTbls(struct D2PoolManagerStr
 // and server memory (record struct itself).
 // Source: .\\DATATBLS\\AnimTbls.cpp
 // @sourcefile .\DATATBLS\AnimTbls.cpp
-void __fastcall ANIMDATA_FreeAnimDataRecord(struct D2AnimDataStrc * pParam);
+void __fastcall ANIMDATA_FreeAnimDataRecord(struct D2AnimDataStrc * pAnimData);
 // pdwName1 in EDI, pdwName2 in ESI: TRUE when both 8-byte names match as two dwords. Halts (AnimTbls.cpp lines 217/218, StringLength((LPCTSTR)pdwName2) <= 8) on a name longer than 8.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __stdcall ANIMDATA_CompareNames(uint32_t * pdwName1, uint32_t * pdwName2);
 // Gets the AnimData record for a unit. Builds the composit animation
 // name via COMPOSIT_BuildCofPath, then looks it up via ANIMDATA_GetRecordByNameHash.
 // Called by SetAnimData and composit rendering code.
-struct D2AnimDataRecordStrc * __fastcall ANIMDATA_GetAnimDataForUnit(struct D2UnitStrc * pUnit, uint32_t nParam, uint32_t nCofMode, uint32_t nWeaponClass, struct D2InventoryStrc * pInventory);
+struct D2AnimDataRecordStrc * __fastcall ANIMDATA_GetAnimDataForUnit(struct D2UnitStrc * pUnit, uint32_t nClassId, uint32_t nCofMode, uint32_t nWeaponClass, struct D2InventoryStrc * pInventory);
 // Sets the animation speed value in an AnimData record for a unit.
 // Builds composit name, looks up record, writes nParam to the speed field.
-void __stdcall ANIMDATA_SetAnimSpeedForUnit(struct D2UnitStrc * pUnit, int32_t nParam);
+void __stdcall ANIMDATA_SetAnimSpeedForUnit(struct D2UnitStrc * pUnit, int32_t nAnimSpeed);
 // Retrieves frame count, animation speed, and trigger frame from an AnimData
 // record by name. The trigger frame is the first non-zero byte in the
 // per-frame event array (up to 0x90 bytes). Returns 1 on success, 0 on

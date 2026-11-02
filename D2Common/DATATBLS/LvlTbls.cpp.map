@@ -1,0 +1,773 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "D2Common/DATATBLS/LvlTbls.cpp",
+  "functions": [
+    {
+      "name": "TXT_AllocTxt_levels",
+      "address": "0061c540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061c540"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "CompileTxt",
+        "TXT_AllocTxt_levels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "STRTABLE_GetStringByKey",
+        "WSTRING_PutWideCharIntoBuffer"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "WCHAR",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_Levels_GetLine",
+      "address": "0061db70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061db70"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_Levels_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "LEVEL_CanHaveRain",
+      "address": "0061dba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061dba0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LEVEL_CanHaveRain"
+      ],
+      "usedTypes": [
+        "eD2LevelId",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LVLTBLS_GetNoPer",
+      "address": "0061dbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061dbe0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LVLTBLS_GetNoPer"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LEVEL_CanHaveMud",
+      "address": "0061dc20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061dc20"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LEVEL_CanHaveMud"
+      ],
+      "usedTypes": [
+        "eD2LevelId",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "LVLTBLS_FreeLevelsTxt",
+      "address": "0061dc60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061dc60"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LVLTBLS_FreeLevelsTxt",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "TXT_Levels_GetMonLvlForDifficulty",
+      "address": "0061dca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061dca0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_Levels_GetMonLvlForDifficulty"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "eD2Difficulty",
+        "eD2LevelId",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LVLTBLS_BuildPortalLevelArray",
+      "address": "0061dd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061dd00"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LVLTBLS_BuildPortalLevelArray",
+        "AllocServerMemory",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LevelDefsTxt",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetPortalLevelArrayFromPortalFlags",
+      "address": "0061ddf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ddf0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "GetPortalLevelArrayFromPortalFlags"
+      ],
+      "usedTypes": [
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_leveldefs",
+      "address": "0061de00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061de00"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_leveldefs",
+        "CompileTxt",
+        "LVLTBLS_BuildPortalLevelArray"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "LVLTBLS_FreeLevelDefsTxt",
+      "address": "0061e440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061e440"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LVLTBLS_FreeLevelDefsTxt",
+        "UnloadBin",
+        "FreeServerMemory"
+      ]
+    },
+    {
+      "name": "TXT_LevelDefs_GetLine",
+      "address": "0061e470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061e470"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LevelDefs_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelDefsTxt",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "LVLTBLS_FixPathSlashes",
+      "address": "0061e4a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061e4a0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LVLTBLS_FixPathSlashes",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_lvltypes",
+      "address": "0061e520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061e520"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_lvltypes",
+        "CompileTxt",
+        "LVLTBLS_FixPathSlashes"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2LvlTypesTxt",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "thunk_UnloadBin_DataTbls",
+      "address": "0061ea90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ea90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "thunk_UnloadBin_DataTbls",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "TXT_LvlTypes_GetLine",
+      "address": "0061eaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061eaa0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlTypes_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LvlTypesTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_LvlTypes_CheckIfTypeIsAssignedToAct",
+      "address": "0061eae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061eae0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlTypes_CheckIfTypeIsAssignedToAct",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "LVLTBLS_GetLvlTypeFilename",
+      "address": "0061eb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061eb40"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LVLTBLS_GetLvlTypeFilename",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LvlTypesTxt",
+        "char[60]",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_lvlprest",
+      "address": "0061ebb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061ebb0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_lvlprest",
+        "CompileTxt",
+        "AllocClientMemory",
+        "memset",
+        "D2CheckExpansionGame",
+        "LVLTBLS_FixPathSlashes",
+        "AllocDrlgFile"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2LvlPrestTxt",
+        "D2PoolManagerStrc",
+        "char[60]",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TXT_LvlTbls_Free",
+      "address": "0061f030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f030"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlTbls_Free",
+        "DRLGPRESET_ReleaseDrlgFile",
+        "FreeClientMemory",
+        "UnloadBin"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc *"
+      ]
+    },
+    {
+      "name": "TXT_LvlPrest_GetLine",
+      "address": "0061f0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f0b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlPrest_GetLine"
+      ],
+      "usedTypes": [
+        "D2LvlPrestTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_LvlPrest_FindLineByLevelId",
+      "address": "0061f0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f0e0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlPrest_FindLineByLevelId"
+      ],
+      "usedTypes": [
+        "D2LvlPrestTxt",
+        "eD2LevelId"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_lvlwarp",
+      "address": "0061f130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f130"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_lvlwarp",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "TXT_LvlWarp_Free",
+      "address": "0061f300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f300"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlWarp_Free",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "TXT_LvlWarp_Setup",
+      "address": "0061f310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f310"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlWarp_Setup",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LvlWarpTxt",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_lvlmaze",
+      "address": "0061f380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f380"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_lvlmaze",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
+      "name": "TXT_FreeTxt_LvlMaze",
+      "address": "0061f480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f480"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_FreeTxt_LvlMaze",
+        "UnloadBin"
+      ]
+    },
+    {
+      "name": "TXT_LvlMaze_FindLineByLevelId",
+      "address": "0061f490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f490"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlMaze_FindLineByLevelId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LvlMazeTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_lvlsub",
+      "address": "0061f500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f500"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "AllocDrlgFile",
+        "TXT_AllocTxt_lvlsub",
+        "CompileTxt",
+        "AllocServerMemory",
+        "memset",
+        "AllocClientMemory",
+        "D2CheckExpansionGame",
+        "LVLTBLS_FixPathSlashes",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2LvlSubTxt",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_FreeTxt_LvlSub",
+      "address": "0061f9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061f9c0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_FreeTxt_LvlSub",
+        "DRLGPRESET_ReleaseDrlgFile",
+        "FreeClientMemory",
+        "DRLGMAZE_FreeRoomPresetData",
+        "UnloadBin",
+        "FreeServerMemory"
+      ]
+    },
+    {
+      "name": "TXT_LvlSub_GetLineFromSubType",
+      "address": "0061fa90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061fa90"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LvlSub_GetLineFromSubType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LvlSubTxt",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_LoadExpansionLvlTbls",
+      "address": "0061fae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061fae0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_LoadExpansionLvlTbls",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocServerMemory",
+        "memset",
+        "D2CheckExpansionGame",
+        "TILEPROJECT_AllocSlot"
+      ],
+      "usedTypes": [
+        "D2ExpansionLvlTblsTxt",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TXT_FreeExpansionLvlTbls",
+      "address": "0061fbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061fbf0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_FreeExpansionLvlTbls",
+        "FreeServerMemory"
+      ]
+    },
+    {
+      "name": "LVLTBLS_GetAutomapLevelId",
+      "address": "0061fc10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061fc10"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LVLTBLS_GetAutomapLevelId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t",
+        "uint8_t[16]"
+      ]
+    },
+    {
+      "name": "LVLTBLS_GetAutomapTileId",
+      "address": "0061fc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061fc80"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "LVLTBLS_GetAutomapTileId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t",
+        "uint8_t[8]"
+      ]
+    },
+    {
+      "name": "TXT_AllocTxt_automap",
+      "address": "0061fcf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061fcf0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_automap",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "CompileTxt",
+        "AllocServerMemory",
+        "memset",
+        "LVLTBLS_GetAutomapLevelId",
+        "LVLTBLS_GetAutomapTileId",
+        "UnloadBin",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AutoMapLvlTbls",
+        "D2AutomapTxt",
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "GetRandomCellNo",
+      "address": "0061fff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0061fff0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "GetRandomCellNo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2AutoMapLvlTbls",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "FreeAutoMapLvlTbls",
+      "address": "006200d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006200d0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::LvlTbls",
+      "calledFunctions": [
+        "FreeAutoMapLvlTbls",
+        "FreeServerMemory"
+      ]
+    }
+  ]
+}

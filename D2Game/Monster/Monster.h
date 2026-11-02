@@ -49,7 +49,7 @@ struct D2MonsterLevelDataStrc {
 namespace D2Game::Monster {
 
 // Function declarations
-struct D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nParam);
+struct D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nClassId);
 void __fastcall SetAiState(struct D2UnitStrc * pMonster, int nAiState);
 int __fastcall GetAiState(struct D2UnitStrc * pUnit);
 void __fastcall SetLevelId(struct D2UnitStrc * pUnit, eD2LevelId eLevel);
@@ -64,7 +64,7 @@ void __fastcall MONSTER_ClearTargetIfMatch(::SGAMEDATA * pGame, struct D2UnitStr
 void __fastcall MONSTERAI_TriggerMageThink(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall MONSTER_StartAiAndRegenTimers(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 int32_t __fastcall PlayerMultiplyer(int32_t nPlayers);
-int32_t __fastcall PlayerMultiplyer2(int32_t nParam);
+int32_t __fastcall PlayerMultiplyer2(int32_t nPlayerCount);
 // Initialises a D2MonsterLevelDataStrc with player-count and difficulty multipliers for a monster. Queries the current player count (SERVER_GAME_CountPlayers), computes PlayerMultiplyer/2/3, and reads MonsterSkillBonus from the DifficultyLevels txt. Skips scaling for boss/special-aligned monsters (Align != 0) and sets nPlayerMultiplyer3=1 for them instead.
 void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, struct D2MonsterLevelDataStrc * pMonsterLevelData, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
 // Randomises the 16 visual component slots of a monster unit. Two paths: if nParam is 0 or its byte[3] is 0, iterates all 16 component indices via GetComponentsData and seeds each slot by RNG (power-of-two fast-path uses bitmask; otherwise modulo). Writes results into pUnitData->szCharName+4. If nParam has a count in byte[3], uses RANDOM_RandomNumberSelector to pick one appearance entry from the nParam table and writes it into pUnitData->sSeed/nPlayerGUID/nModSeed fields. No-ops on null unit or non-monster.
