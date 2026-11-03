@@ -149,7 +149,7 @@ int __fastcall NET_SID_CLIENT_Send_0x3A_LogonResponse2(char * szText1, char * sz
 int __fastcall NET_SID_CLIENT_Send_0x3D_CreateAccount2(char * szText1, char * szText2);
 int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * szText2, char * szNewPassword);
 void __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint32_t dwExeChecksum, char * szExeInfoStr);
-void NET_SID_CLIENT_Send_0x06_StartVersioning();
+void __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning();
 // @sourcefile .\BnSend.cpp
 void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, size_t nSize);
 int32_t __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId);
@@ -161,7 +161,7 @@ int __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar)
 void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bForceJoin, int32_t nJoinType);
 uint32_t __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount);
 void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, uint32_t dwProductCode);
-uint32_t NET_SID_CLIENT_Send_0x10_LeaveChat();
+uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat();
 void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText);
 int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd();
 // Registers: ECX and EDX are loaded by the only caller but not read.
@@ -235,7 +235,7 @@ void __fastcall BNSEND_SetGlobalFlag(uint32_t dwThreadInitFlag);
 void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList);
 // lpStartAddress parameter of CreateThread
 int __stdcall BattleConnectFastest();
-HANDLE ConnectingToBattleNet();
+HANDLE __fastcall ConnectingToBattleNet();
 void __fastcall BNNEWS_SetNewsChannel(int bIsClassic);
 int __thiscall BNNEWS_GetNewsEntryByIndex(int * pNewsTable, int nIndex);
 uint32_t __thiscall BNNEWS_RoundToPowerOfTwo(struct D2BnNewsTableStrc * pNewsTable, uint32_t dwSize);

@@ -2802,10 +2802,7 @@ void __fastcall GAME_TryCopyFrom(::SGAMEDATA * pGame, ::SGAMEDATA * pGame2) {
 
 // Register -lng command-line option handler (language file) via SCMD::SCmdRegisterArgument.
 BOOL __stdcall RegisterCmdLineLngOption() {
-    // Static local variables (originally global data)
-    static char * cCmdLineLanguageOption = (char *)0x00676e6c; D2_STATIC_GUARD(cCmdLineLanguageOption, "D2Client::GAME::Game::RegisterCmdLineLngOption::cCmdLineLanguageOption");
-
-    Storm::Source::SCmdRegisterArgument(0x20000, -1, (char*)&cCmdLineLanguageOption, lpLibFileName_007a0710, 0x104, 0, 0, nullptr);
+    Storm::Source::SCmdRegisterArgument(0x20000, -1, "lng", lpLibFileName_007a0710, 0x104, 0, 0, nullptr);
     return 1;
 }
 

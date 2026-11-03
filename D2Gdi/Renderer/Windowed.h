@@ -44,17 +44,17 @@ namespace D2Gdi::Renderer::Windowed {
 // @sourcefile .\Src\gdiCore.cpp
 BOOL __fastcall InitPerspective(struct D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers);
 // @sourcefile .\Src\gdiCore.cpp
-BOOL Release();
-void ClearCaches();
+BOOL __fastcall Release();
+void __fastcall ClearCaches();
 BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode);
 BOOL __stdcall BeginCutScene();
 void __fastcall PlayCutScene(char * szFile, int nResolutionMode, void * fpFrame);
-BOOL CheckCutScene();
+BOOL __fastcall CheckCutScene();
 BOOL __stdcall RENDERER_WINDOWED_DestroyWindow();
 void __fastcall EndCutScene(HWND hWnd, int nResolutionMode, int nWindowState);
 BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue);
-BOOL EndScene1();
-BOOL EndScene2();
+BOOL __fastcall EndScene1();
+BOOL __fastcall EndScene2();
 BOOL __fastcall GetBackBuffer(BYTE * pBuffer);
 int __fastcall GetScreenSize(int * pWidth, int * pHeight);
 void __fastcall SetPalette(LPPALETTEENTRY pPalette);
@@ -63,18 +63,18 @@ void __fastcall SetPaletteTable(BYTE * * ppPaletteTable);
 HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle();
 void __fastcall UpdateScaleFactor(int nScaleFactor);
 void __fastcall SetGamma(int nGamma);
-int CheckGamma();
+int __fastcall CheckGamma();
 void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue);
 void __fastcall SetPerspectiveScale(int nScaleX, int nScaleY);
 void __fastcall AdjustPerspectivePosition(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
 void __fastcall PerspecitveScalePosition(int nPosX, int nPosY, int nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder);
-void SetDefaultPerspectiveFactor();
+void __fastcall SetDefaultPerspectiveFactor();
 BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize);
-BOOL ActivateWindow();
+BOOL __fastcall ActivateWindow();
 BOOL __fastcall SetOption(int nOption, int nValue);
 // Palette quantization via brute-force nearest-neighbor search. Iterates all 256 palette entries (prgbq_00989c40), calculates Manhattan distance (|R1-R2| + |G1-G2| + |B1-B2|) in RGB space, returns index of closest match. Classic indexed color dithering support for 8-bit framebuffer.
 uint32_t __fastcall RENDERER_WINDOWED_FindNearestPaletteIndex(int nRed, int nBlue, int nGreen);
-int * GetRendererStatistics();
+int * __fastcall GetRendererStatistics();
 // Stores RENDERER_WINDOWED_hPalette in *phPalette and the RGBQUAD table at 0x989c40 in *ppRgbQuad; halts (lines 546/547) on a NULL out-pointer.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __fastcall RENDERER_WINDOWED_GetPalette(HPALETTE * phPalette, RGBQUAD * * ppRgbQuad);

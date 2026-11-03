@@ -38,7 +38,7 @@ typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 #ifndef RECON_FPTD_fpActivateWindow
 #define RECON_FPTD_fpActivateWindow
-typedef BOOL (*fpActivateWindow)();
+typedef BOOL (__fastcall *fpActivateWindow)();
 #endif
 #ifndef RECON_FPTD_fpAdjustPerspectivePosition
 #define RECON_FPTD_fpAdjustPerspectivePosition
@@ -54,15 +54,15 @@ typedef BOOL (__fastcall *fpBeginScene)(BOOL bClear, BYTE nRed, BYTE nGreen, BYT
 #endif
 #ifndef RECON_FPTD_fpCheckCutScene
 #define RECON_FPTD_fpCheckCutScene
-typedef BOOL (*fpCheckCutScene)();
+typedef BOOL (__fastcall *fpCheckCutScene)();
 #endif
 #ifndef RECON_FPTD_fpCheckGamma
 #define RECON_FPTD_fpCheckGamma
-typedef int (*fpCheckGamma)();
+typedef int (__fastcall *fpCheckGamma)();
 #endif
 #ifndef RECON_FPTD_fpClearCaches
 #define RECON_FPTD_fpClearCaches
-typedef void (*fpClearCaches)();
+typedef void (__fastcall *fpClearCaches)();
 #endif
 #ifndef RECON_FPTD_fpClearScreen
 #define RECON_FPTD_fpClearScreen
@@ -166,11 +166,11 @@ typedef void (__fastcall *fpEndCutScene)(HWND hWnd, int nResolutionMode, int nWi
 #endif
 #ifndef RECON_FPTD_fpEndScene1
 #define RECON_FPTD_fpEndScene1
-typedef BOOL (*fpEndScene1)();
+typedef BOOL (__fastcall *fpEndScene1)();
 #endif
 #ifndef RECON_FPTD_fpEndScene2
 #define RECON_FPTD_fpEndScene2
-typedef BOOL (*fpEndScene2)();
+typedef BOOL (__fastcall *fpEndScene2)();
 #endif
 #ifndef RECON_FPTD_fpGetBackBuffer
 #define RECON_FPTD_fpGetBackBuffer
@@ -178,7 +178,7 @@ typedef BOOL (__fastcall *fpGetBackBuffer)(BYTE * pBuffer);
 #endif
 #ifndef RECON_FPTD_fpGetRenderStatistics
 #define RECON_FPTD_fpGetRenderStatistics
-typedef int * (*fpGetRenderStatistics)();
+typedef int * (__fastcall *fpGetRenderStatistics)();
 #endif
 #ifndef RECON_FPTD_fpGetScreenSize
 #define RECON_FPTD_fpGetScreenSize
@@ -206,7 +206,7 @@ typedef void (__fastcall *fpPlayerSmacker)(struct D2SmackerContextStrc * pContex
 #endif
 #ifndef RECON_FPTD_fpRelease
 #define RECON_FPTD_fpRelease
-typedef BOOL (*fpRelease)();
+typedef BOOL (__fastcall *fpRelease)();
 #endif
 #ifndef RECON_FPTD_fpResizeWindow
 #define RECON_FPTD_fpResizeWindow
@@ -214,7 +214,7 @@ typedef BOOL (__fastcall *fpResizeWindow)(HWND hWnd, BOOL bForceResize);
 #endif
 #ifndef RECON_FPTD_fpSetDefaultPerspectiveFactor
 #define RECON_FPTD_fpSetDefaultPerspectiveFactor
-typedef void (*fpSetDefaultPerspectiveFactor)();
+typedef void (__fastcall *fpSetDefaultPerspectiveFactor)();
 #endif
 #ifndef RECON_FPTD_fpSetGamma
 #define RECON_FPTD_fpSetGamma
@@ -253,32 +253,32 @@ struct D2RendererCoreStrc {
 struct D2RendererFunctionsStrc {
     /* 0x00 */ BOOL (__fastcall *nfpInitialize)(HINSTANCE);
     /* 0x04 */ BOOL (__fastcall *nfpInitPerspective)(struct D2GfxSettingsStrc *, ::D2GfxHelperStrc *);
-    /* 0x08 */ BOOL (*nfpRelease)();
+    /* 0x08 */ BOOL (__fastcall *nfpRelease)();
     /* 0x0C */ BOOL (__fastcall *nfpCreateWindow)(HWND, int);
     /* 0x10 */ BOOL (__stdcall *nfpDestroyWindow)();
     /* 0x14 */ void (__fastcall *nfpEndCutScene)(HWND, int, int);
     /* 0x18 */ BOOL (__fastcall *nfpBeginScene)(BOOL, BYTE, BYTE, BYTE);
-    /* 0x1C */ BOOL (*fpEndScene1)();
-    /* 0x20 */ BOOL (*fpEndScene2)();
+    /* 0x1C */ BOOL (__fastcall *fpEndScene1)();
+    /* 0x20 */ BOOL (__fastcall *fpEndScene2)();
     /* 0x24 */ BOOL (__fastcall *nfpResizeWindow)(HWND, BOOL);
     /* 0x28 */ BOOL (__fastcall *nfpGetBackBuffer)(BYTE *);
-    /* 0x2C */ BOOL (*nfpActivateWindow)();
+    /* 0x2C */ BOOL (__fastcall *nfpActivateWindow)();
     /* 0x30 */ BOOL (__fastcall *nfpSetOption)(int, int);
     /* 0x34 */ BOOL (__stdcall *nfpBeginCutScene)();
     /* 0x38 */ void (__fastcall *nfpPlayCutScene)(char *, int, fnBinkFrameCallback);
-    /* 0x3C */ BOOL (*nfpCheckCutScene)();
+    /* 0x3C */ BOOL (__fastcall *nfpCheckCutScene)();
     /* 0x40 */ void (__fastcall *nfpDecodeSmacker)(char *, struct D2SmackerContextStrc *, int);
     /* 0x44 */ void (__fastcall *nfpPlayerSmacker)(struct D2SmackerContextStrc *);
     /* 0x48 */ void (__fastcall *nfpCloseSmacker)(struct D2SmackerContextStrc *);
-    /* 0x4C */ int * (*nfpGetRenderStatistics)();
+    /* 0x4C */ int * (__fastcall *nfpGetRenderStatistics)();
     /* 0x50 */ int (__fastcall *nfpGetScreenSize)(int *, int *);
     /* 0x54 */ void (__fastcall *nfpUpdateScaleFactor)(int);
     /* 0x58 */ void (__fastcall *nfpSetGamma)(int);
-    /* 0x5C */ int (*nfpCheckGamma)();
+    /* 0x5C */ int (__fastcall *nfpCheckGamma)();
     /* 0x60 */ void (__fastcall *nfpSetPerspectiveScale)(int, int);
     /* 0x64 */ void (__fastcall *nfpAdjustPerspectivePosition)(int, int, int, int *, int *);
     /* 0x68 */ void (__fastcall *nfpPerspectiveScalePosition)(int, int, int, int *, int *, BOOL);
-    /* 0x6C */ void (*nfpSetDefaultPerspectiveFactor)();
+    /* 0x6C */ void (__fastcall *nfpSetDefaultPerspectiveFactor)();
     /* 0x70 */ void (__fastcall *nfpSetPalette)(LPPALETTEENTRY);
     /* 0x74 */ void (__fastcall *nfpSetPaletteTable)(BYTE * *);
     /* 0x78 */ void (__fastcall *nfpSetGlobalLight)(int, int, int);
@@ -304,7 +304,7 @@ struct D2RendererFunctionsStrc {
     /* 0xC8 */ void (__fastcall *nfpDrawString)(int, int, char *, va_list);
     /* 0xCC */ void (__fastcall *nfpDrawLight)(DWORD *, DWORD *, int, int);
     /* 0xD0 */ void (__fastcall *nfpDebugFillBackBuffer)(int, int);
-    /* 0xD4 */ void (*nfpClearCaches)();
+    /* 0xD4 */ void (__fastcall *nfpClearCaches)();
 };
 
 // =============================================================================

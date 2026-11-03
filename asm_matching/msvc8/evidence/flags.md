@@ -225,6 +225,30 @@ functions that match only under `/O1` are too few to say more than that some
 object may have been built differently; they are not adopted.
 
 
+## /O1 for D2Hell - DONE, adopted for D2Hell
+
+The whole-tree `/O1` run above rejects it per module, but D2Hell was not a module
+of its own there. In 1.14d the D2Hell library is one tightly packed block,
+0x516d8b-0x517e2f (4260 bytes, about 31 functions):
+
+- every function start in the block is unaligned with no padding between functions;
+  every `/O2` module aligns its functions to 16 bytes (outside the CRT only this block
+  starts functions unaligned);
+- `push imm; pop reg` occurs 7 times in the block's 1380 instructions and nowhere else
+  in the game code (the CRT, built for size, has 135).
+
+A/B on the D2Hell TU and on the block's functions filed elsewhere, `/O2` against
+`/O1 /Oy- /Ob1`, each TU built without the precompiled header: 12 functions newly
+exact (729 bytes; in D2Hell GetFileSize, RegisterErrorHandler,
+ShowFormattedErrorWithArgs), one worse (TSList_UnlinkAll). `/Os` and `/O1 /Oy-` give
+the same code, so the two are not told apart. RTM and SP1 give identical code at `/O1`.
+
+`/Y-` is required: under the precompiled header `/O1` is silently dropped (C4653).
+Only the functions filed under `D2Hell/` get the row; the rest of the block is filed in
+Fog/Archive, Storm/Source/SSystem, Bnclient, D2Common/DataTbls and D2Client and gains
+only once its namespace moves to D2Hell. Pointed out by Mir Drualga (D2Hell was built
+`/O1` in earlier versions).
+
 ## Symbol phase (the declarations ahead of a function) - DONE, not a flag
 
 Not a flag but the compile context, measured the same way. VC8 breaks some

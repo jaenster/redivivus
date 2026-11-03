@@ -201,7 +201,7 @@ void __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint3
     NET_SID_CLIENT_Send(7, (char*)&sPacket, (size_t)(szFilenameCursor + (0x15 - (int)(sPacket.szExeInfo + 1))));
 }
 
-void NET_SID_CLIENT_Send_0x06_StartVersioning() {
+void __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning() {
     // Frame slots -288..-8 are ONE object: &dwExeChecksum is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -427,7 +427,7 @@ void __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * sz
     NET_SID_CLIENT_Send(10, __frame0.szPacketBuf, (size_t)(pszScanEnd + ((uintptr_t)((uint8_t*)&__frame0.szPacketBuf + 520) * -2 - (int)(pszCursor + (0x207 - (uintptr_t)((uint8_t*)&__frame0.szPacketBuf + 520)))) + (int)(pszText2End + 0x410)));
 }
 
-uint32_t NET_SID_CLIENT_Send_0x10_LeaveChat() {
+uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat() {
     int32_t nSendResult = NET_SID_CLIENT_Send(0x10, nullptr, 0);
     return (uint32_t)(nSendResult >= 0);
 }
@@ -1895,7 +1895,7 @@ int __stdcall BattleConnectFastest() {
     return 1;
 }
 
-HANDLE ConnectingToBattleNet() {
+HANDLE __fastcall ConnectingToBattleNet() {
     HANDLE hThread;
     DWORD dwThreadId;
     Bnet::BnetLog_WriteLine("Connecting to Battle.net...");

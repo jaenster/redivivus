@@ -58,7 +58,7 @@ namespace D2Glide::Renderer::Glide {
 
 static uint8_t gnFontKerningTracking = 0x0; D2_STATIC_GUARD(gnFontKerningTracking, "D2Glide::Renderer::Glide::gnFontKerningTracking");
 
-void ClearCaches() {
+void __fastcall ClearCaches() {
     glFloorCache::GLFLOOR_Destroy(&gGlideFloorTextureCache.dwEntrySize, nullptr);
     glSubtileCache::GLSUBTILE_Destroy(&gGlideSubtileTextureCache.dwEntrySize, nullptr);
     glTextureCache::GLTEXCACHE_Destroy(gGlideVertex0.aTextureCache, nullptr);
@@ -120,11 +120,11 @@ BOOL __fastcall SetGamma(int32_t nGamma) {
     return FVar1;
 }
 
-int32_t CheckGamma() {
+int32_t __fastcall CheckGamma() {
     return 1;
 }
 
-BOOL EndScene1() {
+BOOL __fastcall EndScene1() {
     if (!RENDERER_SelectedRendererCore) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x47a);
       exit(-1);
@@ -135,7 +135,7 @@ BOOL EndScene1() {
     return 1;
 }
 
-BOOL EndScene2() {
+BOOL __fastcall EndScene2() {
     if (pD2GFXRenderedDataStrc->bVSync) {
       (*GLIDEDLL_grBufferSwap_4)(1);
       return 1;
@@ -234,7 +234,7 @@ void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {
     gpPaletteTable = gaGlidePaletteTableData;
 }
 
-BOOL ActivateWindow() {
+BOOL __fastcall ActivateWindow() {
     return 0;
 }
 
@@ -352,7 +352,7 @@ void __fastcall RENDERER_GLIDE_SetTextureFiltering(int32_t nFilteringMode) {
     gnGlideTextureFilteringMode = nFilterMode;
 }
 
-int * GetRenderStatistics() {
+int * __fastcall GetRenderStatistics() {
     return &gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes;
 }
 
@@ -3097,7 +3097,7 @@ void __fastcall PerspectiveScalePosition(int32_t nPosX, int32_t nPosY, int32_t n
     gnGlidePerspectiveScale = nPerspScale * 0x466 >> 10;
 }
 
-void SetDefaultPerspectiveFactor() {
+void __fastcall SetDefaultPerspectiveFactor() {
     gnGlidePerspectiveScale = 0x100;
 }
 

@@ -18,7 +18,7 @@ typedef HRESULT (__stdcall *DDS_Flip)(void * This, void * lpDDSurfaceTargetOverr
 
 namespace D2Client::Renderer {
 
-BOOL CheckCutScene() {
+BOOL __fastcall CheckCutScene() {
     return D2Direct3D::Renderer::g_bCutscenePlaying;
 }
 
@@ -26,11 +26,11 @@ void __fastcall UpdateScaleFactor(int nScaleFactor) {
     nScaleFactor = nScaleFactor;
 }
 
-int CheckGamma() {
+int __fastcall CheckGamma() {
     return gadwBitMasks[4] & D2Direct3D::Renderer::gnD3DTextureCapFlags;
 }
 
-BOOL EndScene2() {
+BOOL __fastcall EndScene2() {
     DDS_Flip pDVar1 = g_pD3DSurfaceBackbuffer->lpVtbl->Flip;
     if (pD2GFXRenderedDataStrc->bVSync) {
       (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 1);
@@ -142,11 +142,11 @@ void __fastcall RENDERER_D3D_ConvertPalettedTo32Bit(uint8_t * pSrc8Bit, uint32_t
     } while (nHeight);
 }
 
-int * GetRenderStatistics() {
+int * __fastcall GetRenderStatistics() {
     return &gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes;
 }
 
-BOOL ActivateWindow() {
+BOOL __fastcall ActivateWindow() {
     return 0;
 }
 

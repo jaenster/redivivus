@@ -228,7 +228,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash)
     gnD2GSPacketsSentTotal++;
 }
 
-void NET_D2GS_CLIENT_Send_0x6A() {
+void __fastcall NET_D2GS_CLIENT_Send_0x6A() {
     uint8_t aPacketFrame[4];
     aPacketFrame[3] = 0x6a;
     d2_store24((char*)&aPacketFrame, 0);

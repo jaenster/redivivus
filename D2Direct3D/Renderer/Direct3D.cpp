@@ -90,7 +90,7 @@ HRESULT __stdcall D3D_EnumTextureFormatsCallback(void * lpDDPixFmt, DWORD * pnDe
     return 1;
 }
 
-void ClearCaches() {
+void __fastcall ClearCaches() {
     d3dFloorCache::D3DFLOOR_Free(&gD3DFloorTextureCache, 0);
     d3dSubtileCache::D3DSUBTILE_Free(&gD3DSubtileTextureCache, 0);
     d3dTextureCache::D3DTEXCACHE_Free(gD3DGenericTextureCache.aCaches, 0);
@@ -2425,7 +2425,7 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
     return 1;
 }
 
-BOOL EndScene1() {
+BOOL __fastcall EndScene1() {
     DWORD dwHResult = g_pD3DDevice->lpVtbl->EndScene(g_pD3DDevice);
     if (dwHResult) {
       RENDERER_DIRECT3D_ErrorLog("EndScene failed!", dwHResult);
@@ -4825,7 +4825,7 @@ void __fastcall PerspectiveScalePosition(int nPosX, int nPosY, int nAngle, int *
     g_aSmackerSurfaceArray = nScaleDelta * 0x466 >> 10;
 }
 
-void SetDefaultPerspectiveFactor() {
+void __fastcall SetDefaultPerspectiveFactor() {
     g_aSmackerSurfaceArray = 0x100;
 }
 

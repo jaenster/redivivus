@@ -54,7 +54,7 @@ BOOL __fastcall InitPerspective(D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc
 }
 
 // @sourcefile .\Src\gdiCore.cpp
-BOOL Release() {
+BOOL __fastcall Release() {
     if (RENDERER_SelectedRendererCore) {
       /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&RENDERER_SelectedRendererCore->sLock);
       D2_FREE_AT(RENDERER_SelectedRendererCore, ".\\Src\\gdiCore.cpp", 0x59);
@@ -64,7 +64,7 @@ BOOL Release() {
     return 1;
 }
 
-void ClearCaches() {
+void __fastcall ClearCaches() {
 
 }
 
@@ -127,7 +127,7 @@ void __fastcall PlayCutScene(char * szFile, int nResolutionMode, void * fpFrame)
 
 }
 
-BOOL CheckCutScene() {
+BOOL __fastcall CheckCutScene() {
     return 0;
 }
 
@@ -167,7 +167,7 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
     return 1;
 }
 
-BOOL EndScene1() {
+BOOL __fastcall EndScene1() {
     if (!RENDERER_SelectedRendererCore) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11d);
       exit(-1);
@@ -177,7 +177,7 @@ BOOL EndScene1() {
     return 1;
 }
 
-BOOL EndScene2() {
+BOOL __fastcall EndScene2() {
     tagRECT sClientRect;
     HDC hdc = GetDC((HWND)gnGlideWindowHandle);
     HDC hdc_00 = CreateCompatibleDC(hdc);
@@ -285,7 +285,7 @@ void __fastcall SetGamma(int nGamma) {
 
 }
 
-int CheckGamma() {
+int __fastcall CheckGamma() {
     return 0;
 }
 
@@ -305,7 +305,7 @@ void __fastcall PerspecitveScalePosition(int nPosX, int nPosY, int nAngle, int *
 
 }
 
-void SetDefaultPerspectiveFactor() {
+void __fastcall SetDefaultPerspectiveFactor() {
 
 }
 
@@ -318,7 +318,7 @@ BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize) {
     return 1;
 }
 
-BOOL ActivateWindow() {
+BOOL __fastcall ActivateWindow() {
     return 0;
 }
 
@@ -362,7 +362,7 @@ uint32_t __fastcall RENDERER_WINDOWED_FindNearestPaletteIndex(int nRed, int nBlu
     return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)nRedDelta >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)(char)uVar2);
 }
 
-int * GetRendererStatistics() {
+int * __fastcall GetRendererStatistics() {
     return nullptr;
 }
 

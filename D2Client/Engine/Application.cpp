@@ -26,6 +26,11 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+#ifndef RECON_FPTD_fpRequiredUserAction
+#define RECON_FPTD_fpRequiredUserAction
+typedef BOOL (*fpRequiredUserAction)();
+#endif
+
 namespace D2Client::Engine::Application {
 
 // Main app init. Client path loads MPQ data/media, sets renderer/window, optional keyhook, sound/gamma/vsync, then loops ApplicationRunCurrentMode until exit. On exit unloads MPQs and cleans up.

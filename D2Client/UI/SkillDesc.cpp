@@ -1735,7 +1735,7 @@ static void __stdcall SKILLDESC_BuildChargeSkillDesc(D2UnitStrc * pUnit, uint16_
                 } else {
                   D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszValueFormatted, wszValueStr);
                 }
-                if (((int*)((char*)&gnUIFlagSkillDescHeight + 12))[nChargeSkillIndex * 4] != 2) {
+                if (((int*)((char*)&gaSkillChargeDescTable + 12))[nChargeSkillIndex * 4] != 2) {
                   Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13d);
                   exit(-1);
                 }
@@ -1784,7 +1784,7 @@ void __fastcall SKILLDESC_BuildStatBuffDesc(D2UnitStrc * pUnit, uint16_t * wszOu
     eD2ItemTypes eItemType;
     eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit);
     if (eItemType == ITEMTYPE_Elixir) {
-      SKILLDESC_BuildChargeSkillDesc(pUnit, wszOutputBuffer, gnUIFlagSkillDescHeight);
+      SKILLDESC_BuildChargeSkillDesc(pUnit, wszOutputBuffer, gaSkillChargeDescTable);
       return;
     }
 

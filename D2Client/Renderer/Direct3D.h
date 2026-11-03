@@ -11,17 +11,17 @@
 namespace D2Client::Renderer {
 
 // Function declarations
-BOOL CheckCutScene();
+BOOL __fastcall CheckCutScene();
 void __fastcall UpdateScaleFactor(int nScaleFactor);
-int CheckGamma();
-BOOL EndScene2();
+int __fastcall CheckGamma();
+BOOL __fastcall EndScene2();
 int __fastcall GetScreenSize(int * pWidth, int * pHeight);
 void __fastcall SetPalette(LPPALETTEENTRY pPalette);
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable);
 void __fastcall RENDERER_D3D_CopyPixelsWithStride(void * pSrc, void * pDest, size_t nWidthBytes, int nHeight, int nDestPitch, uint32_t dwParam6);
 void __fastcall RENDERER_D3D_ConvertPalettedTo32Bit(uint8_t * pSrc8Bit, uint32_t * pDest32Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwParam6);
-int * GetRenderStatistics();
-BOOL ActivateWindow();
+int * __fastcall GetRenderStatistics();
+BOOL __fastcall ActivateWindow();
 BOOL __fastcall SetOption(int nOption, int nValue);
 void __fastcall RENDERER_D3D_CloseRegistryKey(uint32_t * phKey);
 

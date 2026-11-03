@@ -34,7 +34,7 @@ typedef BOOL (__fastcall *fnCacheWriteData)(char * szKey, void * pData, uint32_t
 #endif
 #ifndef RECON_FPTD_fnConnectToBattleNet
 #define RECON_FPTD_fnConnectToBattleNet
-typedef int (*fnConnectToBattleNet)();
+typedef int (__fastcall *fnConnectToBattleNet)();
 #endif
 #ifndef RECON_FPTD_fnDecodeCDKeys
 #define RECON_FPTD_fnDecodeCDKeys
@@ -232,7 +232,7 @@ typedef BOOL (__stdcall *fpD2IniTrueFunction)();
 // Data types
 struct D2BNetClientCallbacksStrc {
     /* 0x00 */ void (__fastcall *pfnSetLoggingFlag)(uint32_t);
-    /* 0x04 */ int (*pfnConnectToBattleNet)();
+    /* 0x04 */ int (__fastcall *pfnConnectToBattleNet)();
     /* 0x08 */ int (__fastcall *pfnSendLogonRequest)(char *, char *);
     /* 0x0C */ BOOL (__stdcall *pfnWaitForLogonResponse)();
     /* 0x10 */ BOOL (__stdcall *pfnDisconnect)();

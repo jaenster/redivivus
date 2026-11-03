@@ -62,24 +62,24 @@ struct GlideTexInfoStrc {
 namespace D2Glide::Renderer::Glide {
 
 // Function declarations
-void ClearCaches();
+void __fastcall ClearCaches();
 BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue);
 BOOL __fastcall SetGamma(int32_t nGamma);
-int32_t CheckGamma();
-BOOL EndScene1();
-BOOL EndScene2();
+int32_t __fastcall CheckGamma();
+BOOL __fastcall EndScene1();
+BOOL __fastcall EndScene2();
 BOOL __fastcall GetBackBuffer(BYTE * pBuffer);
 int32_t __fastcall GetScreenSize(int * pWidth, int * pHeight);
 void __fastcall SetPalette(LPPALETTEENTRY pPalette);
 int32_t __fastcall RENDERER_GLIDE_ScalePaletteValue(int32_t nPaletteIndex);
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable);
-BOOL ActivateWindow();
+BOOL __fastcall ActivateWindow();
 BOOL __fastcall SetOption(int32_t nOption, int32_t nValue);
 void __fastcall RENDERER_GLIDE_SetTextureMode(int32_t nTextureMode);
 void __fastcall RENDERER_GLIDE_SetColorCombine(int32_t nCombineMode);
 void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode);
 void __fastcall RENDERER_GLIDE_SetTextureFiltering(int32_t nFilteringMode);
-int * GetRenderStatistics();
+int * __fastcall GetRenderStatistics();
 BOOL __stdcall RENDERER_GLIDE_IsPerspectiveMode();
 BOOL __stdcall RENDERER_GLIDE_InitTextureMemory();
 BOOL __stdcall RENDERER_GLIDE_DestroyWindow();
@@ -147,7 +147,7 @@ BOOL __stdcall RENDERER_GLIDE_IsPerspectiveEnabled();
 void __fastcall SetPerspectiveScale(int32_t nScaleX, int32_t nScaleY);
 void __fastcall AdjustPerspectivePosition(int32_t nPosX, int32_t nPosY, int32_t nBais, int * pXAdjust, int * pYAdjust);
 void __fastcall PerspectiveScalePosition(int32_t nPosX, int32_t nPosY, int32_t nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder);
-void SetDefaultPerspectiveFactor();
+void __fastcall SetDefaultPerspectiveFactor();
 // @sourcefile .\Src\glSmack.cpp
 void __stdcall GLSMACK_AllocBuffers();
 // @sourcefile .\Src\glSmack.cpp

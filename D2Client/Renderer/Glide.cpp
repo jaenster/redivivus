@@ -452,7 +452,7 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
     return (uint32_t)(gnGlideSecondaryTMUCount[1] > 0);
 }
 
-BOOL CheckCutScene() {
+BOOL __fastcall CheckCutScene() {
     return gbPlayingCutScene;
 }
 

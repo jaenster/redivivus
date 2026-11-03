@@ -423,7 +423,6 @@ static HANDLE GetKeyFileHandle(DWORD dwCreationDisposition, DWORD dwDesiredAcces
 void __stdcall CMD_WriteKeyFile() {
     char* pEnd;
     char szBuffer[1142];
-    char cStack_115;
     char szInstallPath[260];
     D2KeyFileHeaderStrc sKeyFileHeader;
     HANDLE hFile = GetKeyFileHandle(2, 0x40000000);
@@ -455,7 +454,7 @@ void __stdcall CMD_WriteKeyFile() {
     Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)szBuffer, 0x476, &nWritten, (LPOVERLAPPED)0x0);
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
     Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0xdc);
-    pDst = &cStack_115;
+    pDst = szInstallPath - 1;
     do {
       pEnd = pDst;
       pDst = pEnd + 1;
@@ -485,7 +484,6 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
     D2CmdTbl_Line0x50f* pDst;
     int* pDstDefault;
     uint8_t aKeyBindFileBuf[1146];
-    char cStack_10d;
     char szPath[260];
     char szLangAbbr[4];
     char* pScan;
@@ -494,7 +492,7 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
     if (bUseInstallDir) {
       char* pEnd;
       Fog::Source::SFile::SFILE_GetInstallPath(szPath, 0xdc);
-      pScan = &cStack_10d;
+      pScan = szPath - 1;
       do {
         pEnd = pScan;
         pScan = pEnd + 1;

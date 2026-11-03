@@ -237,7 +237,7 @@ void * __thiscall BNCLIENT_DestroyCompressor(void * pCompressor, uint8_t bFreeMe
 }
 
 // Initializes the BNet lobby chat message queue via BNMESSQUEUE_Initialize, then returns a pointer to the global sgBNetClientCallbacks structure used for lobby chat callbacks.
-D2BNetClientCallbacksStrc * NET_InitAndGetLobbyChatQueue() {
+D2BNetClientCallbacksStrc * __fastcall NET_InitAndGetLobbyChatQueue() {
     BNMESSQUEUE_Initialize();
     return &sgBNetClientCallbacks;
 }

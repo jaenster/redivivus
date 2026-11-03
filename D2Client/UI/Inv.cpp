@@ -1297,7 +1297,7 @@ static void INV_DrawBodySlotCursorHighlight(D2InventoryStrc * pInventory) {
     INV_DrawBodySlotHighlight(&gaPlayerBodySlotScreenCoords[gnInvBodySlotUnderCursor].nLeft, bHighlightValid);
 }
 
-void InitInventory() {
+void __fastcall InitInventory() {
     uint8_t nMaxSockets;
     D2UnitStrc* pSlotItem;
     int nHandedness;
@@ -2796,7 +2796,7 @@ int32_t __stdcall INV_GetGoldButtonY() {
 }
 
 // Returns whether the inventory is in an interactive (shop/stash/trade) mode. Thirty-three bytes that touch EAX only - a global load, a jump table and a return - so it preserves ECX. Declaring it __stdcall made the decompiler treat ECX as killed by the call, and ClickItemLeft carries a SETZ result in ECX across exactly this call. The lost register became an unassigned local, the pick-up branch was never taken, and clicking an inventory item stopped lifting it.
-BOOL INV_IsInteractiveMode() {
+BOOL __fastcall INV_IsInteractiveMode() {
     switch (g_nCurrentInventoryPage) {
       case 0:
 
@@ -3425,7 +3425,7 @@ int32_t __stdcall ClickItemRight(D2UnitStrc * pItem, D2InventoryStrc * pGridCoor
 }
 
 // Resets the shop/inventory panel UI state. Fifty-six bytes whose only writes are stores to globals through EAX, so it preserves ECX. Typed __stdcall, the decompiler treated ECX as killed by the call, and INV_HandleShopLeftClick carries its button-loop stride there across two calls to this function - the stride became an unassigned local and the shop button scan advanced by garbage.
-void INV_ResetHoverAndContextState() {
+void __fastcall INV_ResetHoverAndContextState() {
     gaInventoryItemSlots = -1;
     gaInventoryState = -1;
     nInventoryContextMode = -1;

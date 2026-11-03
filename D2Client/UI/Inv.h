@@ -101,7 +101,7 @@ BOOL __fastcall IsInInventoryScreenRange(int32_t nX, int32_t nY);
 BOOL __stdcall INV_IsPlayerInventoryMode();
 void __stdcall INV_DrawSocketedItems(struct D2UnitStrc * pUnit, struct D2GridScreenCoordinates * pGridCoords, int32_t nBaseX, int32_t nBaseY);
 void __stdcall DRAW_UI_InventoryContent(struct D2UnitStrc * pUnit);
-void InitInventory();
+void __fastcall InitInventory();
 // Formats weapon damage text for item tooltips, handling one-handed, two-handed, barbarian dual-wield, throwable, and missile potion damage display. Calculates min/max damage based on weapon type, applies color coding for modified stats, and formats elemental damage for missile potions with duration scaling.
 void __stdcall szPrintfBuffer(struct D2UnitStrc * pUnit, uint16_t * wszText);
 void __stdcall INV_FormatArmorClassText(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint16_t * wszText);
@@ -110,7 +110,7 @@ void __stdcall INV_FreeBodySlotImages();
 int32_t __stdcall INV_GetGoldButtonX();
 int32_t __stdcall INV_GetGoldButtonY();
 // Returns whether the inventory is in an interactive (shop/stash/trade) mode. Thirty-three bytes that touch EAX only - a global load, a jump table and a return - so it preserves ECX. Declaring it __stdcall made the decompiler treat ECX as killed by the call, and ClickItemLeft carries a SETZ result in ECX across exactly this call. The lost register became an unassigned local, the pick-up branch was never taken, and clicking an inventory item stopped lifting it.
-BOOL INV_IsInteractiveMode();
+BOOL __fastcall INV_IsInteractiveMode();
 BOOL __stdcall INV_IsInteractiveModeEx();
 int __stdcall INV_CheckActionThrottle();
 BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY);
@@ -118,7 +118,7 @@ void __stdcall INV_HandleInventoryRightClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleMouseMove(struct D2UIMouseMsgStrc * pMsg);
 int32_t __stdcall ClickItemRight(struct D2UnitStrc * pItem, struct D2InventoryStrc * pGridCoords, int32_t nPage, struct D2UnitStrc * pPlayer, struct D2InventoryStrc * pInventory);
 // Resets the shop/inventory panel UI state. Fifty-six bytes whose only writes are stores to globals through EAX, so it preserves ECX. Typed __stdcall, the decompiler treated ECX as killed by the call, and INV_HandleShopLeftClick carries its button-loop stride there across two calls to this function - the stride became an unassigned local and the shop button scan advanced by garbage.
-void INV_ResetHoverAndContextState();
+void __fastcall INV_ResetHoverAndContextState();
 void __fastcall INV_ClearItemDescription(struct D2UnitStrc * pUnit);
 void __stdcall INV_SetShopPageFromNpc(uint8_t byPage);
 void __stdcall INV_ResetInventoryState();

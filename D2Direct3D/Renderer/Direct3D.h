@@ -1109,7 +1109,7 @@ namespace D2Direct3D::Renderer {
 // D3DEnumPixelFormatsCallback. Parameter 1 is an LPDDPIXELFORMAT; parameter 2 is the device-caps flag word, and the 0x200 bit
 // it sets is the one Direct3DCallBack tests for "Supports 1555 textures".
 HRESULT __stdcall D3D_EnumTextureFormatsCallback(void * lpDDPixFmt, DWORD * pnDeviceFlags);
-void ClearCaches();
+void __fastcall ClearCaches();
 uint32_t __fastcall PALETTE_GetColorByIndex(int nPaletteIndex);
 void __fastcall RENDERER_D3D_ConvertPalettedTo16Bit(uint8_t * pSrc8Bit, uint16_t * pDest16Bit, int nWidth, int nHeight, int nDestPitchInPixels, uint32_t dwUnused);
 void __fastcall RENDERER_D3D_SetBlendMode(int nBlendMode);
@@ -1143,7 +1143,7 @@ BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode);
 void __fastcall EndCutScene(HWND hWnd, int nResolutionMode, int nWindowState);
 void __fastcall PlayCutScene(char * szFile, int nResolutionMode, void * fpFrame);
 BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue);
-BOOL EndScene1();
+BOOL __fastcall EndScene1();
 BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize);
 BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(struct IDirectDrawSurface7 * * ppSurface, void * * ppTexture, DWORD nWidth, DWORD nHeight);
 // @wasnamed Release - one name on two different functions.
@@ -1202,7 +1202,7 @@ BOOL __stdcall RENDERER_D3D_IsPerspectiveEnabled();
 void __fastcall SetPerspectiveScale(int nScaleX, int nScaleY);
 void __fastcall AdjustPerspectivePosition(int nPosX, int nPosY, int nBais, int * pXAdjust, int * pYAdjust);
 void __fastcall PerspectiveScalePosition(int nPosX, int nPosY, int nAngle, int * pXAdjust, int * pYAdjust, BOOL bOrder);
-void SetDefaultPerspectiveFactor();
+void __fastcall SetDefaultPerspectiveFactor();
 // Initializes Smacker video subsystem. Allocates 64KB decode buffer at pSmackerDecodeBuffer, clears it to zero. Sets 4 corner vertex colors to 0xFFFFFFFF (white with full alpha) at offsets 0x00989760, 0x00989780, 0x009897a0, 0x009897c0.
 void __stdcall RENDERER_D3D_InitSmackerVertexBuffer();
 int __fastcall RENDERER_D3D_CreateSmackerSurfaces(int nParam);

@@ -166,7 +166,7 @@ int __stdcall NPCMENU_OpenNpcShop();
 void __stdcall NPCMENU_CloseAndResetAll();
 void __fastcall NPCMENU_HandlePlayerInteractionEnd(struct D2UnitStrc * pUnit);
 void __stdcall NPCMENU_CloseShopUI();
-void CloseNPCInteract();
+void __fastcall CloseNPCInteract();
 void __stdcall NPCMENU_CloseCubeUI();
 void __stdcall NPCMENU_CloseStashUI();
 int __stdcall NPCMENU_CloseGossipDialog();

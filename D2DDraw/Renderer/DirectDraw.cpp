@@ -108,11 +108,11 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
     return 1;
 }
 
-void ClearCaches() {
+void __fastcall ClearCaches() {
 
 }
 
-BOOL CheckCutScene() {
+BOOL __fastcall CheckCutScene() {
     return gnCutSceneActiveFlag;
 }
 
@@ -194,7 +194,7 @@ BOOL __fastcall SetGamma(int32_t nGamma) {
     return bResult;
 }
 
-int32_t CheckGamma() {
+int32_t __fastcall CheckGamma() {
     return 1;
 }
 
@@ -214,15 +214,15 @@ void __fastcall PerspectiveScalePosition(int32_t nPosX, int32_t nPosY, int32_t n
 
 }
 
-void SetDefaultPerspectiveFactor() {
+void __fastcall SetDefaultPerspectiveFactor() {
 
 }
 
-int * GetRenderStatistics() {
+int * __fastcall GetRenderStatistics() {
     return nullptr;
 }
 
-BOOL ActivateWindow() {
+BOOL __fastcall ActivateWindow() {
     return 0;
 }
 
@@ -814,7 +814,7 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
     return 1;
 }
 
-BOOL EndScene1() {
+BOOL __fastcall EndScene1() {
     HRESULT nHResult = pDirectDrawSurface->lpVtbl->Unlock(pDirectDrawSurface, (LPVOID)0x0);
     if (nHResult) {
       DirectDrawErrorHandler("Unlock failed!", nHResult);
@@ -832,7 +832,7 @@ BOOL EndScene1() {
     return 1;
 }
 
-BOOL EndScene2() {
+BOOL __fastcall EndScene2() {
     int32_t nHResult;
     RECT rcDestLeft;
     if (gnDDrawFlipState) {

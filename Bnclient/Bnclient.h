@@ -89,7 +89,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
 int * __thiscall BNCLIENT_InitFilestream(int * pStream, char * szFilePath);
 void * __thiscall BNCLIENT_DestroyCompressor(void * pCompressor, uint8_t bFreeMemory);
 // Initializes the BNet lobby chat message queue via BNMESSQUEUE_Initialize, then returns a pointer to the global sgBNetClientCallbacks structure used for lobby chat callbacks.
-struct D2BNetClientCallbacksStrc * NET_InitAndGetLobbyChatQueue();
+struct D2BNetClientCallbacksStrc * __fastcall NET_InitAndGetLobbyChatQueue();
 // Returns a pointer to the global sgBNetClientCallbacks structure (lobby chat message queue) without initialization; use NET_InitAndGetLobbyChatQueue on first access.
 struct D2BNetClientCallbacksStrc * __stdcall NET_GetLobbyChatQueue();
 void * __stdcall BNCLIENT_GetBnetLogFilestream();

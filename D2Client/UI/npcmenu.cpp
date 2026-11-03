@@ -2005,7 +2005,7 @@ void __stdcall NPCMENU_CloseShopUI() {
     ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
 }
 
-void CloseNPCInteract() {
+void __fastcall CloseNPCInteract() {
     if (_Interaction::geNpcUiState == NPCUI_MENU) {
       gnNpcMenuActiveMode = 0;
       _Interaction::geNpcUiState = NPCUI_NONE;

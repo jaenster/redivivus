@@ -137,7 +137,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING();
 // The prologue's PUSH ECX only reserves the 4-byte frame slot; ECX is not an argument.
 void __stdcall NET_D2GS_CLIENT_Send_0x69();
 void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash);
-void NET_D2GS_CLIENT_Send_0x6A();
+void __fastcall NET_D2GS_CLIENT_Send_0x6A();
 void __fastcall LOADING_SetProgressRatio(int32_t nProgress, int32_t nTotal);
 int __stdcall LOADING_GetProgressRatio();
 void __fastcall LOADING_AnimateProgressBar(int32_t nCurrentChunk, int32_t nTotalChunks);

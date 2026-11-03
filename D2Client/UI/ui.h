@@ -178,7 +178,7 @@ BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY);
 BOOL UI_IsMouseOverActiveControlConfigButton(int32_t nMouseX, int32_t nMouseY);
 // Control config mouse handler. Tracks g_nControlConfigMouseButtonState array for each UI region (scroll up/down, list drag, buttons). Dispatches scroll/selection based on mouse state. Main mouse logic for config UI.
 void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouseYStack);
-void UIAction_ResetKeyBindingsToDefaults();
+void __fastcall UIAction_ResetKeyBindingsToDefaults();
 void CONTROLCONFIG_SaveAndCancel();
 void CONTROLCONFIG_RevertAndClose();
 void __stdcall CONTROLCONFIG_CalculateColumnBounds();
