@@ -2651,7 +2651,8 @@ static D2UnitStrc * GetSetItem(int32_t nId, D2InventoryStrc * pInventory) {
           eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pCarriedItem);
           if ((eInvPage == INVPAGE_INVENTORY || eInvPage == INVPAGE_CUBE || eInvPage == INVPAGE_STASH || eInvPage == INVPAGE_None) && ((nGridType = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pUnit) , nGridType == 1 || nGridType == 3) || nGridType == 4)) {
             nQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pCarriedItem);
-            if (nQuality >= 0 && nQuality < sgptDataTable->nTxtSetItemsSize && sgptDataTable->pTxtSetItems + nQuality && sgptDataTable->pTxtSetItems[nQuality].nId == nId) {
+            D2SetItemsTxt* pSetItemsTxt;
+            if ((pSetItemsTxt = nQuality >= 0 && nQuality < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + nQuality : nullptr) && pSetItemsTxt->nId == nId) {
               break;
             }
           }

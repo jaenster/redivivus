@@ -796,8 +796,7 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
-        "D2UnitStrc",
-        "uint32_t"
+        "D2UnitStrc"
       ]
     },
     {
@@ -818,8 +817,7 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
-        "D2QuestDataStrc",
-        "uint32_t"
+        "D2QuestDataStrc"
       ]
     },
     {
@@ -840,8 +838,7 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
-        "D2QuestDataStrc",
-        "uint32_t"
+        "D2QuestDataStrc"
       ]
     },
     {
@@ -862,8 +859,7 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
-        "D2QuestDataStrc",
-        "uint32_t"
+        "D2QuestDataStrc"
       ]
     },
     {

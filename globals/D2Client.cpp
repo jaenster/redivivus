@@ -44212,6 +44212,51 @@ int32_t aIntensityTable_Mode1[120] = {
     -0x5
 }; D2_GLOBAL_GUARD(aIntensityTable_Mode1, "aIntensityTable_Mode1");
 
+D2SkillChargeDescStrc gnUIFlagSkillDescHeight[6] = {
+    {
+        /* .nFileIndex = */ 0x0,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdaa,
+        /* .wDescStrNeg = */ 0xdaa,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x1,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdac,
+        /* .wDescStrNeg = */ 0xdac,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x2,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdab,
+        /* .wDescStrNeg = */ 0xdab,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x3,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdad,
+        /* .wDescStrNeg = */ 0xdad,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x9,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdae,
+        /* .wDescStrNeg = */ 0xdae,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x7,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdaf,
+        /* .wDescStrNeg = */ 0xdaf,
+        /* .nDescVal = */ 0x2
+    }
+}; D2_GLOBAL_GUARD(gnUIFlagSkillDescHeight, "gnUIFlagSkillDescHeight");
+
 D2SkillDescDamageFunc gapSkillDamageDescFuncTable[36] = {
     nullptr,
     &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgType1,

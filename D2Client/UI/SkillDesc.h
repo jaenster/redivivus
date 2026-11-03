@@ -599,6 +599,14 @@ struct D2SkillCalcTxt {
     /* 0x00 */ char code[4];
 };
 
+struct D2SkillChargeDescStrc {
+    /* 0x00 */ int32_t nFileIndex; // matched against the item file index and tested as a stat id (6..11 are >>8 shifted)
+    /* 0x04 */ int32_t nDescFunc; // must be 1, else halt line 0x141
+    /* 0x08 */ uint16_t wDescStrPos; // string id when the value is positive
+    /* 0x0A */ uint16_t wDescStrNeg; // string id when the value is negative
+    /* 0x0C */ int32_t nDescVal; // must be 2, else halt line 0x13d; read via the table base + 0xc
+};
+
 struct D2SkillDescTxt {
     /* 0x000 */ short skilldesc;
     /* 0x002 */ int8_t skillpage;

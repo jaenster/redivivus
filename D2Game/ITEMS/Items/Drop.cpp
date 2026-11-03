@@ -686,16 +686,11 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
               pDataTable = sgptDataTable;
             }
             if (pItemsTxt->bQuest != '\0' || !pGame || nChosenUniqueIdx <= 0x1000 && !(pGame->fUniqueSpawn[(int)nChosenUniqueIdx >> 5] & gadwBitMasks[nChosenUniqueIdx & 0x1f])) {
-              if ((int)nChosenUniqueIdx < 0) {
+              D2UniqueItemsTxt* pUniqueItemsTxt2 = (int)nChosenUniqueIdx >= 0 && (int)nChosenUniqueIdx < pDataTable->nTxtUniqueItemsSize ? pDataTable->pTxtUniqueItems + nChosenUniqueIdx : nullptr;
+              if (!pUniqueItemsTxt2) {
                 return 0;
               }
-              if ((int)nChosenUniqueIdx >= pDataTable->nTxtUniqueItemsSize) {
-                return 0;
-              }
-              if (!(pDataTable->pTxtUniqueItems + nChosenUniqueIdx)) {
-                return 0;
-              }
-              if (pItemsTxt->dwCode != pDataTable->pTxtUniqueItems[nChosenUniqueIdx].dwItemCode) {
+              if (pItemsTxt->dwCode != pUniqueItemsTxt2->dwItemCode) {
                 return 0;
               }
 

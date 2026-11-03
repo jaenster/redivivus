@@ -261,6 +261,7 @@
         "AppendToBuffer"
       ],
       "usedTypes": [
+        "D2SkillChargeDescStrc",
         "D2UnitStrc",
         "WCHAR",
         "int32_t",

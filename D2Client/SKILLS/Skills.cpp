@@ -1660,7 +1660,8 @@ int32_t __fastcall SKILL_ProcessCastFromPacket(D2UnitStrc * pUnit, int * pnCastA
     if (pUnit->eUnitType == UNIT_MONSTER) {
       uint8_t bNewDir;
       nMonClassId = pUnit->nClassId;
-      if (nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nMonClassId && *(int*)sgptDataTable->pTxtMonStats[nMonClassId].Code == 0x20204250) {
+      D2MonStatsTxt* pMonStatsTxt;
+      if ((pMonStatsTxt = nMonClassId >= 0 && nMonClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonClassId : nullptr) && *(int*)pMonStatsTxt->Code == 0x20204250) {
         bNewDir = D2Common::PATH::DynamicPath::UpdateDirection(pUnit->pPath.pDynamicPath);
         bNewDir = bNewDir + 0x38 & 0x3f;
         D2Common::PATH::DynamicPath::PATH_SetNewDirection(pUnit->pPath.pDynamicPath, bNewDir);

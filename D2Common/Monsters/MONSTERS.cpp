@@ -799,8 +799,9 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
       D2SeedStrc* pSeed;
       nMonStatsId = pUnit->nClassId;
       nBaseId = nMonStatsId;
-      if ((int)nMonStatsId >= 0 && (int)nMonStatsId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nMonStatsId) {
-        nBaseId = (int)sgptDataTable->pTxtMonStats[nMonStatsId].BaseId;
+      D2MonStatsTxt* pMonStatsTxt = (int)nMonStatsId >= 0 && (int)nMonStatsId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nMonStatsId : nullptr;
+      if (pMonStatsTxt) {
+        nBaseId = (int)pMonStatsTxt->BaseId;
       }
       if ((int)nBaseId < 0 || (nMonStatsTblSize = sgptDataTable->nTxtMonStatsSize , (int)nBaseId >= nMonStatsTblSize)) {
         nBaseId = ~MonsterUnitSkeleton1;

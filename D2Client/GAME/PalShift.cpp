@@ -151,7 +151,8 @@ static void PALSHIFT_ApplyGreenBloodPalette(uint8_t * pPaletteData, int32_t nMon
     }
 
     int nMonStatsExId = (int)sgptDataTable->pTxtMonStats[nMonsterId].MonStatsEx;
-    if (!(nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize && sgptDataTable->pTxtMonStatsEx + nMonStatsExId && sgptDataTable->pTxtMonStatsEx[nMonStatsExId].byLocalBlood == 2)) {
+    D2MonStats2Txt* pMonStatsExTxt;
+    if (!((pMonStatsExTxt = nMonStatsExId >= 0 && nMonStatsExId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr) && pMonStatsExTxt->byLocalBlood == 2)) {
       return;
     }
 

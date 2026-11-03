@@ -1141,7 +1141,7 @@ BOOL __fastcall Q35_CheckQuestNotStarted(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // [A5Q5 = Rite of Passage] Q35_SetStatueAnimMode: sets one altar statue's display/anim mode from the saved per-statue mode. classId 0x1da->slot[0x34], 0x1db->slot[0x30], 0x1dc->slot[0x38]. No quest-state writes.
-static void Q35_SetStatueAnimMode(uint32_t dwParam, D2QuestDataA5Q5Strc * pQuestData, D2ObjectInitFnArg * pInitArg) {
+static void Q35_SetStatueAnimMode(D2QuestDataA5Q5Strc * pQuestData, D2ObjectInitFnArg * pInitArg) {
     int nClassId;
     D2UnitStrc* pUnit = pInitArg->pObject;
     if (!pUnit) {
@@ -1172,47 +1172,44 @@ static void Q35_SetStatueAnimMode(uint32_t dwParam, D2QuestDataA5Q5Strc * pQuest
 
 // [A5Q5 = Rite of Passage] Objects_InitFn65: object init for one Ancient altar statue — records its GUID (slot 5) and applies its anim mode. No quest-state writes.
 void __fastcall Objects_InitFn65_AncientStatue2(D2ObjectInitFnArg * pInitArg) {
-    uint32_t dwUnusedECX;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
     if (!pInitArg->pObject) {
       pQuestSpecificData->anStatueObjectGUID[0] = -1;
-      Q35_SetStatueAnimMode(dwUnusedECX, pQuestSpecificData, pInitArg);
+      Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
       return;
     }
 
     pQuestSpecificData->anStatueObjectGUID[0] = pInitArg->pObject->nUnitGUID;
-    Q35_SetStatueAnimMode(dwUnusedECX, pQuestSpecificData, pInitArg);
+    Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn63: object init for one Ancient altar statue — records its GUID (slot 6) and applies its anim mode. No quest-state writes.
 void __fastcall Objects_InitFn63_AncientStatue3(D2ObjectInitFnArg * pInitArg) {
-    uint32_t dwUnusedECX;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
     if (!pInitArg->pObject) {
       pQuestSpecificData->anStatueObjectGUID[1] = -1;
-      Q35_SetStatueAnimMode(dwUnusedECX, pQuestSpecificData, pInitArg);
+      Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
       return;
     }
 
     pQuestSpecificData->anStatueObjectGUID[1] = pInitArg->pObject->nUnitGUID;
-    Q35_SetStatueAnimMode(dwUnusedECX, pQuestSpecificData, pInitArg);
+    Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn64: object init for one Ancient altar statue — records its GUID (slot 7) and applies its anim mode. No quest-state writes.
 void __fastcall Objects_InitFn64_AncientStatue1(D2ObjectInitFnArg * pInitArg) {
-    uint32_t dwUnusedECX;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
     if (!pInitArg->pObject) {
       pQuestSpecificData->anStatueObjectGUID[2] = -1;
-      Q35_SetStatueAnimMode(dwUnusedECX, pQuestSpecificData, pInitArg);
+      Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
       return;
     }
 
     pQuestSpecificData->anStatueObjectGUID[2] = pInitArg->pObject->nUnitGUID;
-    Q35_SetStatueAnimMode(dwUnusedECX, pQuestSpecificData, pInitArg);
+    Q35_SetStatueAnimMode(pQuestSpecificData, pInitArg);
 }
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsTriggerSound1: object-operate stub that plays the "locked" sound (event 0x13) on the altar. No quest-state writes.

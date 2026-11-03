@@ -393,7 +393,8 @@ short * __fastcall InitializeSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion,
     pMatchedMonData = pMonData;
     if (nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsSize) {
       nMonStatId = (int)sgptDataTable->pTxtMonStats[nMonStatId].MonStatsEx;
-      if (nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsExSize && sgptDataTable->pTxtMonStatsEx + nMonStatId && (uint8_t)sgptDataTable->pTxtMonStatsEx[nMonStatId].TotalPieces > 2) {
+      D2MonStats2Txt* pMonStatsExTxt;
+      if ((pMonStatsExTxt = nMonStatId >= 0 && nMonStatId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatId : nullptr) && (uint8_t)pMonStatsExTxt->TotalPieces > 2) {
         pMatchedMonData->nClassId = nClassId;
         pMonsterRegion->nSpawnCount++;
         SKILLS::SkillItem::SEED_RollChampionPack(&pUnit->sSeed, pMatchedMonData, 3);

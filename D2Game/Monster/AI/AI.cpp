@@ -8437,6 +8437,7 @@ BOOL __fastcall AI_Monster_TryCastRateLimitedSkill(::SGAMEDATA * pGame, D2UnitSt
     int nClassId;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2MapAIStrc* pDVar1 = pAiGeneral->pMapAi;
+    D2MonStatsTxt* pMonStatsTxt;
     if (!pDVar1 || (nMapAiIdxOrFrameDiff = pAiGeneral->dwArg0 , nMapAiIdxOrFrameDiff >= pDVar1->nSize)) {
       nMapAiIdxOrFrameDiff = pGame->dwGameFrame - pAiGeneral->dwArg1;
       if (nMapAiIdxOrFrameDiff < 0) {
@@ -8445,7 +8446,7 @@ BOOL __fastcall AI_Monster_TryCastRateLimitedSkill(::SGAMEDATA * pGame, D2UnitSt
       if (nMapAiIdxOrFrameDiff > 700) {
         pAiGeneral->dwArg0 = 0;
       }
-    } else if (pUnit && (nClassId = pUnit->nClassId , nClassId >= 0) && nClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nClassId && (eSkill = (eD2Skills)sgptDataTable->pTxtMonStats[nClassId].aSkill[0] , (int)eSkill >= 0) && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+    } else if (pUnit && (nClassId = pUnit->nClassId , pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr) && (eSkill = (eD2Skills)pMonStatsTxt->aSkill[0] , (int)eSkill >= 0) && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
       SERVER_UNIT_CastSkill(pGame, pUnit, 4, eSkill, nullptr, pDVar1->pPosition[nMapAiIdxOrFrameDiff].nXpos, pDVar1->pPosition[nMapAiIdxOrFrameDiff].nYpos);
       pAiGeneral->dwArg0++;
       pAiGeneral->dwArg1 = pGame->dwGameFrame;

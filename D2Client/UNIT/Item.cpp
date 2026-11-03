@@ -956,17 +956,12 @@ int32_t __fastcall SOUND_GetIdFromUnit(D2UnitStrc * pUnit) {
       }
 
       eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-      if (eQuality < 0) {
-        return nSoundId;
-      }
-      if (eQuality >= sgptDataTable->nTxtUniqueItemsSize) {
-        return nSoundId;
-      }
-      if (!(sgptDataTable->pTxtUniqueItems + eQuality)) {
+      D2UniqueItemsTxt* pUniqueItemsTxt = eQuality >= 0 && eQuality < sgptDataTable->nTxtUniqueItemsSize ? sgptDataTable->pTxtUniqueItems + eQuality : nullptr;
+      if (!pUniqueItemsTxt) {
         return nSoundId;
       }
 
-      nDropSound = sgptDataTable->pTxtUniqueItems[eQuality].dropsound;
+      nDropSound = pUniqueItemsTxt->dropsound;
     } else {
       eQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
       if (eQuality != 5) {
@@ -974,17 +969,12 @@ int32_t __fastcall SOUND_GetIdFromUnit(D2UnitStrc * pUnit) {
       }
 
       eQuality = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-      if (eQuality < 0) {
-        return nSoundId;
-      }
-      if (eQuality >= sgptDataTable->nTxtSetItemsSize) {
-        return nSoundId;
-      }
-      if (!(sgptDataTable->pTxtSetItems + eQuality)) {
+      D2SetItemsTxt* pSetItemsTxt = eQuality >= 0 && eQuality < sgptDataTable->nTxtSetItemsSize ? sgptDataTable->pTxtSetItems + eQuality : nullptr;
+      if (!pSetItemsTxt) {
         return nSoundId;
       }
 
-      nDropSound = sgptDataTable->pTxtSetItems[eQuality].dropsound;
+      nDropSound = pSetItemsTxt->dropsound;
     }
     if (nDropSound > 0) {
       nSoundId = (int32_t)nDropSound;

@@ -2375,12 +2375,8 @@ int32_t __fastcall MISSILE_CltHitFn12_ImmolationArrow(D2UnitStrc * pUnit, D2Unit
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
     aSubMissileIds[3] = eSkill;
     int32_t nRange = D2Common::Units::Missile::GetLevel(pUnit);
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 1;
-    }
-
-    D2SkillsTxt* pSkillTxt = sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 1;
     }
 
@@ -2401,7 +2397,7 @@ int32_t __fastcall MISSILE_CltHitFn12_ImmolationArrow(D2UnitStrc * pUnit, D2Unit
       nClassId = pMissileTxtClassId->cHitPar1;
       nSkillLvlSaved = nRange;
       if (nClassId <= 0) {
-        nClassId = pSkillTxt[eSkill].calc[0];
+        nClassId = pSkillTxt->calc[0];
         eSkill = aSubMissileIds[3];
         nClassId = D2Common::Skills::D2GetSkillCalc(Player::MISSILE_GetOwnerUnit(pUnit), nClassId, eSkill, nRange);
         if (nClassId < 1) {

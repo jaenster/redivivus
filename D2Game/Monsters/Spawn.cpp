@@ -470,8 +470,9 @@ uint32_t __stdcall MONSTER_SpawnUniquePackInRoom(D2RoomStrc * pRoom, ::SGAMEDATA
 // Resolves the effective monster class ID for spawning in a given level, handling variant substitution. For Fallen (baseId=0x13) and Zombie (baseId=0x3a), remaps to level-appropriate variants based on eLevelId (BlackMarsh, TamoeHighland, PitLevel1/2). Returns the original nClassId unchanged if no substitution applies or if out of MonStats bounds.
 static int32_t MONSTER_ValidateSpawnForLevel(int32_t nClassId, eD2LevelId eLevelId) {
     int32_t nBaseId = nClassId;
-    if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nClassId) {
-      nBaseId = (int32_t)sgptDataTable->pTxtMonStats[nClassId].BaseId;
+    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    if (pMonStatsTxt) {
+      nBaseId = (int32_t)pMonStatsTxt->BaseId;
     }
     if (nBaseId < 0) {
       return nClassId;

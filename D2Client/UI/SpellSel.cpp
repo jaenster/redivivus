@@ -1932,11 +1932,12 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
     D2GfxDataStrc sGfxData;
     uint16_t wszLevelBuf[10];
     char szLevelBuf[12];
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
 
-    int nColumnX = (int)sgptDataTable->pTxtSkills[eSkill].skilldesc;
+    int nColumnX = (int)pSkillsTxt->skilldesc;
     D2SkillDescTxt* pSkillDesc = nColumnX >= 0 && nColumnX < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nColumnX : nullptr;
     if (!pSkillDesc) {
       return;
@@ -2083,7 +2084,8 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
       pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
       if (pSkillTxt) {
         nSkillDescIdx = (int)pSkillTxt->skilldesc;
-        if (nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize && sgptDataTable->pTxtSkillDesc + nSkillDescIdx && nSkillTreeActiveTab == sgptDataTable->pTxtSkillDesc[nSkillDescIdx].skillpage) {
+        D2SkillDescTxt* pSkillDescTxt;
+        if ((pSkillDescTxt = nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nSkillDescIdx : nullptr) && nSkillTreeActiveTab == pSkillDescTxt->skillpage) {
           BVar1 = D2Common::Skills::SkillCalculateIfWeCanSkillThisSkill(pUnit, eSkill);
           if (BVar1) {
             bCanSkill = 1;
@@ -2181,7 +2183,8 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
       pSkillTxt = (int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + eSkill : nullptr;
       if (pSkillTxt) {
         nSkillDescIdx = (int)pSkillTxt->skilldesc;
-        if (nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize && sgptDataTable->pTxtSkillDesc + nSkillDescIdx && nSkillTreeActiveTab == sgptDataTable->pTxtSkillDesc[nSkillDescIdx].skillpage) {
+        D2SkillDescTxt* pSkillDescTxt;
+        if ((pSkillDescTxt = nSkillDescIdx >= 0 && nSkillDescIdx < sgptDataTable->nTxtSkillDescSize ? sgptDataTable->pTxtSkillDesc + nSkillDescIdx : nullptr) && nSkillTreeActiveTab == pSkillDescTxt->skillpage) {
           gaSpellSelSkillTreeState[nSkillIdx] = -1;
           gbSpellSelSkillTreeNodeHovered[nSkillIdx] = 5;
           pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnitCopy, eSkill, -1);

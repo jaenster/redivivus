@@ -5507,7 +5507,9 @@ static BOOL ITEM_IsReplenishable(D2UnitStrc * pUnit) {
         return 0;
       }
     }
-    if (!((int)eItemType < sgptDataTable->nTxtItemTypesSize && sgptDataTable->pTxtItemTypes + eItemType && sgptDataTable->pTxtItemTypes[eItemType].repair != '\0')) {
+
+    D2ItemTypesTxt* pItemTypesTxt;
+    if (!((pItemTypesTxt = (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr) && pItemTypesTxt->repair != '\0')) {
       return 0;
     }
 
@@ -5914,7 +5916,8 @@ static void __stdcall ITEMS_CalcStaffModsPriceModifier(int * pBuy, int * pSell, 
     }
 
     eD2ItemTypes eItemType = ITEM_GetItemData_wType(pItem);
-    if (!((int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize && sgptDataTable->pTxtItemTypes + eItemType && sgptDataTable->pTxtItemTypes[eItemType].staffmods != '\a')) {
+    D2ItemTypesTxt* pItemTypesTxt;
+    if (!((pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr) && pItemTypesTxt->staffmods != '\a')) {
       return;
     }
 

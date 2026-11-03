@@ -831,16 +831,11 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
     uint32_t bIsMultiplayer;
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       nLvlDamage = pUnit->nClassId;
-      if (nLvlDamage < 0) {
+      D2MissilesTxt* pMissilesTxt = nLvlDamage >= 0 && nLvlDamage < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nLvlDamage : nullptr;
+      if (!pMissilesTxt) {
         return;
       }
-      if (nLvlDamage >= sgptDataTable->nTxtMissilesSize) {
-        return;
-      }
-      if (!(sgptDataTable->pTxtMissiles + nLvlDamage)) {
-        return;
-      }
-      if (*((uint8_t*)&sgptDataTable->pTxtMissiles[nLvlDamage] + 0x5) & (uint8_t)gadwBitMasks[5]) {
+      if (*((uint8_t*)pMissilesTxt + 0x5) & (uint8_t)gadwBitMasks[5]) {
         return;
       }
     }

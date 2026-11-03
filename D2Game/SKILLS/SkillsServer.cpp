@@ -1046,8 +1046,9 @@ void __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
 }
 
 uint32_t __fastcall IsSkillBoundToClass(D2UnitStrc * pUnit, int32_t nSkillId) {
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + nSkillId) {
-      return (uint32_t)((int)sgptDataTable->pTxtSkills[nSkillId].charclass == pUnit->nClassId);
+    D2SkillsTxt* pSkillsTxt;
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && (pSkillsTxt = nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr)) {
+      return (uint32_t)((int)pSkillsTxt->charclass == pUnit->nClassId);
     }
 
     return 0;
@@ -1114,11 +1115,12 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
 
 // Sets skill data by entry type. The second parameter is a whole 32-bit value in EDX; typed from DL alone it was truncated to a byte.
 void __fastcall SKILLS_SetSkillDataByEType(D2UnitStrc * pUnitStrc, uint32_t nUnitLow, uint32_t dwValue, uint32_t nSkillId) {
-    if (!((int)nSkillId >= 0 && (int)nSkillId < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + nSkillId && true)) {
+    D2SkillsTxt* pSkillsTxt = (int)nSkillId >= 0 && (int)nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
 
-    switch (sgptDataTable->pTxtSkills[nSkillId].EType) {
+    switch (pSkillsTxt->EType) {
       case ELEMENTAL_COLD:
         *(uint32_t*)(nUnitLow + 0x30) = dwValue;
       return;
@@ -2583,14 +2585,15 @@ void __fastcall SKILLS_FreeMonsterMinions(D2UnitStrc * pUnit) {
 int32_t __fastcall SKILLS_GetUnitWalkVelocity(D2UnitStrc * pUnit) {
     if (pUnit) {
       int nWalkVelocity;
+      D2MonStatsTxt* pMonStatsTxt;
       if (pUnit->eUnitType == UNIT_PLAYER) {
         nWalkVelocity = pUnit->nClassId;
         D2CharStatsTxt* pCharStatsTxt = nWalkVelocity >= 0 && nWalkVelocity < sgptDataTable->nTxtCharStatsSize ? sgptDataTable->pTxtCharStats + nWalkVelocity : nullptr;
         if (pCharStatsTxt) {
           return (uint32_t)pCharStatsTxt->WalkVelocity << 8;
         }
-      } else if (pUnit->eUnitType == UNIT_MONSTER && (nWalkVelocity = pUnit->nClassId , nWalkVelocity >= 0) && nWalkVelocity < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + nWalkVelocity) {
-        return (int)sgptDataTable->pTxtMonStats[nWalkVelocity].Velocity << 8;
+      } else if (pUnit->eUnitType == UNIT_MONSTER && (nWalkVelocity = pUnit->nClassId , pMonStatsTxt = nWalkVelocity >= 0 && nWalkVelocity < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nWalkVelocity : nullptr)) {
+        return (int)pMonStatsTxt->Velocity << 8;
       }
     }
 
