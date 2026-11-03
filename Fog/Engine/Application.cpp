@@ -24,7 +24,7 @@
 #include "D2Client/ClientModeInGame.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Launch/D2Launch.h"
-#include "D2Multi/Launcher.h"
+#include "D2Multi/ChatDlg.h"
 #include "D2gfx/D2GFX.data.h"
 #include "Fog/Engine/Application.data.h"
 
@@ -1676,8 +1676,8 @@ int32_t __stdcall ApplicationRunCurrentMode(D2IniConfigStrc * pD2IniData) {
         /* .pfnShutdown = */ nullptr
     },
     {
-        /* .pfnInit = */ &D2Multi::Launcher::AppModeMultiplayerInit,
-        /* .pfnShutdown = */ &D2Multi::Launcher::AppModeMultiplayerShutdown
+        /* .pfnInit = */ &D2Multi::ChatDlg::AppModeMultiplayerInit,
+        /* .pfnShutdown = */ &D2Multi::ChatDlg::AppModeMultiplayerShutdown
     },
     {
         /* .pfnInit = */ &D2Launch::AppModeLauncherInit,

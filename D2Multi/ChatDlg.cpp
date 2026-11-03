@@ -13,11 +13,11 @@
 #include "D2MCPClient/McpConnect.h"
 #include "D2Multi/ComCallback.h"
 #include "D2Multi/D2Multi.h"
-#include "D2Multi/Launcher.h"
 #include "D2Multi/OOGUtilities.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
 #include "D2Win/Src/D2Comp.h"
+#include "D2Win/Src/D2WinArchive.h"
 #include "D2Win/Src/D2WinButton.h"
 #include "D2Win/Src/D2WinEditBox.h"
 #include "D2Win/Src/D2WinImage.h"
@@ -27,6 +27,7 @@
 #include "D2Win/Src/D2WinTextBox.h"
 #include "D2Win/Src/D2WinTimer.h"
 #include "Fog/File.h"
+#include "Fog/Fog.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
@@ -36,12 +37,12 @@
 #include "D2Client/UI/Help.data.h"
 #include "D2Multi/ChatDlg.data.h"
 #include "D2Multi/ComCallback.data.h"
-#include "D2Multi/Launcher.data.h"
 #include "D2Multi/OOG/ChatDlg.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/D2WinTimer.h"
+#include "Fog/Engine/Application.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -60,6 +61,10 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2ChatDlgUnknown_0x10) == 0x10, "D2
 #endif
 
 
+#ifndef RECON_FPTD_fnAppModeRun
+#define RECON_FPTD_fnAppModeRun
+typedef int32_t (__fastcall *fnAppModeRun)(D2IniConfigStrc * pD2IniConfig);
+#endif
 #ifndef RECON_FPTD_ChatDlgCallback
 #define RECON_FPTD_ChatDlgCallback
 typedef int (__stdcall *ChatDlgCallback)(uint32_t dwParam);
@@ -108,6 +113,45 @@ static int FORMS_nListExCount = 0; D2_STATIC_GUARD(FORMS_nListExCount, "FORMS_nL
 uint32_t gbLadderNewsExpanded = 0; D2_GLOBAL_GUARD(gbLadderNewsExpanded, "gbLadderNewsExpanded");
 uint32_t gdwGameJoinRequestTick = 0; D2_GLOBAL_GUARD(gdwGameJoinRequestTick, "gdwGameJoinRequestTick");
 static uint32_t gnLadderScrollPos = 0; D2_STATIC_GUARD(gnLadderScrollPos, "gnLadderScrollPos");
+uint32_t gbLobbyInitialized = 0; D2_GLOBAL_GUARD(gbLobbyInitialized, "gbLobbyInitialized");
+static D2CharSelCompStrc * gpChatDlgCharSelCompositeUnit = 0; D2_STATIC_GUARD(gpChatDlgCharSelCompositeUnit, "gpChatDlgCharSelCompositeUnit");
+DC6 * gpDC6BnetBackground = 0; D2_GLOBAL_GUARD(gpDC6BnetBackground, "gpDC6BnetBackground");
+DC6 * gpDC6WaitingRoomBackground = 0; D2_GLOBAL_GUARD(gpDC6WaitingRoomBackground, "gpDC6WaitingRoomBackground");
+DC6 * gpDC6PopUpLargest2 = 0; D2_GLOBAL_GUARD(gpDC6PopUpLargest2, "gpDC6PopUpLargest2");
+DC6 * gpDC6MediumButtonBlank2 = 0; D2_GLOBAL_GUARD(gpDC6MediumButtonBlank2, "gpDC6MediumButtonBlank2");
+DC6 * gpDC6CursorOpenHand = 0; D2_GLOBAL_GUARD(gpDC6CursorOpenHand, "gpDC6CursorOpenHand");
+DC6 * gpDC6CursorLRotate = 0; D2_GLOBAL_GUARD(gpDC6CursorLRotate, "gpDC6CursorLRotate");
+DC6 * gpDC6ChatScrollbar = 0; D2_GLOBAL_GUARD(gpDC6ChatScrollbar, "gpDC6ChatScrollbar");
+DC6 * gpDC6JoinGameScrollbar = 0; D2_GLOBAL_GUARD(gpDC6JoinGameScrollbar, "gpDC6JoinGameScrollbar");
+DC6 * gpDC6ChatLeftButtons1 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons1, "gpDC6ChatLeftButtons1");
+DC6 * gpDC6ChatLeftButtons2 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons2, "gpDC6ChatLeftButtons2");
+DC6 * gpDC6ChatLeftButtons3 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons3, "gpDC6ChatLeftButtons3");
+DC6 * gpDC6ChatRightTopButtonsAlt = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtonsAlt, "gpDC6ChatRightTopButtonsAlt");
+DC6 * gpDC6ChatRightTopButtons = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtons, "gpDC6ChatRightTopButtons");
+DC6 * gpDC6ChatArrows = 0; D2_GLOBAL_GUARD(gpDC6ChatArrows, "gpDC6ChatArrows");
+D2WinTextBox * gpCtlConfirmDialog = 0; D2_GLOBAL_GUARD(gpCtlConfirmDialog, "gpCtlConfirmDialog");
+// also labelled: gpCtlLobbyChannelListBtn
+D2ControlStrc * gpCtlLobbyAccountList = 0; D2_GLOBAL_GUARD(gpCtlLobbyAccountList, "gpCtlLobbyAccountList");
+D2WinButton * gpCtlLobbyLadderNewsToggle = 0; D2_GLOBAL_GUARD(gpCtlLobbyLadderNewsToggle, "gpCtlLobbyLadderNewsToggle");
+D2WinTextBox * pGameListCache = 0; D2_GLOBAL_GUARD(pGameListCache, "pGameListCache");
+DC6 * DCC_JoinGame = 0; D2_GLOBAL_GUARD(DCC_JoinGame, "DCC_JoinGame");
+DC6 * gpDC6BlankBckg2 = 0; D2_GLOBAL_GUARD(gpDC6BlankBckg2, "gpDC6BlankBckg2");
+DC6 * gpDC6GemButton = 0; D2_GLOBAL_GUARD(gpDC6GemButton, "gpDC6GemButton");
+DC6 * gpDC6GameButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6GameButtonBlank, "gpDC6GameButtonBlank");
+DC6 * gpDC6JoinGameClickBox = 0; D2_GLOBAL_GUARD(gpDC6JoinGameClickBox, "gpDC6JoinGameClickBox");
+DC6 * gpDC6GreyLevelBox = 0; D2_GLOBAL_GUARD(gpDC6GreyLevelBox, "gpDC6GreyLevelBox");
+DC6 * gpDC6RadioButton = 0; D2_GLOBAL_GUARD(gpDC6RadioButton, "gpDC6RadioButton");
+static DC6 * gpDC6RadioButtonGrey = 0; D2_STATIC_GUARD(gpDC6RadioButtonGrey, "gpDC6RadioButtonGrey");
+DC6 * gpDC6PopUpOk = 0; D2_GLOBAL_GUARD(gpDC6PopUpOk, "gpDC6PopUpOk");
+DC6 * gpDC6CancelButtonBlankAlt = 0; D2_GLOBAL_GUARD(gpDC6CancelButtonBlankAlt, "gpDC6CancelButtonBlankAlt");
+DC6 * gpDC6OverallTab = 0; D2_GLOBAL_GUARD(gpDC6OverallTab, "gpDC6OverallTab");
+DC6 * gpDC6AmazonTab = 0; D2_GLOBAL_GUARD(gpDC6AmazonTab, "gpDC6AmazonTab");
+DC6 * gpDC6SorceressTab = 0; D2_GLOBAL_GUARD(gpDC6SorceressTab, "gpDC6SorceressTab");
+DC6 * gpDC6NecromancerTab = 0; D2_GLOBAL_GUARD(gpDC6NecromancerTab, "gpDC6NecromancerTab");
+DC6 * gpDC6PaladinTab = 0; D2_GLOBAL_GUARD(gpDC6PaladinTab, "gpDC6PaladinTab");
+DC6 * gpDC6BarbarianTab = 0; D2_GLOBAL_GUARD(gpDC6BarbarianTab, "gpDC6BarbarianTab");
+DC6 * gpDC6DruidTab = 0; D2_GLOBAL_GUARD(gpDC6DruidTab, "gpDC6DruidTab");
+DC6 * gpDC6AssassinTab = 0; D2_GLOBAL_GUARD(gpDC6AssassinTab, "gpDC6AssassinTab");
 static D2WinButton * gpCtlLadderBtnOverall = 0; D2_STATIC_GUARD(gpCtlLadderBtnOverall, "gpCtlLadderBtnOverall");
 static D2WinButton * gpCtlLadderBtnAmazon = 0; D2_STATIC_GUARD(gpCtlLadderBtnAmazon, "gpCtlLadderBtnAmazon");
 static D2WinButton * gpCtlLadderBtnSorceress = 0; D2_STATIC_GUARD(gpCtlLadderBtnSorceress, "gpCtlLadderBtnSorceress");
@@ -116,7 +160,44 @@ static D2WinButton * gpCtlLadderBtnPaladin = 0; D2_STATIC_GUARD(gpCtlLadderBtnPa
 static D2WinButton * gpCtlLadderBtnBarbarian = 0; D2_STATIC_GUARD(gpCtlLadderBtnBarbarian, "gpCtlLadderBtnBarbarian");
 static D2WinButton * gpCtlLadderBtnDruid = 0; D2_STATIC_GUARD(gpCtlLadderBtnDruid, "gpCtlLadderBtnDruid");
 static D2WinButton * gpCtlLadderBtnAssassin = 0; D2_STATIC_GUARD(gpCtlLadderBtnAssassin, "gpCtlLadderBtnAssassin");
+static DC6 * gpDC6SquelchAura = 0; D2_STATIC_GUARD(gpDC6SquelchAura, "gpDC6SquelchAura");
+static DC6 * gpDC6SelectAura = 0; D2_STATIC_GUARD(gpDC6SelectAura, "gpDC6SelectAura");
+DC6 * gpDC6NumberArrows1 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows1, "gpDC6NumberArrows1");
+DC6 * gpDC6NumberArrows2 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows2, "gpDC6NumberArrows2");
+DC6 * gpDC6NumberArrows3 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows3, "gpDC6NumberArrows3");
+DC6 * gpDC6NumberArrows4 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows4, "gpDC6NumberArrows4");
+DC6 * gpDC6NumberGreyArrows = 0; D2_GLOBAL_GUARD(gpDC6NumberGreyArrows, "gpDC6NumberGreyArrows");
+DC6 * gpDC6CreateJoinBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateJoinBckg, "gpDC6CreateJoinBckg");
+static DC6 * gpDC6OkayButton = 0; D2_STATIC_GUARD(gpDC6OkayButton, "gpDC6OkayButton");
+// also labelled: gpLauncherMainWindow
+D2ControlStrc * gpCtlChannelDlgBackground = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgBackground, "gpCtlChannelDlgBackground");
+// also labelled: gpControlTcpIpGameListScroll
+D2WinTextBox * gpCtlChannelDlgTitle = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgTitle, "gpCtlChannelDlgTitle");
+// also labelled: gpControlTcpIpGameListText
+D2WinTextBox * gpCtlChannelNameLabel = 0; D2_GLOBAL_GUARD(gpCtlChannelNameLabel, "gpCtlChannelNameLabel");
+// also labelled: gpControlTcpIpGameListCancel
+D2WinTextBox * gpCtlChannelListLabel = 0; D2_GLOBAL_GUARD(gpCtlChannelListLabel, "gpCtlChannelListLabel");
+// also labelled: gpControlChannelInput
+D2ControlStrc * gpCtlChannelOkButton = 0; D2_GLOBAL_GUARD(gpCtlChannelOkButton, "gpCtlChannelOkButton");
+// also labelled: gpLauncherLogoWindow
+D2ControlStrc * gpCtlChannelDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgCancelButton, "gpCtlChannelDlgCancelButton");
+// also labelled: gpChatDlgSendButtonControl
+D2WinEditBox * gpCtlChannelNameEditBox = 0; D2_GLOBAL_GUARD(gpCtlChannelNameEditBox, "gpCtlChannelNameEditBox");
+D2WinTextBox * gpCtlChannelList = 0; D2_GLOBAL_GUARD(gpCtlChannelList, "gpCtlChannelList");
 static D2WinTextBox * g_pLadderBoardTextBox = 0; D2_STATIC_GUARD(g_pLadderBoardTextBox, "g_pLadderBoardTextBox");
+D2ControlStrc * ghWndGameNameEditBox = 0; D2_GLOBAL_GUARD(ghWndGameNameEditBox, "ghWndGameNameEditBox");
+DC6 * gpDC6CreateGameBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateGameBckg, "gpDC6CreateGameBckg");
+static DC6 * gpDC6CreateGameButton = 0; D2_STATIC_GUARD(gpDC6CreateGameButton, "gpDC6CreateGameButton");
+DC6 * gpDC6WideButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6WideButtonBlank, "gpDC6WideButtonBlank");
+DC6 * gpLauncherImageResource2 = 0; D2_GLOBAL_GUARD(gpLauncherImageResource2, "gpLauncherImageResource2");
+DC6 * gpDC6YesNoButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6YesNoButtonBlank, "gpDC6YesNoButtonBlank");
+DC6 * gpDC6LadderChoiceEXP = 0; D2_GLOBAL_GUARD(gpDC6LadderChoiceEXP, "gpDC6LadderChoiceEXP");
+DC6 * gpDC6HardcoreLadderBckg = 0; D2_GLOBAL_GUARD(gpDC6HardcoreLadderBckg, "gpDC6HardcoreLadderBckg");
+DC6 * gpDC6PlayerProfileBckg = 0; D2_GLOBAL_GUARD(gpDC6PlayerProfileBckg, "gpDC6PlayerProfileBckg");
+DC6 * gpDC6PlayerProfileBckg2 = 0; D2_GLOBAL_GUARD(gpDC6PlayerProfileBckg2, "gpDC6PlayerProfileBckg2");
+DC6 * gpDC6HelpBckg = 0; D2_GLOBAL_GUARD(gpDC6HelpBckg, "gpDC6HelpBckg");
+DC6 * gpDC6D2LogoBlackBnet = 0; D2_GLOBAL_GUARD(gpDC6D2LogoBlackBnet, "gpDC6D2LogoBlackBnet");
+DC6 * gpDC6D2LogoBnet = 0; D2_GLOBAL_GUARD(gpDC6D2LogoBnet, "gpDC6D2LogoBnet");
 static int gnChatHistoryEntryCount = 0; D2_STATIC_GUARD(gnChatHistoryEntryCount, "gnChatHistoryEntryCount");
 uint32_t gnNotifyEnabled = 0; D2_GLOBAL_GUARD(gnNotifyEnabled, "gnNotifyEnabled");
 uint32_t gbIsChannelScreen = 0; D2_GLOBAL_GUARD(gbIsChannelScreen, "gbIsChannelScreen");
@@ -127,11 +208,397 @@ int gaFormList32InitialItems[4] = {}; D2_GLOBAL_GUARD(gaFormList32InitialItems, 
 int32_t gaChatTextBoxFontParams[2] = {}; D2_GLOBAL_GUARD(gaChatTextBoxFontParams, "gaChatTextBoxFontParams");
 // also labelled: gpnChatMessages
 D2WinTextBox * gpChatMessagesTextBox = 0; D2_GLOBAL_GUARD(gpChatMessagesTextBox, "gpChatMessagesTextBox");
+// also labelled: gnChatDlgTabCompletionList
+D2WinEditBox * gpChatDlgInputEditBox = 0; D2_GLOBAL_GUARD(gpChatDlgInputEditBox, "gpChatDlgInputEditBox");
+D2WinTextBox * BattleNetNews = 0; D2_GLOBAL_GUARD(BattleNetNews, "BattleNetNews");
+D2WinTextBox * gpControlJoinGameError = 0; D2_GLOBAL_GUARD(gpControlJoinGameError, "gpControlJoinGameError");
+uint32_t gnOpenBNetMode = 0; D2_GLOBAL_GUARD(gnOpenBNetMode, "gnOpenBNetMode");
+static ChatDlgCallback gpfnChatDlgCallback = (ChatDlgCallback)0; D2_STATIC_GUARD(gpfnChatDlgCallback, "gpfnChatDlgCallback");
 static void * gpChatMessageQueueHead = 0; D2_STATIC_GUARD(gpChatMessageQueueHead, "gpChatMessageQueueHead");
 static void * gpChatMessageQueueTail = 0; D2_STATIC_GUARD(gpChatMessageQueueTail, "gpChatMessageQueueTail");
 static void * gpChatPlayerNameListHead = 0; D2_STATIC_GUARD(gpChatPlayerNameListHead, "gpChatPlayerNameListHead");
 
 namespace D2Multi::ChatDlg {
+
+// App mode multiplayer init: stash module handle and return pointer to fAPPMODE_multiplayer_ReturnAppMode_Caller.
+fnAppModeRun * __fastcall AppModeMultiplayerInit(HMODULE hModule) {
+    // Static local variables (originally global data)
+    static fnAppModeRun gpfnMultiplayerAppModeRun = &D2Multi::OOGUtilities::fAPPMODE_multiplayer_ReturnAppMode_Caller; D2_STATIC_GUARD(gpfnMultiplayerAppModeRun, "D2Multi::ChatDlg::AppModeMultiplayerInit::gpfnMultiplayerAppModeRun");
+    static HMODULE gbChatRoomListUIActive; D2_STATIC_GUARD_BSS(gbChatRoomListUIActive, "D2Multi::ChatDlg::AppModeMultiplayerInit::gbChatRoomListUIActive");
+
+    gbChatRoomListUIActive = hModule;
+    return &gpfnMultiplayerAppModeRun;
+}
+
+// Multiplayer app mode shutdown (no-op).
+void __stdcall AppModeMultiplayerShutdown() {
+
+}
+
+void __fastcall LAUNCHER_StringManipUtility(char * szText, char cSeparator, int32_t bFindLast) {
+    if (bFindLast) {
+      Storm::Source::SSTR::SStrChrR(szText, cSeparator);
+      return;
+    }
+
+    Storm::Source::SSTR::SStrChr(szText, cSeparator);
+}
+
+// Loads all predefined DC6 image resources for the Battle.net launcher UI. Constructs resource paths using sprintf into a reusable buffer, then loads each DC6 file via IMAGE_LoadDC6 and stores the pointers in global variables (PTR_0077bc*). Resources include popup backgrounds, buttons, tabs for each character class, scrollbars, and selection/squelch auras.
+void __stdcall IMAGE_LoadPredefinedImagesExEx() {
+    char szPathBuffer[260];
+    sprintf(szPathBuffer, "%s\\UI\\FrontEnd\\PopUpLargest2", "DATA\\GLOBAL");
+    gpDC6PopUpLargest2 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\FrontEnd\\MediumButtonBlank2", "DATA\\GLOBAL");
+    gpDC6MediumButtonBlank2 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\bnet", "DATA\\GLOBAL");
+    gpDC6BnetBackground = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\waitingroombkgd", "DATA\\GLOBAL");
+    gpDC6WaitingRoomBackground = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\CURSOR\\ohand", "DATA\\GLOBAL");
+    gpDC6CursorOpenHand = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\CURSOR\\lrotate", "DATA\\GLOBAL");
+    gpDC6CursorLRotate = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\scrollbar", "DATA\\GLOBAL");
+    gpDC6ChatScrollbar = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\FRONTEND\\joingamescrollbars", "DATA\\GLOBAL");
+    gpDC6JoinGameScrollbar = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\chatleftbuttons", "DATA\\GLOBAL");
+    gpDC6ChatLeftButtons1 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\chatleftbuttons1", "DATA\\GLOBAL");
+    gpDC6ChatLeftButtons2 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\chatleftbuttons2", "DATA\\GLOBAL");
+    gpDC6ChatLeftButtons3 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\chatrightbuttons", "DATA\\GLOBAL");
+    gpDC6ChatRightTopButtonsAlt = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\chatrighttopbuttons", "DATA\\GLOBAL");
+    gpDC6ChatRightTopButtons = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\chatarrows", "DATA\\GLOBAL");
+    gpDC6ChatArrows = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\joingamebckg", "DATA\\GLOBAL");
+    DCC_JoinGame = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\GameButtonBlank", "DATA\\GLOBAL");
+    gpDC6GameButtonBlank = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\joingameclickbox", "DATA\\GLOBAL");
+    gpDC6JoinGameClickBox = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\numberarrows", "DATA\\GLOBAL");
+    gpDC6NumberArrows1 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\numberarrows", "DATA\\GLOBAL");
+    gpDC6NumberArrows2 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\numberarrows", "DATA\\GLOBAL");
+    gpDC6NumberArrows3 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\numberarrows", "DATA\\GLOBAL");
+    gpDC6NumberArrows4 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\numbergreyarrows", "DATA\\GLOBAL");
+    gpDC6NumberGreyArrows = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\GreyLevelBox", "DATA\\GLOBAL");
+    gpDC6GreyLevelBox = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\createjoinbckg", "DATA\\GLOBAL");
+    gpDC6CreateJoinBckg = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\okaybutton", "DATA\\GLOBAL");
+    gpDC6OkayButton = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\creategamebckg", "DATA\\GLOBAL");
+    gpDC6CreateGameBckg = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\creategamebutton", "DATA\\GLOBAL");
+    gpDC6CreateGameButton = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\widebuttonblank", "DATA\\GLOBAL");
+    gpDC6WideButtonBlank = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\CancelButtonBlank", "DATA\\GLOBAL");
+    gpLauncherImageResource2 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\yesnobuttonblank", "DATA\\GLOBAL");
+    gpDC6YesNoButtonBlank = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\D2logoBlackBnet", "DATA\\GLOBAL");
+    gpDC6D2LogoBlackBnet = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\D2logoBnet", "DATA\\GLOBAL");
+    gpDC6D2LogoBnet = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\blankbckg2", "DATA\\GLOBAL");
+    gpDC6BlankBckg2 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\gembutton", "DATA\\GLOBAL");
+    gpDC6GemButton = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\LadderChoiceEXP", "DATA\\GLOBAL");
+    gpDC6LadderChoiceEXP = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\HardcoreLadderBckg", "DATA\\GLOBAL");
+    gpDC6HardcoreLadderBckg = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\PlayerProfileBckg", "DATA\\GLOBAL");
+    gpDC6PlayerProfileBckg2 = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\PlayerProfileBckg", "DATA\\GLOBAL");
+    gpDC6PlayerProfileBckg = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\HelpBckg", "DATA\\GLOBAL");
+    gpDC6HelpBckg = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\radiobutton", "DATA\\GLOBAL");
+    gpDC6RadioButton = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    sprintf(szPathBuffer, "%s\\UI\\BIGMENU\\radiobuttonGrey", "DATA\\GLOBAL");
+    gpDC6RadioButtonGrey = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\PopUpOK", "DATA\\GLOBAL");
+    gpDC6PopUpOk = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\CancelButtonBlank", "DATA\\GLOBAL");
+    gpDC6CancelButtonBlankAlt = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\overalltab", "DATA\\GLOBAL");
+    gpDC6OverallTab = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\amazontab", "DATA\\GLOBAL");
+    gpDC6AmazonTab = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\sorceresstab", "DATA\\GLOBAL");
+    gpDC6SorceressTab = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\necromancertab", "DATA\\GLOBAL");
+    gpDC6NecromancerTab = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\paladintab", "DATA\\GLOBAL");
+    gpDC6PaladinTab = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\barbariantab", "DATA\\GLOBAL");
+    gpDC6BarbarianTab = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\druidtab", "DATA\\GLOBAL");
+    gpDC6DruidTab = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\ui\\BIGMENU\\assassintab", "DATA\\GLOBAL");
+    gpDC6AssassinTab = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\UncompOverlays\\SquelchAura", "DATA\\GLOBAL");
+    gpDC6SquelchAura = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPathBuffer, "%s\\UncompOverlays\\SelectAura", "DATA\\GLOBAL");
+    gpDC6SelectAura = D2Win::Src::D2WinArchive::IMAGE_LoadDC6(szPathBuffer, 0);
+    D2Win::Src::D2Comp::D2COMP_SetSelectionAndAuraImages(gpDC6SquelchAura, gpDC6SelectAura);
+}
+
+void __stdcall LAUNCHER_FreeLauncherImages() {
+    // Static local variables (originally global data)
+    static DC6 * gpDC6Unidentified_0077bc24; D2_STATIC_GUARD_BSS(gpDC6Unidentified_0077bc24, "D2Multi::ChatDlg::LAUNCHER_FreeLauncherImages::gpDC6Unidentified_0077bc24");
+
+    if (gpDC6PopUpLargest2) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6PopUpLargest2);
+      gpDC6PopUpLargest2 = 0;
+    }
+    if (gpDC6MediumButtonBlank2) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6MediumButtonBlank2);
+      gpDC6MediumButtonBlank2 = 0;
+    }
+    if (gpDC6BnetBackground) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6BnetBackground);
+      gpDC6BnetBackground = 0;
+    }
+    if (gpDC6WaitingRoomBackground) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6WaitingRoomBackground);
+      gpDC6WaitingRoomBackground = 0;
+    }
+    if (gpDC6CursorOpenHand) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6CursorOpenHand);
+      gpDC6CursorOpenHand = 0;
+    }
+    if (gpDC6CursorLRotate) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6CursorLRotate);
+      gpDC6CursorLRotate = 0;
+    }
+    if (gpDC6ChatScrollbar) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6ChatScrollbar);
+      gpDC6ChatScrollbar = 0;
+    }
+    if (gpDC6JoinGameScrollbar) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6JoinGameScrollbar);
+      gpDC6JoinGameScrollbar = 0;
+    }
+    if (gpDC6ChatLeftButtons1) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6ChatLeftButtons1);
+      gpDC6ChatLeftButtons1 = 0;
+    }
+    if (gpDC6ChatLeftButtons2) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6ChatLeftButtons2);
+      gpDC6ChatLeftButtons2 = 0;
+    }
+    if (gpDC6ChatLeftButtons3) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6ChatLeftButtons3);
+      gpDC6ChatLeftButtons3 = 0;
+    }
+    if (gpDC6ChatRightTopButtonsAlt) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6ChatRightTopButtonsAlt);
+      gpDC6ChatRightTopButtonsAlt = 0;
+    }
+    if (gpDC6ChatRightTopButtons) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6ChatRightTopButtons);
+      gpDC6ChatRightTopButtons = 0;
+    }
+    if (gpDC6ChatArrows) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6ChatArrows);
+      gpDC6ChatArrows = 0;
+    }
+    if (DCC_JoinGame) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(DCC_JoinGame);
+      DCC_JoinGame = 0;
+    }
+    if (gpDC6GameButtonBlank) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6GameButtonBlank);
+      gpDC6GameButtonBlank = 0;
+    }
+    if (gpDC6JoinGameClickBox) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6JoinGameClickBox);
+      gpDC6JoinGameClickBox = 0;
+    }
+    if (gpDC6NumberArrows1) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6NumberArrows1);
+      gpDC6NumberArrows1 = 0;
+    }
+    if (gpDC6NumberArrows2) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6NumberArrows2);
+      gpDC6NumberArrows2 = 0;
+    }
+    if (gpDC6NumberArrows3) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6NumberArrows3);
+      gpDC6NumberArrows3 = 0;
+    }
+    if (gpDC6NumberArrows4) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6NumberArrows4);
+      gpDC6NumberArrows4 = 0;
+    }
+    if (gpDC6NumberGreyArrows) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6NumberGreyArrows);
+      gpDC6NumberGreyArrows = 0;
+    }
+    if (gpDC6GreyLevelBox) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6GreyLevelBox);
+      gpDC6GreyLevelBox = 0;
+    }
+    if (gpDC6CreateJoinBckg) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6CreateJoinBckg);
+      gpDC6CreateJoinBckg = 0;
+    }
+    if (gpDC6OkayButton) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6OkayButton);
+      gpDC6OkayButton = 0;
+    }
+    if (gpDC6CreateGameBckg) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6CreateGameBckg);
+      gpDC6CreateGameBckg = 0;
+    }
+    if (gpDC6CreateGameButton) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6CreateGameButton);
+      gpDC6CreateGameButton = 0;
+    }
+    if (gpDC6Unidentified_0077bc24) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6Unidentified_0077bc24);
+      gpDC6Unidentified_0077bc24 = 0;
+    }
+    if (gpDC6WideButtonBlank) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6WideButtonBlank);
+      gpDC6WideButtonBlank = 0;
+    }
+    if (gpLauncherImageResource2) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpLauncherImageResource2);
+      gpLauncherImageResource2 = 0;
+    }
+    if (gpDC6YesNoButtonBlank) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6YesNoButtonBlank);
+      gpDC6YesNoButtonBlank = 0;
+    }
+    if (gpDC6D2LogoBlackBnet) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6D2LogoBlackBnet);
+      gpDC6D2LogoBlackBnet = 0;
+    }
+    if (gpDC6D2LogoBnet) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6D2LogoBnet);
+      gpDC6D2LogoBnet = 0;
+    }
+    if (gpDC6BlankBckg2) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6BlankBckg2);
+      gpDC6BlankBckg2 = 0;
+    }
+    if (gpDC6GemButton) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6GemButton);
+      gpDC6GemButton = 0;
+    }
+    if (gpDC6LadderChoiceEXP) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6LadderChoiceEXP);
+      gpDC6LadderChoiceEXP = 0;
+    }
+    if (gpDC6HardcoreLadderBckg) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6HardcoreLadderBckg);
+      gpDC6HardcoreLadderBckg = 0;
+    }
+    if (gpDC6PlayerProfileBckg) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6PlayerProfileBckg);
+      gpDC6PlayerProfileBckg = 0;
+    }
+    if (gpDC6HelpBckg) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6HelpBckg);
+      gpDC6HelpBckg = 0;
+    }
+    if (gpDC6PlayerProfileBckg2) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6PlayerProfileBckg2);
+      gpDC6PlayerProfileBckg2 = 0;
+    }
+    if (gpDC6RadioButton) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6RadioButton);
+      gpDC6RadioButton = 0;
+    }
+    if (gpDC6RadioButtonGrey) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6RadioButtonGrey);
+      gpDC6RadioButton = 0;
+    }
+    if (gpDC6PopUpOk) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6PopUpOk);
+      gpDC6PopUpOk = 0;
+    }
+    if (gpDC6CancelButtonBlankAlt) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6CancelButtonBlankAlt);
+      gpDC6CancelButtonBlankAlt = 0;
+    }
+    if (gpDC6OverallTab) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6OverallTab);
+      gpDC6OverallTab = 0;
+    }
+    if (gpDC6AmazonTab) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6AmazonTab);
+      gpDC6AmazonTab = 0;
+    }
+    if (gpDC6SorceressTab) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6SorceressTab);
+      gpDC6SorceressTab = 0;
+    }
+    if (gpDC6NecromancerTab) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6NecromancerTab);
+      gpDC6NecromancerTab = 0;
+    }
+    if (gpDC6PaladinTab) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6PaladinTab);
+      gpDC6PaladinTab = 0;
+    }
+    if (gpDC6BarbarianTab) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6BarbarianTab);
+      gpDC6BarbarianTab = 0;
+    }
+    if (gpDC6DruidTab) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6DruidTab);
+      gpDC6DruidTab = 0;
+    }
+    if (gpDC6AssassinTab) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6AssassinTab);
+      gpDC6AssassinTab = 0;
+    }
+    if (gpDC6SquelchAura) {
+      D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6SquelchAura);
+      gpDC6SquelchAura = 0;
+    }
+    if (!gpDC6SelectAura) {
+      return;
+    }
+
+    D2Win::Src::D2WinArchive::IMAGE_FreeImage(gpDC6SelectAura);
+    gpDC6SelectAura = 0;
+}
+
+void __stdcall LAUNCHER_RestoreFocusToControl() {
+    if (!gpChatDlgInputEditBox) {
+      return;
+    }
+
+    D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
+}
+
+BOOL __stdcall LAUNCHER_GenerateJoinGameRequestId(uint32_t pCallbackArg) {
+    uint16_t nRequestId;
+    do {
+      nRequestId = CreateJoinGameRequestId + 1;
+      CreateJoinGameRequestId = 0;
+    } while (!nRequestId);
+
+    CreateJoinGameRequestId = nRequestId;
+    (*gpfnChatDlgCallback)(pCallbackArg);
+    return 1;
+}
 
 // OnPress of the chat-lobby user-list page-back button gpCtlLobbyUserListPrevPageButton: COMCALLBACK_ScrollChannelUserList(-10); returns 1.
 // Provenance: asm 0043d9e0 (RET 4); fpOnPressCallback of form record 0070d060 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fce8.
@@ -159,6 +626,282 @@ BOOL __stdcall CHATDLG_OnPressUserListPrevLine(D2ControlMsg * pControlMsg) {
 BOOL __stdcall CHATDLG_OnPressUserListNextLine(D2ControlMsg * pControlMsg) {
     ComCallback::COMCALLBACK_ScrollChannelUserList(1);
     return 1;
+}
+
+uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szValueName, LPBYTE pbData, DWORD dwDataSize, LPDWORD pdwDataSize) {
+    DWORD dwValueType;
+    HKEY hKey;
+    /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ *pdwDataSize = 0;
+    LSTATUS lStatus = RegOpenKeyExA((HKEY)0x80000002, szSubKey, 0, 0x20019, &hKey);
+    if (lStatus) {
+      return 0;
+    }
+
+    /* LPDWORD lpcbData for RegQueryValueExA */ /* LPBYTE lpData for RegQueryValueExA */ /* LPDWORD lpType for RegQueryValueExA */ *pdwDataSize = dwDataSize;
+    /* LPDWORD lpReserved for RegQueryValueExA */ /* LPCSTR lpValueName for RegQueryValueExA */ /* HKEY hKey for RegQueryValueExA */ lStatus = RegQueryValueExA(hKey, szValueName, (LPDWORD)0x0, &dwValueType, pbData, pdwDataSize);
+    if (lStatus) {
+      /* HKEY hKey for RegCloseKey */ RegCloseKey(hKey);
+      return 0;
+    }
+
+    /* HKEY hKey for RegCloseKey */ lStatus = RegCloseKey(hKey);
+    return (uint32_t)!lStatus;
+}
+
+// Sets the active state of the game-list cache control pGameListCache via D2WINMAIN_SetControlActive. Returns TRUE (MOV EAX,1 at 0043dadd); the caller ignores it.
+// Provenance: asm 0043dad0; one caller, UIMENU_WaitInLine.
+BOOL __fastcall LAUNCHER_SetGameListCacheActive(BOOL bActive) {
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&pGameListCache->sControl, bActive);
+    return 1;
+}
+
+BOOL __stdcall CHATDLG_IsLobbyInitialized() {
+    return gbLobbyInitialized;
+}
+
+void __stdcall LAUNCHER_DestroyLauncherForms() {
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpCtlChannelDlgBackground);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlChannelDlgTitle);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlChannelNameLabel);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlChannelListLabel);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpCtlChannelOkButton);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpCtlChannelDlgCancelButton);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlChannelNameEditBox);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlChannelList);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    if (!gpChatDlgInputEditBox) {
+      return;
+    }
+
+    D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
+}
+
+int __stdcall isServerDown() {
+    if (D2IniData_multiplayer->szCharacterRealm[0] == '\0') {
+      return 0;
+    }
+
+    int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
+    if (!bHasPeerName) {
+      return -1;
+    }
+
+    return 0;
+}
+
+void LAUNCHER_AllocCharSelectComponent(int32_t pCharInfo) {
+    int32_t nComponentMode = 5;
+    if (*(uint16_t*)(pCharInfo + 0x3cb) & 4 && !(*(uint16_t*)(pCharInfo + 0x3cb) & 8)) {
+      BOOL bIsExpansion;
+      bIsExpansion = Fog::D2CheckExpansionGame();
+      if (bIsExpansion || *(uint8_t*)(pCharInfo + 0x1ee) < 5) {
+        nComponentMode = 1;
+      }
+    }
+
+    gpChatDlgCharSelCompositeUnit = D2Win::Src::D2Comp::AllocCharSelectComponent((uint32_t)*(uint8_t*)(pCharInfo + 0x1ee), nComponentMode, (uint8_t*)(pCharInfo + 0x3a1), (char*)(pCharInfo + 0x3b1));
+    if (!gpChatDlgCharSelCompositeUnit) {
+      return;
+    }
+
+    D2Win::Src::D2Comp::D2COMP_SetScreenX(gpChatDlgCharSelCompositeUnit, 0x42);
+    D2Win::Src::D2Comp::D2COMP_SetScreenY(gpChatDlgCharSelCompositeUnit, 0x23b);
+    D2Win::Src::D2Comp::D2COMP_SetAnimationSpeed(gpChatDlgCharSelCompositeUnit, 0);
+    D2Win::Src::D2Comp::D2COMP_SetCurrentFrame(gpChatDlgCharSelCompositeUnit, 0);
+}
+
+static void LAUNCHER_GetDifficultyNameStringId(int32_t nDifficulty, uint16_t * wszText) {
+    uint16_t* pwszLocaleStr;
+    switch (nDifficulty) {
+      case 0:
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfab);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLocaleStr);
+      return;
+      case 1:
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfaa);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLocaleStr);
+      return;
+      case 2:
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfa9);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLocaleStr);
+      return;
+      case 3:
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfa8);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLocaleStr);
+      return;
+      case 4:
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfa7);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLocaleStr);
+      return;
+      case 5:
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x2771);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLocaleStr);
+      return;
+      case 6:
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x2772);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLocaleStr);
+      return;
+      default:
+        pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x1507);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwszLocaleStr);
+      return;
+    }
+}
+
+void __stdcall UIMENU_CantTestItBeacuseItCrash() {
+    uint16_t wDifficultyStrId;
+    int nDifficultyDone;
+    uint32_t nCopyCount;
+    char* pszCopyCur;
+    uint16_t wszClassName[100];
+    D2UiLevelLineTextStrc sLevelLineText;
+    uint16_t wszLevelStr[10];
+    uint32_t nCopyBytes;
+    char cCur;
+    gpLobbyForm0.pLobbyForm0 = 0;
+    gpLobbyForm0.pLobbyForm1 = 0;
+    gpLobbyForm0.pLobbyForm2 = 0;
+    gpLobbyForm0.pLobbyForm3 = 0;
+    gpLobbyForm0.pLobbyForm4 = 0;
+    gpLobbyForm0.pLobbyForm5 = 0;
+    gpLobbyForm0.pCtlLobbyCreateButton = 0;
+    gpLobbyForm0.pCtlLobbyChannelButton = 0;
+    gpLobbyForm0.pCtlLobbyJoinButton = 0;
+    gpLobbyForm0.pCtlLobbyLadderButton = 0;
+    gpLobbyForm0.pCtlLobbyGameModePanel = 0;
+    gpLobbyForm0.pCtlLobbyUserListPrevPageButton = 0;
+    gpLobbyForm0.pCtlLobbyUserListNextPageButton = 0;
+    gpLobbyForm0.pCtlLobbyUserListPrevLineButton = 0;
+    gpLobbyForm0.pCtlLobbyUserListNextLineButton = 0;
+    gpLobbyForm0.pCtlLobbyUnknownPanel = 0;
+    gpLobbyForm0.pCtlLobbyLadderMode = 0;
+    gpLobbyForm0.pCtlLobbyCreateButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 6);
+    gpLobbyForm0.pCtlLobbyChannelButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 7);
+    gpLobbyForm0.pCtlLobbyJoinButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 8);
+    gpLobbyForm0.pCtlLobbyLadderButton = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 9);
+    gpLobbyForm0.pCtlLobbyGameModePanel = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 10);
+    gpLobbyForm0.pCtlLobbyUnknownPanel = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0xf);
+    gpLobbyForm0.pCtlLobbyLadderMode = (::D2WinSmack*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x10);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyChannelButton->sControl, 0);
+    FORMS_PredefinedFormStrc* pFormDef = gaPredefinedForms_b + 0x11;
+    D2ControlStrc** ppCtlSlot = gpCtlLobbyChat;
+    do {
+      D2ControlStrc* pCtl;
+      pCtl = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(pFormDef);
+      *ppCtlSlot = pCtl;
+      ppCtlSlot++;
+      pFormDef++;
+    } while ((int)ppCtlSlot <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
+
+    gpCtlConfirmDialog = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x13);
+    for (nDifficultyDone = 0; nDifficultyDone < 0x64; nDifficultyDone++) {
+      wszClassName[nDifficultyDone] = L'\0';
+    }
+
+    sLevelLineText.szNameAndTitle[0] = '\0';
+    eD2PlayerStatus ePlayerStatus = D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
+    char* pszTitlePrefix = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, ePlayerStatus >> 8 & 0x1f, ePlayerStatus & 4, ePlayerStatus & 0x20);
+    char* pszDst = pszTitlePrefix;
+    if (pszTitlePrefix) {
+      pszDst = pszDst + strlen(pszDst) + 1;
+      nCopyBytes = (int)pszDst - (int)pszTitlePrefix;
+      pszDst = (char*)((int)sLevelLineText.wszLevelLine + 199);
+      do {
+        pszCopyCur = pszDst + 1;
+        pszDst++;
+      } while (*pszCopyCur != '\0');
+
+      for (nCopyCount = nCopyBytes >> 2; nCopyCount; nCopyCount--) {
+        *(uint32_t*)pszDst = *(uint32_t*)pszTitlePrefix;
+        pszTitlePrefix += 4;
+        pszDst += 4;
+      }
+
+      for (nCopyCount = nCopyBytes & 3; nCopyCount; nCopyCount--) {
+        *pszDst = *pszTitlePrefix;
+        pszTitlePrefix++;
+        pszDst++;
+      }
+    }
+
+    pszDst = D2IniData_multiplayer->szNAME;
+    strcat(sLevelLineText.szNameAndTitle, D2IniData_multiplayer->szNAME);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpCtlConfirmDialog, sLevelLineText.szNameAndTitle, (uint8_t)(char)D2IniData_multiplayer->neD2PlayerStatus >> 2 & 1);
+    LAUNCHER_GetDifficultyNameStringId((uint32_t)D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, wszClassName);
+    D2UiLevelLineTextStrc* pDVar1 = &sLevelLineText;
+    for (nDifficultyDone = 0x32; nDifficultyDone; nDifficultyDone--) {
+      pDVar1->wszLevelLine[0] = L'\0';
+      pDVar1->wszLevelLine[1] = L'\0';
+      pDVar1 = (D2UiLevelLineTextStrc*)(pDVar1->wszLevelLine + 2);
+    }
+
+    memset(wszLevelStr, 0, 10 * sizeof(wszLevelStr[0]));
+    uint32_t nCharLevel = (uint32_t)D2IniData_multiplayer->padding_0x35F[0x62];
+    if (!D2IniData_multiplayer->padding_0x35F[0x62]) {
+      nCharLevel = 1;
+    }
+
+    sprintf(sLevelLineText.szNameAndTitle, " %d ", nCharLevel);
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLevelStr, sLevelLineText.szNameAndTitle, 9);
+    uint16_t* pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xfd9);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(sLevelLineText.wszLevelLine, pwszLocaleStr);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(sLevelLineText.wszLevelLine, wszLevelStr);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(sLevelLineText.wszLevelLine, wszClassName);
+    D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, sLevelLineText.wszLevelLine, 0, false, 0);
+    /* Last Difficulty Setting Completed: */ D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0x2b74), 0, false, 0);
+    nDifficultyDone = (int)((D2IniData_multiplayer->eCTEMP_eD2PlayerStatus >> 8 & 0x1f) / (int)((D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & 0x20 | 0x80) >> 5));
+    int nVertAlign = 0;
+    bool bCentered = false;
+    int32_t dwTextColor = 0;
+    switch (nDifficultyDone) {
+      case 0:
+        {
+          /* None */ wDifficultyStrId = 0x2b75;
+          break;
+        }
+      case 1:
+        {
+          /* Normal */ wDifficultyStrId = 0x1424;
+          break;
+        }
+      case 2:
+        {
+          /* Nightmare */ wDifficultyStrId = 0x1423;
+          break;
+        }
+      default:
+        {
+          /* Hell */ wDifficultyStrId = 0x1422;
+        }
+    }
+
+    pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(wDifficultyStrId);
+    D2Win::Src::D2WinTextBox::SetText(gpCtlConfirmDialog, pwszLocaleStr, dwTextColor, bCentered, nVertAlign);
+    BattleNetNews = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x17);
+    if (!BattleNetNews) {
+      return;
+    }
+
+    /* Battle.net News Updates */ D2Win::Src::D2WinTextBox::SetText(BattleNetNews, D2Lang::StrTable::strtable::GetLocaleString(0x2b73), 3, false, 0);
+}
+
+void __stdcall CHATDLG_DestroyLobbyChatForms() {
+    D2ControlStrc** pForm = gpCtlLobbyChat;
+    do {
+      if (*pForm) {
+        D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(pForm);
+        *pForm = 0;
+      }
+
+      pForm++;
+    } while ((int)pForm <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
+
+    if (!gpCtlConfirmDialog) {
+      return;
+    }
+
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlConfirmDialog);
+    gpCtlConfirmDialog = 0;
 }
 
 static void __stdcall CHATDLG_AddMultiLineText(::D2WinTextBox * pTextBox, int32_t bAddBlankLine, char * szText, int32_t nColor) {
@@ -1156,7 +1899,7 @@ void __stdcall CHATDLG_DestroyAllForms() {
 
     OOGUtilities::OOGUTIL_UpdateGameListFilter();
     OOGUtilities::UIMENU_DestroyLobbyAndJoinGameForms();
-    Launcher::LAUNCHER_DestroyLauncherForms();
+    LAUNCHER_DestroyLauncherForms();
     FORMS_DestroyListEx();
     OOGUtilities::OOGUTIL_CloseProfileDialog();
     g_pLadderBoardTextBox = 0;
@@ -1181,7 +1924,7 @@ uint32_t __stdcall CHATDLG_SetDestroyCallback(uint32_t dwUnused, ChatDlgCallback
       exit(-1);
     }
 
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     gpfnChatDlgCallback = pfnCallback;
     return 1;
 }
@@ -1236,7 +1979,7 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
 }
 
 int __fastcall UIMENU_DrawSpecificJoinGameError(uint16_t * wszText, ChatDlgCallback pfnCallback) {
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     if (pGameListCache) {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&pGameListCache->sControl, 0);
     }
@@ -1252,7 +1995,7 @@ int __fastcall UIMENU_DrawSpecificJoinGameError(uint16_t * wszText, ChatDlgCallb
 }
 
 void __stdcall CHATDLG_ResetButtonsAndForms() {
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyChannelButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyCreateButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyJoinButton, 0);
@@ -1268,7 +2011,7 @@ void __stdcall CHATDLG_CreateAllForms() {
 
     gbLobbyInitialized = 0;
     sprintf(szRealmCharName, "%s,%s", D2IniData_multiplayer->szCharacterRealm, D2IniData_multiplayer->szNAME);
-    Launcher::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyLobbyChatForms();
     if (gpChatDlgCharSelCompositeUnit) {
       D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit((D2CharSelStrc*)gpChatDlgCharSelCompositeUnit, 1);
     }
@@ -1323,7 +2066,7 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
     uint16_t* pwszError;
     uint16_t nReqId;
     char cCur;
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     gpfnChatDlgCallback = OOGUtilities::OOG_DisableControlCallback;
     char* pcSrc = D2IniData_multiplayer->szGAMENAME;
     mcp0x03data* pSrcName = pMcpData;
@@ -1399,7 +2142,7 @@ void __fastcall OOGMENU_JoinGame(int16_t nJoinId, char * szGameName, char * szPa
     uint16_t* pwszError;
     char cCur;
     gpChatFormList = (void*)0x2;
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     gpfnChatDlgCallback = OOGUtilities::OOG_DisableControlCallback;
     D2IniData_multiplayer->nJOINID = nJoinId;
     char* pcDst = D2IniData_multiplayer->szGAMENAME;
@@ -1512,7 +2255,7 @@ void __fastcall UIMENU_PrintSmallTitleOnCenterScreen(uint16_t * wszText, ChatDlg
 // Provenance: asm 00440240 (RET 4); fpOnPressCallback of form record 0070e110 (FORM_Button, string 0x13ef), gaPredefinedForms_b[100], the CANCEL shared by OOGUTIL_OpenCreateGameDialog, OOGUTIL_OpenChannelDialog, UIMENU_JoinGame and CHATDLG_OpenLadderTypeMenu (form 0x64).
 BOOL __stdcall CHATDLG_OnPressCloseDialog(D2ControlMsg * pControlMsg) {
     CHATDLG_UpdateButtonVisibility();
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     return 1;
 }
 
@@ -1522,7 +2265,7 @@ BOOL __stdcall CHATDLG_OnPressCloseLadderBoard(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyChannelButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyCreateButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyJoinButton, 0);
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderTypeMenu();
     return 1;
 }
@@ -1871,7 +2614,7 @@ void __stdcall CHATDLG_OpenLadderExpansionHardcore() {
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderClassicSoftcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 9 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e080 (string 0x14c5) in the FORMS_PredefinedFormStrc table.
 BOOL __stdcall CHATDLG_OnPressLadderClassicSoftcore(D2ControlMsg * pControlMsg) {
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderClassicSoftcore();
     g_nLadderFilterMode = 9;
     gnLadderBoardSelectedRank = 0;
@@ -1881,7 +2624,7 @@ BOOL __stdcall CHATDLG_OnPressLadderClassicSoftcore(D2ControlMsg * pControlMsg) 
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderExpansionSoftcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0x1b and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e0e0 (string 0x276a) in the FORMS_PredefinedFormStrc table.
 BOOL __stdcall CHATDLG_OnPressLadderExpansionSoftcore(D2ControlMsg * pControlMsg) {
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderExpansionSoftcore();
     g_nLadderFilterMode = 0x1b;
     gnLadderBoardSelectedRank = 0;
@@ -1891,7 +2634,7 @@ BOOL __stdcall CHATDLG_OnPressLadderExpansionSoftcore(D2ControlMsg * pControlMsg
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderExpansionHardcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0x13 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e0b0 (string 0x276b) in the FORMS_PredefinedFormStrc table.
 BOOL __stdcall CHATDLG_OnPressLadderExpansionHardcore(D2ControlMsg * pControlMsg) {
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderExpansionHardcore();
     g_nLadderFilterMode = 0x13;
     gnLadderBoardSelectedRank = 0;
@@ -1964,7 +2707,7 @@ void __fastcall CHATDLG_StorePlayerName(uint32_t nPlayerId, uint32_t nDataLength
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderClassicHardcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e020 (string 0x14c6) in the FORMS_PredefinedFormStrc table.
 BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(D2ControlMsg * pControlMsg) {
-    ChatDlg::CHATDLG_DestroyAllForms();
+    CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderClassicHardcore();
     g_nLadderFilterMode = 0;
     gnLadderBoardSelectedRank = 0;

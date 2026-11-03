@@ -5,7 +5,6 @@
 
 #include "globals/globals.h"
 #include "D2Multi/ChatDlg.data.h"
-#include "D2Multi/Launcher.data.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Multi/ChatDlg.h"
 #include "D2Multi/ComCallback.h"
@@ -1457,31 +1456,6 @@ char gszProfileCharacterName[16] = {}; D2_GLOBAL_GUARD(gszProfileCharacterName, 
 D2IniConfigStrc * D2IniData_multiplayer = 0; D2_GLOBAL_GUARD(D2IniData_multiplayer, "D2IniData_multiplayer");
 uint16_t LastGameRequestId = 0; D2_GLOBAL_GUARD(LastGameRequestId, "LastGameRequestId");
 void * gpChatFormList = 0; D2_GLOBAL_GUARD(gpChatFormList, "gpChatFormList");
-uint32_t gbLobbyInitialized = 0; D2_GLOBAL_GUARD(gbLobbyInitialized, "gbLobbyInitialized");
-D2CharSelCompStrc * gpChatDlgCharSelCompositeUnit = 0; D2_GLOBAL_GUARD(gpChatDlgCharSelCompositeUnit, "gpChatDlgCharSelCompositeUnit");
-DC6 * gpDC6BnetBackground = 0; D2_GLOBAL_GUARD(gpDC6BnetBackground, "gpDC6BnetBackground");
-DC6 * gpDC6WaitingRoomBackground = 0; D2_GLOBAL_GUARD(gpDC6WaitingRoomBackground, "gpDC6WaitingRoomBackground");
-// also labelled: gpLauncherMainWindow
-D2ControlStrc * gpCtlChannelDlgBackground = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgBackground, "gpCtlChannelDlgBackground");
-// also labelled: gpControlTcpIpGameListScroll
-D2WinTextBox * gpCtlChannelDlgTitle = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgTitle, "gpCtlChannelDlgTitle");
-// also labelled: gpControlTcpIpGameListText
-D2WinTextBox * gpCtlChannelNameLabel = 0; D2_GLOBAL_GUARD(gpCtlChannelNameLabel, "gpCtlChannelNameLabel");
-// also labelled: gpControlTcpIpGameListCancel
-D2WinTextBox * gpCtlChannelListLabel = 0; D2_GLOBAL_GUARD(gpCtlChannelListLabel, "gpCtlChannelListLabel");
-// also labelled: gpControlChannelInput
-D2ControlStrc * gpCtlChannelOkButton = 0; D2_GLOBAL_GUARD(gpCtlChannelOkButton, "gpCtlChannelOkButton");
-// also labelled: gpLauncherLogoWindow
-D2ControlStrc * gpCtlChannelDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgCancelButton, "gpCtlChannelDlgCancelButton");
-// also labelled: gpChatDlgSendButtonControl
-D2WinEditBox * gpCtlChannelNameEditBox = 0; D2_GLOBAL_GUARD(gpCtlChannelNameEditBox, "gpCtlChannelNameEditBox");
-D2ControlStrc * ghWndGameNameEditBox = 0; D2_GLOBAL_GUARD(ghWndGameNameEditBox, "ghWndGameNameEditBox");
-// also labelled: gnChatDlgTabCompletionList
-D2WinEditBox * gpChatDlgInputEditBox = 0; D2_GLOBAL_GUARD(gpChatDlgInputEditBox, "gpChatDlgInputEditBox");
-D2WinTextBox * BattleNetNews = 0; D2_GLOBAL_GUARD(BattleNetNews, "BattleNetNews");
-D2WinTextBox * gpControlJoinGameError = 0; D2_GLOBAL_GUARD(gpControlJoinGameError, "gpControlJoinGameError");
-uint32_t gnOpenBNetMode = 0; D2_GLOBAL_GUARD(gnOpenBNetMode, "gnOpenBNetMode");
-ChatDlgCallback gpfnChatDlgCallback = (ChatDlgCallback)0; D2_GLOBAL_GUARD(gpfnChatDlgCallback, "gpfnChatDlgCallback");
 unsigned int gdwLastGameListRefreshTick = {}; D2_GLOBAL_GUARD(gdwLastGameListRefreshTick, "gdwLastGameListRefreshTick");
 D2WinTextBox * gpOOGGameListTextBox = 0; D2_GLOBAL_GUARD(gpOOGGameListTextBox, "gpOOGGameListTextBox");
 D2WinTextBox * gpOogGameListDetailsPanelControl = 0; D2_GLOBAL_GUARD(gpOogGameListDetailsPanelControl, "gpOogGameListDetailsPanelControl");

@@ -11,11 +11,16 @@
 // Forward declarations
 struct D2ControlMsg;
 struct D2ControlStrc;
+struct D2IniConfigStrc;
 struct D2WinTextBox;
 struct mcp0x03data;
 #ifndef RECON_FPTD_ChatDlgCallback
 #define RECON_FPTD_ChatDlgCallback
 typedef int (__stdcall *ChatDlgCallback)(uint32_t dwParam);
+#endif
+#ifndef RECON_FPTD_fnAppModeRun
+#define RECON_FPTD_fnAppModeRun
+typedef int32_t (__fastcall *fnAppModeRun)(struct D2IniConfigStrc * pD2IniConfig);
 #endif
 
 // Data types
@@ -31,9 +36,24 @@ struct D2LadderRowBufStrc {
     /* 0x200 */ char szName[256]; // inlined strcat cursor starts at szName-1 (last byte of wszCell)
 };
 
+struct D2UiLevelLineTextStrc {
+    /* 0x00 */ uint16_t wszLevelLine[100];
+    /* 0xC8 */ char szNameAndTitle[100];
+};
+
 namespace D2Multi::ChatDlg {
 
 // Function declarations
+// App mode multiplayer init: stash module handle and return pointer to fAPPMODE_multiplayer_ReturnAppMode_Caller.
+fnAppModeRun * __fastcall AppModeMultiplayerInit(HMODULE hModule);
+// Multiplayer app mode shutdown (no-op).
+void __stdcall AppModeMultiplayerShutdown();
+void __fastcall LAUNCHER_StringManipUtility(char * szText, char cSeparator, int32_t bFindLast);
+// Loads all predefined DC6 image resources for the Battle.net launcher UI. Constructs resource paths using sprintf into a reusable buffer, then loads each DC6 file via IMAGE_LoadDC6 and stores the pointers in global variables (PTR_0077bc*). Resources include popup backgrounds, buttons, tabs for each character class, scrollbars, and selection/squelch auras.
+void __stdcall IMAGE_LoadPredefinedImagesExEx();
+void __stdcall LAUNCHER_FreeLauncherImages();
+void __stdcall LAUNCHER_RestoreFocusToControl();
+BOOL __stdcall LAUNCHER_GenerateJoinGameRequestId(uint32_t pCallbackArg);
 // OnPress of the chat-lobby user-list page-back button gpCtlLobbyUserListPrevPageButton: COMCALLBACK_ScrollChannelUserList(-10); returns 1.
 // Provenance: asm 0043d9e0 (RET 4); fpOnPressCallback of form record 0070d060 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fce8.
 BOOL __stdcall CHATDLG_OnPressUserListPrevPage(struct D2ControlMsg * pControlMsg);
@@ -46,6 +66,16 @@ BOOL __stdcall CHATDLG_OnPressUserListPrevLine(struct D2ControlMsg * pControlMsg
 // OnPress of the chat-lobby user-list line-forward button gpCtlLobbyUserListNextLineButton: COMCALLBACK_ScrollChannelUserList(1); returns 1.
 // Provenance: asm 0043da30 (RET 4); fpOnPressCallback of form record 0070d0f0 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fd15.
 BOOL __stdcall CHATDLG_OnPressUserListNextLine(struct D2ControlMsg * pControlMsg);
+uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szValueName, LPBYTE pbData, DWORD dwDataSize, LPDWORD pdwDataSize);
+// Sets the active state of the game-list cache control pGameListCache via D2WINMAIN_SetControlActive. Returns TRUE (MOV EAX,1 at 0043dadd); the caller ignores it.
+// Provenance: asm 0043dad0; one caller, UIMENU_WaitInLine.
+BOOL __fastcall LAUNCHER_SetGameListCacheActive(BOOL bActive);
+BOOL __stdcall CHATDLG_IsLobbyInitialized();
+void __stdcall LAUNCHER_DestroyLauncherForms();
+int __stdcall isServerDown();
+void LAUNCHER_AllocCharSelectComponent(int32_t pCharInfo);
+void __stdcall UIMENU_CantTestItBeacuseItCrash();
+void __stdcall CHATDLG_DestroyLobbyChatForms();
 // @sourcefile .\Src\ChatDlg.cpp
 void CHATDLG_FreeChatMsgNode(void * * pChatNode);
 // @sourcefile .\Src\ChatDlg.cpp
@@ -184,6 +214,6 @@ void __fastcall CHATDLG_StorePlayerName(uint32_t nPlayerId, uint32_t nDataLength
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderClassicHardcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e020 (string 0x14c6) in the FORMS_PredefinedFormStrc table.
 BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(struct D2ControlMsg * pControlMsg);
-// 6 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Multi::ChatDlg

@@ -14,7 +14,6 @@
 #include "D2Launch/CharSel.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Multi/ChatDlg.h"
-#include "D2Multi/Launcher.h"
 #include "D2Multi/OOGUtilities.h"
 #include "D2Win/DC6.h"
 #include "D2Win/Src/D2Comp.h"
@@ -32,7 +31,6 @@
 #include "D2Game/D2QuestGUIDStrc.h"
 #include "D2Multi/ChatDlg.data.h"
 #include "D2Multi/ComCallback.data.h"
-#include "D2Multi/Launcher.data.h"
 #include "D2Multi/OOG.h"
 #include "D2Multi/OOGUtilities.data.h"
 #include "D2Win/D2WinEditBox.h"
@@ -1077,7 +1075,7 @@ BOOL __stdcall COMCALLBACK_ValidateGameJoinability() {
 
 BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus2(D2ControlMsg * pControlMsg) {
     OOGUtilities::UIMENU_DialogWindowChatCommands();
-    Launcher::LAUNCHER_RestoreFocusToControl();
+    ChatDlg::LAUNCHER_RestoreFocusToControl();
     return 1;
 }
 
@@ -1447,7 +1445,7 @@ void __stdcall COMCALLBACK_ClearChannelListView() {
       gnCurrentChannelContextId = -1;
     }
 
-    BOOL nLauncherFlag = Launcher::CHATDLG_IsLobbyInitialized();
+    BOOL nLauncherFlag = ChatDlg::CHATDLG_IsLobbyInitialized();
     if (nLauncherFlag) {
       return;
     }

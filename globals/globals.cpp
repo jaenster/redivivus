@@ -4,7 +4,7 @@
  */
 
 #include "globals/globals.h"
-#include "D2Multi/Launcher.data.h"
+#include "D2Multi/ChatDlg.data.h"
 #include "Fog/Source/SFile.data.h"
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/Renderer/Glide.h"
@@ -10898,7 +10898,6 @@ uint32_t DEFAULT_SECURITY_COOKIE = 0xbb40e64e; D2_GLOBAL_GUARD(DEFAULT_SECURITY_
 unsigned int gaCRT_FPremData_3 = 0x6a9a24; D2_GLOBAL_GUARD(gaCRT_FPremData_3, "gaCRT_FPremData_3");
 int TokenHashMapBucketSize = 0x10; D2_GLOBAL_GUARD(TokenHashMapBucketSize, "TokenHashMapBucketSize");
 uint32_t gnServiceRunning = 0x0; D2_GLOBAL_GUARD(gnServiceRunning, "gnServiceRunning");
-D2WinTextBox * gpCtlChannelList = 0; D2_GLOBAL_GUARD(gpCtlChannelList, "gpCtlChannelList");
 uint32_t gnEngineMode = 0; D2_GLOBAL_GUARD(gnEngineMode, "gnEngineMode");
 uint32_t gdwSpellSelThrottleTick = 0; D2_GLOBAL_GUARD(gdwSpellSelThrottleTick, "gdwSpellSelThrottleTick");
 int gnTileInnerClipZMin = 0; D2_GLOBAL_GUARD(gnTileInnerClipZMin, "gnTileInnerClipZMin");

@@ -5,7 +5,6 @@
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Multi/ChatDlg.h"
-#include "D2Multi/Launcher.h"
 #include "D2Multi/OOGUtilities.h"
 #include "D2Win/DC6.h"
 #include "D2Win/Src/D2WinButton.h"
@@ -74,7 +73,7 @@ BOOL __stdcall CHATDLG_DestroyFormsAndOpenCreateGameDialog(D2ControlMsg * pContr
 
 BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus(D2ControlMsg * pControlMsg) {
     OOGUtilities::UIMENU_DialogWindowChatCommands();
-    Launcher::LAUNCHER_RestoreFocusToControl();
+    ChatDlg::LAUNCHER_RestoreFocusToControl();
     return 1;
 }
 

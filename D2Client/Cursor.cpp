@@ -115,7 +115,7 @@ static D2CursorDataStrc CursorData[7] = {
     }
 }; D2_STATIC_GUARD(CursorData, "CursorData");
 static int gnCursorDataCount = 0x7; D2_STATIC_GUARD(gnCursorDataCount, "gnCursorDataCount");
-static int MouseY = 0; D2_STATIC_GUARD(MouseY, "MouseY");
+int MouseY = 0; D2_GLOBAL_GUARD(MouseY, "MouseY");
 int MouseX = 0; D2_GLOBAL_GUARD(MouseX, "MouseX");
 static uint32_t gnCursorType = 0; D2_STATIC_GUARD(gnCursorType, "gnCursorType");
 static D2UnitStrc * pCursorItem = 0; D2_STATIC_GUARD(pCursorItem, "pCursorItem");

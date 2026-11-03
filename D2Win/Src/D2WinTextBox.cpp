@@ -21,6 +21,7 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/EscMenu.h"
+#include "D2Multi/ChatDlg.data.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/Src/D2WinList.h"

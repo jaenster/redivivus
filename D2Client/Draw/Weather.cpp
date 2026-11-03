@@ -405,20 +405,15 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
 }
 
 void __stdcall WEATHER_FreeDC6Graphics() {
-    // The original walks &DC6_UncompOverlays_Rain up to &gnWeatherOffsetXModulo, which is
-    // exactly four pointers (0x007a89b0..0x007a89c0). That adjacency is an artefact of the
-    // original image; the linker does not reproduce it, and left absolute the loop frees
-    // and nulls an unbounded stretch of .data. Spelled as a count it is the same four
-    // slots on any layout. Ghidra has the array as DC6 *[4] now, but the BOUND is still a
-    // folded absolute address with no operand to attach a symbol to, so it stays here.
-    for (int nRain = 0; nRain < 4; nRain++) {
-      DC6** ppRainCur = &DC6_UncompOverlays_Rain[nRain];
-      if (*ppRainCur) {
-        Core::Archive::DC6_FreeAndDelete(*ppRainCur);
-        *ppRainCur = 0;
+    DC6** ppBubbleDC6Cur = DC6_UncompOverlays_Rain;
+    do {
+      if (*ppBubbleDC6Cur) {
+        Core::Archive::DC6_FreeAndDelete(*ppBubbleDC6Cur);
+        *ppBubbleDC6Cur = 0;
       }
-    }
-    DC6** ppBubbleDC6Cur;
+
+      ppBubbleDC6Cur++;
+    } while ((int)ppBubbleDC6Cur < (intptr_t)&DC6_UncompOverlays_Rain + 16);
 
     ppBubbleDC6Cur = DC6_UncompOverlays_bubble;
     do {

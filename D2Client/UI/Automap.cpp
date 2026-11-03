@@ -2526,14 +2526,7 @@ void __stdcall AUTOMAP_Init() {
       pPriorityValue = pCellEntry + 1;
       pCellEntry += 2;
       gnAutoMapCellPriority[nCellIndex] = *pPriorityValue;
-    } while (pCellEntry < gnAutoMapInitialZoomLevel + 98);
-    // The original's bound is `pCellEntry < 0x7113e0`, and 0x7113e0 is where nAutoMapCenters
-    // happens to sit immediately after this 49-pair table - so the compiler spelled "the end of
-    // the table" as the NEXT GLOBAL'S ADDRESS. After relinking the two are nowhere near each
-    // other, the loop ran away, and gnAutoMapCellPriority[garbage] faulted in AUTOMAP_Init the
-    // moment a character entered the game.
-    // Retire-When: the address-literal pass rewrites a loop bound that is another symbol's
-    // address into that symbol's own extent.
+    } while ((int)pCellEntry < (intptr_t)&gnAutoMapInitialZoomLevel + 392);
 
     nRegValue = 0;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "AutoMapFade", 0, &nRegValue);
