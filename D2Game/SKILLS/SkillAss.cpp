@@ -3245,7 +3245,7 @@ uint32_t __fastcall SKILLAMZ_GetStrafeArrowCount(D2SkillCallbackContextStrc * pC
       pDamageDst = (D2DamageStrc*)&pDamageDst->wResultFlags;
     }
 
-    SkillsServer::SKILLS_CalcMissileToHit(pContext->pGame, pContext->pUnit, pUnit, (uint32_t)pEventData->wResultFlags, pEventData->nToHit, (uintptr_t)&sDamage, 1);
+    SkillsServer::SKILLS_CalcMissileToHit(pContext->pGame, pContext->pUnit, pUnit, (uint32_t)pEventData->wResultFlags, pEventData->nToHit, &sDamage, 1);
     if ((uint8_t)sDamage.wResultFlags & 1) {
       sDamage.dwHitFlags |= pEventData->dwHitFlags;
       if (pEventData->nSrcDam) {

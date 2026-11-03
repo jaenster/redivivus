@@ -5,6 +5,7 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
+#include "D2Client/GAME/SCmd.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT.h"
 #include "D2Client/UNIT/CUnitEvent.h"
@@ -676,6 +677,7 @@ void __fastcall SendRemoveObject(D2UnitStrc * pItem, D2ClientStrc * pClient) {
 
 // Sends a unit's hover-text (name tag) to a specific client. If the unit has a D2HoverTextStrc, checks whether the viewing player has hostile/party relationship flags; if allowed, formats a 0x26 chat packet with language code and copies the hover message string. If the unit has no hover text, falls back to sending a 0x76 unit-type/GUID packet to clear the hover display.
 void __fastcall PLAYER_SendHoverTextToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
+    uint8_t _byUnitTypeFallback;
     uint32_t nLangCodeOrFlags;
     uint32_t dwPlayerListFlags;
     int32_t nGUIDFallback;
@@ -714,13 +716,13 @@ void __fastcall PLAYER_SendHoverTextToClient(D2UnitStrc * pUnit, D2ClientStrc * 
       }
 
       nGUIDFallback = pUnit->nUnitGUID;
-      byUnitTypeFallback = (uint8_t)pUnit->eUnitType;
+      _byUnitTypeFallback = pUnit->eUnitType;
     } else {
       nGUIDFallback = -1;
-      byUnitTypeFallback = 6;
+      _byUnitTypeFallback = UNIT_COUNT;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0x76, byUnitTypeFallback, nGUIDFallback);
+    GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0x76, _byUnitTypeFallback, nGUIDFallback);
 }
 
 void __fastcall UNITMSG_SendSoundPacketToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {

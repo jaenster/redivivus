@@ -15,6 +15,7 @@
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Msg.h"
 #include "D2Client/GAME/Roster.h"
+#include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Select.h"
 #include "D2Client/GAME/Sound.h"
 #include "D2Client/GAME/View.h"
@@ -1085,7 +1086,7 @@ void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
             break;
           }
 
-          bIsLineBreak = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition((int32_t)(pwszText + nOffset), nLineLen + 1);
+          bIsLineBreak = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition(pwszText + nOffset, nLineLen + 1);
           if (bIsLineBreak) {
             break;
           }

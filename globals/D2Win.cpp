@@ -28,7 +28,7 @@ D2WinWndHandlerStrc gaUIWindowHandlers[33] = {
     {
         /* .nType = */ 0x0,
         /* .nMessage = */ 0x2a3,
-        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::D2WIN_HandleMouseLeave
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_HandleMouseLeave
     },
     {
         /* .nType = */ 0x0,
@@ -153,22 +153,22 @@ D2WinWndHandlerStrc gaUIWindowHandlers[33] = {
     {
         /* .nType = */ 0x3,
         /* .nMessage = */ 0x4d,
-        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::D2WIN_ToggleMusicOptions
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_ToggleMusicOptions
     },
     {
         /* .nType = */ 0x0,
         /* .nMessage = */ 0x1c,
-        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::D2WIN_HandleActivation
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_HandleActivation
     },
     {
         /* .nType = */ 0x0,
         /* .nMessage = */ 0x112,
-        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::D2WIN_HandleSystemCommand
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_HandleSystemCommand
     },
     {
         /* .nType = */ 0x2,
         /* .nMessage = */ 0x2c,
-        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::D2WIN_TakeScreenshotMsgHandler
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_TakeScreenshotMsgHandler
     },
     {
         /* .nType = */ 0x2,

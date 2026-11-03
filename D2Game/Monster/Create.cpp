@@ -58,6 +58,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Common/Unit.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "Fog/Src/Safesock.h"
 
@@ -636,7 +637,7 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
       pFloorTile = pFloorTiles;
       if (pFloorTiles[nSearchTileIdx].pTileLibraryEntry) {
         nSavedSearchIdx = nSearchTileIdx;
-        nTileWalkFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((int32_t)pFloorTiles[nSearchTileIdx].pTileLibraryEntry);
+        nTileWalkFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount(pFloorTiles[nSearchTileIdx].pTileLibraryEntry);
         if (nTileWalkFlags & 2) {
           nY = (pFloorTile[nSearchTileIdx].nPosY + sRoomCoords.sTileRect.top) * 5 + 3;
           nX = (pFloorTile[nSearchTileIdx].nPosX + sRoomCoords.sTileRect.left) * 5 + 3;

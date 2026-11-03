@@ -11,6 +11,7 @@
 // Forward declarations
 struct CMDPARAMS;
 struct D2EscMenuItemStrc;
+struct D2GSPacketSrv0x50;
 struct D2MissilesTxt;
 struct D2RC4StateStrc;
 struct D2SeedStrc;
@@ -31,13 +32,6 @@ struct _CONTEXT;
 #define RECON_FPTD_fnBinkFrameCallback
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
-
-// Data types
-struct __attribute__((packed)) D2GSPacketSrv0x50 {
-    /* 0x00 */ uint8_t nPacketId; // 0x50
-    /* 0x01 */ uint16_t nMessageType; // 1/2/4/0xd/0x17 or quest id (Q36)
-    /* 0x03 */ uint16_t aPayload[6]; // word stores at +3,+5,+7; stone-order word loop from +3
-};
 
 namespace D2Client {
 

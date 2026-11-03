@@ -95,6 +95,8 @@
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/SCmd.h"
 #include "D2Game/GAME/Server.h"
+#include "D2Game/PLAYER/PlayerMsg.h"
+#include "D2Game/Quests/QUESTS.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"

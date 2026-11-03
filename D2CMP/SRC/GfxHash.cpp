@@ -168,7 +168,7 @@ uint32_t __fastcall GFXHASH_CalcDirectionIndex(D2GfxDataStrc * pGfxData, uint32_
 
 static uint32_t GFXHASH_CalcHashKey(D2GfxDataStrc * pGfxData, uint32_t * pnDirectionDivisor, uint32_t * pnDirectionIndex, D2CelFileCacheEntryStrc * pCelEntry) {
     uint32_t nHashAccum;
-    uint32_t nDirIdx = GFXHASH_CalcDirectionIndex((int32_t)pGfxData, pnDirectionDivisor, pCelEntry);
+    uint32_t nDirIdx = GFXHASH_CalcDirectionIndex(pGfxData, pnDirectionDivisor, pCelEntry);
     *pnDirectionIndex = nDirIdx;
     eD2UnitType eUnitType = pGfxData->eUnitType;
     if (eUnitType == UNIT_COUNT && pGfxData->dwFlags & 2 || eUnitType == UNIT_MISSILE || eUnitType == UNIT_ITEM) {

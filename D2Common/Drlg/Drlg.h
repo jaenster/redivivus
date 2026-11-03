@@ -31,6 +31,7 @@ struct D2PathTypeArg;
 struct D2PoolManagerStrc;
 struct D2RoomExStrc;
 struct D2RoomStrc;
+struct D2TileLibraryEntryStrc;
 struct D2UnitStrc;
 struct D2UnkOutdoorStrc;
 struct SGAMEDATA;

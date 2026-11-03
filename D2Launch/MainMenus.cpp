@@ -3039,7 +3039,7 @@ BOOL __stdcall UIMENU_ShowTermsOfService() {
       goto add_line;
       find_break_point:
       while (true) {
-        bConnected = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition((int32_t)pFileBufferSrc, nLineWidth);
+        bConnected = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition(pFileBufferSrc, nLineWidth);
         if (bConnected) {
           break;
         }
@@ -3532,7 +3532,7 @@ BOOL __stdcall StorePreferedRealmAgain(D2ControlMsg * pControlMsg) {
     int32_t nSelectedLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetSelectedLine(gpMainMenuGatewayListTextBox);
     if (nSelectedLine != -1) {
       char* pszRealmName;
-      Bnclient::BNGatewayAccess::SetCurGateway((int32_t)pGatewayAccess, nSelectedLine + 1);
+      Bnclient::BNGatewayAccess::SetCurGateway(pGatewayAccess, nSelectedLine + 1);
       pszRealmName = Bnclient::BNGatewayAccess::Realm(pGatewayAccess, nSelectedLine + 1);
       Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, pszRealmName);
     }

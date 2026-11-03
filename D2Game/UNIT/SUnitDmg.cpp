@@ -828,7 +828,7 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
         }
       }
 
-      DAMAGE_ApplyUndeadBonusDamage((int32_t)pDmgStrc, pUnit, pTarget);
+      DAMAGE_ApplyUndeadBonusDamage(pDmgStrc, pUnit, pTarget);
       DAMAGE_ApplyMonsterTypeBonusDamage(pUnit, pDmgStrc, pTarget);
     }
     if (!(pDmgStrc->dwHitFlags & 1)) {

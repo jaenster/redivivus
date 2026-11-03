@@ -1993,7 +1993,7 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * pControl) {
       } while (nEntryIdx < nGameListDifficultyFilter);
     }
 
-    bHasPeerName = OOGUTIL_HandleGameListEntry((char*)aPassword, aGameName, (uintptr_t)&sGameEntry);
+    bHasPeerName = OOGUTIL_HandleGameListEntry((char*)aPassword, aGameName, &sGameEntry);
     if (bHasPeerName) {
       nEntryIdx = strcmp(sGameEntry.szGameName, (char*)aPassword);
       if (!nEntryIdx) {

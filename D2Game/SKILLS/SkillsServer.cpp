@@ -2629,20 +2629,20 @@ uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, D2UnitStrc * p
     return pDamage->wResultFlags;
 }
 
-uint16_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pUnit, uint32_t dwResultFlags, int32_t nToHitBonusExtra, uint32_t pDamage, int32_t nExtraRange) {
+uint16_t __fastcall SKILLS_CalcMissileToHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pUnit, uint32_t dwResultFlags, int32_t nToHitBonusExtra, D2DamageStrc * pDamage, int32_t nExtraRange) {
     uint16_t wResultFlags = (uint16_t)dwResultFlags;
     if (!(dwResultFlags & 1)) {
       uint16_t uVar1;
       uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit2, pUnit, nToHitBonusExtra, nExtraRange);
-      *(uint16_t*)(pDamage + 4) = uVar1;
+      pDamage->wResultFlags = uVar1;
       if (uVar1 & 1) {
-        *(uint16_t*)(pDamage + 4) = uVar1 | wResultFlags;
+        pDamage->wResultFlags = uVar1 | wResultFlags;
       }
 
-      return *(uint16_t*)(pDamage + 4);
+      return pDamage->wResultFlags;
     }
 
-    *(uint16_t*)(pDamage + 4) = wResultFlags;
+    pDamage->wResultFlags = wResultFlags;
     return wResultFlags;
 }
 

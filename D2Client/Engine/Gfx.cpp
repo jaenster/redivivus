@@ -397,28 +397,28 @@ static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, 
 
 // @sourcefile .\ENGINE\Gfx.cpp
 void __stdcall GFX_RemoveOverlayFromUnit(D2UnitStrc * pUnit, int * pOverlay) {
-    int* pMemoryToFree;
+    D2GfxUnknown_0xa8* pMemoryToFree;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1bf);
       exit(-1);
     }
 
-    int* pPrev = 0;
-    int* pCur = (int*)pGfxInfo->pOverlayList;
+    D2GfxUnknown_0xa8* pPrev = 0;
+    D2GfxUnknown_0xa8* pCur = (D2GfxUnknown_0xa8*)pGfxInfo->pOverlayList;
     if (!pGfxInfo->pOverlayList) {
       return;
     }
 
     while (true) {
       pMemoryToFree = pCur;
-      if (pMemoryToFree == pOverlay) {
+      if (pMemoryToFree == (D2GfxUnknown_0xa8*)pOverlay) {
         break;
       }
 
-      pCur = (int*)pMemoryToFree[0x29];
+      pCur = pMemoryToFree->pNext;
       pPrev = pMemoryToFree;
-      if (!(int*)pMemoryToFree[0x29]) {
+      if (!pMemoryToFree->pNext) {
         return;
       }
     }
@@ -426,17 +426,17 @@ void __stdcall GFX_RemoveOverlayFromUnit(D2UnitStrc * pUnit, int * pOverlay) {
     if (!pMemoryToFree) {
       return;
     }
-    if ((D2LightMapStrc*)pMemoryToFree[0x10]) {
-      Draw::LightMap::FreeLightMap((D2LightMapStrc*)pMemoryToFree[0x10]);
-      pMemoryToFree[0x10] = 0;
+    if (pMemoryToFree->pLightMap) {
+      Draw::LightMap::FreeLightMap(pMemoryToFree->pLightMap);
+      pMemoryToFree->pLightMap = 0;
     }
     if (pPrev) {
-      pPrev[0x29] = pMemoryToFree[0x29];
+      pPrev->pNext = pMemoryToFree->pNext;
     } else {
-      pGfxInfo->pOverlayList = (void*)pMemoryToFree[0x29];
+      pGfxInfo->pOverlayList = pMemoryToFree->pNext;
     }
-    if (*pMemoryToFree == 8) {
-      GFX_RemoveStateOverlayAndReprioritize(pUnit, pGfxInfo, (int32_t)pMemoryToFree);
+    if (pMemoryToFree->nOverlayType == 8) {
+      GFX_RemoveStateOverlayAndReprioritize(pUnit, pGfxInfo, pMemoryToFree);
     }
 
     D2_FREE_AT(pMemoryToFree, ".\\ENGINE\\Gfx.cpp", 0x1e1);
@@ -2203,7 +2203,7 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
       memset(pOverlay, 0, 0xa8);
       pOverlay->nOverlayType = nOverlayType;
       pOverlay->neOverlayId = eOverlay;
-      nRandomValue = GfxUtil::GFXUTIL_GetOverlayFrameDelay(pUnit, (int32_t)pOverlay);
+      nRandomValue = GfxUtil::GFXUTIL_GetOverlayFrameDelay(pUnit, pOverlay);
       pOverlay->nFrameDelay = nRandomValue;
       switch (nOverlayType) {
         case 2:
@@ -2589,15 +2589,15 @@ void __fastcall ANIM_ResetMonsterFrameCache(D2UnitStrc * pUnit) {
 }
 
 void __fastcall GFX_UpdateOverlayAnimations(D2UnitStrc * pUnit) {
-    int pEffectiveAnimMode;
+    uint32_t pEffectiveAnimMode;
     eD2States eUnitState;
     eD2States eActiveState;
     DWORD nTickCount2;
     bool bKeepOverlay;
     eOverlayId eOverlayA;
     eOverlayId eOverlayB;
-    int nOverlayAnimRate;
-    int* pOverlayCur;
+    uint32_t nOverlayAnimRate;
+    D2GfxUnknown_0xa8* pOverlayCur;
     D2GfxInfoStrc* pGfxInfo;
     pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
@@ -2608,84 +2608,84 @@ void __fastcall GFX_UpdateOverlayAnimations(D2UnitStrc * pUnit) {
     DWORD nTickCount;
     nTickCount = GetTickCount();
     while (true) {
-      pOverlayCur = (int*)pGfxInfo->pOverlayList;
+      pOverlayCur = (D2GfxUnknown_0xa8*)pGfxInfo->pOverlayList;
       while (true) {
         if (!pOverlayCur) {
           return;
         }
-        if (pOverlayCur[0xb] != nTickCount) {
+        if (*(DWORD*)&pOverlayCur->field_0x2c != nTickCount) {
           break;
         }
 
-        pOverlayCur = (int*)pOverlayCur[0x29];
+        pOverlayCur = pOverlayCur->pNext;
       }
 
-      pOverlayCur[0xb] = nTickCount;
+      *(DWORD*)&pOverlayCur->field_0x2c = nTickCount;
       if (!false) {
-        switch (*pOverlayCur) {
+        switch (pOverlayCur->nOverlayType) {
           case 0:
             pEffectiveAnimMode = Source::ClientEngine::CLIENT_GetEffectiveAnimMode(pUnit);
-          bKeepOverlay = pEffectiveAnimMode == pOverlayCur[2];
+          bKeepOverlay = pEffectiveAnimMode == pOverlayCur->nValue0;
           goto remove_unless_kept;
           case 1:
-            bKeepOverlay = pOverlayCur[2] != 0;
-          pOverlayCur[2]--;
+            bKeepOverlay = pOverlayCur->nValue0 != 0;
+          pOverlayCur->nValue0--;
           remove_unless_kept:
           if (bKeepOverlay) {
             break;
           }
-          GFX_RemoveOverlayFromUnit(pUnit, pOverlayCur);
+          GFX_RemoveOverlayFromUnit(pUnit, &pOverlayCur->nOverlayType);
           continue;
           case 2:
-            if (pOverlayCur[2]) {
+            if (pOverlayCur->nValue0) {
               break;
             }
-          GFX_RemoveOverlayFromUnit(pUnit, pOverlayCur);
+          GFX_RemoveOverlayFromUnit(pUnit, &pOverlayCur->nOverlayType);
           continue;
           case 6:
-            if (pOverlayCur[2]) {
+            if (pOverlayCur->nValue0) {
               break;
             }
           nTickCount2 = GetTickCount();
-          if (nTickCount2 - pOverlayCur[0xc] < (uint32_t)pOverlayCur[10]) {
+          if (nTickCount2 - *(int*)&pOverlayCur->field_0x30 < (uint32_t)pOverlayCur->nLoopWaitTime) {
             continue;
           }
 
-          pOverlayCur[2] = 1;
+          pOverlayCur->nValue0 = 1;
           break;
           case 8:
-            eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, pOverlayCur[0xe]);
+            eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, pOverlayCur->nStatePriorityValue);
           if (eUnitState == STATE_none) {
-            GFX_RemoveOverlayFromUnit(pUnit, pOverlayCur);
+            GFX_RemoveOverlayFromUnit(pUnit, &pOverlayCur->nOverlayType);
             continue;
           }
-          if (pOverlayCur[0xf]) {
-            if (pOverlayCur[2] >= 0x32) {
-              GFX_RemoveStateOverlayAndReprioritize(pUnit, pGfxInfo, (int32_t)pOverlayCur);
+          if (*(int*)&pOverlayCur->field_0x3c) {
+            if ((int)pOverlayCur->nValue0 >= 0x32) {
+              GFX_RemoveStateOverlayAndReprioritize(pUnit, pGfxInfo, pOverlayCur);
             } else {
-              pOverlayCur[2]++;
+              pOverlayCur->nValue0++;
             }
           }
         }
       }
 
-      pOverlayCur[6] += pOverlayCur[5];
-      pEffectiveAnimMode = pOverlayCur[6];
-      nOverlayAnimRate = pOverlayCur[7];
-      if (pEffectiveAnimMode >= nOverlayAnimRate) {
-        switch (*pOverlayCur) {
+      pOverlayCur->nRandomOffset += pOverlayCur->nAnimRate;
+      pEffectiveAnimMode = pOverlayCur->nRandomOffset;
+      nOverlayAnimRate = pOverlayCur->nFrameDelay;
+      if ((int)pEffectiveAnimMode >= (int)nOverlayAnimRate) {
+        switch (pOverlayCur->nOverlayType) {
           case 5:
-            pOverlayCur[5] = 0;
-          pOverlayCur[6] = nOverlayAnimRate - 1;
-          pOverlayCur[2] = 1;
+            pOverlayCur->nAnimRate = 0;
+          pOverlayCur->nRandomOffset = nOverlayAnimRate - 1;
+          pOverlayCur->nValue0 = 1;
           break;
           case 2:
-            pOverlayCur[2] = 0;
+            pOverlayCur->nValue0 = 0;
           break;
           case 4:
-            eOverlayA = pOverlayCur[3];
-          eOverlayB = pOverlayCur[2];
-          GFX_RemoveOverlayFromUnit(pUnit, pOverlayCur);
+            eOverlayA = pOverlayCur->nValue1;
+          eOverlayB = pOverlayCur->nValue0;
+          GFX_RemoveOverlayFromUnit(pUnit, &pOverlayCur->nOverlayType);
           if (eOverlayB != ~OVERLAY_null) {
             GFX_AddOverlayToUnit(pUnit, eOverlayB, 3, 0, 0, 0, 0, 0);
           }
@@ -2695,10 +2695,10 @@ void __fastcall GFX_UpdateOverlayAnimations(D2UnitStrc * pUnit) {
 
           break;
           case 9:
-            eOverlayA = pOverlayCur[2];
-          eOverlayB = pOverlayCur[3];
-          eUnitState = pOverlayCur[4];
-          GFX_RemoveOverlayFromUnit(pUnit, pOverlayCur);
+            eOverlayA = pOverlayCur->nValue0;
+          eOverlayB = pOverlayCur->nValue1;
+          eUnitState = pOverlayCur->nValue2;
+          GFX_RemoveOverlayFromUnit(pUnit, &pOverlayCur->nOverlayType);
           eActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eUnitState);
           if (eActiveState != STATE_none) {
             if (eOverlayA != ~OVERLAY_null) {
@@ -2715,16 +2715,16 @@ void __fastcall GFX_UpdateOverlayAnimations(D2UnitStrc * pUnit) {
           case 3:
 
           case 8:
-            pOverlayCur[6] = pEffectiveAnimMode - nOverlayAnimRate;
+            pOverlayCur->nRandomOffset = pEffectiveAnimMode - nOverlayAnimRate;
           break;
           case 6:
-            pOverlayCur[6] = pEffectiveAnimMode - nOverlayAnimRate;
-          pOverlayCur[2] = 0;
+            pOverlayCur->nRandomOffset = pEffectiveAnimMode - nOverlayAnimRate;
+          pOverlayCur->nValue0 = 0;
           nTickCount2 = GetTickCount();
-          pOverlayCur[0xc] = nTickCount2;
+          *(DWORD*)&pOverlayCur->field_0x30 = nTickCount2;
           break;
           case 7:
-            GFX_RemoveOverlayFromUnit(pUnit, pOverlayCur);
+            GFX_RemoveOverlayFromUnit(pUnit, &pOverlayCur->nOverlayType);
           GFX_AddOverlayToUnit(pUnit, OVERLAY_bonearmor_cast, 4, 0, 0x8d, 0x8e, 0, 0);
           break;
         }

@@ -1230,6 +1230,7 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2RoomStrc",
         "D2UnitStrc *",
         "SGAMEDATA",
         "uint32_t"

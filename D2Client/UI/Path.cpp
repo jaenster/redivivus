@@ -351,7 +351,7 @@ void __stdcall DRAW_DrawRoomWallTiles(D2RoomStrc * pRoom) {
           nScreenY = (*pTile + roomCoords.sTileRect.top) * 5 + 3;
           D2Common::Drlg::Transform::CoordsMapToScreen(&nScreenX, &nScreenY);
           if (pTile[4] != 0xf && (pTile[2] & 0x1c000U) == 0x4000) {
-            nTileFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((int32_t)pTile[3]);
+            nTileFlags = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((D2TileLibraryEntryStrc*)pTile[3]);
             if (nTileFlags & 4) {
               rect.right = nScreenX + 0x20 - MouseXOffset;
               rect.left = rect.right - 0x10;

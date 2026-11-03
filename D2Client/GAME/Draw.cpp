@@ -406,7 +406,7 @@ void __thiscall DrawFloorTile(D2DrawFloorStrc * pFloor, D2DrlgTileDataStrc * pTi
       }
     }
 
-    DRAW_UpdateTileVisibilityBounds((int32_t)pFloor, pTileData, nWorldX, nWorldY);
+    DRAW_UpdateTileVisibilityBounds(pFloor, pTileData, nWorldX, nWorldY);
 }
 
 void __thiscall DRAW_DrawEdgeFloorTile(D2DrawFloorStrc * pDrawFloor, int32_t nWorldX, int32_t nParam) {

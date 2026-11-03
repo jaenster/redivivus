@@ -10,7 +10,9 @@
 
 // Forward declarations
 struct D2DrlgRoomCoordsStrc;
+struct D2LevelsTxt;
 struct D2ObjectInitFnArg;
+struct D2ObjectRngStrc;
 struct D2RoomCoordListStrc;
 struct D2RoomStrc;
 struct D2TimerArgStrc;

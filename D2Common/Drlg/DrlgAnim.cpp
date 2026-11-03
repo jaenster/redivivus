@@ -2,6 +2,8 @@
 
 #include "D2Common/Drlg/DrlgAnim.h"
 #include "D2CMP/DUNGEON/Dungeon.h"
+#include "D2CMP/SRC/LRUCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2Common/D2RoomCoordListStrc.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2RoomStrc.h"
@@ -46,7 +48,7 @@ void __fastcall DRLGROOMTILE_CountAnimTilesFromGrid(D2RoomExStrc * pRoomEx, D2Dr
     uint32_t nTileLibFlags;
     uint8_t nMainIndex;
     uint32_t nSubIndex;
-    int32_t aTileResults[40];
+    D2TileLibraryEntryStrc* aTileResults[40];
     int nWidth = (uint32_t)!nKillEdgeX + pRoomEx->sCoords.WorldSize.x;
     bool bFullHeight = !nKillEdgeY;
     nKillEdgeY = 0;
@@ -151,7 +153,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
     D2DrlgTileDataStrc* pTileCreated;
     uint8_t nOrientation;
     int* pTileEntryIter;
-    int aTileResults[40];
+    D2TileLibraryEntryStrc* aTileResults[40];
     int i;
     uint32_t nFrameIter;
     int nWorldPosY;
@@ -174,7 +176,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
           pRoomExIter = pRoomExCtx;
           if ((D2TileLibraryEntryStrc*)*pTileEntryIter) {
             pTileEntryPtr = pTileEntryIter;
-            nMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((int32_t)*pTileEntryIter);
+            nMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount((D2TileLibraryEntryStrc*)*pTileEntryIter);
             if (nMatchCount & 0x100) {
               nCellGridFlags = DrlgGrid::GetGridFlags(pGridsCtx + (((uint32_t)pTileEntryIter[-1] >> 0xe & 7) - 1), pTileEntryIter[-4], pTileEntryIter[-3]);
               if (nCellGridFlags) {
@@ -222,7 +224,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
                 exit(-1);
               }
 
-              *pTileEntryPtr = aTileResults[nIndex];
+              *pTileEntryPtr = (int)aTileResults[nIndex];
               *pAnimTileGrid->ppTileData = (D2DrlgTileDataStrc*)(pTileEntryPtr - 6);
               nFrameIter = 1;
               nWorldPosX = pRoomExCtx->sCoords.WorldPosition.x + pTileEntryPtr[-4];
@@ -252,12 +254,12 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
                   nLibEntry = pTileEntryPtr[1];
                   if (nLibEntry) {
                     if (nLibEntry != 0xd) {
-                      pTileCreated = RoomTile::DRLGROOMTILE_CreateWallTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, (D2TileLibraryEntryStrc*)aTileResults[nIndex], nLibEntry);
+                      pTileCreated = RoomTile::DRLGROOMTILE_CreateWallTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex], nLibEntry);
                     } else {
-                      pTileCreated = RoomTile::DRLGROOMTILE_CreateShadowTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, (D2TileLibraryEntryStrc*)aTileResults[nIndex]);
+                      pTileCreated = RoomTile::DRLGROOMTILE_CreateShadowTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex]);
                     }
                   } else {
-                    pTileCreated = RoomTile::DRLGROOMTILE_CreateFloorTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, (D2TileLibraryEntryStrc*)aTileResults[nIndex]);
+                    pTileCreated = RoomTile::DRLGROOMTILE_CreateFloorTileData(pRoomExCtx, nullptr, nWorldPosX, nWorldPosY, nCellGridFlags, aTileResults[nIndex]);
                   }
 
                   pAnimTileGrid->ppTileData[nFrameIter] = pTileCreated;

@@ -2357,7 +2357,6 @@ BOOL __fastcall SpecialItemsBonuses(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
     int nQuantity;
     int nItemGUID;
     int32_t nOwnerGUID;
-    uint8_t byOwnerUnitType;
     eD2UnitType eUnitType;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x105a);
@@ -2411,8 +2410,8 @@ BOOL __fastcall SpecialItemsBonuses(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
                   D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pItem, UNITSTAT_quantity, -1, 0);
                   GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x10b2), pItem, '\x01', 0x46, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0), 0);
                   nItemGUID = pItem->nUnitGUID;
-                  byOwnerUnitType = (uint8_t)pItem->eUnitType;
-                  GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x10b3), 0x7c, byOwnerUnitType, nItemGUID);
+                  eUnitType = pItem->eUnitType;
+                  GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x10b3), 0x7c, eUnitType, nItemGUID);
                   ITEMMODE_CastItemSkill(eCastSkill, pUnit);
                   return 1;
                 }
@@ -5264,12 +5263,12 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     int nSkillResult;
     eD2Skills eSkillId;
     char bIsEquipped;
+    eD2UnitType eVar1;
     uint16_t nStatLayerOrCount;
-    int iVar1;
+    int iVar2;
     int nScrollItemGUID;
     int nScrollCharges;
     int nChargesLeft;
-    uint8_t byUnitType;
     int32_t nLine;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfcf);
@@ -5366,8 +5365,8 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       if (nSkillResult <= 0) {
         SERVER_ITEM_SendStackableUsagePackets(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1023);
         nScrollItemGUID = pScrollItem->nUnitGUID;
-        byUnitType = (uint8_t)pScrollItem->eUnitType;
-        GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1024), 0x7c, byUnitType, nScrollItemGUID);
+        eVar1 = pScrollItem->eUnitType;
+        GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1024), 0x7c, eVar1, nScrollItemGUID);
         return 0;
       }
     }
@@ -5383,9 +5382,9 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         ITEMMODE_ConsumeItemAndRemove(pGame, pUnit, pScrollItem);
         nLine = 0x1034;
       } else {
-        iVar1 = pScrollItem->nUnitGUID;
-        byUnitType = (uint8_t)pScrollItem->eUnitType;
-        GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1032), 0x7c, byUnitType, iVar1);
+        iVar2 = pScrollItem->nUnitGUID;
+        eVar1 = pScrollItem->eUnitType;
+        GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1032), 0x7c, eVar1, iVar2);
         nLine = 0x1034;
       }
     } else {
@@ -5408,9 +5407,9 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x103c);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pScrollItem, bIsEquipped, nLine, _bIsScrollType, nStatLayerOrCount);
           ITEMMODE_CastItemSkill(eSkillId, pUnit);
-          iVar1 = pScrollItem->nUnitGUID;
-          byUnitType = (uint8_t)pScrollItem->eUnitType;
-          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x104a), 0x7c, byUnitType, iVar1);
+          iVar2 = pScrollItem->nUnitGUID;
+          eVar1 = pScrollItem->eUnitType;
+          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x104a), 0x7c, eVar1, iVar2);
         }
       } else {
         eSkillId = ITEMMODE_GetItemCastSkill(pScrollItem);

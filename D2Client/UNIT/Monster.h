@@ -13,6 +13,7 @@ struct D2AiGeneralStrc;
 struct D2DynamicPathStrc;
 struct D2MonStatsTxt;
 struct D2MonsterAiParameterStruct;
+struct D2RoomStrc;
 struct D2ServerMessageHandleStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;

@@ -470,9 +470,9 @@ eD2ServerIncomingStatus __fastcall PlayerScreen_DispatchAction(::SGAMEDATA * pGa
     // Static local variables (originally global data)
     static pfnPartyScreenAction g_PlayerScreenActionTable[10] = {
     nullptr,
-    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetCorpseLootPermission,
-    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateMuteRelation,
-    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateSquelchRelation,
+    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetCorpseLootPermission,
+    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateMuteRelation,
+    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateSquelchRelation,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_ToggleHostile,
     nullptr,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SendPartyInvite,

@@ -411,7 +411,7 @@ uint32_t __stdcall ITEMMOD_RollMagicAffixLegacy(D2UnitStrc * pUnit, int32_t bSpa
     do {
       if ((!bSpawnableOnly || *(bool*)((int)pAffixTable + 0x32)) && (*(uint16_t*)pAffixTable < 100 || (uint16_t)nItemVersion >= 100) && *(int*)((int)pAffixTable + 0x36) <= bIsPrefix) {
         pAffixEntry = (D2MagicAffixTxt*)((int)pAffixTable - 0x22);
-        BVar1 = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAutomod(pUnit, (int32_t)pAffixEntry);
+        BVar1 = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAutomod(pUnit, pAffixEntry);
         if (BVar1 && (int)nCandidatesFound < 0x1ff) {
           anCandidatePairs[nCandidatesFound * 2 + 1] = (int)pAffixEntry;
           anCandidatePairs[nCandidatesFound * 2] = bForceRoll + nBaseOffset;
@@ -640,7 +640,7 @@ int32_t __stdcall ITEMMOD_RollMagicAffix(D2UnitStrc * pItem, int32_t bSpawnableO
             bGroupExclusive = 1;
           }
           if (*(bool*)(pAffixEntry + 1) || (pItemTxt = D2Common::ITEMS::Items::GetItemQuality(pItem) , pItemTxt != 6 && (pItemTxt += -8 , 0x2 <= (uint32_t)pItemTxt))) {
-            pItemTxt = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAutomod(pItem, (int32_t)pDVar4);
+            pItemTxt = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAutomod(pItem, pDVar4);
             if ((D2MagicAffixTxt*)pItemTxt) {
               pItemTxt = nAutoMagicGroup;
               if ((!nAutoMagicGroup || nAutoMagicGroup == pAffixEntry[-1]) && *(char*)((int)pAffixEntry + 0x22) != '\0' && (*(char*)((int)pAffixEntry + 6) == -1 || (eVar3 = D2Common::ITEMS::Items::TXT_ItemTypes_GetClass(pItem) , eVar3 == CLASS_COUNT) || (pItemTxt = D2Common::ITEMS::Items::TXT_ItemTypes_GetClass(pItem) , (D2MagicAffixTxt*)(uint32_t)(uint8_t)*(char*)((int)pAffixEntry + 6) == (D2MagicAffixTxt*)pItemTxt))) {
@@ -778,7 +778,7 @@ uint32_t __thiscall ITEMMOD_GetMaxAffixGroupClassic(int32_t pThis, D2UnitStrc * 
     }
 
     do {
-      nCanApply = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAffix(pUnit, (int32_t)pCurAffixEntry);
+      nCanApply = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAffix(pUnit, pCurAffixEntry);
       if (nCanApply && (int)nCandidateCount < 0x1ff) {
         nCanApply = iAffixEntry + nAffixTableBaseIdx;
         apiStack4108[nCandidateCount * 2 + 1] = (uint32_t)pCurAffixEntry;
@@ -841,7 +841,7 @@ uint32_t __thiscall GetMaxToRoll(int32_t pThis, D2UnitStrc * pUnit) {
     }
 
     do {
-      nCanApply = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAffix(pUnit, (int32_t)pCurAffixEntry);
+      nCanApply = D2Common::ITEMS::ItemMods::ITEMMOD_CanApplyAffix(pUnit, pCurAffixEntry);
       if (nCanApply && (int)nCandidateCount < 0x1ff) {
         nCanApply = iAffixEntry + nAffixTableBaseIdx;
         apiStack4108[nCandidateCount * 2 + 1] = (uint32_t)pCurAffixEntry;

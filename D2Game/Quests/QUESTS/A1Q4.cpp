@@ -4,6 +4,7 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
+#include "D2Client/GAME/SCmd.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/D2BitBufferStrc.h"

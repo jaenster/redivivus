@@ -488,7 +488,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
           wPosX = 0;
         }
 
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', (uint8_t)pUnit->eUnitType, pUnit->nUnitGUID, wPosX, wPosY, '\x01');
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, wPosX, wPosY, '\x01');
         SUnit::UNITS_UpdateRoomClientVisibility(pGame, pUnit, nullptr);
       }
       if (pUnit->eUnitFlags & UNITFLAG_DOUPDATE) {

@@ -129,7 +129,7 @@ void __fastcall fpDrawWallTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
         return;
       }
 
-      DRAW_DrawWallTileWithLighting((int32_t)pTileData, nScreenX, nScreenY, nCoords);
+      DRAW_DrawWallTileWithLighting(pTileData, nScreenX, nScreenY, nCoords);
       return;
     }
 
@@ -174,7 +174,7 @@ void __fastcall fpDrawWallTile(uint8_t * pTileData, int32_t nScreenX, int32_t nS
         return;
       }
 
-      DRAW_DrawWallTileWithLighting((int32_t)pTileData, nScreenX, nScreenY, (uint32_t)*pCoords);
+      DRAW_DrawWallTileWithLighting(pTileData, nScreenX, nScreenY, (uint32_t)*pCoords);
     }
 }
 

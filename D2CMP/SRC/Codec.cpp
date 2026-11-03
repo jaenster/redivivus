@@ -951,7 +951,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         }
 
         CODEC_CalculateFrameBounds((int32_t)aFrameHeaderInfo, (int32_t)__frame0.local_338, &sFrameBounds.pFrameData, gCodecFrameWorkBuffer);
-        CODEC_InitializeFrameIterator((uintptr_t)&sFrameBounds);
+        CODEC_InitializeFrameIterator(&sFrameBounds);
         memset(gaCodecFrameDecodeBuffer, 0, sFrameBounds.nBlockCount * 0x14);
         pDVar1 = __frame0.local_330;
         __frame0.local_32c = 0;
@@ -1129,7 +1129,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         sEqualCellBitsPass2.pCurWord = pdwBitCursor;
         sEqualCellBitsPass2.nBitOffset = iVar2;
         sBitState.pCurWord = sPixelCodeBits.pCurWord;
-        CODEC_DecompressFrameData((uintptr_t)&sFrameBounds, gaCodecFrameDecodeBuffer, __frame0.local_32c ? (D2CodecBitStateStrc*)&sEqualCellBits : nullptr, &sPixelMaskBits, local_314 ? (D2CodecBitStateStrc*)&sEncodingTypeBits : nullptr, pbVar7 ? (D2CodecBitStateStrc*)&sRawPixelBits : nullptr, (int*)&sPixelCodeBits, &__frame0.pRemapOutputBuf, (int*)&local_318);
+        CODEC_DecompressFrameData(&sFrameBounds, gaCodecFrameDecodeBuffer, __frame0.local_32c ? (D2CodecBitStateStrc*)&sEqualCellBits : nullptr, &sPixelMaskBits, local_314 ? (D2CodecBitStateStrc*)&sEncodingTypeBits : nullptr, pbVar7 ? (D2CodecBitStateStrc*)&sRawPixelBits : nullptr, (int*)&sPixelCodeBits, &__frame0.pRemapOutputBuf, (int*)&local_318);
         local_318 += (uint32_t)pbVar8 & 0x1f;
         sBitState.pCurWord += (int)(local_318 + ((int)local_318 >> 0x1f & 0x1f)) >> 5;
         uVar10 = (uint32_t)local_318 & 0x1f;
@@ -1159,7 +1159,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         if (sFrameBounds.nFrameCount) {
           memset(aFrameIterState, 0, 0x3c);
           aFrameIterState[0] = -1;
-          BVar5 = CODEC_AdvanceFrameIterator((int*)aFrameIterState, (uintptr_t)&sFrameBounds);
+          BVar5 = CODEC_AdvanceFrameIterator((int*)aFrameIterState, &sFrameBounds);
           if (BVar5) {
             local_314 = 0;
             memset(gaCodecFrameDecodeBuffer, 0, 0x1b774);
@@ -1179,7 +1179,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
               gaCodecFrameDecodeBuffer[uVar3].nPitch = aUsedColourBits[5];
               gaCodecFrameDecodeBuffer[uVar3].nWidth = aUsedColourBits[6];
               gaCodecFrameDecodeBuffer[uVar3].nHeight = aUsedColourBits[7];
-              BVar5 = CODEC_AdvanceFrameIterator((int*)aFrameIterState, (uintptr_t)&sFrameBounds);
+              BVar5 = CODEC_AdvanceFrameIterator((int*)aFrameIterState, &sFrameBounds);
               uVar3 = aFrameIterState[0];
               if (aFrameIterState[0] != local_314) {
                 *puVar8 = gCodecFrameWorkBuffer[local_314].nXOffset;

@@ -165,7 +165,7 @@ void __fastcall SendReassignPlayer(D2UnitStrc * pUnitStrc, D2ClientStrc * pClien
       wPosX = 0;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', (uint8_t)pUnitStrc->eUnitType, pUnitStrc->nUnitGUID, wPosX, wPosY, bWarpFade);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnitStrc->eUnitType, pUnitStrc->nUnitGUID, wPosX, wPosY, bWarpFade);
 }
 
 // Broadcasts the player's current skill cast to nearby clients. If the skill has a valid target unit visible to the client, sends packet 0x4C (target-entity cast). Otherwise sends packet 0x4D (XY cast) using the caster's SP1 path coordinates. Skips if the skill has flag bit 2 set and the caster is the client's own player unit.
@@ -1290,7 +1290,7 @@ static int32_t __stdcall CheckIfInrangeAndReassign(::SGAMEDATA * pGame, uint32_t
 // [op:1][x:u16][y:u16]
 // Calls MoveToLocation(mode=2).
 eD2ServerIncomingStatus __fastcall SCMD_0x01_WalkToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x01_WalkToLocation * pPacket, uint32_t nSize) {
-    int32_t nStatus = CheckIfInrangeAndReassign(pGame, (D2UnitStrc*)nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
     if (!nStatus) {
       PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 2, (uint32_t)pPacket & 0xffff, nSize & 0xffff, 0);
       nStatus = 0;
@@ -1337,7 +1337,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x02_WalkToEntity(::SGAMEDATA * pGame, D
 // [op:1][x:u16][y:u16]
 // Calls MoveToLocation(mode=3).
 eD2ServerIncomingStatus __fastcall SCMD_0x03_RunToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x03_RunToLocation * pPacket, uint32_t nSize) {
-    int32_t nStatus = CheckIfInrangeAndReassign(pGame, (D2UnitStrc*)nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
     if (!nStatus) {
       PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 3, (uint32_t)pPacket & 0xffff, nSize & 0xffff, 0);
       nStatus = 0;
@@ -1549,7 +1549,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDAT
 // [op:1][x:u16][y:u16]
 // Gets left skill, increments pierce_idx, CastSkillOnLocation.
 eD2ServerIncomingStatus __fastcall SCMD_0x05_LeftSkillOnLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x05_LeftSkillOnLocation * pPacket, uint32_t nSize) {
-    int32_t nPierceIdx = CheckIfInrangeAndReassign(pGame, (D2UnitStrc*)nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    int32_t nPierceIdx = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
     if (nPierceIdx) {
       return (eD2ServerIncomingStatus)nPierceIdx;
     }
@@ -1622,7 +1622,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x07_LeftSkillOnEntityEx(::SGAMEDATA * p
 eD2ServerIncomingStatus __fastcall SCMD_0x08_LeftSkillOnLocationEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x08_LeftSkillOnLocationEx * pPacket, uint32_t nSize) {
     uint32_t nSizeCopy = nSize;
     ::SGAMEDATA* pGameCopy = pGame;
-    int32_t nStatus = CheckIfInrangeAndReassign(pGame, (D2UnitStrc*)nSize, (uint16_t*)&pGameCopy, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pGameCopy, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
     if (nStatus) {
       return (eD2ServerIncomingStatus)nStatus;
     }
@@ -1690,7 +1690,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0B_Keepalive(::SGAMEDATA * pGame, D2Un
 // [op:1][x:u16][y:u16]
 // Gets right skill, increments pierce_idx, CastSkillOnLocation.
 eD2ServerIncomingStatus __fastcall SCMD_0x0C_RightSkillOnLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0C_RightSkillOnLocation * pPacket, uint32_t nSize) {
-    int32_t nPierceIdx = CheckIfInrangeAndReassign(pGame, (D2UnitStrc*)nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    int32_t nPierceIdx = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
     if (nPierceIdx) {
       return (eD2ServerIncomingStatus)nPierceIdx;
     }
@@ -1763,7 +1763,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0E_RightSkillOnEntityEx(::SGAMEDATA * 
 eD2ServerIncomingStatus __fastcall SCMD_0x0F_RightSkillOnLocationEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0F_RightSkillOnLocationEx * pPacket, uint32_t nSize) {
     uint32_t nSizeCopy = nSize;
     ::SGAMEDATA* pGameCopy = pGame;
-    int32_t nStatus = CheckIfInrangeAndReassign(pGame, (D2UnitStrc*)nSize, (uint16_t*)&pGameCopy, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pGameCopy, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
     if (nStatus) {
       return (eD2ServerIncomingStatus)nStatus;
     }

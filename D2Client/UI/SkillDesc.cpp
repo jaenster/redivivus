@@ -4371,7 +4371,7 @@ void __fastcall SKILLDESC_DrawSkillDmgType1(D2UnitStrc * pUnit, D2SkillStrc * pS
       uDamCalc1 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, (uint32_t)pSkillDescTxt->ddamCalc1, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0x9b8), nSkillLevelTmp);
       nSkillLevelTmp = nSkillLevel;
       pDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, (uint32_t)pSkillDescTxt->ddamCalc2, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0x9b9), nSkillLevelTmp);
-      SKILLDESC_DrawSkillDmgPhysical((int32_t)pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, uDamCalc1, pDamCalc2, nXLeft, nY, nXRight, 1, &pSkillsTxt->skill);
+      SKILLDESC_DrawSkillDmgPhysical(pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, uDamCalc1, pDamCalc2, nXLeft, nY, nXRight, 1, &pSkillsTxt->skill);
       return;
     }
 
@@ -4398,7 +4398,7 @@ void __fastcall SKILLDESC_DrawSkillDmgType2(D2UnitStrc * pUnit, D2SkillStrc * pS
       uDamCalc1 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, (uint32_t)pSkillDescTxt->ddamCalc1, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0x9dd), nSkillLevelTmp);
       nSkillLevelTmp = nSkillLevel;
       pDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, (uint32_t)pSkillDescTxt->ddamCalc2, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0x9de), nSkillLevelTmp);
-      SKILLDESC_DrawSkillDmgPhysical((int32_t)pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, uDamCalc1, pDamCalc2, nXLeft, nY, nXRight, 0, &pSkillsTxt->skill);
+      SKILLDESC_DrawSkillDmgPhysical(pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, uDamCalc1, pDamCalc2, nXLeft, nY, nXRight, 0, &pSkillsTxt->skill);
       return;
     }
 
@@ -4425,7 +4425,7 @@ void __fastcall SKILLDESC_DrawSkillDmgType3(D2UnitStrc * pUnit, D2SkillStrc * pS
       nMinDamage = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, (uint32_t)pSkillDescTxt->ddamCalc1, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xa02), nSkillLevelTmp);
       nSkillLevelTmp = nSkillLevel;
       pDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, (uint32_t)pSkillDescTxt->ddamCalc2, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xa03), nSkillLevelTmp);
-      SKILLDESC_DrawSkillDmgPhysical((int32_t)pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, nMinDamage, pDamCalc2, nXLeft, nY, nXRight, 1, &pSkillsTxt->skill);
+      SKILLDESC_DrawSkillDmgPhysical(pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, nMinDamage, pDamCalc2, nXLeft, nY, nXRight, 1, &pSkillsTxt->skill);
       return;
     }
 
@@ -4933,7 +4933,7 @@ void __fastcall SKILLDESC_DrawSkillDmgRanged(D2UnitStrc * pUnit, D2SkillStrc * p
 
 void __fastcall SKILLDESC_DrawSkillDmgSimple(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
     int32_t nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], (int)pSkillsTxt->skill, nSkillLevel);
-    SKILLDESC_DrawSkillDmgPhysical((int32_t)pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_CalcAuraDamageRange, nSkillCalc, 0, nXLeft, nY, nXRight, 1, &pSkillsTxt->skill);
+    SKILLDESC_DrawSkillDmgPhysical(pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_CalcAuraDamageRange, nSkillCalc, 0, nXLeft, nY, nXRight, 1, &pSkillsTxt->skill);
 }
 
 // @sourcefile .\UI\SkillDesc.cpp
@@ -6752,7 +6752,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
       SKILLDESC_FormatThreeValues(nCalcA, wDescTextA, 0x10b3, wDescTextB, nSigned, pwszOutput);
       return 1;
       case 0x16:
-        SKILLDESC_DescLine16_MissileDamage((int)pSkillDescLocal->descmissile[0], pUnitLocal, nSkillLevel, (int32_t)pSkillsTxt, pwszOutput);
+        SKILLDESC_DescLine16_MissileDamage((int)pSkillDescLocal->descmissile[0], pUnitLocal, nSkillLevel, pSkillsTxt, pwszOutput);
       return 1;
       case 0x17:
         nSubMissileId = pSkillDescLocal->descmissile[0];

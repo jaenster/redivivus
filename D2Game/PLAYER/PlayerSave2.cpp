@@ -1433,7 +1433,7 @@ int __fastcall PLRSAVE_LoadCorpseFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
         nClassId = D2Client::UNIT::GetGUID(pUnit);
         D2Common::INVENTORY::Inventory::INVENTORY_SetOwnerGUID(pCorpseUnit->pInventory, nClassId);
         nItemLoadError = 0;
-        nResult = PLRSAVE_LoadItemsFromBuffer(pGame, pCorpseUnit, &pReadPtr, (int32_t)pOwnerUnit, dwFileVersion, 1, &nItemLoadError);
+        nResult = PLRSAVE_LoadItemsFromBuffer(pGame, pCorpseUnit, &pReadPtr, (uint8_t*)pOwnerUnit, dwFileVersion, 1, &nItemLoadError);
         if (nResult) {
           if (pnErrorCode) {
             *pnErrorCode = nItemLoadError;
@@ -1556,7 +1556,7 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc *
     if (pUnit) {
       int nLoadResult;
       ppUnit = 0;
-      nLoadResult = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, &pUnit2, (int32_t)pMercUnit, dwFileVersion, 0, (int*)&ppUnit);
+      nLoadResult = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, &pUnit2, (uint8_t*)pMercUnit, dwFileVersion, 0, (int*)&ppUnit);
       if (nLoadResult) {
         if (pnErrorCode) {
           *pnErrorCode = (int)ppUnit;
@@ -1936,7 +1936,7 @@ int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, D2ClientStrc
               nLoadError = LoadHardSkills(pGame, pUnit, (short int**)&pReadPos, (short int*)pBufEnd, dwFileVersion, (uint32_t)pSaveHeader->nMaxSkillsCount);
               bIsFatalError = nLoadError < 0;
               if (!nLoadError) {
-                nLoadError = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, (D2UnitStrc**)&pReadPos, (int32_t)pBufEnd, dwFileVersion, 0, &nSubError);
+                nLoadError = PLRSAVE_LoadItemsFromBuffer(pGame, pUnit, (D2UnitStrc**)&pReadPos, (uint8_t*)pBufEnd, dwFileVersion, 0, &nSubError);
                 bIsFatalError = nLoadError < 0;
                 if (!nLoadError) {
                   nLoadError = PLRSAVE_LoadCorpseFromBuffer(pGame, pUnit, (D2UnitStrc**)&pReadPos, (D2UnitStrc*)pBufEnd, dwFileVersion, &nSubError);

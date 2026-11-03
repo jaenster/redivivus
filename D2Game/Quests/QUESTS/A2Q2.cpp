@@ -820,7 +820,7 @@ bool __fastcall Q10_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
       }
 
       pA2Q2Data = pQuestData->pQuestSpecificData.pA2Q2;
-      if (pA2Q2Data->bHasCube && !pA2Q2Data->nBoxCount || !pA2Q2Data->nVipCount && (bVar1 = A2Q3::Q11_GetTaintedSunFlag((int32_t)pQuestData) , bVar1 != 0) || pA2Q2Data->bHasViperAmulet && !pA2Q2Data->nMsfCount) {
+      if (pA2Q2Data->bHasCube && !pA2Q2Data->nBoxCount || !pA2Q2Data->nVipCount && (bVar1 = A2Q3::Q11_GetTaintedSunFlag(pQuestData) , bVar1 != 0) || pA2Q2Data->bHasViperAmulet && !pA2Q2Data->nMsfCount) {
         *pbyStatusCode = '\t';
       }
       if (BVar2) {

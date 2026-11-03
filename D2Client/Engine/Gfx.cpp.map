@@ -199,6 +199,7 @@
       ],
       "usedTypes": [
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -1749,10 +1750,12 @@
       ],
       "usedTypes": [
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "eD2States",
         "eOverlayId",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {

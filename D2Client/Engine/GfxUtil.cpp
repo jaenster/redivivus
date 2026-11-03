@@ -6,6 +6,7 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2GfxInfoStrc.h"
+#include "D2Client/D2LightMapStrc.h"
 #include "D2Client/DataTbls.h"
 #include "D2Client/DataTbls/MonsterTbls.h"
 #include "D2Client/Engine/Gfx.h"

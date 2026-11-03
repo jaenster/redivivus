@@ -1980,6 +1980,7 @@
         "DAMAGE_CalculateHitCheck"
       ],
       "usedTypes": [
+        "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",

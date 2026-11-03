@@ -52,11 +52,6 @@ struct D2GSPacketClt0x89 {
     /* 0x01 */ uint8_t nEventType;
 };
 
-struct D2GSPacketSrv0x29 {
-    /* 0x00 */ uint8_t nPacketId;
-    /* 0x01 */ uint8_t szQuestBits[96]; // game quest record, raw copy of pQuestControl->pQuestFlags
-};
-
 struct D2GSPacketSrv0x5D {
     /* 0x00 */ uint8_t nPacketId; // 0x5D
     /* 0x01 */ uint8_t nQuestId;

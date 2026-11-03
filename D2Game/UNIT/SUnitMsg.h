@@ -15,23 +15,6 @@ struct SGAMEDATA;
 typedef uint32_t eD2UnitType;
 
 // Data types
-struct __attribute__((packed)) D2GSPacketSrv0xA8 {
-    /* 0x00 */ uint8_t nPacketId; // 0xA8
-    /* 0x01 */ uint8_t nUnitType;
-    /* 0x02 */ int32_t nUnitGUID;
-    /* 0x06 */ uint8_t nPacketSize;
-    /* 0x07 */ uint8_t nStateId;
-    /* 0x08 */ uint8_t aBitStream[244];
-};
-
-struct __attribute__((packed)) D2GSPacketSrv0xAA {
-    /* 0x00 */ uint8_t nPacketId; // 0xAA
-    /* 0x01 */ uint8_t nUnitType;
-    /* 0x02 */ int32_t nUnitGUID;
-    /* 0x06 */ uint8_t nPacketSize;
-    /* 0x07 */ uint8_t aBitStream[244];
-};
-
 struct __attribute__((packed)) D2SUnitMsg23Strc {
     /* 0x00 */ uint32_t dwSkillOwnerGUID;
     /* 0x04 */ uint16_t nSkillId;

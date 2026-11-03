@@ -1072,7 +1072,7 @@ D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, int * p
           break;
         }
 
-        bCanBreak = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition((int32_t)(wszText + nSegStart), nBreakPos);
+        bCanBreak = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition(wszText + nSegStart, nBreakPos);
         if (bCanBreak) {
           break;
         }
@@ -1163,7 +1163,7 @@ D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, int * p
       }
 
       check_break_position:
-      if (nSegEnd == nStrLen || (bCanBreak = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition((int32_t)(wszText + nSegStart), nBreakPos) , bCanBreak != 0)) {
+      if (nSegEnd == nStrLen || (bCanBreak = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition(wszText + nSegStart, nBreakPos) , bCanBreak != 0)) {
         break;
       }
     }

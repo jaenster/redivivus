@@ -2,9 +2,9 @@
 
 #include "D2Game/Quests/QUESTS/A2Q7.h"
 #include "D2Client/Archive.h"
-#include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
+#include "D2Client/GAME/SCmd.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"

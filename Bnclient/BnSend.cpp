@@ -2890,7 +2890,7 @@ BOOL __fastcall BNNEWS_DecodeCDKey26Char(char * szCDKey, uint32_t * pOutValue1, 
       return 0;
     }
 
-    _net_sid::NET_SID_CLIENT_TransformCdKeyToken((int32_t)szCDKey, pOutValue2, pOutValue1, pOutValue3);
+    _net_sid::NET_SID_CLIENT_TransformCdKeyToken(szCDKey, pOutValue2, pOutValue1, pOutValue3);
     return 1;
 }
 
@@ -2905,7 +2905,7 @@ static int32_t __stdcall BNSEND_PrepareCDKeyHash(uint32_t nToken, uint32_t nServ
         sHashInput26.dwClientToken = nToken;
         sHashInput26.dwServerToken = nServerToken;
         if (szCDKey) {
-          _net_sid::NET_SID_CLIENT_TransformCdKeyToken((int32_t)szCDKey, &sHashInput26.dwProductId, &nPublic2, (uint16_t*)sHashInput26.abPrivateValue);
+          _net_sid::NET_SID_CLIENT_TransformCdKeyToken(szCDKey, &sHashInput26.dwProductId, &nPublic2, (uint16_t*)sHashInput26.abPrivateValue);
           sHashInput26.dwPublicValue = nPublic2;
           pKeyLenPtr = Storm::Source::SSTR::SStrLen(szCDKey);
           pOutHash->nPublic = sHashInput26.dwProductId;
@@ -3024,7 +3024,7 @@ void __stdcall BNNEWS_DecodeCDKeys() {
         goto cleanup;
       }
 
-      _net_sid::NET_SID_CLIENT_TransformCdKeyToken((int32_t)szCDKey, &nProduct, &nPublic, aExtra26);
+      _net_sid::NET_SID_CLIENT_TransformCdKeyToken(szCDKey, &nProduct, &nPublic, aExtra26);
     } else {
       bDecodeOk = BNSEND_DecodeCDKeyString(&nProduct, &nPublic, szCDKey, &nPrivate);
       if (!bDecodeOk) {
@@ -3039,7 +3039,7 @@ void __stdcall BNNEWS_DecodeCDKeys() {
       pKeyLenPtr = Storm::Source::SSTR::SStrLen(szCDKey);
       if (pKeyLenPtr != 0x10) {
         if (pKeyLenPtr == 0x1a && szCDKey) {
-          _net_sid::NET_SID_CLIENT_TransformCdKeyToken((int32_t)szCDKey, &nProduct, &nPublic, aExtra26);
+          _net_sid::NET_SID_CLIENT_TransformCdKeyToken(szCDKey, &nProduct, &nPublic, aExtra26);
         }
       } else {
         BNSEND_DecodeCDKeyString(&nProduct, &nPublic, szCDKey, &nPrivate);

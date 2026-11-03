@@ -1767,9 +1767,9 @@ void __stdcall DRAW_UI_Quest() {
 // QUESTLOG_HitTestCloseButton returns a bool; only AL is tested after the call (004a3f9d).
 void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
     int nClickThresholdY;
+    int32_t nActTab;
     BOOL bIsExpansion;
     int nQuestCountCopy;
-    int32_t bHitButton;
     uint8_t* pQuestEntry;
     uint32_t uVar2;
     uVar2 = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
@@ -1801,19 +1801,19 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
     nPanelRelY = nMouseYRaw + gnPanelOffsetY;
     if (gQuestLog.bQuestLogButtonDown == '\0') {
       bool bVar1;
-      bHitButton = QUESTLOG_HitTestActTab(nPanelRelY, nPanelRelX);
-      if (bHitButton != -1) {
-        if (bHitButton < 5 && bHitButton != gQuestLog.nQuestLogActiveAct_b && ((bIsExpansion = Fog::D2CheckExpansionGame() , bIsExpansion && (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , bIsExpansion != 0)) || bHitButton != 4)) {
+      nActTab = QUESTLOG_HitTestActTab(nPanelRelY, nPanelRelX);
+      if (nActTab != -1) {
+        if (nActTab < 5 && nActTab != gQuestLog.nQuestLogActiveAct_b && ((bIsExpansion = Fog::D2CheckExpansionGame() , bIsExpansion && (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , bIsExpansion != 0)) || nActTab != 4)) {
           QUESTLOG_AcknowledgeNewQuests();
-          QUESTLOG_SetActiveAct(bHitButton);
+          QUESTLOG_SetActiveAct(nActTab);
           QUESTLOG_LoadQuestIconsForAct(gQuestLog.nQuestLogActiveAct_b, 1);
           QUESTLOG_ResetState();
         }
       } else {
         uVar2 = QUESTLOG_HitTestQuestIcon(nPanelRelY, nPanelRelX);
         if (uVar2 == -1 || (int)uVar2 >= gQuestLog.nQuestLogQuestCount) {
-          bHitButton = QUESTLOG_HitTestOpenButton(nPanelRelY, nPanelRelX);
-          if ((char)bHitButton != '\0') {
+          bVar1 = QUESTLOG_HitTestOpenButton(nPanelRelY, nPanelRelX);
+          if (bVar1) {
             gQuestLog.bQuestLogOpenBtnPressed = 1;
           } else {
             bVar1 = QUESTLOG_HitTestCloseButton(nPanelRelY, nPanelRelX);

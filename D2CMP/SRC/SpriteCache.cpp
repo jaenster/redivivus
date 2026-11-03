@@ -1289,7 +1289,7 @@ static D2SpriteCacheEntryStrc * __stdcall SPRITECACHE_Query(int32_t nSize, int32
         nEntry->pPrev = 0;
       }
 
-      SPRITECACHE_EvictOldest(bPriority, (int32_t)pGfxMemory, (int32_t)nEntry);
+      SPRITECACHE_EvictOldest(bPriority, pGfxMemory, nEntry);
       if (!nEntry) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x993);
         exit(-1);
@@ -1368,7 +1368,7 @@ D2SpriteCacheEntryStrc * __fastcall SPRITECACHE_EvictEntry(D2GfxMemoryStrc * pGf
         return pCandidate;
       }
     } else if (!(pCandidate->dwFlags & 2)) {
-      SPRITECACHE_RemoveFromLRU((int32_t)pGfxMemory, (int32_t)pCandidate);
+      SPRITECACHE_RemoveFromLRU(pGfxMemory, pCandidate);
       goto release_entry;
     }
 
@@ -2014,7 +2014,7 @@ int __stdcall SPRITECACHE_GetOrLoadSprite(D2GfxDataStrc * pGfxData, int32_t bChe
         return (uint32_t)(nPaletteShift != 0);
       }
 
-      SPRITECACHE_AllocateMemory(&D2GfxMemoryStrc_0089db60, *(int32_t*)(nHashEntry + 0x24));
+      SPRITECACHE_AllocateMemory(&D2GfxMemoryStrc_0089db60, *(D2SpriteCacheEntryStrc**)(nHashEntry + 0x24));
       if (!pCachedCelEntry->tDecode.bFramesBuilt) {
         SPRITECACHE_LoadAndCacheDC6(pCodecHeader, pGfxData, pCachedCelEntry);
       }

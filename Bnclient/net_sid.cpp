@@ -1889,7 +1889,7 @@ void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, int32_t p
       outIdx1 = (outIdx2 + 0x7b5) % 0x34;
       nextInIdx = inIdx + 1;
       outIdx2 = (outIdx1 + 0x7b5) % 0x34;
-      digitValue = g_CdKeyCharToDigitTable[*(uint8_t*)(inIdx + pCdKeyString)];
+      digitValue = g_CdKeyCharToDigitTable[(uint8_t)pCdKeyString[inIdx]];
       *(uint8_t*)(outIdx1 + pOutBase5) = digitValue / 5;
       *(uint8_t*)(outIdx2 + pOutBase5) = digitValue % 5;
       inIdx = nextInIdx;

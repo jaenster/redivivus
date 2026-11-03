@@ -4,7 +4,6 @@
 #include "D2Client/Archive.h"
 #include "D2Client/ClientModeInGame.h"
 #include "D2Client/Core/Archive.h"
-#include "D2Client/D2Client.h"
 #include "D2Client/D2DialogStrc.h"
 #include "D2Client/D2GSPacketSrv0x2A.h"
 #include "D2Client/D2GSPacketSrv0x91.h"
@@ -12,6 +11,7 @@
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Msg.h"
+#include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Select.h"
 #include "D2Client/GAME/Sound.h"
 #include "D2Client/GAME/View.h"
@@ -66,6 +66,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
+#include "D2Client/D2Client.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Common/Collision.h"
@@ -4013,7 +4014,7 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int3
         pNpcUnit = 0;
       }
 
-      nMenuIndex = NPCMENU_FindMenuIndexByNpcId((int32_t)pNpcUnit);
+      nMenuIndex = NPCMENU_FindMenuIndexByNpcId(pNpcUnit);
       if (!nReason || !nScrollState) {
         bIsSideNpc = inline_NPC_IsInteractableSideNpc(_Interaction::nCurrentInteractedNpcClassId);
         if (!bIsSideNpc && nMenuIndex >= 0) {

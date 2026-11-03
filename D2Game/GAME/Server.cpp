@@ -1949,7 +1949,7 @@ static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t bSendStatu
           D2Net::Game::Server::WSAGetLastError();
           bSendFailed = true;
           pClient->dwPacketsInList++;
-          Clients::CLIENT_SetPacketList(pClient, (int32_t)pPacketList);
+          Clients::CLIENT_SetPacketList(pClient, pPacketList);
           if (pClient->dwPacketsInList >= 3) {
             SERVER_DisconnectClient(pGame, pClient, '\0');
             return;

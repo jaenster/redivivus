@@ -5354,7 +5354,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
               default:
                 deserialize_single_stat:
                 read_generic_stat:
-                ITEMS_DeserializeSingleStat(nFileVersion, eStatId, pBitBuffer, pStatsEx, (int32_t)pStatCostTxt, nStatIndex);
+                ITEMS_DeserializeSingleStat(nFileVersion, eStatId, pBitBuffer, pStatsEx, pStatCostTxt, nStatIndex);
               break;
             }
 

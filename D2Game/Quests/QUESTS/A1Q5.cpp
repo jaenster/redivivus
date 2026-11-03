@@ -933,7 +933,7 @@ void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, D2Ques
 // (bDeathEffectPlayed==false), schedules event 7 on the unit ~10 frames out to play the final
 // death/treasure animation. No quest-record state changes; gates purely on A1Q5-specific flags.
 void __fastcall Q05_TriggerCountessDeathEffect(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
-    Q05_SpawnCountessDeathEffect(pQuestData, (int32_t)d2_bits_of(pQuestData->pQuestSpecificData));
+    Q05_SpawnCountessDeathEffect(pQuestData, pQuestData->pQuestSpecificData.pA1Q5);
     if (!(pQuestData->pQuestSpecificData.pA1Q5->bRewardDistributed && !pQuestData->pQuestSpecificData.pA1Q5->bDeathEffectPlayed)) {
       return;
     }
@@ -972,7 +972,7 @@ void __fastcall Q05_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
       AddQuestTimer(pQuestData, Q05_TimerNotifyCompletion, 7);
     }
 
-    Q05_SpawnCountessDeathEffect(pQuestData, (int32_t)pA1Q5Data);
+    Q05_SpawnCountessDeathEffect(pQuestData, pA1Q5Data);
     if (pA1Q5Data->bDeathEffectPlayed) {
       return;
     }

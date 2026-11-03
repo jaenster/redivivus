@@ -13,6 +13,7 @@ struct D2BitBufferStrc;
 struct D2ObjectInitFnArg;
 struct D2ObjectOperateFnArg;
 struct D2QuestArgStrc;
+struct D2QuestDataA4Q1Strc;
 struct D2QuestDataA4Q2Strc;
 struct D2QuestDataStrc;
 struct D2RoomStrc;

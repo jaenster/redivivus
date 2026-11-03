@@ -110,7 +110,7 @@ void __fastcall Objects_InitFn47_CountessChest(D2ObjectInitFnArg * pInitArg) {
       pQuestSpecific->nCountessChestCount++;
     }
 
-    A1Q5::Q05_SpawnCountessDeathEffect(pQuestData, (int32_t)pQuestSpecific);
+    A1Q5::Q05_SpawnCountessDeathEffect(pQuestData, pQuestSpecific);
     if (!(pQuestSpecific->bRewardDistributed && !pQuestSpecific->bDeathEffectPlayed)) {
       return;
     }

@@ -587,8 +587,7 @@
         "D2ItemsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
-        "uint8_t"
+        "int32_t"
       ]
     },
     {

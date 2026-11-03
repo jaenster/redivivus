@@ -315,7 +315,7 @@ void __fastcall Q35_SpawnAncientTimer(D2QuestDataStrc * pQuestData, D2UnitStrc *
 
     D2QuestDataStrc* pQuestDataLocal = pQuestData;
     if (pQuestSpecificData->nResurrectionCount > 0) {
-      Q35_ResetAncientsArena(pQuestData->pGame, (int32_t)pQuestData, (int32_t)pQuestSpecificData);
+      Q35_ResetAncientsArena(pQuestData->pGame, pQuestData, pQuestSpecificData);
       return;
     }
 
@@ -1042,7 +1042,7 @@ void __fastcall Q35_OnPlayerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     (*pnResurrectionCount)++;
     pQuestData->pQuestSpecificData.pA5Q5->bAncientsFightStarted = 0;
     pQuestData->pQuestSpecificData.pA5Q5->bAncientsActive = 0;
-    Q35_ResetAncientsArena(pGame, (int32_t)pQuestData, (int32_t)d2_bits_of(pQuestData->pQuestSpecificData));
+    Q35_ResetAncientsArena(pGame, pQuestData, pQuestData->pQuestSpecificData.pA5Q5);
 }
 
 // [A5Q5 = Rite of Passage] QUEST_OnPlayerLeaveArreatSummit: decrements the on-summit player count when a player leaves; if reward not yet dropped, sets the "reset pending" flag. No quest-state writes.
@@ -1425,7 +1425,7 @@ void __fastcall Q35_OnPlayerLeavesSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     pQuestData->pQuestSpecificData.pA5Q5->bAncientsFightStarted = 0;
     pQuestData->pQuestSpecificData.pA5Q5->bAncientsActive = 0;
-    Q35_ResetAncientsArena(pGame, (int32_t)pQuestData, (int32_t)d2_bits_of(pQuestData->pQuestSpecificData));
+    Q35_ResetAncientsArena(pGame, pQuestData, pQuestData->pQuestSpecificData.pA5Q5);
 }
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsQuestStateQuery: on altar operate, if quest is Completed but record Step0x04 not yet set, sends npc info packet 0x4ec9 (which makes Q35_Callback_11 write Step0x04). Read-only on records itself.

@@ -13,6 +13,7 @@
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/Msg.h"
+#include "D2Client/GAME/SCmd.h"
 #include "D2Client/GAME/Select.h"
 #include "D2Client/GAME/Wall2.h"
 #include "D2Client/Message.h"

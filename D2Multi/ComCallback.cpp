@@ -457,7 +457,7 @@ static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) 
       wCharLevel = *(uint16_t*)(pChannelUser->pad_0x87 + 1);
     }
 
-    D2Win::Src::D2Comp::D2COMP_SetUnitDisplayStrings((int32_t)pChannelUser->pComposite, wszDisplayName, wszClanNameW, wszRealmName, wszClanTag, (uint32_t)wCharLevel, nProductTag);
+    D2Win::Src::D2Comp::D2COMP_SetUnitDisplayStrings(pChannelUser->pComposite, wszDisplayName, wszClanNameW, wszRealmName, wszClanTag, (uint32_t)wCharLevel, nProductTag);
 }
 
 // Adds or updates a channel user in gpChannelUserLinkedListHead sorted list. Allocates 0x48-byte node, copies username and raw BNet data. Updates existing entry if username matches.
@@ -1872,7 +1872,7 @@ D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUserna
           gbChannelUserSeedInitialized = 1;
         }
 
-        nResult = D2Win::Src::D2Comp::D2COMP_GetNumFrames((int32_t)pNewUser->pComposite);
+        nResult = D2Win::Src::D2Comp::D2COMP_GetNumFrames(pNewUser->pComposite);
         nRandFrame = rand();
         D2Win::Src::D2Comp::D2COMP_SetCurrentFrame(pNewUser->pComposite, nRandFrame % (nResult << 8));
         COMCALLBACK_FormatChannelUserData(pNewUser);

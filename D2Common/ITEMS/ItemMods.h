@@ -11,6 +11,7 @@
 // Forward declarations
 struct D2GemsTxt;
 struct D2MagicAffixTxt;
+struct D2RareAffixTxt;
 struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;

@@ -2186,7 +2186,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint32_t *
             return 0xe;
           }
           if (nVersion <= 0x59) {
-            nConvertedExp = _oldSaveGameLoadingPart8_part1((int32_t)pGame, (uint16_t)pdwSectionStart[3], *(uint32_t*)((int)pdwSectionStart + 0xe));
+            nConvertedExp = _oldSaveGameLoadingPart8_part1(pGame, (uint16_t)pdwSectionStart[3], *(uint32_t*)((int)pdwSectionStart + 0xe));
             *(uint32_t*)((int)pdwSectionStart + 0xe) = nConvertedExp;
           }
 
@@ -2510,7 +2510,7 @@ static int32_t __fastcall CLIENT_ReadAndLoadSaveFile(D2ClientStrc * pClient, D2R
       nBytesRead = fread((D2CharSelCompStrc*)__frame0.saveBuffer, 1, 0x2000, pFile);
       fclose(pFile);
       if (nBytesRead) {
-        nLoadResult = SERVER_LoadPlayerFromSaveFile(pGame, pClient, (D2SaveFileHeaderStrc*)__frame0.saveBuffer, nBytesRead, &__frame0.pLoadedUnit, (uint32_t)pRoom, nX, nY);
+        nLoadResult = SERVER_LoadPlayerFromSaveFile(pGame, pClient, (D2SaveFileHeaderStrc*)__frame0.saveBuffer, nBytesRead, &__frame0.pLoadedUnit, pRoom, nX, nY);
         if (nLoadResult) {
           return nLoadResult;
         }
@@ -2571,7 +2571,7 @@ static int32_t __stdcall CLIENT_LoadPlayerFromNetworkSave(::SGAMEDATA * pGame, D
 }
 
 // Loads player from save or creates new character. Dispatches to disk loader (SP/LAN), network loader (BNet), or fresh character creator based on game type and bLoadFromSave. After unit creation, updates passive skills and returns status. Called during join flow before placing unit in world.
-BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2ClientStrc * pClientCharName, BOOL bLoadFromSave, D2UnitStrc * * ppUnitOut, uint32_t pRoomOrNull, uint32_t nX, uint32_t nY) {
+BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, D2ClientStrc * pClient, char * pClientCharName, BOOL bLoadFromSave, D2UnitStrc * * ppUnitOut, D2RoomStrc * pRoomOrNull, uint32_t nX, uint32_t nY) {
     BOOL bResult;
     /* This is the loader for battle net. unkBool is always 1 from the path of
                          ClientJoinGame */ if (pGame->nGameType == SGAMETYPE_OBNET_HOST || pGame->nGameType == SGAMETYPE_LAN_HOST || BattleNetServerService) {
@@ -2580,7 +2580,7 @@ BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, D2ClientStrc 
         goto finish_player_unit;
       }
     } else if (bLoadFromSave) {
-      bResult = CLIENT_LoadPlayerFromDisk(pGame, pRoomOrNull, (char*)pClientCharName, pClient, ppUnitOut, (D2RoomStrc*)pRoomOrNull, nX, nY);
+      bResult = CLIENT_LoadPlayerFromDisk(pGame, (uint32_t)pRoomOrNull, pClientCharName, pClient, ppUnitOut, pRoomOrNull, nX, nY);
       goto finish_player_unit;
     }
 

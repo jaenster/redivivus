@@ -10955,7 +10955,7 @@ void __fastcall AITHINK_Fn1_Diablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     D2AiGeneralStrc* pAiGeneral;
     pAiGeneral = pAiParam->pMonsterAiGeneral;
     int32_t nDecision;
-    nDecision = AI_Diablo_DecideAction(pAiGeneral, pUnit, pTarget, nTargetRisk, nTargetPosY, (int32_t)pMonAi);
+    nDecision = AI_Diablo_DecideAction(pAiGeneral, pUnit, pTarget, nTargetRisk, nTargetPosY, pMonAi);
     /* If you look up diablo in the monster stats you will see it has no skill8.
 
                          However, diablo clone does have it, "Diablogeddon".

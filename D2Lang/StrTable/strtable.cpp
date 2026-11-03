@@ -853,7 +853,7 @@ static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
     {   /* TEMP diagnostic: is the packed header being read correctly? */
         const unsigned char* hb = (const unsigned char*)pArchive;
     }
-    STRTABLE_CalculateCRC((uint16_t*)&wComputedCRC, (int32_t)pArchive, nCrcStartOffset, pArchive->dwFileSize);
+    STRTABLE_CalculateCRC((uint16_t*)&wComputedCRC, (uint8_t*)pArchive, nCrcStartOffset, pArchive->dwFileSize);
     if ((uint16_t)wComputedCRC != pArchive->wCRC) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce);
       exit(-1);

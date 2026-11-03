@@ -1189,7 +1189,7 @@ void __stdcall DRAW_UI_InventoryContent(D2UnitStrc * pUnit) {
     }
 
     draw_placement_highlight:
-    INV_DrawGridPlacementHighlight(pInventory, pPlayerUnit_lcl, (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pCoords >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)CurrentInventoryPage), nGridIndex, (int32_t)pCoords);
+    INV_DrawGridPlacementHighlight(pInventory, pPlayerUnit_lcl, (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pCoords >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)CurrentInventoryPage), nGridIndex, pCoords);
 }
 
 static uint32_t __fastcall ITEM_CanTheseBeSocketed(D2UnitStrc * pUnit, D2UnitStrc * pTargetItem) {
@@ -10384,7 +10384,7 @@ void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
       pMsg->bHandled = 0;
     } else {
       int32_t iVar1;
-      iVar1 = ClickItemRight((D2UnitStrc*)nMouseY, (D2InventoryStrc*)nMouseX, (uint32_t)pPlayerUnit_lcl & -256, pPlayerUnit_lcl, pInventory);
+      iVar1 = ClickItemRight(nMouseY, nMouseX, (uint32_t)pPlayerUnit_lcl & -256, pPlayerUnit_lcl, pInventory);
       if (iVar1) {
         goto resume_shop_and_consume;
       }
@@ -10597,7 +10597,7 @@ void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
 
           bResult = IsInBankPageScreenRange(nMouseX, nMouseY);
           if (bResult) {
-            ClickItemRight((D2UnitStrc*)nMouseY, (D2InventoryStrc*)nMouseX, (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pMyUnit >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)4), pMyUnit, pMyUnit->pInventory);
+            ClickItemRight(nMouseY, nMouseX, (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pMyUnit >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)4), pMyUnit, pMyUnit->pInventory);
             goto consume_click;
           }
         }

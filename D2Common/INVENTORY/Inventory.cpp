@@ -626,7 +626,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
 
     insert_in_page_list:
     INVENTORY_InsertItemInPageList(pInventory, pUnit, pGridInfo);
-    INVENTORY_FillGridRect(byItemW, nnX, pGridInfo, (uint8_t)nItemH, (uint32_t)pUnit, nnY);
+    INVENTORY_FillGridRect(byItemW, nnX, pGridInfo, (uint8_t)nItemH, pUnit, nnY);
     *(char*)(ppItemDataPtr + 3) = (char)nInventoryGrid + '\x01';
     pInventory->nItemCount++;
     Units::SetXForStaticUnit(pUnit, nnX);

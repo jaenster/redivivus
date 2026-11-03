@@ -1267,7 +1267,7 @@ bool __fastcall Q33_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
           return true;
         }
 
-        bPartyHasScroll = Q33_CheckPartyHasScrollOfResistance((int32_t)pQuestData, pUnit);
+        bPartyHasScroll = Q33_CheckPartyHasScrollOfResistance(pQuestData, pUnit);
         if (bPartyHasScroll) {
           *pbyStatusCode = '\x04';
           return true;

@@ -2631,7 +2631,7 @@ void __fastcall OBJECT_PopulateRoomObjects(::SGAMEDATA * pGame, D2RoomStrc * pRo
       exit(-1);
     }
 
-    BOOL bBadCodePtr = OBJECT_PopulateRoomSpecialObjects(pGame, (int32_t)pLevelsTxt, pRoom);
+    BOOL bBadCodePtr = OBJECT_PopulateRoomSpecialObjects(pGame, pLevelsTxt, pRoom);
     if (!bBadCodePtr) {
       return;
     }
@@ -2939,7 +2939,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, 
             goto record_spawn_point;
           }
 
-          OBJECT_RemapClassIdFromParm((int32_t)pUnit);
+          OBJECT_RemapClassIdFromParm(pUnit);
           pGameLocal = pGameSave;
           OBJECT_SelectRandomShrineType(pGameSave, 1, 2, pRoom);
           pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\x02';

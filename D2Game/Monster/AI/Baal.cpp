@@ -1218,7 +1218,7 @@ void __fastcall AI_Fn1_BaalCrab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     }
 
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
-    int32_t nSelectedAction = AI_BaalEvaluateCombatAction(pUnit, pGameSaved, (int32_t)pMonsterAiGeneral, nCandidateCount, nBestScore, (int32_t)pAnchorCmd, pBestTarget);
+    int32_t nSelectedAction = AI_BaalEvaluateCombatAction(pUnit, pGameSaved, pMonsterAiGeneral, nCandidateCount, nBestScore, pAnchorCmd, pBestTarget);
     ::SGAMEDATA* pGameCopy = pGameSaved;
     AI_Baal_ExecuteAction(pGameSaved, pUnit, (int32_t)pMonsterAiGeneral, pBestTarget, nSelectedAction, pAnchorCmd);
     RestartAiThink(pGameCopy, pUnit, 0x19);
@@ -1320,7 +1320,7 @@ void __fastcall AI_Fn1_BaalCrabClone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
         }
 
         pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
-        nAction = AI_BaalEvaluateCombatAction(pUnit, pGame, (int32_t)pMonsterAiGeneral, nCandidateCount, nBestScore, (int32_t)pAiCmd, pBestTarget);
+        nAction = AI_BaalEvaluateCombatAction(pUnit, pGame, pMonsterAiGeneral, nCandidateCount, nBestScore, pAiCmd, pBestTarget);
         if (nAction == 7 || nAction == 9 || nAction == 0xe || nAction == 0xf) {
           nAction = 2;
         }

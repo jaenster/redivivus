@@ -317,6 +317,7 @@
         "D2DrlgTileDataStrc",
         "D2DrlgTileDataStrc *",
         "D2RoomExStrc",
+        "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -496,6 +497,7 @@
         "D2DrlgTileGridStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc",
+        "D2TileLibraryEntryStrc",
         "eD2GridCellFlags",
         "int32_t",
         "uint32_t",

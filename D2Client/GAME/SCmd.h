@@ -13,18 +13,32 @@ struct D2GSPacket0x18Decoded;
 struct D2GSPacket0x95Decoded;
 struct D2GSPacket0x96Decoded;
 struct D2GSPacketSrv0x03;
+struct D2GSPacketSrv0x22_0x23;
+struct D2GSPacketSrv0x26;
+struct D2GSPacketSrv0x27;
 struct D2GSPacketSrv0x28;
+struct D2GSPacketSrv0x2A;
+struct D2GSPacketSrv0x2C;
+struct D2GSPacketSrv0x4C;
+struct D2GSPacketSrv0x4D;
 struct D2GSPacketSrv0x4E;
+struct D2GSPacketSrv0x53;
 struct D2GSPacketSrv0x5B;
+struct D2GSPacketSrv0x5D;
+struct D2GSPacketSrv0x67;
+struct D2GSPacketSrv0x68;
 struct D2GSPacketSrv0x73;
+struct D2GSPacketSrv0x76;
 struct D2GSPacketSrv0x7A;
 struct D2GSPacketSrv0x7F;
 struct D2GSPacketSrv0x81;
 struct D2GSPacketSrv0x82;
 struct D2GSPacketSrv0x8B;
+struct D2GSPacketSrv0x8C;
 struct D2GSPacketSrv0x8D;
 struct D2GSPacketSrv0x8E;
 struct D2GSPacketSrv0x90;
+struct D2GSPacketSrv0x91;
 struct D2ItemStatCostTxt;
 struct D2ServerCmdStrc;
 struct D2SkillsTxt;
@@ -49,6 +63,128 @@ struct __attribute__((packed)) D2GSPacketClt0x5D {
     /* 0x03 */ int nPlayerGUID;
 };
 
+struct __attribute__((packed)) D2GSPacketSrv0x01 {
+    D2GSPacketSrv0x01() = default;
+    D2GSPacketSrv0x01(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2GSPacketSrv0x01(uint8_t a0, uint8_t a1, uint32_t a2, uint8_t a3, uint8_t a4) : nPacketId(a0), nDifficulty(a1), dwArenaFlags(a2), nExpansion(a3), nLadder(a4) {}
+
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nDifficulty;
+    /* 0x02 */ uint32_t dwArenaFlags;
+    /* 0x06 */ uint8_t nExpansion;
+    /* 0x07 */ uint8_t nLadder;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x09 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nClassId;
+    /* 0x07 */ uint16_t wX;
+    /* 0x09 */ uint16_t wY;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x0A {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x0C {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nMessageType;
+    /* 0x07 */ uint8_t nHitClass;
+    /* 0x08 */ uint8_t nHpPercent;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x0D {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nMessageType;
+    /* 0x07 */ uint16_t wX;
+    /* 0x09 */ uint16_t wY;
+    /* 0x0B */ uint8_t nHitClass;
+    /* 0x0C */ uint8_t nHpPercent;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x0E {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nMessageType;
+    /* 0x07 */ uint8_t nParam2;
+    /* 0x08 */ uint32_t dwParam;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x0F {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nMessageType;
+    /* 0x07 */ uint16_t wX;
+    /* 0x09 */ uint16_t wY;
+    /* 0x0B */ uint8_t nHitClass;
+    /* 0x0C */ uint16_t wX2;
+    /* 0x0E */ uint16_t wY2;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x10 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nMessageType;
+    /* 0x07 */ uint8_t nTargetType;
+    /* 0x08 */ uint32_t dwTargetGUID;
+    /* 0x0C */ uint16_t wX;
+    /* 0x0E */ uint16_t wY;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x11 {
+    D2GSPacketSrv0x11() = default;
+    D2GSPacketSrv0x11(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2GSPacketSrv0x11(uint8_t a0, uint8_t a1, uint32_t a2, uint16_t a3) : nPacketId(a0), nUnitType(a1), dwUnitGUID(a2), wParam(a3) {}
+
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint16_t wParam;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x15 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint16_t wX;
+    /* 0x08 */ uint16_t wY;
+    /* 0x0A */ uint8_t bWarpFade;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x20 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwUnitGUID;
+    /* 0x05 */ uint8_t nAttributeId;
+    /* 0x06 */ uint32_t dwValue;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x23 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nSkillSlot;
+    /* 0x07 */ uint16_t wSkillId;
+    /* 0x09 */ uint32_t dwSkillOwnerGUID;
+};
+
+struct D2GSPacketSrv0x29 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t szQuestBits[96]; // game quest record, raw copy of pQuestControl->pQuestFlags
+};
+
 struct __attribute__((packed)) D2GSPacketSrv0x3F {
     D2GSPacketSrv0x3F() = default;
     D2GSPacketSrv0x3F(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
@@ -68,10 +204,95 @@ struct __attribute__((packed)) D2GSPacketSrv0x40 {
     /* 0x09 */ BOOL bSet;
 };
 
+struct __attribute__((packed)) D2GSPacketSrv0x50 {
+    /* 0x00 */ uint8_t nPacketId; // 0x50
+    /* 0x01 */ uint16_t nMessageType; // 1/2/4/0xd/0x17 or quest id (Q36)
+    /* 0x03 */ uint16_t aPayload[6]; // word stores at +3,+5,+7; stone-order word loop from +3
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x51 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nObjectType;
+    /* 0x02 */ uint32_t dwObjectGUID;
+    /* 0x06 */ uint16_t wClassId;
+    /* 0x08 */ uint16_t wX;
+    /* 0x0A */ uint16_t wY;
+    /* 0x0C */ uint8_t nState;
+    /* 0x0D */ uint8_t nInteraction;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x57 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwUnitGUID;
+    /* 0x05 */ uint8_t nParam5;
+    /* 0x06 */ uint16_t wNameSeed;
+    /* 0x08 */ uint16_t wParam8;
+    /* 0x0A */ uint16_t wParam10;
+    /* 0x0C */ uint16_t wParam12;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x5C {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwPlayerGUID;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x5F {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwFlags;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x62 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nUnused;
+};
+
 struct __attribute__((packed)) D2GSPacketSrv0x65 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwUnitGUID;
     /* 0x05 */ uint16_t wKillCount;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x69 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwMonsterGUID;
+    /* 0x05 */ uint8_t nState;
+    /* 0x06 */ uint16_t wX;
+    /* 0x08 */ uint16_t wY;
+    /* 0x0A */ uint8_t nParam1;
+    /* 0x0B */ uint8_t nParam2;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x6B {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwMonsterGUID;
+    /* 0x05 */ uint8_t nAction;
+    /* 0x06 */ uint16_t wX;
+    /* 0x08 */ uint16_t wY;
+    /* 0x0A */ uint8_t nParam1;
+    /* 0x0B */ uint8_t nParam2;
+    /* 0x0C */ uint16_t wX2;
+    /* 0x0E */ uint16_t wY2;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x6C {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwMonsterGUID;
+    /* 0x05 */ uint8_t nAttackType;
+    /* 0x06 */ uint8_t nParam1;
+    /* 0x07 */ uint32_t dwTargetGUID;
+    /* 0x0B */ uint8_t nParam2;
+    /* 0x0C */ uint16_t wX;
+    /* 0x0E */ uint16_t wY;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x6D {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwMonsterGUID;
+    /* 0x05 */ uint16_t wX;
+    /* 0x07 */ uint16_t wY;
+    /* 0x09 */ uint8_t nHpPercent128;
 };
 
 struct __attribute__((packed)) D2GSPacketSrv0x74 {
@@ -81,6 +302,24 @@ struct __attribute__((packed)) D2GSPacketSrv0x74 {
     /* 0x06 */ uint32_t dwCorpseGUID;
 };
 
+struct __attribute__((packed)) D2GSPacketSrv0x79 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nTradeId;
+    /* 0x02 */ uint32_t dwGold;
+};
+
+struct D2GSPacketSrv0x7B {
+    D2GSPacketSrv0x7B() = default;
+    D2GSPacketSrv0x7B(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2GSPacketSrv0x7B(uint8_t a0, uint8_t a1, uint16_t a2, uint32_t a3) : nPacketId(a0), nHotkeySlot(a1), wSkillId(a2), dwHotkeyArg(a3) {}
+
+    /* 0x00 */ uint8_t nPacketId; // 0x7B
+    /* 0x01 */ uint8_t nHotkeySlot;
+    /* 0x02 */ uint16_t wSkillId; // skill id in the low 12 bits, 0x8000 = left-hand skill
+    /* 0x04 */ uint32_t dwHotkeyArg;
+};
+
 struct __attribute__((packed)) D2GSPacketSrv0x7D {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nOwnerUnitType;
@@ -88,6 +327,86 @@ struct __attribute__((packed)) D2GSPacketSrv0x7D {
     /* 0x06 */ uint32_t dwItemGUID;
     /* 0x0A */ uint32_t dwItemState; // 0x100 broke, 0x200 repaired
     /* 0x0E */ uint32_t dwBrokenFlag;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x7E {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwUnused;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0x9B {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint16_t wMercNameId;
+    /* 0x03 */ uint32_t dwReviveCost;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0xA3 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nParam2;
+    /* 0x02 */ uint16_t wSkillId;
+    /* 0x04 */ uint16_t wSkillLevel;
+    /* 0x06 */ uint8_t nCasterType;
+    /* 0x07 */ uint32_t dwValue1;
+    /* 0x0B */ uint8_t nTargetType;
+    /* 0x0C */ uint32_t dwValue2;
+    /* 0x10 */ uint32_t dwValue3;
+    /* 0x14 */ uint32_t dwValue4;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0xA5 {
+    D2GSPacketSrv0xA5() = default;
+    D2GSPacketSrv0xA5(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2GSPacketSrv0xA5(uint8_t a0, uint8_t a1, uint32_t a2, uint16_t a3) : nPacketId(a0), nUnitType(a1), dwUnitGUID(a2), wSkillId(a3) {}
+
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint16_t wSkillId;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0xA7 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nStateId;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0xA8 {
+    /* 0x00 */ uint8_t nPacketId; // 0xA8
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ int32_t nUnitGUID;
+    /* 0x06 */ uint8_t nPacketSize;
+    /* 0x07 */ uint8_t nStateId;
+    /* 0x08 */ uint8_t aBitStream[244];
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0xA9 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nStateId;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0xAA {
+    /* 0x00 */ uint8_t nPacketId; // 0xAA
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ int32_t nUnitGUID;
+    /* 0x06 */ uint8_t nPacketSize;
+    /* 0x07 */ uint8_t aBitStream[244];
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0xAB {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint8_t nUnitType;
+    /* 0x02 */ uint32_t dwUnitGUID;
+    /* 0x06 */ uint8_t nHpPercent128;
+};
+
+struct __attribute__((packed)) D2GSPacketSrv0xAE {
+    /* 0x00 */ uint8_t nPacketId; // 0xAE
+    /* 0x01 */ uint16_t nDataSize; // word SI
+    /* 0x03 */ uint8_t aData[509];
 };
 
 struct D2NET_CLIENT_D2GS_ServerToClient {

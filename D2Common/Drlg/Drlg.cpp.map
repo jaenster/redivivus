@@ -534,6 +534,7 @@
       "usedTypes": [
         "D2DrlgStrc",
         "D2DrlgTileDataStrc",
+        "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t",
         "uint8_t"

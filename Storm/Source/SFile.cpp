@@ -5119,7 +5119,7 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ *ppArchiveOut = pListNode;
     LeaveCriticalSection(&lpCriticalSection_00779068);
-    SFILE_ReadAdditionalAttributes(pListNode, (int)pListNode->pBlockTable, pListNode->pMpqHeader->dwBlockTableSize);
+    SFILE_ReadAdditionalAttributes(pListNode, pListNode->pBlockTable, pListNode->pMpqHeader->dwBlockTableSize);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }

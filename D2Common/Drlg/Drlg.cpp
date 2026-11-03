@@ -3,6 +3,8 @@
 #include "D2Common/Drlg/Drlg.h"
 #include "support/d2_trace.h"
 #include "D2CMP/DUNGEON/Dungeon.h"
+#include "D2CMP/SRC/LRUCache.h"
+#include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/SRC/TileProjects.h"
 #include "D2Client/Archive.h"
 #include "D2Client/D2ClientStrc.h"
@@ -708,7 +710,7 @@ void __fastcall InitCache(D2DrlgStrc * pDrlg, D2DrlgTileDataStrc * pDrlgActSub18
     uint32_t nTileCount;
     int32_t nTileSubType;
     int32_t nTileSubType_00;
-    int nTileIndices[40];
+    D2TileLibraryEntryStrc* nTileIndices[40];
     uint8_t byActNo;
     if (!pDrlg) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x437);
@@ -747,7 +749,7 @@ void __fastcall InitCache(D2DrlgStrc * pDrlg, D2DrlgTileDataStrc * pDrlgActSub18
         exit(-1);
       }
 
-      RoomTile::DRLGROOMTILE_FillTileData(nullptr, pDrlgActSub18, 0, 0, 0, nTileIndices[0]);
+      RoomTile::DRLGROOMTILE_FillTileData(nullptr, pDrlgActSub18, 0, 0, 0, (int)nTileIndices[0]);
       return;
     }
 }
@@ -3688,7 +3690,7 @@ void __stdcall DRLGOUTROOM_ComputeWallOrientations(D2DrlgLevelStrc * pLevel) {
 // Orchestrator: initializes grid, clips vertices, computes wall orientations for Act1 outdoor rooms.
 void __fastcall DRLGOUTROOM_InitAct1RoomGridCells(D2DrlgLevelStrc * pLevel, D2DrlgLevelStrc * pLevelRoom) {
     DrlgGrid::DRLGGRID_InitGridCells(pLevel->pDrlg->pMemoryPool, (D2DrlgGridStrc*)(pLevelRoom->sCoordinatesAndSize.WorldPosition.y + 0x3c), pLevelRoom->aSpawnPoints[1].nY + 3, pLevelRoom->aSpawnPoints[1].nSpawnType + 3);
-    DRLGGRID_SetOutRoomEdgeFlags((int)pLevel, (D2RoomExStrc*)pLevelRoom);
+    DRLGGRID_SetOutRoomEdgeFlags(pLevel, (D2RoomExStrc*)pLevelRoom);
     DRLGOUTROOM_ComputeWallOrientations(pLevelRoom);
 }
 

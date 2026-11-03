@@ -1218,7 +1218,7 @@ void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, D2UnitStrc * 
       return;
     }
 
-    SOUND_StopUnitSound((int32_t)nChanDataPtr);
+    SOUND_StopUnitSound(nChanDataPtr);
 }
 
 void __fastcall SOUND_StopById(int32_t nChannelHandle) {

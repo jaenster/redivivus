@@ -9,6 +9,7 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2AiGeneralStrc;
 struct D2AiParamStrc;
 struct D2MonsterAiCmdStrc;
 struct D2MonsterAiParameterStruct;

@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2GfxDataStrc;
+struct D2GfxUnknown_0xa8;
 struct D2InventoryStrc;
 struct D2MonStatsTxt;
 struct D2UnitStrc;

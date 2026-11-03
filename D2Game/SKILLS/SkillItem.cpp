@@ -527,6 +527,7 @@ BOOL __fastcall SKILLITEM_TownPortalScrollSpell(::SGAMEDATA * pGame, D2UnitStrc 
     BOOL bInTown;
     D2UnitStrc* pPrevPortalOwner;
     uint32_t nPortalGUID;
+    eD2UnitType nArg1;
     D2UnitStrc* pNewPortal;
     uint8_t byItemUnitType;
     int nItemGUID;
@@ -574,8 +575,8 @@ BOOL __fastcall SKILLITEM_TownPortalScrollSpell(::SGAMEDATA * pGame, D2UnitStrc 
         }
         if (pItem) {
           nItemGUID = pItem->nUnitGUID;
-          byItemUnitType = (uint8_t)pItem->eUnitType;
-          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0xda), 0x7c, byItemUnitType, nItemGUID);
+          nArg1 = pItem->eUnitType;
+          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0xda), 0x7c, nArg1, nItemGUID);
         }
 
         return bInTown;
@@ -1264,7 +1265,7 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
     bool bIsBookOrScrollType;
     int* pBookTxt;
     bool bHasCursorFlag;
-    uint8_t byItemUnitType;
+    eD2UnitType eVar2;
     D2UnitStrc* pUnit_00;
     pUnit_00 = pItem;
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
@@ -1313,8 +1314,8 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
 
           SKILLITEM_ClearCursorFlagAndNotifyClient(pUnit);
           nSpellIdx = pUnit_00->nUnitGUID;
-          byItemUnitType = (uint8_t)pUnit_00->eUnitType;
-          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x46f), 0x7c, byItemUnitType, nSpellIdx);
+          eVar2 = pUnit_00->eUnitType;
+          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x46f), 0x7c, eVar2, nSpellIdx);
           return 0;
         }
       }
@@ -1324,8 +1325,8 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
         if (!_bHasCursorFlag) {
           SKILLITEM_ClearCursorFlagAndNotifyClient(pUnit);
           nSpellIdx = pUnit_00->nUnitGUID;
-          byItemUnitType = (uint8_t)pUnit_00->eUnitType;
-          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x47f), 0x7c, byItemUnitType, nSpellIdx);
+          eVar2 = pUnit_00->eUnitType;
+          GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x47f), 0x7c, eVar2, nSpellIdx);
         }
 
         return _bHasCursorFlag;
