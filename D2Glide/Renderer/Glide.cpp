@@ -832,8 +832,8 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
     static int gnGlideCacheSizeB[4] = { 0x0, -0x1, -0x2, -0x3 }; D2_STATIC_GUARD(gnGlideCacheSizeB, "D2Glide::Renderer::Glide::RENDERER_GLIDE_CalculateTextureSize::gnGlideCacheSizeB");
     static int gnGlideCacheSizeA[4] = { 0x0, 0x1, 0x2, 0x3 }; D2_STATIC_GUARD(gnGlideCacheSizeA, "D2Glide::Renderer::Glide::RENDERER_GLIDE_CalculateTextureSize::gnGlideCacheSizeA");
 
-    uint32_t nTexHeightPow2;
-    uint32_t nTexWidthPow2;
+    int nTexHeightPow2;
+    int nTexWidthPow2;
     int nLodLevel = pTexInfo->nWidth;
     if (nLodLevel > 0x80) {
       nTexWidthPow2 = 0x100;
@@ -875,7 +875,7 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
 
     pTexInfo->nTexHeight = nTexHeightPow2;
     uint32_t nMaxDimPow2 = nTexWidthPow2;
-    if (nTexWidthPow2 <= nTexHeightPow2) {
+    if ((uint32_t)nTexWidthPow2 <= (uint32_t)nTexHeightPow2) {
       nMaxDimPow2 = nTexHeightPow2;
     }
     if (nMaxDimPow2 == 0x100) {
@@ -907,31 +907,31 @@ static void RENDERER_GLIDE_CalculateTextureSize(GlideTexInfoStrc * pTexInfo) {
     pTexInfo->nLodLevel = nLodLevel;
     if (nTexWidthPow2 == nTexHeightPow2) {
       pTexInfo->nAspect = 0;
-    } else if (nTexWidthPow2 < nTexHeightPow2) {
+    } else if ((uint32_t)nTexWidthPow2 < (uint32_t)nTexHeightPow2) {
       nLodLevel = 0;
       do {
         nTexWidthPow2 *= 2;
-        if ((int)nTexWidthPow2 > (int)nTexHeightPow2) {
+        if (nTexWidthPow2 > nTexHeightPow2) {
           break;
         }
 
         nLodLevel++;
       } while (nLodLevel < 3);
 
-      pTexInfo->nTexWidth = (int)nTexHeightPow2 >> (uint8_t)nLodLevel;
+      pTexInfo->nTexWidth = nTexHeightPow2 >> (uint8_t)nLodLevel;
       pTexInfo->nAspect = gnGlideCacheSizeB[nLodLevel];
     } else {
       nLodLevel = 0;
       do {
         nTexHeightPow2 *= 2;
-        if ((int)nTexHeightPow2 > (int)nTexWidthPow2) {
+        if (nTexHeightPow2 > nTexWidthPow2) {
           break;
         }
 
         nLodLevel++;
       } while (nLodLevel < 3);
 
-      pTexInfo->nTexHeight = (int)nTexWidthPow2 >> (uint8_t)nLodLevel;
+      pTexInfo->nTexHeight = nTexWidthPow2 >> (uint8_t)nLodLevel;
       pTexInfo->nAspect = gnGlideCacheSizeA[nLodLevel];
     }
 

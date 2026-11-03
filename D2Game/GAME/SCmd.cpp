@@ -169,9 +169,9 @@ void __fastcall NET_D2GS_SERVER_Send_0x03_NEWACT(D2ClientStrc * pClient, uint8_t
     SCMD_QueuePacketForClient(&packet.nPacketId, 0xc, pClient);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_CMD_BYTE_INT(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nArg1, int32_t nArg2) {
+void __fastcall NET_D2GS_SERVER_Send_CMD_BYTE_INT(D2ClientStrc * pClient, uint8_t nPacketId, int nArg1, int32_t nArg2) {
     D2GSPacketSrv_CMD_BYTE_INT aPacket;
-    aPacket.nArg1 = nArg1;
+    aPacket.nArg1 = (uint8_t)nArg1;
     aPacket.nPacketId = nPacketId;
     aPacket.nArg2 = nArg2;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 6, pClient);
@@ -561,11 +561,11 @@ void __fastcall NET_D2GS_SERVER_Send_0x6D_UNITCHANGE_MONSTERNEUTRAL(D2ClientStrc
 // [8..9]=Y, [10]=flag), and that handler calls CLIENT_TeleportUnitToPosition.
 // Two of the four callers (SendReassignPlayer @00548010, CheckIfInrangeAndReassign @005497aa) carry
 // "Reassign" in their names; they warp a unit like the other two.
-void __fastcall NET_D2GS_SERVER_Send_0x15_WarpXY(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint16_t wX, uint16_t wY, uint8_t bWarpFade) {
+void __fastcall NET_D2GS_SERVER_Send_0x15_WarpXY(D2ClientStrc * pClient, uint8_t nPacketId, int nUnitType, uint32_t nUnitGUID, uint16_t wX, uint16_t wY, uint8_t bWarpFade) {
     D2GSPacketSrv0x15 aPacket;
     aPacket.nPacketId = nPacketId;
     aPacket.dwUnitGUID = nUnitGUID;
-    aPacket.nUnitType = nUnitType;
+    aPacket.nUnitType = (uint8_t)nUnitType;
     aPacket.wY = wY;
     aPacket.wX = wX;
     aPacket.bWarpFade = bWarpFade;

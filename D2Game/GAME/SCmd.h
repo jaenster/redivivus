@@ -558,7 +558,7 @@ void __fastcall NET_D2GS_SERVER_SendStateCommand(struct D2ClientStrc * pClient, 
 void __fastcall NET_D2GS_SERVER_Send_0x01_NEWGAME(struct D2ClientStrc * pClient, uint8_t nPacketId, ::SGAMEDATA * pGame);
 // Server-to-client act load command. Opcode 0x03. Instructs client to load a new act.
 void __fastcall NET_D2GS_SERVER_Send_0x03_NEWACT(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nAct, uint32_t nMapSeed, uint32_t nAutomap, uint16_t nArea);
-void __fastcall NET_D2GS_SERVER_Send_CMD_BYTE_INT(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nArg1, int32_t nArg2);
+void __fastcall NET_D2GS_SERVER_Send_CMD_BYTE_INT(struct D2ClientStrc * pClient, uint8_t nPacketId, int nArg1, int32_t nArg2);
 // Server-to-client portal flags notification. Opcode 0x5F, 5 bytes. Sends player's portal flags (GetPlayerPortalFlags) during character load sequence.
 void __fastcall NET_D2GS_SERVER_Send_0x5F_PortalFlags(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t dwPortalFlags);
 // Server-to-client NPC health update. Opcode 0x0C, 9 bytes.
@@ -596,7 +596,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x6D_UNITCHANGE_MONSTERNEUTRAL(struct D2Cli
 // [8..9]=Y, [10]=flag), and that handler calls CLIENT_TeleportUnitToPosition.
 // Two of the four callers (SendReassignPlayer @00548010, CheckIfInrangeAndReassign @005497aa) carry
 // "Reassign" in their names; they warp a unit like the other two.
-void __fastcall NET_D2GS_SERVER_Send_0x15_WarpXY(struct D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nUnitType, uint32_t nUnitGUID, uint16_t wX, uint16_t wY, uint8_t bWarpFade);
+void __fastcall NET_D2GS_SERVER_Send_0x15_WarpXY(struct D2ClientStrc * pClient, uint8_t nPacketId, int nUnitType, uint32_t nUnitGUID, uint16_t wX, uint16_t wY, uint8_t bWarpFade);
 // Server-to-client map reveal. Opcode 0x07, 6 bytes. Reveals automap area around tile coordinate.
 void __fastcall NET_D2GS_SERVER_Send_0x07_MapReveal(struct D2ClientStrc * pClient, int nAreaId, uint16_t nTileX, uint16_t nTileY);
 // Server-to-client map hide. Opcode 0x08, 6 bytes.
