@@ -104,7 +104,7 @@ static void __stdcall SendPlayerInfo(uint16_t wRelationFlag, uint32_t nRelationS
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, uint32_t pnError) {
+void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, int * pnError) {
     uint32_t bIsConnected;
     uint8_t nPartyEventCode;
     uint8_t bEventType;
@@ -129,7 +129,7 @@ void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, D2UnitS
     SendPlayerEvent(UNIT::SUnit::SUNIT_GetClient(pTarget, ".\\PLAYER\\PartyScreen.cpp", 0x65), bIsConnected, nPartyEventCode);
 }
 
-void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, uint32_t pnError) {
+void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, int * pnError) {
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pTarget, pUnit);
     uint32_t nCurrentFlags = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pUnit, pTarget, 2);
@@ -141,7 +141,7 @@ void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, D2UnitStrc *
     GAME::SCmd::NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(pTarget, pUnit);
 }
 
-void __fastcall PARTYSCREEN_UpdateSquelchRelation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, uint32_t pnError) {
+void __fastcall PARTYSCREEN_UpdateSquelchRelation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bNewState, int * pnError) {
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pTarget, pUnit);
     uint32_t nCurrentFlags = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pUnit, pTarget, 4);
@@ -341,7 +341,7 @@ void __fastcall SendPlayerPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
     GAME::SCmd::NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(pTarget, pUnit);
 }
 
-void __fastcall PARTYSCREEN_LeaveParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t pTarget, uint32_t dwArg, uint32_t pnError) {
+void __fastcall PARTYSCREEN_LeaveParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwArg, int * pnError) {
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
     UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)PARTY_SendPlayerLeftEvent, (BOOL)(uintptr_t)pUnit);
     UNIT::Party::PARTY_RemoveUnitFromParty(pGame, pUnit);
@@ -396,7 +396,7 @@ static void __stdcall PARTYSCREEN_SetHostileWithParty(::SGAMEDATA * pGame, D2Uni
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTYSCREEN_ToggleHostile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bWantHostile, uint32_t * pnError) {
+void __fastcall PARTYSCREEN_ToggleHostile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t bWantHostile, int * pnError) {
     BOOL bIsInTown;
     int32_t nLevel;
     int nTargetLevel;
@@ -450,7 +450,7 @@ void __fastcall PARTYSCREEN_ToggleHostile(::SGAMEDATA * pGame, D2UnitStrc * pUni
           return;
         }
 
-        PARTYSCREEN_LeaveParty(pGame, pUnit, 0, 0, (uint32_t)&bWantHostile);
+        PARTYSCREEN_LeaveParty(pGame, pUnit, nullptr, 0, (int*)&bWantHostile);
         return;
       }
 

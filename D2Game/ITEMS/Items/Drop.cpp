@@ -2547,7 +2547,7 @@ void __fastcall ITEM_RemoveRuneword(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Deserialises a saved item into a live server unit. Validates game pointer and classId bounds, allocates a unit via CreateUnit, loads save-data blob via ITEM_LoadFromSaveData, sets SERVER/clears NEW flags, refreshes durability and quantity. Returns null on any failure and frees the partially-created unit.
-D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t * pSaveData, size_t nSaveDataSize, uint32_t bCheckItemHeader, D2UnitDataItemDetailsStrc * pUnitDataItemDetails, int * pnBytesConsumed, uint32_t nParam2) {
+D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t * pSaveData, size_t nSaveDataSize, uint32_t bCheckItemHeader, D2UnitDataItemDetailsStrc * pUnitDataItemDetails, int * pnBytesConsumed, uint32_t nVersion) {
     int nItemsTableSize;
     D2UnitStrc* pUnit;
     int32_t nBytesConsumed;
@@ -2568,7 +2568,7 @@ D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, D2RoomStrc 
           return nullptr;
         }
 
-        nBytesConsumed = D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pSaveData, nSaveDataSize, bCheckItemHeader, nullptr, nParam2, (int*)&pUnitDataItemDetails);
+        nBytesConsumed = D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pSaveData, nSaveDataSize, bCheckItemHeader, nullptr, nVersion, (int*)&pUnitDataItemDetails);
         *pnBytesConsumed = nBytesConsumed;
         if (nBytesConsumed && !pUnitDataItemDetails) {
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_SERVER, 1);

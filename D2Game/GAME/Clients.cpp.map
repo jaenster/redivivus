@@ -1741,7 +1741,7 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "int32_t"
+        "D2PacketListStrc"
       ]
     },
     {

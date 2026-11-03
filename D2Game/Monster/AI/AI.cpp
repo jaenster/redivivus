@@ -10380,7 +10380,7 @@ int32_t __fastcall CalculateRiskAncientsAndDiablo(::SGAMEDATA * pGameStrc, D2Uni
 
 // Server-side Diablo (act boss) AI action selector; structurally identical to the Baal variant. Builds a 17-slot skill-weight table selected by melee-range vs wall-collision vs ranged branch, then biases weights by target fire/light resist, life%, cold state, difficulty (nChaosArenaRadius), distance, whether the target casts a feared mass-spell (Blizzard/Meteor/FireWall/ImmolationArrow above level threshold) and Chaos-Sanctuary arena positioning (pChaosArenaData marker). Zeroes weights for actions Diablo can't cast at the position, sums and seed-RNG weighted-picks. Returns the chosen action index (0..16, mapping to spell/move helpers), 0x10 if path blocked with no target, 0xb fallback. Returns dwArg0 immediately if a queued decision override is set.
 // Action weight slots (aActionWeights index): 5 melee skill mod, 6 lightning, 7 cold adjust, 8 fire adjust, 9 range bias, 10 fire, 12 skill, 13 cold, 14 teleport, 15 arena target. aActionWeightTemplate is built first and copied over aActionWeights with REP MOVSD (17 dwords).
-int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2UnitStrc * pDiabloUnit, D2UnitStrc * pTargetEnemyUnit, uint32_t nTargetDistance, int32_t nChaosArenaRadius, int32_t pChaosArenaData) {
+int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2UnitStrc * pDiabloUnit, D2UnitStrc * pTargetEnemyUnit, uint32_t nTargetDistance, int32_t nChaosArenaRadius, D2MonsterAiCmdStrc * pChaosArenaData) {
     bool bSignedGreater;
     int32_t nWeightedDist;
     int32_t nPosCoord;
@@ -10455,7 +10455,7 @@ int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2Unit
         pRoom = D2Common::Units::UNITS_GetRoom(pArenaPlayerMarker);
         eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
         if (eLevelId == LEVEL_ChaosSanctuary) {
-          nTotalWeightSum = D2Common::Collision::GetDistanceToXY(pArenaPlayerMarker, *(int32_t*)(pChaosArenaData + 0xc), *(int32_t*)(pChaosArenaData + 0x10));
+          nTotalWeightSum = D2Common::Collision::GetDistanceToXY(pArenaPlayerMarker, pChaosArenaData->nCmdArg[1], pChaosArenaData->nCmdArg[2]);
           if (nTotalWeightSum < 0x55) {
             bMarkerNearArenaCenter = true;
           }
@@ -10517,7 +10517,7 @@ int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2Unit
     bool bVar15;
     bVar15 = false;
     if (pChaosArenaData) {
-      nWeightedDist = AI_GetWeightedDistanceToPoint(pTargetEnemyUnit, *(int32_t*)(pChaosArenaData + 0xc), *(int32_t*)(pChaosArenaData + 0x10));
+      nWeightedDist = AI_GetWeightedDistanceToPoint(pTargetEnemyUnit, pChaosArenaData->nCmdArg[1], pChaosArenaData->nCmdArg[2]);
       bVar15 = nWeightedDist > 0x55;
       if (nWeightedDist > 0x69) {
         bVar16 = true;
@@ -22082,7 +22082,7 @@ BOOL __fastcall MONSTERAI_CanSpawnMonsterAt(int32_t nMonsterClassId, D2RoomStrc 
 }
 
 // Validation predicate used by monster AI before casting a positional/teleport skill. Given a skill id, target unit and target X/Y (nParam1/nParam2), returns nonzero if the skill may be cast at the chosen position. Rejects invalid/passive skills (and id 0xa7); special-cases by srvdofunc/skill id: leap-type (srvdofunc 0x4d/0x4e) mirrors the target position past the caster and requires free coords + non-town room + no blocking collision + line of sight; id 199 spawns a predefined unit at the target; teleport-type ids (0xb8/0xcb and srvdofunc 0x43) find a better nearby room and require non-town + clear collision + LOS to nParam1/nParam2. Read-only except for the id-199 spawn path.
-uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillId, D2UnitStrc * pTargetUnit, int32_t nParam1, int32_t nParam2) {
+uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillId, D2UnitStrc * pTargetUnit, int32_t nCastX, int32_t nCastY) {
     int32_t nUnitY;
     int32_t nUnitSize;
     D2RoomStrc* pRoom;
@@ -22165,18 +22165,18 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
       }
       if (nSkillId == 0xb8) {
         if (pUnit) {
-          nUnitY = nParam2;
+          nUnitY = nCastY;
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nParam1, nUnitY);
+          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nCastX, nUnitY);
           if (pRoom) {
             bTmp = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
             if (!bTmp) {
               nUnitY = 0x3c01;
-              nUnitY = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, nParam1, nParam2, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), nUnitY);
+              nUnitY = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, nCastX, nCastY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), nUnitY);
               if (!nUnitY) {
                 nUnitY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
                 nUnitSize = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-                bHasLoS = D2Common::Skills::SKILLS_HasLineOfSight(nUnitY, nUnitSize, nParam1, nParam2, pRoom, 0xc01);
+                bHasLoS = D2Common::Skills::SKILLS_HasLineOfSight(nUnitY, nUnitSize, nCastX, nCastY, pRoom, 0xc01);
                 return (uint32_t)(bHasLoS != 0);
               }
             }
@@ -22184,15 +22184,15 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
         }
       } else if (nSrvDoFunc == 0x43) {
         if (pUnit) {
-          nUnitY = nParam2;
+          nUnitY = nCastY;
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nParam1, nUnitY);
+          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nCastX, nUnitY);
           if (pRoom) {
             bTmp = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
             if (!bTmp) {
               nUnitY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
               nUnitSize = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-              bHasLoS = D2Common::Skills::SKILLS_HasLineOfSight(nUnitY, nUnitSize, nParam1, nParam2, pRoom, 0xc01);
+              bHasLoS = D2Common::Skills::SKILLS_HasLineOfSight(nUnitY, nUnitSize, nCastX, nCastY, pRoom, 0xc01);
               return (uint32_t)(bHasLoS != 0);
             }
           }
@@ -22202,15 +22202,15 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
           return 1;
         }
         if (pUnit) {
-          nUnitY = nParam2;
+          nUnitY = nCastY;
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nParam1, nUnitY);
+          pRoom = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nCastX, nUnitY);
           if (pRoom) {
             bTmp = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
             if (!bTmp) {
               nUnitY = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit);
               nUnitSize = D2Client::Units::GetYPosFromDynamicPathUnit(pUnit);
-              bHasLoS = D2Common::Skills::SKILLS_HasLineOfSight(nUnitY, nUnitSize, nParam1, nParam2, pRoom, 0x805);
+              bHasLoS = D2Common::Skills::SKILLS_HasLineOfSight(nUnitY, nUnitSize, nCastX, nCastY, pRoom, 0x805);
               return (uint32_t)(bHasLoS != 0);
             }
           }

@@ -66,23 +66,23 @@
 
 namespace D2Game::Monster::Create {
 
-int * * __fastcall MONSTER_FindUnitInPartySlot(int * pUnit, int32_t pGame) {
-    int** pPartyNode;
-    if (!(pGame && pUnit && (!*pUnit || *pUnit == 1) && pUnit[0x34] != 0xb)) {
+int * * __fastcall MONSTER_FindUnitInPartySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+    D2UnitNodeStrc* pPartyNode;
+    if (!(pGame && pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER) && pUnit->nNodeTableIndex != 0xb)) {
       return nullptr;
     }
 
-    for (pPartyNode = *(int***)(pGame + 0x10f8 + pUnit[0x34] * 4); pPartyNode; pPartyNode = (int**)pPartyNode[2]) {
-      if (*pPartyNode == pUnit) {
-        return pPartyNode;
+    for (pPartyNode = pGame->pUnitNodes[pUnit->nNodeTableIndex]; pPartyNode; pPartyNode = pPartyNode->pPrev) {
+      if (pPartyNode->pUnit == pUnit) {
+        return (int**)pPartyNode;
       }
     }
 
     return nullptr;
 }
 
-void __fastcall MONSTER_SetClearPartyFlags(int32_t pGame, int * pUnit, uint32_t dwFlagMask, int32_t bSet) {
-    if (!(pGame && pUnit && (!*pUnit || *pUnit == 1))) {
+void __fastcall MONSTER_SetClearPartyFlags(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwFlagMask, int32_t bSet) {
+    if (!(pGame && pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER))) {
       return;
     }
 

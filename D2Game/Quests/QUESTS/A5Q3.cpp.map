@@ -609,6 +609,7 @@
         "ExecuteFunctionForEveryPartyMember"
       ],
       "usedTypes": [
+        "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t",
         "uint16_t",

@@ -79,7 +79,7 @@
         "CHAT_ResetIMEState"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2UIMouseMsgStrc"
       ]
     },
     {
@@ -366,7 +366,7 @@
         "SetUIFlag"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2UIMouseMsgStrc"
       ]
     },
     {

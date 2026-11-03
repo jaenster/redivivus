@@ -238,13 +238,13 @@ uint32_t __fastcall SOUNDSMP_GetStreamProgress(D2SoundSmpStrc * pSound) {
     return 0;
 }
 
-void __fastcall SOUNDSMP_SetFrequency(int32_t pSound, uint32_t bLoop) {
+void __fastcall SOUNDSMP_SetFrequency(D2SoundSmpStrc * pSound, int bLoop) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32f);
       exit(-1);
     }
 
-    *(uint32_t*)(pSound + 0x40) = bLoop;
+    pSound->bLooping = bLoop;
 }
 
 void __fastcall SOUNDSMP_SetMinDistance(D2SoundSmpStrc * pSound, uint32_t dwParam) {

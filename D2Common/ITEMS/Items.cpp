@@ -2508,11 +2508,10 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
 }
 
 // Reads one item stat from a bit-buffer during .d2s / stash deserialization. Applies legacy file-version fixups (versions below 0x58/0x5a/0x5d remap specific stats and narrow their bit-widths), reads the param-lo nibble if the stat has a size field, then calls D2AddStatToStatsListEx to append the decoded stat to pStatList.
-static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2UnitStat eUnitStat, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatList, int32_t pItemStatCost, int32_t nStatIndex) {
+static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2UnitStat eUnitStat, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatList, D2ItemStatCostTxt * pItemStatCost, int32_t nStatIndex) {
     uint32_t uVar1;
-    int nSize = *(int*)(pItemStatCost + 0x24 + nStatIndex * 4);
-    uint32_t nSaveBits = (uint32_t)*(uint8_t*)(pItemStatCost + 0x19 + nStatIndex);
-    int32_t nSaveAdd = *(int32_t*)(pItemStatCost + 0x1c + nStatIndex * 4);
+    uint32_t nSaveBits = (uint32_t)pItemStatCost->saveBits[nStatIndex];
+    int32_t nSaveAdd = pItemStatCost->saveAdd[nStatIndex];
     int32_t nParamLo = 0;
     switch (eUnitStat) {
       case UNITSTAT_secondary_mindamage:
@@ -2592,13 +2591,13 @@ static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2Unit
         }
     }
 
-    if (nSize > 0) {
-      uVar1 = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nSize);
+    if (pItemStatCost->saveAdd[nStatIndex + 2] > 0) {
+      uVar1 = Fog::BitBuffer::ReadUnsigned(pBitBuffer, pItemStatCost->saveAdd[nStatIndex + 2]);
       nParamLo = (uint16_t)uVar1;
     }
 
     uVar1 = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nSaveBits);
-    Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, uVar1 - nSaveAdd << (*(uint8_t*)(pItemStatCost + 0x18) & 0x1f), nParamLo);
+    Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, uVar1 - nSaveAdd << (pItemStatCost->valshift & 0x1fU), nParamLo);
 }
 
 // Deserializes the header fields of a D2 item from a packed bit-stream into a D2UnitDataItemDetailsStrc. Reads flags (32 bits), skips 10 bits (version + destination prefix), decodes the 3-bit destination: if stored/socketed (3 or 5) reads 16-bit x/y grid coords; otherwise reads body-loc, x, y, and inventory page. Handles the BODYPART (ear) special case for the item code tag, applies a legacy "nec " -> "neg " fixup for saves pre-version 0x5D, converts the 4-char code to a classId, and reads the socket count for non-compact non-crude items.

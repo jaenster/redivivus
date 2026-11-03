@@ -15,7 +15,7 @@ namespace D2Client {
 
 // Function declarations
 void __fastcall fpDrawVisTile(uint8_t * pbTileData, int32_t nScreenX, int32_t nScreenY);
-void __fastcall DRAW_DrawWallTileWithLighting(int32_t nTileDataPtr, int32_t nScreenX, int32_t nScreenY, int32_t nLightLevel);
+void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nScreenX, int32_t nScreenY, int32_t nLightLevel);
 // Stack-slot reuse: with perspective on, the low byte of the pCoords slot caches the first byte read through pCoords (tested against 0xf8).
 void __fastcall fpDrawWallTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, uint8_t * pCoords);
 void __fastcall fpDrawBlendedVisTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, int32_t nLightVal);

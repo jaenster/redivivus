@@ -51,25 +51,25 @@
 
 namespace D2Client::GAME::Draw {
 
-void __thiscall DRAW_UpdateTileVisibilityBounds(int32_t pDrawFloor, D2DrlgTileDataStrc * pActSub18, int32_t nWorldX, int32_t nWorldY) {
+void __thiscall DRAW_UpdateTileVisibilityBounds(D2DrawFloorStrc * pDrawFloor, D2DrlgTileDataStrc * pActSub18, int32_t nWorldX, int32_t nWorldY) {
     pActSub18->nFlags |= 0x20000;
-    if (!*(int*)(pDrawFloor + 0x28)) {
+    if (!pDrawFloor->bPerspectiveHasEffectOnSprite) {
       return;
     }
-    if (nWorldX < *(int*)(pDrawFloor + 0x2c)) {
-      *(int32_t*)(pDrawFloor + 0x2c) = nWorldX;
+    if (nWorldX < pDrawFloor->nMinTileX) {
+      pDrawFloor->nMinTileX = nWorldX;
     }
-    if (nWorldX > *(int*)(pDrawFloor + 0x30)) {
-      *(int32_t*)(pDrawFloor + 0x30) = nWorldX;
+    if (nWorldX > pDrawFloor->nMaxTileX) {
+      pDrawFloor->nMaxTileX = nWorldX;
     }
-    if (nWorldY < *(int*)(pDrawFloor + 0x34)) {
-      *(int32_t*)(pDrawFloor + 0x34) = nWorldY;
+    if (nWorldY < pDrawFloor->nMinTileY) {
+      pDrawFloor->nMinTileY = nWorldY;
     }
-    if (nWorldY <= *(int*)(pDrawFloor + 0x38)) {
+    if (nWorldY <= pDrawFloor->nMaxTileY) {
       return;
     }
 
-    *(int32_t*)(pDrawFloor + 0x38) = nWorldY;
+    pDrawFloor->nMaxTileY = nWorldY;
 }
 
 // Fills an 8x8 grid of D2GfxLightExStrc entries with light colour and intensity for a tile. For indoor tiles, queries the act environment for a flat intensity and RGB colour, then writes those constant values to all 64 cells. For outdoor tiles, iterates the 8x8 world-coordinate grid (tile origin * 8, stepped by 8) and calls DRAW_CoordIsInCoord for each cell to compute per-cell light colour from the outdoor lighting model.

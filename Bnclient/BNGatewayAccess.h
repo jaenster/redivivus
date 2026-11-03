@@ -67,7 +67,7 @@ char * __stdcall DNS(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex)
 int32_t __stdcall GMT(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
 char * __stdcall Name(struct D2BNetGatewayAccessStr * pGatewayAccess, int nIndex);
 char * __stdcall Realm(struct D2BNetGatewayAccessStr * pGatewayAccess, int32_t nIndex);
-void __stdcall SetCurGateway(int32_t pGatewayAccess, int32_t nGatewayIdx);
+void __stdcall SetCurGateway(struct D2BNetGatewayAccessStr * pGatewayAccess, int32_t nGatewayIdx);
 // GetGatewayList(this=ECX, szValueName on stack) __thiscall, ret 4. Reads the gateway
 // REG_MULTI_SZ via Storm SSTR_RegistryReadValueEx(key="Configuration", value=szValueName)
 // into this+0x10 (pGatewayData), this+0x14 (size), this+0x18 (version=strtoul of 1st string).

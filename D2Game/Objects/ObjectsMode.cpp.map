@@ -2616,6 +2616,7 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "POINT",
+        "SGAMEDATA",
         "eD2ItemTypes",
         "int32_t",
         "uint32_t",

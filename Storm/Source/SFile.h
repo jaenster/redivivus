@@ -530,7 +530,7 @@ void __stdcall SFileReadFileEx(struct D2MPQFileStrc * pMPQFile, void * pOutputBu
 // @sourcefile .\SOURCE\SFILE.CPP
 // Reads the archive's (attributes) file for SFILE_s_OpenArchive.
 // Name from the PowerPC 1.13c Storm traceback table (static ReadAdditionalAttributes @10020670).
-int __thiscall SFILE_ReadAdditionalAttributes(struct D2ArchiveStrc * pArchive, int pAttributesBuffer, int nNumEntries);
+int __thiscall SFILE_ReadAdditionalAttributes(struct D2ArchiveStrc * pArchive, struct D2MPQBlockEntryStrc * pAttributesBuffer, int nNumEntries);
 // Open wave file as audio stream from MPQ archive. Parses RIFF/WAVE headers, allocates audio buffer, initializes DirectSound stream with frequency/channels settings. Starts async IO thread. Returns 1 on success, 0 on failure.
 // @sourcefile .\SOURCE\SFILE.CPP
 BOOL __stdcall SFileDdaBeginEx(struct D2MPQFileStrc * hFile, uint32_t dwBufferBytes, uint32_t dwFlags, uint32_t dwInitialPos, int32_t lVolume, int32_t lPan, struct IDirectSoundBuffer * lpDSB);

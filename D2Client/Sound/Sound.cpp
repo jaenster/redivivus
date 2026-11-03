@@ -1171,14 +1171,14 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
     exit(-1);
 }
 
-static void SOUND_StopUnitSound(int32_t pChannel) {
-    D2SoundsTxt* pSoundsTxt = SoundHdr::TXT_sounds_GetLineBySoundId(*(int32_t*)(pChannel + 4));
-    *(uint32_t*)(pChannel + 0x3d) = 1;
-    if (!(pSoundsTxt->Fade_Out && *(int*)(pChannel + 0x30) == 1)) {
+static void SOUND_StopUnitSound(D2SoundChannelStrc * pChannel) {
+    D2SoundsTxt* pSoundsTxt = SoundHdr::TXT_sounds_GetLineBySoundId(pChannel->nSoundId);
+    pChannel->bStopFlag = 1;
+    if (!(pSoundsTxt->Fade_Out && pChannel->nPlayMode == 1)) {
       return;
     }
 
-    SOUND_StopChannelGracefully(*(int32_t*)(pChannel + 8), 0, 0, (uint32_t)pSoundsTxt->Fade_Out);
+    SOUND_StopChannelGracefully(pChannel->nChannelHandle, 0, 0, (uint32_t)pSoundsTxt->Fade_Out);
 }
 
 void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, D2UnitStrc * pUnit, int32_t bForceStop) {

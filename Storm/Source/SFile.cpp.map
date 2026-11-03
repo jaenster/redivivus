@@ -2791,8 +2791,10 @@
       ],
       "usedTypes": [
         "D2ArchiveStrc",
+        "D2MPQBlockEntryStrc",
         "D2MPQFileStrc",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {

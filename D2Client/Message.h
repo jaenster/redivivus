@@ -50,7 +50,7 @@ void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, in
 void __fastcall MESSAGE_RegisterEventHandlerBatch(HWND hWnd, struct D2UIFlagInitStrc * pEventHandlers, int32_t nCount);
 // Iterates D2UIFlagInitStrc array and unregisters nCount event handlers via MESSAGE_UnregisterEventHandler. Used during UI state cleanup.
 void __fastcall MESSAGE_UnregisterEventHandlerBatch(HWND hWnd, struct D2UIFlagInitStrc * pEventHandlers, int32_t nCount);
-uint32_t __fastcall MESSAGE_RegisterWindowMessageHandlers(uint32_t hWnd);
+uint32_t __fastcall MESSAGE_RegisterWindowMessageHandlers(HWND hWnd);
 void __fastcall MESSAGE_UnregisterWindowMessageHandlers(char * szText);
 // Gets the current HWND and snapshots all registered event handlers. Used for save/restore state during modal dialogs.
 void __stdcall MESSAGE_SnapshotEventHandlers();

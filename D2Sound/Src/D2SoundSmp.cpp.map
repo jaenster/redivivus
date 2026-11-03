@@ -242,6 +242,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2SoundSmpStrc",
         "int32_t"
       ]
     },

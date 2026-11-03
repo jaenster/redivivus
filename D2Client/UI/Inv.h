@@ -116,7 +116,7 @@ int __stdcall INV_CheckActionThrottle();
 BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY);
 void __stdcall INV_HandleInventoryRightClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleMouseMove(struct D2UIMouseMsgStrc * pMsg);
-int32_t __stdcall ClickItemRight(struct D2UnitStrc * pItem, struct D2InventoryStrc * pGridCoords, int32_t nPage, struct D2UnitStrc * pPlayer, struct D2InventoryStrc * pInventory);
+int32_t __stdcall ClickItemRight(int32_t pItem, int32_t pGridCoords, int32_t nPage, struct D2UnitStrc * pPlayer, struct D2InventoryStrc * pInventory);
 // Resets the shop/inventory panel UI state. Fifty-six bytes whose only writes are stores to globals through EAX, so it preserves ECX. Typed __stdcall, the decompiler treated ECX as killed by the call, and INV_HandleShopLeftClick carries its button-loop stride there across two calls to this function - the stride became an unassigned local and the shop button scan advanced by garbage.
 void __fastcall INV_ResetHoverAndContextState();
 void __fastcall INV_ClearItemDescription(struct D2UnitStrc * pUnit);

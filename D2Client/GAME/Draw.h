@@ -73,7 +73,7 @@ struct D2GfxLightExStrc {
 namespace D2Client::GAME::Draw {
 
 // Function declarations
-void __thiscall DRAW_UpdateTileVisibilityBounds(int32_t pDrawFloor, struct D2DrlgTileDataStrc * pActSub18, int32_t nWorldX, int32_t nWorldY);
+void __thiscall DRAW_UpdateTileVisibilityBounds(struct D2DrawFloorStrc * pDrawFloor, struct D2DrlgTileDataStrc * pActSub18, int32_t nWorldX, int32_t nWorldY);
 // Populates a 6×6 grid of D2GfxLightExStrc entries for orthographic roof lighting. Reads the act's ambient light intensity and RGB color via DRLGENV_GetIntensityFromAct / DRLGENV_GetLightColorFromAct. Adjusts nScreenX by ±ScreenSizeX/4 for split-screen sides (nSplitSide 1/2). For each grid cell (skipping interior cells when bBorderOnly), sets screen-space X/Y position and either samples dynamic light (outdoor: DRAW_CoordIsInCoord) or fills with the flat ambient color (indoor). Output is written into the pParam array.
 void __stdcall DRAW_CalcRoofLightOrtho(struct D2GfxLightExStrc * pLightGrid, int32_t nScreenX, int32_t nScreenY, int32_t nTileX, int32_t nTileY, int32_t nIndoorFlag, int32_t nSplitSide, int32_t bBorderOnly);
 // Fills a 6×6 grid of D2GfxLightExStrc light entries for a roof tile in perspective (3D) mode. Reads ambient intensity and RGB colour from the act DRLG environment, then for each grid point calls D2GFX_AdjustPerspectivePosition (depth != 0) or DRAW_CoordIsInCoord (depth == 0, orthographic fallback) to compute screen-space XY. Applies a horizontal split-screen offset when nSplitSide is 1 (left half) or 2 (right half). bBorderOnly restricts writes to the 4 border rows/columns.

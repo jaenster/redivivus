@@ -859,8 +859,10 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc",
+        "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t",
+        "uint32_t",
         "uint8_t"
       ]
     },

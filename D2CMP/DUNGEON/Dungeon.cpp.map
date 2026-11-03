@@ -60,6 +60,7 @@
         "FINDTILE_Lookup"
       ],
       "usedTypes": [
+        "D2TileLibraryEntryStrc *",
         "int32_t",
         "uint32_t",
         "void *"
@@ -124,6 +125,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
       ]
@@ -165,6 +167,7 @@
         "exit"
       ],
       "usedTypes": [
+        "D2TileLibraryEntryStrc",
         "int32_t"
       ]
     },

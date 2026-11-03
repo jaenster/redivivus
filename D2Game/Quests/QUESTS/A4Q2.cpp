@@ -93,13 +93,13 @@ void __fastcall Q26_NotifyIzualKilledToPlayers(::SGAMEDATA * pGame) {
 }
 
 // [A4Q1 Izual helper] Per-unit IterateAllUnits callback: if this unit is within collision-distance 5 of the tracked target (Izual), set the "near" flag in the iteration context.
-void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t pQuestSpecificData) {
-    int32_t nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, *(D2UnitStrc**)(pQuestSpecificData + 0x14));
+void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2QuestDataA4Q1Strc * pQuestSpecificData) {
+    int32_t nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, pQuestSpecificData->pIzualUnit);
     if (nCollisionDist >= 5) {
       return;
     }
 
-    *(uint8_t*)(pQuestSpecificData + 0x18) = 1;
+    *(uint8_t*)&pQuestSpecificData->field_0x18 = 1;
 }
 
 // [A4Q1 Izual helper] Returns true if NO player is near Izual: looks up The Fallen Angel quest data, then iterates all units via Q26_CheckIzualProximity to test proximity.

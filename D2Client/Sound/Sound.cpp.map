@@ -719,8 +719,8 @@
         "SOUND_StopChannelGracefully"
       ],
       "usedTypes": [
-        "D2SoundsTxt",
-        "int32_t"
+        "D2SoundChannelStrc",
+        "D2SoundsTxt"
       ]
     },
     {

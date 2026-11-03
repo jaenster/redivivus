@@ -165,16 +165,16 @@ char * __stdcall Realm(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nIndex) 
     return "";
 }
 
-void __stdcall SetCurGateway(int32_t pGatewayAccess, int32_t nGatewayIdx) {
-    /* 0x118150  19  ?SetCurGateway@BNGatewayAccess@@QAGXH@Z */ if (!(*(int*)(pGatewayAccess + 0x10) && nGatewayIdx >= 1 && nGatewayIdx <= *(int*)(pGatewayAccess + 8))) {
+void __stdcall SetCurGateway(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nGatewayIdx) {
+    /* 0x118150  19  ?SetCurGateway@BNGatewayAccess@@QAGXH@Z */ if (!(pGatewayAccess->pGatewayData && nGatewayIdx >= 1 && nGatewayIdx <= pGatewayAccess->nGatewayCount)) {
       return;
     }
     if (nGatewayIdx > 99) {
       nGatewayIdx = 99;
     }
 
-    *(int32_t*)(pGatewayAccess + 0xc) = nGatewayIdx;
-    *(uint32_t*)(pGatewayAccess + 4) = 1;
+    pGatewayAccess->nCurGatewayIdx = nGatewayIdx;
+    pGatewayAccess->bDirty = 1;
 }
 
 // GetGatewayList(this=ECX, szValueName on stack) __thiscall, ret 4. Reads the gateway

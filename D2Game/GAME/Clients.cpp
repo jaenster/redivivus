@@ -1468,16 +1468,16 @@ void __fastcall SERVER_PutPacketInQueueList(D2ClientStrc * pClient, D2PacketList
     pClient->pPacketList = pPacketList;
 }
 
-void __fastcall CLIENT_SetPacketList(D2ClientStrc * pClient, int32_t pPacketList) {
-    *(uint32_t*)(pPacketList + 0x204) = 0;
+void __fastcall CLIENT_SetPacketList(D2ClientStrc * pClient, D2PacketListStrc * pPacketList) {
+    pPacketList->pNext = 0;
     if (!pClient->pDispatchList) {
-      *(uint32_t*)(pPacketList + 0x204) = 0;
-      pClient->pDispatchList = (D2PacketListStrc*)pPacketList;
+      pPacketList->pNext = 0;
+      pClient->pDispatchList = pPacketList;
       return;
     }
 
-    pClient->pPacketList = (D2PacketListStrc*)pPacketList;
-    pClient->pDispatchList = (D2PacketListStrc*)pPacketList;
+    pClient->pPacketList = pPacketList;
+    pClient->pDispatchList = pPacketList;
 }
 
 D2PacketListStrc * __fastcall CLIENT_ClearDispatchList(D2ClientStrc * pClient) {

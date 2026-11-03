@@ -75,9 +75,9 @@
       ],
       "usedTypes": [
         "D2InventoryGridInfoStrc",
+        "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t",
-        "uint32_t",
         "uint8_t"
       ]
     },

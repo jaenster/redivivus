@@ -1081,8 +1081,8 @@
         "ITEMS_IsA"
       ],
       "usedTypes": [
+        "D2MagicAffixTxt",
         "D2UnitStrc",
-        "int32_t",
         "uint16_t",
         "uint32_t",
         "uint8_t"
@@ -1106,8 +1106,8 @@
         "ITEMS_IsA"
       ],
       "usedTypes": [
+        "D2RareAffixTxt",
         "D2UnitStrc",
-        "int32_t",
         "uint16_t",
         "uint32_t"
       ]
@@ -1197,6 +1197,7 @@
       ],
       "usedTypes": [
         "D2ItemStatCostTxt",
+        "D2SetsTxtFStrc",
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2UnitStat",

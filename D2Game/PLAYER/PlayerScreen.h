@@ -19,9 +19,9 @@ namespace D2Game::PLAYER::PlayerScreen {
 // Builds and sends a 0x5A event-message packet to a client. Zeroes a D2Packet0x5aEventStructure, fills packet ID 0x5A, message type 0x07, the target unit GID, and maps bParam (event subtype 1-11) to a color code. Dispatches via NET_D2GS_SERVER_Send_0x5A_EventMessages. Used for party/relationship notifications.
 void __thiscall SendPlayerEvent(void * pThis, uint32_t pUnitGid, uint8_t nPartyEventCode);
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, uint32_t pnError);
-void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, uint32_t pnError);
-void __fastcall PARTYSCREEN_UpdateSquelchRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, uint32_t pnError);
+void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, int * pnError);
+void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, int * pnError);
+void __fastcall PARTYSCREEN_UpdateSquelchRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, int * pnError);
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pPartyJoinArgs);
 // Processes acceptance of a party invite between pUnit (acceptor) and pInvitee (inviter). Allocates bidirectional player-list entries, checks PLAYERLIST_IsPartied result: if not fully partied sends 0x8B relationship packets and returns. Otherwise allocates a new party (if invitee has none) or joins the existing one via PARTY_AddUnitToParty, refreshes all relationship states, sends a join event (bParam=8) to acceptor's client, and iterates all units to assign them to the party.
@@ -39,11 +39,11 @@ void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, struct D2UnitSt
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall PARTY_SendPlayerLeftEvent(uint32_t dwUnused, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther);
 void __fastcall SendPlayerPartyInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
-void __fastcall PARTYSCREEN_LeaveParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t pTarget, uint32_t dwArg, uint32_t pnError);
+void __fastcall PARTYSCREEN_LeaveParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t dwArg, int * pnError);
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall PARTYSCREEN_SetHostileForPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTYSCREEN_ToggleHostile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bWantHostile, uint32_t * pnError);
+void __fastcall PARTYSCREEN_ToggleHostile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bWantHostile, int * pnError);
 void __fastcall SendAllPlayersPartyInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 eD2ServerIncomingStatus __fastcall PlayerScreen_DispatchAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int nActionIndex, uint32_t dwTargetUnitId, uint32_t dwArg);
 int __fastcall PARTYSCREEN_ClearHostileRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);

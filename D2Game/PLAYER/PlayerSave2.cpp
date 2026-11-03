@@ -1327,11 +1327,11 @@ int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short
     return 0;
 }
 
-int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppItemList, int32_t nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnLoadResult) {
+int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppItemList, uint8_t * nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnLoadResult) {
     D2UnitStrc** ppReadPos = ppItemList;
     D2UnitStrc* pBufStart = *ppItemList;
     ppItemList = 0;
-    int32_t nLoadResult = PlayerSave::PLRSAVE_DispatchItemLoadByFormat(pGame, pUnit, (uint8_t*)pBufStart, nFormat, nItemMode - (int)pBufStart, 0, (short int**)&ppItemList);
+    int32_t nLoadResult = PlayerSave::PLRSAVE_DispatchItemLoadByFormat(pGame, pUnit, (uint8_t*)pBufStart, nFormat, (int)nItemMode - (int)pBufStart, 0, (short int**)&ppItemList);
     if (nLoadResult) {
       if (pnLoadResult) {
         *pnLoadResult = nLoadResult;

@@ -36,7 +36,7 @@ int __fastcall FINDTILE_ComputeHash(char cSubIndex, char cIndex, char cTileSubTy
 struct D2TileLibraryHashStrc * __stdcall FINDTILE_AllocHashTable();
 void __fastcall FINDTILE_FreeHashTable(struct D2TileLibraryHashStrc * pHashTable);
 void __fastcall FINDTILE_Register(struct D2TileLibraryHashStrc * pHashTable, struct D2TileLibraryEntryStrc * pTileData);
-int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex);
+int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, struct D2TileLibraryEntryStrc * * pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex);
 // 2 internal functions (defined in .cpp)
 
 } // namespace D2CMP::SRC::FindTiles

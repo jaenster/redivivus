@@ -2726,6 +2726,7 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc",
+        "D2ItemStatCostTxt",
         "D2StatListExStrc",
         "eD2UnitStat",
         "int32_t",

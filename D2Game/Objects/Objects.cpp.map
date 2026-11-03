@@ -1274,6 +1274,7 @@
       ],
       "usedTypes": [
         "D2DrlgRoomCoordsStrc",
+        "D2ObjectRngStrc",
         "D2RoomStrc",
         "D2SeedStrc",
         "SGAMEDATA",
@@ -1302,6 +1303,7 @@
         "OBJECT_RollAndDispatchPopulateFn"
       ],
       "usedTypes": [
+        "D2LevelsTxt",
         "D2ObjectRngStrc",
         "D2RoomStrc",
         "SGAMEDATA",
@@ -1497,6 +1499,7 @@
       ],
       "usedTypes": [
         "D2ObjectsTxt",
+        "D2UnitStrc",
         "int32_t"
       ]
     },

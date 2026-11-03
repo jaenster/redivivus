@@ -2379,9 +2379,9 @@ static int16_t GetAltSkillDescription(eD2Skills eSkillId) {
     return pSkillDescTxt->strAlt;
 }
 
-static void __stdcall ApplyPassiveFireMasteryDamage(int32_t pSkillsTxt, int32_t * nMinElemDamage, int32_t * nMaxElemDamage) {
+static void __stdcall ApplyPassiveFireMasteryDamage(D2SkillsTxt * pSkillsTxt, int32_t * nMinElemDamage, int32_t * nMaxElemDamage) {
     D2UnitStrc* pUnitEx = UNIT::Player::GetPlayerUnit_UI();
-    if (!(pSkillsTxt && *(char*)(pSkillsTxt + 0x1dc) == '\x01')) {
+    if (!(pSkillsTxt && pSkillsTxt->EType == ELEMENTAL_FIRE)) {
       return;
     }
 
@@ -2398,9 +2398,9 @@ static void __stdcall ApplyPassiveFireMasteryDamage(int32_t pSkillsTxt, int32_t 
     *nMaxElemDamage = nBonus + nBaseDmg;
 }
 
-static void __stdcall ApplyPassiveLightningMasteryDamage(int32_t pSkillsTxt, int32_t * nMinElemDamage, int32_t * nMaxElemDamage) {
+static void __stdcall ApplyPassiveLightningMasteryDamage(D2SkillsTxt * pSkillsTxt, int32_t * nMinElemDamage, int32_t * nMaxElemDamage) {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    if (!(pSkillsTxt && *(char*)(pSkillsTxt + 0x1dc) == '\x02')) {
+    if (!(pSkillsTxt && pSkillsTxt->EType == ELEMENTAL_LIGHTNING)) {
       return;
     }
 
@@ -4107,7 +4107,7 @@ static void __stdcall SKILLDESC_DrawSingleNumber(int32_t nColorIdx, int32_t nScr
     ui::UI_DrawTextCentered(nScreenX + gnPanelOffsetX, gnPanelOffsetY + ScreenSizeY - 0x1e0 + nScreenY, gnPanelOffsetX + nScreenZ, wszNumTextW16, nColorIdx);
 }
 
-static void __stdcall SKILLDESC_DrawSkillDmgPhysical(int32_t pSkillRecord, D2UnitStrc * pUnit, int32_t nItemClassId, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t nExtraFlags, int pCompareUnit, int32_t nScreenX, int32_t nScreenY, int32_t nScreenZ, int32_t nElemDmg, short * pnDamageRange) {
+static void __stdcall SKILLDESC_DrawSkillDmgPhysical(D2SkillStrc * pSkillRecord, D2UnitStrc * pUnit, int32_t nItemClassId, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t nExtraFlags, int pCompareUnit, int32_t nScreenX, int32_t nScreenY, int32_t nScreenZ, int32_t nElemDmg, short * pnDamageRange) {
     // Frame slots -20..-4 are ONE object: &nElemDmgTypeFlag is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -4150,7 +4150,7 @@ static void __stdcall SKILLDESC_DrawSkillDmgPhysical(int32_t pSkillRecord, D2Uni
     nElemDmg = 0;
     nItemClassId = 0;
     __frame0.nOffhandMaxDmg = 0;
-    SKILLDESC_CalcDualWieldDamage(&__frame0.nMainMinDmg, &nElemDmg, &__frame0.nDmgTypeFlag, &nItemClassId, &__frame0.nOffhandMaxDmg, &__frame0.nElemDmgTypeFlag, (D2SkillStrc*)pSkillRecord, pfnCalcWeaponDmg, nExtraFlags, (D2UnitStrc*)pCompareUnit, pUnit);
+    SKILLDESC_CalcDualWieldDamage(&__frame0.nMainMinDmg, &nElemDmg, &__frame0.nDmgTypeFlag, &nItemClassId, &__frame0.nOffhandMaxDmg, &__frame0.nElemDmgTypeFlag, pSkillRecord, pfnCalcWeaponDmg, nExtraFlags, (D2UnitStrc*)pCompareUnit, pUnit);
     if (__frame0.nMainMinDmg && nElemDmg) {
       __frame0.nMainMinDmg = (int)(__frame0.nMainMinDmg * nSrcDamPct) / 128 + nElemMinDmg;
       nElemDmg = (int)(nElemDmg * nSrcDamPct) / 128 + nElemMaxDmg;
@@ -5624,7 +5624,7 @@ static int __stdcall SKILLDESC_FormatMissileDamage(int32_t nMinDamage, int32_t n
     return 1;
 }
 
-static void __stdcall SKILLDESC_DescLine16_MissileDamage(int32_t nMissileId, D2UnitStrc * pOwner, int32_t nLevel, int32_t pSkillsTxt, uint16_t * wszText) {
+static void __stdcall SKILLDESC_DescLine16_MissileDamage(int32_t nMissileId, D2UnitStrc * pOwner, int32_t nLevel, D2SkillsTxt * pSkillsTxt, uint16_t * wszText) {
     uint8_t byElemType;
     uint16_t wElemLocaleId;
     int32_t nMinDmgRaw;

@@ -284,7 +284,7 @@ void __fastcall DRLG_FreeInactiveLevelData(struct D2DrlgStrc * pDrlg);
 void __fastcall DRLGANIM_PropagateAnimationData(struct D2RoomExStrc * pRoomExSrc, struct D2RoomExStrc * pRoomExDst);
 // Looks up tile library entry by type/index/subindex, randomly selects variant.
 // @blizzard FindHTile
-int __fastcall DRLG_FindHTile(struct D2RoomExStrc * pRoomEx, int nTileType, uint32_t nGridFlags);
+struct D2TileLibraryEntryStrc * __fastcall DRLG_FindHTile(struct D2RoomExStrc * pRoomEx, int nTileType, uint32_t nGridFlags);
 void __fastcall FreeRoomEx(struct D2RoomExStrc * pRoomEx, BOOL bServerSide);
 // Loads DT1 tile files from LvlTypes.txt based on nDT1Mask, plus Blank/InvisWal/Warp.dt1.
 void __fastcall DRLGROOMEX_InitTileData(struct D2RoomExStrc * pRoomEx);

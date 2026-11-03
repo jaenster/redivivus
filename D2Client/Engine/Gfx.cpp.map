@@ -171,6 +171,7 @@
       ],
       "usedTypes": [
         "D2GfxInfoStrc",
+        "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "eD2States",
         "int32_t"

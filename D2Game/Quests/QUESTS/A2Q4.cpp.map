@@ -397,6 +397,7 @@
       ],
       "usedTypes": [
         "D2QuestDataA2Q4Strc",
+        "D2QuestDataStrc",
         "D2RoomStrc",
         "D2UnitStrc",
         "POINT",

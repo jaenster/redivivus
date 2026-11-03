@@ -37,6 +37,7 @@
         "GetCollisionDistance"
       ],
       "usedTypes": [
+        "D2QuestDataA4Q1Strc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"

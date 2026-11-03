@@ -138,6 +138,7 @@
         "AllocPresetUnit"
       ],
       "usedTypes": [
+        "D2DrlgMapStrc",
         "D2PoolManagerStrc",
         "D2PresetUnitStrc",
         "int32_t"

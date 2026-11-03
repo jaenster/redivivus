@@ -139,7 +139,7 @@ int32_t __fastcall GetExperience(struct D2ClientStrc * pClient);
 BYTE __fastcall HasWeaponSwapped(struct D2ClientStrc * pClient);
 void __fastcall SetWeaponSwap(struct D2ClientStrc * pClient, uint8_t bWeaponSwapped);
 void __fastcall SERVER_PutPacketInQueueList(struct D2ClientStrc * pClient, struct D2PacketListStrc * pPacketList);
-void __fastcall CLIENT_SetPacketList(struct D2ClientStrc * pClient, int32_t pPacketList);
+void __fastcall CLIENT_SetPacketList(struct D2ClientStrc * pClient, struct D2PacketListStrc * pPacketList);
 struct D2PacketListStrc * __fastcall CLIENT_ClearDispatchList(struct D2ClientStrc * pClient);
 struct D2PacketListStrc * __fastcall CLIENT_GetPacketList(struct D2ClientStrc * pClient);
 struct D2PacketListStrc * __fastcall CLIENT_GetDispatchList(struct D2ClientStrc * pClient);

@@ -1098,6 +1098,7 @@
         "OOGUTIL_CheckCharacterLevel"
       ],
       "usedTypes": [
+        "D2LanGameEntryStrc",
         "eD2PlayerStatus",
         "int32_t",
         "uint32_t",

@@ -68,7 +68,7 @@ void __stdcall TILEPROJECT_FreeSlot(int32_t pnProjectIds, int32_t pProject) {
     *(uint32_t*)(pnProjectIds + nSlotIndex * 4) = 0;
 }
 
-uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex, int * pnFoundTiles, uint32_t nMaxTiles) {
+uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex, D2TileLibraryEntryStrc * * pnFoundTiles, uint32_t nMaxTiles) {
     int32_t nTotalFound;
     if (!ppProjects) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5d);
@@ -83,7 +83,7 @@ uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int
         break;
       }
 
-      nTotalFound = SRC::FindTiles::FINDTILE_Lookup((int**)ppProjects[iProjectIdx], (int32_t)(pnFoundTiles + nFoundInProjectAccum), nRemaining, nTileType, nTileSubType, nSubIndex);
+      nTotalFound = SRC::FindTiles::FINDTILE_Lookup((int**)ppProjects[iProjectIdx], pnFoundTiles + nFoundInProjectAccum, nRemaining, nTileType, nTileSubType, nSubIndex);
       nRemaining -= nTotalFound;
       nFoundInProjectAccum += nTotalFound;
       if (!nRemaining) {
@@ -114,13 +114,13 @@ int32_t __stdcall GetIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     return pTileLibraryEntry->nIndex;
 }
 
-uint32_t __stdcall TILEPROJECT_GetTileCount(int32_t pTileEntry) {
+uint32_t __stdcall TILEPROJECT_GetTileCount(D2TileLibraryEntryStrc * pTileEntry) {
     if (!pTileEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b);
       exit(-1);
     }
 
-    return (uint32_t)*(uint16_t*)(pTileEntry + 6);
+    return (uint32_t)(uint16_t)pTileEntry->nFlags;
 }
 
 uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam) {
@@ -132,13 +132,13 @@ uint32_t __stdcall TILEPROJECT_GetTileDataPtr(int32_t nParam) {
     return *(uint32_t*)(nParam + 0xc);
 }
 
-uint32_t __stdcall TILEPROJECT_GetAnimatedTileDataPtr(int32_t pTileLibraryEntry) {
+int __stdcall TILEPROJECT_GetAnimatedTileDataPtr(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7d);
       exit(-1);
     }
 
-    return *(uint32_t*)(pTileLibraryEntry + 0x20);
+    return pTileLibraryEntry->nFrame_Rarity;
 }
 
 int32_t __stdcall GetSubIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {

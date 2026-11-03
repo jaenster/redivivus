@@ -883,7 +883,7 @@ uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(D2UnitStrc * pUnit, D2Un
 }
 
 // Core initialization of a freshly allocated monster unit from its MonStats/MonStats2 record. Validates nClassId against the MonStats table, allocates the unit stat list and sets base stats: level (per-difficulty from TreasureClass area), attackrate, velocity%, animrate, and the six per-difficulty resistances (dmg/magic/fire/light/cold/poison), then applies difficulty scaling and base maxhp/hitpoints. Allocates the dynamic path (room nParam1, mode/coords from params) and sets velocity. Creates a player inventory for NPCs/interactables (or special class ids). Sets the update flag (nParam2). For dead/no-deadCol monsters removes collision, shrinks width and switches to corpse collision. Randomizes start gfx frame; sets targetable/shadow/valid-target/can-be-attacked unit flags from MonStats2 isSel/shadow/isAtt. Sets monstats type, special-monster init, light map, creates skill list, applies unique modifiers, then adds the monster's up to 8 skills (level += difficulty MonsterSkillBonus) with their modes. Finally computes an initial facing direction (random or special-case per base/class id, e.g. catapult firing position) and sets the path direction. nParam1=room ptr, pSkillIdPtr/nOverrideMode feed path alloc.
-void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, uint32_t pRoom, int32_t nOverrideMode, short * pSkillIdPtr, int32_t nClassId, uint32_t nAnimMode) {
+void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nOverrideMode, short * pSkillIdPtr, int32_t nClassId, uint32_t nAnimMode) {
     D2InventoryStrc* pInventory;
     eD2UnitFlags eUpdatedFlags;
     D2SkillListStrc* pSkillsList;
@@ -929,7 +929,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, uint32_t pRoom, int3
     D2Common::Monsters::MONSTERS::MONSTER_ApplyDifficultyScaling(pUnit, GAME::Game::CLIENT_CheckExpansion(), byDifficulty);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, 0x6400, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, 0x6400, 0);
-    D2Common::PATH::DynamicPath::AllocDynamicPath(nullptr, (D2RoomStrc*)pRoom, nOverrideMode, (int32_t)pSkillIdPtr, pUnit, 1);
+    D2Common::PATH::DynamicPath::AllocDynamicPath(nullptr, pRoom, nOverrideMode, (int32_t)pSkillIdPtr, pUnit, 1);
     D2DynamicPathStrc* pDynamicPath;
     pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, (int)pMonStatsTxt->Velocity << 8, ".\\UNIT\\Monster.cpp", 0x208);

@@ -45,7 +45,7 @@ namespace D2Client::UI::Chat {
 // @sourcefile .\UI\chat.cpp
 void __stdcall INPUT_HandleIMENotify(struct D2UIMouseMsgStrc * pMsg);
 uint8_t __stdcall CHAT_CheckIMELanguage();
-void __stdcall CHAT_ResetIMEState(int32_t pMsg);
+void __stdcall CHAT_ResetIMEState(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall CHAT_InitIME();
 // @sourcefile .\UI\chat.cpp
 void __stdcall CHAT_ShutdownIME();
@@ -57,7 +57,7 @@ void __stdcall DRAW_UI_ChatInput();
 void __stdcall CHAT_RestoreFromHistory();
 void __stdcall CHAT_ScrollHistory(int32_t nDirection);
 BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, char * szOutParam);
-void __stdcall CHAT_CheckChatboxBounds(int32_t pMsg);
+void __stdcall CHAT_CheckChatboxBounds(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_HandleChatScroll(struct D2UIMouseMsgStrc * pMsg);
 int32_t __fastcall CHAT_IsWideStringASCII(uint16_t * wszText);
 void __stdcall CHAT_InitHistoryIndices();

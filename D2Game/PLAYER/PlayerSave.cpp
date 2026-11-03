@@ -2120,7 +2120,7 @@ static int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelin
     return nLevel < 0x19 ? 100 : 0xc8;
 }
 
-uint32_t __fastcall _oldSaveGameLoadingPart8_part1(int32_t pGame, uint16_t wHirelingId, uint32_t dwExperience) {
+uint32_t __fastcall _oldSaveGameLoadingPart8_part1(::SGAMEDATA * pGame, uint16_t wHirelingId, uint32_t dwExperience) {
     int nMercLevel = 1;
     int32_t nExpPerLevel = _oldSaveGameLoadingPart8_part1_part1(wHirelingId, 2);
     uint32_t nExpThreshold = nExpPerLevel * 0x12;
@@ -2134,7 +2134,7 @@ uint32_t __fastcall _oldSaveGameLoadingPart8_part1(int32_t pGame, uint16_t wHire
       iVar1 = nLevel;
     }
 
-    D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(*(int32_t*)(pGame + 0x70), (uint32_t)wHirelingId, nMercLevel);
+    D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)wHirelingId, nMercLevel);
     if (!(!pHirelingTxt || (nExpThreshold = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl) , nExpThreshold <= dwExperience))) {
       return nExpThreshold;
     }
@@ -2471,7 +2471,7 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
     return iVar1;
 }
 
-int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, D2UnitStrc * * ppUnit, uint32_t pRoom, uint32_t nSpawnX, uint32_t nSpawnY) {
+int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, D2UnitStrc * * ppUnit, D2RoomStrc * pRoom, uint32_t nSpawnX, uint32_t nSpawnY) {
     int32_t nResult;
     if (nSavefileSize < 8) {
       return 9;
@@ -2480,11 +2480,11 @@ int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, D2ClientSt
       return 9;
     }
     if (pSavefile->dwFileVersion < 0x5c) {
-      nResult = SEVER_loadFrom_Old_Savegame(pGame, pClient, pSavefile, nSavefileSize, ppUnit, pRoom, nSpawnX, nSpawnY);
+      nResult = SEVER_loadFrom_Old_Savegame(pGame, pClient, pSavefile, nSavefileSize, ppUnit, (uint32_t)pRoom, nSpawnX, nSpawnY);
       return nResult;
     }
 
-    nResult = PlayerSave2::PLAYERSAVE_LoadModernFormat(pGame, pClient, pSavefile, nSavefileSize, ppUnit, pRoom, nSpawnX, nSpawnY);
+    nResult = PlayerSave2::PLAYERSAVE_LoadModernFormat(pGame, pClient, pSavefile, nSavefileSize, ppUnit, (uint32_t)pRoom, nSpawnX, nSpawnY);
     return nResult;
 }
 
@@ -2546,7 +2546,7 @@ static int32_t __fastcall CLIENT_LoadPlayerFromDisk(::SGAMEDATA * pGame, uint32_
     return 0xe;
 }
 
-static int32_t __stdcall CLIENT_LoadPlayerFromNetworkSave(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * * ppUnit, uint32_t dwParam1, uint32_t dwParam2, uint32_t dwParam3) {
+static int32_t __stdcall CLIENT_LoadPlayerFromNetworkSave(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * * ppUnit, D2RoomStrc * pRoom, uint32_t nSpawnX, uint32_t nSpawnY) {
     *ppUnit = 0;
     D2SaveFileHeaderStrc* pSavegame = GAME::Clients::GetSaveGame(pClient);
     size_t nSaveGameSize = GAME::Clients::GetSaveGameSize(pClient);
@@ -2554,7 +2554,7 @@ static int32_t __stdcall CLIENT_LoadPlayerFromNetworkSave(::SGAMEDATA * pGame, D
       return 0xe;
     }
 
-    int32_t nResult = SERVER_LoadPlayerFromSaveFile(pGame, pClient, pSavegame, nSaveGameSize, ppUnit, dwParam1, dwParam2, dwParam3);
+    int32_t nResult = SERVER_LoadPlayerFromSaveFile(pGame, pClient, pSavegame, nSaveGameSize, ppUnit, pRoom, nSpawnX, nSpawnY);
     if (nResult) {
       *ppUnit = 0;
       return nResult;

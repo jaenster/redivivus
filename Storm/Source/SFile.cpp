@@ -4702,10 +4702,12 @@ void __stdcall SFileReadFileEx(D2MPQFileStrc * pMPQFile, void * pOutputBuffer, u
 // @sourcefile .\SOURCE\SFILE.CPP
 // Reads the archive's (attributes) file for SFILE_s_OpenArchive.
 // Name from the PowerPC 1.13c Storm traceback table (static ReadAdditionalAttributes @10020670).
-int __thiscall SFILE_ReadAdditionalAttributes(D2ArchiveStrc * pArchive, int pAttributesBuffer, int nNumEntries) {
+int __thiscall SFILE_ReadAdditionalAttributes(D2ArchiveStrc * pArchive, D2MPQBlockEntryStrc * pAttributesBuffer, int nNumEntries) {
     void* pAttrData;
     uint32_t* pSrcAttr;
-    uint32_t* pDstEntry;
+    uint32_t* puVar1;
+    FILETIME* pFVar2;
+    uint8_t* pDstEntry;
     DWORD nExpectedSize;
     D2MPQFileStrc* pMpqFile;
     uint32_t nAttrFlags;
@@ -4732,34 +4734,34 @@ int __thiscall SFILE_ReadAdditionalAttributes(D2ArchiveStrc * pArchive, int pAtt
           }
           if (nAttrFileSize == nExpectedSize) {
             if (nAttrFlags & 1 && (uint32_t)nNumEntries > 0) {
-              pDstEntry = (uint32_t*)(pAttributesBuffer + 0x18);
+              puVar1 = &pAttributesBuffer->dwCRC32;
               nResult = nNumEntries;
               do {
-                *pDstEntry = *pSrcAttr;
-                pDstEntry += 0xb;
+                *puVar1 = *pSrcAttr;
+                puVar1 += 0xb;
                 pSrcAttr++;
                 nResult--;
               } while (nResult);
             }
             if (nAttrFlags & 2 && (uint32_t)nNumEntries > 0) {
-              pDstEntry = (uint32_t*)(pAttributesBuffer + 0x10);
+              pFVar2 = &pAttributesBuffer->ftFileTime;
               nResult = nNumEntries;
               do {
-                *pDstEntry = *pSrcAttr;
-                pDstEntry[1] = pSrcAttr[1];
-                pDstEntry += 0xb;
+                pFVar2->dwLowDateTime = *pSrcAttr;
+                pFVar2->dwHighDateTime = pSrcAttr[1];
+                pFVar2 = (FILETIME*)((int)(pFVar2 + 5) + 4);
                 pSrcAttr += 2;
                 nResult--;
               } while (nResult);
             }
             if (nAttrFlags & 4 && (uint32_t)nNumEntries > 0) {
-              pDstEntry = (uint32_t*)(pAttributesBuffer + 0x24);
+              pDstEntry = pAttributesBuffer->abMD5 + 8;
               do {
-                pDstEntry[-2] = *pSrcAttr;
-                pDstEntry[-1] = pSrcAttr[1];
-                *pDstEntry = pSrcAttr[2];
-                pDstEntry[1] = pSrcAttr[3];
-                pDstEntry += 0xb;
+                *(uint32_t*)(pDstEntry - 8) = *pSrcAttr;
+                *(uint32_t*)(pDstEntry - 4) = pSrcAttr[1];
+                *(uint32_t*)pDstEntry = pSrcAttr[2];
+                *(uint32_t*)(pDstEntry + 4) = pSrcAttr[3];
+                pDstEntry += 0x2c;
                 pSrcAttr += 4;
                 nNumEntries--;
               } while (nNumEntries);

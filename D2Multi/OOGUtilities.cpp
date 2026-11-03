@@ -1874,7 +1874,7 @@ BOOL __stdcall OOGUTIL_OnPressWaitInLineCancel(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
-int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, int32_t pEntry) {
+int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, D2LanGameEntryStrc * pEntry) {
     bool bDiffMatch;
     uint8_t byCopy;
     int nNameChar;
@@ -1917,13 +1917,13 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, i
       return 0;
     }
 
-    *(uint16_t*)(pEntry + 0x33) = 1;
+    pEntry->nPort = 1;
     int* pnNameField = pnQueryResult + 9;
-    *(int*)(pEntry + 0x37) = pnQueryResult[4];
+    pEntry->dwIpAddress = pnQueryResult[4];
     pnQueryResult = pnNameField;
     do {
       nNameChar = *pnQueryResult;
-      *(char*)(pEntry + 1 - (int)pnNameField + (int)pnQueryResult) = (char)nNameChar;
+      *(char*)((int)pEntry + (1 - (int)pnNameField) + (int)pnQueryResult) = (char)nNameChar;
       pnQueryResult = (int*)((int)pnQueryResult + 1);
     } while ((char)nNameChar != '\0');
 
@@ -1935,7 +1935,7 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, i
       pbCopySrc = pbLevelField;
       do {
         byCopy = *pbCopySrc;
-        pbCopySrc[pEntry + 0x11 - (int)pbLevelField] = byCopy;
+        pbCopySrc[(int)pEntry + (0x11 - (int)pbLevelField)] = byCopy;
         pbCopySrc++;
       } while (byCopy);
 

@@ -1197,12 +1197,12 @@ void __fastcall DRLGANIM_PropagateAnimationData(D2RoomExStrc * pRoomExSrc, D2Roo
 
 // Looks up tile library entry by type/index/subindex, randomly selects variant.
 // @blizzard FindHTile
-int __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int nTileType, uint32_t nGridFlags) {
+D2TileLibraryEntryStrc * __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int nTileType, uint32_t nGridFlags) {
     int nRarityEntry;
     uint8_t nMainIndex;
     uint32_t nRaritySum;
     uint32_t nRandom;
-    int aTileResults[40];
+    D2TileLibraryEntryStrc* aTileResults[40];
     D2SeedStrc sNewSeed;
     if (nGridFlags) {
       nMainIndex = (uint8_t)(nGridFlags >> 0x14) & 0x3f;
@@ -3578,20 +3578,20 @@ static void __stdcall DRLGOUTROOM_InitGridNeighborBuffer(int32_t nRow, eD2GridCe
 }
 
 // Iterates outdoor vertex lists, calls SetLineFlagsWithWidth for room edges.
-static void DRLGGRID_SetOutRoomEdgeFlags(int pDrlgLevelData, D2RoomExStrc * pRoomEx) {
+static void DRLGGRID_SetOutRoomEdgeFlags(D2DrlgLevelStrc * pDrlgLevelData, D2RoomExStrc * pRoomEx) {
     D2DrlgCoordsStrc sCoords;
     D2DrlgVertexStrc* pVertex;
-    int nDrlgLevelBase = *(int*)(pDrlgLevelData + 0x14);
+    D2DrlgLevelDataWildernessLevel* nDrlgLevelBase = pDrlgLevelData->pDrlgLevelData.pDrlgLevelOutdoorsData;
     sCoords.WorldPosition.x = pRoomEx->sCoords.WorldPosition.x - 1;
     sCoords.WorldPosition.y = pRoomEx->sCoords.WorldPosition.y - 1;
     sCoords.WorldSize.x = pRoomEx->sCoords.WorldSize.x + 3;
     sCoords.WorldSize.y = pRoomEx->sCoords.WorldSize.y + 3;
     int nIndex = 0;
-    if (*(int*)(nDrlgLevelBase + 0x260) <= 0) {
+    if (nDrlgLevelBase->nExitCount <= 0) {
       return;
     }
 
-    D2DrlgVertexStrc** pVertexListPtr = (D2DrlgVertexStrc**)(nDrlgLevelBase + 0x68);
+    D2DrlgVertexStrc** pVertexListPtr = nDrlgLevelBase->pAdjacentVertices;
     do {
       D2DrlgRoomExDataMazeStrc* pRoomExDataVoid = pRoomEx->pRoomExData.pRoomExDataMazeRoom;
       for (pVertex = *pVertexListPtr; pVertex; pVertex = pVertex->pNext) {
@@ -3602,7 +3602,7 @@ static void DRLGGRID_SetOutRoomEdgeFlags(int pDrlgLevelData, D2RoomExStrc * pRoo
 
       pVertexListPtr++;
       nIndex++;
-    } while (nIndex < *(int*)(nDrlgLevelBase + 0x260));
+    } while (nIndex < nDrlgLevelBase->nExitCount);
 }
 
 // Autotiling: computes 8-bit neighbor mask, looks up wall orientation from 256-entry table.

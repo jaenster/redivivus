@@ -2504,21 +2504,21 @@ int32_t __fastcall RollWeaponRack(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2Drl
 }
 
 // Decides whether and which object-populate sub-function to run for a room. Returns 0 immediately if the room area fails a minimum-density threshold (objRng[2] < objRng[3]*10). Rolls the object-control seed to get a base chance, adjusts a density bonus (+5/+10) based on room fill ratio, and skips if the roll exceeds the density+12 threshold. Collects enabled populate-type indices from dwPopulateMask bits, randomly picks one, then dispatches to the corresponding function pointer from the global populate-function table at 0x731e68, passing &sRoomCoords.
-static int32_t __stdcall OBJECT_RollAndDispatchPopulateFn(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint32_t dwPopulateMask, int32_t pObjRng) {
+static int32_t __stdcall OBJECT_RollAndDispatchPopulateFn(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint32_t dwPopulateMask, D2ObjectRngStrc * pObjRng) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     int nEnabledPopTypes[8];
-    if (!(*(int*)(pObjRng + 8) < *(int*)(pObjRng + 0xc) * 10)) {
+    if (!(pObjRng->nMinDistance < pObjRng->pad_0xC * 10)) {
       D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
       D2SeedStrc newSeed = D2_SEED_NEXT(*pCtrlSeed);
       *pCtrlSeed = newSeed;
       nEnabledPopTypes[7] = newSeed.nSeedLow % 100;
       int nDensityPct = 0;
-      if (*(int*)(pObjRng + 4) > *(int*)(pObjRng + 8) / 2) {
+      if (pObjRng->pad_0x4 > pObjRng->nMinDistance / 2) {
         nDensityPct = 5;
       }
 
-      int nRoomArea = *(int*)(pObjRng + 8);
-      if (*(int*)(pObjRng + 4) > nRoomArea - nRoomArea / 4) {
+      int nRoomArea = pObjRng->nMinDistance;
+      if (pObjRng->pad_0x4 > nRoomArea - nRoomArea / 4) {
         nDensityPct += 5;
       }
       if (!(nEnabledPopTypes[7] < nDensityPct + 0xc)) {
@@ -2570,7 +2570,7 @@ static int32_t __stdcall OBJECT_RollAndDispatchPopulateFn(::SGAMEDATA * pGame, D
 }
 
 // Populates special objects for one room during level generation. Skips rooms that already have a waypoint, are outdoors-bordered, or are in town. Lazily initialises the per-level object RNG's room count on first call. Increments the room counter (pad_0x4) and, if the room's populate-fn pointer is set, calls OBJECT_RollAndDispatchPopulateFn; returns 1 on success, 0 otherwise.
-static BOOL __stdcall OBJECT_PopulateRoomSpecialObjects(::SGAMEDATA * pGame, int32_t pLevelsTxt, D2RoomStrc * pRoom) {
+static BOOL __stdcall OBJECT_PopulateRoomSpecialObjects(::SGAMEDATA * pGame, D2LevelsTxt * pLevelsTxt, D2RoomStrc * pRoom) {
     int32_t nPopResult;
     BOOL bResult = D2Common::DUNGEON::Dungeon::HasWaypoint(pRoom);
     if (bResult) {
@@ -2598,11 +2598,11 @@ static BOOL __stdcall OBJECT_PopulateRoomSpecialObjects(::SGAMEDATA * pGame, int
     }
 
     pObjRng->pad_0x4++;
-    if (!*(uint32_t*)(pLevelsTxt + 0x210)) {
+    if (!pLevelsTxt->Themes) {
       return 1;
     }
 
-    nPopResult = OBJECT_RollAndDispatchPopulateFn(pGame, pRoom, *(uint32_t*)(pLevelsTxt + 0x210), (int32_t)pObjRng);
+    nPopResult = OBJECT_RollAndDispatchPopulateFn(pGame, pRoom, pLevelsTxt->Themes, pObjRng);
     if (nPopResult != 1) {
       return 1;
     }
@@ -2836,16 +2836,16 @@ uint8_t __stdcall OBJECT_GetDefaultSize() {
     return '\x02';
 }
 
-static void OBJECT_RemapClassIdFromParm(int32_t pUnit) {
-    int32_t nClassId = !pUnit ? -1 : *(int32_t*)(pUnit + 4);
+static void OBJECT_RemapClassIdFromParm(D2UnitStrc * pUnit) {
+    int32_t nClassId = !pUnit ? -1 : pUnit->nClassId;
     D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
     int nParmClassId = pObjectsTxt->Parm[1];
     if (nParmClassId && nParmClassId < 0x23d) {
-      *(int*)(pUnit + 4) = nParmClassId;
+      pUnit->nClassId = nParmClassId;
       return;
     }
 
-    *(uint32_t*)(pUnit + 4) = 0x54;
+    pUnit->nClassId = 0x54;
 }
 
 void __fastcall OBJECTS_SetUnitIdInTimerArg(D2UnitStrc * pUnit, int32_t nUnitGUID) {

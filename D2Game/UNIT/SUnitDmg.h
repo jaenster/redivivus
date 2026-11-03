@@ -133,7 +133,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, struct D2UnitStr
 // Resolves a pending deferred-hit combat queue entry between pUnit (attacker) and pVictim. Finds the matching D2CombatEntryStrc, verifies melee range, applies damage via DAMAGE_ApplyDamageToUnit, dispatches hit/defend unit events, applies reflected damage, runs GetHitCalculation, and removes the entry from the queue. No-ops if either unit is null or out of range.
 void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, uint32_t dwParam);
 struct D2DamageStrc * __fastcall DAMAGE_FindCombatEntry(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
-uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnMinDamage, uint32_t * pnMaxDamage);
+uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(struct D2UnitStrc * pUnit, uint32_t * pnMinDamage, uint32_t * pnMaxDamage);
 // TO-HIT CALCULATION: AR vs AC formula with level penalty.
 // Formula:
 //   AR_final = AR + (AR * ToHit_bonus%)

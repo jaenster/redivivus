@@ -819,6 +819,7 @@
       "usedTypes": [
         "D2RoomExStrc",
         "D2SeedStrc",
+        "D2TileLibraryEntryStrc",
         "uint32_t",
         "uint8_t"
       ]
@@ -1870,6 +1871,8 @@
       ],
       "usedTypes": [
         "D2DrlgCoordsStrc",
+        "D2DrlgLevelDataWildernessLevel",
+        "D2DrlgLevelStrc",
         "D2DrlgRoomExDataMazeStrc",
         "D2DrlgVertexStrc",
         "D2DrlgVertexStrc *",

@@ -85,26 +85,26 @@ namespace D2Game::Quests::QUESTS::A1Q4 {
 // Object/anim init helper for Deckard Cain's NPC unit: sets the active flag,
 // captures the target unit's GUID into the anim-state block, and pushes the
 // update flag so the client re-renders Cain. No quest-state transitions.
-void __fastcall Q04_UpdateCainNpcAnimState(int32_t pCainUnit, D2UnitStrc * * pTargetUnit) {
-    int dwAnimFrame;
+void __fastcall Q04_UpdateCainNpcAnimState(D2QuestDataStrc * pCainUnit, D2UnitStrc * * pTargetUnit) {
+    int32_t dwAnimFrame;
     if (!pCainUnit) {
       return;
     }
 
-    int pAnimState = *(int*)(pCainUnit + 0x18);
-    *(uint8_t*)(pAnimState + 1) = 1;
+    D2QuestDataA1Q3Strc* pAnimState = pCainUnit->pQuestSpecificData.pA1Q3;
+    pAnimState->bMalusTaken = '\x01';
     if (!pTargetUnit[1]) {
       dwAnimFrame = -1;
     } else {
       dwAnimFrame = pTargetUnit[1]->nUnitGUID;
     }
 
-    *(int*)(pAnimState + 4) = dwAnimFrame;
-    if (*(char*)(pCainUnit + 9) == '\0') {
-      *(uint32_t*)(pAnimState + 0x98) = 2;
+    pAnimState->nMalusGUID = dwAnimFrame;
+    if (pCainUnit->bIsNotIntroduction == '\0') {
+      pAnimState->nMalusMode = 2;
     }
 
-    D2Common::Units::SetupUpdateFlag(pTargetUnit[1], *(int32_t*)(pAnimState + 0x98));
+    D2Common::Units::SetupUpdateFlag(pTargetUnit[1], pAnimState->nMalusMode);
 }
 
 // A1Q4 — Q04_NotifyQuestStateToPlayer (per-player callback).
@@ -1864,20 +1864,20 @@ void __fastcall Objects_InitFn13_InvisibleObject(D2ObjectInitFnArg * pInitArg) {
 // A1Q4 — Q04_InitializeCainGibbetObject: anim-init helper for the Cain cage/gibbet
 // object. Sets the active flag (0x48), captures the target unit GUID (or -1), and
 // pushes the cage's update flag. No quest-state transition.
-void __fastcall Q04_InitializeCainGibbetObject(int32_t pQuestData, D2ObjectInitFnArg * pInitArg) {
+void __fastcall Q04_InitializeCainGibbetObject(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pInitArg) {
     if (!pQuestData) {
       return;
     }
 
-    int nQuestSpecific = *(int*)(pQuestData + 0x18);
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, *(int32_t*)(nQuestSpecific + 0x54));
-    *(uint8_t*)(nQuestSpecific + 0x48) = 1;
+    D2QuestDataA5Q5Strc* nQuestSpecific = pQuestData->pQuestSpecificData.pA5Q5;
+    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, nQuestSpecific->nPlayersOnSummit);
+    nQuestSpecific->bAncientsSpawned = 1;
     if (!pInitArg->pObject) {
-      *(uint32_t*)(nQuestSpecific + 0x34) = -1;
+      nQuestSpecific->anStatueMode[1] = -1;
       return;
     }
 
-    *(int*)(nQuestSpecific + 0x34) = pInitArg->pObject->nUnitGUID;
+    nQuestSpecific->anStatueMode[1] = pInitArg->pObject->nUnitGUID;
 }
 
 // A1Q4 — Q04_RemovePlayerFromList (per-player iterate callback): removes a player

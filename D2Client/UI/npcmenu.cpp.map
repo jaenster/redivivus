@@ -937,6 +937,7 @@
       ],
       "usedTypes": [
         "D2NpcMenuOptions",
+        "D2UnitStrc",
         "int32_t"
       ]
     },

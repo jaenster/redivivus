@@ -1572,7 +1572,7 @@ void __stdcall ITEMMOD_ApplyEtherealBonus(D2UnitStrc * pUnit) {
 }
 
 // Returns 1 if the given automod entry (nParam points to an AutomagicTxt record) can be applied to pUnit. Rejects stackable items, throwables, items without inventory slots, and items whose type matches the automod's exclusion list; passes only if the item type matches at least one inclusion entry.
-BOOL __stdcall ITEMMOD_CanApplyAutomod(D2UnitStrc * pUnit, int32_t pMagicAffixTxt) {
+BOOL __stdcall ITEMMOD_CanApplyAutomod(D2UnitStrc * pUnit, D2MagicAffixTxt * pMagicAffixTxt) {
     uint8_t nMaxSock;
     int32_t iVar1;
     uint32_t bTypeMatch;
@@ -1593,14 +1593,14 @@ BOOL __stdcall ITEMMOD_CanApplyAutomod(D2UnitStrc * pUnit, int32_t pMagicAffixTx
 
     iVar1 = Items::ITEM_GetItemsTxt_bHasInv(pUnit);
     if (!iVar1 || (nMaxSock = Items::ITEM_GetMaxSockCount(pUnit) , nMaxSock <= 0)) {
-      nLoopIdx = *(int*)(pMagicAffixTxt + 0x24);
+      nLoopIdx = pMagicAffixTxt->mod[0].code;
       if (nLoopIdx >= 0 && (nLoopIdx >= sgptDataTable->nTxtPropertiesSize || !(sgptDataTable->pTxtProperties + nLoopIdx) || sgptDataTable->pTxtProperties[nLoopIdx].stat[0] == 0xc2)) {
         return 0;
       }
     }
 
     nLoopIdx = 0;
-    short int* pTypeEntry = (short int*)(pMagicAffixTxt + 0x78);
+    short int* pTypeEntry = pMagicAffixTxt->exclude_type;
     do {
       if (*pTypeEntry <= 0) {
         break;
@@ -1616,7 +1616,7 @@ BOOL __stdcall ITEMMOD_CanApplyAutomod(D2UnitStrc * pUnit, int32_t pMagicAffixTx
     } while (nLoopIdx < 5);
 
     nLoopIdx = 0;
-    pTypeEntry = (short int*)(pMagicAffixTxt + 0x6a);
+    pTypeEntry = pMagicAffixTxt->include_type;
     while (true) {
       if (*pTypeEntry <= 0) {
         return 0;
@@ -1638,7 +1638,7 @@ BOOL __stdcall ITEMMOD_CanApplyAutomod(D2UnitStrc * pUnit, int32_t pMagicAffixTx
 }
 
 // Returns 1 if the given affix (nParam points to affix txt record) may be applied to pUnit, 0 if blocked. Checks: classic-only affixes rejected on stackable/throwable items, expansion-only affixes rejected in classic mode, up to 4 exclusion item types (any match = fail), up to 7 inclusion types (must match at least one). Does not check group exclusion despite the name suggesting it.
-BOOL __stdcall ITEMMOD_CanApplyAffix(D2UnitStrc * pUnit, int32_t pRareAffixTxt) {
+BOOL __stdcall ITEMMOD_CanApplyAffix(D2UnitStrc * pUnit, D2RareAffixTxt * pRareAffixTxt) {
     int32_t iVar1;
     uint32_t bTypeMatch;
     uint16_t wVersion = Items::ITEM_GetItemData_wItemVersion(pUnit);
@@ -1654,7 +1654,7 @@ BOOL __stdcall ITEMMOD_CanApplyAffix(D2UnitStrc * pUnit, int32_t pRareAffixTxt) 
         return 0;
       }
     }
-    if (*(uint16_t*)(pRareAffixTxt + 0xe) >= 100) {
+    if ((uint16_t)pRareAffixTxt->version >= 100) {
       wVersion = Items::ITEM_GetItemData_wItemVersion(pUnit);
       if (wVersion < 100) {
         return 0;
@@ -1662,7 +1662,7 @@ BOOL __stdcall ITEMMOD_CanApplyAffix(D2UnitStrc * pUnit, int32_t pRareAffixTxt) 
     }
 
     int nLoopIdx = 0;
-    short int* pTypeEntry = (short int*)(pRareAffixTxt + 0x1e);
+    short int* pTypeEntry = &pRareAffixTxt->etype1;
     do {
       if (*pTypeEntry <= 0) {
         break;
@@ -1678,7 +1678,7 @@ BOOL __stdcall ITEMMOD_CanApplyAffix(D2UnitStrc * pUnit, int32_t pRareAffixTxt) 
     } while (nLoopIdx < 4);
 
     nLoopIdx = 0;
-    pTypeEntry = (short int*)(pRareAffixTxt + 0x10);
+    pTypeEntry = &pRareAffixTxt->itype1;
     while (true) {
       if (*pTypeEntry <= 0) {
         return 0;
@@ -1811,7 +1811,7 @@ int32_t __fastcall ITEMMOD_RollRandomValue(D2UnitStrc * pUnit, int32_t nMin, int
 }
 
 // Adds a stat to an item's stat list. Validates stat ID against ItemStatCost table, then calls ITEMMOD_GetOrCreateStatList to obtain or create the target stat list. Adds the shifted stat value via STATLIST_AddStatValue or D2AddStatToStatsListEx depending on nParam2. Special-cases poison (stat 0x3A) to also add/check UNITSTAT_poison_count. Returns nParam3 (the stat value) on success, 0 on invalid stat or missing stat list.
-int32_t __fastcall ITEMMOD_AddStatToItem(D2UnitStrc * pUnit2, uint32_t dwFlags, D2UnitStrc * pUnit, int32_t pProperty, int32_t bSet, int16_t nStatId, uint32_t nSubIndex, int32_t nValue, int32_t nState) {
+int32_t __fastcall ITEMMOD_AddStatToItem(D2UnitStrc * pUnit2, uint32_t dwFlags, D2UnitStrc * pUnit, D2SetsTxtFStrc * pProperty, int32_t bSet, int16_t nStatId, uint32_t nSubIndex, int32_t nValue, int32_t nState) {
     if (!pProperty) {
       return 0;
     }

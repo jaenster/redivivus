@@ -1001,13 +1001,13 @@ void __fastcall SetRosterPosition(int32_t nRosterGUID, int32_t nX, int32_t nY) {
     pRoster->nY = nY;
 }
 
-uint32_t __fastcall ROSTER_CheckPlayerInSameParty(int32_t pRoster) {
+uint32_t __fastcall ROSTER_CheckPlayerInSameParty(D2RosterStrc * pRoster) {
     D2UnitStrc* pUnit;
-    if (pRoster && *(short int*)(pRoster + 0x22) != -1) {
-      int16_t nPlayerPartyId;
+    if (pRoster && pRoster->nPartyId != 0xffff) {
+      uint16_t nPlayerPartyId;
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       nPlayerPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pUnit);
-      if (nPlayerPartyId == *(short int*)(pRoster + 0x22)) {
+      if (nPlayerPartyId == pRoster->nPartyId) {
         return 1;
       }
     }

@@ -292,6 +292,8 @@
         "AI_BAAL_ThroneRoomChooseAction"
       ],
       "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",

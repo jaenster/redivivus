@@ -147,9 +147,10 @@
         "SetupUpdateFlag"
       ],
       "usedTypes": [
+        "D2QuestDataA5Q5Strc",
+        "D2QuestDataStrc",
         "D2UnitStrc",
-        "SGAMEDATA",
-        "int32_t"
+        "SGAMEDATA"
       ]
     },
     {

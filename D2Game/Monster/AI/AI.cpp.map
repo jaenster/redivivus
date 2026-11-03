@@ -5332,6 +5332,7 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
+        "D2MonsterAiCmdStrc",
         "D2MonsterLevelDataStrc",
         "D2RoomStrc",
         "D2SeedStrc",

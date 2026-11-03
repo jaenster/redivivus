@@ -847,34 +847,34 @@ void __fastcall Q05_SetCompletionForTrackedPlayers(::SGAMEDATA * pGame, D2QuestG
 // (falls back to the chest's own coords). Marks the effect as fired (+0x119=1), then for each chest
 // launches a SKILL_Attack missile aimed at the chest and toggles its room portal flag — this drives
 // the gold/treasure-burst visual from the Countess's chests. No quest-state changes here (pure FX).
-void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, int32_t pA1Q5Data) {
+void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, D2QuestDataA1Q5Strc * pA1Q5Data) {
     D2UnitStrc* pChestUnit;
     D2RoomStrc* pNearbyRoom;
     int nFallbackPosY;
     uint32_t nPosY;
     uint32_t nPosX;
-    int32_t nY;
+    LONG nY;
     POINT sCountessKillPos;
     eD2UnitType eUnitType;
-    if (!(*(char*)(pA1Q5Data + 0x118) != '\0' && *(char*)(pA1Q5Data + 0x119) == '\0')) {
+    if (!(pA1Q5Data->bRewardDistributed && !pA1Q5Data->bDeathEffectPlayed)) {
       return;
     }
 
     int i;
     i = 0;
-    if ((uint16_t)*(short int*)(pA1Q5Data + 0x88) <= 0) {
+    if ((uint16_t)pA1Q5Data->nCountessChestCount <= 0) {
       return;
     }
 
-    uint32_t* pnChestGUIDList;
-    pnChestGUIDList = (uint32_t*)(pA1Q5Data + 0x68);
+    int32_t* pnChestGUIDList;
+    pnChestGUIDList = pA1Q5Data->nCountessChestGUID_0;
     D2UnitStrc* pCountessDeathActor;
     pCountessDeathActor = 0;
     do {
       pChestUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, *pnChestGUIDList);
       if (pChestUnit) {
-        sCountessKillPos.x = *(int32_t*)(pA1Q5Data + 0x110);
-        nY = *(int32_t*)(pA1Q5Data + 0x114);
+        sCountessKillPos.x = pA1Q5Data->ptCountessDeath.x;
+        nY = pA1Q5Data->ptCountessDeath.y;
         sCountessKillPos.y = nY;
         if (!pCountessDeathActor) {
           pNearbyRoom = D2Common::Units::UNITS_GetRoom(pChestUnit);
@@ -893,7 +893,7 @@ void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, int32_
           }
         }
 
-        *(uint8_t*)(pA1Q5Data + 0x119) = 1;
+        pA1Q5Data->bDeathEffectPlayed = true;
         eUnitType = pChestUnit->eUnitType;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
           nPosY = pChestUnit->pPath.pStaticPath->nPosY;
@@ -924,7 +924,7 @@ void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, int32_
       next_chest:
       pnChestGUIDList++;
       i++;
-    } while (i < (int)(uint32_t)*(uint16_t*)(pA1Q5Data + 0x88));
+    } while (i < (int)(uint32_t)(uint16_t)pA1Q5Data->nCountessChestCount);
 }
 
 // 1.14d: 0x5956c0 | A1Q5 "The Forgotten Tower" — death-effect trigger (timer-driven thunk).

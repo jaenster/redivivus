@@ -920,9 +920,9 @@
         "GetPlayerUnitPartyId"
       ],
       "usedTypes": [
+        "D2RosterStrc",
         "D2UnitStrc",
-        "int16_t",
-        "int32_t"
+        "uint16_t"
       ]
     },
     {

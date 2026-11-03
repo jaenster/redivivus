@@ -345,9 +345,9 @@ BOOL __fastcall Q31_CheckNearShenk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void
 }
 
 // A5Q1 party-member completion stamp: for each party member, if Siege not already Completed(0)/RewardAwaits(1)/JustCompleted(0xd) AND they are physically in Act 5, set RewardAwaits(1)+JustCompleted(0xd) so the whole party gets credit for Shenk's death.
-void __fastcall Q31_SetCompleteForPartyMember(int32_t pGameRaw, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+void __fastcall Q31_SetCompleteForPartyMember(::SGAMEDATA * pGameRaw, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[*(uint8_t*)(pGameRaw + 0x6d)];
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGameRaw->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SiegeOnHaggorath, QUESTSTATE_Completed);
     if (bQuestState == 1) {
       return;

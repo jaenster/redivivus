@@ -18,6 +18,8 @@
         "SetupUpdateFlag"
       ],
       "usedTypes": [
+        "D2QuestDataA1Q3Strc",
+        "D2QuestDataStrc",
         "D2UnitStrc *",
         "int32_t"
       ]
@@ -1058,7 +1060,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
-        "int32_t"
+        "D2QuestDataA5Q5Strc",
+        "D2QuestDataStrc"
       ]
     },
     {

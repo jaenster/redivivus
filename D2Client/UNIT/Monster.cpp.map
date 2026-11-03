@@ -558,6 +558,7 @@
         "D2InventoryStrc",
         "D2MonStats2Txt",
         "D2MonStatsTxt",
+        "D2RoomStrc",
         "D2SkillListStrc",
         "D2SkillStrc",
         "D2UnitStrc",

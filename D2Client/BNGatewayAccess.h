@@ -15,6 +15,6 @@ namespace D2Client::BNGatewayAccess {
 
 // Function declarations
 int32_t __stdcall NumGateways(int32_t pGatewayAccess);
-int32_t __stdcall CurGateway(int32_t pGatewayAccess);
+int32_t __stdcall CurGateway(struct D2BNetGatewayAccessStr * pGatewayAccess);
 
 } // namespace D2Client::BNGatewayAccess

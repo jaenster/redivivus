@@ -85,7 +85,8 @@
       ],
       "usedTypes": [
         "D2CelFileCacheEntryStrc",
-        "int32_t",
+        "D2GfxDataStrc",
+        "eD2UnitType",
         "uint32_t"
       ]
     },

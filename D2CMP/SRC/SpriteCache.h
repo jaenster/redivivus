@@ -126,7 +126,7 @@ BOOL __stdcall SPRITECACHE_IsLoadPending(eD2UnitType eUnitType, int32_t nMode, i
 void __stdcall SPRITECACHE_CancelPendingLoads();
 // @sourcefile .\SRC\SpriteCache.cpp
 struct D2SpriteCacheEntryStrc * __fastcall SPRITECACHE_EvictEntry(struct D2GfxMemoryStrc * pGfxMemory, struct D2SpriteCacheEntryStrc * pCandidate, uint32_t bPreferOld);
-void __fastcall SPRITECACHE_AllocateMemory(void * pCache, int32_t pEntry);
+void __fastcall SPRITECACHE_AllocateMemory(void * pCache, struct D2SpriteCacheEntryStrc * pEntry);
 void __fastcall SPRITECACHE_FreeMemory(struct D2GfxMemoryStrc * pGfxMemory, struct D2SpriteCacheEntryStrc * pCacheEntry, int32_t nFreedSize, uint32_t bEvictPriority);
 uint32_t __stdcall SPRITECACHE_DecodeFrameByIndex(uint32_t * pReadBuffer, size_t nReadSize, struct D2SpriteDecodeRequestStrc * pRequest);
 // @sourcefile .\SRC\SpriteCache.cpp

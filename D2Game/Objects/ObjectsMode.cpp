@@ -3532,7 +3532,7 @@ void __fastcall SpawnDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t sCod
     }
 }
 
-void __fastcall OBJMODE_DropItemAtPosition(int32_t pGame, D2UnitStrc * pUnit, int32_t nItemClassId, eD2ItemTypes eItemType) {
+void __fastcall OBJMODE_DropItemAtPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nItemClassId, eD2ItemTypes eItemType) {
     POINT ptUnitPos;
     POINT ptSpawnPos;
     D2ItemGenContextStrc sItemGenCtx;
@@ -3550,7 +3550,7 @@ void __fastcall OBJMODE_DropItemAtPosition(int32_t pGame, D2UnitStrc * pUnit, in
     }
 
     memset(&sItemGenCtx, 0, 0x84);
-    sItemGenCtx.wItemFormat = *(short int*)(pGame + 0x78);
+    sItemGenCtx.wItemFormat = pGame->wItemFormat;
     sItemGenCtx.nItemClassid = nItemClassId;
     sItemGenCtx.nPosX = ptSpawnPos.x;
     sItemGenCtx.eQuality = eItemType;
@@ -3559,10 +3559,10 @@ void __fastcall OBJMODE_DropItemAtPosition(int32_t pGame, D2UnitStrc * pUnit, in
     sItemGenCtx.nPosY = ptSpawnPos.y;
     sItemGenCtx.usually_one = 1;
     sItemGenCtx.pUnit = pUnit;
-    sItemGenCtx.pGame = (::SGAMEDATA*)pGame;
+    sItemGenCtx.pGame = pGame;
     sItemGenCtx.pDrlgRoom = pSpawnRoom;
     sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
-    ITEMS::Items::Drop::ITEM_CreateItemInstance((::SGAMEDATA*)pGame, &sItemGenCtx, 0);
+    ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
 }
 
 // Server-side loot roll for an opened chest object. Resolves the chest's room level, determines act and difficulty-scaled monster level tier, selects the appropriate treasure class via RollTreasureClass, and calls SERVER_ITEM_RollItemToDrop to generate up to 6 drop items. Returns the first dropped item unit, or NULL on any lookup failure.

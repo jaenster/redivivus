@@ -93,7 +93,7 @@ uint32_t __fastcall CheckRostersArePartied(int32_t nRoster1GUID, int32_t nRoster
 int32_t __fastcall GetRosterGUID(struct D2RosterStrc * pRoster);
 void __fastcall SetRosterHpAndArea(int32_t nRosterGUID, int32_t nHpPercent, uint16_t eLevel);
 void __fastcall SetRosterPosition(int32_t nRosterGUID, int32_t nX, int32_t nY);
-uint32_t __fastcall ROSTER_CheckPlayerInSameParty(int32_t pRoster);
+uint32_t __fastcall ROSTER_CheckPlayerInSameParty(struct D2RosterStrc * pRoster);
 int32_t __fastcall GetRosterHP(int32_t nRosterGUID);
 uint32_t __fastcall ROSTER_CheckPlayerNotHostile(int32_t nRosterGUID);
 void __fastcall GetRosterPosition(struct D2RosterStrc * pRoster, int * pX, int * pY);

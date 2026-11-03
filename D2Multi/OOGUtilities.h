@@ -197,7 +197,7 @@ int __stdcall OOG_PollMCPJoinD2GSPump(int nFrameIndex);
 // OnPress handler of the wait-in-line dialog button (form record 0070eb30, FORM_Button, string 0x13ef, created by UIMENU_WaitInLine): restores the lobby buttons (CHATDLG_UpdateButtonVisibility), sends MCP 0x13 CancelGameCreate (CHATDLG_CancelGameCreate) and destroys the create-game/wait forms (OOGUTIL_UpdateGameListFilter); returns 1.
 // Provenance: 1.14d asm 004438c0..004438d4, RET 4.
 BOOL __stdcall OOGUTIL_OnPressWaitInLineCancel(struct D2ControlMsg * pControlMsg);
-int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, int32_t pEntry);
+int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, struct D2LanGameEntryStrc * pEntry);
 int __stdcall OOGUTIL_ProcessGameListEntry(struct D2ControlStrc * pControl);
 // OnPress handler that does nothing and returns 1.
 // Provenance: asm 00443c10 (MOV EAX,1; RET 4); fpOnPressCallback of the four 15x16 FORM_Button records 0070d7e0, 0070d810, 0070d840, 0070d870 (gaPredefinedForms_b).

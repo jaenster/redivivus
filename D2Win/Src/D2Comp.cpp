@@ -1357,18 +1357,18 @@ void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelStrc * pCharSel, int32_t bUn
     }
 }
 
-void __stdcall D2COMP_SetUnitDisplayStrings(int32_t pCompUnit, uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, int32_t nDisplayFlags, int32_t nExtraData) {
+void __stdcall D2COMP_SetUnitDisplayStrings(D2CharSelCompStrc * pCompUnit, uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, int32_t nDisplayFlags, int32_t nExtraData) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8a8);
       exit(-1);
     }
 
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)(pCompUnit + 0xcc), wszText1);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)(pCompUnit + 0x14c), wszText2);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)(pCompUnit + 0x1cc), wszText3);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)(pCompUnit + 0x1ec), wszText4);
-    *(int32_t*)(pCompUnit + 0x22c) = nDisplayFlags;
-    *(int32_t*)(pCompUnit + 0x230) = nExtraData;
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(pCompUnit->wszDisplayString1, wszText1);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(pCompUnit->wszDisplayString2, wszText2);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(pCompUnit->wszDisplayString3, wszText3);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(pCompUnit->wszDisplayString4, wszText4);
+    pCompUnit->nD2CharLevel = nDisplayFlags;
+    pCompUnit->dwProductCode = nExtraData;
 }
 
 BOOL __fastcall D2COMP_SetAnimationMode(D2CharSelCompStrc * pCompUnit, int32_t nAnimMode) {
@@ -2016,13 +2016,13 @@ uint32_t __stdcall D2COMP_GetNumDirections(uint32_t pCompUnit) {
     return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)(pCompUnit >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)*(uint8_t*)(pCompUnit + 5));
 }
 
-int __stdcall D2COMP_GetNumFrames(int32_t pCompUnit) {
+int __stdcall D2COMP_GetNumFrames(D2CharSelCompStrc * pCompUnit) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd6b);
       exit(-1);
     }
 
-    return *(int*)(pCompUnit + 0xc);
+    return pCompUnit->nNumFrames;
 }
 
 void __stdcall D2COMP_SetCurrentFrame(D2CharSelCompStrc * pCompUnit, uint32_t nTargetFrame) {
@@ -2076,7 +2076,7 @@ void __stdcall D2COMP_SetFlags(D2CharSelStrc * pCharSel, uint32_t dwFlags) {
     *(uint32_t*)pCharSel->szCharname = dwFlags;
 }
 
-void __stdcall D2COMP_LoadGuildEmblemIcon(int32_t pCompUnit, uint8_t byEmblemIcon, uint8_t byPrimaryColor, uint8_t bySecondaryColor) {
+void __stdcall D2COMP_LoadGuildEmblemIcon(D2CharSelCompStrc * pCompUnit, uint8_t byEmblemIcon, uint8_t byPrimaryColor, uint8_t bySecondaryColor) {
     char szEmblemPath[512];
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdb0);
@@ -2088,18 +2088,21 @@ void __stdcall D2COMP_LoadGuildEmblemIcon(int32_t pCompUnit, uint8_t byEmblemIco
 
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szEmblemPath, "%s\\ui\\emblems\\icon%02dc", "DATA\\GLOBAL", byEmblemIcon - 1);
     DC6* pEmblemDC6 = D2WinArchive::IMAGE_LoadDC6(szEmblemPath, 0);
-    *(DC6**)(pCompUnit + 0xbc) = (DC6*)pEmblemDC6;
+    pCompUnit->pGuildEmblemImage = pEmblemDC6;
+    uint8_t nGuildEmblemColor1Value;
     if ((uint8_t)(byPrimaryColor - 1) <= 9) {
-      *(uint8_t*)(pCompUnit + 0xc0) = gaGlideEmblemPrimaryColorTableEntries[byPrimaryColor - 1];
+      nGuildEmblemColor1Value = gaGlideEmblemPrimaryColorTableEntries[byPrimaryColor - 1];
     } else {
-      *(uint8_t*)(pCompUnit + 0xc0) = 0;
+      nGuildEmblemColor1Value = 0;
     }
+
+    pCompUnit->nGuildEmblemColor1 = nGuildEmblemColor1Value;
     if ((uint8_t)(bySecondaryColor - 1) <= 9) {
-      *(uint8_t*)(pCompUnit + 0xc1) = gaGlideEmblemSecondaryColorTableEntries[bySecondaryColor - 1];
+      pCompUnit->nGuildEmblemColor2 = gaGlideEmblemSecondaryColorTableEntries[bySecondaryColor - 1];
       return;
     }
 
-    *(uint8_t*)(pCompUnit + 0xc1) = 0;
+    pCompUnit->nGuildEmblemColor2 = 0;
 }
 
 static void D2COMP_LoadItemPaletteFile(int32_t nPaletteSlot, char * szPaletteFilename) {

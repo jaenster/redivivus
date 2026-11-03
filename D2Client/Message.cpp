@@ -215,14 +215,14 @@ void __fastcall MESSAGE_UnregisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc 
     }
 }
 
-uint32_t __fastcall MESSAGE_RegisterWindowMessageHandlers(uint32_t hWnd) {
+uint32_t __fastcall MESSAGE_RegisterWindowMessageHandlers(HWND hWnd) {
     if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x178);
       exit(-1);
     }
 
-    MESSAGE_RegisterEventHandlerBatch((HWND)hWnd, gaUIFlagInitMessageHandlers, 4);
-    Storm::WindowHandle::SMsgPushRegisterState(hWnd);
+    MESSAGE_RegisterEventHandlerBatch(hWnd, gaUIFlagInitMessageHandlers, 4);
+    Storm::WindowHandle::SMsgPushRegisterState((uint32_t)hWnd);
     return 1;
 }
 

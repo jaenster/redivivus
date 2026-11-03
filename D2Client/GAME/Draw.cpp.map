@@ -17,6 +17,7 @@
         "DRAW_UpdateTileVisibilityBounds"
       ],
       "usedTypes": [
+        "D2DrawFloorStrc",
         "D2DrlgTileDataStrc",
         "int32_t"
       ]

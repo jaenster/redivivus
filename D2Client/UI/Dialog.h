@@ -127,7 +127,7 @@ void __fastcall DIALOG_SetHighlightStyle(struct D2DialogStrc * pDialog, int32_t 
 void __fastcall DIALOG_RecalculateLayout(struct D2DialogStrc * pDialog);
 int32_t __fastcall DIALOG_GetSelectedIndex(struct D2DialogStrc * pDialog);
 int __stdcall GetDialogCounter();
-void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t param_1, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);
+void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t nColor, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);
 // 6 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Dialog

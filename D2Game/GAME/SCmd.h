@@ -706,7 +706,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x52_PlayerQuestLog(struct D2ClientStrc * p
 // The parameters byKillFlags / dwKilledUnitGUID_in / wKillParam are most likely overlay id / unit GUID /
 // duration; not established.
 void __fastcall NET_D2GS_SERVER_Send_0x11_UnitDoOverlay(struct D2ClientStrc * pClient, uint8_t byKillFlags, uint32_t dwKilledUnitGUID_in, uint16_t wKillParam);
-void __fastcall NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT(struct D2ClientStrc * pClient, uint32_t dwUnitGUID, uint8_t byNpcClassOrType, uint16_t wNpcCodeParam, uint16_t wParam1, uint16_t wParam2, uint16_t wParam3);
+void __fastcall NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT(struct D2ClientStrc * pClient, uint32_t dwUnitGUID, uint8_t byNpcClassOrType, uint16_t wNpcCodeParam, uint16_t wUMods01, uint16_t wUMod2, uint16_t wIsChampion);
 void __fastcall NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x58 * pPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x60_SETWARPDEST(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
 void __fastcall NET_D2GS_SERVER_Send_0x61_CanGoToAct(struct D2ClientStrc * pClient, uint8_t nAct);

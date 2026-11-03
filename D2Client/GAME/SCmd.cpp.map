@@ -176,6 +176,7 @@
         "InitializeUI"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x01",
         "eD2ArenaFlags"
       ]
     },
@@ -388,6 +389,7 @@
         "ANIM_ResetMonsterFrameCache"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x09",
         "D2UnitStrc"
       ]
     },
@@ -404,6 +406,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x51_NEWOBJECT",
         "CreateObject"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x51"
       ]
     },
     {
@@ -423,6 +428,7 @@
         "RemoveObjectFromServerObjectTable"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x0A",
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
@@ -463,6 +469,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x0C",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -483,9 +490,10 @@
         "SetRosterPlayerHpPercent"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x0D",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
-        "int32_t"
+        "uint32_t"
       ]
     },
     {
@@ -503,6 +511,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x0E",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -523,6 +532,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x0F",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -543,6 +553,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x10",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -562,6 +573,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x67",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -582,6 +594,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x68",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -601,6 +614,7 @@
         "NET_D2GS_CLIENT_Incoming0x69_UNITCHANGE_MONSTERXYNOPATH"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x69",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -640,6 +654,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x6B",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -660,6 +675,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x6C",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -682,6 +698,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x6D",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "int32_t"
@@ -788,6 +805,7 @@
         "UNITS_FindClientSideUnit"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x11",
         "D2UnitStrc",
         "uint16_t"
       ]
@@ -863,6 +881,7 @@
         "GAMEDATA_ExtendTimeout"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x15",
         "D2RoomStrc",
         "D2UnitStrc",
         "eAct",
@@ -953,6 +972,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x62_INTERACTION_STOP",
         "NPCMENU_HandleQuestItemPacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x62"
       ]
     },
     {
@@ -968,6 +990,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD",
         "QuestHandeling"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x29"
       ]
     },
     {
@@ -1084,6 +1109,7 @@
         "SKILL_ExecuteClientProgressFunc"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0xA3",
         "D2UnitStrc",
         "eD2Skills"
       ]
@@ -1107,6 +1133,7 @@
         "SKILL_HandleTeleportLanding"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0xA5",
         "D2UnitStrc",
         "eD2Skills",
         "uint16_t"
@@ -1171,6 +1198,7 @@
         "SCMD_HandleStatChangeEffect"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x20",
         "D2UnitStrc",
         "uint8_t"
       ]
@@ -1413,6 +1441,7 @@
         "SKILL_SetQuantity"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x22_0x23",
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t",
@@ -1436,9 +1465,10 @@
         "SelectSkillRight"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x23",
         "D2UnitStrc",
-        "int32_t",
-        "uint16_t"
+        "uint16_t",
+        "uint32_t"
       ]
     },
     {
@@ -1512,6 +1542,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x4C",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -1531,6 +1562,7 @@
         "HandleMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x4D",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ]
@@ -1552,6 +1584,7 @@
         "TEXT_ProcessChatMessage"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x26",
         "MessageStrc"
       ]
     },
@@ -1570,7 +1603,8 @@
         "TEXT_ClearUnitHoverText"
       ],
       "usedTypes": [
-        "D2GSPacketSrv0x"
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x76"
       ]
     },
     {
@@ -1641,6 +1675,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x2C_PLAY_SOUND",
         "UNITSND_PlaySoundForMercenary"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x2C"
       ]
     },
     {
@@ -1699,7 +1736,8 @@
         "ITEM_HandleItemFlagEditPacket"
       ],
       "usedTypes": [
-        "D2GSPacketSrv0x"
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x40"
       ]
     },
     {
@@ -1790,6 +1828,7 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x53",
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t",
@@ -1811,7 +1850,8 @@
         "NET_D2GS_CLIENT_Handle0x50_QuestSpecial"
       ],
       "usedTypes": [
-        "D2GSPacketSrv0x"
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x50"
       ]
     },
     {
@@ -1851,6 +1891,7 @@
         "MONUNIQUE_ApplyModifierEffects"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x57",
         "D2UnitStrc",
         "uint16_t",
         "uint8_t"
@@ -1920,6 +1961,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x5C",
         "PlayerLeft"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x5C"
       ]
     },
     {
@@ -1937,7 +1981,8 @@
         "QUESTLOG_HandleQuestStatePacket"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x5D"
+        "D2GSPacketClt0x5D",
+        "D2GSPacketSrv0x5D"
       ]
     },
     {
@@ -1956,7 +2001,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x",
-        "D2GSPacketSrv0x91"
+        "D2GSPacketSrv0x91",
+        "uint8_t"
       ]
     },
     {
@@ -1997,6 +2043,7 @@
         "SetPlayerPortalFlags"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x5F",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -2135,7 +2182,8 @@
         "PLAYER_HandlePlayerDeath"
       ],
       "usedTypes": [
-        "D2GSPacketSrv0x"
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x74"
       ]
     },
     {
@@ -2184,6 +2232,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD",
         "TRADE_HandleTradeComplete"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x79"
       ]
     },
     {
@@ -2239,6 +2290,7 @@
         "SPELLSEL_SetSkillSlot"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x7B",
         "uint32_t"
       ]
     },
@@ -2297,6 +2349,7 @@
         "GFX_LoadMonsterCofArchive"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0x7E",
         "D2RoomStrc",
         "D2UnitStrc",
         "eAct",
@@ -2412,6 +2465,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS",
         "ROSTER_SetPlayerHostileFlag"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x8C"
       ]
     },
     {
@@ -2464,6 +2520,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x9B_DEAD_HIRELING",
         "SetPlayersMercInfo"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x9B"
       ]
     },
     {
@@ -2584,6 +2643,7 @@
         "STATES_DispatchSetFunc"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0xA7",
         "D2UnitStrc",
         "uint8_t"
       ]
@@ -2610,6 +2670,7 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc",
+        "D2GSPacketSrv0xA8",
         "D2ItemStatCostTxt",
         "D2StatListExStrc",
         "D2UnitStrc",
@@ -2637,6 +2698,7 @@
         "PLRSKILLS_RemoveStateFromUnit"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0xA9",
         "D2UnitStrc",
         "uint8_t"
       ]
@@ -2663,6 +2725,7 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc",
+        "D2GSPacketSrv0xAA",
         "D2ItemStatCostTxt",
         "D2StatListExStrc",
         "D2UnitStrc",
@@ -2691,6 +2754,7 @@
         "SetRosterPlayerHpPercent"
       ],
       "usedTypes": [
+        "D2GSPacketSrv0xAB",
         "D2UnitStrc"
       ]
     },
@@ -2753,6 +2817,9 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA",
         "WARDEN_HandleServerPacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xAE"
       ]
     },
     {

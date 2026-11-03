@@ -680,7 +680,7 @@ void __stdcall INPUT_FormDeactivate(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
-void __stdcall D2WIN_HandleSystemCommand(int32_t pMsg) {
+void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
     HWND hGameWnd;
     HMONITOR hMonitor;
     DWORD dwResolutionMode;
@@ -703,14 +703,14 @@ void __stdcall D2WIN_HandleSystemCommand(int32_t pMsg) {
     int nTargetWidth;
     int nTargetHeight;
     tagRECT* pRcDesktop;
-    uint16_t uSysCmd = *(uint16_t*)(pMsg + 8) & 0xfff0;
+    uint16_t uSysCmd = *(uint16_t*)&pMsg->nWParam & 0xfff0;
     if (uSysCmd != 0xf130 && uSysCmd != 0xf100) {
       uint32_t bIsFullscreen;
       if (uSysCmd == 0xf010) {
         bIsFullscreen = D2gfx::D2GFX::IsFullscreen();
         if (bIsFullscreen) {
-          *(uint32_t*)(pMsg + 0x18) = 1;
-          *(uint32_t*)(pMsg + 0x1c) = 0;
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
           return;
         }
       } else if (uSysCmd == 0xf030 && (bIsFullscreen = D2gfx::D2GFX::IsFullscreen() , !bIsFullscreen)) {
@@ -782,24 +782,24 @@ void __stdcall D2WIN_HandleSystemCommand(int32_t pMsg) {
           D2gfx::D2GFX::D2GFX_UpdateWindowSize(dwResolutionMode);
         }
 
-        *(uint32_t*)(pMsg + 0x18) = 1;
-        *(uint32_t*)(pMsg + 0x1c) = 0;
+        pMsg->bHandled = 1;
+        pMsg->dwResult = 0;
       }
 
       return;
     }
 
-    *(uint32_t*)(pMsg + 0x18) = 1;
-    *(uint32_t*)(pMsg + 0x1c) = 0;
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
 }
 
-void __stdcall D2WIN_HandleActivation(int32_t pMsg) {
+void __stdcall D2WIN_HandleActivation(D2UIMouseMsgStrc * pMsg) {
     // Static local variables (originally global data)
     static uint32_t gnSavedMusicVolume; D2_STATIC_GUARD_BSS(gnSavedMusicVolume, "D2Win::Src::D2WinMain::D2WIN_HandleActivation::gnSavedMusicVolume");
     static uint32_t gbWindowDeactivated; D2_STATIC_GUARD_BSS(gbWindowDeactivated, "D2Win::Src::D2WinMain::D2WIN_HandleActivation::gbWindowDeactivated");
 
-    gbWindowIsActive = (uint32_t)(*(int*)(pMsg + 8) != 0);
-    if (*(int*)(pMsg + 8)) {
+    gbWindowIsActive = (uint32_t)(pMsg->nWParam != 0);
+    if (pMsg->nWParam) {
       uint32_t nErrorState;
       nErrorState = Fog::Src::ErrorManager::GetErrorState();
       if (!nErrorState) {
@@ -825,7 +825,7 @@ void __stdcall D2WIN_HandleActivation(int32_t pMsg) {
       D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
     }
 
-    *(uint32_t*)(pMsg + 0x18) = 0;
+    pMsg->bHandled = 0;
 }
 
 // Writes the screenshot DIB out as a JPEG through Intel JPEG Library (IJL11.DLL).
@@ -909,7 +909,7 @@ void __fastcall D2WIN_TakeThrottledScreenshot(LPCSTR szFileName) {
     D2_FREE_AT(pBuffer, ".\\Src\\D2WinMain.cpp", 0x6b4);
 }
 
-void __stdcall D2WIN_ToggleMusicOptions(int32_t pMsg) {
+void __stdcall D2WIN_ToggleMusicOptions(D2UIMouseMsgStrc * pMsg) {
     if (!gbFormActivated) {
       return;
     }
@@ -927,8 +927,8 @@ void __stdcall D2WIN_ToggleMusicOptions(int32_t pMsg) {
     }
 
     D2Sound::Src::D2SoundFast::SOUND_SetOptionsMusic((uint32_t)!bMusicEnabled);
-    *(uint32_t*)(pMsg + 0x18) = 1;
-    *(uint32_t*)(pMsg + 0x1c) = 0;
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
 }
 
 int32_t __stdcall D2WIN_FindClosestControlToMouse(D2ControlStrc * pControl1, D2ControlStrc * pControl2) {
@@ -1109,15 +1109,15 @@ void __stdcall D2WIN_HandleCursorHide(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
-void __stdcall D2WIN_HandleMouseLeave(int32_t pMsg) {
+void __stdcall D2WIN_HandleMouseLeave(D2UIMouseMsgStrc * pMsg) {
     gbMouseInWindow = 0;
     if (D2GFX_eRendererMode != RENDERER_Glide) {
       gbCursorVisible = 0;
     }
 
     D2gfx::D2GFX::UpdateOSCursorVisibilty(0);
-    *(uint32_t*)(pMsg + 0x18) = 0;
-    *(uint32_t*)(pMsg + 0x1c) = 0;
+    pMsg->bHandled = 0;
+    pMsg->dwResult = 0;
 }
 
 BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2RendererMode eRenderedMode, BOOL bWindowed, BOOL bDontUseCompression) {
@@ -1286,10 +1286,10 @@ void __stdcall TakeScreenshot() {
     D2_FREE_AT(pBuffer, ".\\Src\\D2WinMain.cpp", 0x6b4);
 }
 
-void __stdcall D2WIN_TakeScreenshotMsgHandler(int32_t pMsg) {
+void __stdcall D2WIN_TakeScreenshotMsgHandler(D2UIMouseMsgStrc * pMsg) {
     TakeScreenshot();
-    *(uint32_t*)(pMsg + 0x18) = 1;
-    *(uint32_t*)(pMsg + 0x1c) = 0;
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
 }
 
 void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {

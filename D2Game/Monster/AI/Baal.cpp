@@ -765,7 +765,7 @@ static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, int32
 }
 
 // Evaluates and returns the next combat action index for Baal's AI. When nCombatAiState==0 and no target (pUnit2 null): checks collision at Baal's current position and returns 4 if blocked, else 1 with 8% chance or 1. When a target is present: determines if the target's player-object is in the Throne Room within 75 units, measures distance to anchor point, tests melee range and wall collision, then delegates to AI_BAAL_CloneChooseAction (melee), AI_Baal_SelectActionWeighted (wall), or AI_BAAL_ThroneRoomChooseAction. Returns the chosen action index.
-static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t pAiGeneral, int32_t nBestScore, int32_t nCandidateCount, int32_t pAnchorAiCmd, D2UnitStrc * pUnit2) {
+static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2AiGeneralStrc * pAiGeneral, int32_t nBestScore, int32_t nCandidateCount, D2MonsterAiCmdStrc * pAnchorAiCmd, D2UnitStrc * pUnit2) {
     bool _bInThroneRoom;
     uint32_t _bVeryFarFromAnchor;
     BOOL _bInMeleeRange;
@@ -783,7 +783,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     bool bVeryFarFromAnchor;
     eD2UnitType eUnitType;
     eD2CollisionShapeType nCollisionWidth;
-    int nCombatAiState = *(int*)(pAiGeneral + 0x14);
+    int nCombatAiState = pAiGeneral->dwArg0;
     if (nCombatAiState) {
       return nCombatAiState;
     }
@@ -829,7 +829,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
       if (pFoundUnit) {
         pRoom = D2Common::Units::UNITS_GetRoom(pFoundUnit);
         eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-        if (eLevelId == LEVEL_TheWorldstoneChamber && (!pAnchorAiCmd || (nDistToAnchor = D2Common::Collision::GetDistanceToXY(pFoundUnit, *(int32_t*)(pAnchorAiCmd + 0xc), *(int32_t*)(pAnchorAiCmd + 0x10)) , nDistToAnchor < 0x4b))) {
+        if (eLevelId == LEVEL_TheWorldstoneChamber && (!pAnchorAiCmd || (nDistToAnchor = D2Common::Collision::GetDistanceToXY(pFoundUnit, pAnchorAiCmd->nCmdArg[1], pAnchorAiCmd->nCmdArg[2]) , nDistToAnchor < 0x4b))) {
           _bInThroneRoom = 1;
         }
       }
@@ -838,7 +838,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     nAction = 0;
     _bVeryFarFromAnchor = 0;
     if (pAnchorAiCmd) {
-      nDistToAnchorPt = AI_GetWeightedDistanceToPoint(pUnit2, *(int32_t*)(pAnchorAiCmd + 0xc), *(int32_t*)(pAnchorAiCmd + 0x10));
+      nDistToAnchorPt = AI_GetWeightedDistanceToPoint(pUnit2, pAnchorAiCmd->nCmdArg[1], pAnchorAiCmd->nCmdArg[2]);
       _bVeryFarFromAnchor = (uint32_t)(nDistToAnchorPt > 0x4b);
       if (nDistToAnchorPt > 100) {
         nAction = 1;
@@ -852,7 +852,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
       return nAction;
     }
     if (nFoundGUID) {
-      nAction = AI_Baal_SelectActionWeighted(pGame, pAiGeneral, pUnit2, nCandidateCount, _bVeryFarFromAnchor, nAction, _bInThroneRoom, nBestScore, pUnit);
+      nAction = AI_Baal_SelectActionWeighted(pGame, (int32_t)pAiGeneral, pUnit2, nCandidateCount, _bVeryFarFromAnchor, nAction, _bInThroneRoom, nBestScore, pUnit);
       return nAction;
     }
 

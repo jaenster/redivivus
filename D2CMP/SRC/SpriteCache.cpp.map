@@ -509,6 +509,8 @@
         "GetTickCount"
       ],
       "usedTypes": [
+        "D2GfxMemoryStrc",
+        "D2SpriteCacheEntryStrc",
         "int32_t"
       ]
     },
@@ -549,6 +551,8 @@
         "exit"
       ],
       "usedTypes": [
+        "D2GfxMemoryStrc",
+        "D2SpriteCacheEntryStrc",
         "int32_t"
       ]
     },
@@ -685,6 +689,7 @@
         "GetTickCount"
       ],
       "usedTypes": [
+        "D2SpriteCacheEntryStrc",
         "int32_t"
       ]
     },

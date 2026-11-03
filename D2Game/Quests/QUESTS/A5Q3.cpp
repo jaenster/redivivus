@@ -1232,20 +1232,20 @@ void __fastcall Q33_CheckPlayerHasScrollOfResistance(::SGAMEDATA * pGame, D2Unit
 
 // Q33_CheckPartyHasScrollOfResistance (PrisonOfIce): returns 1 if this player holds the "ice " scroll, else scans the
 // whole party via Q33_CheckPlayerHasScrollOfResistance and returns whether anyone holds it (field_0xE2).
-static uint32_t Q33_CheckPartyHasScrollOfResistance(int32_t pQuestData, D2UnitStrc * pUnit) {
-    D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(*(::SGAMEDATA**)(pQuestData + 4), pUnit, 0x20656369);
+static uint32_t Q33_CheckPartyHasScrollOfResistance(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
+    D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20656369);
     if (pScrollItem) {
       return 1;
     }
 
-    int32_t pnQuestSpecificData = *(int32_t*)(pQuestData + 0x18);
+    int32_t pnQuestSpecificData = *(int32_t*)&pQuestData->pQuestSpecificData;
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
     if (nPartyId == 0xffff) {
       return 0;
     }
 
     *(uint8_t*)(pnQuestSpecificData + 0xe2) = 0;
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(*(::SGAMEDATA**)(pQuestData + 4), nPartyId, (::fpExecuteOnUnitFunction)Q33_CheckPlayerHasScrollOfResistance, 0);
+    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q33_CheckPlayerHasScrollOfResistance, 0);
     return (uint32_t)(*(char*)(pnQuestSpecificData + 0xe2) != '\0');
 }
 

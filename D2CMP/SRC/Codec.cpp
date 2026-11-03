@@ -70,7 +70,7 @@ uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, D2Codec
     return nBitsRead;
 }
 
-static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t pFrameBounds) {
+static BOOL CODEC_AdvanceFrameIterator(int * pIterState, D2CodecFrameBoundsStrc * pFrameBounds) {
     int nFrameEntry;
     int nFrameWidth;
     uint32_t nXRemainder;
@@ -101,7 +101,7 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t pFrameBounds) {
       pIterState[0xd] = nFrameWidth;
       pIterState[0xb] += pIterState[6] * pIterState[0xe];
       pIterState[0xc] = pIterState[0xb];
-      pIterState[7] += *(int*)(pFrameBounds + 0x28);
+      pIterState[7] += pFrameBounds->nBlockStride;
       pIterState[8] = pIterState[7];
       if (!(pIterState[10] + 5 >= nFrameEntry)) {
         pIterState[0xe] = 4;
@@ -115,12 +115,12 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t pFrameBounds) {
     uint32_t nYRemainder;
     (*pIterState)++;
     nFrameWidth = *pIterState;
-    nFrameEntry = nFrameWidth * 0x2c + *(int*)(pFrameBounds + 4);
-    while (nFrameWidth < *(int*)(pFrameBounds + 0x1c)) {
+    nFrameEntry = nFrameWidth * 0x2c + pFrameBounds->pFrameArray;
+    while (nFrameWidth < pFrameBounds->nFrameCount) {
       if (*(int*)(nFrameEntry + 4) && *(int*)(nFrameEntry + 8)) {
         pIterState[1] = *(int*)(nFrameEntry + 4);
         pIterState[2] = *(int*)(nFrameEntry + 8);
-        pIterState[3] = *(int*)(nFrameEntry + 0xc) - *(int*)(pFrameBounds + 8);
+        pIterState[3] = *(int*)(nFrameEntry + 0xc) - pFrameBounds->nMinX;
         if (*(int*)(nFrameEntry + 0x28)) {
           nFrameWidth = 0;
         } else {
@@ -128,11 +128,11 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t pFrameBounds) {
         }
 
         nXRemainder = pIterState[3];
-        nYRemainder = *(int*)(nFrameEntry + 0x10) - *(int*)(pFrameBounds + 0xc) - nFrameWidth;
+        nYRemainder = *(int*)(nFrameEntry + 0x10) - pFrameBounds->nMinY - nFrameWidth;
         pIterState[4] = nYRemainder;
         pIterState[5] = *(int*)(nFrameEntry + 0x20);
         pIterState[6] = *(int*)(nFrameEntry + 0x24);
-        nFrameWidth = (int)nXRemainder / 4 + (int)nYRemainder / 4 * *(int*)(pFrameBounds + 0x28);
+        nFrameWidth = (int)nXRemainder / 4 + (int)nYRemainder / 4 * pFrameBounds->nBlockStride;
         pIterState[7] = nFrameWidth;
         pIterState[8] = nFrameWidth;
         memset(pIterState + 9, 0, 4 * sizeof(pIterState[0]));
@@ -161,15 +161,15 @@ static BOOL CODEC_AdvanceFrameIterator(int * pIterState, int32_t pFrameBounds) {
     return 0;
 }
 
-static void CODEC_InitializeFrameIterator(int32_t pFrameBounds) {
+static void CODEC_InitializeFrameIterator(D2CodecFrameBoundsStrc * pFrameBounds) {
     int iterState[15];
-    int nStride = *(int*)(pFrameBounds + 0x10) + 3;
-    int nHeightAligned = *(int*)(pFrameBounds + 0x14) + 3;
+    int nStride = pFrameBounds->nWidth + 3;
+    int nHeightAligned = pFrameBounds->nHeight + 3;
     nStride = nStride / 4;
-    *(int*)(pFrameBounds + 0x28) = nStride;
-    *(int*)(pFrameBounds + 0x24) = nHeightAligned / 4 * nStride;
-    *(uint32_t*)(pFrameBounds + 0x20) = 0;
-    if (!*(int*)(pFrameBounds + 0x1c)) {
+    pFrameBounds->nBlockStride = nStride;
+    pFrameBounds->nBlockCount = nHeightAligned / 4 * nStride;
+    pFrameBounds->nIterSteps = 0;
+    if (!pFrameBounds->nFrameCount) {
       return;
     }
 
@@ -177,7 +177,7 @@ static void CODEC_InitializeFrameIterator(int32_t pFrameBounds) {
     iterState[0] = -1;
     nStride = CODEC_AdvanceFrameIterator(iterState, pFrameBounds);
     while (nStride) {
-      (*(int*)(pFrameBounds + 0x20))++;
+      pFrameBounds->nIterSteps++;
       nStride = CODEC_AdvanceFrameIterator(iterState, pFrameBounds);
     }
 }
@@ -385,7 +385,7 @@ static void __stdcall CODEC_DecodeFramePixels(uint8_t * * ppPixelValues, int32_t
 }
 
 // Decompress frame pixel data from bit streams. Processes frame iterator list, decodes pixels via two bit buffers (one for pixel delta, one for colors). Fills output buffer row-by-row. Returns bits read into pBitsRead and buffer advance into pBitOffsets.
-void __stdcall CODEC_DecompressFrameData(int32_t nCodecState, D2CodecPixelBufferEntryStrc * pBitState1, D2CodecBitStateStrc * nBits1, D2CodecBitStateStrc * pBitState2, D2CodecBitStateStrc * nBits2, D2CodecBitStateStrc * pBitState3, int * pBitOffsets, uint8_t * * ppOutBuffer, int * pBitsRead) {
+void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D2CodecPixelBufferEntryStrc * pBitState1, D2CodecBitStateStrc * nBits1, D2CodecBitStateStrc * pBitState2, D2CodecBitStateStrc * nBits2, D2CodecBitStateStrc * pBitState3, int * pBitOffsets, uint8_t * * ppOutBuffer, int * pBitsRead) {
     // Frame -108..-48 is ONE object: a call writes 60 literal bytes starting at &aIterState.
     // Separate locals let the compiler reorder them, and the write would run off the frame.
     struct __frame0_t {
@@ -417,7 +417,7 @@ void __stdcall CODEC_DecompressFrameData(int32_t nCodecState, D2CodecPixelBuffer
     pOutPixelCursor = *ppOutBuffer;
     int nBitShift;
     nBitShift = (pBitOffsets[1] - *pBitOffsets >> 2) * 0x20 + pBitOffsets[3];
-    if (*(int*)(nCodecState + 0x1c)) {
+    if (nCodecState->nFrameCount) {
       int nIterResult;
       nInitBitPos = nBitShift;
       pOutPixel = pOutPixelCursor;

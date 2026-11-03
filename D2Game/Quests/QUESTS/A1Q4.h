@@ -26,7 +26,7 @@ namespace D2Game::Quests::QUESTS::A1Q4 {
 // Object/anim init helper for Deckard Cain's NPC unit: sets the active flag,
 // captures the target unit's GUID into the anim-state block, and pushes the
 // update flag so the client re-renders Cain. No quest-state transitions.
-void __fastcall Q04_UpdateCainNpcAnimState(int32_t pCainUnit, struct D2UnitStrc * * pTargetUnit);
+void __fastcall Q04_UpdateCainNpcAnimState(struct D2QuestDataStrc * pCainUnit, struct D2UnitStrc * * pTargetUnit);
 // A1Q4 — Q04_NotifyQuestStateToPlayer (per-player callback).
 // Gating predicate used as the "broadcast filter" by QUEST_SetStateAndBroadcast.
 // Sends quest-update packet 4 to a player ONLY if the quest is in a
@@ -240,7 +240,7 @@ void __fastcall Objects_InitFn13_InvisibleObject(struct D2ObjectInitFnArg * pIni
 // A1Q4 — Q04_InitializeCainGibbetObject: anim-init helper for the Cain cage/gibbet
 // object. Sets the active flag (0x48), captures the target unit GUID (or -1), and
 // pushes the cage's update flag. No quest-state transition.
-void __fastcall Q04_InitializeCainGibbetObject(int32_t pQuestData, struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Q04_InitializeCainGibbetObject(struct D2QuestDataStrc * pQuestData, struct D2ObjectInitFnArg * pInitArg);
 // A1Q4 — Q04_RemovePlayerFromList (per-player iterate callback): removes a player
 // (by GUID, or -1) from quest list1. Bookkeeping only.
 void __fastcall Q04_RemovePlayerFromList(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

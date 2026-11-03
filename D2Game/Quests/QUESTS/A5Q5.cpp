@@ -226,34 +226,34 @@ BOOL __stdcall Q35_PrepareAncientsForBattle(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A5Q5 (Rite of Passage) full arena reset, called on player death or leaving during the fight. Iterates all three Ancient slots: kills and removes each spawned Ancient via Q35_KillAndRemoveAncient (or removes inactive unit if already dead), decrements alive/spawned counters, and restores all three altar statues to anim mode 0. Clears fight-active flags. No quest-state writes.
-static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, int32_t pQuestData, int32_t pA5Q5Data) {
+static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData, D2QuestDataA5Q5Strc * pA5Q5Data) {
     bool bKillSuccess;
     D2UnitStrc* pStatue;
-    DWORD* pAncientGUID = (DWORD*)(pA5Q5Data + 0x20);
+    int* pAncientGUID = pA5Q5Data->anAncientMonsterGUID;
     int nAncientIdx = 0;
     do {
-      if (*(char*)(pA5Q5Data + 0x2c + nAncientIdx) != '\0') {
+      if (pA5Q5Data->abAncientSpawned[nAncientIdx]) {
         bKillSuccess = Q35_KillAndRemoveAncient(pGame, *pAncientGUID);
         if (bKillSuccess) {
-          (*(int*)(pA5Q5Data + 0x40))--;
-          (*(int*)(pA5Q5Data + 0x44))--;
+          pA5Q5Data->nSpawnedAncientCount--;
+          pA5Q5Data->nAncientsAlive--;
         } else {
           UNIT::SUnitInactive::SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(pGame, 1, (short int)nAncientIdx + 0x21c, 4);
         }
 
-        *(uint8_t*)(pA5Q5Data + 0x2c + nAncientIdx) = 0;
+        pA5Q5Data->abAncientSpawned[nAncientIdx] = 0;
       }
 
       pAncientGUID++;
       nAncientIdx++;
     } while (nAncientIdx < 3);
 
-    *(uint8_t*)(pA5Q5Data + 0x48) = 0;
+    pA5Q5Data->bAncientsSpawned = 0;
     int nStatueIdx = 0;
-    int* pStatueMode = (int*)(pA5Q5Data + 0x30);
+    int* pStatueMode = pA5Q5Data->anStatueMode;
     do {
-      *(uint8_t*)(pA5Q5Data + 0x3c + nStatueIdx) = 0;
-      pStatue = UNIT::SUnit::FindUnitFromTable(*(::SGAMEDATA**)(pQuestData + 4), UNIT_OBJECT, pStatueMode[-7]);
+      pA5Q5Data->abAncientDead[nStatueIdx] = 0;
+      pStatue = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pStatueMode[-7]);
       if (pStatue) {
         D2Common::Units::SetupUpdateFlag(pStatue, 0);
       }
@@ -263,8 +263,8 @@ static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, int32_t pQuest
       pStatueMode++;
     } while (nStatueIdx < 3);
 
-    *(uint32_t*)(pA5Q5Data + 0x4c) = 0;
-    pStatue = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, *(uint32_t*)(pA5Q5Data + 0x50));
+    pA5Q5Data->nAltarObjectMode = 0;
+    pStatue = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pA5Q5Data->nAltarGUID);
     if (!pStatue) {
       return;
     }

@@ -166,6 +166,7 @@
         "SetCurGateway"
       ],
       "usedTypes": [
+        "D2BNetGatewayAccessStr",
         "int32_t"
       ]
     },

@@ -17,8 +17,10 @@
         "MONSTER_FindUnitInPartySlot"
       ],
       "usedTypes": [
-        "int *",
-        "int32_t"
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int *"
       ]
     },
     {
@@ -36,6 +38,8 @@
         "MONSTER_FindUnitInPartySlot"
       ],
       "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
         "int *",
         "int32_t",
         "uint32_t"

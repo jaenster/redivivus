@@ -329,9 +329,9 @@ uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(int32_t pCdKeyData, uint32
 void __fastcall NET_SID_CLIENT_SetCDKeyNibble(int32_t pCdKeyData, uint32_t nNibbleIndex, uint8_t nNibbleValue);
 void __fastcall NET_SID_CLIENT_SetCDKeyBit(int32_t pCdKeyData, uint32_t nBitIndex, uint8_t nBitValue);
 void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn);
-void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(int32_t pCdKeyString, int32_t pOutBase5);
+void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, int32_t pOutBase5);
 void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(int32_t pToken);
-void __fastcall NET_SID_CLIENT_TransformCdKeyToken(int32_t nCdKeyValue, uint32_t * pOutPublic, uint32_t * pOutProduct, uint16_t * pOutHash);
+void __fastcall NET_SID_CLIENT_TransformCdKeyToken(char * nCdKeyValue, uint32_t * pOutPublic, uint32_t * pOutProduct, uint16_t * pOutHash);
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00522bb0..00522bb9; unreferenced in 1.14d.
 __time32_t __stdcall NET_SID_GetTime32_00522bb0(__time32_t * pTime);

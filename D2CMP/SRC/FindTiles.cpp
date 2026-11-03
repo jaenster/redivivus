@@ -184,7 +184,7 @@ void __fastcall FINDTILE_Register(D2TileLibraryHashStrc * pHashTable, D2TileLibr
     }
 }
 
-int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex) {
+int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, D2TileLibraryEntryStrc * * pResultArray, uint32_t nMaxResults, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex) {
     uint32_t i;
     void* pChainNode;
     bool bMatched;
@@ -226,7 +226,7 @@ int32_t __fastcall FINDTILE_Lookup(int * * pHashTable, int32_t pResultArray, uin
         pChainNode = (void*)pEntry[3];
         for (i = 0; pChainNode && i < nMaxResults; i++) {
           nResultCount++;
-          *(uint32_t*)(pResultArray + i * 4) = *(uint32_t*)pChainNode;
+          pResultArray[i] = *(D2TileLibraryEntryStrc**)pChainNode;
           pChainNode = *(void**)((int)pChainNode + 4);
         }
       }

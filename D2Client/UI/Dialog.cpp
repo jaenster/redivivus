@@ -1134,7 +1134,7 @@ int __stdcall GetDialogCounter() {
     return gnDialogCounter_b;
 }
 
-void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t param_1, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam) {
+void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t nColor, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam) {
     RECT nDialogX;
     int32_t nErrLine;
     int nIndex = pDialog->nSubCounter;
@@ -1148,7 +1148,7 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
     pDialog->aStringData[nIndex].nYPos = nYPos;
     pDialog->aStringData[nIndex].nFont = nFont;
     pDialog->aStringData[nIndex].nXOffset = 0;
-    pDialog->aStringData[nIndex].nColor = param_1;
+    pDialog->aStringData[nIndex].nColor = nColor;
     if (!(nLineType != 3 || pDialog->nHighlightStyle != 1)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55e);
       exit(-1);

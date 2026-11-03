@@ -722,7 +722,7 @@ void __stdcall DAMAGE_ApplyDemonBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D
     pDamage->dwEnDmgPct += nDemonDmgPct;
 }
 
-static void DAMAGE_ApplyUndeadBonusDamage(int32_t pDamage, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static void DAMAGE_ApplyUndeadBonusDamage(D2DamageStrc * pDamage, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     BOOL nUndeadOrBluntBonus = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pUnit2);
     if (!nUndeadOrBluntBonus) {
       return;
@@ -743,7 +743,7 @@ static void DAMAGE_ApplyUndeadBonusDamage(int32_t pDamage, D2UnitStrc * pUnit, D
       return;
     }
 
-    *(int*)(pDamage + 0xc) = *(int*)(pDamage + 0xc) + nBluntBonusPct + nUndeadDmgPct;
+    pDamage->dwEnDmgPct = pDamage->dwEnDmgPct + nBluntBonusPct + nUndeadDmgPct;
 }
 
 static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2DamageStrc * pDamage, D2UnitStrc * pTarget) {
@@ -2631,34 +2631,47 @@ D2DamageStrc * __fastcall DAMAGE_FindCombatEntry(D2UnitStrc * pUnit, D2UnitStrc 
     return nullptr;
 }
 
-uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnMinDamage, uint32_t * pnMaxDamage) {
-    uint64_t nSeedStateGeneral;
-    int64_t nSeedStatePow2;
+uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(D2UnitStrc * pUnit, uint32_t * pnMinDamage, uint32_t * pnMaxDamage) {
+    uint32_t uVar1;
+    uint64_t uVar2;
+    D2SeedStrc nSeedStateGeneral;
     uint32_t nRangeRoll = *pnMinDamage;
     if ((int)nRangeRoll <= 0) {
       nRangeRoll = 0;
-    } else if (nRangeRoll & nRangeRoll - 1) {
-      nSeedStateGeneral = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
-      *(uint64_t*)(pUnit + 0x20) = nSeedStateGeneral;
-      nRangeRoll = (uint32_t)((uint32_t)nSeedStateGeneral % nRangeRoll);
     } else {
-      nSeedStatePow2 = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
-      *(int64_t*)(pUnit + 0x20) = nSeedStatePow2;
-      nRangeRoll = nRangeRoll - 1 & (uint32_t)nSeedStatePow2;
+      uVar1 = pUnit->sSeed.nSeedLow;
+      uVar2 = (uint64_t)pUnit->sSeed.nSeedHigh;
+      if (nRangeRoll & nRangeRoll - 1) {
+        nSeedStateGeneral = (D2SeedStrc)((uint64_t)uVar1 * 0x6ac690c5 + uVar2);
+        pUnit->sSeed.nSeedHigh = nSeedStateGeneral.nSeedHigh;
+        pUnit->sSeed.nSeedLow = nSeedStateGeneral.nSeedLow;
+        nRangeRoll = (uint32_t)(nSeedStateGeneral.nSeedLow % nRangeRoll);
+      } else {
+        nSeedStateGeneral = (D2SeedStrc)((uint64_t)uVar1 * 0x6ac690c5 + uVar2);
+        pUnit->sSeed.nSeedHigh = nSeedStateGeneral.nSeedHigh;
+        pUnit->sSeed.nSeedLow = nSeedStateGeneral.nSeedLow;
+        nRangeRoll = nRangeRoll - 1 & nSeedStateGeneral.nSeedLow;
+      }
     }
 
     *pnMinDamage = nRangeRoll;
     nRangeRoll = *pnMaxDamage;
     if ((int)nRangeRoll <= 0) {
       nRangeRoll = 0;
-    } else if (nRangeRoll & nRangeRoll - 1) {
-      nSeedStateGeneral = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
-      *(uint64_t*)(pUnit + 0x20) = nSeedStateGeneral;
-      nRangeRoll = (uint32_t)((uint32_t)nSeedStateGeneral % nRangeRoll);
     } else {
-      nSeedStatePow2 = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
-      *(int64_t*)(pUnit + 0x20) = nSeedStatePow2;
-      nRangeRoll = nRangeRoll - 1 & (uint32_t)nSeedStatePow2;
+      uVar2 = (uint64_t)pUnit->sSeed.nSeedHigh;
+      uVar1 = pUnit->sSeed.nSeedLow;
+      if (nRangeRoll & nRangeRoll - 1) {
+        nSeedStateGeneral = (D2SeedStrc)((uint64_t)uVar1 * 0x6ac690c5 + uVar2);
+        pUnit->sSeed.nSeedHigh = nSeedStateGeneral.nSeedHigh;
+        pUnit->sSeed.nSeedLow = nSeedStateGeneral.nSeedLow;
+        nRangeRoll = (uint32_t)(nSeedStateGeneral.nSeedLow % nRangeRoll);
+      } else {
+        nSeedStateGeneral = (D2SeedStrc)((uint64_t)uVar1 * 0x6ac690c5 + uVar2);
+        pUnit->sSeed.nSeedHigh = nSeedStateGeneral.nSeedHigh;
+        pUnit->sSeed.nSeedLow = nSeedStateGeneral.nSeedLow;
+        nRangeRoll = nRangeRoll - 1 & nSeedStateGeneral.nSeedLow;
+      }
     }
 
     *pnMaxDamage = nRangeRoll;

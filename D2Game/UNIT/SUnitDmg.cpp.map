@@ -445,6 +445,7 @@
         "ITEM_GetMinimalStatValueShifted"
       ],
       "usedTypes": [
+        "D2DamageStrc",
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
@@ -1085,10 +1086,9 @@
         "DAMAGE_RollMinMaxDamageRange"
       ],
       "usedTypes": [
-        "int32_t",
-        "int64_t",
-        "uint32_t",
-        "uint64_t"
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "uint32_t"
       ]
     },
     {

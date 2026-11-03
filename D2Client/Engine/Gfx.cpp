@@ -320,13 +320,13 @@ static void GFX_SyncStateOverlayPriority(int * pOverlay, D2GfxInfoStrc * pGfxInf
     } while (true);
 }
 
-static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, D2GfxInfoStrc * pGfxInfo, int32_t pOverlay) {
+static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, D2GfxInfoStrc * pGfxInfo, D2GfxUnknown_0xa8 * pOverlay) {
     BOOL _bHasHideState;
     bool bHasHideState;
     int32_t nStateUnused;
     int* pCur;
     eD2States eState;
-    eState = *(eD2States*)(pOverlay + 0x38);
+    eState = pOverlay->nStatePriorityValue;
     eD2States eOldState;
     eOldState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
     if (eOldState != STATE_none) {
@@ -335,7 +335,7 @@ static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, 
 
     _bHasHideState = D2Common::DATATBLS::ItemStats::STATES_HasHideState(pUnit);
     if (!_bHasHideState) {
-      *(uint32_t*)(pOverlay + 8) = 0;
+      pOverlay->nValue0 = 0;
       if (eOldState != STATE_none) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 1);
         if (eOldState != STATE_none) {

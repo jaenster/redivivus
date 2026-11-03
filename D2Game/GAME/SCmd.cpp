@@ -1837,15 +1837,15 @@ void __fastcall NET_D2GS_SERVER_Send_0x11_UnitDoOverlay(D2ClientStrc * pClient, 
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 8, pClient);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT(D2ClientStrc * pClient, uint32_t dwUnitGUID, uint8_t byNpcClassOrType, uint16_t wNpcCodeParam, uint16_t wParam1, uint16_t wParam2, uint16_t wParam3) {
+void __fastcall NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT(D2ClientStrc * pClient, uint32_t dwUnitGUID, uint8_t byNpcClassOrType, uint16_t wNpcCodeParam, uint16_t wUMods01, uint16_t wUMod2, uint16_t wIsChampion) {
     D2GSPacketSrv0x57 byOpcode;
     byOpcode.dwUnitGUID = dwUnitGUID;
     byOpcode.wNameSeed = wNpcCodeParam;
     byOpcode.nParam5 = byNpcClassOrType;
-    byOpcode.wParam10 = wParam2;
-    byOpcode.wParam8 = wParam1;
+    byOpcode.wParam10 = wUMod2;
+    byOpcode.wParam8 = wUMods01;
     byOpcode.nPacketId = 'W';
-    byOpcode.wParam12 = wParam3;
+    byOpcode.wParam12 = wIsChampion;
     SCMD_QueuePacketForClient(&byOpcode.nPacketId, 0xe, pClient);
 }
 

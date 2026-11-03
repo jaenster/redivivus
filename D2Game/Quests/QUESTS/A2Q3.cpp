@@ -298,12 +298,12 @@ uint8_t __stdcall Q11_BeginTaintedSun(D2QuestDataStrc * pQuestData) {
 
 // A2Q3 - Q11_EndTaintedSun: ends the darkening. Clears the darkened flag, calls DRLGENV_TaintedSunEnd()
 // (restores daylight in Act 2) and iterates players sending Q11_SendSunRestoredPacket. No quest-record writes.
-void __stdcall Q11_EndTaintedSun(int pQuestData, ::SGAMEDATA * pGame) {
+void __stdcall Q11_EndTaintedSun(D2QuestDataStrc * pQuestData, ::SGAMEDATA * pGame) {
     if (!pGame->pAct[1]) {
       return;
     }
 
-    *(uint8_t*)(*(int*)(pQuestData + 0x18) + 2) = 0;
+    pQuestData->pQuestSpecificData.pA1Q2->bRewardGiven = false;
     D2Common::Environment::DRLGENV_TaintedSunEnd(pGame->pAct[1]);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q11_SendSunRestoredPacket);
 }
@@ -748,8 +748,8 @@ void __fastcall Q11_InitTaintedSunForAct(::SGAMEDATA * pGame, char nActNo) {
 
 // A2Q3 - Q11_GetTaintedSunFlag: accessor returning the A2Q3 bTaintedSunStartedFailed flag (low byte) from the
 // quest-specific data, or 0 if quest data missing. Read-only.
-uint8_t __fastcall Q11_GetTaintedSunFlag(int32_t pCallerQuestData) {
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(*(::SGAMEDATA**)(pCallerQuestData + 4), QUESTINT_TheTaintedSun);
+uint8_t __fastcall Q11_GetTaintedSunFlag(D2QuestDataStrc * pCallerQuestData) {
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pCallerQuestData->pGame, QUESTINT_TheTaintedSun);
     if (pQuestData) {
       return pQuestData->pQuestSpecificData.pA2Q6->bOrificeObjectPresent;
     }

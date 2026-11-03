@@ -215,9 +215,9 @@ uint8_t __stdcall CHAT_CheckIMELanguage() {
     return 1;
 }
 
-void __stdcall CHAT_ResetIMEState(int32_t pMsg) {
-    *(uint32_t*)(pMsg + 0x18) = 1;
-    *(uint32_t*)(pMsg + 0x1c) = 0;
+void __stdcall CHAT_ResetIMEState(D2UIMouseMsgStrc * pMsg) {
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
 }
 
 void __stdcall CHAT_InitIME() {
@@ -804,8 +804,8 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
     } while (true);
 }
 
-void __stdcall CHAT_CheckChatboxBounds(int32_t pMsg) {
-    if (!((int)(uint32_t)*(uint16_t*)(pMsg + 0xe) > ScreenSizeY - 0x31)) {
+void __stdcall CHAT_CheckChatboxBounds(D2UIMouseMsgStrc * pMsg) {
+    if (!((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY > ScreenSizeY - 0x31)) {
       return;
     }
 

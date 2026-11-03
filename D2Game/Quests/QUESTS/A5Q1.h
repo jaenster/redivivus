@@ -40,7 +40,7 @@ void __fastcall Q31_Callback10_PlayerLeavesGame(struct D2QuestDataStrc * pQuestD
 // A5Q1: per-player "am I near Shenk's room?" check, run after Shenk dies. Skips if quest already Completed. Compares player's current room (and its adjacent rooms) against the saved Shenk-room GUID; if the player witnessed the kill, sets RewardAwaits(1) + JustCompleted(0xd) on their quest record so Larzuk will offer the socket reward. Iterator cb, returns 0.
 BOOL __fastcall Q31_CheckNearShenk(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A5Q1 party-member completion stamp: for each party member, if Siege not already Completed(0)/RewardAwaits(1)/JustCompleted(0xd) AND they are physically in Act 5, set RewardAwaits(1)+JustCompleted(0xd) so the whole party gets credit for Shenk's death.
-void __fastcall Q31_SetCompleteForPartyMember(int32_t pGameRaw, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
+void __fastcall Q31_SetCompleteForPartyMember(::SGAMEDATA * pGameRaw, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame);
 // A5Q1: if this player just completed the quest (JustCompleted 0xd) and is in a party, propagate completion to every party member via Q31_SetCompleteForPartyMember.
 BOOL __fastcall Q31_PropagateCompleteToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A5Q1: per-player, if not Completed(0)/RewardAwaits(1)/JustCompleted(0xd), set CannotCompleteQuestInGame(0xe) and push a quest-update packet (id 0x1f) - marks players who were not present for Shenk's kill as unable to finish this session.

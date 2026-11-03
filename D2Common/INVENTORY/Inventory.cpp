@@ -138,7 +138,7 @@ static BOOL __stdcall INVENTORY_IsGridRectEmpty(int32_t nRow, uint32_t nCol, int
     return 1;
 }
 
-static void __stdcall INVENTORY_FillGridRect(uint8_t nWidth, int32_t nStartCol, D2InventoryGridInfoStrc * pGridInfo, uint8_t byHeight, uint32_t pFillItem, int32_t nStartRow) {
+static void __stdcall INVENTORY_FillGridRect(uint8_t nWidth, int32_t nStartCol, D2InventoryGridInfoStrc * pGridInfo, uint8_t byHeight, D2UnitStrc * pFillItem, int32_t nStartRow) {
     int nColsRemaining;
     D2UnitStrc** pCellPtr;
     int nRowEnd = (uint32_t)byHeight + nStartRow;
@@ -146,7 +146,7 @@ static void __stdcall INVENTORY_FillGridRect(uint8_t nWidth, int32_t nStartCol, 
       if (nStartCol < (int)((uint32_t)nWidth + nStartCol)) {
         pCellPtr = pGridInfo->pGridCells + (uint32_t)pGridInfo->bWidth * nStartRow + nStartCol;
         for (nColsRemaining = (uint32_t)nWidth + nStartCol - nStartCol; nColsRemaining; nColsRemaining--) {
-          *pCellPtr = (D2UnitStrc*)pFillItem;
+          *pCellPtr = pFillItem;
           pCellPtr++;
         }
       }

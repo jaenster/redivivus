@@ -535,9 +535,9 @@
         "D2GFX_UpdateWindowSize"
       ],
       "usedTypes": [
+        "D2UIMouseMsgStrc",
         "HMONITOR",
         "WINDOWPLACEMENT",
-        "int32_t",
         "tagMONITORINFO",
         "tagRECT",
         "uint16_t",
@@ -565,7 +565,7 @@
         "D2GFX_EndCutSceneReturnSceneState"
       ],
       "usedTypes": [
-        "int32_t",
+        "D2UIMouseMsgStrc",
         "uint32_t"
       ]
     },
@@ -631,7 +631,7 @@
         "SOUND_SetOptionsMusic"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2UIMouseMsgStrc"
       ]
     },
     {
@@ -829,7 +829,7 @@
         "UpdateOSCursorVisibilty"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2UIMouseMsgStrc"
       ]
     },
     {
@@ -971,7 +971,7 @@
         "TakeScreenshot"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2UIMouseMsgStrc"
       ]
     },
     {

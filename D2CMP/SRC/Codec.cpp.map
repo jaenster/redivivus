@@ -56,7 +56,7 @@
         "CODEC_AdvanceFrameIterator"
       ],
       "usedTypes": [
-        "int32_t",
+        "D2CodecFrameBoundsStrc",
         "uint32_t"
       ]
     },
@@ -76,7 +76,7 @@
         "CODEC_AdvanceFrameIterator"
       ],
       "usedTypes": [
-        "int32_t"
+        "D2CodecFrameBoundsStrc"
       ]
     },
     {
@@ -175,8 +175,8 @@
       ],
       "usedTypes": [
         "D2CodecBitStateStrc",
+        "D2CodecFrameBoundsStrc",
         "D2CodecPixelBufferEntryStrc",
-        "int32_t",
         "uint32_t",
         "uint8_t",
         "uint8_t *"

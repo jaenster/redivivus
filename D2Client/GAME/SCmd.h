@@ -160,7 +160,7 @@ void __stdcall SaveCharacter();
 //   0xB3: Save file download (DownloadSave)
 //   0xB4: Connection refused (maps server reason 1-0x1A to client error codes)
 void __fastcall NET_D2GS_CLIENT_PacketHandle_from0xAF(uint8_t * pBytes, size_t nSize);
-void __fastcall NET_D2GS_CLIENT_Incoming0x01_NEWGAME(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x01_NEWGAME(struct D2GSPacketSrv0x01 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x03_NEWACT(struct D2GSPacketSrv0x03 * pBytes);
 void __fastcall SCMD_Rcv_IgnoreShared(char * pBytes);
 // A 5-byte thunk whose entire body is a tail call to
@@ -182,18 +182,18 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x05_UnloadComplete(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x06_ENDGAME(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x07_NEWROOM(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x08_REMOVEROOM(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x09_AssignLevelWarp(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x51_NEWOBJECT(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x09_AssignLevelWarp(struct D2GSPacketSrv0x09 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x51_NEWOBJECT(struct D2GSPacketSrv0x51 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x52(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x0A_RemoveObject(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x0A_RemoveObject(struct D2GSPacketSrv0x0A * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x0D_UNITCHANGE_XY(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x0E_UNITCHANGE_ID(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x0F_UNITCHANGE_XYPOS(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x10_UNITCHANGE_IDPOS(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x67_UNITCHANGE_MONSTERXYPATH(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x68_UNITCHANGE_MONSTERIDPATH(struct D2UnitStrc * pUnit, char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x0C * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x0D_UNITCHANGE_XY(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x0D * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x0E_UNITCHANGE_ID(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x0E * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x0F_UNITCHANGE_XYPOS(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x0F * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x10_UNITCHANGE_IDPOS(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x10 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x67_UNITCHANGE_MONSTERXYPATH(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x67 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x68_UNITCHANGE_MONSTERIDPATH(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x68 * pBytes);
 // - This body performs no coordinate and no path work at all. It fills a D2ServerMessageHandleStrc
 //   from pBytes+6 (u16), +8 (u16), +10 (u8), +0xb (u8) and calls
 //   D2Common::Unit::UnitMode::HandleMessage(mode=pBytes[5], pUnit, &msg, 1). Nothing more.
@@ -208,12 +208,12 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x68_UNITCHANGE_MONSTERIDPATH(struct D2U
 // D2ServerMessageHandleStrc field names and are reused verbatim across the whole 0x67-0x6a family.
 // They are not per-packet analysis. The verb "MonsterSpell" is unsupported - no skill lookup, no
 // cast, no missile.
-void __fastcall NET_D2GS_CLIENT_Incoming0x69_UNITCHANGE_MONSTERXYNOPATH(struct D2UnitStrc * pUnit, char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x69_UNITCHANGE_MONSTERXYNOPATH(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x69 * pBytes);
 // Client receiver for S2C packet 0x6A (12 bytes): [opcode:1][npcGUID:u32][animMode:1][targetUnitType:1][targetGUID:u32][extraData:1]. Unpacks into D2ServerMessageHandleStrc and dispatches via HandleMessage to set the NPC's animation mode while targeting a specific entity. Part of NPC update family (0x67-0x6D). Used when monsters perform stationary actions (curse, roar, channel) directed at a target unit. extraData carries HP%, direction, or hit class depending on animMode.
 void __fastcall NET_D2GS_CLIENT_RecvNpcStateToEntity(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x6B_UNITCHANGE_MONSTERXYPOSITION(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x6C_UNITCHANGE_MONSTERIDPOSITION(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL(struct D2UnitStrc * pUnit, char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x6B_UNITCHANGE_MONSTERXYPOSITION(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x6B * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x6C_UNITCHANGE_MONSTERIDPOSITION(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x6C * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x6D * pBytes);
 void __fastcall SCMD_Rcv0x6E_UnitIgnore(struct D2UnitStrc * pUnit, char * pBytes);
 void __fastcall SCMD_Rcv0x6F_UnitIgnore(struct D2UnitStrc * pUnit, char * pBytes);
 void __fastcall SCMD_Rcv0x70_UnitIgnore(struct D2UnitStrc * pUnit, char * pBytes);
@@ -224,7 +224,7 @@ void __fastcall SCMD_Rcv0x72_UnitIgnore(struct D2UnitStrc * pUnit, char * pBytes
 // as the eOverlayId argument of UnitDoOverlay(pUnit, eOverlay, nDuration) @00464e50 - a typed
 // overlay id plus a duration. The matching sender NET_D2GS_SERVER_Send_0x11_UnitDoOverlay has exactly
 // two callers, both PLAYER_SendOverlayToClient.
-void __fastcall NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay(struct D2GSPacketSrv0x11 * pBytes);
 void __fastcall SCMD_Rcv0x12_Ignore(char * pBytes);
 void __fastcall SCMD_Rcv0x13_Ignore(char * pBytes);
 void __fastcall SCMD_Rcv0x14_Ignore(char * pBytes);
@@ -233,22 +233,22 @@ void __fastcall SCMD_Rcv0x14_Ignore(char * pBytes);
 // The body calls
 // D2Common::Unit::CUnit::CLIENT_TeleportUnitToPosition(pUnit, nX, nY, byFlag) - a warp to an X/Y.
 // It warps ANY unit type, branching on UNIT_PLAYER vs UNIT_MONSTER for the collision pattern.
-void __fastcall NET_D2GS_CLIENT_Incoming0x15_WarpXY(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x15_WarpXY(struct D2GSPacketSrv0x15 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x17_UNITPATH(struct D2UnitStrc * pUnit, char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x16_UPDATE(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x28_INTERACTION_ENABLE(struct D2GSPacketSrv0x28 * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x62_INTERACTION_STOP(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x62_INTERACTION_STOP(struct D2GSPacketSrv0x62 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD(struct D2GSPacketSrv0x29 * pBytes);
 // Recomputes stat contributions of all items in pUnit's inventory. Snapshots the unit's current left/right skills, iterates every item via INVENTORY_GetFirstItem/GetNextItem, and for each carried item whose owner is confirmed, strips and re-applies its stat list via STATLIST_RemoveFromOwnerAndRecalc + STATLIST_SetItemStatActive. Finally re-selects the saved left/right skills to update skill state. Called after inventory changes that may alter active stats.
 void __fastcall SCMD_RecalcInventoryItemStats(struct D2UnitStrc * pUnit);
 // Server→client handler for stat-update opcodes 0x9E–0xA2 targeting a monster unit. Decodes the stat id (byte 1) and a value (bytes 6+, width varies by opcode: byte/word/dword). Opcodes 0xA1/0xA2 add to the stat (STATLIST_AddUnitStat); others set it (STATLIST_SetUnitStat). If the stat is UNITSTAT_level, also triggers ITEM_CltRecalcEquippedFromUnit to refresh item-level requirements.
 void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(struct D2GSPacketSrv0xA3 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(struct D2GSPacketSrv0xA5 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER(char * pBytes);
 // Server→client handler for stat-set/add opcodes 0x19–0x1F targeting the local player. Opcodes 0x19–0x1B add gold or experience (delta from bytes 1–4, varying width); 0x1C sets experience outright; 0x1D–0x1F set an arbitrary stat (id=byte 1, value bytes 2+, byte/word/dword). Calls STATLIST_SetUnitStat then SCMD_HandleStatChangeEffect to apply side-effects (level-up UI, sound, etc.).
 void __fastcall NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x20(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x20(struct D2GSPacketSrv0x20 * pBytes);
 void __stdcall SCMD_DecodeRelativeCoordinates(uint16_t nByteY, int16_t nBaseX, int16_t nBaseY, short * pOutX, short * pOutY, uint16_t nByteX);
 void __fastcall NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(char * pBytes);
@@ -259,44 +259,44 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_RecvSkillTabBonusDelta(char * pBytes);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x23_SETSKILL(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS(struct D2GSPacketSrv0x22_0x23 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x23_SETSKILL(struct D2GSPacketSrv0x23 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x9A_ITEM_SKILL_XY(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x4C_SKILL_ID(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY(struct D2UnitStrc * pUnit, char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x26_CHATSTART(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x76(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x4C_SKILL_ID(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x4C * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY(struct D2UnitStrc * pUnit, struct D2GSPacketSrv0x4D * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x26_CHATSTART(struct D2GSPacketSrv0x26 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x76(struct D2GSPacketSrv0x76 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x5A(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x27_PRESETTALK(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x2A_TRANSACTION_RESULTS(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x2C_PLAY_SOUND(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x27_PRESETTALK(struct D2GSPacketSrv0x27 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x2A_TRANSACTION_RESULTS(struct D2GSPacketSrv0x2A * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x2C_PLAY_SOUND(struct D2GSPacketSrv0x2C * pBytes);
 // Server→client SCMD 0x3E bit-packed stat-update handler. Reads a bitstream from pBytes+2 (length = pBytes[1]-2): decodes a variable-width unit GUID (8/16/32-bit), a signed flag, a 9-bit stat id, a variable-width value (8/16/32-bit), and a variable-width param (8/16-bit). Dispatches to ITEM_HandleStatUpdatePacket to apply the stat to the target item unit.
 void __fastcall NET_D2GS_CLIENT_Incoming0x3E_ITEMUPDATESTAT(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x3F(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x40(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x3F(struct D2GSPacketSrv0x3F * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x40(struct D2GSPacketSrv0x40 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x42(char * pBytes);
 void __fastcall SCMD_Rcv0x45_Ignore(char * pBytes);
 // Client receiver for S2C packet 0x47 (11 bytes). Copies packet bytes into D2GSPacketSrv0x47 struct and calls ITEM_CltRecalcAllEquippedItems to re-evaluate equipped item requirements after stat changes.
 void __fastcall NET_D2GS_CLIENT_RecvRecalcEquippedItems(char * pBytes);
 // Client receiver for S2C packet 0x48 (11 bytes). Copies packet bytes into D2GSPacketSrv0x48 struct and calls ITEM_CltRecalcAllEquippedItems2 to re-evaluate equipped item requirements.
 void __fastcall NET_D2GS_CLIENT_RecvRecalcEquippedItems2(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x53(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x50(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x53(struct D2GSPacketSrv0x53 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x50(struct D2GSPacketSrv0x50 * pBytes);
 void __fastcall SCMD_Rcv0x54_Ignore(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x4F(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x4E_ADDTOMERCENARYLIST(struct D2GSPacketSrv0x4E * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x57_CHANGEMONSTERUNIT(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x57_CHANGEMONSTERUNIT(struct D2GSPacketSrv0x57 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x58(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x59_NEWPLAYERUNIT(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x5B(struct D2GSPacketSrv0x5B * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x5C(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x5D(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x5C(struct D2GSPacketSrv0x5C * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x5D(struct D2GSPacketSrv0x5D * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x5E(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK(struct D2GSPacketSrv0x91 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x92_CLEARINVENTORY(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x5F_PORTALFLAGS(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x5F_PORTALFLAGS(struct D2GSPacketSrv0x5F * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x60_SETWARPDEST(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x61(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x63(char * pBytes);
@@ -308,28 +308,28 @@ void __fastcall SCMD_Rcv0x66_Ignore(char * pBytes);
 // D2Common::Unit::Missile::MakeMissile, then StoreOwnerInfo, STATLIST_SetUnitStat(UNITSTAT_pierce_idx)
 // and Missile::SetCurrentFrame on the returned unit. It creates a missile.
 void __fastcall NET_D2GS_CLIENT_Incoming0x73_CreateMissile(struct D2GSPacketSrv0x73 * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x74(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x74(struct D2GSPacketSrv0x74 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x75_UPDATEROSTER(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x77(uint8_t * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x78_TRADENAME(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD(struct D2GSPacketSrv0x79 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET(struct D2GSPacketSrv0x7A * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x81(struct D2GSPacketSrv0x81 * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS(struct D2GSPacketSrv0x7B * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x7C_SETITEMUNUSED(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x7D(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x7E(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x7D(struct D2GSPacketSrv0x7D * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x7E(struct D2GSPacketSrv0x7E * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x7F(struct D2GSPacketSrv0x7F * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x90_PARTYLOCUPDATE(struct D2GSPacketSrv0x90 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x82_LINKTOWNPORTAL(struct D2GSPacketSrv0x82 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x89(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8A(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8B_PLAYERBUTTON(struct D2GSPacketSrv0x8B * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS(struct D2GSPacketSrv0x8C * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY(struct D2GSPacketSrv0x8D * pPacket);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8E_LINKDEADBODY(struct D2GSPacketSrv0x8E * pBytes);
 // Packet 0x9B: hands the unsigned words at +1 and +3 to SetPlayersMercInfo.
-void __fastcall NET_D2GS_CLIENT_Incoming0x9B_DEAD_HIRELING(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0x9B_DEAD_HIRELING(struct D2GSPacketSrv0x9B * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x9(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x8F(char * pBytes);
 // Server-side handler for client packet 0x9C (item action, ground/container/belt ops). Copies 63 dwords from pBytes into a local buffer, then dispatches on byte[1] (action subcode) to the appropriate D2Common item handler: add/pick/drop/put/swap ground, quantity update, shop, container swap, belt add/remove/swap, cursor transfer. Subcodes 5–9, 0x11, 0x13–0x17 are invalid and halt.
@@ -337,16 +337,16 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9C_ITEMEX(uint8_t * pBytes);
 // Server-side handler for client packet 0x9D (item action, body/socket/weapon-switch ops). Copies 64 dwords + 1 byte from pBytes into a local buffer, then dispatches on byte[1] (action subcode) to the appropriate D2Common item handler: remove from container, equip, indirect/direct body swap, unequip, auto-unequip, socket insert, move to body loc, update stats, copy to cursor, weapon switch. Subcodes 0–4, 0xa–0x10, 0x12 are invalid and halt.
 void __fastcall NET_D2GS_CLIENT_Incoming0x9D(uint8_t * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0xA6(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0xA7(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0xA7(struct D2GSPacketSrv0xA7 * pBytes);
 // Server→client SCMD 0xA8 handler: applies a state and its associated stat list to a unit. Looks up the target unit by GUID+type (bytes 1–5), sets the state (byte 7) via STATES_SetStateOnUnit, then reads a 9-bit-delimited bitstream (bytes 8+, length=byte 6−8) of stat entries (id, optional param, signed/unsigned value) using ItemStatCost sendBits/sendParamBits metadata, accumulating them via NET_D2GS_CLIENT_HandleAddSTatUnit. Finalises with STATES_DispatchSetFunc.
-void __fastcall NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0xA9_UNITSTATE_OFF_EX(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX(struct D2GSPacketSrv0xA8 * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0xA9_UNITSTATE_OFF_EX(struct D2GSPacketSrv0xA9 * pBytes);
 // Client-side handler for GS→client packet 0xAA (state + stat update). Looks up the target unit by GUID and type from the packet header, then reads a bit-packed stream: a list of state IDs (8-bit, 0xFF sentinel) each followed by an optional stat block (9-bit stat IDs, 0x1FF sentinel). For each state calls STATES_SetStateOnUnit; for each stat reads sendParamBits param and sendBits value from ItemStatCost.txt and applies via NET_D2GS_CLIENT_HandleAddSTatUnit. Ends each state entry with STATES_DispatchSetFunc.
-void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(char * pBytes);
-void __fastcall NET_D2GS_CLIENT_Incoming0xAB(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(struct D2GSPacketSrv0xAA * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0xAB(struct D2GSPacketSrv0xAB * pBytes);
 // Client-side handler for server packet 0xAC (assign/create monster unit). Reads fixed header (unitGUID@+1, monstatId@+5, x@+7, y@+9, hp byte@+0xb) then a bit stream from +0xd: unit type, optional component/equipment bytes per MonStats2 layout, monster-type flags (Champion/Unique/SuperUnique/Minion/Ghostly), optional super-unique index and name, nameId and owner GUID. Calls UNIT_CreateMonster to instantiate the client unit, resets its anim frame cache, seeds maxhp/hitpoints and a packed x+y pierce-idx stat, stores owner info, then drains a (statId,value[,param]) list per ItemStatCost sendBits into a freshly attached stat list. Skips HP seeding for the local player's hireling. NOTE: pUnit is read after UNIT_CreateMonster but the call's return is not visibly assigned to it in this decompile (likely an out/return artifact).
 void __fastcall NET_D2GS_CLIENT_Incoming0xAC(char * pPacketData);
-void __fastcall NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA(char * pBytes);
+void __fastcall NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA(struct D2GSPacketSrv0xAE * pBytes);
 // CLIENT S2C PACKET DISPATCHER (game packets 0x00-0xAE)
 // Table: NET_D2GS_CLIENT_INCOMING at 0x007114D0 (175 entries, 12 bytes each)
 // Entry: {fpHandler:4, nExpectedSize:4, fpHandlerUnit:4}

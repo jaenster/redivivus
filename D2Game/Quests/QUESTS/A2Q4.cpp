@@ -596,9 +596,9 @@ BOOL __fastcall Q12_CheckJerhynGateOpen(::SGAMEDATA * pGame) {
 }
 
 // A2Q4 - BlockHaremRoomForPlayerAccess. Spawns a blocking object (classId 0x13e) just in front of the player to wall off the harem/palace room until the quest opens it. Tries player-pos offset, then a fallback offset; on success marks the substruct occupied and records the object GUID.
-void __fastcall BlockHaremRoomForPlayerAccess(int32_t pQuestData, D2UnitStrc * pUnit) {
+void __fastcall BlockHaremRoomForPlayerAccess(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     POINT ptPlayerPos;
-    D2QuestDataA2Q4Strc* pA2Q4Specific = *(D2QuestDataA2Q4Strc**)(pQuestData + 0x18);
+    D2QuestDataA2Q4Strc* pA2Q4Specific = pQuestData->pQuestSpecificData.pA2Q4;
     D2Common::Units::GetCoords(pUnit, &ptPlayerPos);
     if (!(!pA2Q4Specific->bDrognanSummonerHint && pA2Q4Specific->bPortalJerhynSpawned == '\0')) {
       return;
@@ -610,13 +610,13 @@ void __fastcall BlockHaremRoomForPlayerAccess(int32_t pQuestData, D2UnitStrc * p
     pA2Q4Specific->nHaremBlockerX = ptPlayerPos.x - 2;
     uint8_t bForcedSpawn = 1;
     pA2Q4Specific->nHaremBlockerY = ptPlayerPos.y - 1;
-    D2UnitStrc* pBlockerUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x13e, pA2Q4Specific->nHaremBlockerX, pA2Q4Specific->nHaremBlockerY, *(::SGAMEDATA**)(pQuestData + 4), D2Common::Units::UNITS_GetRoom(pUnit), bForcedSpawn, nInitialMode, pNullArg);
+    D2UnitStrc* pBlockerUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x13e, pA2Q4Specific->nHaremBlockerX, pA2Q4Specific->nHaremBlockerY, pQuestData->pGame, D2Common::Units::UNITS_GetRoom(pUnit), bForcedSpawn, nInitialMode, pNullArg);
     if (!pBlockerUnit) {
       pNullArg = 0;
       nInitialMode = 0;
       bForcedSpawn = 1;
       pA2Q4Specific->nHaremBlockerY = ptPlayerPos.y;
-      pBlockerUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x13e, pA2Q4Specific->nHaremBlockerX, pA2Q4Specific->nHaremBlockerY, *(::SGAMEDATA**)(pQuestData + 4), D2Common::Units::UNITS_GetRoom(pUnit), bForcedSpawn, nInitialMode, pNullArg);
+      pBlockerUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x13e, pA2Q4Specific->nHaremBlockerX, pA2Q4Specific->nHaremBlockerY, pQuestData->pGame, D2Common::Units::UNITS_GetRoom(pUnit), bForcedSpawn, nInitialMode, pNullArg);
       if (!pBlockerUnit) {
         return;
       }

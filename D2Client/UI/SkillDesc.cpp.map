@@ -577,6 +577,7 @@
         "D2ApplyPercent"
       ],
       "usedTypes": [
+        "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -598,6 +599,7 @@
         "D2ApplyPercent"
       ],
       "usedTypes": [
+        "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
       ]
@@ -1743,6 +1745,7 @@
         "SKILLDESC_DrawTwoLineText"
       ],
       "usedTypes": [
+        "D2SkillStrc",
         "D2UnitStrc",
         "WCHAR",
         "int32_t",
@@ -2676,6 +2679,7 @@
         "SKILLDESC_FormatMissileDamage"
       ],
       "usedTypes": [
+        "D2SkillsTxt",
         "D2UnitStrc",
         "WCHAR",
         "int32_t",

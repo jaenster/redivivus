@@ -75,7 +75,7 @@ void __fastcall Q05_SetCompletionForTrackedPlayers(::SGAMEDATA * pGame, struct D
 // (falls back to the chest's own coords). Marks the effect as fired (+0x119=1), then for each chest
 // launches a SKILL_Attack missile aimed at the chest and toggles its room portal flag — this drives
 // the gold/treasure-burst visual from the Countess's chests. No quest-state changes here (pure FX).
-void __stdcall Q05_SpawnCountessDeathEffect(struct D2QuestDataStrc * pQuestData, int32_t pA1Q5Data);
+void __stdcall Q05_SpawnCountessDeathEffect(struct D2QuestDataStrc * pQuestData, struct D2QuestDataA1Q5Strc * pA1Q5Data);
 // 1.14d: 0x5956c0 | A1Q5 "The Forgotten Tower" — death-effect trigger (timer-driven thunk).
 // Called from the monster-id timer path. Invokes Q05_SpawnCountessDeathEffect with the quest data, then
 // if the reward has been distributed (bRewardDistributed) but the death animation hasn't yet played

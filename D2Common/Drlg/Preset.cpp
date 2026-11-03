@@ -573,11 +573,11 @@ void __fastcall DRLGPRESET_FreeSpawnPointList(D2PoolManagerStrc * pMemory, D2AiG
     D2_FREE_POOL_AT(pMemory, pAiGeneral, ".\\DRLG\\Preset.cpp", 0x598);
 }
 
-void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, D2PoolManagerStrc * pMemory, int32_t nPosY, int32_t pDrlgMap) {
+void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, D2PoolManagerStrc * pMemory, int32_t nPosY, D2DrlgMapStrc * pDrlgMap) {
     D2PresetUnitStrc* pPresetUnit = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_OBJECT, nClassId, 0, nPosX, nPosY);
     pPresetUnit->nFlags |= 1;
-    pPresetUnit->pPresetUnitNext = *(D2PresetUnitStrc**)(pDrlgMap + 0x38);
-    *(D2PresetUnitStrc**)(pDrlgMap + 0x38) = (D2PresetUnitStrc*)pPresetUnit;
+    pPresetUnit->pPresetUnitNext = pDrlgMap->pPresetUnit;
+    pDrlgMap->pPresetUnit = pPresetUnit;
 }
 
 // Spawns repeated object presets (class 0x41) along a vertical line in world coords from start to end, spaced by 0x28. Prepends each to pMap->pPresetUnit and marks flag bit 0x1.

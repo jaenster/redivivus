@@ -475,6 +475,7 @@
         "ToggleHasPortalFlagRoom"
       ],
       "usedTypes": [
+        "D2QuestDataA1Q5Strc",
         "D2QuestDataStrc",
         "D2RoomStrc",
         "D2UnitStrc",

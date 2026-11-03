@@ -977,6 +977,7 @@
       ],
       "usedTypes": [
         "D2HirelingTxt",
+        "SGAMEDATA",
         "int32_t",
         "uint16_t",
         "uint32_t"
@@ -1118,6 +1119,7 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2RoomStrc",
         "D2SaveFileHeaderStrc",
         "D2UnitStrc *",
         "SGAMEDATA",
@@ -1202,6 +1204,7 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2RoomStrc",
         "D2SaveFileHeaderStrc",
         "D2UnitStrc *",
         "SGAMEDATA",

@@ -220,6 +220,7 @@
         "IteratePlayerOrMonsterUnits"
       ],
       "usedTypes": [
+        "D2QuestDataStrc",
         "SGAMEDATA"
       ]
     },
@@ -512,7 +513,6 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc",
-        "int32_t",
         "uint8_t"
       ]
     },

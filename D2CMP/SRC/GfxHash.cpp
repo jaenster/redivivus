@@ -107,36 +107,36 @@ void __fastcall GFX_UnlinkCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTa
     GFXHASH_UnlinkCacheEntry((int32_t)pHashTable, pMemory, pEntry);
 }
 
-uint32_t __fastcall GFXHASH_CalcDirectionIndex(int32_t pGfxData, uint32_t * pnDirectionDivisor, D2CelFileCacheEntryStrc * pCelEntry) {
+uint32_t __fastcall GFXHASH_CalcDirectionIndex(D2GfxDataStrc * pGfxData, uint32_t * pnDirectionDivisor, D2CelFileCacheEntryStrc * pCelEntry) {
     uint32_t dwDirectionMask;
-    int32_t nDirFrameTable;
+    int nDirFrameTable;
     uint32_t nDirFrameIdx = 0;
     *pnDirectionDivisor = 0;
-    if (*(int*)(pGfxData + 8)) {
-      int nType;
-      if (*(int*)(pGfxData + 8) != 1) {
+    if (pGfxData->eUnitType != UNIT_PLAYER) {
+      eD2UnitType nType;
+      if (pGfxData->eUnitType != UNIT_MONSTER) {
         *pnDirectionDivisor = 1;
-        nType = *(int*)(pGfxData + 8);
-        if (nType == 2) {
+        nType = pGfxData->eUnitType;
+        if (nType == UNIT_OBJECT) {
           return nDirFrameIdx / *pnDirectionDivisor;
         }
-        if (nType != 6 || !(*(uint8_t*)(pGfxData + 4) & 2)) {
-          if (nType == 4) {
-            return *(uint32_t*)(pGfxData + 0x40) / *pnDirectionDivisor;
+        if (nType != UNIT_COUNT || !(pGfxData->dwFlags & 2)) {
+          if (nType == UNIT_ITEM) {
+            return (uint32_t)pGfxData->nDirection / *pnDirectionDivisor;
           }
-          if (nType != 3) {
+          if (nType != UNIT_MISSILE) {
             return nDirFrameIdx / *pnDirectionDivisor;
           }
         }
-        if (nType == 4) {
-          return *(uint32_t*)(pGfxData + 0x40) / *pnDirectionDivisor;
+        if (nType == UNIT_ITEM) {
+          return (uint32_t)pGfxData->nDirection / *pnDirectionDivisor;
         }
         if (pCelEntry->dwCacheFlags & 1) {
           return nDirFrameIdx / *pnDirectionDivisor;
         }
 
         dwDirectionMask = pCelEntry->nDirections;
-        nDirFrameTable = *(int32_t*)(pGfxData + 0x40);
+        nDirFrameTable = pGfxData->nDirection;
       } else {
         if (pCelEntry->dwCacheFlags & 1) {
           return 0;
@@ -144,18 +144,18 @@ uint32_t __fastcall GFXHASH_CalcDirectionIndex(int32_t pGfxData, uint32_t * pnDi
 
         *pnDirectionDivisor = (pCelEntry->nDirections != 8 ? -3 : 0) + 4;
         dwDirectionMask = pCelEntry->nDirections;
-        nDirFrameTable = *(int32_t*)(pGfxData + 0x40);
+        nDirFrameTable = pGfxData->nDirection;
       }
 
       nDirFrameIdx = CelCmp::CELCMP_GetDirectionFrameTableIndex(nDirFrameTable, dwDirectionMask);
     } else {
       *pnDirectionDivisor = 8;
-      if (!*(int*)(pGfxData + 0x10) || *(int*)(pGfxData + 0x10) == 0x11 || *(uint8_t*)(pGfxData + 0x44) & 2) {
+      if (!pGfxData->nMode || pGfxData->nMode == 0x11 || pGfxData->dwRenderFlags & 2) {
         *pnDirectionDivisor = 1;
       }
       if (!(pCelEntry->dwCacheFlags & 1)) {
         dwDirectionMask = pCelEntry->nDirections;
-        nDirFrameTable = *(int32_t*)(pGfxData + 0x40);
+        nDirFrameTable = pGfxData->nDirection;
         nDirFrameIdx = CelCmp::CELCMP_GetDirectionFrameTableIndex(nDirFrameTable, dwDirectionMask);
       }
     }

@@ -98,7 +98,7 @@ void __fastcall fpDrawVisTile(uint8_t * pbTileData, int32_t nScreenX, int32_t nS
     } while (nRowsLeft < 0x20);
 }
 
-void __fastcall DRAW_DrawWallTileWithLighting(int32_t nTileDataPtr, int32_t nScreenX, int32_t nScreenY, int32_t nLightLevel) {
+void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nScreenX, int32_t nScreenY, int32_t nLightLevel) {
     if (!(nScreenY >= gnMinTileDrawY && nScreenY < gnTileClipYMin && nScreenX >= gnTileInnerClipXMin && nScreenX < gnTileInnerClipYMin)) {
       return;
     }
@@ -109,11 +109,11 @@ void __fastcall DRAW_DrawWallTileWithLighting(int32_t nTileDataPtr, int32_t nScr
       exit(-1);
     }
     if (nScreenY >= gnTileInnerClipYMinRow && nScreenY < gnTileInnerClipYMax && nScreenX >= gnTileInnerClipXMax_b && nScreenX < gnTileClipXMax) {
-      D2gfx::D2GFX::D2GFX_DrawWallTileBasic((uint8_t*)nTileDataPtr, pDst, gaPaletteColorLUT[(uint32_t)nLightLevel >> 3 & 0x1f], 0x20);
+      D2gfx::D2GFX::D2GFX_DrawWallTileBasic(nTileDataPtr, pDst, gaPaletteColorLUT[(uint32_t)nLightLevel >> 3 & 0x1f], 0x20);
       return;
     }
 
-    D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, (uint8_t*)nTileDataPtr, pDst, gaPaletteColorLUT[(uint32_t)nLightLevel >> 3 & 0x1f], 0x20);
+    D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, nTileDataPtr, pDst, gaPaletteColorLUT[(uint32_t)nLightLevel >> 3 & 0x1f], 0x20);
 }
 
 // Stack-slot reuse: with perspective on, the low byte of the pCoords slot caches the first byte read through pCoords (tested against 0xf8).

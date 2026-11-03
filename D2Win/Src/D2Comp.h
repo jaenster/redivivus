@@ -37,7 +37,7 @@ void __fastcall D2COMP_ZeroBuffer512(void * pBuffer);
 void __fastcall D2COMP_UnlinkCompositeUnit(struct D2CharSelStrc * pCharSel);
 void __stdcall D2COMP_AllocSmallClientBlock();
 void __stdcall D2COMP_DestroyCompositeUnit(struct D2CharSelStrc * pCharSel, int32_t bUnlink);
-void __stdcall D2COMP_SetUnitDisplayStrings(int32_t pCompUnit, uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, int32_t nDisplayFlags, int32_t nExtraData);
+void __stdcall D2COMP_SetUnitDisplayStrings(struct D2CharSelCompStrc * pCompUnit, uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, int32_t nDisplayFlags, int32_t nExtraData);
 BOOL __fastcall D2COMP_SetAnimationMode(struct D2CharSelCompStrc * pCompUnit, int32_t nAnimMode);
 // Returns the code index (1..13) paired with the four-character weapon-class code nWeaponClassCode ('bow '..'ht2 ') in gaCompWeaponClassCodeMap, or 0 when the code is not in the map; the index selects gaCompWeaponClassByCodeIndex.
 // Provenance: 1.14d asm 00504370 (pair scan over gnCompWeaponClassCodeMapCount entries); no callers, the same scan is inlined in D2COMP_AllocTxt_EverythingItems.
@@ -55,13 +55,13 @@ uint32_t * __stdcall D2COMP_GetCompositeUnitListHead();
 uint32_t * __stdcall D2COMP_GetNextCompositeUnit(uint32_t * pCompUnit);
 void __stdcall D2COMP_SetAnimationSpeed(struct D2CharSelCompStrc * pCompUnit, uint8_t bySpeed);
 uint32_t __stdcall D2COMP_GetNumDirections(uint32_t pCompUnit);
-int __stdcall D2COMP_GetNumFrames(int32_t pCompUnit);
+int __stdcall D2COMP_GetNumFrames(struct D2CharSelCompStrc * pCompUnit);
 void __stdcall D2COMP_SetCurrentFrame(struct D2CharSelCompStrc * pCompUnit, uint32_t nTargetFrame);
 void __stdcall D2COMP_SetScreenX(struct D2CharSelCompStrc * pCompUnit, int32_t nScreenX);
 void __stdcall D2COMP_SetScreenY(struct D2CharSelCompStrc * pCompUnit, int32_t nScreenY);
 uint32_t __stdcall D2COMP_GetFlags(struct D2CharSelCompStrc * pCompUnit);
 void __stdcall D2COMP_SetFlags(struct D2CharSelStrc * pCharSel, uint32_t dwFlags);
-void __stdcall D2COMP_LoadGuildEmblemIcon(int32_t pCompUnit, uint8_t byEmblemIcon, uint8_t byPrimaryColor, uint8_t bySecondaryColor);
+void __stdcall D2COMP_LoadGuildEmblemIcon(struct D2CharSelCompStrc * pCompUnit, uint8_t byEmblemIcon, uint8_t byPrimaryColor, uint8_t bySecondaryColor);
 void __stdcall D2COMP_LoadAllItemPalettes();
 void __stdcall D2COMP_InitEmblemColorTables();
 char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion);

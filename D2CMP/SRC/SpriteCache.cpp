@@ -1022,37 +1022,37 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&pGfxMemory->lpCriticalSection);
 }
 
-static void __stdcall SPRITECACHE_EvictOldest(int32_t bPriority, int32_t pGfxMemory, int32_t pEntry) {
+static void __stdcall SPRITECACHE_EvictOldest(int32_t bPriority, D2GfxMemoryStrc * pGfxMemory, D2SpriteCacheEntryStrc * pEntry) {
     DWORD dwTick;
     if (bPriority) {
-      if (!*(int*)(pGfxMemory + 0x20)) {
-        *(int32_t*)(pGfxMemory + 0x1c) = pEntry;
-        *(int32_t*)(pGfxMemory + 0x20) = pEntry;
+      if (!pGfxMemory->pPriorityLruTail) {
+        pGfxMemory->pPriorityLruHead = pEntry;
+        pGfxMemory->pPriorityLruTail = pEntry;
         dwTick = GetTickCount();
-        *(DWORD*)(pEntry + 0x10) = dwTick;
+        pEntry->dwLastAccess = dwTick;
         return;
       }
 
-      *(int32_t*)(*(int*)(pGfxMemory + 0x20) + 0x14) = pEntry;
-      *(uint32_t*)(pEntry + 0x18) = *(uint32_t*)(pGfxMemory + 0x20);
-      *(int32_t*)(pGfxMemory + 0x20) = pEntry;
+      pGfxMemory->pPriorityLruTail->pNext = pEntry;
+      pEntry->pPrev = pGfxMemory->pPriorityLruTail;
+      pGfxMemory->pPriorityLruTail = pEntry;
       dwTick = GetTickCount();
-      *(DWORD*)(pEntry + 0x10) = dwTick;
+      pEntry->dwLastAccess = dwTick;
       return;
     }
-    if (!*(int*)(pGfxMemory + 0x18)) {
-      *(int32_t*)(pGfxMemory + 0x14) = pEntry;
-      *(int32_t*)(pGfxMemory + 0x18) = pEntry;
+    if (!pGfxMemory->pLruTail) {
+      pGfxMemory->pLruHead = pEntry;
+      pGfxMemory->pLruTail = pEntry;
       dwTick = GetTickCount();
-      *(DWORD*)(pEntry + 0x10) = dwTick;
+      pEntry->dwLastAccess = dwTick;
       return;
     }
 
-    *(int32_t*)(*(int*)(pGfxMemory + 0x18) + 0x14) = pEntry;
-    *(uint32_t*)(pEntry + 0x18) = *(uint32_t*)(pGfxMemory + 0x18);
-    *(int32_t*)(pGfxMemory + 0x18) = pEntry;
+    pGfxMemory->pLruTail->pNext = pEntry;
+    pEntry->pPrev = pGfxMemory->pLruTail;
+    pGfxMemory->pLruTail = pEntry;
     dwTick = GetTickCount();
-    *(DWORD*)(pEntry + 0x10) = dwTick;
+    pEntry->dwLastAccess = dwTick;
     return;
 }
 
@@ -1099,86 +1099,86 @@ static D2SpriteCacheEntryStrc * __fastcall SPRITECACHE_AddToLRU(D2GfxMemoryStrc 
     return nullptr;
 }
 
-static void SPRITECACHE_RemoveFromLRU(int32_t pGfxMemory, int32_t pEntry) {
-    int nCurEntry;
-    int nNextEntry;
+static void SPRITECACHE_RemoveFromLRU(D2GfxMemoryStrc * pGfxMemory, D2SpriteCacheEntryStrc * pEntry) {
+    D2SpriteCacheEntryStrc* nCurEntry;
+    D2SpriteCacheEntryStrc* nNextEntry;
     if (!pEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xafc);
       exit(-1);
     }
-    if (*(uint8_t*)(pEntry + 0xc) & 1) {
-      nCurEntry = *(int*)(pGfxMemory + 0x1c);
+    if (pEntry->dwFlags & 1) {
+      nCurEntry = pGfxMemory->pPriorityLruHead;
       if (!nCurEntry) {
         return;
       }
       if (pEntry == nCurEntry) {
-        if (*(uint8_t*)(nCurEntry + 0xc) & 2) {
+        if (nCurEntry->dwFlags & 2) {
           return;
         }
 
-        nNextEntry = *(int*)(nCurEntry + 0x14);
-        *(int*)(pGfxMemory + 0x1c) = nNextEntry;
+        nNextEntry = nCurEntry->pNext;
+        pGfxMemory->pPriorityLruHead = nNextEntry;
         if (nNextEntry) {
-          *(uint32_t*)(nNextEntry + 0x18) = 0;
-          *(uint32_t*)(nCurEntry + 0x14) = 0;
-          *(uint32_t*)(nCurEntry + 0x18) = 0;
+          nNextEntry->pPrev = 0;
+          nCurEntry->pNext = 0;
+          nCurEntry->pPrev = 0;
           return;
         }
 
-        *(uint32_t*)(pGfxMemory + 0x20) = 0;
-        *(uint32_t*)(nCurEntry + 0x14) = 0;
-        *(uint32_t*)(nCurEntry + 0x18) = 0;
+        pGfxMemory->pPriorityLruTail = 0;
+        nCurEntry->pNext = 0;
+        nCurEntry->pPrev = 0;
         return;
       }
-      if (pEntry == *(int*)(pGfxMemory + 0x20)) {
-        nCurEntry = *(int*)(*(int*)(pGfxMemory + 0x20) + 0x18);
-        *(int*)(pGfxMemory + 0x20) = nCurEntry;
-        *(uint32_t*)(nCurEntry + 0x14) = 0;
-        *(uint32_t*)(pEntry + 0x14) = 0;
-        *(uint32_t*)(pEntry + 0x18) = 0;
+      if (pEntry == pGfxMemory->pPriorityLruTail) {
+        nCurEntry = pGfxMemory->pPriorityLruTail->pPrev;
+        pGfxMemory->pPriorityLruTail = nCurEntry;
+        nCurEntry->pNext = 0;
+        pEntry->pNext = 0;
+        pEntry->pPrev = 0;
         return;
       }
     } else {
-      nCurEntry = *(int*)(pGfxMemory + 0x14);
+      nCurEntry = pGfxMemory->pLruHead;
       if (!nCurEntry) {
         return;
       }
       if (pEntry == nCurEntry) {
-        if (*(uint8_t*)(nCurEntry + 0xc) & 2) {
+        if (nCurEntry->dwFlags & 2) {
           return;
         }
 
-        nNextEntry = *(int*)(nCurEntry + 0x14);
-        *(int*)(pGfxMemory + 0x14) = nNextEntry;
+        nNextEntry = nCurEntry->pNext;
+        pGfxMemory->pLruHead = nNextEntry;
         if (nNextEntry) {
-          *(uint32_t*)(nNextEntry + 0x18) = 0;
-          *(uint32_t*)(nCurEntry + 0x14) = 0;
-          *(uint32_t*)(nCurEntry + 0x18) = 0;
+          nNextEntry->pPrev = 0;
+          nCurEntry->pNext = 0;
+          nCurEntry->pPrev = 0;
           return;
         }
 
-        *(uint32_t*)(pGfxMemory + 0x18) = 0;
-        *(uint32_t*)(nCurEntry + 0x14) = 0;
-        *(uint32_t*)(nCurEntry + 0x18) = 0;
+        pGfxMemory->pLruTail = 0;
+        nCurEntry->pNext = 0;
+        nCurEntry->pPrev = 0;
         return;
       }
-      if (pEntry == *(int*)(pGfxMemory + 0x18)) {
-        nCurEntry = *(int*)(*(int*)(pGfxMemory + 0x18) + 0x18);
-        *(int*)(pGfxMemory + 0x18) = nCurEntry;
-        *(uint32_t*)(nCurEntry + 0x14) = 0;
-        *(uint32_t*)(pEntry + 0x14) = 0;
-        *(uint32_t*)(pEntry + 0x18) = 0;
+      if (pEntry == pGfxMemory->pLruTail) {
+        nCurEntry = pGfxMemory->pLruTail->pPrev;
+        pGfxMemory->pLruTail = nCurEntry;
+        nCurEntry->pNext = 0;
+        pEntry->pNext = 0;
+        pEntry->pPrev = 0;
         return;
       }
     }
-    if (!(*(int*)(pEntry + 0x18) || *(int*)(pEntry + 0x14))) {
+    if (!(pEntry->pPrev || pEntry->pNext)) {
       return;
     }
 
-    *(uint32_t*)(*(int*)(pEntry + 0x18) + 0x14) = *(uint32_t*)(pEntry + 0x14);
-    *(uint32_t*)(*(int*)(pEntry + 0x14) + 0x18) = *(uint32_t*)(pEntry + 0x18);
-    *(uint32_t*)(pEntry + 0x14) = 0;
-    *(uint32_t*)(pEntry + 0x18) = 0;
+    pEntry->pPrev->pNext = pEntry->pNext;
+    pEntry->pNext->pPrev = pEntry->pPrev;
+    pEntry->pNext = 0;
+    pEntry->pPrev = 0;
 }
 
 // Counts the LRU cache blocks whose async load has not completed (ASYNCDATA_IsComplete == 0); halts on a block with no pAsyncData.
@@ -1375,7 +1375,7 @@ D2SpriteCacheEntryStrc * __fastcall SPRITECACHE_EvictEntry(D2GfxMemoryStrc * pGf
     return nullptr;
 }
 
-void __fastcall SPRITECACHE_AllocateMemory(void * pCache, int32_t pEntry) {
+void __fastcall SPRITECACHE_AllocateMemory(void * pCache, D2SpriteCacheEntryStrc * pEntry) {
     DWORD DVar1;
     if (!*(int*)((int)pCache + 0xc)) {
       return;
@@ -1388,18 +1388,18 @@ void __fastcall SPRITECACHE_AllocateMemory(void * pCache, int32_t pEntry) {
       exit(-1);
     }
 
-    SPRITECACHE_RemoveFromLRU((int32_t)pCache, pEntry);
-    *(uint32_t*)(pEntry + 0xc) &= -2;
+    SPRITECACHE_RemoveFromLRU((D2GfxMemoryStrc*)pCache, pEntry);
+    pEntry->dwFlags &= -2;
     if (!*(int*)((int)pCache + 0x18)) {
-      *(int32_t*)((int)pCache + 0x14) = pEntry;
+      *(D2SpriteCacheEntryStrc**)((int)pCache + 0x14) = (D2SpriteCacheEntryStrc*)pEntry;
     } else {
-      *(int32_t*)(*(int*)((int)pCache + 0x18) + 0x14) = pEntry;
-      *(uint32_t*)(pEntry + 0x18) = *(uint32_t*)((int)pCache + 0x18);
+      *(D2SpriteCacheEntryStrc**)(*(int*)((int)pCache + 0x18) + 0x14) = (D2SpriteCacheEntryStrc*)pEntry;
+      pEntry->pPrev = *(D2SpriteCacheEntryStrc**)((int)pCache + 0x18);
     }
 
-    *(int32_t*)((int)pCache + 0x18) = pEntry;
+    *(D2SpriteCacheEntryStrc**)((int)pCache + 0x18) = (D2SpriteCacheEntryStrc*)pEntry;
     DVar1 = GetTickCount();
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ *(DWORD*)(pEntry + 0x10) = DVar1;
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pEntry->dwLastAccess = DVar1;
     LeaveCriticalSection((LPCRITICAL_SECTION)((int)pCache + 0x30));
 }
 

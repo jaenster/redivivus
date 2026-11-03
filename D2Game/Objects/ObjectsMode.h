@@ -148,7 +148,7 @@ void __stdcall OBJECT_HandleUnitRevival(struct D2UnitStrc * pUnit, bool * pbRevi
 BOOL __fastcall OBJOP_ActivateHealingWell(struct D2ObjectOperateFnArg * pOperation);
 // Spawns a single item drop near a unit. Converts a 4-char item code to a class ID, finds the best nearby open spawn tile via FindBestSpotToSpawnItem, and calls ITEM_CreateItemInstance with the given quality and a level derived from the source unit. No-ops silently if the item code is invalid or no spawn tile is found.
 void __fastcall SpawnDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t sCode, eD2ItemQuality eItemQuality);
-void __fastcall OBJMODE_DropItemAtPosition(int32_t pGame, struct D2UnitStrc * pUnit, int32_t nItemClassId, eD2ItemTypes eItemType);
+void __fastcall OBJMODE_DropItemAtPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nItemClassId, eD2ItemTypes eItemType);
 // Server-side loot roll for an opened chest object. Resolves the chest's room level, determines act and difficulty-scaled monster level tier, selects the appropriate treasure class via RollTreasureClass, and calls SERVER_ITEM_RollItemToDrop to generate up to 6 drop items. Returns the first dropped item unit, or NULL on any lookup failure.
 struct D2UnitStrc * * __fastcall RollChestDrops(struct D2ObjectOperateFnArg * pUnitKill, eD2ItemTypes eItemType);
 // Drives the death/destruction sequence of an object unit based on its current animation mode. In Neutral mode, schedules a death event 10 frames out. In Walk mode, increments a hit-count component; on the first hit triggers a proximity effect and re-schedules; on the second hit rolls chest drops and schedules the final death animation. In Run mode, marks the unit destroyed immediately (update flag 4). No-ops for any other mode.
