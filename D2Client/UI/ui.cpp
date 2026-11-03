@@ -64,7 +64,6 @@
 #include "D2Common/D2MonStatsTxt.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2RoomStrc.h"
-#include "D2Common/D2SeedStrc.h"
 #include "D2Common/D2SkillsTxt.h"
 #include "D2Common/D2StatInfoStrc.h"
 #include "D2Common/D2StatListExStrc.h"
@@ -1427,8 +1426,8 @@ void __stdcall UI_UpdateCursorAnimationTimer() {
 }
 
 void __stdcall UI_SendMouseMoveMessage() {
-    int nMouseY = GetMouseY();
-    uint32_t lParam = GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
+    uint32_t lParam = Cursor::GetMouseX();
     lParam = lParam & 0xffff | nMouseY << 0x10;
     uint32_t wParam = 0;
     UINT Msg = 0x200;
@@ -1567,7 +1566,7 @@ void __stdcall UI_FreeAllPanelAssets() {
     }
 
     MiniPanel::UpdateGlobalAlwaysRun();
-    ITEM_SetItemOnHand(nullptr);
+    Cursor::ITEM_SetItemOnHand(nullptr);
 }
 
 uint16_t * __fastcall CLIENT_GetLevelNameByLevelId(eD2LevelId eLevel) {
@@ -1594,7 +1593,7 @@ uint16_t * __fastcall CLIENT_GetLevelNameByLevelId(eD2LevelId eLevel) {
 }
 
 void __stdcall UI_DropCursorItemOnGround() {
-    D2UnitStrc* pCursorItem_lcl = GetCursorItem();
+    D2UnitStrc* pCursorItem_lcl = Cursor::GetCursorItem();
     if (!pCursorItem_lcl) {
       return;
     }
@@ -3147,9 +3146,9 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
       UI_UnregisterHandlersForPanel(eUI);
     }
 
-    iVar2 = GetMouseX();
+    iVar2 = Cursor::GetMouseX();
     int y;
-    y = GetMouseY();
+    y = Cursor::GetMouseY();
     switch (eUI) {
       case UI_INVENTORY:
         Inv::INV_ResetHoverAndContextState();
@@ -3168,14 +3167,14 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
         if (bAdjustMouse) {
           iVar1 = ScreenSizeX / 4;
           if (iVar2 > iVar1) {
-            SetMouseXY(iVar2 - iVar1, y);
+            Cursor::SetMouseXY(iVar2 - iVar1, y);
             return 1;
           }
         }
       } else {
         Path::TypeOfUiOverlayOverWorld(0);
         if (bAdjustMouse && iVar2 < ScreenSizeX / 2) {
-          SetMouseXY(ScreenSizeX / 4 + iVar2, y);
+          Cursor::SetMouseXY(ScreenSizeX / 4 + iVar2, y);
           return 1;
         }
       }
@@ -3206,7 +3205,7 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
               return 1;
             }
 
-            SetMouseXY(iVar1 + iVar2, y);
+            Cursor::SetMouseXY(iVar1 + iVar2, y);
             return 1;
           }
 
@@ -3218,7 +3217,7 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
             return 1;
           }
 
-          SetMouseXY(iVar2 - ScreenSizeX / 4, y);
+          Cursor::SetMouseXY(iVar2 - ScreenSizeX / 4, y);
           return 1;
         }
       eOverlayMode = 3;
@@ -3333,8 +3332,8 @@ BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse
             UNIT::Player::GetPlayerUnit_UI();
             (&GFX_bShowUIFlag.Game)[eUI] = 0;
             UI_UnregisterHandlersForPanel(eUI);
-            nCursorX = GetMouseX();
-            nMouseY = GetMouseY();
+            nCursorX = Cursor::GetMouseX();
+            nMouseY = Cursor::GetMouseY();
             if (!false) {
               switch (eUI) {
                 case UI_NPCSHOP:
@@ -3363,7 +3362,7 @@ BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse
                   if (!GFX_bShowUIFlag.CharStat && !GFX_bShowUIFlag.WaypointMenu && !GFX_bShowUIFlag.Quest && !GFX_bShowUIFlag.PartyPane && !GFX_bShowUIFlag.MercMenu && !GFX_bShowUIFlag.UnusedScroll && !GFX_bShowUIFlag.PartyMenu) {
                     Path::TypeOfUiOverlayOverWorld(0);
                     if (bAdjustMouse && nCursorX < ScreenSizeX / 2) {
-                      SetMouseXY(ScreenSizeX / 4 + nCursorX, nMouseY);
+                      Cursor::SetMouseXY(ScreenSizeX / 4 + nCursorX, nMouseY);
                     }
                   } else {
                     eOverlayMode = 2;
@@ -3390,7 +3389,7 @@ BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse
                   }
                 Path::TypeOfUiOverlayOverWorld(0);
                 if (bAdjustMouse && nCursorX > ScreenSizeX / 2) {
-                  SetMouseXY(nCursorX - ScreenSizeX / 4, nMouseY);
+                  Cursor::SetMouseXY(nCursorX - ScreenSizeX / 4, nMouseY);
                 }
 
                 break;
@@ -3434,466 +3433,8 @@ bool __stdcall UI_ShowPopupDialog() {
     return bNotCancelled;
 }
 
-void __stdcall UI_HandleCursorMouseDown(D2UIMouseMsgStrc * pMsg) {
-    gnCursorInitialized = 0;
-    if (pMsg->nWParam == 2) {
-      D2gfx::D2GFX::UpdateOSCursorVisibilty(0);
-    }
-
-    pMsg->dwResult = 0;
-    pMsg->bHandled = 0;
-}
-
-void __stdcall UI_HandleCursorMouseMove(D2UIMouseMsgStrc * pMsgEvent) {
-    MouseX = (int)pMsgEvent->uLParam.sMousePos.nMouseX;
-    MouseY = (int)pMsgEvent->uLParam.sMousePos.nMouseY;
-    gnCursorAnimStartTick = GetTickCount();
-    if (ItemTypeOnHand != 5) {
-      int nKeyPressCount;
-      nKeyPressCount = CursorData[Cursor::nCursorDataIndex].bKeyPressSwitch;
-      pMsgEvent->bHandled = 0;
-      if (nKeyPressCount) {
-        ItemTypeOnHand = 5;
-        Cursor::nCursorDataIndex = 4;
-        gCursorAnimationFrame = 0;
-        return;
-      }
-    } else {
-      pMsgEvent->bHandled = 0;
-    }
-}
-
-void __stdcall UI_HandleCursorMouseUp(D2UIMouseMsgStrc * pMsg) {
-    MouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    MouseY = (int)pMsg->uLParam.sMousePos.nMouseY;
-    gnCursorAnimStartTick = GetTickCount();
-    if (ItemTypeOnHand == 5) {
-      Cursor::nCursorDataIndex = 5;
-      pMsg->bHandled = 0;
-      ItemTypeOnHand = 1;
-      gCursorAnimationFrame = 0;
-      return;
-    }
-
-    pMsg->bHandled = 0;
-}
-
-void __fastcall CURSOR_SetCursorItem(D2UnitStrc * pUnit, int32_t nAnimFrame) {
-    pCursorItem = pUnit;
-    Cursor::nCursorDataIndex = 6;
-    gCursorAnimationFrame = nAnimFrame;
-    ItemTypeOnHand = 6;
-}
-
-void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon) {
-    pCursorItem = 0;
-    Cursor::nCursorDataIndex = 6;
-    gCursorAnimationFrame = nAnimFrame;
-    ItemTypeOnHand = bAltIcon != 0 ? 8 : 7;
-}
-
-void __fastcall ITEM_SetItemOnHand(D2UnitStrc * pUnit) {
-    pCursorItem = pUnit;
-    Cursor::nCursorDataIndex = 5;
-    gCursorAnimationFrame = 0;
-    ItemTypeOnHand = 1;
-    if (!pUnit) {
-      return;
-    }
-
-    ItemTypeOnHand = 4;
-}
-
-D2UnitStrc * __stdcall GetCursorItem() {
-    return pCursorItem;
-}
-
-void __fastcall UI_InitializeCursor(int32_t nCursorType) {
-    // Static local variables (originally global data)
-    static unsigned short gwCursorAnimUnknownField; D2_STATIC_GUARD_BSS(gwCursorAnimUnknownField, "D2Client::UI::ui::UI_InitializeCursor::gwCursorAnimUnknownField");
-
-    char szPath[80];
-    int32_t nEventCount = 3;
-    gnCursorType = nCursorType;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, gUIFlagGeneralInit, nEventCount);
-    DC6** ppCursorDC6 = Cursor::pCursorsDC6;
-    char** ppszCursorName = &CursorData[0].szCursorname;
-    do {
-      DC6* pCursorDC6;
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UI\\CURSOR\\%s", "DATA\\GLOBAL", *ppszCursorName);
-      pCursorDC6 = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
-      *ppCursorDC6 = pCursorDC6;
-      ppszCursorName += 7;
-      ppCursorDC6++;
-    } while ((int)ppszCursorName < (intptr_t)((char*)&CursorData + sizeof(CursorData) + 24));
-
-    gnCursorInitialized = 1;
-    ItemTypeOnHand = 1;
-    Cursor::nCursorDataIndex = 5;
-    gCursorAnimationFrame = 0;
-    gwCursorAnimUnknownField = 0;
-    gnCursorAnimStartTick = GetTickCount();
-    MouseX = ScreenSizeX / 2;
-    MouseY = ScreenSizeY / 2;
-}
-
-void __stdcall UI_FreeCursor() {
-    int32_t nEventCount = 3;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gUIFlagGeneralInit, nEventCount);
-    gnCursorInitialized = 0;
-    DC6** ppCursorDC6 = Cursor::pCursorsDC6;
-    do {
-      if (*ppCursorDC6) {
-        Core::Archive::DC6_FreeAndDelete(*ppCursorDC6);
-        *ppCursorDC6 = 0;
-      }
-
-      ppCursorDC6++;
-    } while ((int)ppCursorDC6 < (intptr_t)((char*)&Cursor::pCursorsDC6 + sizeof(Cursor::pCursorsDC6)));
-}
-
-void __stdcall UI_AnimateCursorForward() {
-    D2SeedStrc sNewSeed;
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    int nSavedCursorIndex = Cursor::nCursorDataIndex;
-    if (!pPlayerUnit_lcl) {
-      return;
-    }
-    if (ItemTypeOnHand == 1) {
-      sNewSeed = D2_SEED_NEXT(pPlayerUnit_lcl->sSeed);
-      pPlayerUnit_lcl->sSeed = sNewSeed;
-      if (((uint8_t)sNewSeed.nSeedLow & 0x3f) < 0x10) {
-        gCursorAnimationFrame += 0x20;
-      }
-    } else {
-      gCursorAnimationFrame += CursorData[Cursor::nCursorDataIndex].nAnimStep;
-    }
-
-    int32_t nMaxFrames = Cursor::UI_GetCursorMaxFrames(nSavedCursorIndex);
-    if (gCursorAnimationFrame < nMaxFrames) {
-      return;
-    }
-
-    int nFrameOffset = Cursor::UI_GetCursorFrameOffset(Cursor::nCursorDataIndex);
-    nSavedCursorIndex = ItemTypeOnHand;
-    if (nFrameOffset) {
-      nMaxFrames = Cursor::UI_GetCursorMaxFrames(Cursor::nCursorDataIndex);
-      gCursorAnimationFrame -= nMaxFrames;
-      return;
-    }
-    if (ItemTypeOnHand == 2) {
-      ItemTypeOnHand = 4;
-      Cursor::nCursorDataIndex = 3;
-      gCursorAnimationFrame = 0;
-      return;
-    }
-    if (ItemTypeOnHand == 5) {
-      ItemTypeOnHand = 1;
-      Cursor::nCursorDataIndex = nSavedCursorIndex;
-      gCursorAnimationFrame = 0;
-      return;
-    }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e9);
-    exit(-1);
-}
-
-void __stdcall UI_AnimateCursorBackward() {
-    int nFrameOffset;
-    gCursorAnimationFrame += -0x40;
-    if (gCursorAnimationFrame >= 0) {
-      return;
-    }
-
-    nFrameOffset = Cursor::UI_GetCursorFrameOffset(Cursor::nCursorDataIndex);
-    if (nFrameOffset) {
-      int32_t nMaxFrames;
-      nMaxFrames = Cursor::UI_GetCursorMaxFrames(Cursor::nCursorDataIndex);
-      gCursorAnimationFrame -= nMaxFrames;
-      return;
-    }
-
-    ItemTypeOnHand = 1;
-    Cursor::nCursorDataIndex = 5;
-    gCursorAnimationFrame = 0;
-}
-
-void __stdcall UI_UpdateCursorAnimation() {
-    // Static local variables (originally global data)
-    static uint32_t gdwCursorAnimLastTick; D2_STATIC_GUARD_BSS(gdwCursorAnimLastTick, "D2Client::UI::ui::UI_UpdateCursorAnimation::gdwCursorAnimLastTick");
-
-    DWORD dwTickCount = GetTickCount();
-    if (gnCursorDataCount != 7) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);
-      exit(-1);
-    }
-    if (!(Cursor::nCursorDataIndex < 7)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x85);
-      exit(-1);
-    }
-    if (CursorData[Cursor::nCursorDataIndex].bAnimated && dwTickCount > gdwCursorAnimLastTick + 0x10) {
-      gdwCursorAnimLastTick = dwTickCount;
-      if (ItemTypeOnHand != 3) {
-        UI_AnimateCursorForward();
-      } else {
-        UI_AnimateCursorBackward();
-      }
-    }
-    if (!(ItemTypeOnHand == 1 && gnCursorAnimStartTick + 5000U < dwTickCount)) {
-      return;
-    }
-
-    ItemTypeOnHand = 2;
-    Cursor::nCursorDataIndex = 2;
-    gCursorAnimationFrame = 0;
-    return;
-}
-
-void __stdcall MOUSE_DrawCursorSprite() {
-    int32_t nPositionY;
-    D2GfxDataStrc sGfxData;
-    int nMouseX = gnCursorType + MouseX;
-    if (MouseY < 0) {
-      nPositionY = 0;
-    } else {
-      nPositionY = MouseY;
-      if (MouseY > ScreenSizeY - 1) {
-        nPositionY = ScreenSizeY - 1;
-      }
-    }
-
-    int nPositionX = gnCursorType;
-    if (nMouseX >= gnCursorType) {
-      int nMaxX;
-      nMaxX = ScreenSizeX - gnCursorType - 1;
-      nPositionX = nMouseX;
-      if (nMouseX > nMaxX) {
-        nPositionX = nMaxX;
-      }
-    }
-
-    memset(&sGfxData, 0, 0x48);
-    sGfxData.pDC6 = Cursor::pCursorsDC6[Cursor::nCursorDataIndex];
-    sGfxData.nFrameNumber = gCursorAnimationFrame >> 8;
-    sGfxData.nDirection = 0;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nPositionY, -1, DRAW_SOLID, nullptr);
-    UI_UpdateCursorAnimation();
-}
-
-void __stdcall UI_DrawCursorIcon() {
-    D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
-    sGfxData.pDC6 = Cursor::pCursorsDC6[6];
-    sGfxData.nFrameNumber = gCursorAnimationFrame;
-    sGfxData.nDirection = 0;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnCursorType + MouseX, MouseY + 0x21, -1, DRAW_SOLID, nullptr);
-}
-
-void __stdcall DrawCursor() {
-    int nSpriteLoaded;
-    uint32_t nDimension;
-    D2GfxDataStrc sGfxData;
-    int nOutValue;
-    D2UnitStrc* pUnit = pCursorItem;
-    if (!gnCursorInitialized) {
-      return;
-    }
-    if (!pCursorItem || pCursorItem->eUnitType != UNIT_ITEM || ItemTypeOnHand >= 6 || ItemTypeOnHand >= 8) {
-      CursorData[Cursor::nCursorDataIndex].pFunction();
-    } else {
-      int32_t nResult;
-      memset(&sGfxData, 0, 0x48);
-      nResult = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', (D2UnitStrc*)-1);
-      if (nResult) {
-        nSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
-        if (nSpriteLoaded) {
-          if (!sGfxData.pDC6Block) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27d);
-            exit(-1);
-          }
-
-          nDimension = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
-          nSpriteLoaded = MouseY - (nDimension >> 1);
-          nDimension = D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block);
-          Engine::Gfx::DrawItemGfx(pCursorItem, gnCursorType - (nDimension >> 1) + MouseX, nSpriteLoaded);
-          return;
-        }
-      }
-    }
-}
-
-void __stdcall UI_DrawCursorWithItem() {
-    // Static local variables (originally global data)
-    static uint32_t gnCursorClipHeight; D2_STATIC_GUARD_BSS(gnCursorClipHeight, "D2Client::UI::ui::UI_DrawCursorWithItem::gnCursorClipHeight");
-    static uint32_t gnCursorItemAnimDrawOffset; D2_STATIC_GUARD_BSS(gnCursorItemAnimDrawOffset, "D2Client::UI::ui::UI_DrawCursorWithItem::gnCursorItemAnimDrawOffset");
-
-    int32_t nClampedY;
-    uint32_t nDimension;
-    int nMaxX;
-    int nPositionX;
-    D2GfxDataStrc sGfxData;
-    int nOutValue;
-    int nMouseX;
-    int nCursorIndex = Cursor::nCursorDataIndex;
-    D2UnitStrc* pUnit = pCursorItem;
-    if (!gnCursorInitialized) {
-      return;
-    }
-    if (!pCursorItem || pCursorItem->eUnitType != UNIT_ITEM) {
-      if (Cursor::nCursorDataIndex < 7) {
-        nMouseX = gnCursorType + MouseX;
-        if (MouseY < 0) {
-          nClampedY = 0;
-        } else {
-          nClampedY = MouseY;
-          if (MouseY > gnCursorClipHeight - 1) {
-            nClampedY = gnCursorClipHeight - 1;
-          }
-        }
-
-        nPositionX = gnCursorType;
-        if (nMouseX >= gnCursorType) {
-          nMaxX = gnCursorItemAnimDrawOffset - gnCursorType - 1;
-          nPositionX = nMouseX;
-          if (nMouseX > nMaxX) {
-            nPositionX = nMaxX;
-          }
-        }
-
-        memset(&sGfxData, 0, 0x48);
-        sGfxData.pDC6 = Cursor::pCursorsDC6[nCursorIndex];
-        sGfxData.nFrameNumber = gCursorAnimationFrame >> 8;
-        sGfxData.nDirection = 0;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nClampedY, -1, DRAW_SOLID, nullptr);
-        UI_UpdateCursorAnimation();
-      }
-    } else {
-      memset(&sGfxData, 0, 0x48);
-      nClampedY = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', (D2UnitStrc*)-1);
-      if (nClampedY) {
-        nCursorIndex = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
-        if (nCursorIndex) {
-          if (!sGfxData.pDC6Block) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 699);
-            exit(-1);
-          }
-
-          nDimension = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
-          nCursorIndex = MouseY - (nDimension >> 1);
-          nDimension = D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block);
-          Engine::Gfx::DrawItemGfx(pCursorItem, gnCursorType - (nDimension >> 1) + MouseX, nCursorIndex);
-          return;
-        }
-      }
-    }
-}
-
-int __stdcall GetMouseX() {
-    return MouseX;
-}
-
-int __stdcall GetMouseY() {
-    return MouseY;
-}
-
-// SetCursorPos(nX, nY), then caches nX in the GetMouseX global (007a6ab0) and nY in the
-// GetMouseY global (007a6aac). nX arrives in ECX, nY in EDX (00468752/00468754).
-void __fastcall UI_SetMousePosition(int32_t nX, int32_t nY) {
-    SetCursorPos(nX, nY);
-    MouseX = nX;
-    MouseY = nY;
-}
-
-void __fastcall SetMouseXY(int32_t x, int32_t y) {
-    HWND hWnd;
-    int iCaptionAreaHeight;
-    int iFixedFrameWidth;
-    tagRECT WindowRect_lcl;
-    tagRECT* lpRect;
-    if (x < 0) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30f);
-      exit(-1);
-    } else {
-      uint32_t bIsFullscreen;
-      if (!(y >= 0)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x310);
-        exit(-1);
-      }
-
-      bIsFullscreen = D2gfx::D2GFX::IsFullscreen();
-      if (!bIsFullscreen) {
-        lpRect = &WindowRect_lcl;
-        /* LPRECT lpRect for GetWindowRect */ hWnd = D2gfx::D2GFX::GetHwnd();
-        /* HWND hWnd for GetWindowRect */ GetWindowRect(hWnd, lpRect);
-        /* int nIndex for GetSystemMetrics */ iCaptionAreaHeight = GetSystemMetrics(4);
-        /* int nIndex for GetSystemMetrics */ iFixedFrameWidth = GetSystemMetrics(7);
-        /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(iFixedFrameWidth + WindowRect_lcl.left + x, iCaptionAreaHeight + WindowRect_lcl.top + y);
-        MouseY = y;
-        MouseX = x;
-        return;
-      }
-
-      /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(x, y);
-      MouseY = y;
-      MouseX = x;
-      return;
-    }
-}
-
 void __stdcall nullSub_CharonGameDraw() {
 
-}
-
-int __stdcall GetItemType() {
-    return ItemTypeOnHand;
-}
-
-void __stdcall UI_HandleMousePositionUpdate(D2UIMouseMsgStrc * pMsg) {
-    int32_t nMaxFrames;
-    int nClampedX;
-    int nClampedY;
-    int nSavedMouseX;
-    MouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    MouseY = (int)pMsg->uLParam.sMousePos.nMouseY;
-    gnCursorInitialized = 1;
-    uint32_t bWindowActive = D2gfx::D2GFX::D2GFX_IsWindowActive();
-    if (bWindowActive) {
-      int nMaxX;
-      bWindowActive = Fog::Src::ErrorManager::GetErrorState();
-      nClampedX = MouseX;
-      if (!bWindowActive) {
-        nMaxX = ScreenSizeX - 1;
-        if (MouseX > nMaxX) {
-          MouseX = nMaxX;
-        }
-
-        nSavedMouseX = MouseX;
-        nClampedY = ScreenSizeY - 1;
-        if (MouseY > ScreenSizeY - 1 || (nClampedY = MouseY , nMaxX < nClampedX)) {
-          /* int Y for SetCursorPos */ MouseY = nClampedY;
-          nClampedX = MouseY;
-          /* int X for SetCursorPos */ SetCursorPos(MouseX, MouseY);
-          MouseX = nSavedMouseX;
-          MouseY = nClampedX;
-          return;
-        }
-      }
-    }
-
-    D2gfx::D2GFX::UpdateOSCursorVisibilty(1);
-    gnCursorAnimStartTick = GetTickCount();
-    if (ItemTypeOnHand == 4 || ItemTypeOnHand == 2) {
-      ItemTypeOnHand = 3;
-      Cursor::nCursorDataIndex = 2;
-      gCursorAnimationFrame = 0;
-      nMaxFrames = Cursor::UI_GetCursorMaxFrames(2);
-      gCursorAnimationFrame = nMaxFrames - 0x100;
-    }
-
-    pMsg->bHandled = 0;
-    pMsg->dwResult = 0;
 }
 
 void __stdcall UI_ToggleHelpScreen() {
@@ -4977,11 +4518,11 @@ void __stdcall DRAW_ConfigControlsMenu() {
     int bShowKeyBind;
     BOOL bBold;
     int nTmpX;
-    nTmpX = GetMouseX();
+    nTmpX = Cursor::GetMouseX();
     int nMouseX;
     nMouseX = nTmpX;
     int nTmpY;
-    nTmpY = GetMouseY();
+    nTmpY = Cursor::GetMouseY();
     int nMouseY;
     nMouseY = nTmpY;
     UI_InitializeStatDescriptionPointers();
@@ -5672,8 +5213,8 @@ BOOL __fastcall UI_IsMouseOnStatButton(int32_t nPanelMode, int32_t nMouseX, int3
 }
 
 int __stdcall UI_GetNewStatPointsCount() {
-    int nMouseX = GetMouseX();
-    int nMouseY = GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX > ScreenSizeX / 2 - 0xc2 && nMouseX < ScreenSizeX / 2 - 0xa0 && nMouseY > ScreenSizeY - 0x2a && nMouseY < ScreenSizeY - 8) {
       return 1;
     }
@@ -5699,8 +5240,8 @@ BOOL __fastcall UI_IsMouseOnSkillButton(int32_t nPanelMode, int32_t nMouseX, int
 }
 
 int __stdcall UI_GetNewSkillPointsCount() {
-    int nMouseX = GetMouseX();
-    int nMouseY = GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX > ScreenSizeX / 2 + 0xa3 && nMouseX < ScreenSizeX / 2 + 0xc5 && nMouseY > ScreenSizeY - 0x2a && nMouseY < ScreenSizeY - 8) {
       return 1;
     }
@@ -5728,7 +5269,7 @@ void __stdcall INPUT_StatScreenButtonDown(D2UIMouseMsgStrc * pMsg) {
     if (bOnButton) {
       gbUIStatButtonHovered = 1;
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-      UI_HandleCursorMouseMove(pMsg);
+      Cursor::UI_HandleCursorMouseMove(pMsg);
       if (eBorderType != 2 || (bOnButton = npcmenu::NPCMENU_IsNpcMenuStateActive() , !bOnButton)) {
         pMsg->bHandled = 1;
         pMsg->dwResult = 0;
@@ -5760,7 +5301,7 @@ void __stdcall INPUT_SkillTreeButtonDown(D2UIMouseMsgStrc * pMsg) {
     if (bOnButton) {
       gbUISkillButtonHovered = 1;
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-      UI_HandleCursorMouseMove(pMsg);
+      Cursor::UI_HandleCursorMouseMove(pMsg);
       if (eBorderType != 1 || (bOnButton = npcmenu::NPCMENU_IsNpcMenuStateActive() , !bOnButton)) {
         pMsg->bHandled = 1;
         pMsg->dwResult = 0;
@@ -5785,7 +5326,7 @@ void __stdcall INPUT_StatScreenButtonUp(D2UIMouseMsgStrc * pMsg) {
       }
     }
 
-    UI_HandleCursorMouseUp(pMsg);
+    Cursor::UI_HandleCursorMouseUp(pMsg);
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
       if (gbUIStatButtonHovered) {
@@ -5833,7 +5374,7 @@ void __stdcall INPUT_SkillTreeButtonUp(D2UIMouseMsgStrc * pMsg) {
       }
     }
 
-    UI_HandleCursorMouseUp(pMsg);
+    Cursor::UI_HandleCursorMouseUp(pMsg);
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
       if (gbUISkillButtonHovered) {
@@ -5976,8 +5517,8 @@ void __stdcall DRAW_UI_NewStatPoints_II() {
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
       if (gbUIStatButtonHovered) {
-        bMouseOnButton = GetMouseY();
-        bMouseOnButton = UI_IsMouseOnStatButton(eBorderType, GetMouseX(), bMouseOnButton);
+        bMouseOnButton = Cursor::GetMouseY();
+        bMouseOnButton = UI_IsMouseOnStatButton(eBorderType, Cursor::GetMouseX(), bMouseOnButton);
         pick_button_frame:
         sGfxData.nFrameNumber = 1;
         if (bMouseOnButton) {
@@ -6126,8 +5667,8 @@ void __stdcall Draw_UI_NewStatPoints() {
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
       if (gbUISkillButtonHovered) {
-        bMouseOnButton = GetMouseY();
-        bMouseOnButton = UI_IsMouseOnSkillButton(eBorderType, GetMouseX(), bMouseOnButton);
+        bMouseOnButton = Cursor::GetMouseY();
+        bMouseOnButton = UI_IsMouseOnSkillButton(eBorderType, Cursor::GetMouseX(), bMouseOnButton);
         pick_button_frame:
         sGfxData.nFrameNumber = 1;
         if (bMouseOnButton) {
@@ -6479,7 +6020,7 @@ static int INPUT_HighResLeftPanelClick(D2UIMouseMsgStrc * pMsg) {
     BOOL nBeltSlot = Panel::PANEL_CalculateBeltSlotIndex(pMsg);
     if (!nBeltSlot && (int)(uint32_t)pMsg->uLParam.sMousePos.nMouseX <= ScreenSizeX / 2 && (int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY < ScreenSizeY - 0x2f) {
       int nItemType;
-      nItemType = GetItemType();
+      nItemType = Cursor::GetItemType();
       if (nItemType == 6) {
         UI_DropCursorItemOnGround();
       }
@@ -6518,7 +6059,7 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
           nBtnY = ScreenSizeY + pBtnEntry[1] + gnPanelOffsetY;
           if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(*pBtnEntry + gnPanelOffsetX) && nMouseX < (int)(*pBtnEntry + gnPanelOffsetX + 0x28)) {
             gaStatScreenButtons[(int)pMsg].bHitTest = 1;
-            UI_HandleCursorMouseMove(pBtnIdx);
+            Cursor::UI_HandleCursorMouseMove(pBtnIdx);
             pBtnIdx->bHandled = 1;
             pBtnIdx->dwResult = 0;
             Sound::SOUND_PlaySound(SOUND_CURSOR_POINT_DROP, nullptr, 0, 0, 0);
@@ -6552,7 +6093,7 @@ void __stdcall INPUT_StatScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
     int dwScreenSizeY;
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-    UI_HandleCursorMouseUp(pMsg);
+    Cursor::UI_HandleCursorMouseUp(pMsg);
     gbUIStatScreenMouseDown = 0;
     if (nMouseX >= gnPanelOffsetX + 0x80 && nMouseX <= gnPanelOffsetX + 0xa0 && nMouseY >= gnPanelOffsetY - 0x5c + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x3c + ScreenSizeY) {
       SetUIFlag(UI_STATSCREEN, UI_RESET, 0);
@@ -6878,9 +6419,9 @@ void __stdcall DRAW_UI_StatWindow_I() {
     sGfxData.nFrameNumber = 3;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x100, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     int nMouseXCast;
-    nMouseXCast = GetMouseX();
+    nMouseXCast = Cursor::GetMouseX();
     int nTmp;
-    nTmp = GetMouseY();
+    nTmp = Cursor::GetMouseY();
     if (nMouseXCast >= gnPanelOffsetX + 0x80 && nMouseXCast <= gnPanelOffsetX + 0xa0 && nTmp >= gnPanelOffsetY - 0x5c + ScreenSizeY && nTmp <= gnPanelOffsetY - 0x3c + ScreenSizeY) {
       nDrawX = 1;
       iVar2 = gnPanelOffsetY - 0x5f + ScreenSizeY;
@@ -7477,9 +7018,9 @@ void __stdcall DRAW_UI_TradePrompt() {
     int32_t nColor;
     int nMouseX;
     int nMouseX2;
-    nMouseX2 = GetMouseX();
+    nMouseX2 = Cursor::GetMouseX();
     int nMouseY;
-    nMouseY = GetMouseY();
+    nMouseY = Cursor::GetMouseY();
     if (g_nTradeWindowState > 2) {
       bIsDialogActive = DRAW_IsDialogActive();
       if (!bIsDialogActive) {
@@ -7636,7 +7177,7 @@ void __stdcall PACKET_SendUnitInteraction0x44(D2UIMouseMsgStrc * pMsg) {
         pPlayerOrCursorItem = 0;
       }
 
-      ITEM_SetItemOnHand(pPlayerOrCursorItem);
+      Cursor::ITEM_SetItemOnHand(pPlayerOrCursorItem);
     }
     if (!nHoradricCubeUIState) {
       pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
@@ -7722,7 +7263,7 @@ BOOL __stdcall NPCSHOP_IsRepairTabActive() {
         pDVar1 = 0;
       }
 
-      ITEM_SetItemOnHand(pDVar1);
+      Cursor::ITEM_SetItemOnHand(pDVar1);
     }
 
     Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);

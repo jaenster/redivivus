@@ -2,6 +2,7 @@
 
 #include "D2Client/Engine.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2LightMapStrc.h"
@@ -59,8 +60,8 @@
 namespace D2Client::Engine {
 
 BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight) {
-    int nMouseX = UI::ui::GetMouseX();
-    int nMouseY = UI::ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nRectLeftX && nMouseX <= nRectLeftX + nRectWidth && nMouseY >= nRectBottomY - nRectHeight && nMouseY <= nRectBottomY) {
       return 1;
     }
@@ -132,7 +133,7 @@ void __fastcall LOADER_DrawInsertDiscScreen(int32_t nUnused) {
     LOADER_CheckForInsertedDiscs();
     DrawOkCancel(gnCharScreenOkButtonPressed);
     LOADER_DrawInsertDiscMessage();
-    UI::ui::DrawCursor();
+    Cursor::DrawCursor();
     D2gfx::D2GFX::D2GFX_EndScene();
 }
 
@@ -140,8 +141,8 @@ void __stdcall INPUT_CharScreenOkDown(D2UIMouseMsgStrc * pMsg) {
     int nBaseX = gnPanelOffsetX;
     int nBaseY = -gnPanelOffsetY;
     int nLeftEdge = gnPanelOffsetX + 0x110;
-    int nMouseX = UI::ui::GetMouseX();
-    int nMouseY = UI::ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nLeftEdge && nMouseX <= nBaseX + 0x170 && nMouseY >= nBaseY + 0x116 && nMouseY <= nBaseY + 0x136) {
       gnCharScreenOkButtonPressed = 1;
       gnCharScreenInputState = 1;
@@ -168,8 +169,8 @@ void __stdcall INPUT_CharScreenOkUp(D2UIMouseMsgStrc * pMsg) {
       int nMouseX;
       nBaseY = -gnPanelOffsetY;
       nLeftEdge = gnPanelOffsetX + 0x110;
-      nMouseX = UI::ui::GetMouseX();
-      nMouseY = UI::ui::GetMouseY();
+      nMouseX = Cursor::GetMouseX();
+      nMouseY = Cursor::GetMouseY();
       if (nMouseX >= nLeftEdge && nMouseX <= nBaseX + 0x170 && nMouseY >= nBaseY + 0x116 && nMouseY <= nBaseY + 0x136) {
         gbCharScreenOkPressed = 1;
         gnCharScreenInputState = 0;
@@ -247,7 +248,7 @@ void __fastcall LOADER_DrawConnectionLostScreen(int32_t nUnused) {
     LOADER_DrawConnectionLostMessage();
     LOADER_DrawOkCancelButtons(gnCharScreenOkButtonPressed, gnConnectionLostScreenState);
     DRAW_UI_OkCancel();
-    UI::ui::DrawCursor();
+    Cursor::DrawCursor();
     D2gfx::D2GFX::D2GFX_EndScene();
 }
 
@@ -255,14 +256,14 @@ void __stdcall INPUT_CharScreenDualButtonDown(D2UIMouseMsgStrc * pMsg) {
     int nBaseX = gnPanelOffsetX;
     int nBaseY = -gnPanelOffsetY;
     int nLeftEdge = gnPanelOffsetX + 0xce;
-    int nMouseX = UI::ui::GetMouseX();
-    int nMouseY = UI::ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX < nLeftEdge || nMouseX > nBaseX + 0x12e || nMouseY < nBaseY + 0x116 || nMouseY > nBaseY + 0x136) {
       int nBaseX2 = gnPanelOffsetX;
       nBaseY = -gnPanelOffsetY;
       nMouseY = gnPanelOffsetX + 0x152;
-      nBaseX = UI::ui::GetMouseX();
-      nMouseX = UI::ui::GetMouseY();
+      nBaseX = Cursor::GetMouseX();
+      nMouseX = Cursor::GetMouseY();
       if (nBaseX < nMouseY || nBaseX > nBaseX2 + 0x1b2 || nMouseX < nBaseY + 0x116 || nMouseX > nBaseY + 0x136) {
         GAME::Game::GAMEDATA_ClearQueuedClicks();
         pMsg->bHandled = 1;
@@ -295,8 +296,8 @@ void __stdcall INPUT_CharScreenDualButtonUp(D2UIMouseMsgStrc * pMsg) {
       int nMouseX;
       nBaseY = -gnPanelOffsetY;
       nLeftEdge = gnPanelOffsetX + 0xce;
-      nMouseX = UI::ui::GetMouseX();
-      nMouseY = UI::ui::GetMouseY();
+      nMouseX = Cursor::GetMouseX();
+      nMouseY = Cursor::GetMouseY();
       nBaseX2 = gnPanelOffsetX;
       if (nMouseX >= nLeftEdge && nMouseX <= nBaseX + 0x12e && nMouseY >= nBaseY + 0x116 && nMouseY <= nBaseY + 0x136) {
         gbCharScreenOkButtonConfirmed = 1;
@@ -305,8 +306,8 @@ void __stdcall INPUT_CharScreenDualButtonUp(D2UIMouseMsgStrc * pMsg) {
 
       nBaseX = -gnPanelOffsetY;
       nMouseY = gnPanelOffsetX + 0x152;
-      nBaseY = UI::ui::GetMouseX();
-      nMouseX = UI::ui::GetMouseY();
+      nBaseY = Cursor::GetMouseX();
+      nMouseX = Cursor::GetMouseY();
       if (nBaseY >= nMouseY && nBaseY <= nBaseX2 + 0x1b2 && nMouseX >= nBaseX + 0x116 && nMouseX <= nBaseX + 0x136) {
         gbCharScreenCancelPressed = 1;
         gnCharScreenInputState = 0;
@@ -380,7 +381,7 @@ uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused) {
         LOADER_CheckForInsertedDiscs();
         DrawOkCancel(gnCharScreenOkButtonPressed);
         LOADER_DrawInsertDiscMessage();
-        UI::ui::DrawCursor();
+        Cursor::DrawCursor();
         D2gfx::D2GFX::D2GFX_EndScene();
       }
     }

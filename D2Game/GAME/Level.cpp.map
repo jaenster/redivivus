@@ -4,6 +4,33 @@
   "file": "D2Game/GAME/Level.cpp",
   "functions": [
     {
+      "name": "DispatchUnitUpdate",
+      "address": "0053a500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a500"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "DispatchUnitUpdate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CLIENTS_GetControlUnit",
+        "SERVER_SendInitUnitPacket",
+        "PacketUpdateForClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
       "name": "SendRoomUnitUpdates",
       "address": "0053a5d0",
       "lines": [
@@ -52,6 +79,37 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
+      ]
+    },
+    {
+      "name": "GAME_SendRemoveObjectsForAdjacentRooms",
+      "address": "0053a770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053a770"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "GAME_SendRemoveObjectsForAdjacentRooms",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "CLIENTS_GetControlUnit",
+        "GetDrlgDeleteFromRoom",
+        "NET_D2GS_SERVER_Send_0x0A_REMOVEUNIT",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2DrlgDeleteStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
       ]
     },
     {
@@ -119,6 +177,59 @@
         "eD2LevelId",
         "eD2UnitType",
         "int32_t"
+      ]
+    },
+    {
+      "name": "CLIENT_RemoveFromAdjacentRooms",
+      "address": "0053ab80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053ab80"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "CLIENT_RemoveFromAdjacentRooms",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "DRLGROOM_RemoveClientFromRoom"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TellClientToLoadAct",
+      "address": "0053abe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0053abe0"
+        }
+      ],
+      "namespace": "D2Game::GAME::Level",
+      "calledFunctions": [
+        "TellClientToLoadAct",
+        "GetAct",
+        "GetTownLevelIdFromAct",
+        "NET_D2GS_SERVER_Send_0x03_NEWACT",
+        "DRLGENV_GetCycleIndex_Ticks_EclipseFromAct",
+        "NET_D2GS_SERVER_Send_0x53_ACTTIMEOFDAY"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "int32_t",
+        "uint8_t"
       ]
     },
     {

@@ -3,6 +3,7 @@
 #include "support/d2_trace.h"
 #include "D2Client/UI/Waypoint.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/GAME/Game/Game.h"
@@ -504,9 +505,9 @@ void __stdcall DRAW_UI_Waypoint() {
     sDrawImageArgs.nFrameNumber = 3;
     D2gfx::D2GFX::D2GFX_DrawImage(&sDrawImageArgs, gnPanelOffsetX + 0x100, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     int nMouseX;
-    nMouseX = ui::GetMouseX();
+    nMouseX = Cursor::GetMouseX();
     int nMouseY;
-    nMouseY = ui::GetMouseY();
+    nMouseY = Cursor::GetMouseY();
     nMouseX -= gnPanelOffsetX;
     nMouseY += gnPanelOffsetY;
     sDrawImageArgs.pDC6 = WaypointWayGateTabs;

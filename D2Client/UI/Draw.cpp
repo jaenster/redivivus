@@ -8,6 +8,7 @@
 #include "D2CMP/SRC/SubTile.h"
 #include "D2Client/ButtonWrapper.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/D2DialogStrc.h"
 #include "D2Client/D2GameViewStrc.h"
@@ -218,16 +219,16 @@ void __stdcall UI_ToggleMiniPanel() {
     if (!bWasMiniPanelOpen) {
       if (GFX_bShowUIFlag.MiniPanel) {
         _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitDrawUnknown, 2);
-        ui::GetMouseX();
-        ui::GetMouseY();
+        Cursor::GetMouseX();
+        Cursor::GetMouseY();
         return;
       }
     } else if (!GFX_bShowUIFlag.MiniPanel) {
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitDrawUnknown, 2);
     }
 
-    ui::GetMouseX();
-    ui::GetMouseY();
+    Cursor::GetMouseX();
+    Cursor::GetMouseY();
 }
 
 void __stdcall InitializeUI() {
@@ -337,8 +338,8 @@ void __stdcall InitializeUI() {
           _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitDrawMouseDown, 4);
         }
 
-        ui::GetMouseX();
-        ui::GetMouseY();
+        Cursor::GetMouseX();
+        Cursor::GetMouseY();
       }
 
       init_mini_panel_and_help_button:
@@ -387,8 +388,8 @@ void __stdcall InitializeUI() {
             _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit1, 2);
           }
 
-          ui::GetMouseX();
-          ui::GetMouseY();
+          Cursor::GetMouseX();
+          Cursor::GetMouseY();
         }
 
         load_ui_resources:
@@ -431,8 +432,8 @@ void __stdcall FreeDraw() {
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitDrawMouseDown, 4);
     }
 
-    ui::GetMouseX();
-    ui::GetMouseY();
+    Cursor::GetMouseX();
+    Cursor::GetMouseY();
     Panel::FreePanelImages();
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (pPlayer) {
@@ -670,8 +671,8 @@ void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
           _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDrawFlagInit0, 5);
         }
 
-        ui::GetMouseX();
-        ui::GetMouseY();
+        Cursor::GetMouseX();
+        Cursor::GetMouseY();
       }
 
       draw_help_menu:

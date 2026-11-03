@@ -3,6 +3,7 @@
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Client/ClientModeInGame.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/Sound/Sound.h"
@@ -444,9 +445,9 @@ void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    int nCenterX = ui::GetItemType();
+    int nCenterX = Cursor::GetItemType();
     if (nCenterX != 7) {
-      ui::ITEM_SetItemOnHand(nullptr);
+      Cursor::ITEM_SetItemOnHand(nullptr);
     }
 
     int nButtonCount = 8;
@@ -683,8 +684,8 @@ void __stdcall SetupMiniPanel() {
 
 BOOL __stdcall WAYPOINT_IsMouseInMiniPanel() {
     int nButtonCount;
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     BOOL bFlagSet = ui::GetUIFlag(UI_WAYPOINT);
     if (bFlagSet) {
       int nPanelX;
@@ -788,8 +789,8 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
 }
 
 static void MINIPANEL_HandleMouseHover(int32_t nLayout) {
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     int nButtonIndex = 0;
     int nButtonCount = 8;
     if (gbMiniPanelSinglePlayer) {
@@ -847,8 +848,8 @@ void __stdcall DRAW_UI_MiniPanel() {
         return;
       }
 
-      ui::GetMouseX();
-      ui::GetMouseY();
+      Cursor::GetMouseX();
+      Cursor::GetMouseY();
       gnMiniPanelMouseOverButton = 1;
       return;
     }

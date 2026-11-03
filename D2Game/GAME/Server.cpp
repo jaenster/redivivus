@@ -349,7 +349,7 @@ void __fastcall CLIENT_LoadActAndSetState2(::SGAMEDATA * pGame, D2ClientStrc * p
     }
 
     Level::EnsureDrlgActLoaded(pGame, pClient->nAct);
-    Clients::TellClientToLoadAct(pGame, pClient);
+    Level::TellClientToLoadAct(pGame, pClient);
     Clients::CLIENT_SetConnectionState(pClient, 2);
 }
 

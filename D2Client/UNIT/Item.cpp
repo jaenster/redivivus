@@ -2,6 +2,7 @@
 
 #include "D2Client/UNIT/Item.h"
 #include "D2Client/ClientModeInGame.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GSPacketSrv0x47.h"
 #include "D2Client/D2GSPacketSrv0x48.h"
@@ -1112,7 +1113,7 @@ void __fastcall ITEM_HandleCursorItemRemoval(int32_t pbPacket) {
     uint32_t nUnitGUID = pUnit->nUnitGUID;
     D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
     pLocalPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-    UI::ui::ITEM_SetItemOnHand(pLocalPlayer);
+    Cursor::ITEM_SetItemOnHand(pLocalPlayer);
     CUnit::RemoveObjectFromServerObjectTable(nUnitGUID, pUnit->eUnitType);
     UI::npcmenu::NPCMENU_OnCursorItemRemoved(nUnitGUID);
 }
@@ -1141,7 +1142,7 @@ void __fastcall HandleItemToCursor(uint8_t * pBytes) {
 
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pItem);
       pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-      UI::ui::ITEM_SetItemOnHand(pPlayerUnit_lcl);
+      Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
       return;
     }
 }
@@ -1267,7 +1268,7 @@ void __fastcall ITEM_HandleItemCopyToCursor(uint8_t * pBytes) {
     D2InventoryStrc* pInventory = pPlayer->pInventory;
     D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pUnit);
     pPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-    UI::ui::ITEM_SetItemOnHand(pPlayer);
+    Cursor::ITEM_SetItemOnHand(pPlayer);
 }
 
 // Re-validates and re-applies all socketed/equipped item effects for a unit's inventory. For each item carrying a socket-filler, re-enables charms whose owner is empty and whose equip requirements are met, then iterates the 11 body-location slots: disables items failing equip requirements (removing them from body), repeatedly re-equips items now meeting requirements (up to 100 passes), and re-applies set-item (quality==5) bonus stats. Saves/restores skill selections around the recalc and triggers a GFX mode-COF reload (player) or MonsterMessage(7) if anything changed. Finally frees the recursive child inventories. Halts via Fog ErrorManager on inventory-consistency failures.
@@ -1403,7 +1404,7 @@ void __fastcall HandleItemPickedFromGround(uint8_t * pBytes) {
 
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pPlayerUnit_lcl);
       pNewCursorItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-      UI::ui::ITEM_SetItemOnHand(pNewCursorItem);
+      Cursor::ITEM_SetItemOnHand(pNewCursorItem);
       ITEM_RemoveUninterruptableState(pPlayerUnit_lcl);
       return;
     } else {
@@ -1432,7 +1433,7 @@ void __fastcall HandleItemDroppedToGround(uint8_t * pBytes) {
       if (pPlayerUnit_lcl && pPlayerUnit_lcl == pUnit) {
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
         pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-        UI::ui::ITEM_SetItemOnHand(pPlayerUnit_lcl);
+        Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
       }
 
       bIsReload = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(stItemDetails.flags, ITEMFLAG_RELOAD);
@@ -1592,7 +1593,7 @@ static void __stdcall ITEM_PlaceItemInContainer(D2UnitStrc * pUnit, uint32_t nYP
       } else {
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
         pLocalPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-        UI::ui::ITEM_SetItemOnHand(pLocalPlayer);
+        Cursor::ITEM_SetItemOnHand(pLocalPlayer);
       }
     }
 
@@ -1771,7 +1772,7 @@ void __fastcall HandleItemRemoveFromContainer(uint8_t * pBytes) {
           pErrorLineOrInv = pInventory2;
           D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory2, pItem);
           pBelongsResult = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pErrorLineOrInv);
-          UI::ui::ITEM_SetItemOnHand(pBelongsResult);
+          Cursor::ITEM_SetItemOnHand(pBelongsResult);
           ITEM_RemoveUninterruptableState(pItem);
         } else {
           CUnit::RemoveObjectFromServerObjectTable(pItem->nUnitGUID, UNIT_ITEM);
@@ -1780,7 +1781,7 @@ void __fastcall HandleItemRemoveFromContainer(uint8_t * pBytes) {
             if (stItemDetails.nInvPage == INVPAGE_CORPSE) {
               Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
             } else {
-              UI::ui::ITEM_SetItemOnHand(nullptr);
+              Cursor::ITEM_SetItemOnHand(nullptr);
             }
           }
         }
@@ -1880,7 +1881,7 @@ void __fastcall HandleItemEquip(uint8_t * pBytes) {
       if (!bResult) {
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventoryTmp, nullptr);
         pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-        UI::ui::ITEM_SetItemOnHand(pCursorItem_lcl);
+        Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
       }
     }
     if (stItemDetails.nBodyLoc < 0xb) {
@@ -1999,7 +2000,7 @@ void __fastcall HandleItemIndirectSwapBodyItem(uint8_t * pBytes) {
         D2Common::ITEMS::Items::SetBodyLoc(pSwappedOutItem, BODYLOC_NONE);
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInvTmp, pSwappedOutItem);
         pNewItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInvTmp);
-        UI::ui::ITEM_SetItemOnHand(pNewItem);
+        Cursor::ITEM_SetItemOnHand(pNewItem);
       }
 
       ITEM_RemoveUninterruptableState(pSwappedOutItem);
@@ -2154,7 +2155,7 @@ void __fastcall HandleItemUnequip(uint8_t * pBytes) {
       D2Common::ITEMS::Items::SetBodyLoc(pUnequippedItem, BODYLOC_NONE);
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pUnequippedItem);
       pBodyItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-      UI::ui::ITEM_SetItemOnHand(pBodyItem);
+      Cursor::ITEM_SetItemOnHand(pBodyItem);
       ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
       ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
       if (pUnequippedItem) {
@@ -2316,7 +2317,7 @@ static void __stdcall ITEM_HandleSwapBodyUnequipItem(uint8_t * pPacketData, D2Un
           D2Common::ITEMS::Items::SetBodyLoc(pBodyItem, BODYLOC_NONE);
           D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pBodyItem);
           pOwnerUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-          UI::ui::ITEM_SetItemOnHand(pOwnerUnit);
+          Cursor::ITEM_SetItemOnHand(pOwnerUnit);
           ITEM_RemoveUninterruptableState(pBodyItem);
           return;
         }
@@ -2460,7 +2461,7 @@ void __fastcall NET_D2GS_CLIENT_HandleItemAddQuantity(uint8_t * pPacket) {
       if (!bIsIgnore) {
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
         pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-        UI::ui::ITEM_SetItemOnHand(pItem);
+        Cursor::ITEM_SetItemOnHand(pItem);
       }
 
       pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
@@ -2733,7 +2734,7 @@ static void __stdcall ITEM_HandleSwapContainerOldItem(uint8_t * pPacketData, D2U
 
           D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pItem);
           pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-          UI::ui::ITEM_SetItemOnHand(pPlayerUnit_lcl);
+          Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
           ITEM_RemoveUninterruptableState(pItem);
           return;
         }
@@ -2810,7 +2811,7 @@ void __fastcall HandleItemPutInBelt(uint8_t * pPacket) {
 
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
       pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-      UI::ui::ITEM_SetItemOnHand(pPlayerUnit_lcl);
+      Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
       eUnitType = pUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nIndex = pUnit->pPath.pStaticPath->nPosX;
@@ -2880,13 +2881,13 @@ void __fastcall HandleItemRemoveFromBelt(uint8_t * pPacket) {
         pInventory = pInventorySaved;
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventorySaved, pUnit);
         pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-        UI::ui::ITEM_SetItemOnHand(pPlayerUnit_lcl);
+        Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
         ITEM_RemoveUninterruptableState(pUnit);
         return;
       }
 
       CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pBytesSaved + 4), UNIT_ITEM);
-      UI::ui::ITEM_SetItemOnHand(nullptr);
+      Cursor::ITEM_SetItemOnHand(nullptr);
       return;
     }
 }
@@ -2976,7 +2977,7 @@ void __stdcall ITEM_HandleSwapBeltOldItem(uint8_t * pBytes, D2UnitDataItemDetail
         ITEM_DropItemToGroundWithMode((uint32_t)itemDetails->nAnimMode, 0, itemDetails->nInvPage, 0, pUnit, 0);
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pUnit);
         pPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-        UI::ui::ITEM_SetItemOnHand(pPlayer);
+        Cursor::ITEM_SetItemOnHand(pPlayer);
         ITEM_RemoveUninterruptableState(pUnit);
         return;
       }
@@ -3023,7 +3024,7 @@ void __fastcall ITEM_HandleItemCursorAssign(D2GSPacketSrv0x3F * pPacket) {
 
       pItem = Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_ITEM);
       if (pItem) {
-        UI::ui::CURSOR_SetCursorItem(pItem, (uint32_t)pPacket->nItemSlot);
+        Cursor::CURSOR_SetCursorItem(pItem, (uint32_t)pPacket->nItemSlot);
         return;
       }
     } else {
@@ -3034,7 +3035,7 @@ void __fastcall ITEM_HandleItemCursorAssign(D2GSPacketSrv0x3F * pPacket) {
           ITEM_RemoveUninterruptableState(pItem);
         }
 
-        UI::ui::ITEM_SetItemOnHand(nullptr);
+        Cursor::ITEM_SetItemOnHand(nullptr);
         return;
       }
 
@@ -3050,7 +3051,7 @@ void __fastcall ITEM_HandleItemCursorAssign(D2GSPacketSrv0x3F * pPacket) {
       pItem = Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_ITEM);
       if (pItem) {
         D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_CURSOR, 1);
-        UI::ui::CURSOR_SetCursorItem(pItem, (uint32_t)pPacket->nItemSlot);
+        Cursor::CURSOR_SetCursorItem(pItem, (uint32_t)pPacket->nItemSlot);
         return;
       }
     }
@@ -3146,7 +3147,7 @@ void __fastcall HandleItemAutoUnequip(uint8_t * pPacketData) {
             D2Common::ITEMS::Items::SetBodyLoc(pBodyItem, BODYLOC_NONE);
             D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
             pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-            UI::ui::ITEM_SetItemOnHand(pItem);
+            Cursor::ITEM_SetItemOnHand(pItem);
             ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
             ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
             ITEM_RemoveUninterruptableState(pBodyItem);
@@ -3201,7 +3202,7 @@ void __fastcall HandleItemInSocket(uint8_t * pPacket) {
 
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
         pLocalPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-        UI::ui::ITEM_SetItemOnHand(pLocalPlayer);
+        Cursor::ITEM_SetItemOnHand(pLocalPlayer);
       }
 
       ITEM_ApplySocketableAndEquipStats(0, pOwner, pSocketItem);
@@ -3446,7 +3447,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
         if (!bFlag) {
           D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
           pLocalPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-          UI::ui::ITEM_SetItemOnHand(pLocalPlayer);
+          Cursor::ITEM_SetItemOnHand(pLocalPlayer);
         }
       }
 
@@ -3537,7 +3538,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
       D2Common::Units::SetYForStaticUnit(pCursorItem_lcl, (uint32_t)stItemDetails.y);
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pCursorItem_lcl);
       pLocalPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-      UI::ui::ITEM_SetItemOnHand(pLocalPlayer);
+      Cursor::ITEM_SetItemOnHand(pLocalPlayer);
     }
 
     UI::ui::UI_SendMouseMoveMessage();

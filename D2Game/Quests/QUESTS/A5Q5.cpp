@@ -61,7 +61,7 @@
 #include "D2Common/Units/Missile.h"
 #include "D2Game/D2Game.h"
 #include "D2Game/Monster/AI/AI.h"
-#include "D2Game/Quests/QUESTS/A2Q7.h"
+#include "D2Game/Quests/QUESTS/A2Q6.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -1368,7 +1368,7 @@ BOOL __fastcall OBJOP_A5Q5_WorldstonePortalActivate(D2ObjectOperateFnArg * pOper
         }
       case Opened:
         {
-          A2Q7::TakeStairs(pOperation);
+          A2Q6::TakeStairs(pOperation);
           D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 1);
           return 0;
         }
@@ -1518,7 +1518,7 @@ BOOL __fastcall OBJOP_A5Q5_WorldstoneStairPortal(D2ObjectOperateFnArg * pOperati
             return 0;
           }
 
-          A2Q7::TakeStairs(pOperation);
+          A2Q6::TakeStairs(pOperation);
           break;
         }
     }

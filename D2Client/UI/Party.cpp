@@ -3,6 +3,7 @@
 #include "D2Client/UI/Party.h"
 #include "D2Client/ClientModeInGame.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2RosterStrc.h"
@@ -563,8 +564,8 @@ void __stdcall SetEachPlayerRosterGlobalPartyId() {
 }
 
 BOOL __stdcall UI_CheckMouseInRectangle(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight) {
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nX + gnPanelOffsetX && nMouseX <= nX + gnPanelOffsetX + nWidth && nMouseY >= nY - gnPanelOffsetY - nHeight && nMouseY <= nY - gnPanelOffsetY) {
       return 1;
     }
@@ -636,8 +637,8 @@ void __stdcall DRAW_UI_PartyWindow_II() {
     cRed = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0);
     uint16_t nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
     if (nPartyId != 0xffff) {
-      nTmp = ui::GetMouseX();
-      nTmpX = ui::GetMouseY();
+      nTmp = Cursor::GetMouseX();
+      nTmpX = Cursor::GetMouseY();
       if (nTmp >= gnPanelOffsetX + 0xe3 && nTmp <= gnPanelOffsetX + 0x118 && nTmpX >= 0x18 - gnPanelOffsetY && nTmpX <= 0x23 - gnPanelOffsetY) {
         ShowToolTipOnPartyButtons(0x1018, 0, 0xd5, 0);
         iVar1 = UI_CalculateCenteredTextXPosition(0x1018, 0xd5);
@@ -655,8 +656,8 @@ void __stdcall DRAW_UI_PartyWindow_II() {
       int nTmpY;
       nTmp = pUiPartyRow->pPartyButtons[0].nY;
       nTmpX = pUiPartyRow->pPartyButtons[0].nX;
-      nTmpY = ui::GetMouseX();
-      nMouseY = ui::GetMouseY();
+      nTmpY = Cursor::GetMouseX();
+      nMouseY = Cursor::GetMouseY();
       pUiPartyCur = pUiPartyGlobal;
       nTmpX = gnPanelOffsetX + nTmpX;
       if (nTmpY >= nTmpX && nTmpY <= nTmpX + 0x35) {
@@ -925,8 +926,8 @@ void __stdcall UI_HandlePartyButtonTooltips() {
     do {
       uint16_t wszText[100];
       nTmp = pUiPartyCur->nScreenY;
-      nTmpX = ui::GetMouseX();
-      nTmpY = ui::GetMouseY();
+      nTmpX = Cursor::GetMouseX();
+      nTmpY = Cursor::GetMouseY();
       pRosterPlayer = pRosterIter;
       if (nTmpX < gnPanelOffsetX + 0x24 || nTmpX > gnPanelOffsetX + 0x8c || (nTmp -= gnPanelOffsetY , nTmpY < nTmp - 0x1a) || nTmpY > nTmp) {
         nButtonIdx = 1;
@@ -934,8 +935,8 @@ void __stdcall UI_HandlePartyButtonTooltips() {
         do {
           nButtonY = pButton[-3];
           nTmp = pButton[-4];
-          nTmpX = ui::GetMouseX();
-          nTmpY = ui::GetMouseY();
+          nTmpX = Cursor::GetMouseX();
+          nTmpY = Cursor::GetMouseY();
           if (nTmpX >= gnPanelOffsetX + nTmp && nTmpX <= gnPanelOffsetX + nTmp + 0x14 && nTmpY >= nButtonY - gnPanelOffsetY - 0x14 && nTmpY <= nButtonY - gnPanelOffsetY) {
             nTmp = *pButton;
             if (nTmp == 1) {
@@ -1240,7 +1241,7 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
     int nButtonIdx;
     D2UiPartyStrc* pUiParty;
     int nTmpX;
-    nTmpX = ui::GetMouseX();
+    nTmpX = Cursor::GetMouseX();
     D2RosterStrc* pRosterIter;
     pRosterIter = GAME::Roster::GetNextRosterPlayer(nullptr);
     pRosterIter = GAME::Roster::GetNextRosterPlayer(pRosterIter);
@@ -1248,9 +1249,9 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
     D2UnitStrc* pUnit;
     pUnit = UNIT::Player::GetPlayerUnit_UI();
     int nButtonY;
-    nButtonY = ui::GetMouseX();
+    nButtonY = Cursor::GetMouseX();
     int nMouseX;
-    nMouseX = ui::GetMouseY();
+    nMouseX = Cursor::GetMouseY();
     if (nButtonY < gnPanelOffsetX + 0x116 || nButtonY > gnPanelOffsetX + 0x136 || nMouseX < 0x185 - gnPanelOffsetY || nMouseX > 0x1a5 - gnPanelOffsetY) {
       int nMouseY;
       if (nTmpX >= ScreenSizeX / 2) {
@@ -1264,8 +1265,8 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
           nTmpX = pButton[-4];
           if (!((D2UiPartyBoxStrc*)(pButton - 5))->bIsPartyButton) {
             nButtonY = pButton[-3];
-            nMouseX = ui::GetMouseX();
-            nMouseY = ui::GetMouseY();
+            nMouseX = Cursor::GetMouseX();
+            nMouseY = Cursor::GetMouseY();
             nTmpX = gnPanelOffsetX + nTmpX;
             if (nMouseX >= nTmpX && nMouseX <= nTmpX + 0x14 && nMouseY >= nButtonY - gnPanelOffsetY - 0x14 && nMouseY <= nButtonY - gnPanelOffsetY) {
               if (*pButton == 1) {
@@ -1299,8 +1300,8 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
             }
           } else {
             nButtonY = pButton[-3];
-            nMouseX = ui::GetMouseX();
-            nMouseY = ui::GetMouseY();
+            nMouseX = Cursor::GetMouseX();
+            nMouseY = Cursor::GetMouseY();
             nTmpX = gnPanelOffsetX + nTmpX;
             if (nMouseX >= nTmpX && nMouseX <= nTmpX + 0x35 && nMouseY >= nButtonY - gnPanelOffsetY - 0x14 && nMouseY <= nButtonY - gnPanelOffsetY) {
               if (pUiParty->pPartyButtons[nButtonIdx].bIsActive != 1) {
@@ -1342,7 +1343,7 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
     int nButtonIndex;
     D2UiPartyStrc* pUiParty;
     int nMouseX;
-    nMouseX = ui::GetMouseX();
+    nMouseX = Cursor::GetMouseX();
     D2RosterStrc* pRosterPlayer;
     pRosterPlayer = GAME::Roster::GetNextRosterPlayer(nullptr);
     pUiParty = Party::pUiParty;
@@ -1354,9 +1355,9 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    nMouseX = ui::GetMouseX();
+    nMouseX = Cursor::GetMouseX();
     int nMouseY;
-    nMouseY = ui::GetMouseY();
+    nMouseY = Cursor::GetMouseY();
     if (nMouseX < gnPanelOffsetX + 0x116 || nMouseX > gnPanelOffsetX + 0x136 || nMouseY < 0x185 - gnPanelOffsetY || nMouseY > 0x1a5 - gnPanelOffsetY) {
       uint16_t nPartyId;
       bIsInTown = UI_CheckMouseInRectangle(0xe3, 0x23, 0x35, 0xb);
@@ -1369,8 +1370,8 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
               nMouseX = pButtonField[-3];
               if (!((D2UiPartyBoxStrc*)(pButtonField - 4))->bIsPartyButton) {
                 nMouseY = pButtonField[-2];
-                nMouseX2 = ui::GetMouseX();
-                nMouseY2 = ui::GetMouseY();
+                nMouseX2 = Cursor::GetMouseX();
+                nMouseY2 = Cursor::GetMouseY();
                 nMouseX = gnPanelOffsetX + nMouseX;
                 if (nMouseX2 >= nMouseX && nMouseX2 <= nMouseX + 0x14 && nMouseY2 >= nMouseY - gnPanelOffsetY - 0x14 && nMouseY2 <= nMouseY - gnPanelOffsetY) {
                   if (pButtonField[1] == 1) {
@@ -1400,8 +1401,8 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
                 }
               } else {
                 nMouseY = pButtonField[-2];
-                nMouseX2 = ui::GetMouseX();
-                nMouseY2 = ui::GetMouseY();
+                nMouseX2 = Cursor::GetMouseX();
+                nMouseY2 = Cursor::GetMouseY();
                 nMouseX = gnPanelOffsetX + nMouseX;
                 if (nMouseX2 >= nMouseX && nMouseX2 <= nMouseX + 0x35 && nMouseY2 >= nMouseY - gnPanelOffsetY - 0x14 && nMouseY2 <= nMouseY - gnPanelOffsetY) {
                   UI_HandlePartyButtonClick(pUiParty, pRosterPlayer, nButtonIndex);
@@ -1560,8 +1561,8 @@ void __stdcall DRAW_UI_PartyWindow() {
     DRAW_UI_PartyWindow_II();
     UI_HandlePartyButtonTooltips();
     SetEachPlayerRosterGlobalPartyId();
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (!(nMouseX >= gnPanelOffsetX + 0x116 && nMouseX <= gnPanelOffsetX + 0x136 && nMouseY >= 0x185 - gnPanelOffsetY && nMouseY <= 0x1a5 - gnPanelOffsetY)) {
       return;
     }

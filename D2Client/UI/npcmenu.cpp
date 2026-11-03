@@ -4,6 +4,7 @@
 #include "D2Client/Archive.h"
 #include "D2Client/ClientModeInGame.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2DialogStrc.h"
 #include "D2Client/D2GSPacketSrv0x2A.h"
 #include "D2Client/D2GSPacketSrv0x91.h"
@@ -1677,9 +1678,9 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     pfnCallback = NPCMENU_ConfirmTransactionReturn;
     _Interaction::geNpcUiState = NPCUI_CONFIRM_TRANSACTION;
     int nErrorAddr;
-    nErrorAddr = ui::GetMouseY();
+    nErrorAddr = Cursor::GetMouseY();
     int nMouseX;
-    nMouseX = ui::GetMouseX();
+    nMouseX = Cursor::GetMouseX();
     Dialog::gpNpcTransactionConfirmDialog = Dialog::AllocDialogStrc(nMouseX, nErrorAddr, pfnCallback, nStringCallbackId, dwDialogArg0, dwDialogArg1, dwDialogArg4, dwDialogArg5, dwDialogArg6, dwDialogArg7, dwDialogArg8);
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcTransactionConfirmDialog, 1);
     switch (gnNpcMenuTransactionType) {
@@ -2552,7 +2553,7 @@ void DRAW_UI_NPC_INTERACTION() {
         pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
         pNpcUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pNpcUnit->pInventory);
         if (!pNpcUnit) {
-          pNpcUnit = ui::GetCursorItem();
+          pNpcUnit = Cursor::GetCursorItem();
           if (!pNpcUnit) {
             Dialog::DIALOG_DrawBackground(Dialog::gpNpcTransactionConfirmDialog);
             return;
@@ -3248,9 +3249,9 @@ void __stdcall NPCMENU_HandleTradeAccepted() {
       if (gnNpcMenuTransactionType == 2) {
         pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerInv);
         if (gnNpcMenuPreviousGold == 1 && pPlayerUnit_lcl) {
-          pTradeItem = ui::GetCursorItem();
+          pTradeItem = Cursor::GetCursorItem();
           if (!pTradeItem) {
-            ui::ITEM_SetItemOnHand(pPlayerUnit_lcl);
+            Cursor::ITEM_SetItemOnHand(pPlayerUnit_lcl);
           }
         }
       }
@@ -3264,8 +3265,8 @@ void __stdcall NPCMENU_HandleTradeAccepted() {
       dwErrorCode = 0;
       dwCallbackArg = 0;
       pfnDrawCallback = NPCMENU_GetCurrentMenuId;
-      nY = ui::GetMouseY();
-      nDialogX = ui::GetMouseX();
+      nY = Cursor::GetMouseY();
+      nDialogX = Cursor::GetMouseX();
       Dialog::gpNpcTradeErrorDialog = Dialog::AllocDialogStrc(nDialogX, nY, pfnDrawCallback, dwCallbackArg, dwErrorCode, dwBorder, dwHighlight, nAlignArg, nColorArg, dwFontArg, dwScrollable);
       Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcTradeErrorDialog, 1);
       Dialog::AddStringData(Dialog::gpNpcTradeErrorDialog, D2Lang::StrTable::strtable::GetLocaleString(nErrorStringId), 0x15, 0, 1, 1, 0, 0);
@@ -3341,8 +3342,8 @@ void __stdcall NPCMENU_HandleTradeRejected() {
         dwTransparent = 0;
         dwCallbackArg = 0;
         pfnDrawCallback = NPCMENU_GetCurrentMenuId;
-        nMouseY = ui::GetMouseY();
-        nDialogX = ui::GetMouseX();
+        nMouseY = Cursor::GetMouseY();
+        nDialogX = Cursor::GetMouseX();
         Dialog::gpNpcTradeErrorDialog = Dialog::AllocDialogStrc(nDialogX, nMouseY, pfnDrawCallback, dwCallbackArg, dwTransparent, dwBorder, dwHighlight, nAlignArg, nColorArg, dwFontArg, dwScrollable);
         Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcTradeErrorDialog, 1);
         Dialog::AddStringData(Dialog::gpNpcTradeErrorDialog, D2Lang::StrTable::strtable::GetLocaleString(nErrorStringId), 0x15, 0, 1, 1, 0, 0);

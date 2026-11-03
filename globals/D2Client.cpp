@@ -5,7 +5,6 @@
 
 #include "globals/globals.h"
 #include "D2Client/ClientModeInGame.h"
-#include "D2Client/Cursor.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/D2GSPacketSrv0x2A.h"
 #include "D2Client/Draw/LightMap.h"
@@ -1242,90 +1241,6 @@ D2UIFlagInitStrc gsUIEngineFlagInit2[4] = {
         /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenDualButtonForce
     }
 }; D2_GLOBAL_GUARD(gsUIEngineFlagInit2, "gsUIEngineFlagInit2");
-
-D2UIFlagInitStrc gUIFlagGeneralInit[3] = {
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0x200,
-        /* .pfHandler = */ &D2Client::UI::ui::UI_HandleMousePositionUpdate
-    },
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0xa0,
-        /* .pfHandler = */ &D2Client::UI::ui::UI_HandleCursorMouseDown
-    },
-    {
-        /* .eEventType = */ 0x0,
-        /* .nMessageOrKeyCode = */ 0x202,
-        /* .pfHandler = */ &D2Client::UI::ui::UI_HandleCursorMouseUp
-    }
-}; D2_GLOBAL_GUARD(gUIFlagGeneralInit, "gUIFlagGeneralInit");
-
-D2CursorDataStrc CursorData[7] = {
-    {
-        /* .bAnimated = */ 0x0,
-        /* .nFrameOffset = */ 0x0,
-        /* .nMaxFrames = */ 0x1,
-        /* .nAnimStep = */ 0x0,
-        /* .bKeyPressSwitch = */ 0x1,
-        /* .pFunction = */ &D2Client::UI::ui::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_Gaunt_006d6b80
-    },
-    {
-        /* .bAnimated = */ 0x1,
-        /* .nFrameOffset = */ 0x0,
-        /* .nMaxFrames = */ 0x8,
-        /* .nAnimStep = */ 0x0,
-        /* .bKeyPressSwitch = */ 0x1,
-        /* .pFunction = */ &D2Client::UI::ui::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_grasp_006d6b78
-    },
-    {
-        /* .bAnimated = */ 0x1,
-        /* .nFrameOffset = */ 0x0,
-        /* .nMaxFrames = */ 0x8,
-        /* .nAnimStep = */ 0x40,
-        /* .bKeyPressSwitch = */ 0x1,
-        /* .pFunction = */ &D2Client::UI::ui::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_ohand_006d6b70
-    },
-    {
-        /* .bAnimated = */ 0x1,
-        /* .nFrameOffset = */ 0x1,
-        /* .nMaxFrames = */ 0x8,
-        /* .nAnimStep = */ 0x20,
-        /* .bKeyPressSwitch = */ 0x1,
-        /* .pFunction = */ &D2Client::UI::ui::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_orotate_006d6b68
-    },
-    {
-        /* .bAnimated = */ 0x1,
-        /* .nFrameOffset = */ 0x1,
-        /* .nMaxFrames = */ 0x8,
-        /* .nAnimStep = */ 0x40,
-        /* .bKeyPressSwitch = */ 0x1,
-        /* .pFunction = */ &D2Client::UI::ui::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_ppress_006d6b60
-    },
-    {
-        /* .bAnimated = */ 0x1,
-        /* .nFrameOffset = */ 0x1,
-        /* .nMaxFrames = */ 0x8,
-        /* .nAnimStep = */ 0x40,
-        /* .bKeyPressSwitch = */ 0x1,
-        /* .pFunction = */ &D2Client::UI::ui::MOUSE_DrawCursorSprite,
-        /* .szCursorname = */ s_protate_006d6b58
-    },
-    {
-        /* .bAnimated = */ 0x0,
-        /* .nFrameOffset = */ 0x0,
-        /* .nMaxFrames = */ 0x1,
-        /* .nAnimStep = */ 0x0,
-        /* .bKeyPressSwitch = */ 0x0,
-        /* .pFunction = */ &D2Client::UI::ui::UI_DrawCursorIcon,
-        /* .szCursorname = */ s_buysell_006d6b50
-    }
-}; D2_GLOBAL_GUARD(CursorData, "CursorData");
 
 int gaKeyBindingsDefault[285] = {
     0x0,
@@ -42741,7 +42656,6 @@ BOOL gbQuitGame = 0x1; D2_GLOBAL_GUARD(gbQuitGame, "gbQuitGame");
 uint32_t gnPrimaryClickState = 0x10; D2_GLOBAL_GUARD(gnPrimaryClickState, "gnPrimaryClickState");
 int gnMouseButtonEventState = 0x10; D2_GLOBAL_GUARD(gnMouseButtonEventState, "gnMouseButtonEventState");
 int gnActTransitionFadeFrames = 0x1; D2_GLOBAL_GUARD(gnActTransitionFadeFrames, "gnActTransitionFadeFrames");
-D2GameRecordStrc * gpCurrentGameRecord = (D2GameRecordStrc *)&gsGameRecordContext; D2_GLOBAL_GUARD(gpCurrentGameRecord, "gpCurrentGameRecord");
 uint32_t gnLastMouseButtonEventType = 0x1; D2_GLOBAL_GUARD(gnLastMouseButtonEventType, "gnLastMouseButtonEventType");
 int nHealthBarScreenX = -0x1; D2_GLOBAL_GUARD(nHealthBarScreenX, "nHealthBarScreenX");
 int gnMercenaryHealthBarScreenY = -0x1; D2_GLOBAL_GUARD(gnMercenaryHealthBarScreenY, "gnMercenaryHealthBarScreenY");
@@ -42750,20 +42664,9 @@ uint32_t gbCursorAnimationPending = 0x1; D2_GLOBAL_GUARD(gbCursorAnimationPendin
 int nAutoMapZoomDivisor = 0xa; D2_GLOBAL_GUARD(nAutoMapZoomDivisor, "nAutoMapZoomDivisor");
 int ScreenSizeX = 0x280; D2_GLOBAL_GUARD(ScreenSizeX, "ScreenSizeX");
 int ScreenSizeY = 0x1e0; D2_GLOBAL_GUARD(ScreenSizeY, "ScreenSizeY");
-uint32_t nNextGUID = 0x1; D2_GLOBAL_GUARD(nNextGUID, "nNextGUID");
-uint32_t gnSelectConstant13_X = 0x13; D2_GLOBAL_GUARD(gnSelectConstant13_X, "gnSelectConstant13_X");
-uint32_t gnSelectConstant13_Y = 0x13; D2_GLOBAL_GUARD(gnSelectConstant13_Y, "gnSelectConstant13_Y");
-int gnCursorDataCount = 0x7; D2_GLOBAL_GUARD(gnCursorDataCount, "gnCursorDataCount");
-int gnDenOfEvilLightTimerTick = -0x1; D2_GLOBAL_GUARD(gnDenOfEvilLightTimerTick, "gnDenOfEvilLightTimerTick");
-int gnDiabloSpawnLightTimer = -0x1; D2_GLOBAL_GUARD(gnDiabloSpawnLightTimer, "gnDiabloSpawnLightTimer");
-uint32_t gnQuestMonsterUnitId = -0x1; D2_GLOBAL_GUARD(gnQuestMonsterUnitId, "gnQuestMonsterUnitId");
-uint32_t gnMonsterModePrecacheCount = 0xf; D2_GLOBAL_GUARD(gnMonsterModePrecacheCount, "gnMonsterModePrecacheCount");
-uint32_t gnBlizzardSoundPlayed = 0x1; D2_GLOBAL_GUARD(gnBlizzardSoundPlayed, "gnBlizzardSoundPlayed");
+D2CmdBindingStrc gaCmdHandlerTable[57] = {}; D2_GLOBAL_GUARD(gaCmdHandlerTable, "gaCmdHandlerTable");
+D2CmdBindingStrc gnCmdTableMax[57] = {}; D2_GLOBAL_GUARD(gnCmdTableMax, "gnCmdTableMax");
 uint32_t gbLightmapColorEnabled = 0x1; D2_GLOBAL_GUARD(gbLightmapColorEnabled, "gbLightmapColorEnabled");
-D2SeedStrc * gpArcaneStarsSeed = (D2SeedStrc *)&gaSpriteArcaneStarYOffset; D2_GLOBAL_GUARD(gpArcaneStarsSeed, "gpArcaneStarsSeed");
-int gnChatHistoryReadIndex = 0x7; D2_GLOBAL_GUARD(gnChatHistoryReadIndex, "gnChatHistoryReadIndex");
-uint32_t gnChatHistoryWriteIndex = 0x7; D2_GLOBAL_GUARD(gnChatHistoryWriteIndex, "gnChatHistoryWriteIndex");
-uint32_t gpWardenModuleParam = -0x1; D2_GLOBAL_GUARD(gpWardenModuleParam, "gpWardenModuleParam");
 uint32_t gnInventoryActiveUnitId = 0x1; D2_GLOBAL_GUARD(gnInventoryActiveUnitId, "gnInventoryActiveUnitId");
 int gnItemDescTitleMaxWidth = 0x1; D2_GLOBAL_GUARD(gnItemDescTitleMaxWidth, "gnItemDescTitleMaxWidth");
 int gaInventoryItemSlots = -0x1; D2_GLOBAL_GUARD(gaInventoryItemSlots, "gaInventoryItemSlots");
@@ -42916,21 +42819,6 @@ D2UnitStrc * pCursorItem = 0; D2_GLOBAL_GUARD(pCursorItem, "pCursorItem");
 int32_t gCursorAnimationFrame = 0; D2_GLOBAL_GUARD(gCursorAnimationFrame, "gCursorAnimationFrame");
 uint32_t gnCursorAnimStartTick = 0; D2_GLOBAL_GUARD(gnCursorAnimStartTick, "gnCursorAnimStartTick");
 int ItemTypeOnHand = 0; D2_GLOBAL_GUARD(ItemTypeOnHand, "ItemTypeOnHand");
-// also labelled: gnPacketSendCount_0x69
-unsigned int gnD2GSBytesSentTotal = {}; D2_GLOBAL_GUARD(gnD2GSBytesSentTotal, "gnD2GSBytesSentTotal");
-// also labelled: gbNetworkPacketSyncFlag
-uint32_t gnD2GSPacketsSentTotal = 0; D2_GLOBAL_GUARD(gnD2GSPacketsSentTotal, "gnD2GSPacketsSentTotal");
-int gnCursorInitialized = 0; D2_GLOBAL_GUARD(gnCursorInitialized, "gnCursorInitialized");
-pfnVoidNoArgCallback gpfnMouseLeftButtonHandler = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnMouseLeftButtonHandler, "gpfnMouseLeftButtonHandler");
-pfnVoidNoArgCallback gpfnMouseRightButtonHandler = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnMouseRightButtonHandler, "gpfnMouseRightButtonHandler");
-pfnVoidNoArgCallback gpfnMouseMiddleButtonHandler = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnMouseMiddleButtonHandler, "gpfnMouseMiddleButtonHandler");
-pfnVoidNoArgCallback gpfnScrollUpButtonHandler = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnScrollUpButtonHandler, "gpfnScrollUpButtonHandler");
-pfnVoidNoArgCallback gpfnScrollDownButtonHandler = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnScrollDownButtonHandler, "gpfnScrollDownButtonHandler");
-pfnVoidNoArgCallback gpfnMouseLeftButtonAltHandler = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnMouseLeftButtonAltHandler, "gpfnMouseLeftButtonAltHandler");
-pfnVoidNoArgCallback gpfnMouseRightButtonAltHandler = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnMouseRightButtonAltHandler, "gpfnMouseRightButtonAltHandler");
-pfnVoidNoArgCallback gpfnMouseMiddleButtonAltHandler = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnMouseMiddleButtonAltHandler, "gpfnMouseMiddleButtonAltHandler");
-unsigned int gbKeyBindingsEnabled = {}; D2_GLOBAL_GUARD(gbKeyBindingsEnabled, "gbKeyBindingsEnabled");
-unsigned int gbKeyConfigModeActive = {}; D2_GLOBAL_GUARD(gbKeyConfigModeActive, "gbKeyConfigModeActive");
 BOOL DenOfEvilLight = 0; D2_GLOBAL_GUARD(DenOfEvilLight, "DenOfEvilLight");
 uint32_t gnDiabloSpawnLightActive = 0; D2_GLOBAL_GUARD(gnDiabloSpawnLightActive, "gnDiabloSpawnLightActive");
 // also labelled: SecondsUntilGameEnds

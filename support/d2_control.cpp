@@ -1375,7 +1375,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             pRight ? (int)D2Client::UNIT::PlrSkills::PLRSKILLS_CanUseSkillCheck(pPl, pRight) : -1,
             bUsableL, nCodeL,
             pLeft ? (int)D2Client::UNIT::PlrSkills::PLRSKILLS_CanUseSkillCheck(pPl, pLeft) : -1,
-            (int)D2Client::UI::ui::GetMouseX(), (int)D2Client::UI::ui::GetMouseY(),
+            (int)D2Client::Cursor::GetMouseX(), (int)D2Client::Cursor::GetMouseY(),
             (int)D2Client::UI::Draw::DRAW_GetBottomPanelY());
         lstrcpynA(reply, whyOut, replyMax);
         return;
@@ -2618,10 +2618,10 @@ extern "C" void D2CONTROL_Pump(void) {
             // The cast path bails before it sends anything if the REAL cursor is below the
             // bottom panel (PLAYER_ExecuteModeBasedAction's first two lines), so the cursor
             // has to be where the click says it is - a queued WM_MOUSEMOVE is not enough.
-            D2Client::UI::ui::SetMouseXY(a.x, a.y);
+            D2Client::Cursor::SetMouseXY(a.x, a.y);
             D2Client::UNIT::Player::ClickMap((int32_t)a.wp, a.x, a.y, 0);
             D2TraceFmt("CLICKMAP-CMD type=%d at %d,%d mouse=%d,%d panelY=%d", (int)a.wp, a.x, a.y,
-                       (int)D2Client::UI::ui::GetMouseX(), (int)D2Client::UI::ui::GetMouseY(),
+                       (int)D2Client::Cursor::GetMouseX(), (int)D2Client::Cursor::GetMouseY(),
                        (int)D2Client::UI::Draw::DRAW_GetBottomPanelY());
         } else if (a.kind == 6) {
             D2Client::UNIT::UnitMode::UNITMODE_ExecuteSkillAction(

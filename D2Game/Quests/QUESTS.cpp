@@ -1134,7 +1134,7 @@ void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
 
-    A2Q7::Q14_SendTombLevelInfo(pGame, pUnit);
+    A2Q6::Q14_SendTombLevelInfo(pGame, pUnit);
 }
 
 void __fastcall Objects_InitFn18_JerhynPosition(D2ObjectInitFnArg * pInitArg) {
@@ -2129,7 +2129,7 @@ uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2Unit
     uint32_t nResult;
     switch (nEventId) {
       case 0x49:
-        nResult = A2Q7::Q14_IsPortalNotCreated(pGame);
+        nResult = A2Q6::Q14_IsPortalNotCreated(pGame);
       return nResult;
       case 100:
         nResult = A3Q6::Q23_CheckDuranceOfHateLevel2(pGame, pUnit);

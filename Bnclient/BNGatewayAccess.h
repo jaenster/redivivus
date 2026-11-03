@@ -68,16 +68,5 @@ void __stdcall Load(struct D2BNetGatewayAccessStr * pGatewayAccess);
 // on a bad/empty buffer — the crash the 2nd shared-wineprefix client hits via the BNFTP path.
 // @sourcefile .\BNetGW.cpp
 void __stdcall UpdateGatewaysFromIni(struct D2BNetGatewayAccessStr * pClientSideData, char * szText);
-uint32_t CACHE_ComputeCRC32(int32_t nByteLen, uint8_t * pbData);
-void CACHE_DecryptBlock(uint32_t dwKey, uint32_t * pdwData, uint32_t nByteLen);
-void CACHE_EncryptBlock(uint32_t dwKey, uint32_t nByteLen, uint32_t * pdwData);
-LPFILETIME * CACHE_GetFileTime(uint32_t nSecondsFromNow);
-uint32_t __stdcall CACHE_HashString(int32_t nHashType, char * szText);
-void __stdcall CACHE_InitCryptTable();
-uint32_t __stdcall CACHE_FindHashEntry(uint32_t nLocale, char * szText);
-void CACHE_RemoveEntry(char * szText);
-void CACHE_BuildFilePath(LPSTR szText);
-// Closes and deletes the Fog cache file. Closes ghCacheFileHandle if open, builds cache file path to %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat, and deletes it via DeleteFileA.
-void __stdcall CACHE_DeleteFile();
 
 } // namespace Bnclient::BNGatewayAccess

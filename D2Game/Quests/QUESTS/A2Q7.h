@@ -10,8 +10,6 @@
 
 // Forward declarations
 struct D2BitBufferStrc;
-struct D2ObjectInitFnArg;
-struct D2ObjectOperateFnArg;
 struct D2QuestArgStrc;
 struct D2QuestDataA2Q6Strc;
 struct D2QuestDataStrc;
@@ -22,40 +20,14 @@ struct SGAMEDATA;
 namespace D2Game::Quests::QUESTS::A2Q7 {
 
 // Function declarations
-// Q14 (The Seven Tombs / Act2 Q6). Sends packet 0x50 QuestSpecial type 0xd to the operating player's client: the offset (Tal Rasha tomb levelId - 0x42) of the true Horadric-orifice tomb, so the client can mark the correct tomb symbol on the map. Caches the chosen tombLevelId into A2Q6 quest-specific data. No quest-state transition.
-void __fastcall Q14_SendTombLevelInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-// Q14 helper: returns the next "arcane" object classId to spawn (Tal Rasha sarcophagus/orifice decoy set: 0x133..0x139). On first call lazily fills a 6-entry ring (skipping the index matching the real tomb level), then cycles through it round-robin. Returns 0x133 if no tomb level is set yet. No quest-state transition.
-uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassId(struct D2QuestDataStrc * pQuestData);
 // Q14 predicate (used as a quest-display/state filter): true if The Seven Tombs is NOT yet started (no quest record, or introduced and stateFlag < 2). nStateFlag<2 == still in step 0/1.
 uint8_t __fastcall Q14_IsSevenTombsNotStarted(::SGAMEDATA * pGame);
 // Q14 predicate: true if The Seven Tombs is introduced and stateFlag != 0 (any progress made).
 uint8_t __fastcall Q14_IsSevenTombsAtState1(::SGAMEDATA * pGame);
 // Q14 predicate: returns false (0) whenever The Seven Tombs is introduced (the inner test is a decompiler tautology bVar1||!bVar1). Effectively: true (1) only if quest data missing or not introduced. Used as a "not active yet" gate.
 int __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame);
-// @wasnamed SelectUnkownArkaneThingId - one name on two different functions.
-// @evidence Calls GetQuestDataByQuestNoInternal(QUESTINT_TheSevenTombs)
-// and then 0059d720. A wrapper that supplies the quest record.
-uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassIdForGame(::SGAMEDATA * pGame);
 // Q14 accessor: returns the "town/Duriel portal already created" flag from A2Q6 data (field_0x0B). Returns 1 (treat as created) if quest not introduced. Used to gate the stairs-to-tombs operate and portal creation.
 uint8_t __fastcall Q14_GetPortalCreatedFlag(struct D2QuestArgStrc * pQuestArgs);
-// A2Q7 (The Tainted Sun) timer callback that creates the two warp portals after the Horadric Staff is placed. If the pending-create flag (offset +0xd) is set: waits for the orifice object to reach Death/open anim and fires its open event; spawns the red town-portal object (class 100) in a nearby room and toggles HasPortal flags on both rooms. On success sets portal-created flag (+0xb=1) and clears the pending flag. No quest-record state change.
-uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
-// Q14 helper: scans the victim object's room for any UNIT_WARP and walks the operating player through it (SUnit::TakeStairs). Used by the tomb-stairs operate fn.
-void __fastcall TakeStairs(struct D2ObjectOperateFnArg * pOperateArg);
-// Q14 object OperateFn: stairs/warp into the Tal Rasha tombs. Allows traversal only if The Seven Tombs isn't introduced yet OR the Duriel-area portal has already been created (field_0x0B), and the warp object is in Walk (open) anim. Calls TakeStairs. No quest-state transition.
-uint32_t __fastcall Q14_OperateStairsToTombs(struct D2ObjectOperateFnArg * pOperateArg);
-// Q14 object InitFn (Objects_InitFn37): on spawn of a Q14 quest object, records its GUID into A2Q6 data (field_0x28) and marks it present (field_0x6=1). Sets the object's client visibility/update mode: hidden(2) if quest not introduced or already-portal-created flag set, else visible(0). No quest-record state change.
-void __fastcall Objects_InitFn37(struct D2ObjectInitFnArg * pInitArg);
-// Q14 object InitFn (Objects_InitFn38): records this object's GUID into A2Q6 data and sets bAllPlayersLeft. Update mode = hidden(2) if quest not introduced, else field_0x18. No quest-record state change.
-void __fastcall Objects_InitFn38_TyraelsDoor(struct D2ObjectInitFnArg * pInitArg);
-// Q14 predicate: true if The Seven Tombs is introduced AND the Duriel/town portal has NOT yet been created (!field_0x0B). Inverse of Q14_GetPortalCreatedFlag.
-BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame);
-// Q14 object InitFn (Objects_InitFn21): orifice/Tal Rasha chamber object init. Records GUID, marks present. If the staff has been used (state byte [3]) but portal not yet created ([0xb]==0), schedules the Q14_TimerCreatePortal timer to spawn the portals and marks timer-armed. Sets object hidden(2). No quest-record state change.
-void __fastcall Objects_InitFn21_HoradricOrifice(struct D2ObjectInitFnArg * pInitArg);
-// Q14 per-party-member callback: completes The Horadric Staff quest record for one player if not already complete and the player is in Act II. Sets Completed+JustCompleted and (unless mid-trade) strips the 3 staff component quest items (hsu/vip/msf). Invoked for every party member when the staff is placed in the orifice.
-void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// Q14 object OperateFn (OBJOP_A2Q7_OpenArcaneNpcTrade): player operates the Horadric orifice. If the object is closed (Death anim) and player not busy trading: if player holds the assembled Horadric Staff (item 'hsu '), set interact target + send packet 0x58 to open the staff-in-orifice UI; otherwise play the "can't do that" sound. Closes the interaction when the object returns to Neutral. No quest-record state change here (that happens in Q14_OnStaffUsedInOrifice).
-BOOL __fastcall OBJOP_A2Q7_OpenArcaneNpcTrade(struct D2ObjectOperateFnArg * pOperation);
 // IterateAllUnits callback for Q14_IsNpcStationary: if the player is within collision
 // distance < 0xC of pA2Q6Data->pTyraelSpawnAnchor (+0x40), sets
 // pA2Q6Data->bTyraelSpawnSpotOccupied (+0x44). Q14_IsNpcStationary passes its pA2Q6Data as pArgs.

@@ -168,19 +168,13 @@ struct D2UnitStrc * __fastcall CLIENT_GetAttachedUnit(::SGAMEDATA * pGame, struc
 // Dead code / unused client join path. Sets pClient->nClass to bParam, resolves the player unit and its spawn coords, then deletes the existing unit from the room (AllocDrlgDelete + FreeServerUnit) and reloads it from scratch via CLIENT_LoadCharacterAndSendGameData + CLIENT_PlacePlayerInRoom. Clears the lowest fClientFlags bit and fires GAME_OnClientRoomChange if the room changed. Halts with an internal error if pClient is null. Not referenced by any active join flow.
 void __fastcall UnusedClientJoinGame(struct D2ClientStrc * pClient, int nClass);
 void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, uint8_t bActNo);
-// Routes a per-frame unit visibility update to the appropriate type-specific packet handler. If the unit's "new" flag is set and it is not the client's own player, sends an init-unit packet first (skipping missiles). Then dispatches by eUnitType: UNIT_PLAYER to PlayerModes::PacketUpdateForClient, UNIT_MONSTER to Item::PacketUpdateForClient, UNIT_OBJECT to ObjectsMode::PacketUpdateForClient, UNIT_ITEM to ItemMode::PacketUpdateForClient. Halts fatally if pUnit is null.
-void __stdcall DispatchUnitUpdate(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
 // pRoom in EAX, pClient in EDI: UNITS_SendUnitUpdateToClient for every unit in pRoom->pUnitList (pRoomNext chain); halts (line 98) on a NULL room.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall CLIENT_SendRoomUnitUpdates(struct D2RoomStrc * pRoom, struct D2ClientStrc * pClient);
 void __fastcall UnusedUpdateFunctionForUnits(struct D2RoomStrc * pRoom, struct D2ClientStrc * pClient);
-// Sends SCMD 0x0A (RemoveObject) packets to pClient for every entry in the DrlgDelete list of each adjacent room, skipping the client's own player unit. Iterates all adjacent rooms of pRoom, walks each room's pDrlgDelete linked list, and calls NET_D2GS_SERVER_Send_0x0A_RemoveObject for non-self entries. Halts fatally if pRoom is null or the player unit cannot be resolved.
-void __fastcall GAME_SendRemoveObjectsForAdjacentRooms(struct D2RoomStrc * pRoom, struct D2ClientStrc * pClient);
 void __fastcall FreePendingDrlgDeletes(::SGAMEDATA * pGame);
 void __fastcall MovementUpdateForClient(::SGAMEDATA * pGame, struct D2RoomStrc * * ppRoom, struct D2UnitStrc * pUnit);
 void __fastcall CLIENT_BroadcastMovementToAdjacentRooms(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
-void __fastcall CLIENT_RemoveFromAdjacentRooms(struct D2RoomStrc * pRoom, struct D2ClientStrc * nClientId);
-void __fastcall TellClientToLoadAct(::SGAMEDATA * pGame, struct D2ClientStrc * pClient);
 // 4 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Clients

@@ -59,6 +59,445 @@
       "usedTypes": [
         "int32_t"
       ]
+    },
+    {
+      "name": "UI_HandleCursorMouseDown",
+      "address": "00467ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467ef0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_HandleCursorMouseDown",
+        "UpdateOSCursorVisibilty"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_HandleCursorMouseMove",
+      "address": "00467f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467f20"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_HandleCursorMouseMove",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "UI_HandleCursorMouseUp",
+      "address": "00467fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467fa0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_HandleCursorMouseUp",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc"
+      ]
+    },
+    {
+      "name": "CURSOR_SetCursorItem",
+      "address": "00468010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468010"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "CURSOR_SetCursorItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_SetCursorToSpecialIcon",
+      "address": "00468040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468040"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_SetCursorToSpecialIcon"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "ITEM_SetItemOnHand",
+      "address": "00468070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468070"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "ITEM_SetItemOnHand"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "GetCursorItem",
+      "address": "004680a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004680a0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "GetCursorItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ]
+    },
+    {
+      "name": "UI_InitializeCursor",
+      "address": "004680b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004680b0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_InitializeCursor",
+        "GetHwnd",
+        "MESSAGE_RegisterEventHandlerBatch",
+        "IMAGE_LoadDC6Ex",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "DC6",
+        "DC6 *",
+        "char *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_FreeCursor",
+      "address": "00468170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468170"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_FreeCursor",
+        "GetHwnd",
+        "MESSAGE_UnregisterEventHandlerBatch",
+        "DC6_FreeAndDelete"
+      ],
+      "usedTypes": [
+        "DC6 *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_AnimateCursorForward",
+      "address": "004681c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004681c0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_AnimateCursorForward",
+        "GetPlayerUnit_UI",
+        "UI_GetCursorMaxFrames",
+        "UI_GetCursorFrameOffset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_AnimateCursorBackward",
+      "address": "004682c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004682c0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_AnimateCursorBackward",
+        "UI_GetCursorFrameOffset",
+        "UI_GetCursorMaxFrames"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_UpdateCursorAnimation",
+      "address": "00468310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468310"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_UpdateCursorAnimation",
+        "GetTickCount",
+        "UI_AnimateCursorBackward",
+        "UI_AnimateCursorForward",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ]
+    },
+    {
+      "name": "MOUSE_DrawCursorSprite",
+      "address": "004683c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004683c0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "MOUSE_DrawCursorSprite",
+        "memset",
+        "D2GFX_DrawImage",
+        "UI_UpdateCursorAnimation"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_DrawCursorIcon",
+      "address": "00468460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468460"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_DrawCursorIcon",
+        "memset",
+        "D2GFX_DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc"
+      ]
+    },
+    {
+      "name": "DrawCursor",
+      "address": "004684c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004684c0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "DrawCursor",
+        "memset",
+        "DC6_AssignParams",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Height",
+        "GetDC6Width",
+        "DrawItemGfx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "UI_DrawCursorWithItem",
+      "address": "004685c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004685c0"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_DrawCursorWithItem",
+        "memset",
+        "D2GFX_DrawImage",
+        "UI_UpdateCursorAnimation",
+        "DC6_AssignParams",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Height",
+        "GetDC6Width",
+        "DrawItemGfx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetMouseX",
+      "address": "00468730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468730"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "GetMouseX"
+      ]
+    },
+    {
+      "name": "GetMouseY",
+      "address": "00468740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468740"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "GetMouseY"
+      ]
+    },
+    {
+      "name": "UI_SetMousePosition",
+      "address": "00468750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468750"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_SetMousePosition"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetMouseXY",
+      "address": "00468770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468770"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "SetMouseXY",
+        "IsFullscreen",
+        "GetHwnd",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "tagRECT",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "GetItemType",
+      "address": "00468830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468830"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "GetItemType"
+      ]
+    },
+    {
+      "name": "UI_HandleMousePositionUpdate",
+      "address": "00468840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00468840"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_HandleMousePositionUpdate",
+        "D2GFX_IsWindowActive",
+        "GetErrorState",
+        "UpdateOSCursorVisibilty",
+        "GetTickCount",
+        "UI_GetCursorMaxFrames"
+      ],
+      "usedTypes": [
+        "D2UIMouseMsgStrc",
+        "int32_t",
+        "uint32_t"
+      ]
     }
   ]
 }

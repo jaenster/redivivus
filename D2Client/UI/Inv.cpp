@@ -2,6 +2,7 @@
 
 #include "D2Client/UI/Inv.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
@@ -325,24 +326,24 @@ static void __stdcall INV_DrawGridPlacementHighlight(D2InventoryStrc * pInventor
       return;
     }
     if (g_nCurrentInventoryPage == 1) {
-      nCheckResult = ui::GetMouseX();
+      nCheckResult = Cursor::GetMouseX();
       if (nCheckResult < ScreenSizeX / 2) {
         return;
       }
     }
 
-    nCheckResult = ui::GetMouseY();
+    nCheckResult = Cursor::GetMouseY();
     if (!(nCheckResult < ScreenSizeY - 0x27)) {
       return;
     }
     if (g_nCurrentInventoryPage == 0x13) {
-      nCheckResult = ui::GetMouseX();
+      nCheckResult = Cursor::GetMouseX();
       if (nCheckResult < ScreenSizeX / 2) {
         return;
       }
     }
 
-    nCheckResult = ui::GetMouseY();
+    nCheckResult = Cursor::GetMouseY();
     if (!(nCheckResult < ScreenSizeY - 0x27)) {
       return;
     }
@@ -1077,7 +1078,7 @@ void __stdcall DRAW_UI_InventoryContent(D2UnitStrc * pUnit) {
           ePageCurrent = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
           if (ePageCurrent == CurrentInventoryPage) {
             if (pItem == pItemToDescribe && gpInvItemUnderCursor) {
-              nColorIndex = ui::GetItemType();
+              nColorIndex = Cursor::GetItemType();
               if (nColorIndex == 8 && (bTransmogrify = D2Common::ITEMS::Items::ITEM_CheckItemsTxt_bTransmogrify(pItemToDescribe) , !bTransmogrify)) {
                 nBgColor = 0;
               } else {
@@ -1133,9 +1134,9 @@ void __stdcall DRAW_UI_InventoryContent(D2UnitStrc * pUnit) {
       return;
     }
 
-    nColorIndex = ui::GetMouseX();
+    nColorIndex = Cursor::GetMouseX();
     int nMouseYPos;
-    nMouseYPos = ui::GetMouseY();
+    nMouseYPos = Cursor::GetMouseY();
     switch (g_nCurrentInventoryPage) {
       case 0xb:
         if (CurrentInventoryPage == INVPAGE_CORPSE) {
@@ -1230,18 +1231,18 @@ static void INV_DrawBodySlotCursorHighlight(D2InventoryStrc * pInventory) {
     char nItemWidth;
     char nItemHeight;
     if (g_nCurrentInventoryPage == 1) {
-      nResult = ui::GetMouseX();
+      nResult = Cursor::GetMouseX();
       if (nResult < ScreenSizeX / 2) {
         return;
       }
     }
 
-    nResult = ui::GetMouseY();
+    nResult = Cursor::GetMouseY();
     if (nResult >= ScreenSizeY - 0x27) {
       return;
     }
 
-    nResult = ui::GetMouseX();
+    nResult = Cursor::GetMouseX();
     if (nResult < ScreenSizeX / 2) {
       gnInvBodySlotUnderCursor = 0;
       return;
@@ -1375,7 +1376,7 @@ void __fastcall InitInventory() {
         }
 
         if (pSlotItem == pItemToDescribe && gbInvBodySlotUnderCursorExists) {
-          nCursorItemType = ui::GetItemType();
+          nCursorItemType = Cursor::GetItemType();
           nHandedness = gaPlayerBodySlotScreenCoords[nBodySlot].nLeft;
           nSlotScreenY = gaPlayerBodySlotScreenCoords[nBodySlot].nTop;
           nMaxSockets = gaInvHighlightColors[1];
@@ -2650,8 +2651,8 @@ static D2UnitStrc * GetSetItem(int32_t nId, D2InventoryStrc * pInventory) {
 }
 
 static BOOL __stdcall INV_IsMouseInRect(int32_t nWidth, int32_t nHeight, int32_t nBottomY, int32_t nLeftX) {
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nLeftX && nMouseX <= nLeftX + nWidth && nMouseY >= nBottomY - nHeight && nMouseY <= nBottomY) {
       return 1;
     }
@@ -2929,7 +2930,7 @@ static void __stdcall INV_HandleHighResDropClick(int32_t nMouseY, D2UIMouseMsgSt
       return;
     }
 
-    int nItemType = ui::GetItemType();
+    int nItemType = Cursor::GetItemType();
     if (nItemType == 6) {
       ui::UI_DropCursorItemOnGround();
     }
@@ -3548,7 +3549,7 @@ void __stdcall INV_HandleShopAction(DWORD nAction, D2UnitStrc * pTarget, D2UnitS
       g_nCurrentInventoryPage = 5;
     }
 
-    ui::ITEM_SetItemOnHand(nullptr);
+    Cursor::ITEM_SetItemOnHand(nullptr);
 }
 
 int __stdcall INV_EnterShopMode() {
@@ -3559,7 +3560,7 @@ int __stdcall INV_EnterShopMode() {
     g_nCurrentInventoryPage = 1;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    ui::ITEM_SetItemOnHand(pCursorItem_lcl);
+    Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
     return 1;
 }
 
@@ -3575,7 +3576,7 @@ void __stdcall INV_ReturnToShopFromRepair() {
     g_nCurrentInventoryPage = 1;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    ui::ITEM_SetItemOnHand(pCursorItem_lcl);
+    Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
 }
 
 void __stdcall INV_SetRepairMode() {
@@ -3623,7 +3624,7 @@ void __stdcall INV_SelectDefaultNpcButton() {
     g_nCurrentInventoryPage = 1;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    ui::ITEM_SetItemOnHand(pCursorItem_lcl);
+    Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
 }
 
 void __stdcall INV_SetIdentifyMode() {
@@ -3643,7 +3644,7 @@ void __stdcall INV_ExitIdentifyMode() {
     g_nCurrentInventoryPage = 1;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    ui::ITEM_SetItemOnHand(pCursorItem_lcl);
+    Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
 }
 
 static void INV_SetNpcButtonBuy(int32_t nButtonIndex) {
@@ -3935,7 +3936,7 @@ void __stdcall DRAW_UI_Inventory_DrawShop() {
       g_nCurrentInventoryPage = 1;
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
-      ui::ITEM_SetItemOnHand(pUnit);
+      Cursor::ITEM_SetItemOnHand(pUnit);
       DrawShopRelated = 0;
     }
 
@@ -4066,7 +4067,7 @@ BOOL __stdcall INV_CanReturnToShop() {
       return 0;
     }
 
-    int nItemType = ui::GetItemType();
+    int nItemType = Cursor::GetItemType();
     if (!(nItemType == 7 || nItemType == 1 || nItemType == 4)) {
       return 0;
     }
@@ -4087,7 +4088,7 @@ void __stdcall INV_HandleShopEscapeKey(D2UIMouseMsgStrc * pMsg) {
     gbInvNpcScreenCoordsInitialized = 0;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    ui::ITEM_SetItemOnHand(pCursorItem_lcl);
+    Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
@@ -4118,7 +4119,7 @@ void __stdcall INV_HandleShopMouseMove(D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     gnInvMouseX = nMouseX;
     gpInvCursorItem = nMouseY;
-    D2UnitStrc* pUnit = ui::GetCursorItem();
+    D2UnitStrc* pUnit = Cursor::GetCursorItem();
     if (!(!pUnit || nMouseX < pNpcInventoryScreenCoordinates.nLeft || nMouseX > pNpcInventoryScreenCoordinates.nRight || nMouseY < pNpcInventoryScreenCoordinates.nTop || nMouseY > pNpcInventoryScreenCoordinates.nBottom)) {
       return;
     }
@@ -4166,7 +4167,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
     gbInvPanelButtonPressed = 0;
     gnInvMouseY = 0;
     D2UnitStrc* pUnit;
-    pUnit = ui::GetCursorItem();
+    pUnit = Cursor::GetCursorItem();
     if (pUnit) {
       pMsg->bHandled = 0;
       return;
@@ -4179,7 +4180,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
         if (BVar1) {
           pUnit = UNIT::Player::GetPlayerUnit_UI();
           pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
-          ui::ITEM_SetItemOnHand(pUnit);
+          Cursor::ITEM_SetItemOnHand(pUnit);
         }
         if (gaNpcShopButtonTable[0] > 0) {
           ppDVar4 = &gaNpcShopButtons[0].nDrawCallback;
@@ -4206,7 +4207,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
               pUnit = UNIT::Player::GetPlayerUnit_UI();
               pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
               if (!pUnit) {
-                ui::ITEM_SetItemOnHand(nullptr);
+                Cursor::ITEM_SetItemOnHand(nullptr);
               }
 
               npcmenu::NPCMENU_CloseShopUI();
@@ -4239,7 +4240,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
                 npcmenu::ShopAction(UNIT::Player::GetPlayerUnit_UI(), nullptr, dwSell, nMouseX, nMouseY, dwMode, dwArg6, dwArg7);
                 gbInvGambleMode = 0;
               } else {
-                ui::UI_SetCursorToSpecialIcon(((D2NpcShopButtonStrc*)((char*)pButton - 0xa))->nIconId, 0);
+                Cursor::UI_SetCursorToSpecialIcon(((D2NpcShopButtonStrc*)((char*)pButton - 0xa))->nIconId, 0);
                 gnInvShopButton2 = (uint32_t)((D2NpcShopButtonStrc*)((char*)pButton - 0xa))->wCurrentSelection;
                 gnInvShopButton = nButtonCount;
               }
@@ -4280,7 +4281,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
 
     pUnit = UNIT::Player::GetPlayerUnit_UI();
     pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
-    ui::ITEM_SetItemOnHand(pUnit);
+    Cursor::ITEM_SetItemOnHand(pUnit);
     npcmenu::NPCMENU_CloseShopUI();
 }
 
@@ -4335,7 +4336,7 @@ void __stdcall INV_HandleShopReturnAction() {
 
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    if (!(!pCursorItem_lcl && ((nItemType = ui::GetItemType() , nItemType == 7 || nItemType == 1) || nItemType == 4))) {
+    if (!(!pCursorItem_lcl && ((nItemType = Cursor::GetItemType() , nItemType == 7 || nItemType == 1) || nItemType == 4))) {
       return;
     }
 
@@ -4346,12 +4347,12 @@ void __stdcall INV_HandleShopReturnAction() {
     g_nCurrentInventoryPage = 1;
     pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    ui::ITEM_SetItemOnHand(pCursorItem_lcl);
+    Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
     nItemType = gnInvShopButton;
     if (gnInvShopButton >= 0 && gnInvShopButton < gaNpcShopButtonTable[0] && gaNpcShopButtons[gnInvShopButton].wStringId != 0x276f) {
       INV_UpdateNpcButtonHighlightState(gnInvShopButton2);
       g_nCurrentInventoryPage = gaNpcShopButtons[nItemType].nActionType;
-      ui::UI_SetCursorToSpecialIcon(gaNpcShopButtons[nItemType].nIconId, 0);
+      Cursor::UI_SetCursorToSpecialIcon(gaNpcShopButtons[nItemType].nIconId, 0);
     }
 
     BOOL bHasInteractedUnit = npcmenu::GetInteractedUnitGuid(&nInteractedUnitGuid);
@@ -4364,8 +4365,8 @@ void __stdcall INV_HandleShopReturnAction() {
       return;
     }
 
-    int32_t nMouseX = ui::GetMouseX();
-    nItemType = ui::GetMouseY();
+    int32_t nMouseX = Cursor::GetMouseX();
+    nItemType = Cursor::GetMouseY();
     if (!(nMouseX >= pNpcInventoryGridScreenCoordinates.nPixelLeft && nMouseX <= pNpcInventoryGridScreenCoordinates.nRight && nItemType >= pNpcInventoryGridScreenCoordinates.nTop && nItemType <= pNpcInventoryGridScreenCoordinates.nBottom)) {
       return;
     }
@@ -5392,7 +5393,7 @@ void INV_HandleGambleMessage() {
     g_nCurrentInventoryPage = 1;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
-    ui::ITEM_SetItemOnHand(pCursorItem_lcl);
+    Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
     byMsgType.nPacketId = 'Z';
     byMsgType.nColor = '\x01';
     byMsgType.nArg = 0;
@@ -5417,7 +5418,7 @@ void __stdcall INV_ResetShopState() {
       }
     }
 
-    ui::ITEM_SetItemOnHand(nullptr);
+    Cursor::ITEM_SetItemOnHand(nullptr);
 }
 
 void __stdcall INV_SetItemDescPending() {
@@ -5471,8 +5472,8 @@ void __stdcall INV_SwapWeaponSet() {
 }
 
 BOOL __stdcall INV_IsMouseInRectLTRB(int32_t nLeft, int32_t nTop, int32_t nRight, int32_t nBottom) {
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nLeft && nMouseX <= nRight && nMouseY >= nTop && nMouseY <= nBottom) {
       return 1;
     }
@@ -6253,8 +6254,8 @@ void __fastcall INV_DrawHirelingCursorHighlight(D2UnitStrc * pUnit) {
         nSlotBottom = gaHirelingBodySlotScreenCoords[nBodySlotIdx].nBottom;
         nSlotRight = gaHirelingBodySlotScreenCoords[nBodySlotIdx].nRight;
         nSlotTop = gaHirelingBodySlotScreenCoords[nBodySlotIdx].nTop;
-        nMouseX = ui::GetMouseX();
-        nMouseY = ui::GetMouseY();
+        nMouseX = Cursor::GetMouseX();
+        nMouseY = Cursor::GetMouseY();
         pPlayerOrCursorItem = pCursorItemUnit;
         if (nMouseX >= nEntryLeft && nMouseX <= nSlotRight && nMouseY >= nSlotTop && nMouseY <= nSlotBottom) {
           D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pCursorItemUnit, &byItemWidth, &byItemHeight, "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
@@ -6342,8 +6343,8 @@ void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
         pMsg->bHandled = 0;
         nScreenBottom = ScreenSizeY - 0x31;
         nScreenHalfWidth = ScreenSizeX / 2;
-        nMouseX = ui::GetMouseX();
-        nMouseY = ui::GetMouseY();
+        nMouseX = Cursor::GetMouseX();
+        nMouseY = Cursor::GetMouseY();
         if (!(nMouseX >= 0 && nMouseX <= nScreenHalfWidth && nMouseY >= 0 && nMouseY <= nScreenBottom)) {
           return;
         }
@@ -6352,8 +6353,8 @@ void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
         nScreenBottom = gnPanelOffsetX + 0x130;
         nScreenHalfWidth = gnPanelOffsetY - 0x5f + ScreenSizeY;
         nMouseX = gnPanelOffsetX + 0x110;
-        nCurMouseX = ui::GetMouseX();
-        nCurMouseY = ui::GetMouseY();
+        nCurMouseX = Cursor::GetMouseX();
+        nCurMouseY = Cursor::GetMouseY();
         if (nCurMouseX >= nMouseX && nCurMouseX <= nScreenBottom && nCurMouseY >= nScreenHalfWidth && nCurMouseY <= nMouseY) {
           gnInvMercBodySlot2 = 1;
           pMsg->bHandled = 1;
@@ -6396,12 +6397,12 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
       pMercUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
       if (pMercUnit) {
         pMsg->bHandled = 0;
-        ui::UI_HandleCursorMouseUp(pMsg);
+        Cursor::UI_HandleCursorMouseUp(pMsg);
         gnInvMercBodySlot2 = 0;
         iScreenBottom = ScreenSizeY - 0x31;
         iScreenHalfWidth = ScreenSizeX / 2;
-        iMouseX = ui::GetMouseX();
-        iMouseY = ui::GetMouseY();
+        iMouseX = Cursor::GetMouseX();
+        iMouseY = Cursor::GetMouseY();
         if (!(iMouseX >= 0 && iMouseX <= iScreenHalfWidth && iMouseY >= 0 && iMouseY <= iScreenBottom)) {
           return;
         }
@@ -6410,8 +6411,8 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
         iCanEquip = gnPanelOffsetY - 0x5f + ScreenSizeY;
         iMouseX = gnPanelOffsetX + 0x130;
         iMouseY = gnPanelOffsetX + 0x110;
-        iScreenBottom = ui::GetMouseX();
-        iScreenHalfWidth = ui::GetMouseY();
+        iScreenBottom = Cursor::GetMouseX();
+        iScreenHalfWidth = Cursor::GetMouseY();
         if (iScreenBottom >= iMouseY && iScreenBottom <= iMouseX && iScreenHalfWidth >= (int)iCanEquip && iScreenHalfWidth <= (int)nBodySlotIdx) {
           pMsg->bHandled = 1;
           pMsg->dwResult = 0;
@@ -6428,8 +6429,8 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
             nSlotBottom = (uint32_t)gaHirelingBodySlotScreenCoords[nBodySlotIdx].nBottom;
             iCanEquip = (uint32_t)gaHirelingBodySlotScreenCoords[nBodySlotIdx].nRight;
             nSlotTop = (uint32_t)gaHirelingBodySlotScreenCoords[nBodySlotIdx].nTop;
-            iMouseX = ui::GetMouseX();
-            iMouseY = ui::GetMouseY();
+            iMouseX = Cursor::GetMouseX();
+            iMouseY = Cursor::GetMouseY();
             if (iMouseX >= (int)nSlotLeft && iMouseX <= (int)iCanEquip && iMouseY >= (int)nSlotTop && iMouseY <= (int)nSlotBottom) {
               if (pPlayerUnit_lcl) {
                 iCanEquip = 0;
@@ -6504,8 +6505,8 @@ void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
         pMsg->bHandled = 0;
         nScreenBottom = ScreenSizeY - 0x31;
         nScreenHalfWidth = ScreenSizeX / 2;
-        nMouseX = ui::GetMouseX();
-        nMouseY = ui::GetMouseY();
+        nMouseX = Cursor::GetMouseX();
+        nMouseY = Cursor::GetMouseY();
         if (!(nMouseX >= 0 && nMouseX <= nScreenHalfWidth && nMouseY >= 0 && nMouseY <= nScreenBottom)) {
           return;
         }
@@ -6596,8 +6597,8 @@ void __stdcall INV_DrawRecipeScroll() {
 void __stdcall INV_HandleRecipeScrollClick(D2UIMouseMsgStrc * pMsg) {
     int nBottomBound = ScreenSizeY - 0x31;
     int nRightBound = ScreenSizeX / 2;
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (!(nMouseX >= 0 && nMouseX <= nRightBound && nMouseY >= 0 && nMouseY <= nBottomBound)) {
       return;
     }
@@ -8021,8 +8022,8 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
       if (bFlagCheck) {
         nBound = gnPanelOffsetY - 0x3f + ScreenSizeY;
         nLeftBound = gnPanelOffsetX + 0x110;
-        nMouseX = ui::GetMouseX();
-        nMouseY = ui::GetMouseY();
+        nMouseX = Cursor::GetMouseX();
+        nMouseY = Cursor::GetMouseY();
         if (nMouseX >= nLeftBound && nMouseX <= nTmp + 0x130 && nMouseY >= nBound - 0x20 && nMouseY <= nBound) {
           nTooltipFlag = 1;
           nBound = gnPanelOffsetY - 0x62 + ScreenSizeY;
@@ -8036,8 +8037,8 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
       if (bFlagCheck || (bFlagCheck = ui::GetUIFlag(UI_MPTRADE) , bFlagCheck != 0) || (bFlagCheck = ui::GetUIFlag(UI_STASH) , bFlagCheck || (bFlagCheck = ui::GetUIFlag(UI_NPCSHOP) , bFlagCheck || (bFlagCheck = ui::GetUIFlag(UI_ANVIL) , bFlagCheck != 0))) || (bFlagCheck = ui::GetUIFlag(UI_CUBE) , bFlagCheck != 0)) {
         nMouseY = ScreenSizeX - gnPanelOffsetX;
         nTmp = gnPanelOffsetY - 0x40 + ScreenSizeY;
-        nBound = ui::GetMouseX();
-        nMouseX = ui::GetMouseY();
+        nBound = Cursor::GetMouseX();
+        nMouseX = Cursor::GetMouseY();
         if (nBound >= nMouseY - 0x12e && nBound <= nMouseY - 0x10e && nMouseX >= nTmp - 0x20 && nMouseX <= nTmp) {
           nBound = ScreenSizeX - gnPanelOffsetX;
           nTooltipFlag = 1;
@@ -8048,8 +8049,8 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
 
         nMouseY = ScreenSizeX - gnPanelOffsetX;
         nTmp = gnPanelOffsetY - 0x45 + ScreenSizeY;
-        nBound = ui::GetMouseX();
-        nMouseX = ui::GetMouseY();
+        nBound = Cursor::GetMouseX();
+        nMouseX = Cursor::GetMouseY();
         if (nBound >= nMouseY - 0xed && nBound <= nMouseY - 0xd9 && nMouseX >= nTmp - 0x12 && nMouseX <= nTmp) {
           nTmp = npcmenu::NPCMENU_IsAnyNpcDialogOpen();
           if (!nTmp) {
@@ -8082,8 +8083,8 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
         if (bFlagCheck) {
           bFlagCheck = GAME::Game::CLIENT_CheckExpansion();
           if (bFlagCheck) {
-            nTmp = ui::GetMouseY();
-            nBound = ui::GetMouseX();
+            nTmp = Cursor::GetMouseY();
+            nBound = Cursor::GetMouseX();
             bFlagCheck = INV_IsMouseOverWeaponSwapSlot(nBound, nTmp);
             if (bFlagCheck) {
               Fog::File::CONTAINER_InitializeBuffer(wszWeaponSwapTip, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
@@ -8108,7 +8109,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
               }
 
               nBound = 0x170;
-              nTmp = ui::GetMouseX();
+              nTmp = Cursor::GetMouseX();
               if (nTmp > gnPanelOffsetX + 500) {
                 nBound = 600;
               }
@@ -8140,7 +8141,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
     if (!gpInvItemUnderCursor || gnItemDescTitleMaxWidth || (nTmp = npcmenu::NPCMENU_GetCurrentShopMode() , !nTmp) || g_nCurrentInventoryPage - 1U > 8) {
       nTmp = D2Common::ITEMS::Items::GetItemQuality(pItemToDescribe);
       nQuality = nTmp;
-      nBound = ui::GetItemType();
+      nBound = Cursor::GetItemType();
       if (nBound == 8 || (nTmpResult = D2Common::ITEMS::Items::ITEM_CheckItemsTxt_bTransmogrify(pItemToDescribe) , nTmpResult != 0)) {
         INV_ShowTransmogrifyTooltip();
         return;
@@ -8550,9 +8551,9 @@ void __stdcall DRAW_UI_Inventory() {
     GLOBALPALLETE nGlobalPaletteShift;
     D2GamePalShiftGreenBloodStrc* pPalette;
     int nMouseX;
-    nMouseX = ui::GetMouseX();
+    nMouseX = Cursor::GetMouseX();
     D2UnitStrc* pLArmItem;
-    pLArmItem = (D2UnitStrc*)ui::GetMouseY();
+    pLArmItem = (D2UnitStrc*)Cursor::GetMouseY();
     if (g_nCurrentInventoryPage == 10) {
       return;
     }
@@ -8703,8 +8704,8 @@ void __stdcall DRAW_UI_Inventory() {
         eDrawMode = DRAW_SOLID;
         D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nDrawTextWidth, INV_GetGoldButtonY(), -1, eDrawMode, pPalette);
         DRAW_UI_INVENTORY_Gold(0);
-        bIsTwoHandedEquipped = ui::GetMouseX();
-        nTradeNameWidth = ui::GetMouseY();
+        bIsTwoHandedEquipped = Cursor::GetMouseX();
+        nTradeNameWidth = Cursor::GetMouseY();
         bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
         if (!bIsExpansion) {
           nWeaponHandedness = gnPanelOffsetX + 0x113;
@@ -9072,9 +9073,9 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
     uint32_t nGridCellY;
     nGridCellY = (y - pInvLayout->top) / (uint32_t)pInvLayout->SlotPixelHeigth;
     int nCallResult;
-    nCallResult = ui::GetItemType();
+    nCallResult = Cursor::GetItemType();
     if (nCallResult == 6) {
-      pCursorItem_lcl = ui::GetCursorItem();
+      pCursorItem_lcl = Cursor::GetCursorItem();
       pTargetItem = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInvWork, nGridCellX, nGridCellY, &nGridX, &nGridY, eInvPage, cPage);
       if (!pCursorItem_lcl) {
         return bReturnValue;
@@ -9104,7 +9105,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
       return bReturnValue;
     }
 
-    nCallResult = ui::GetItemType();
+    nCallResult = Cursor::GetItemType();
     if (nCallResult == 8) {
       pCursorItem_lcl = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInvWork, nGridCellX, nGridCellY, &nGridX, &nGridY, eInvPage, cPage);
       if (!pCursorItem_lcl) {
@@ -9158,7 +9159,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
         }
 
         g_nCurrentInventoryPage = 5;
-        ui::ITEM_SetItemOnHand(nullptr);
+        Cursor::ITEM_SetItemOnHand(nullptr);
         return bReturnValue;
       }
 
@@ -9453,10 +9454,10 @@ uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInven
     D2UnitStrc* pRightArmItem;
     pRightArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
     int nResult;
-    nResult = ui::GetItemType();
+    nResult = Cursor::GetItemType();
     if (nResult == 6) {
       D2UnitStrc* pCursorItem_lcl;
-      pCursorItem_lcl = ui::GetCursorItem();
+      pCursorItem_lcl = Cursor::GetCursorItem();
       if (pCursorItem_lcl && pRightArmItem) {
         BVar1 = UNIT::PlayerIsUnInterruptable(pRightArmItem);
         if (!BVar1) {
@@ -9469,7 +9470,7 @@ uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInven
         }
       }
     } else {
-      nResult = ui::GetItemType();
+      nResult = Cursor::GetItemType();
       if (nResult == 8 && pRightArmItem) {
         BVar1 = UNIT::PlayerIsUnInterruptable(pRightArmItem);
         if (!BVar1) {
@@ -9599,7 +9600,7 @@ uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInven
       shop_action_on_item:
       if (pRightArmItem && (nResult = npcmenu::ShopAction(pUnit, pRightArmItem, 1, gnInvMouseX, gpInvCursorItem, 0, 0, 0) , nResult != 0)) {
         g_nCurrentInventoryPage = 5;
-        ui::ITEM_SetItemOnHand(nullptr);
+        Cursor::ITEM_SetItemOnHand(nullptr);
         return bReturnValue;
       }
       break;
@@ -9702,10 +9703,10 @@ uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInvent
     D2UnitStrc* pRightArmItem;
     pRightArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
     int nResult;
-    nResult = ui::GetItemType();
+    nResult = Cursor::GetItemType();
     if (nResult == 6) {
       D2UnitStrc* pCursorItem_lcl;
-      pCursorItem_lcl = ui::GetCursorItem();
+      pCursorItem_lcl = Cursor::GetCursorItem();
       if (pCursorItem_lcl && pLeftArmItem) {
         BVar1 = UNIT::PlayerIsUnInterruptable(pLeftArmItem);
         if (!BVar1) {
@@ -9718,7 +9719,7 @@ uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInvent
         }
       }
     } else {
-      nResult = ui::GetItemType();
+      nResult = Cursor::GetItemType();
       if (nResult == 8 && pLeftArmItem) {
         BVar1 = UNIT::PlayerIsUnInterruptable(pLeftArmItem);
         if (!BVar1) {
@@ -9848,7 +9849,7 @@ uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInvent
       shop_action_on_item:
       if (pLeftArmItem && (nResult = npcmenu::ShopAction(pUnit, pLeftArmItem, 1, gnInvMouseX, gpInvCursorItem, 0, 0, 0) , nResult != 0)) {
         g_nCurrentInventoryPage = 5;
-        ui::ITEM_SetItemOnHand(nullptr);
+        Cursor::ITEM_SetItemOnHand(nullptr);
         return bReturnValue;
       }
       break;
@@ -9948,10 +9949,10 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
     int bCanAct;
     uint32_t bReturnValue = 0;
     D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-    int nItemType = ui::GetItemType();
+    int nItemType = Cursor::GetItemType();
     if (nItemType == 6) {
       D2UnitStrc* pSlotItem;
-      pItem = ui::GetCursorItem();
+      pItem = Cursor::GetCursorItem();
       pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, bodyLocation);
       if (pItem && pSlotItem) {
         bInteractiveMode = UNIT::PlayerIsUnInterruptable(pSlotItem);
@@ -9965,7 +9966,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
         }
       }
     } else {
-      nItemType2 = ui::GetItemType();
+      nItemType2 = Cursor::GetItemType();
       if (nItemType2 == 8) {
         pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, bodyLocation);
         if (pItem) {
@@ -10041,7 +10042,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
                 bShopHandled = npcmenu::ShopAction(pUnit, pItem, 1, gnInvMouseX, gpInvCursorItem, 0, 0, 0);
                 if (bShopHandled) {
                   g_nCurrentInventoryPage = 5;
-                  ui::ITEM_SetItemOnHand(nullptr);
+                  Cursor::ITEM_SetItemOnHand(nullptr);
                   return 0;
                 }
               }
@@ -10169,9 +10170,9 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
         do {
           if (nMouseX >= (int)(uint32_t)gaPlayerBodySlotScreenCoords[nBodySlotIdx].nLeft && nMouseX <= (int)(uint32_t)gaPlayerBodySlotScreenCoords[nBodySlotIdx].nRight && nMouseY >= (int)(uint32_t)gaPlayerBodySlotScreenCoords[nBodySlotIdx].nTop && nMouseY <= (int)(uint32_t)gaPlayerBodySlotScreenCoords[nBodySlotIdx].nBottom) {
             pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-            nItemType = ui::GetItemType();
+            nItemType = Cursor::GetItemType();
             if (nItemType != 6) {
-              nSocketGuid = ui::GetItemType();
+              nSocketGuid = Cursor::GetItemType();
               if (nSocketGuid != 8) {
                 pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nBodySlotIdx);
                 nPage = ITEM_CanTheseBeSocketed(pCursorItem_lcl, pSlotItem);
@@ -10236,11 +10237,11 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
       pMsg->dwResult = 0;
       pMsg->bHandled = 1;
       if (!nClickResult) {
-        nSocketGuid = ui::GetItemType();
+        nSocketGuid = Cursor::GetItemType();
         if (nSocketGuid == 6) {
           ui::UI_DropCursorItemOnGround();
         } else {
-          nSocketGuid = ui::GetItemType();
+          nSocketGuid = Cursor::GetItemType();
           if (nSocketGuid == 8) {
             GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
           }
@@ -10373,13 +10374,13 @@ void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
       }
     }
     if (!g_nCurrentInventoryPage) {
-      nItemType = ui::GetItemType();
+      nItemType = Cursor::GetItemType();
       if (nItemType == 6) {
         ui::UI_DropCursorItemOnGround();
         return;
       }
 
-      nItemType = ui::GetItemType();
+      nItemType = Cursor::GetItemType();
       if (nItemType != 8) {
         return;
       }
@@ -10388,14 +10389,14 @@ void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    nItemType = ui::GetItemType();
+    nItemType = Cursor::GetItemType();
     if (nItemType == 6) {
       ui::UI_DropCursorItemOnGround();
       Storm::SMsgBreakHandlerChain(pMsg);
       return;
     }
 
-    nItemType = ui::GetItemType();
+    nItemType = Cursor::GetItemType();
     if (nItemType == 8) {
       GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
       Storm::SMsgBreakHandlerChain(pMsg);
@@ -10542,13 +10543,13 @@ void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     int nCallResult;
-    nCallResult = ui::GetItemType();
+    nCallResult = Cursor::GetItemType();
     if (nCallResult == 6) {
       ui::UI_DropCursorItemOnGround();
       goto consume_click;
     }
 
-    nCallResult = ui::GetItemType();
+    nCallResult = Cursor::GetItemType();
     if (nCallResult == 8) {
       GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
       goto consume_click;
@@ -10608,7 +10609,7 @@ void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
             if (pItemToDescribe) {
               nCallResult = npcmenu::ShopAction(pMyUnit, pItemToDescribe, 0, nMouseX, nMouseY, pMouseMsg->nWParam, 1, 0);
               if (nCallResult) {
-                ui::ITEM_SetItemOnHand(nullptr);
+                Cursor::ITEM_SetItemOnHand(nullptr);
               }
             }
 
@@ -10679,7 +10680,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
     }
 
     D2UnitStrc* pCursorItem_lcl;
-    pCursorItem_lcl = ui::GetCursorItem();
+    pCursorItem_lcl = Cursor::GetCursorItem();
     if (pCursorItem_lcl) {
       DWORD dwMode;
       bHasNpcGuid = Panel::PANEL_CalculateBeltSlotIndex(pUnderMouse2);
@@ -10701,7 +10702,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          nCallResult = ui::GetItemType();
+          nCallResult = Cursor::GetItemType();
           if (nCallResult == 6) {
             return;
           }
@@ -10720,13 +10721,13 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
           nBufferSize = 0x40;
           pwszCostBuf = wszCostText;
           pnButtonXOffsets = &__frame0.nNpcTopY;
-          bHasNpcGuid = npcmenu::NPCMENU_CalculateItemTransactionCost(ui::GetCursorItem(), 1, pnButtonXOffsets, pwszCostBuf, nBufferSize);
+          bHasNpcGuid = npcmenu::NPCMENU_CalculateItemTransactionCost(Cursor::GetCursorItem(), 1, pnButtonXOffsets, pwszCostBuf, nBufferSize);
           if (!bHasNpcGuid) {
             return;
           }
 
           dwMode = pUnderMouse2->nWParam;
-          pCursorItem_lcl = ui::GetCursorItem();
+          pCursorItem_lcl = Cursor::GetCursorItem();
           if (!pCursorItem_lcl) {
             return;
           }
@@ -10736,7 +10737,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          ui::ITEM_SetItemOnHand(nullptr);
+          Cursor::ITEM_SetItemOnHand(nullptr);
           return;
         }
 
@@ -10800,7 +10801,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
                     if (pCursorItem_lcl->pInventory) {
                       pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
                       if (!pCursorItem_lcl) {
-                        ui::ITEM_SetItemOnHand(nullptr);
+                        Cursor::ITEM_SetItemOnHand(nullptr);
                         gShopTradeUIState = 1;
                         goto consume_shop_button_click;
                       }
@@ -11156,7 +11157,7 @@ void __stdcall INPUT_CubeLeftClick(D2UIMouseMsgStrc * pMsg) {
       D2UnitStrc* pCursorItem_lcl;
       gbInvCubeTransmuteClicked = 0;
       gbInvCubePageOpen = 0;
-      pCursorItem_lcl = ui::GetCursorItem();
+      pCursorItem_lcl = Cursor::GetCursorItem();
       if (!pCursorItem_lcl) {
         gbInvCubeWithdrawClicked = 1;
         gbInvCubePageOpen2 = 1;

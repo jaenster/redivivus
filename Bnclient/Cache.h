@@ -41,6 +41,9 @@ struct D2BnCacheFileHeaderStrc {
 namespace Bnclient::Cache {
 
 // Function declarations
+void __stdcall CACHE_InitCryptTable();
+// Closes and deletes the Fog cache file. Closes ghCacheFileHandle if open, builds cache file path to %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat, and deletes it via DeleteFileA.
+void __stdcall CACHE_DeleteFile();
 // Frees all Fog cache resources. Closes ghCacheFileHandle if open (setting to INVALID_HANDLE_VALUE), frees global hash table if allocated, and resets all cache state.
 // @sourcefile .\CACHE.CPP
 void __stdcall CACHE_FreeAll();
@@ -59,5 +62,6 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
 BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_t nDataSize, uint32_t * pFileTime, uint32_t nExpiryTime, int32_t nCacheExpiry);
 void StaticInit_CriticalSection_00881894();
 void StaticFini_CriticalSection_00881894();
+// 8 internal functions (defined in .cpp)
 
 } // namespace Bnclient::Cache

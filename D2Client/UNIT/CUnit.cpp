@@ -4,6 +4,7 @@
 #include "D2CMP/Pallete.h"
 #include "D2CMP/SRC/CelCmp.h"
 #include "D2CMP/SRC/SpriteCache.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2Client.h"
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
@@ -2328,7 +2329,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
     int32_t nClickXSaved;
     nClickXSaved = nClickX;
     int nResult;
-    nResult = UI::ui::GetMouseX();
+    nResult = Cursor::GetMouseX();
     uint32_t uResult;
     uResult = UI::Path::DRAW_GetTypeOfBorder();
     D2UnitStrc* pPlayerUnitLocal;

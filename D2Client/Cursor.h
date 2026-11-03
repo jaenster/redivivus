@@ -9,6 +9,8 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2UIMouseMsgStrc;
+struct D2UnitStrc;
 #ifndef RECON_FPTD_fpD2CursorDraw
 #define RECON_FPTD_fpD2CursorDraw
 typedef void (__stdcall *fpD2CursorDraw)();
@@ -31,7 +33,30 @@ namespace D2Client::Cursor {
 // Returns CursorData[nCursor].bAnimated. Halts (Cursor.cpp line 132, assert NUM_CURSORS == nCursorTableSize) unless gnCursorDataCount is 7, and (line 133) when nCursor >= 7.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __stdcall CURSOR_IsAnimated(int nCursor);
-int UI_GetCursorFrameOffset(int32_t nCursorIndex);
-int32_t UI_GetCursorMaxFrames(int32_t nCursorIndex);
+void __stdcall UI_HandleCursorMouseDown(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall UI_HandleCursorMouseMove(struct D2UIMouseMsgStrc * pMsgEvent);
+void __stdcall UI_HandleCursorMouseUp(struct D2UIMouseMsgStrc * pMsg);
+void __fastcall CURSOR_SetCursorItem(struct D2UnitStrc * pUnit, int32_t nAnimFrame);
+void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon);
+void __fastcall ITEM_SetItemOnHand(struct D2UnitStrc * pUnit);
+struct D2UnitStrc * __stdcall GetCursorItem();
+void __fastcall UI_InitializeCursor(int32_t nCursorType);
+void __stdcall UI_FreeCursor();
+void __stdcall UI_AnimateCursorForward();
+void __stdcall UI_AnimateCursorBackward();
+void __stdcall UI_UpdateCursorAnimation();
+void __stdcall MOUSE_DrawCursorSprite();
+void __stdcall UI_DrawCursorIcon();
+void __stdcall DrawCursor();
+void __stdcall UI_DrawCursorWithItem();
+int __stdcall GetMouseX();
+int __stdcall GetMouseY();
+// SetCursorPos(nX, nY), then caches nX in the GetMouseX global (007a6ab0) and nY in the
+// GetMouseY global (007a6aac). nX arrives in ECX, nY in EDX (00468752/00468754).
+void __fastcall UI_SetMousePosition(int32_t nX, int32_t nY);
+void __fastcall SetMouseXY(int32_t x, int32_t y);
+int __stdcall GetItemType();
+void __stdcall UI_HandleMousePositionUpdate(struct D2UIMouseMsgStrc * pMsg);
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Client::Cursor

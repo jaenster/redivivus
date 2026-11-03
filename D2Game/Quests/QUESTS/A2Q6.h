@@ -10,6 +10,8 @@
 
 // Forward declarations
 struct D2BitBufferStrc;
+struct D2ObjectInitFnArg;
+struct D2ObjectOperateFnArg;
 struct D2QuestArgStrc;
 struct D2QuestDataStrc;
 struct D2UnitStrc;
@@ -67,6 +69,32 @@ void __fastcall Q14_Callback14_PlayerJoinedGame(struct D2QuestDataStrc * pQuestD
 void __fastcall Q14_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A2Q6 "The Seven Tombs" — Q14_InitData: per-game quest init. Allocates the 0x68-byte A2Q6 specific-data block, wires the state-handler table (slot0=Callback_00 gossip, 2=Callback_02, 3=Callback_03, 8=Callback_08 chamber-enter, 0xa=Callback_10 participation, 0xb=Callback_11 main dialogue, 0xd=Callback_13 join, 0xe=Callback_14 staff-cleanup), sets fpStatusFilter/fpActiveFilter/fpSequenceFilter, nQuestIdReal=QUEST_TheSevenTombs, nInitNo=4, the NPC gossip table (Jerhyn 0xc9 / string 0x1ae), zeroes the block, nStateFlag=0. No record reads/writes here.
 void __fastcall Q14_InitData(struct D2QuestDataStrc * pQuestData);
+// Q14 (The Seven Tombs / Act2 Q6). Sends packet 0x50 QuestSpecial type 0xd to the operating player's client: the offset (Tal Rasha tomb levelId - 0x42) of the true Horadric-orifice tomb, so the client can mark the correct tomb symbol on the map. Caches the chosen tombLevelId into A2Q6 quest-specific data. No quest-state transition.
+void __fastcall Q14_SendTombLevelInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+// Q14 helper: returns the next "arcane" object classId to spawn (Tal Rasha sarcophagus/orifice decoy set: 0x133..0x139). On first call lazily fills a 6-entry ring (skipping the index matching the real tomb level), then cycles through it round-robin. Returns 0x133 if no tomb level is set yet. No quest-state transition.
+uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassId(struct D2QuestDataStrc * pQuestData);
+// @wasnamed SelectUnkownArkaneThingId - one name on two different functions.
+// @evidence Calls GetQuestDataByQuestNoInternal(QUESTINT_TheSevenTombs)
+// and then 0059d720. A wrapper that supplies the quest record.
+uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassIdForGame(::SGAMEDATA * pGame);
+// A2Q7 (The Tainted Sun) timer callback that creates the two warp portals after the Horadric Staff is placed. If the pending-create flag (offset +0xd) is set: waits for the orifice object to reach Death/open anim and fires its open event; spawns the red town-portal object (class 100) in a nearby room and toggles HasPortal flags on both rooms. On success sets portal-created flag (+0xb=1) and clears the pending flag. No quest-record state change.
+uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
+// Q14 helper: scans the victim object's room for any UNIT_WARP and walks the operating player through it (SUnit::TakeStairs). Used by the tomb-stairs operate fn.
+void __fastcall TakeStairs(struct D2ObjectOperateFnArg * pOperateArg);
+// Q14 object OperateFn: stairs/warp into the Tal Rasha tombs. Allows traversal only if The Seven Tombs isn't introduced yet OR the Duriel-area portal has already been created (field_0x0B), and the warp object is in Walk (open) anim. Calls TakeStairs. No quest-state transition.
+uint32_t __fastcall Q14_OperateStairsToTombs(struct D2ObjectOperateFnArg * pOperateArg);
+// Q14 object InitFn (Objects_InitFn37): on spawn of a Q14 quest object, records its GUID into A2Q6 data (field_0x28) and marks it present (field_0x6=1). Sets the object's client visibility/update mode: hidden(2) if quest not introduced or already-portal-created flag set, else visible(0). No quest-record state change.
+void __fastcall Objects_InitFn37(struct D2ObjectInitFnArg * pInitArg);
+// Q14 object InitFn (Objects_InitFn38): records this object's GUID into A2Q6 data and sets bAllPlayersLeft. Update mode = hidden(2) if quest not introduced, else field_0x18. No quest-record state change.
+void __fastcall Objects_InitFn38_TyraelsDoor(struct D2ObjectInitFnArg * pInitArg);
+// Q14 predicate: true if The Seven Tombs is introduced AND the Duriel/town portal has NOT yet been created (!field_0x0B). Inverse of Q14_GetPortalCreatedFlag.
+BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame);
+// Q14 object InitFn (Objects_InitFn21): orifice/Tal Rasha chamber object init. Records GUID, marks present. If the staff has been used (state byte [3]) but portal not yet created ([0xb]==0), schedules the Q14_TimerCreatePortal timer to spawn the portals and marks timer-armed. Sets object hidden(2). No quest-record state change.
+void __fastcall Objects_InitFn21_HoradricOrifice(struct D2ObjectInitFnArg * pInitArg);
+// Q14 per-party-member callback: completes The Horadric Staff quest record for one player if not already complete and the player is in Act II. Sets Completed+JustCompleted and (unless mid-trade) strips the 3 staff component quest items (hsu/vip/msf). Invoked for every party member when the staff is placed in the orifice.
+void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+// Q14 object OperateFn (OBJOP_A2Q7_OpenArcaneNpcTrade): player operates the Horadric orifice. If the object is closed (Death anim) and player not busy trading: if player holds the assembled Horadric Staff (item 'hsu '), set interact target + send packet 0x58 to open the staff-in-orifice UI; otherwise play the "can't do that" sound. Closes the interaction when the object returns to Neutral. No quest-record state change here (that happens in Q14_OnStaffUsedInOrifice).
+BOOL __fastcall OBJOP_A2Q7_OpenArcaneNpcTrade(struct D2ObjectOperateFnArg * pOperation);
 // Q14 core event: the Horadric Staff has been placed in the orifice. Completes The Horadric Staff quest record (Completed+JustCompleted) for the acting player and every party member, strips the staff component items, broadcasts event 3 (cinematic/quest log), flags Jerhyn to spawn (bShouldSpawnJerhyn) + field_0x0E, arms Q14_TimerCreatePortal (delay derived from missile 0x152 Range), and toggles HasPortal flags on the chamber rooms. This is the Seven Tombs / Tal Rasha chamber opening trigger.
 void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // 1 internal function (defined in .cpp)

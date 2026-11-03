@@ -43,7 +43,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Text.h"
 #include "D2Game/D2Game.h"
-#include "D2Game/Quests/QUESTS/A2Q7.h"
+#include "D2Game/Quests/QUESTS/A2Q6.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -346,7 +346,7 @@ void __fastcall Q19_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 BOOL __fastcall OBJOP_UseStairDirect(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
     if (pVictim && pVictim->eAnimMode.ePlayerMode == Walk) {
-      A2Q7::TakeStairs(pOperation);
+      A2Q6::TakeStairs(pOperation);
     }
 
     return 0;

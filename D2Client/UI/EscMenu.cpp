@@ -4,6 +4,7 @@
 #include "D2CMP/SRC/CelCmp.h"
 #include "D2Client/ClientModeInGame.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2GameViewStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/Engine/Gfx.h"
@@ -1140,8 +1141,8 @@ void __stdcall DRAW_EscMenu() {
         exit(-1);
       }
 
-      nMouseX = ui::GetMouseX();
-      nMouseY = ui::GetMouseY();
+      nMouseX = Cursor::GetMouseX();
+      nMouseY = Cursor::GetMouseY();
       nVerticalSpacing = gpEscMenuItemCount->nVerticalSpacing;
       nTotalItemCount = gpEscMenuItemCount->nItemCount;
       nMenuCenterY = ScreenSizeY - 0x50;

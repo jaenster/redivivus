@@ -2,6 +2,7 @@
 
 #include "D2Client/UI/Help.h"
 #include "D2Client/Core/Archive.h"
+#include "D2Client/Cursor.h"
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/Engine/Gfx.h"
 #include "D2Client/GAME/Game/Game.h"
@@ -294,8 +295,8 @@ void __stdcall HELP_HideMiniPanel() {
 }
 
 BOOL __stdcall MouseIsInRange(int32_t nSizeX, int32_t nSizeY, int32_t nX, int32_t nY) {
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nX && nMouseX <= nX + nSizeX && nMouseY >= nY - nSizeY && nMouseY <= nY) {
       return 1;
     }
@@ -387,8 +388,8 @@ void __stdcall INPUT_HelpScrollButtonDown(D2UIMouseMsgStrc * pMsg) {
 
     int nBottomY = ScreenSizeY - 0xa0;
     int nLeftX = ScreenSizeX - 0x4b;
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (!(nMouseX >= nLeftX && nMouseX <= nScreenX - 0x28 && nMouseY >= nScreenY - 0xc4 && nMouseY <= nBottomY)) {
       return;
     }
@@ -408,8 +409,8 @@ void __stdcall INPUT_HelpScrollButtonUp(D2UIMouseMsgStrc * pMsg) {
 
     int nBottomY = ScreenSizeY - 0xa0;
     int nLeftX = ScreenSizeX - 0x4b;
-    int nMouseX = ui::GetMouseX();
-    int nMouseY = ui::GetMouseY();
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
     if (!(nMouseX >= nLeftX && nMouseX <= nScreenX - 0x28 && nMouseY >= nScreenY - 0xc4 && nMouseY <= nBottomY)) {
       return;
     }
