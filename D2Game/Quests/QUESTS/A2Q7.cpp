@@ -5,19 +5,14 @@
 #include "D2Client/D2ClientStrc.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
 #include "D2Client/GAME/SCmd.h"
-#include "D2Client/UI/SkillDesc.h"
-#include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/Units.h"
 #include "D2Common/Collision.h"
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/D2InventoryStrc.h"
-#include "D2Common/D2MissilesTxt.h"
-#include "D2Common/D2MonStatsTxt.h"
 #include "D2Common/D2RoomExStrc.h"
 #include "D2Common/D2RoomStrc.h"
 #include "D2Common/D2SeedStrc.h"
-#include "D2Common/D2SkillsTxt.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/D2WaypointStrc.h"
@@ -26,15 +21,11 @@
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/Drlg.h"
-#include "D2Common/Drlg/Preset.h"
-#include "D2Common/Merc.h"
-#include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/D2ObjectInitFnArg.h"
 #include "D2Game/D2ObjectOperateFnArg.h"
-#include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/SCmd.h"
@@ -45,19 +36,14 @@
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
-#include "D2Game/UNIT/Party.h"
 #include "D2Game/UNIT/PlayerList.h"
 #include "D2Game/UNIT/SUnit.h"
-#include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
-#include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
-#include "D2Game/D2Game.h"
-#include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -72,10 +58,6 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA2Q7Strc) == 0x1, "D2_NEW_AT(D2QuestDataA2Q7Strc): the 32-bit layout must be the 0x1 bytes 1.14d allocates");
 
 
-#ifndef RECON_FPTD_fpExecuteOnUnitFunction
-#define RECON_FPTD_fpExecuteOnUnitFunction
-typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg);
-#endif
 #ifndef RECON_FPTD_fpSUnitIterateCallback
 #define RECON_FPTD_fpSUnitIterateCallback
 typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArgs);
@@ -489,76 +471,6 @@ BOOL __fastcall OBJOP_A2Q7_OpenArcaneNpcTrade(D2ObjectOperateFnArg * pOperation)
     sPacket.nUIType = '\0';
     GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pClient, &sPacket);
     return 0;
-}
-
-// Q14 core event: the Horadric Staff has been placed in the orifice. Completes The Horadric Staff quest record (Completed+JustCompleted) for the acting player and every party member, strips the staff component items, broadcasts event 3 (cinematic/quest log), flags Jerhyn to spawn (bShouldSpawnJerhyn) + field_0x0E, arms Q14_TimerCreatePortal (delay derived from missile 0x152 Range), and toggles HasPortal flags on the chamber rooms. This is the Seven Tombs / Tal Rasha chamber opening trigger.
-void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    D2MissilesTxt* pMissileTxt;
-    int nPosY;
-    int nPosX;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    /* SetQuestState(QUEST_TheHoradricStaff=0xa, Completed=0) -> staff placed in
-                         orifice: complete for acting player */ D2Common::QuestRecord::SetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheHoradricStaff, QUESTSTATE_Completed);
-    pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    /* SetQuestState(QUEST_TheHoradricStaff=0xa, JustCompleted=0xd) -> fire
-                         just-completed FX for acting player */ D2Common::QuestRecord::SetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheHoradricStaff, QUESTSTATE_JustCompleted);
-    QUEST_RemoveQuestItemFromPlayer(pGame, pUnit, 0x20747368);
-    QUEST_RemoveQuestItemFromPlayer(pGame, pUnit, 0x20706976);
-    QUEST_RemoveQuestItemFromPlayer(pGame, pUnit, 0x2066736d);
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnit);
-    if (nPartyId != 0xffff) {
-      UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q14_CompleteHoradricStaffOnPartyMember, 0);
-    }
-
-    NotifyPlayersAboutEvent(pGame, 3);
-    if (sgptDataTable->nTxtMissilesSize <= 0x152) {
-      pMissileTxt = 0;
-    } else {
-      pMissileTxt = sgptDataTable->pTxtMissiles + 0x152;
-    }
-
-    short int nMissileRange = pMissileTxt->Range;
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
-    D2QuestDataA2Q6Strc* pA2Q4Data = pQuestData->pQuestSpecificData.pA2Q6;
-    pA2Q4Data->field_0xD = 1;
-    pA2Q4Data->bStaffInserted = 1;
-    if (!pA2Q4Data->bPortalTimerArmed) {
-      AddQuestTimer(pQuestData, Q14_TimerCreatePortal, (nMissileRange - 0x4b) / 0x14);
-      pA2Q4Data->bPortalTimerArmed = 1;
-    }
-
-    D2Common::Units::SetupUpdateFlag(pUnit2, 1);
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
-    if (!pRoom) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x686);
-      exit(-1);
-    }
-
-    eD2UnitType eUnitType = pUnit2->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosY = pUnit2->pPath.pStaticPath->nPosY;
-    } else if (pUnit2->pPath.pDynamicPath) {
-      nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit2->pPath.pDynamicPath);
-    } else {
-      nPosY = 0;
-    }
-
-    eUnitType = pUnit2->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPosX = pUnit2->pPath.pStaticPath->nPosX;
-    } else if (pUnit2->pPath.pDynamicPath) {
-      nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit2->pPath.pDynamicPath);
-    } else {
-      nPosX = 0;
-    }
-
-    D2RoomStrc* pRoom_00 = D2Client::UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pRoom, nPosX - 0xd, nPosY + 3);
-    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pRoom, 0);
-    if (!pRoom_00) {
-      return;
-    }
-
-    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pRoom_00, 0);
 }
 
 // IterateAllUnits callback for Q14_IsNpcStationary: if the player is within collision

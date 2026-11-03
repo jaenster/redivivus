@@ -14,7 +14,6 @@
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
 #include "D2Win/Forms.h"
-#include "D2Win/Forms/D2WinImageEx.h"
 #include "D2Win/Src/D2Comp.h"
 #include "D2Win/Src/D2WinAccountList.h"
 #include "D2Win/Src/D2WinButton.h"
@@ -269,7 +268,7 @@ D2ControlStrc * __stdcall FORMS_CreateAnyForm(FORMS_PredefinedFormStrc * pForm) 
         pAnimImage = D2WinAnimImage(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->nExtraParam, pForm->fpOnPressCallback, (FORMS_AnimFrameStrc*)pForm->pTypeArg1, pForm->nLabelAsLocaleStringId, (fpD2WinAnimImageNotify)pForm->pTypeArg2);
       return (D2ControlStrc*)pAnimImage;
       case FORM_ImageEx:
-        pImageEx = Forms::D2WinImageEx(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->nExtraParam, pForm->nLabelAsLocaleStringId);
+        pImageEx = D2WinImage::Create_D2WinImageEx(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->nExtraParam, pForm->nLabelAsLocaleStringId);
       return (D2ControlStrc*)pImageEx;
       case FORM_Scrollbar:
         pScrollbar = D2WinScrollbar::D2WinScrollbar(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->fpOnPressCallback);
@@ -322,7 +321,7 @@ void __stdcall FORMS_DestroyAnyForm(D2ControlStrc * * pForm) {
       *pForm = 0;
       return;
       case FORM_ImageEx:
-        D2WinImage::FORMS_DestroyD2WinImageEx((::D2WinImageEx*)pWinEditBox_00);
+        D2WinImage::FORMS_DestroyD2WinImageEx((D2WinImageEx*)pWinEditBox_00);
       *pForm = 0;
       return;
       case FORM_AnimImage:

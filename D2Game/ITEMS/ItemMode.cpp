@@ -83,6 +83,27 @@
 
 namespace D2Game::ITEMS::ItemMode {
 
+void * __fastcall GetSavePacketList(D2ClientStrc * pClient) {
+    if (!pClient) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7ff);
+      exit(-1);
+    }
+
+    return pClient->pSavePacketList;
+}
+
+// @wasnamed GetSavePacketList - one name on two different functions.
+// @evidence Writes pClient->pSavePacketList (line 0x80a). 00538350 reads it (line 0x7ff).
+// A setter had been given the getter's name.
+void __fastcall SetSavePacketList(D2ClientStrc * pClient, void * pSavePacketList) {
+    if (!pClient) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x80a);
+      exit(-1);
+    }
+
+    pClient->pSavePacketList = pSavePacketList;
+}
+
 D2MonStatsTxt * __fastcall GetMonsterData(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       return pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;

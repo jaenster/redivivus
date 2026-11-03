@@ -62,6 +62,7 @@
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A1Q4.h"
+#include "D2Game/Quests/QUESTS/A1Q5.h"
 #include "D2Game/Quests/QUESTS/A1Q6.h"
 #include "D2Game/Quests/QUESTS/A2Q2.h"
 #include "D2Game/Quests/QUESTS/A2Q4.h"
@@ -372,7 +373,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     &D2Game::Objects::Objects_InitFn01_Shrine,
     &D2Game::Objects::Objects_InitFn02_Urn,
     &D2Game::Objects::Objects_InitFn03_Chest,
-    &D2Game::Quests::QUESTS::A1Q6::Objects_InitFn04_TowerTome,
+    &D2Game::Quests::QUESTS::A1Q5::Objects_InitFn04_TowerTome,
     &D2Game::Objects::Objects_InitFn05_Door,
     &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn06_CairnStone,
     &D2Game::Quests::QUESTS::Objects_InitFn07_CainGibbet,

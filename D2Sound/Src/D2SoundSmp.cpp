@@ -39,6 +39,170 @@ static float gnSoundFrequency_22kHz = 2; D2_STATIC_GUARD(gnSoundFrequency_22kHz,
 static float gnSoundQuality_Low = 100; D2_STATIC_GUARD(gnSoundQuality_Low, "D2Sound::Src::D2SoundSmp::gnSoundQuality_Low");
 static double gnSoundAttenuation_Max = 0.0000999999974737875; D2_STATIC_GUARD(gnSoundAttenuation_Max, "D2Sound::Src::D2SoundSmp::gnSoundAttenuation_Max");
 
+void __fastcall SOUNDSMP_WriteToBuffer(D2SoundSmpStrc * ppSoundSmp, int nWritePos, int nLockOffset, int nBytesToWrite) {
+    // Frame slots -16..-4 are ONE object: &pBytesLocked2 is passed out and the callee reaches the rest by byte offset.
+    // Separate locals let the compiler reorder them, so the run is one struct.
+    struct __frame0_t {
+      DWORD pBytesLocked2;
+      void* pLockedBuf1;
+      void* pWriteCursor;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    __frame0_t __frame0;
+    uint32_t pChunkSize;
+    uint32_t nMinBufSize;
+    uint32_t pBufEnd;
+    __frame0.pLockedBuf1 = 0;
+    if (!ppSoundSmp || !ppSoundSmp->pDSBuffer || !ppSoundSmp->pPcmData || !nBytesToWrite) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd);
+      exit(-1);
+    }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
+    __frame0.pBytesLocked2 = nBytesToWrite;
+    HRESULT nLockResult = ppSoundSmp->pDSBuffer->lpVtbl->Lock(ppSoundSmp->pDSBuffer, nLockOffset, nBytesToWrite, &__frame0.pLockedBuf1, &__frame0.pBytesLocked2, nullptr, nullptr, 0);
+    if (nLockResult < 0) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
+      return;
+    }
+
+    __frame0.pWriteCursor = __frame0.pLockedBuf1;
+    while (true) {
+      pBufEnd = ppSoundSmp->nPcmSize;
+      if ((uint32_t)nWritePos >= pBufEnd) {
+        nMinBufSize = ppSoundSmp->nMinBufSize;
+        nWritePos = (nWritePos - nMinBufSize) % (pBufEnd - nMinBufSize) + nMinBufSize;
+      }
+
+      pChunkSize = nBytesToWrite;
+      if ((uint32_t)nBytesToWrite >= pBufEnd - nWritePos) {
+        pChunkSize = pBufEnd - nWritePos;
+      }
+
+      memcpy(__frame0.pWriteCursor, ppSoundSmp->pPcmData + nWritePos, pChunkSize);
+      ppSoundSmp->nWritePos += pChunkSize;
+      __frame0.pWriteCursor = (void*)((int)__frame0.pWriteCursor + pChunkSize);
+      nLockOffset += pChunkSize;
+      nBytesToWrite -= pChunkSize;
+      nWritePos += pChunkSize;
+      if (!ppSoundSmp->bLooping) {
+        if (!nBytesToWrite) {
+          break;
+        }
+
+        pBufEnd = ppSoundSmp->nLoopEnd;
+        if (pBufEnd != -1) {
+          if ((uint32_t)nLockOffset >= pBufEnd) {
+            break;
+          }
+
+          nBytesToWrite = pBufEnd - nLockOffset;
+        }
+        if (nBytesToWrite) {
+          memset(__frame0.pWriteCursor, 0, nBytesToWrite);
+        }
+
+        break;
+      }
+      if (!nBytesToWrite) {
+        break;
+      }
+    }
+
+    ppSoundSmp->pDSBuffer->lpVtbl->Unlock(ppSoundSmp->pDSBuffer, __frame0.pLockedBuf1, __frame0.pBytesLocked2, nullptr, 0);
+    if (!ppSoundSmp->bLooping && ppSoundSmp->nWritePos >= ppSoundSmp->nPcmSize) {
+      ppSoundSmp->bAtEnd = 1;
+    }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
+}
+
+BOOL __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, size_t nBytesToClear) {
+    void* pLockedBuf = 0;
+    if (!pSoundSmp) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14b);
+      exit(-1);
+    }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
+    HRESULT nHResult = pSoundSmp->lpVtbl->Lock(pSoundSmp, dwWriteOffset, nBytesToClear, &pLockedBuf, (DWORD*)&nBytesToClear, nullptr, nullptr, 0);
+    if (nHResult < 0) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
+      return 0;
+    }
+
+    memset(pLockedBuf, 0, nBytesToClear);
+    pSoundSmp->lpVtbl->Unlock(pSoundSmp, pLockedBuf, nBytesToClear, nullptr, 0);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
+    return 1;
+}
+
+static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc * pSoundSmp) {
+    WAVEFORMATEX tWaveFormat;
+    uint32_t dwEaxCapabilities;
+    uint8_t* pObstructionGuid;
+    IKsPropertySet** ppEaxInterface2;
+    SOUNDSMP_InitWaveFormat(&tWaveFormat, (nFlags & 1) != 0 ? 2 : 1);
+    DSBUFFERDESC tBufferDesc = {0};
+    uint32_t nBufSize = nFlags & 1 ? 0x40000 : 0x20000;
+    uint32_t uVar1 = g_nSoundSampleParam ? 0x80a0 : 0xa0;
+    uint32_t u3DFlag = nFlags & 2;
+    tBufferDesc.dwSize = 0x14;
+    if (u3DFlag) {
+      tBufferDesc.dwFlags = uVar1 | 0x14;
+    } else {
+      tBufferDesc.dwFlags = uVar1 | 0x40;
+    }
+
+    tBufferDesc.dwBufferBytes = nBufSize;
+    tBufferDesc.lpwfxFormat = &tWaveFormat;
+    IDirectSound* pDSDevice = SOUND_GetSpeakerConfigFlag();
+    HRESULT nHResult = pDSDevice->lpVtbl->CreateSoundBuffer(pDSDevice, &tBufferDesc, (void**)&pSoundSmp->pDSBuffer, nullptr);
+    if (nHResult < 0) {
+      return 0;
+    }
+    if (u3DFlag) {
+      DWORD dw3DFlag;
+      nHResult = pSoundSmp->pDSBuffer->lpVtbl->QueryInterface(pSoundSmp->pDSBuffer, (GUID*)&gIID_IDirectSound3DBuffer, (void**)&pSoundSmp->pDS3DBuffer);
+      if (nHResult < 0) {
+        pSoundSmp->pDSBuffer->lpVtbl->Release(pSoundSmp->pDSBuffer);
+        return 0;
+      }
+      if (u3DFlag) {
+        dw3DFlag = SOUND_GetSound3DFlag();
+        if (dw3DFlag) {
+          ppEaxInterface2 = &pSoundSmp->pEaxInterface;
+          nHResult = pSoundSmp->pDS3DBuffer->lpVtbl->QueryInterface(pSoundSmp->pDS3DBuffer, (GUID*)&gIID_IKsPropertySet, (void**)ppEaxInterface2);
+          if (nHResult >= 0) {
+            dwEaxCapabilities = 0;
+            dw3DFlag = SOUND_GetSoundQualityFlag();
+            if (dw3DFlag == 1) {
+              pObstructionGuid = gaEAXPropertyGuid_ObstructionParams;
+            } else {
+              pObstructionGuid = gEAXPropertyGuid_Obstruction;
+            }
+
+            nHResult = (*ppEaxInterface2)->lpVtbl->QuerySupport(*ppEaxInterface2, pObstructionGuid, 1, (ULONG*)&dwEaxCapabilities);
+            if (!(nHResult >= 0 && ((uint8_t)dwEaxCapabilities & 3) == 3)) {
+              (*ppEaxInterface2)->lpVtbl->Release(*ppEaxInterface2);
+              pSoundSmp->pDSBuffer->lpVtbl->Release(pSoundSmp->pDSBuffer);
+              return 0;
+            }
+          } else {
+            pSoundSmp->pDSBuffer->lpVtbl->Release(pSoundSmp->pDSBuffer);
+            return 0;
+          }
+        }
+      }
+    }
+
+    pSoundSmp->nBufSize = nBufSize;
+    pSoundSmp->nHalfBufSize = nBufSize >> 1;
+    pSoundSmp->dwFlags = nFlags;
+    pSoundSmp->nLoopEnd = -1;
+    return 1;
+}
+
 // @sourcefile .\Src\D2SoundSmp.cpp
 D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSampleParam) {
     g_nSoundSampleParam = dwSampleParam;

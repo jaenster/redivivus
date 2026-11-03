@@ -134,6 +134,26 @@
         "OnPress",
         "int32_t"
       ]
+    },
+    {
+      "name": "D2WINEDITBOX_Destroy",
+      "address": "004fda50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fda50"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinTimer",
+      "calledFunctions": [
+        "D2WINEDITBOX_Destroy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
     }
   ]
 }

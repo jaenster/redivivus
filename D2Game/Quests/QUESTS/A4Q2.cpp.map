@@ -769,6 +769,47 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ]
+    },
+    {
+      "name": "OBJOP_A4Q2_PandemoniumFortressGate",
+      "address": "005b5880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b5880"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A4Q2",
+      "calledFunctions": [
+        "OBJOP_A4Q2_PandemoniumFortressGate",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetupUpdateEvent_AttachEventSound",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState",
+        "SUNIT_GetClient",
+        "GetPlayerTradeTickOrBusy",
+        "ClearInteractInfo",
+        "NET_D2GS_SERVER_Send_0x5D_QuestState",
+        "NET_D2GS_SERVER_Send_0x61_CanGoToAct",
+        "LoadAreaOrSpawnPortal",
+        "QUEST_SendQuestInfoToUnit",
+        "Q23_UnlockHarrogathWaypoint"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ClientStrc",
+        "D2GSPacketSrv0x5D",
+        "D2ObjectOperateFnArg",
+        "D2RoomStrc",
+        "D2UnitDataPlayerStrc",
+        "SGAMEDATA",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ]
     }
   ]
 }

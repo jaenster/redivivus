@@ -62,6 +62,8 @@ int __stdcall LIGHTMAP_GetQualityLevel();
 // Rebuilds the lightmap for the box +/-0x18 around the UI player, then updates every live light.
 void __stdcall dLightMapUpdate();
 void __stdcall LIGHTMAP_FreeAll();
+// Client-side light-map activation callback. Iterates the gpLightMap linked list looking for dynamic (nLightType==2) entries. For each, resolves the owning unit (client- or server-side lookup via bUnknown flag) and checks whether the light radius edge (±nRadiusX>>3 cells in X and Y) touches pRoom via DRLGROOM_FindBetterNearbyRoom. If the light bleeds into pRoom, marks bPixelMapReady=0 so the renderer will rebuild the pixel map for that room on the next frame.
+void __fastcall ACTCALLBACKFN(struct D2RoomStrc * pRoom);
 // 11 internal functions (defined in .cpp)
 
 } // namespace D2Client::Draw::LightMap

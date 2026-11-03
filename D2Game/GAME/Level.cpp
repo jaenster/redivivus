@@ -13,6 +13,7 @@
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/PATH/Path.h"
@@ -41,11 +42,137 @@
 #include "globals/globals.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Common/D2SeedStrc.h"
+#include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
 namespace D2Game::GAME::Level {
+
+static void __stdcall SendRoomUnitUpdates(::SGAMEDATA * pGame, int32_t pRoomNode, D2ClientStrc * pClient) {
+    D2UnitStrc* pNextUnit;
+    if (!pRoomNode) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x44);
+      exit(-1);
+    }
+
+    D2UnitStrc* pUnit = *(D2UnitStrc**)(pRoomNode + 0x1c);
+    while (pUnit) {
+      pNextUnit = pUnit->pChangeNextUnit;
+      Clients::DispatchUnitUpdate(pGame, pClient, pUnit);
+      pUnit = pNextUnit;
+    }
+}
+
+void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
+    D2ClientStrc* pRoomEnd = pClient;
+    ::SGAMEDATA* pGameSave = pGame;
+    uint8_t bActNo = Clients::GetAct(pClient);
+    if (pGame->pAct[bActNo]->eLevelIdFirst == LEVEL_None) {
+      return;
+    }
+    if (!pRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x57);
+      exit(-1);
+    }
+
+    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, (D2RoomStrc***)&pGameSave, (int*)&pClient);
+    D2ClientStrc* pRoomIdx = 0;
+    if (!pClient) {
+      return;
+    }
+
+    do {
+      SendRoomUnitUpdates(pGame, *(int32_t*)(pGameSave->szGameName + (int)pRoomIdx * 4 - 0x2a), pRoomEnd);
+      pRoomIdx = (D2ClientStrc*)((uintptr_t)&pRoomIdx->nClientNo + 1);
+    } while (pRoomIdx < pClient);
+}
+
+// Reveals a room to a client and sends init-unit packets for all units in it. Sends SCMD 0x07 (MapReveal) with the room's level ID and tile coordinates, adds the client to the room's client count, and if this is the first or second client in the room triggers MONSTERAI_TriggerMageThink for all monsters. Then iterates the room's unit list and calls SERVER_SendInitUnitPacket for every unit except the client's own player. Halts fatally if pRoom is null.
+void __fastcall CLIENT_RevealRoomAndSendUnits(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
+    D2UnitStrc* pPlayerUnit_lcl;
+    D2DrlgRoomCoordsStrc sRoomCoords;
+    D2UnitStrc* pRoomUnit;
+    ::SGAMEDATA* pGameSave = pGame;
+    if (!pRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcf);
+      exit(-1);
+    }
+
+    {
+      eD2UnitType eUnitType;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
+      SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
+      D2Common::DUNGEON::Dungeon::DRLGROOM_AddClientToRoom(pRoom, pClient);
+      if ((uint32_t)pRoom->nClientsCount <= 1) {
+        for (pRoomUnit = pRoom->pUnitList; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
+          eUnitType = UNIT_COUNT;
+          eUnitType = pRoomUnit->eUnitType;
+          switch (eUnitType) {
+            case UNIT_MONSTER:
+              {
+                Monster::MONSTERAI_TriggerMageThink(pGameSave, pRoomUnit);
+                break;
+              }
+          }
+        }
+      }
+
+      pRoomUnit = pRoom->pUnitList;
+      pPlayerUnit_lcl = Clients::CLIENTS_GetControlUnit(pClient, 0);
+      for (; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
+        if (pPlayerUnit_lcl != pRoomUnit) {
+          UNIT::SUnitMsg::SERVER_SendInitUnitPacket(pGameSave, pRoomUnit, pClient);
+        }
+      }
+
+      return;
+    }
+}
+
+// Hides a room from a client and cleans up its units. Sends SendRemoveObject for every unit in the room, removes the client from the room's client count, and if nClientsCount drops to zero calls MONSTER_StartAiAndRegenTimers for all monsters (re-enabling AI/regen). Finally sends SCMD 0x08 (MapHide) with the room's level ID and tile coordinates. Halts fatally if pRoom is null.
+void __fastcall RoomClearForClientAndHideMap(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
+    D2DrlgRoomCoordsStrc sRoomCoords;
+    D2UnitStrc* pRoomUnit;
+    ::SGAMEDATA* pGameSave = pGame;
+    if (!pRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x104);
+      exit(-1);
+    }
+
+    {
+      eD2UnitType eUnitType;
+      for (pRoomUnit = pRoom->pUnitList; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
+        UNIT::SUnitMsg::SendRemoveObject(pRoomUnit, pClient);
+      }
+
+      D2Common::DUNGEON::Dungeon::DRLGROOM_RemoveClientFromRoom(pRoom, pClient);
+      if (!pRoom->nClientsCount) {
+        pRoomUnit = pRoom->pUnitList;
+        while (true) {
+          if (!pRoomUnit) {
+            break;
+          }
+
+          eUnitType = UNIT_COUNT;
+          eUnitType = pRoomUnit->eUnitType;
+          switch (eUnitType) {
+            case UNIT_MONSTER:
+              {
+                Monster::MONSTER_StartAiAndRegenTimers(pGameSave, pRoomUnit);
+                break;
+              }
+          }
+
+          pRoomUnit = pRoomUnit->pRoomNext;
+        }
+      }
+
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
+      SCmd::NET_D2GS_SERVER_Send_0x08_REMOVEROOM(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
+      return;
+    }
+}
 
 // Initialize DRLG act for game. Select town level (arena override), allocate act+DRLG+environment, and init Tainted Sun quest state for the act.
 static void InitDrlgAct(::SGAMEDATA * pGame, char nActNo) {

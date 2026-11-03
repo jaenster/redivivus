@@ -112,7 +112,7 @@ static void __stdcall CHATDLG_AddMultiLineText(::D2WinTextBox * pTextBox, int32_
     char* pcCur = szText;
     pcCur = pcCur + strlen(pcCur) + 1;
     if (pcCur == szText + 1 || (int)pcCur - (int)(szText + 1) < 0) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
     } else if (*szText != '\0') {
       do {
         pcCur = szText;
@@ -138,9 +138,9 @@ static void __stdcall CHATDLG_AddMultiLineText(::D2WinTextBox * pTextBox, int32_
           }
         }
 
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, szText, nColor);
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, szText, nColor);
         if (bAddBlankLine) {
-          D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
         }
         if (pcNewlinePos) {
           *pcNewlinePos = '\n';
@@ -1668,7 +1668,7 @@ void __stdcall UIMENU_LadderBoard_PrintClassesAndTableHeaders() {
     CHATDLG_ClearLadderBoard();
     pForm = FORMS_CreateAnyFormFromListEx(0x80);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pForm);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_Destroy((int*)pForm);
+    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy((int*)pForm);
     gszLadderCharNameFilter[0] = '\0';
 }
 

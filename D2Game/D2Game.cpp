@@ -19,7 +19,6 @@
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Monsters/MONSTERS.h"
-#include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Unit.h"
@@ -38,7 +37,6 @@
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A2Q3.h"
 #include "D2Game/SKILLS/SkillNec.h"
-#include "D2Game/SKILLS/SkillPal.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/Party.h"
 #include "D2Game/UNIT/PlayerList.h"
@@ -256,10 +254,6 @@ void __stdcall TASK_InitializeClock() {
     /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ gbPerformanceCounterAvailable = QueryPerformanceFrequency(&gnPerformanceFrequency);
 }
 
-void __stdcall thunk_QueryPerformanceFrequency_B() {
-    /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ gbPerformanceCounterAvailable = QueryPerformanceFrequency(&gnPerformanceFrequency);
-}
-
 // Task queue: calculates time until next scheduled task. Enters critical section for task slot (nParam & 0x1F), reads first task timestamp from priority queue, and returns delta from current timestamp.
 int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot) {
     int nTimeDelta = 100;
@@ -283,79 +277,6 @@ int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot) {
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pTaskSlot->nSlotIndex);
     return nTimeDelta;
-}
-
-uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
-    int nUnitX;
-    int nDeltaX;
-    int nUnitY;
-    int nDistSq;
-    eD2UnitType eTargetType;
-    D2AreaHitNearestCtx* pSearchContext = (D2AreaHitNearestCtx*)pContext->pCallbackArg;
-    if (pSearchContext->pfnFilter) {
-      BOOL bAccepted;
-      bAccepted = pSearchContext->pfnFilter(pContext->pGame, pTargetUnit);
-      if (!bAccepted) {
-        return 0;
-      }
-    }
-
-    eD2UnitType eUnitType = pTargetUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDeltaX = pTargetUnit->pPath.pStaticPath->nPosX;
-    } else if (pTargetUnit->pPath.pDynamicPath) {
-      nUnitX = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
-      nDeltaX = nUnitX;
-    } else {
-      nDeltaX = 0;
-    }
-
-    nDeltaX -= pSearchContext->nX;
-    eTargetType = pTargetUnit->eUnitType;
-    if (eTargetType == UNIT_OBJECT || (int)eTargetType > 3 && (int)eTargetType <= 5) {
-      nUnitY = pTargetUnit->pPath.pStaticPath->nPosY;
-    } else if (pTargetUnit->pPath.pDynamicPath) {
-      nUnitY = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
-    } else {
-      nUnitY = 0;
-    }
-
-    nUnitY -= pSearchContext->nY;
-    nDistSq = nUnitY * nUnitY + nDeltaX * nDeltaX;
-    if (nDistSq < pSearchContext->nBestDistSq) {
-      pSearchContext->nBestDistSq = nDistSq;
-      pSearchContext->pNearest = pTargetUnit;
-    }
-
-    return 1;
-}
-
-uint32_t __fastcall SKILLS_AreaEffect_IncrementHitCount(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
-    (*(int*)pContext->pCallbackArg)++;
-    return 1;
-}
-
-uint32_t __fastcall SKILLS_AreaEffect_TrackBestUnitByUnitId(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
-    uint32_t nUnitId;
-    D2AreaHitNextGUIDCtx* pNextGUIDCtx = (D2AreaHitNextGUIDCtx*)pContext->pCallbackArg;
-    if (!pTargetUnit) {
-      nUnitId = -1;
-    } else {
-      nUnitId = pTargetUnit->nUnitGUID;
-    }
-    if (nUnitId > pNextGUIDCtx->nAfterGUID && nUnitId < pNextGUIDCtx->nNextGUID) {
-      pNextGUIDCtx->nCount++;
-      pNextGUIDCtx->nNextGUID = nUnitId;
-      pNextGUIDCtx->pNext = pTargetUnit;
-      return 1;
-    }
-    if (nUnitId <= pNextGUIDCtx->nLowestGUID) {
-      pNextGUIDCtx->nLowestGUID = nUnitId;
-      pNextGUIDCtx->pLowest = pTargetUnit;
-    }
-
-    pNextGUIDCtx->nCount++;
-    return 1;
 }
 
 void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
@@ -840,33 +761,6 @@ BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
     }
 
     return 0;
-}
-
-void __fastcall QUEST_StateHandler_PlayTomeHandInSound(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int nPlayerGUID;
-    if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0xfe)) {
-      return;
-    }
-
-    D2QuestDataA3Q1Strc* pA3Q1Data = pQuestData->pQuestSpecificData.pA3Q1;
-    if (pA3Q1Data->bTomePickedUp != '\x01') {
-      return;
-    }
-
-    D2UnitStrc* pPlayerUnit = pQuestArgs->pPlayer;
-    if (!pPlayerUnit) {
-      nPlayerGUID = -1;
-    } else {
-      nPlayerGUID = pPlayerUnit->nUnitGUID;
-    }
-    if (nPlayerGUID != pA3Q1Data->nTomePickerGUID) {
-      return;
-    }
-    if (!pPlayerUnit || pPlayerUnit->nClassId != 6 && pPlayerUnit->nClassId != 5) {
-      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pQuestArgs->pPlayer, 0x43, pQuestArgs->pPlayer);
-    }
-
-    pA3Q1Data->bTomePickedUp = '\0';
 }
 
 void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {

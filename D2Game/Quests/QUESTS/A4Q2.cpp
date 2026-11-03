@@ -38,6 +38,7 @@
 #include "D2Game/Monster/MonsterMode.h"
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/PLAYER/Player.h"
+#include "D2Game/PLAYER/PlayerMsg.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/UNIT/Party.h"
@@ -1146,6 +1147,69 @@ uint32_t __fastcall Q27_IsDiabloSpawned(::SGAMEDATA * pGame) {
       return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)pQuestData->pQuestSpecificData.pA4Q2 >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q2->bDiabloKilledBroadcast);
     }
 
+    return 0;
+}
+
+// A4Q3 — OBJOP_A4Q2_PandemoniumFortressGate: operate handler for the Act4 Pandemonium Fortress gate to Act5. Gate is locked until Terror's End (QUEST_TerrorsEnd: Diablo dead) is Completed or JustCompleted; else plays the locked "can't" sound and returns. Once unlocked AND player is in Act IV: sets QUEST_AbleGoToAct5 Completed+JustCompleted (first time only), sends the 0x5D quest-state and 0x61 can-go-to-act packets, loads/portals the player to Harrogath (LEVEL_Harrogath, act 5), resyncs quest info, and unlocks the Harrogath waypoint. Expansion-only.
+// @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOperation) {
+    int32_t nTradeTick;
+    ::SGAMEDATA* pGame = pOperation->sArg.pGame;
+    if (!pGame->bExpansion) {
+      return 0;
+    }
+
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
+    /* GetQuestState(QUEST_TerrorsEnd=0x1a, JustCompleted=0xd): also accept
+                         just-killed-Diablo-this-game as unlock; else play locked sound + bail */ if (!bQuestState) {
+      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_JustCompleted);
+      if (!bQuestState) {
+        UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
+        return 0;
+      }
+    }
+
+    D2RoomStrc* pAttackerRoom = D2Common::Units::UNITS_GetRoom(pOperation->pAttacker);
+    if (!pAttackerRoom) {
+      return 0;
+    }
+
+    eD2LevelId ePlayerLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pAttackerRoom);
+    eAct ePlayerAct = D2Common::Drlg::GetActNoFromLevelNumber(ePlayerLevel);
+    if (ePlayerAct != ACT_IV) {
+      return 0;
+    }
+
+    /* GetQuestState(QUEST_AbleGoToAct5=0x1c, Completed=0): already granted Act5
+                         access? if so skip the one-time grant block */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_AbleGoToAct5, QUESTSTATE_Completed);
+    if (!bQuestState) {
+      D2ClientStrc* pPlayerClient;
+      /* SetQuestState(QUEST_AbleGoToAct5=0x1c, Completed=0): permanently grant travel
+                         to Act5/Harrogath */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct5, QUESTSTATE_Completed);
+      /* SetQuestState(QUEST_AbleGoToAct5=0x1c, JustCompleted=0xd): mark newly-granted self game (drives the 0x5D/0x61 client packets below) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct5, QUESTSTATE_JustCompleted);
+      pPlayerClient = UNIT::SUnit::SUNIT_GetClient(pOperation->pAttacker, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x55a);
+      pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
+      if (pPlayerClient) {
+        nTradeTick = PLAYER::Player::GetPlayerTradeTickOrBusy(pOperation->pAttacker);
+        if (!nTradeTick) {
+          UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
+          pPlayerData->bCutscenePending = 1;
+          D2GSPacketSrv0x5D aQuestStatePacket;
+          memset(&aQuestStatePacket, 0, sizeof(aQuestStatePacket));
+          aQuestStatePacket.nPacketId = ']';
+          aQuestStatePacket.nQuestId = '\x17';
+          aQuestStatePacket.nAlertFlags = '\x02';
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pPlayerClient, &aQuestStatePacket);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pPlayerClient, 5);
+        }
+      }
+    }
+
+    PLAYER::PlayerMsg::LoadAreaOrSpawnPortal(pOperation->sArg.pGame, pOperation->pAttacker, LEVEL_Harrogath, 5);
+    QUEST_SendQuestInfoToUnit(pOperation->sArg.pGame, pOperation->pAttacker);
+    Q23_UnlockHarrogathWaypoint(pOperation->sArg.pGame, pOperation->pAttacker);
     return 0;
 }
 

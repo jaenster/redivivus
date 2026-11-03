@@ -887,7 +887,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
     __frame0.wPacketHeader = (short int)nSaveSizePlus2;
     nSaveFileSize = (int)UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xa3b);
     int nSaveSize;
-    nSaveSize = (int)GAME::Clients::GetSavePacketList((D2ClientStrc*)nSaveFileSize);
+    nSaveSize = (int)ITEMS::ItemMode::GetSavePacketList((D2ClientStrc*)nSaveFileSize);
     int nExistingCrc;
     nExistingCrc = PLAYERSAVE_CRC32MissileTable((D2MissilesTxt*)__frame0.saveTempBuffer, nSaveFileBytes);
     if (nExistingCrc == nSaveSize) {
@@ -983,7 +983,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, uint32_t nAccountId, D2UnitS
 
     nCompareByteIdx = nSaveFileSize;
     GAME::Clients::SetRealm((D2ClientStrc*)nSaveFileSize, (void*)nRealmId);
-    GAME::Clients::SetSavePacketList((D2ClientStrc*)nCompareByteIdx, (void*)nExistingCrc);
+    ITEMS::ItemMode::SetSavePacketList((D2ClientStrc*)nCompareByteIdx, (void*)nExistingCrc);
     if (BattleNetServerService && BattleNetServerService->fpSaveDatabaseCharacter) {
       /* FARPROC lpfn for IsBadCodePtr */ _bLockResult = IsBadCodePtr((FARPROC)BattleNetServerService->fpSaveDatabaseCharacter);
       if (_bLockResult) {

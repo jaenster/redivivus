@@ -17,7 +17,6 @@ struct D2GfxSettingsStrc;
 struct D2RenderClipOutStrc;
 struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
-struct D3DTextureCacheStrc;
 struct DDSURFACEDESC;
 struct IDirectDraw;
 struct IDirectDrawPalette;
@@ -1213,9 +1212,6 @@ void __stdcall RENDERER_D3D_ResetSmackerSurfaces();
 void __stdcall RENDERER_D3D_PresentSmackerFrame();
 void __fastcall DecodeSmacker(char * szSmacker, struct D2SmackerContextStrc * pBuffer, int nVersion);
 void __fastcall PlayerSmacker(struct D2SmackerContextStrc * pContext);
-// Initializes a texture cache pool with doubly-linked free list. Allocates array of 32-byte cache entries (capped at 1024), creates surface+texture for each, links them via next/prev pointers. Returns updated memory usage.
-// @sourcefile .\Src\d3dTextureCache.cpp
-int __fastcall RENDERER_D3D_InitializeTextureCachePool(struct D3DTextureCacheStrc * pCache, int nBaseMemoryUsed, int nAvailableMemory, int nTextureWidth, int nTextureHeight);
 // 14 internal functions (defined in .cpp)
 
 } // namespace D2Direct3D::Renderer

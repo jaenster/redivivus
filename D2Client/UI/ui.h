@@ -252,7 +252,6 @@ BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive();
 void __stdcall INPUT_GambleRepairClick(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall UI_HandleHoradricCubePacket(uint8_t * pPacket);
 void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab);
-BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 void StaticInit_6caa10();
 void StaticInit_gU16ImmunityStringBuffer1();
@@ -261,6 +260,6 @@ void StaticInit_gnMonsterHealthBarValue();
 void StaticInit_WindowSizeX();
 void StaticInit_WindowSizeY();
 void StaticInit_gnUICtrlConfigScrollPosition();
-// 26 internal functions (defined in .cpp)
+// 24 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::ui

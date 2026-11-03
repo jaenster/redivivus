@@ -345,20 +345,6 @@
       ]
     },
     {
-      "name": "thunk_QueryPerformanceFrequency_B",
-      "address": "00564870",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00564870"
-        }
-      ],
-      "namespace": "D2Game",
-      "calledFunctions": [
-        "thunk_QueryPerformanceFrequency_B"
-      ]
-    },
-    {
       "name": "TASK_GetTimeUntilNextTask",
       "address": "00564be0",
       "lines": [
@@ -378,68 +364,6 @@
       "usedTypes": [
         "D2TaskQueueSlotStrc",
         "PD2TaskNodeLink",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SKILLS_AreaEffect_FindNearestUnit",
-      "address": "0056bb20",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0056bb20"
-        }
-      ],
-      "namespace": "D2Game",
-      "calledFunctions": [
-        "SKILLS_AreaEffect_FindNearestUnit",
-        "GetXPos",
-        "GetYPos"
-      ],
-      "usedTypes": [
-        "D2AreaHitNearestCtx",
-        "D2SkillCallbackContextStrc",
-        "D2UnitStrc",
-        "eD2UnitType",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SKILLS_AreaEffect_IncrementHitCount",
-      "address": "0056bc70",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0056bc70"
-        }
-      ],
-      "namespace": "D2Game",
-      "calledFunctions": [
-        "SKILLS_AreaEffect_IncrementHitCount"
-      ],
-      "usedTypes": [
-        "D2SkillCallbackContextStrc",
-        "D2UnitStrc",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SKILLS_AreaEffect_TrackBestUnitByUnitId",
-      "address": "0056bcd0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0056bcd0"
-        }
-      ],
-      "namespace": "D2Game",
-      "calledFunctions": [
-        "SKILLS_AreaEffect_TrackBestUnitByUnitId"
-      ],
-      "usedTypes": [
-        "D2AreaHitNextGUIDCtx",
-        "D2SkillCallbackContextStrc",
-        "D2UnitStrc",
         "uint32_t"
       ]
     },
@@ -968,27 +892,6 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
-    },
-    {
-      "name": "QUEST_StateHandler_PlayTomeHandInSound",
-      "address": "005b76e0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "005b76e0"
-        }
-      ],
-      "namespace": "D2Game",
-      "calledFunctions": [
-        "QUEST_StateHandler_PlayTomeHandInSound",
-        "SetupUpdateEvent_AttachEventSound"
-      ],
-      "usedTypes": [
-        "D2QuestArgStrc",
-        "D2QuestDataA3Q1Strc",
-        "D2QuestDataStrc",
-        "D2UnitStrc"
       ]
     },
     {

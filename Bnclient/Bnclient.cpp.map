@@ -89,21 +89,6 @@
       ]
     },
     {
-      "name": "BNSEND_FreeRealmQueryData",
-      "address": "0051ab80",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0051ab80"
-        }
-      ],
-      "namespace": "Bnclient",
-      "calledFunctions": [
-        "BNSEND_FreeRealmQueryData",
-        "FreeClientMemory"
-      ]
-    },
-    {
       "name": "BNSEND_FreeUserProfileData",
       "address": "0051b3b0",
       "lines": [

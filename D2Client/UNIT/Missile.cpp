@@ -588,7 +588,7 @@ void __fastcall MISSILE_FreeClientMissile(D2UnitStrc * pUnit) {
       D2Common::Unit::RemoveUnitFromRoom(pUnit);
     }
 
-    D2Common::PATH::Path::STRUCT_FreePath(nullptr, pUnit->pPath.pStaticPath);
+    D2Common::PATH::DynamicPath::STRUCT_FreePath(nullptr, pUnit->pPath.pStaticPath);
     pUnit->pPath.pStaticPath = 0;
 }
 

@@ -666,22 +666,22 @@ void __stdcall RENDERER_D3D_AllocateTextureCaches() {
       nSmackerBase = d3dFloorCache::D3DFLOOR_Initialize(&gD3DFloorTextureCache, nGenericNodeBytes, uSubtileCacheAlloc + nGenericNodeBytes, nSmackerBase * 2);
       gnTextureMemoryUsageBytes.nGlideSubtileCacheMemBytes = uVideoMemBudget;
       nSmackerBase = d3dSubtileCache::D3DSUBTILE_Initialize(&gD3DSubtileTextureCache, nSmackerBase, uVideoMemBudget + nSmackerBase, 0x800);
-      nGenericNodeBytes = RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches, nSmackerBase, (uSmallCacheAlloc - nSmackerBase) * 0x14 / 100 + nSmackerBase, 0x100, 0x100);
+      nGenericNodeBytes = d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches, nSmackerBase, (uSmallCacheAlloc - nSmackerBase) * 0x14 / 100 + nSmackerBase, 0x100, 0x100);
       nGenericCacheEnd = gD3DGenericTextureCache.aCaches[0].nMaxNodes * g_nBytesPerPixel;
       uSubtileCacheAlloc = (uint32_t)((uint64_t)((uSmallCacheAlloc - nSmackerBase) * 0x4b) * 0x51eb851f >> 0x20);
     } else {
       gnTextureMemoryUsageBytes.nTextureMemoryUsageBytes = 0;
       gnTextureMemoryUsageBytes.nGlideSubtileCacheMemBytes = 0;
       nSmackerBase = RENDERER_D3D_CreateSmackerSurfaces(0);
-      nGenericNodeBytes = RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches, nSmackerBase, (uSmallCacheAlloc - nSmackerBase) * 0x46 / 100 + nSmackerBase, 0x100, 0x100);
+      nGenericNodeBytes = d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches, nSmackerBase, (uSmallCacheAlloc - nSmackerBase) * 0x46 / 100 + nSmackerBase, 0x100, 0x100);
       nGenericCacheEnd = gD3DGenericTextureCache.aCaches[0].nMaxNodes * g_nBytesPerPixel;
       uSubtileCacheAlloc = (uint32_t)((uint64_t)((uSmallCacheAlloc - nSmackerBase) * 0x50) * 0x51eb851f >> 0x20);
     }
 
     gnTextureMemoryUsageBytes.nGlideSmallTextureCacheMemBytes = nGenericCacheEnd * 0x10000;
-    nSmackerBase = RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 1, nGenericNodeBytes, (uSubtileCacheAlloc >> 5) + nSmackerBase, 0x80, 0x80);
+    nSmackerBase = d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 1, nGenericNodeBytes, (uSubtileCacheAlloc >> 5) + nSmackerBase, 0x80, 0x80);
     gnTextureMemoryUsageBytes.nGlideMediumTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[1].nMaxNodes * g_nBytesPerPixel * 0x4000;
-    RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 2, nSmackerBase, uSmallCacheAlloc, 0x20, 0x20);
+    d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 2, nSmackerBase, uSmallCacheAlloc, 0x20, 0x20);
     gnTextureMemoryUsageBytes.nGlideLargeTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[2].nMaxNodes * g_nBytesPerPixel * 0x400;
     RENDERER_D3D_InitializeTexturePools();
     D2CMP::SRC::CelCmp::GFX_SetSpriteCacheMaxSize((size_t)(uintptr_t)d3dFloorCache::D3D_InvalidateTileCachesForEntry);
@@ -5190,63 +5190,6 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
         return;
       }
     }
-}
-
-// Initializes a texture cache pool with doubly-linked free list. Allocates array of 32-byte cache entries (capped at 1024), creates surface+texture for each, links them via next/prev pointers. Returns updated memory usage.
-// @sourcefile .\Src\d3dTextureCache.cpp
-int __fastcall RENDERER_D3D_InitializeTextureCachePool(D3DTextureCacheStrc * pCache, int nBaseMemoryUsed, int nAvailableMemory, int nTextureWidth, int nTextureHeight) {
-    int* pCurrentNode;
-    int nBytesPerTexture = g_nBytesPerPixel * nTextureWidth * nTextureHeight;
-    int nNodeIndex = (nAvailableMemory - nBaseMemoryUsed) / nBytesPerTexture;
-    pCache->nMaxNodes = nNodeIndex;
-    if (nNodeIndex >= 0x400) {
-      nNodeIndex = 0x400;
-    }
-
-    pCache->nMaxNodes = nNodeIndex;
-    D3DTextureCacheNodeStrc* _Dst = (D3DTextureCacheNodeStrc*)D2_ALLOC_AT(nNodeIndex << 5, ".\\Src\\d3dTextureCache.cpp", 0x37);
-    pCache->pNodeBuffer = _Dst;
-    memset(_Dst, 0, nNodeIndex << 5);
-    nNodeIndex = 0;
-    if (-1 < pCache->nMaxNodes - 1) {
-      BOOL bSurfaceCreated;
-      nAvailableMemory = 0;
-      do {
-        pCurrentNode = (int*)((uintptr_t)&pCache->pNodeBuffer->nIndex + nAvailableMemory);
-        *pCurrentNode = nNodeIndex;
-        if (nNodeIndex < pCache->nMaxNodes - 1) {
-          pCurrentNode[6] = (uintptr_t)&pCache->pNodeBuffer[1].nIndex + nAvailableMemory;
-        }
-        if (nNodeIndex > 0) {
-          pCurrentNode[7] = (uintptr_t)&pCache->pNodeBuffer[-1].nIndex + nAvailableMemory;
-        }
-
-        bSurfaceCreated = RENDERER_D3D_CreateSurfaceWithTexture((IDirectDrawSurface7**)(pCurrentNode + 4), (void**)(pCurrentNode + 5), nTextureWidth, nTextureHeight);
-        if (!bSurfaceCreated) {
-          if (pCurrentNode[7]) {
-            *(uint32_t*)(pCurrentNode[7] + 0x18) = 0;
-          }
-
-          pCache->nMaxNodes = nNodeIndex;
-          if (!nNodeIndex) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
-            exit(-1);
-          }
-
-          break;
-        }
-
-        nAvailableMemory += 0x20;
-        nNodeIndex++;
-      } while (nNodeIndex <= pCache->nMaxNodes - 1);
-    }
-
-    pCache->nUsedCount = 0;
-    pCache->pUsedHead = 0;
-    pCache->pUsedTail = 0;
-    pCache->pFreeHead = pCache->pNodeBuffer;
-    pCache->pFreeTail = pCache->pNodeBuffer + pCache->nMaxNodes - 1;
-    return pCache->nMaxNodes * nBytesPerTexture + nBaseMemoryUsed;
 }
 
 } // namespace D2Direct3D::Renderer

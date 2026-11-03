@@ -63,6 +63,7 @@ void __stdcall TASK_MoveTasksToSlotAndLinkSlot(struct D2TaskQueueSlotStrc * pSlo
 // Scheduled-task callback that drives one game's server tick. Looks up+locks the game by token (pTaskNode->dwUserData), runs ServerGameLoop and FlushAllClientPackets, then either reschedules itself in the per-bucket task queue (nParam&0x1f) for the next tick, or — if the game is empty/expired (idle >300s or frame in the shutdown window) — disconnects all clients (0xB0 ConnectionTerminated + cleanup), destroys the game by token, and unlinks/frees its task node. Uses the task-queue critical sections; halts via Fog ErrorManager on queue-invariant violations.
 // @sourcefile .\GAME\Task.cpp
 void __stdcall TASK_GameTickCallback(uint32_t nParam, struct D2TaskNodeStrc * pTaskNode);
+void __stdcall thunk_QueryPerformanceFrequency_B();
 // @sourcefile .\GAME\Task.cpp
 void __stdcall TASK_FreeAllSlots();
 // @sourcefile .\GAME\Task.cpp

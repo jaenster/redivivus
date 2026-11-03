@@ -450,7 +450,7 @@ void __fastcall CLIENT_FreePlayerUnit(D2UnitStrc * pUnit) {
       D2Common::Unit::RemoveUnitFromRoom(pUnit);
     }
 
-    D2Common::PATH::Path::STRUCT_FreePath(nullptr, pUnit->pPath.pStaticPath);
+    D2Common::PATH::DynamicPath::STRUCT_FreePath(nullptr, pUnit->pPath.pStaticPath);
     pUnit->pPath.pStaticPath = 0;
     CUnit::CleanupInventory(pUnit, 0);
     D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pUnit->pInventory);

@@ -10,12 +10,73 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+#ifndef D2_ALLOC_AT
+#define D2_ALLOC_AT(size, szFile, nLine) Fog::Memory::AllocClientMemory((size), (szFile), (nLine), 0)
+#endif
+
 #ifndef D2_FREE_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
 
 namespace D2Direct3D::d3dTextureCache {
+
+// Initializes a texture cache pool with doubly-linked free list. Allocates array of 32-byte cache entries (capped at 1024), creates surface+texture for each, links them via next/prev pointers. Returns updated memory usage.
+// @sourcefile .\Src\d3dTextureCache.cpp
+int __fastcall RENDERER_D3D_InitializeTextureCachePool(D3DTextureCacheStrc * pCache, int nBaseMemoryUsed, int nAvailableMemory, int nTextureWidth, int nTextureHeight) {
+    int* pCurrentNode;
+    int nBytesPerTexture = g_nBytesPerPixel * nTextureWidth * nTextureHeight;
+    int nNodeIndex = (nAvailableMemory - nBaseMemoryUsed) / nBytesPerTexture;
+    pCache->nMaxNodes = nNodeIndex;
+    if (nNodeIndex >= 0x400) {
+      nNodeIndex = 0x400;
+    }
+
+    pCache->nMaxNodes = nNodeIndex;
+    D3DTextureCacheNodeStrc* _Dst = (D3DTextureCacheNodeStrc*)D2_ALLOC_AT(nNodeIndex << 5, ".\\Src\\d3dTextureCache.cpp", 0x37);
+    pCache->pNodeBuffer = _Dst;
+    memset(_Dst, 0, nNodeIndex << 5);
+    nNodeIndex = 0;
+    if (-1 < pCache->nMaxNodes - 1) {
+      BOOL bSurfaceCreated;
+      nAvailableMemory = 0;
+      do {
+        pCurrentNode = (int*)((uintptr_t)&pCache->pNodeBuffer->nIndex + nAvailableMemory);
+        *pCurrentNode = nNodeIndex;
+        if (nNodeIndex < pCache->nMaxNodes - 1) {
+          pCurrentNode[6] = (uintptr_t)&pCache->pNodeBuffer[1].nIndex + nAvailableMemory;
+        }
+        if (nNodeIndex > 0) {
+          pCurrentNode[7] = (uintptr_t)&pCache->pNodeBuffer[-1].nIndex + nAvailableMemory;
+        }
+
+        bSurfaceCreated = Renderer::RENDERER_D3D_CreateSurfaceWithTexture((IDirectDrawSurface7**)(pCurrentNode + 4), (void**)(pCurrentNode + 5), nTextureWidth, nTextureHeight);
+        if (!bSurfaceCreated) {
+          if (pCurrentNode[7]) {
+            *(uint32_t*)(pCurrentNode[7] + 0x18) = 0;
+          }
+
+          pCache->nMaxNodes = nNodeIndex;
+          if (!nNodeIndex) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
+            exit(-1);
+          }
+
+          break;
+        }
+
+        nAvailableMemory += 0x20;
+        nNodeIndex++;
+      } while (nNodeIndex <= pCache->nMaxNodes - 1);
+    }
+
+    pCache->nUsedCount = 0;
+    pCache->pUsedHead = 0;
+    pCache->pUsedTail = 0;
+    pCache->pFreeHead = pCache->pNodeBuffer;
+    pCache->pFreeTail = pCache->pNodeBuffer + pCache->nMaxNodes - 1;
+    return pCache->nMaxNodes * nBytesPerTexture + nBaseMemoryUsed;
+}
 
 void __fastcall D3DTEXCACHE_SetPalette(D3DTextureCacheStrc * pCache, void * pPalette) {
     DWORD nResult;

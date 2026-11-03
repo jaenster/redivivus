@@ -42,7 +42,6 @@
 #include "D2Client/UI/Party.h"
 #include "D2Client/UI/Path.h"
 #include "D2Client/UI/QuestLog.h"
-#include "D2Client/UI/ShowItems.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UI/SpellSel.h"
 #include "D2Client/UI/Spinner/SpinnerWrapper.h"
@@ -3433,32 +3432,6 @@ bool __stdcall UI_ShowPopupDialog() {
     return bNotCancelled;
 }
 
-static int UI_GetCursorFrameOffset(int32_t nCursorIndex) {
-    if (gnCursorDataCount != 7) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f);
-      exit(-1);
-    }
-    if (!(nCursorIndex < 7)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x90);
-      exit(-1);
-    }
-
-    return CursorData[nCursorIndex].nFrameOffset;
-}
-
-static int32_t UI_GetCursorMaxFrames(int32_t nCursorIndex) {
-    if (gnCursorDataCount != 7) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9a);
-      exit(-1);
-    }
-    if (!(nCursorIndex < 7)) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9b);
-      exit(-1);
-    }
-
-    return CursorData[nCursorIndex].nMaxFrames << 8;
-}
-
 void __stdcall UI_HandleCursorMouseDown(D2UIMouseMsgStrc * pMsg) {
     gnCursorInitialized = 0;
     if (pMsg->nWParam == 2) {
@@ -3596,15 +3569,15 @@ void __stdcall UI_AnimateCursorForward() {
       gCursorAnimationFrame += CursorData[Cursor::nCursorDataIndex].nAnimStep;
     }
 
-    int32_t nMaxFrames = UI_GetCursorMaxFrames(nSavedCursorIndex);
+    int32_t nMaxFrames = Cursor::UI_GetCursorMaxFrames(nSavedCursorIndex);
     if (gCursorAnimationFrame < nMaxFrames) {
       return;
     }
 
-    int nFrameOffset = UI_GetCursorFrameOffset(Cursor::nCursorDataIndex);
+    int nFrameOffset = Cursor::UI_GetCursorFrameOffset(Cursor::nCursorDataIndex);
     nSavedCursorIndex = ItemTypeOnHand;
     if (nFrameOffset) {
-      nMaxFrames = UI_GetCursorMaxFrames(Cursor::nCursorDataIndex);
+      nMaxFrames = Cursor::UI_GetCursorMaxFrames(Cursor::nCursorDataIndex);
       gCursorAnimationFrame -= nMaxFrames;
       return;
     }
@@ -3632,10 +3605,10 @@ void __stdcall UI_AnimateCursorBackward() {
       return;
     }
 
-    nFrameOffset = UI_GetCursorFrameOffset(Cursor::nCursorDataIndex);
+    nFrameOffset = Cursor::UI_GetCursorFrameOffset(Cursor::nCursorDataIndex);
     if (nFrameOffset) {
       int32_t nMaxFrames;
-      nMaxFrames = UI_GetCursorMaxFrames(Cursor::nCursorDataIndex);
+      nMaxFrames = Cursor::UI_GetCursorMaxFrames(Cursor::nCursorDataIndex);
       gCursorAnimationFrame -= nMaxFrames;
       return;
     }
@@ -3913,7 +3886,7 @@ void __stdcall UI_HandleMousePositionUpdate(D2UIMouseMsgStrc * pMsg) {
       ItemTypeOnHand = 3;
       Cursor::nCursorDataIndex = 2;
       gCursorAnimationFrame = 0;
-      nMaxFrames = UI_GetCursorMaxFrames(2);
+      nMaxFrames = Cursor::UI_GetCursorMaxFrames(2);
       gCursorAnimationFrame = nMaxFrames - 0x100;
     }
 
@@ -7913,88 +7886,6 @@ void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab) {
     nHoradricCubeUIState = 1;
     gnNpcShopSecondActiveTab = nNpcShopTab;
     UI_ShowHoradricCubeTransmuteDialog();
-}
-
-BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX) {
-    int nOverlapDelta;
-    bool bOverlapX;
-    bool bOverlapY;
-    int nScreenBottom = ScreenSizeY - 0x30;
-    if (*pnX < nMinX) {
-      *pnRight += nMinX - *pnX;
-      *pnX = 6;
-    }
-    if (*pnY < 6) {
-      *pnBottom += 6 - *pnY;
-      *pnY = 6;
-    }
-
-    int iEntry = *pnRight;
-    if (iEntry >= nMaxX) {
-      nOverlapDelta = iEntry - nMaxX + 1;
-      *pnRight = iEntry - nOverlapDelta;
-      *pnX -= nOverlapDelta;
-    }
-
-    iEntry = *pnBottom;
-    if (iEntry >= nScreenBottom) {
-      *pnBottom = iEntry - (iEntry - nScreenBottom);
-      *pnY -= iEntry - nScreenBottom;
-    }
-    if (gItemDrawFlags >= 0x20) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x47);
-      exit(-1);
-    }
-
-    iEntry = 0;
-    if (gItemDrawFlags <= 0) {
-      return 1;
-    }
-
-    nOverlapDelta = *pnY;
-    int nTooltipIdx = *pnX;
-    do {
-      if (nTooltipIdx > (int)(uint32_t)gaGroundItemLabels[iEntry].nRight || *pnRight < (int)(uint32_t)gaGroundItemLabels[iEntry].nLeft) {
-        bOverlapX = false;
-      } else {
-        bOverlapX = true;
-      }
-      if (nOverlapDelta > (int)(uint32_t)gaGroundItemLabels[iEntry].nBottom || *pnBottom < (int)(uint32_t)gaGroundItemLabels[iEntry].nTop) {
-        bOverlapY = false;
-      } else {
-        bOverlapY = true;
-      }
-      if (bOverlapX && bOverlapY) {
-        if (nPlacementMode <= 6) {
-          if ((*pnBottom - nOverlapDelta) / 2 && nOverlapDelta <= nScreenBottom) {
-            nScreenBottom = gaGroundItemLabels[iEntry].nTop - *pnBottom - 3;
-            *pnY = nOverlapDelta + nScreenBottom;
-            *pnBottom += nScreenBottom;
-            return 0;
-          }
-
-          nScreenBottom = gaGroundItemLabels[iEntry].nBottom - nOverlapDelta + 5;
-          *pnY = nOverlapDelta + nScreenBottom;
-          *pnBottom += nScreenBottom;
-          return 0;
-        }
-        if ((*pnRight - nTooltipIdx) / 2 && nTooltipIdx >= nMaxX) {
-          nScreenBottom = gaGroundItemLabels[iEntry].nLeft - *pnRight - 1;
-          *pnX = nTooltipIdx + nScreenBottom;
-          *pnRight += nScreenBottom;
-          return 0;
-        }
-
-        nScreenBottom = gaGroundItemLabels[iEntry].nRight - nTooltipIdx + 1;
-        *pnX = nTooltipIdx + nScreenBottom;
-        *pnRight += nScreenBottom;
-        return 0;
-      }
-
-      iEntry++;
-    } while (iEntry < gItemDrawFlags);
-
-    return 1;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

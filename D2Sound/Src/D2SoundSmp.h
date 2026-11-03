@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2SoundSmpStrc;
+struct IDirectSoundBuffer;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 struct WAVEFORMATEX;
 #endif // _WIN32
@@ -62,6 +63,8 @@ struct IDirectSoundVtbl {
 namespace D2Sound::Src::D2SoundSmp {
 
 // Function declarations
+void __fastcall SOUNDSMP_WriteToBuffer(struct D2SoundSmpStrc * ppSoundSmp, int nWritePos, int nLockOffset, int nBytesToWrite);
+BOOL __fastcall SOUNDSMP_ClearBuffer(struct IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, size_t nBytesToClear);
 // @sourcefile .\Src\D2SoundSmp.cpp
 struct D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSampleParam);
 BOOL __fastcall SOUNDSMP_LoadWavDataIntoBuffer(struct D2SoundSmpStrc * ppSoundSmp, int * pWavData, uint32_t nWavDataSize);
@@ -105,6 +108,6 @@ float __stdcall SOUNDSMP_ClampAttenuation(float fMillibels);
 void __fastcall SOUNDSMP_InitWaveFormat(WAVEFORMATEX * pWaveFormat, WORD nChannels);
 int * __fastcall SOUNDSMP_ParseWavHeader(int * pWavData, uint32_t * pDataSize, WAVEFORMATEX * pWavFormat);
 void __fastcall SOUNDSMP_CalculateVolumeAndPan(uint32_t * pnVolume, uint32_t * pnPan, float fDeltaX, float fDeltaY, float fDeltaZ);
-// 2 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Sound::Src::D2SoundSmp

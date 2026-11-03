@@ -33,7 +33,6 @@
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/Preset.h"
-#include "D2Common/Game.h"
 #include "D2Common/INVENTORY/Inventory.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Merc.h"
@@ -1921,7 +1920,7 @@ void __fastcall NotifyPlayersAboutEvent(::SGAMEDATA * pGame, uint8_t nEventId) {
 void __fastcall QUEST_SendNpcGossipPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2GSPacketSrv0x27 sPacket0x27Buf;
     D2QuestArgStrc sQuestArgsBuf;
-    D2GSPacketSrv0x27_TextStrc* pTxtMsg = D2Common::Game::STRUCT_AllocTxtMessageForPacket0x27(pGame->pMemoryPool);
+    D2GSPacketSrv0x27_TextStrc* pTxtMsg = D2Common::Text::STRUCT_AllocTxtMessageForPacket0x27(pGame->pMemoryPool);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd22);
     sQuestArgsBuf.pGame = GAME::Clients::CLIENT_GetGame(pClient);
     sQuestArgsBuf.sQuestArgs.sNpcActivate.pTextControl = pTxtMsg;
@@ -1938,7 +1937,7 @@ void __fastcall QUEST_SendNpcGossipPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
       sPacket0x27Buf.eUnitType = (uint8_t)pTarget->eUnitType;
     }
 
-    D2Common::Game::BuildPacket0x27Messages(pTxtMsg, (uint32_t*)&sPacket0x27Buf.nMessageCount);
+    D2Common::Text::BuildPacket0x27Messages(pTxtMsg, (uint32_t*)&sPacket0x27Buf.nMessageCount);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x27_NpcInfo(pClient, &sPacket0x27Buf);
     D2Common::Text::STRUCT_FreeTxtMessageForPacket0x27(pTxtMsg);
     NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(pGame, pClient);

@@ -82,6 +82,8 @@ void __fastcall D2WINTEXTBOX_SetLineCellTextA(::D2WinTextBox * pTextBox, char * 
 void __fastcall D2WINTEXTBOX_SetLineCellTextWDirect(::D2WinTextBox * pTextBox, uint16_t * wszText, int32_t nRow, int32_t nCol);
 // @sourcefile .\Src\D2WinTextBox.cpp
 BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint16_t * wszText, int32_t nLineStyle, int32_t nAlignment);
+void __fastcall D2WINTEXTBOX_SetTextFromAnsiSimple(::D2WinTextBox * pTextBox, char * szText);
+void __fastcall D2WINTEXTBOX_SetTextFromAnsi(::D2WinTextBox * pTextBox, char * szText, int32_t nLineStyle);
 // 3 internal functions (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinTextBox

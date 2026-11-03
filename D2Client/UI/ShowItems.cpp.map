@@ -4,6 +4,27 @@
   "file": "D2Client/UI/ShowItems.cpp",
   "functions": [
     {
+      "name": "UI_DrawGroundItemTooltip",
+      "address": "004c0640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0640"
+        }
+      ],
+      "namespace": "D2Client::UI::ShowItems",
+      "calledFunctions": [
+        "UI_DrawGroundItemTooltip",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "DRAW_AltItems",
       "address": "004c0810",
       "lines": [

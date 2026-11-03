@@ -8,16 +8,18 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
-#ifndef D2_FREE_POOL_AT
-#define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
-#endif
-
 #ifndef D2_ALLOC_POOL_AT
 #define D2_ALLOC_POOL_AT(pPool, size, szFile, nLine) Fog::Memory::AllocServerMemory((pPool), (size), (szFile), (nLine), 0)
 #endif
 
 #ifndef D2_NEW_POOL_AT
 #define D2_NEW_POOL_AT(pPool, T, szFile, nLine) ((T*)D2_ALLOC_POOL_AT((pPool), sizeof(T), (szFile), (nLine)))
+#endif
+
+static_assert(sizeof(void*) != 4 || sizeof(::D2GSPacketSrv0x27_TextStrc) == 0xc, "D2_NEW_AT(D2GSPacketSrv0x27_TextStrc): the 32-bit layout must be the 0xc bytes 1.14d allocates");
+
+#ifndef D2_FREE_POOL_AT
+#define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2GSPacketSrv0x27_EntryStrc) == 0xc, "D2_NEW_AT(D2GSPacketSrv0x27_EntryStrc): the 32-bit layout must be the 0xc bytes 1.14d allocates");
@@ -29,6 +31,15 @@ typedef int32_t (__fastcall *pfnTextMessageCompare)(uint16_t * pnCodeA, uint16_t
 #endif
 
 namespace D2Common::Text {
+
+// @sourcefile .\Text\Text.cpp
+D2GSPacketSrv0x27_TextStrc * __stdcall STRUCT_AllocTxtMessageForPacket0x27(D2PoolManagerStrc * pMemory) {
+    D2GSPacketSrv0x27_TextStrc* pTxtMsg = D2_NEW_POOL_AT(pMemory, D2GSPacketSrv0x27_TextStrc, ".\\Text\\Text.cpp", 0x2b);
+    pTxtMsg->pMemory = pMemory;
+    pTxtMsg->pMessage = 0;
+    pTxtMsg->nCount = 0;
+    return pTxtMsg;
+}
 
 // @sourcefile .\Text\Text.cpp
 static void TEXT_FreeAllMessages(D2GSPacketSrv0x27_TextStrc * ppPoolManager) {
@@ -163,6 +174,42 @@ uint32_t __stdcall OVERHEAD_GetMessageType1(D2GSPacketSrv0x27_TextStrc * pGSPack
 
       pCurEntry = pCurEntry->pPrev;
     } while (true);
+}
+
+void __stdcall BuildPacket0x27Messages(D2GSPacketSrv0x27_TextStrc * pTxtMsg, uint32_t * pOutMessageData) {
+    int nSlot;
+    D2GSPacketSrv0x27_EntryStrc* pCurEntry;
+    if (!pTxtMsg) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0xed);
+      exit(-1);
+    } else if (!pOutMessageData) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0xee);
+      exit(-1);
+    } else {
+      *pOutMessageData = 0;
+      memset(pOutMessageData + 1, 0, 7 * sizeof(pOutMessageData[0]));
+      *(uint16_t*)(pOutMessageData + 8) = 0;
+      pCurEntry = pTxtMsg->pMessage;
+      nSlot = 0;
+      *(char*)pOutMessageData = (char)pTxtMsg->nCount;
+      while (true) {
+        if (!pCurEntry) {
+          return;
+        }
+        if (nSlot >= 8) {
+          break;
+        }
+
+        *(char*)((int)pOutMessageData + 2) = (char)pCurEntry->nType;
+        *(short int*)(pOutMessageData + 1) = pCurEntry->nMessage;
+        pCurEntry = pCurEntry->pPrev;
+        nSlot++;
+        pOutMessageData++;
+      }
+
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0xf8);
+      exit(-1);
+    }
 }
 
 // @sourcefile .\Text\Text.cpp

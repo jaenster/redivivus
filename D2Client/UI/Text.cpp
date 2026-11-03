@@ -51,7 +51,6 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Environment.h"
-#include "D2Common/Game.h"
 #include "D2Common/Text.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
@@ -5744,7 +5743,7 @@ void __fastcall TEXT_HandleOverheadTextPacket(D2GSPacketSrv0x27 * pPacket) {
         D2Common::Text::STRUCT_FreeTxtMessageForPacket0x27(gpOverHeadStrc);
       }
 
-      gpOverHeadStrc = D2Common::Game::STRUCT_AllocTxtMessageForPacket0x27(nullptr);
+      gpOverHeadStrc = D2Common::Text::STRUCT_AllocTxtMessageForPacket0x27(nullptr);
       D2Common::Text::StoreMessages(gpOverHeadStrc, &pPacket->nMessageCount);
       D2Common::Text::TEXT_SortMessageList(gpOverHeadStrc);
       return;

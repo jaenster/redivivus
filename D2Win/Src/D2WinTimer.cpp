@@ -143,4 +143,13 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
     return pTimer;
 }
 
+void __fastcall D2WINEDITBOX_Destroy(int * pEditBox) {
+    if (*pEditBox != 8) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45);
+      exit(-1);
+    }
+
+    pEditBox[8] = (int)D2WINTIMER_GetElapsed;
+}
+
 } // namespace D2Win::Src::D2WinTimer

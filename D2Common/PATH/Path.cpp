@@ -27,17 +27,12 @@
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
-#include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
-
-#ifndef D2_FREE_POOL_AT
-#define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
-#endif
 
 
 namespace D2Common::PATH::Path {
@@ -301,10 +296,6 @@ uint32_t PATH_CanMonsterPathInArea(D2UnitStrc * pUnit, uint16_t * pPathData) {
 
     BOOL bIsTown = DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
     return (uint32_t)!bIsTown;
-}
-
-void __stdcall STRUCT_FreePath(D2PoolManagerStrc * pMemory, void * pPath) {
-    D2_FREE_POOL_AT(pMemory, pPath, ".\\PATH\\Path.cpp", 0x3d9);
 }
 
 // DRLGPATH_UpdateUnitRoom - Checks if a unit's current position is still within its room's bounds. If not, finds the correct room via DRLGROOM_FindBetterNearbyRoom and transfers the unit to the new room.

@@ -46,6 +46,10 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+#ifndef D2_FREE_POOL_AT
+#define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
+#endif
+
 #ifndef D2_ALLOC_POOL_AT
 #define D2_ALLOC_POOL_AT(pPool, size, szFile, nLine) Fog::Memory::AllocServerMemory((pPool), (size), (szFile), (nLine), 0)
 #endif
@@ -58,6 +62,10 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2DynamicPathStrc) == 0x200, "D2_NE
 
 
 namespace D2Common::PATH::DynamicPath {
+
+void __stdcall STRUCT_FreePath(D2PoolManagerStrc * pMemory, void * pPath) {
+    D2_FREE_POOL_AT(pMemory, pPath, ".\\PATH\\Path.cpp", 0x3d9);
+}
 
 static int32_t PATH_GetCollisionPatternFromMonStats(D2UnitStrc * pUnit) {
     D2MonStatsTxt* pMonStatsTxt;

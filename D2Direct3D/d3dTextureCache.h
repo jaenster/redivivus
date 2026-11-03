@@ -37,6 +37,9 @@ struct D3DTextureCacheStrc {
 namespace D2Direct3D::d3dTextureCache {
 
 // Function declarations
+// Initializes a texture cache pool with doubly-linked free list. Allocates array of 32-byte cache entries (capped at 1024), creates surface+texture for each, links them via next/prev pointers. Returns updated memory usage.
+// @sourcefile .\Src\d3dTextureCache.cpp
+int __fastcall RENDERER_D3D_InitializeTextureCachePool(struct D3DTextureCacheStrc * pCache, int nBaseMemoryUsed, int nAvailableMemory, int nTextureWidth, int nTextureHeight);
 void __fastcall D3DTEXCACHE_SetPalette(struct D3DTextureCacheStrc * pCache, void * pPalette);
 struct D3DTextureCacheNodeStrc * __fastcall D3DTEXCACHE_RemoveNodeByIndex(struct D3DTextureCacheStrc * pCache, int nIndex);
 void __fastcall D3DTEXCACHE_InvalidateByIndex(struct D3DTextureCacheStrc * pCache, int nIndex);

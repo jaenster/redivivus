@@ -4,11 +4,11 @@
  */
 
 #include "globals/globals.h"
-#include "Bnclient/BNGatewayAccess.h"
 #include "Bnclient/BnDownload.h"
 #include "Bnclient/BnMessQueue.h"
 #include "Bnclient/BnSend.h"
 #include "Bnclient/Bnet.h"
+#include "Bnclient/Cache.h"
 #include "Bnclient/Debug.h"
 #include "Bnclient/SRP.h"
 #include "Bnclient/net_sid.h"
@@ -77,9 +77,9 @@ D2BNetClientCallbacksStrc sgBNetClientCallbacks = {
     /* .pfnSendResetPassword = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x5A_ResetPassword,
     /* .pfnSendChangeEmail = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x5B_ChangeEmail,
     /* .pfnSendLeaveGame = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x1F_LeaveGame,
-    /* .pfnCacheFreeMem = */ (fnCacheFreeMem)&Bnclient::BNGatewayAccess::CACHE_FreeMem,
-    /* .pfnCacheReadData = */ (fnCacheReadData)&Bnclient::BNGatewayAccess::CACHE_ReadData,
-    /* .pfnCacheWriteData = */ (fnCacheWriteData)&Bnclient::BNGatewayAccess::CACHE_WriteData,
+    /* .pfnCacheFreeMem = */ (fnCacheFreeMem)&Bnclient::Cache::CACHE_FreeMem,
+    /* .pfnCacheReadData = */ (fnCacheReadData)&Bnclient::Cache::CACHE_ReadData,
+    /* .pfnCacheWriteData = */ (fnCacheWriteData)&Bnclient::Cache::CACHE_WriteData,
     /* .pfnReserved = */ nullptr
 }; D2_GLOBAL_GUARD(sgBNetClientCallbacks, "sgBNetClientCallbacks");
 

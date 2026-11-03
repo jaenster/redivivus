@@ -50,7 +50,6 @@
 #include "D2Game/Ai/AiGeneral.h"
 #include "D2Game/Ai/D2AiGeneralStrc.h"
 #include "D2Game/D2DamageStrc.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/D2StateExArgStrc.h"
 #include "D2Game/GAME/Clients.h"
@@ -558,6 +557,51 @@ BOOL __fastcall SKILLS_ApplyAreaDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     return 1;
 }
 
+uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
+    int nUnitX;
+    int nDeltaX;
+    int nUnitY;
+    int nDistSq;
+    eD2UnitType eTargetType;
+    D2AreaHitNearestCtx* pSearchContext = (D2AreaHitNearestCtx*)pContext->pCallbackArg;
+    if (pSearchContext->pfnFilter) {
+      BOOL bAccepted;
+      bAccepted = pSearchContext->pfnFilter(pContext->pGame, pTargetUnit);
+      if (!bAccepted) {
+        return 0;
+      }
+    }
+
+    eD2UnitType eUnitType = pTargetUnit->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nDeltaX = pTargetUnit->pPath.pStaticPath->nPosX;
+    } else if (pTargetUnit->pPath.pDynamicPath) {
+      nUnitX = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
+      nDeltaX = nUnitX;
+    } else {
+      nDeltaX = 0;
+    }
+
+    nDeltaX -= pSearchContext->nX;
+    eTargetType = pTargetUnit->eUnitType;
+    if (eTargetType == UNIT_OBJECT || (int)eTargetType > 3 && (int)eTargetType <= 5) {
+      nUnitY = pTargetUnit->pPath.pStaticPath->nPosY;
+    } else if (pTargetUnit->pPath.pDynamicPath) {
+      nUnitY = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
+    } else {
+      nUnitY = 0;
+    }
+
+    nUnitY -= pSearchContext->nY;
+    nDistSq = nUnitY * nUnitY + nDeltaX * nDeltaX;
+    if (nDistSq < pSearchContext->nBestDistSq) {
+      pSearchContext->nBestDistSq = nDistSq;
+      pSearchContext->pNearest = pTargetUnit;
+    }
+
+    return 1;
+}
+
 // @sourcefile .\SKILLS\Skills.cpp
 D2UnitStrc * __fastcall SKILLS_ApplyAreaHitAtUnit(::SGAMEDATA * nGame, D2UnitStrc * pUnit, int32_t nRange, fpAreaHitUnitFilter nSkillLevel) {
     D2AreaHitNearestCtx sNearestCtx;
@@ -590,11 +634,39 @@ D2UnitStrc * __fastcall SKILLS_ApplyAreaHitAtUnit(::SGAMEDATA * nGame, D2UnitStr
     return sNearestCtx.pNearest;
 }
 
+uint32_t __fastcall SKILLS_AreaEffect_IncrementHitCount(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
+    (*(int*)pContext->pCallbackArg)++;
+    return 1;
+}
+
 // @sourcefile .\SKILLS\Skills.cpp
 eD2MissileHitFlags __fastcall SKILLS_ApplyAreaHitAtPos(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nRadius, uint32_t nCollisionFlags) {
     eD2MissileHitFlags eHitFlags = 0;
     SKILLS_ApplyAreaEffect(pGame, pUnit, nX, nY, nRadius, nCollisionFlags | 0xa783, SKILLS_AreaEffect_IncrementHitCount, &eHitFlags, 0, ".\\SKILLS\\Skills.cpp", 0x2e0);
     return eHitFlags;
+}
+
+uint32_t __fastcall SKILLS_AreaEffect_TrackBestUnitByUnitId(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
+    uint32_t nUnitId;
+    D2AreaHitNextGUIDCtx* pNextGUIDCtx = (D2AreaHitNextGUIDCtx*)pContext->pCallbackArg;
+    if (!pTargetUnit) {
+      nUnitId = -1;
+    } else {
+      nUnitId = pTargetUnit->nUnitGUID;
+    }
+    if (nUnitId > pNextGUIDCtx->nAfterGUID && nUnitId < pNextGUIDCtx->nNextGUID) {
+      pNextGUIDCtx->nCount++;
+      pNextGUIDCtx->nNextGUID = nUnitId;
+      pNextGUIDCtx->pNext = pTargetUnit;
+      return 1;
+    }
+    if (nUnitId <= pNextGUIDCtx->nLowestGUID) {
+      pNextGUIDCtx->nLowestGUID = nUnitId;
+      pNextGUIDCtx->pLowest = pTargetUnit;
+    }
+
+    pNextGUIDCtx->nCount++;
+    return 1;
 }
 
 // Returns the unit in the radius whose GUID is the smallest above nAfterGUID, else the lowest GUID at or below it (cycles targets); *pnUnitCount = units visited. Asm 0056bd49..0056bd7e.

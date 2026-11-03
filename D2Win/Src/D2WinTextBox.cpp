@@ -1622,4 +1622,38 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
     }
 }
 
+void __fastcall D2WINTEXTBOX_SetTextFromAnsiSimple(::D2WinTextBox * pTextBox, char * szText) {
+    int nClearCount;
+    uint16_t* pBufCursor;
+    uint16_t wszWorkBuf[1024];
+    if (!pTextBox) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x109);
+      exit(-1);
+    }
+
+    for (nClearCount = 0; nClearCount < 0x400; nClearCount++) {
+      wszWorkBuf[nClearCount] = L'\0';
+    }
+
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszWorkBuf, szText, 0x400);
+    D2WinTextBox::SetText(pTextBox, wszWorkBuf, 4, false, 0);
+}
+
+void __fastcall D2WINTEXTBOX_SetTextFromAnsi(::D2WinTextBox * pTextBox, char * szText, int32_t nLineStyle) {
+    int nClearCount;
+    uint16_t* pBufCursor;
+    uint16_t wszWorkBuf[1024];
+    for (nClearCount = 0; nClearCount < 0x400; nClearCount++) {
+      wszWorkBuf[nClearCount] = L'\0';
+    }
+
+    if (!pTextBox) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11e);
+      exit(-1);
+    }
+
+    D2Lang::Unicode::UNISYS::STRING_ConvertCharToWchar(wszWorkBuf, szText, 0x400);
+    D2WinTextBox::SetText(pTextBox, wszWorkBuf, nLineStyle, false, 0);
+}
+
 } // namespace D2Win::Src::D2WinTextBox

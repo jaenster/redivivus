@@ -215,12 +215,12 @@ void __stdcall OOGUTIL_OpenChannelDialog() {
     gpCtlChannelList = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x3e);
     uint8_t* pbChannelList = (uint8_t*)pNetworkUnknown->pfnSendGetChannelList((uint8_t)(char)D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & 0x20);
     if (D2IniData_multiplayer->padding_0x35F[0x22]) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlChannelList, (char*)(D2IniData_multiplayer->padding_0x35F + 0x22));
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlChannelList, (char*)(D2IniData_multiplayer->padding_0x35F + 0x22));
     }
     if (D2IniData_multiplayer->padding_0x35F[2]) {
       nCmpResult = strcmp((char*)(D2IniData_multiplayer->padding_0x35F + 0x22), (char*)(D2IniData_multiplayer->padding_0x35F + 2));
       if (nCmpResult) {
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlChannelList, (char*)(D2IniData_multiplayer->padding_0x35F + 2));
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlChannelList, (char*)(D2IniData_multiplayer->padding_0x35F + 2));
       }
     }
 
@@ -240,7 +240,7 @@ void __stdcall OOGUTIL_OpenChannelDialog() {
       pbCmpA = D2IniData_multiplayer->padding_0x35F + 2;
       pbCmpB = pbChannelList;
       if (!*pbCmpA || (nCmpResult = strcmp((char*)pbCmpB, (char*)pbCmpA) , nCmpResult != 0)) {
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlChannelList, (char*)pbChannelList);
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlChannelList, (char*)pbChannelList);
       }
 
       byCur = *pbChannelList;
@@ -1358,7 +1358,7 @@ void __stdcall OOGMENU_RefreshGameListDisplay() {
     if (gnFilteredGameListCount > 0) {
       pwEntryPort = &gbLanGameListEntryNamePadding[0].wDisplayedCount;
       do {
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOOGGameListTextBox, (char*)(pwEntryPort - 0x18));
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOOGGameListTextBox, (char*)(pwEntryPort - 0x18));
         nLastLineIndex = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetLastLineIndex(gpOOGGameListTextBox);
         if (bHasPeer) {
           _itoa((uint32_t)*pwEntryPort, szPortText, 10);
@@ -1421,8 +1421,8 @@ static void OOGUTIL_ShowGameListEntryDetails(int32_t nEntryIndex) {
     char* pbDescEnd = gbLanGameListEntryNamePadding2[nEntryIndex].szDescription;
     pbDescEnd = pbDescEnd + strlen(pbDescEnd) + 1;
     if (pbDescEnd != gbLanGameListEntryNamePadding2[nEntryIndex].szDescription + 1) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, gbLanGameListEntryNamePadding2[nEntryIndex].szDescription);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, gbLanGameListEntryNamePadding2[nEntryIndex].szDescription);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
     }
 
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpOogGameListDetailsPanelControl, 0);
@@ -1448,13 +1448,13 @@ void __fastcall OOGMENU_DisplayGameDetails(D2McpGameInfoStrc * pGameInfo) {
     char* pszCurPlayerName = pGameInfo->szGameDescription;
     pszCurPlayerName = pszCurPlayerName + strlen(pszCurPlayerName) + 1;
     if (pszCurPlayerName != pGameInfo->szGameDescription + 1) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, pGameInfo->szGameDescription);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, pGameInfo->szGameDescription);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
     }
 
     uint32_t nFmtLevel = pGameInfo->dwElapsedSeconds;
     sprintf(szFormatBuffer, "Elapsed Time: %d:%02d:%02d", nFmtLevel / 0xe10, (int)(nFmtLevel % 0xe10 / 0x3c), nFmtLevel % 0x3c);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
     uint8_t byLevelMax = pGameInfo->nLevelRange;
     if (byLevelMax < 100) {
       int nLevelRangeLow;
@@ -1474,23 +1474,23 @@ void __fastcall OOGMENU_DisplayGameDetails(D2McpGameInfoStrc * pGameInfo) {
         sprintf(szFormatBuffer, "Level %d", (uint32_t)pGameInfo->nLevelMin);
       }
 
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
     }
 
     byLevelMax = pGameInfo->nMaxPlayers;
     if (byLevelMax > 0 && byLevelMax < 8) {
       sprintf(szFormatBuffer, "Up to %d Players", (uint32_t)byLevelMax);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, szFormatBuffer);
     }
 
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, "");
     int nPlayerIndex = 0;
     if (pGameInfo->nPlayerCount > 0) {
       pwCurPlayerLevel = pGameInfo->awPlayerLevel;
       szText = pGameInfo->aszPlayerName;
       do {
         if ((*szText)[0] != '\0') {
-          D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, *szText);
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOogGameListDetailsPanelControl, *szText);
           switch (pwCurPlayerLevel[-0x10]) {
             case 0:
               nFmtLevel = (uint32_t)*pwCurPlayerLevel;
@@ -1526,7 +1526,7 @@ void __fastcall OOGMENU_DisplayGameDetails(D2McpGameInfoStrc * pGameInfo) {
           }
 
           sprintf(szFormatBuffer, pszCurPlayerName, nFmtLevel);
-          D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpOogGameListDetailsPanelControl, szFormatBuffer, 5);
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpOogGameListDetailsPanelControl, szFormatBuffer, 5);
         }
 
         nPlayerIndex++;
@@ -2300,27 +2300,27 @@ int __stdcall UIMENU_DialogWindowChatCommands() {
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b0);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b1);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b2);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b3);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b4);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b5);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b6);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b7);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b8);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b34);
@@ -2335,207 +2335,207 @@ int __stdcall UIMENU_DialogWindowChatCommands() {
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2bd);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     }
 
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2be);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2bf);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c0);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c1);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c2);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c3);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c4);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c5);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c6);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c7);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c8);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2c9);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2ca);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2cb);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2cc);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2cd);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2ce);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2cf);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2d0);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2d1);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2d2);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x276c);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x276d);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2d3);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     if (!bIsExpansion) {
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2d4);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b26);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b27);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b28);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2714);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2715);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2da);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b21);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b22);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2db);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2dc);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2716);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2717);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2df);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2718);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2719);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2e2);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2e3);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2e4);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2e5);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2e6);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2e7);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2e8);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2e9);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2ea);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x271a);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2ec);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2ed);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2ee);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x271b);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2f0);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x271c);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2f2);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2f3);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2f4);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x271d);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x271e);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2f7);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2f8);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2f9);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2fa);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2fb);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2fc);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2fd);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2fe);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2ff);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x300);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x301);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x271f);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x303);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x304);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x305);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x306);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x307);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x2b23);
@@ -2562,7 +2562,7 @@ int __stdcall UIMENU_DialogWindowChatCommands() {
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
       pwszLine = D2Lang::StrTable::strtable::GetLocaleString(0x313);
       D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpChatCommandsTextBox, pwszLine);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpChatCommandsTextBox, " ", 0);
     }
 
     gpChatCommandsOKButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070ea70);
@@ -2641,7 +2641,7 @@ void __stdcall OOGUTIL_RequestGameListFromServer() {
           } while (byScan);
 
           if (gpOOGGameListTextBox) {
-            D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOOGGameListTextBox, (char*)pbField);
+            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpOOGGameListTextBox, (char*)pbField);
           }
           if (!pbField) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xad);
@@ -2918,7 +2918,7 @@ void __stdcall UIMENU_WaitInLine() {
                           */ gpCtlGameNameLabelOrQueueStatus = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070ead0);
     pwszClearCursor = D2Lang::StrTable::strtable::GetLocaleString(0x2b0f);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpCtlGameNameLabelOrQueueStatus, pwszClearCursor);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpCtlGameNameLabelOrQueueStatus, " ", 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpCtlGameNameLabelOrQueueStatus, " ", 0);
     for (nClearIter = 0; nClearIter < 200; nClearIter++) {
       wszMessageBuffer[nClearIter] = L'\0';
     }
@@ -3231,7 +3231,7 @@ void __fastcall OOGUTIL_CreateEditProfileDialog(char * szCharacterName, int nHar
     gnProfileDialogMode = 2;
     gpProfileEditBackground = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e680);
     gpProfileEditAccountName = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e6b0);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileEditAccountName, pszLastAccount);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileEditAccountName, pszLastAccount);
     gpProfileEditSex = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e6e0);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpProfileEditSex, szSex);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpProfileEditSex, 8);
@@ -3347,17 +3347,17 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     gnProfileDialogMode = 1;
     gpProfileViewBackground = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e770);
     gpProfileViewAccountName = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e7a0);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewAccountName, pszAccountName);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewAccountName, pszAccountName);
     gpProfileViewSex = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e7d0);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewSex, szSex);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewSex, szSex);
     gpProfileViewLocation = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e800);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewLocation, szLocation);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewLocation, szLocation);
     gpProfileViewDescription = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e830);
     __frame0.wCrLfDelim = 0xa0d;
     __frame0.byTokenDelimNul = 0;
     char* pszDescLine = strtok(szDescription, (char*)&__frame0.wCrLfDelim);
     while (pszDescLine) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewDescription, pszDescLine);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileViewDescription, pszDescLine);
       pszDescLine = strtok(nullptr, (char*)&__frame0.wCrLfDelim);
     }
 

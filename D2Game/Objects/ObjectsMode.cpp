@@ -77,7 +77,7 @@
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A2Q4.h"
-#include "D2Game/Quests/QUESTS/A2Q7.h"
+#include "D2Game/Quests/QUESTS/A2Q6.h"
 #include "D2Game/Quests/QUESTS/A5Q5.h"
 #include "D2Game/SKILLS/SkillsServer.h"
 #include "D2Game/UNIT/Item.h"
@@ -3248,7 +3248,7 @@ int __fastcall _x44PacketHandler(::SGAMEDATA * pGame, DWORD dwPlayerGUID, DWORD 
                 pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pObject->nClassId);
                 if (pObject->nClassId == 0x98) {
                   D2Common::Units::SetupUpdateFlag(pObject, 2);
-                  Quests::QUESTS::A2Q7::Q14_OnStaffUsedInOrifice(pGame, pPlayer, pObject);
+                  Quests::QUESTS::A2Q6::Q14_OnStaffUsedInOrifice(pGame, pPlayer, pObject);
                   return 1;
                 }
 

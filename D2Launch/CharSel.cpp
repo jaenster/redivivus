@@ -19,7 +19,6 @@
 #include "D2Win/DC6Block.h"
 #include "D2Win/Src/D2Comp.h"
 #include "D2Win/Src/D2WinButton.h"
-#include "D2Win/Src/D2WinEditBox.h"
 #include "D2Win/Src/D2WinImage.h"
 #include "D2Win/Src/D2WinMain.h"
 #include "D2Win/Src/D2WinPalette.h"
@@ -39,7 +38,6 @@
 #include "globals/globals.h"
 #include "Bnclient/net_sid.h"
 #include "D2Client/UI/EscMenu.h"
-#include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/D2WinTimer.h"
@@ -416,7 +414,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
           pcSrc = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)ePlayerClass, pCharSel->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pCharSel->nCharacterFlags & 0x20);
           pDVar1 = pCharSel;
           if (pcSrc) {
-            D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], pcSrc, (wCharFlags & 4 ? -3 : 0) + 4);
+            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], pcSrc, (wCharFlags & 4 ? -3 : 0) + 4);
           }
 
           strcat(szNameBuf, pCharSel->szCharname);
@@ -429,7 +427,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
             sprintf(pcDst, " {%s}", pCharSel->szGuildTag);
           }
 
-          D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], szNameBuf, (wCharFlags & 4 ? -3 : 0) + 4);
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], szNameBuf, (wCharFlags & 4 ? -3 : 0) + 4);
           CHARSEL_GetClassNameString((uint32_t)pCharSel->ePlayerClassID, wszClassName);
           for (nTextArg0 = 0; nTextArg0 < 0x64; nTextArg0++) {
             wszLineBuf[nTextArg0] = L'\0';
@@ -657,7 +655,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
               sprintf(pcCopySrc, " {%s}", pCharSelIter->szGuildTag);
             }
 
-            D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharIndex], sLineBuf.szNameBuf, (wCharFlags & 4 ? -3 : 0) + 4);
+            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharIndex], sLineBuf.szNameBuf, (wCharFlags & 4 ? -3 : 0) + 4);
             CHARSEL_GetClassNameString((uint32_t)pCharEntry->ePlayerClassID, wszClassName);
             pLineBufCursor = &sLineBuf;
             for (nLoopIdx = 0x32; pCharEntry = pCharSelIter , nLoopIdx != 0; nLoopIdx--) {
@@ -1035,7 +1033,7 @@ int __stdcall CHARSEL_UpdateSelectionExpansion() {
     }
 
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpaCharSelectDisplay, pCharSel->szCharname, 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpaCharSelectDisplay, pCharSel->szCharname, 0);
     return 1;
 }
 
@@ -1205,7 +1203,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
           pCharSelCopy = (D2CharSelStrc*)szTmpBuf;
         }
 
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpaCharSelectDisplay, pCharSelCopy->szCharname, 0);
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpaCharSelectDisplay, pCharSelCopy->szCharname, 0);
         D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelDeleteButton);
         CHARSEL_GetClassNameString((uint32_t)gpCharSelPendingEntry->ePlayerClassID, wszClassName);
         Fog::File::CONTAINER_InitializeBuffer(wszLineBuf, 2, 100, MainMenus::STRING_ZeroOneWCHAR);
@@ -1761,7 +1759,7 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
         if (nRealmCount) {
           pTimerForm = MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
           D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimerForm);
-          D2Win::Src::D2WinEditBox::D2WINEDITBOX_Destroy((int*)pTimerForm);
+          D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy((int*)pTimerForm);
           gpCharSelStatusTextBox = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x94);
           gnCharSelScrollOffset = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x95);
           MainMenus::FORMS_CreateAnyFormFromListExEx(0x69);
@@ -1986,7 +1984,7 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
           break;
         }
 
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpWinTextBoxRealmSelect, szRealmName);
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpWinTextBoxRealmSelect, szRealmName);
         nNameCmpResult = Storm::Source::SSTR::SStrCmpI(PreferredClosedRealm, szRealmName, 0x7fffffff);
         if (!nNameCmpResult) {
           D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpWinTextBoxRealmSelect, nRealmIndex);
@@ -2236,7 +2234,7 @@ void __fastcall CHARSEL_LoadCharList(char * szText) {
     gnCharSelLoadedCharCount = 0;
     if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpControlCharSelList);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpControlCharSelList, szText, 0);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpControlCharSelList, szText, 0);
       CHARSEL_RequestRealmCharList(szText);
       CHARSEL_UpdateSelectedCharDisplay();
       DRAW_LocalCharsInSelectionScreen0();
@@ -2293,7 +2291,7 @@ void __stdcall CHARSEL_InitCharSelScreen() {
       if (bIsExpansion) {
         pExpansionIcon = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(nSlotIndex + 0x8c);
         gaCharSelExpansionIconControls[nSlotIndex] = (D2ControlStrc*)pExpansionIcon;
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(pExpansionIcon, " ");
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(pExpansionIcon, " ");
       }
 
       D2Win::Src::D2WinPalette::D2WINPAL_SetGammaRamp(1);
@@ -2374,7 +2372,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     D2ControlStrc* pTimerControl;
     pTimerControl = MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimerControl);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_Destroy((int*)pTimerControl);
+    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy((int*)pTimerControl);
     D2IniData_launcher->nDifficulty = 0;
     gpCharSelExitButton = MainMenus::FORMS_CreateAnyFormFromListExEx(0x7c);
     gpCtlCharSelDownArrow = (::D2WinButton*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7d);

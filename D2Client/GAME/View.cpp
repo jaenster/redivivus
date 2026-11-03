@@ -28,7 +28,6 @@
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
 #include "D2Common/Drlg/D2DrlgStrc.h"
 #include "D2Common/Drlg/Transform.h"
-#include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/Seed.h"
 #include "D2Common/Units.h"
 #include "D2Game/GAME/Event.h"
@@ -44,8 +43,6 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Common/Unit.h"
-#include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -65,83 +62,6 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2GameViewStrc) == 0xeabc, "D2_NEW_
 
 
 namespace D2Client::GAME::View {
-
-// Client-side light-map activation callback. Iterates the gpLightMap linked list looking for dynamic (nLightType==2) entries. For each, resolves the owning unit (client- or server-side lookup via bUnknown flag) and checks whether the light radius edge (±nRadiusX>>3 cells in X and Y) touches pRoom via DRLGROOM_FindBetterNearbyRoom. If the light bleeds into pRoom, marks bPixelMapReady=0 so the renderer will rebuild the pixel map for that room on the next frame.
-void __fastcall ACTCALLBACKFN(D2RoomStrc * pRoom) {
-    D2UnitStrc* pUnit;
-    D2RoomStrc* pUnitRoom;
-    int nUnitX;
-    int nUnitY;
-    D2RoomStrc* pNearbyRoom;
-    int nRadiusCells;
-    eD2UnitType eLightUnitType;
-    D2LightMapStrc* pLightMap = D2Client::Draw::LightMap::gpLightMap;
-    do {
-      if (!pLightMap) {
-        return;
-      }
-      if (pLightMap->nLightType == 2) {
-        eLightUnitType = pLightMap->eUnitType;
-        if (eLightUnitType == UNIT_COUNT) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x591);
-          exit(-1);
-        }
-        if (pLightMap->bServerSideUnit != '\0') {
-          pUnit = UNIT::Player::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eLightUnitType);
-        } else {
-          pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eLightUnitType);
-        }
-        if (!pUnit) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x591);
-          exit(-1);
-        }
-
-        pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        if (pUnitRoom != pRoom) {
-          eLightUnitType = pUnit->eUnitType;
-          if (eLightUnitType == UNIT_OBJECT || (int)eLightUnitType > 3 && (int)eLightUnitType <= 5) {
-            nUnitX = pUnit->pPath.pStaticPath->nPosX;
-          } else if (pUnit->pPath.pDynamicPath) {
-            nUnitX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-          } else {
-            nUnitX = 0;
-          }
-
-          eLightUnitType = pUnit->eUnitType;
-          if (eLightUnitType == UNIT_OBJECT || (int)eLightUnitType > 3 && (int)eLightUnitType <= 5) {
-            nUnitY = pUnit->pPath.pStaticPath->nPosY;
-          } else if (pUnit->pPath.pDynamicPath) {
-            nUnitY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-          } else {
-            nUnitY = 0;
-          }
-
-          nRadiusCells = pLightMap->nRadiusX >> 3;
-          pNearbyRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pUnitRoom, nUnitX + nRadiusCells, nUnitY);
-          if (pNearbyRoom == pRoom) {
-            pLightMap->bPixelMapReady = 0;
-          } else {
-            pNearbyRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pUnitRoom, nUnitX - nRadiusCells, nUnitY);
-            if (pNearbyRoom == pRoom) {
-              pLightMap->bPixelMapReady = 0;
-            } else {
-              pNearbyRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pUnitRoom, nUnitX, nUnitY + nRadiusCells);
-              if (pNearbyRoom == pRoom) {
-                pLightMap->bPixelMapReady = 0;
-              } else {
-                pUnitRoom = UNIT::Player::DRLGROOM_FindBetterNearbyRoom(pUnitRoom, nUnitX, nUnitY - nRadiusCells);
-                if (pUnitRoom == pRoom) {
-                  pLightMap->bPixelMapReady = 0;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      pLightMap = pLightMap->pPrev;
-    } while (true);
-}
 
 void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * pOutIntensity, uint8_t * pOutRed, uint8_t * pOutGreen, uint8_t * pOutBlue) {
     int nCellX = (nWorldX >> 3) - gnLightmapWorldRefreshFlag;
@@ -173,7 +93,7 @@ void __stdcall DrawLight() {
 }
 
 void __stdcall VIEW_Init() {
-    D2Common::DUNGEON::Dungeon::SetActCallbackFunc(sgpDrlgAct, (::ACTCALLBACKFN)ACTCALLBACKFN);
+    D2Common::DUNGEON::Dungeon::SetActCallbackFunc(sgpDrlgAct, (::ACTCALLBACKFN)D2Client::Draw::LightMap::ACTCALLBACKFN);
     gnLightmapInterpolationState[1] = 0;
     uint32_t nLoopIdx = 1;
     do {

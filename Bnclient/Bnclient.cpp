@@ -56,15 +56,6 @@ void * __stdcall BNCLIENT_GetBnetLogFilestream() {
 }
 
 // @sourcefile .\BnSend.cpp
-void BNSEND_FreeRealmQueryData() {
-    if (gpRealmQueryData) {
-      D2_FREE_AT(gpRealmQueryData, ".\\BnSend.cpp", 0x19a);
-    }
-
-    gpRealmQueryData = 0;
-}
-
-// @sourcefile .\BnSend.cpp
 void BNSEND_FreeUserProfileData() {
     if (gpBNetWriteUserData) {
       D2_FREE_AT(gpBNetWriteUserData, ".\\BnSend.cpp", 0x3b2);

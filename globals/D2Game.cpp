@@ -1404,7 +1404,7 @@ D2ObjectOperateFnFunc OBJECTSOPERATEFN[101] = {
     &D2Game::Quests::QUESTS::A5Q6::OBJOP_A5Q6_WorldstoneLevelTransition,
     &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_WorldstoneStairPortal,
     &D2Game::Quests::QUESTS::A5Q6::OBJOP_A5Q6_TyraelPortalToEnd,
-    &D2Game::Quests::QUESTS::A4Q3::OBJOP_A4Q2_PandemoniumFortressGate,
+    &D2Game::Quests::QUESTS::A4Q2::OBJOP_A4Q2_PandemoniumFortressGate,
     nullptr,
     nullptr,
     nullptr,

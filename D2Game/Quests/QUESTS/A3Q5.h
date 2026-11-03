@@ -20,10 +20,6 @@ struct SGAMEDATA;
 namespace D2Game::Quests::QUESTS::A3Q5 {
 
 // Function declarations
-// Q21_Callback_08 (GOLDEN BIRD helper; src=a3q4.cpp) — quest-state[8]=boss-killed handler for Quest "The Golden Bird" (Q1, internal Q21). NOT Blackened Temple. On a tracked Council/boss kill while bCouncilMemberTracking && bKhalimsWillComplete: if killer hasn't already Completed the quest, force-drops the Jade Figurine (dwDropItemCode 0x2034336a = "j34 " / jade fig) as a shield-slot reward. On success: clears handler[8], increments killer-GUID list, clears bKhalimsWillComplete, and if nStateFlag==0 advances internal stateFlag 0->1; if nStateFlagPrev==0 broadcasts state 1 (RewardAwaits) via A3Q4::Q21_PlayerNotifyCompleted. Stops council tracking.
-// State transitions: stateFlag 0->1, broadcast progress state 1.
-// @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp
-void __fastcall Q21_Callback08_MonsterKilled(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Q21_CheckGoldenBirdDropConditions (GOLDEN BIRD helper, Q1/internal Q21) — gate that arms the Jade Figurine drop on a boss/Council kill. Returns 1 if the bird drop should be armed: requires bIsNotIntroduction, bBirdDropEnabled, bCanDropBird, AND that the "Blade of the Old Religion" (Gidbinn) quest has NOT failed its Tainted-Sun start. On success: attaches the Golden Bird quest to the killed unit, installs Q21_Callback_08 as handler[8], clears bCanDropBird, sets bBossKillTracking, records killer GUID. No GetQuestState/SetQuestState here.
 void __fastcall Q21_CheckGoldenBirdDropConditions(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit);
 // Q22_OnCouncilMemberKilled (BLACKENED TEMPLE / Travincal council, internal Q22) — on-death notifier for a tracked Council member. Reads quest-specific data off the game (offset 0x18); if its byte[2] tracking flag is set and the killer's GUID (param2 unit field [0xc], -1 if none) matches the recorded killer GUID at [4], clears tracking byte[2] and sets the "kill confirmed" byte[1]. No quest-record state calls (operates on the in-memory D2QuestDataA3Q5Strc council-kill bookkeeping).

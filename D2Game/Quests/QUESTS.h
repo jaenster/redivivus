@@ -52,14 +52,6 @@ struct D2GSPacketClt0x89 {
     /* 0x01 */ uint8_t nEventType;
 };
 
-struct D2GSPacketSrv0x5D {
-    /* 0x00 */ uint8_t nPacketId; // 0x5D
-    /* 0x01 */ uint8_t nQuestId;
-    /* 0x02 */ uint8_t nAlertFlags;
-    /* 0x03 */ uint8_t nFilterStatus;
-    /* 0x04 */ uint16_t nExtra;
-};
-
 struct D2NPCMessageStrc {
     /* 0x00 */ int nMonStatsId;
     /* 0x04 */ short nStringIndex;

@@ -14,7 +14,6 @@
 #include "D2Win/Src/D2Comp.h"
 #include "D2Win/Src/D2WinArchive.h"
 #include "D2Win/Src/D2WinEditBox.h"
-#include "D2Win/Src/D2WinImage.h"
 #include "D2Win/Src/D2WinMain.h"
 #include "D2Win/Src/D2WinScrollbar.h"
 #include "D2Win/Src/D2WinSmack.h"
@@ -23,7 +22,6 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Win/D2WinEditBox.h"
-#include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/Src/D2WinButton.h"
 #include "Fog/Engine/Application.h"
@@ -616,7 +614,7 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
 
     pszDst = D2IniData_multiplayer->szNAME;
     strcat(sLevelLineText.szNameAndTitle, D2IniData_multiplayer->szNAME);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpCtlConfirmDialog, sLevelLineText.szNameAndTitle, (uint8_t)(char)D2IniData_multiplayer->neD2PlayerStatus >> 2 & 1);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpCtlConfirmDialog, sLevelLineText.szNameAndTitle, (uint8_t)(char)D2IniData_multiplayer->neD2PlayerStatus >> 2 & 1);
     LAUNCHER_GetDifficultyNameStringId((uint32_t)D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, wszClassName);
     D2UiLevelLineTextStrc* pDVar1 = &sLevelLineText;
     for (nDifficultyDone = 0x32; nDifficultyDone; nDifficultyDone--) {

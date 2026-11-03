@@ -30,6 +30,7 @@
 #include "D2Game/PLAYER/PlayerTrade.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A3Q6.h"
+#include "D2Game/Quests/QUESTS/A4Q2.h"
 #include "D2Game/UNIT/PlayerList.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"

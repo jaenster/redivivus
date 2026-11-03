@@ -65,6 +65,23 @@ typedef void (__fastcall *pfnSkillRangeCb)(struct D2UnitStrc * pUnit, void * pCt
 #endif
 
 // Data types
+struct D2AreaHitNearestCtx {
+    /* 0x00 */ struct D2UnitStrc * pNearest;
+    /* 0x04 */ int32_t nBestDistSq; // starts at 0x7fffffff
+    /* 0x08 */ int32_t nX;
+    /* 0x0C */ int32_t nY;
+    /* 0x10 */ BOOL (__fastcall *pfnFilter)(::SGAMEDATA *, struct D2UnitStrc *); // SKILLS_ApplyAreaHitAtUnit's 4th argument (0x5d8510 SKILL_CheckCorpseCanBeConsumed)
+};
+
+struct D2AreaHitNextGUIDCtx {
+    /* 0x00 */ struct D2UnitStrc * pNext; // unit with the smallest GUID above nAfterGUID; 0056bcf0
+    /* 0x04 */ uint32_t nNextGUID; // GUID of pNext, starts 0xffffffff; unsigned compare at 0056bce4 (JNC 0056bce7)
+    /* 0x08 */ struct D2UnitStrc * pLowest; // wrap-around fallback: unit with the smallest GUID <= nAfterGUID; 0056bd00
+    /* 0x0C */ uint32_t nLowestGUID; // GUID of pLowest, starts at nAfterGUID; 0056bd23
+    /* 0x10 */ uint32_t nAfterGUID; // search starts after this GUID (-1 = from the lowest); 0056bd26
+    /* 0x14 */ int32_t nCount; // units visited, written to *pnUnitCount; 0056bd7b
+};
+
 struct __attribute__((packed)) D2BaalWaveParamStrc {
     /* 0x00 */ int nUnitFindFlags;
     /* 0x04 */ struct D2UnitStrc * pAttacker;
@@ -110,10 +127,13 @@ void __fastcall SKILLS_ApplyDamageToTarget(::SGAMEDATA * pGame, struct D2UnitStr
 uint32_t __fastcall SKILLS_ApplyDamageCallback(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pUnit);
 // @sourcefile .\SKILLS\Skills.cpp
 BOOL __fastcall SKILLS_ApplyAreaDamage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nRadius, struct D2DamageStrc * pDamage, uint32_t nCollisionFlags);
+uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
 // @sourcefile .\SKILLS\Skills.cpp
 struct D2UnitStrc * __fastcall SKILLS_ApplyAreaHitAtUnit(::SGAMEDATA * nGame, struct D2UnitStrc * pUnit, int32_t nRange, fpAreaHitUnitFilter nSkillLevel);
+uint32_t __fastcall SKILLS_AreaEffect_IncrementHitCount(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
 // @sourcefile .\SKILLS\Skills.cpp
 eD2MissileHitFlags __fastcall SKILLS_ApplyAreaHitAtPos(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nRadius, uint32_t nCollisionFlags);
+uint32_t __fastcall SKILLS_AreaEffect_TrackBestUnitByUnitId(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
 // Returns the unit in the radius whose GUID is the smallest above nAfterGUID, else the lowest GUID at or below it (cycles targets); *pnUnitCount = units visited. Asm 0056bd49..0056bd7e.
 // @sourcefile .\SKILLS\Skills.cpp
 struct D2UnitStrc * __fastcall SKILLS_FindNextUnitInAreaByGUID(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nRadius, uint32_t nCollisionFlags, uint32_t nAfterGUID, int * pnUnitCount);

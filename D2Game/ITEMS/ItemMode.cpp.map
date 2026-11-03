@@ -4,6 +4,48 @@
   "file": "D2Game/ITEMS/ItemMode.cpp",
   "functions": [
     {
+      "name": "GetSavePacketList",
+      "address": "00538350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538350"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "GetSavePacketList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SetSavePacketList",
+      "address": "00538380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00538380"
+        }
+      ],
+      "namespace": "D2Game::ITEMS::ItemMode",
+      "calledFunctions": [
+        "SetSavePacketList",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "int32_t"
+      ]
+    },
+    {
       "name": "GetMonsterData",
       "address": "0055b7e0",
       "lines": [

@@ -756,4 +756,50 @@ void __fastcall Q21_InitData(D2QuestDataStrc * pQuestData) {
     pQuestSpecificData->bCanDropBird = '\x01';
 }
 
+// Q21_Callback_08 (GOLDEN BIRD helper; src=a3q4.cpp) — quest-state[8]=boss-killed handler for Quest "The Golden Bird" (Q1, internal Q21). NOT Blackened Temple. On a tracked Council/boss kill while bCouncilMemberTracking && bKhalimsWillComplete: if killer hasn't already Completed the quest, force-drops the Jade Figurine (dwDropItemCode 0x2034336a = "j34 " / jade fig) as a shield-slot reward. On success: clears handler[8], increments killer-GUID list, clears bKhalimsWillComplete, and if nStateFlag==0 advances internal stateFlag 0->1; if nStateFlagPrev==0 broadcasts state 1 (RewardAwaits) via A3Q4::Q21_PlayerNotifyCompleted. Stops council tracking.
+// State transitions: stateFlag 0->1, broadcast progress state 1.
+// @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp
+void __fastcall Q21_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
+    int32_t nDroppedItemGUID;
+    ::SGAMEDATA* pGame;
+    D2QuestArgStrc* pQuestArgsSaved = pQuestArgs;
+    QUEST_DebugPrint(pQuestData->pGame, "killed boss for quest", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q4.cpp", 0x354);
+    D2QuestDataA3Q4Strc* pQuestSpecificDataA3Q5 = pQuestData->pQuestSpecificData.pA3Q4;
+    if (!(pQuestData->bIsNotIntroduction != '\0' && pQuestSpecificDataA3Q5->bBossKillTracking && pQuestSpecificDataA3Q5->bBirdDropEnabled)) {
+      return;
+    }
+    if (pQuestArgs->pPlayer) {
+      BOOL bAlreadyCompleted;
+      pGame = pQuestData->pGame;
+      /* GetQuestState(nQuestIdReal=Golden Bird, Completed=0): bail if killer already
+                         finished the quest, to avoid a duplicate Jade Figurine drop */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];
+      bAlreadyCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
+      pQuestArgs = pQuestArgsSaved;
+      if (bAlreadyCompleted) {
+        return;
+      }
+    }
+
+    pQuestArgs->pTarget->dwDropItemCode = 0x2034336a;
+    D2UnitStrc* pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDroppedItemGUID, nullptr, -1, 0);
+    if (pPlayerData) {
+      pQuestData->sStateFunctions.fpQuestStateHandler[8] = (QUESTCALLBACKFN)0x0;
+      pQuestSpecificDataA3Q5->nBirdItemCount++;
+      pQuestSpecificDataA3Q5->bBirdDropEnabled = false;
+      pQuestSpecificDataA3Q5->bBirdItemGiven = true;
+      if (!pQuestData->nStateFlag) {
+        QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q4.cpp", 0x36f);
+      }
+      if (!pQuestData->nStateFlagPrev) {
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, true);
+        pQuestSpecificDataA3Q5->bBossKillTracking = false;
+        return;
+      }
+    } else {
+      pQuestSpecificDataA3Q5->bCanDropBird = '\x01';
+    }
+
+    pQuestSpecificDataA3Q5->bBossKillTracking = false;
+}
+
 } // namespace D2Game::Quests::QUESTS::A3Q4

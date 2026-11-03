@@ -23,8 +23,6 @@ struct D2BNetClientCallbacksStrc * __fastcall NET_InitAndGetLobbyChatQueue();
 struct D2BNetClientCallbacksStrc * __stdcall NET_GetLobbyChatQueue();
 void * __stdcall BNCLIENT_GetBnetLogFilestream();
 // @sourcefile .\BnSend.cpp
-void BNSEND_FreeRealmQueryData();
-// @sourcefile .\BnSend.cpp
 void BNSEND_FreeUserProfileData();
 // IDEA cipher encrypt/decrypt dispatch: selects the key schedule at index nKeyScheduleIdx from g_IDEAKeySchedules (stride 0x68) and calls NET_SID_CLIENT_IDEACrypt on pPlaintext→pCiphertext. Used for SID/BNCS session encryption.
 void __fastcall NET_SID_CLIENT_IDEAEncryptDecrypt(int32_t nKeyScheduleIdx, uint16_t * pPlaintext, short * pCiphertext);

@@ -558,6 +558,35 @@
       "usedTypes": [
         "D2LightMapStrc"
       ]
+    },
+    {
+      "name": "ACTCALLBACKFN",
+      "address": "00475930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475930"
+        }
+      ],
+      "namespace": "D2Client::Draw::LightMap",
+      "calledFunctions": [
+        "ACTCALLBACKFN",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_FindClientSideUnit",
+        "UNITS_FindServerSideUnit",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "DRLGROOM_FindBetterNearbyRoom"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType"
+      ]
     }
   ]
 }

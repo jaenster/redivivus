@@ -1623,7 +1623,7 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     pUnit->pDrlgAct = pDrlgAct;
     switch (pUnit->eUnitType) {
       case UNIT_PLAYER:
-        D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
+        D2Common::PATH::DynamicPath::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
       pUnit->pPath.pStaticPath = 0;
       D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
       PLAYER::Player::PLAYER_MoveToLocationWithTimeout(pGame, pUnit, nX, nY);
@@ -1635,7 +1635,7 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
       break;
       case UNIT_MONSTER:
-        D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
+        D2Common::PATH::DynamicPath::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
       pUnit->pPath.pStaticPath = 0;
       D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
       D2Game::Monster::MONSTER_SetVelocityAndTransition(pGame, pUnit, nX, nY, 0);
@@ -1675,7 +1675,7 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         }
       break;
       case UNIT_MISSILE:
-        D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
+        D2Common::PATH::DynamicPath::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
       pUnit->pPath.pStaticPath = 0;
       D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
       break;
@@ -2218,7 +2218,7 @@ void __fastcall FreeServerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         Party::PARTY_RemoveUnitFromParty(pGame, pUnit);
         PLAYER::Player::PLAYER_FreeAllResources(pGame, pUnit);
         if (pUnit->pPath.pStaticPath) {
-          D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
+          D2Common::PATH::DynamicPath::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
           pUnit->pPath.pStaticPath = 0;
         }
 
@@ -2226,7 +2226,7 @@ void __fastcall FreeServerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         case UNIT_MONSTER:
           GAME::Targets::MONSTER_FreeUnitNodes(pGame, pUnit);
         if (pUnit->pPath.pStaticPath) {
-          D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
+          D2Common::PATH::DynamicPath::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
           pUnit->pPath.pStaticPath = 0;
         }
 
@@ -2239,7 +2239,7 @@ void __fastcall FreeServerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         break;
         case UNIT_MISSILE:
           if (pUnit->pPath.pStaticPath) {
-            D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
+            D2Common::PATH::DynamicPath::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
             pUnit->pPath.pStaticPath = 0;
           }
         MISSILES::Missiles::ClearMissileUnitData(pGame, pUnit);

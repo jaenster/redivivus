@@ -259,6 +259,21 @@
       ]
     },
     {
+      "name": "BNSEND_FreeRealmQueryData",
+      "address": "0051ab80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051ab80"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNSEND_FreeRealmQueryData",
+        "FreeClientMemory"
+      ]
+    },
+    {
       "name": "NET_SID_CLIENT_Send_0x41_QueryAdURL",
       "address": "0051abb0",
       "lines": [

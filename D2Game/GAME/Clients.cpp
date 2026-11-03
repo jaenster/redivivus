@@ -38,6 +38,7 @@
 #include "D2Game/D2ParsedTreasureClassStrc.h"
 #include "D2Game/GAME/Arena.h"
 #include "D2Game/GAME/Event.h"
+#include "D2Game/GAME/Level.h"
 #include "D2Game/GAME/SCmd.h"
 #include "D2Game/GAME/Server.h"
 #include "D2Game/GAME/Targets.h"
@@ -317,7 +318,7 @@ static void __stdcall GAME_OnClientRoomChange(D2RoomStrc * pRoom, D2ClientStrc *
           }
         }
 
-        CLIENT_RevealRoomAndSendUnits(pClient->pGame, ppNewAdjacentRooms[nNewRoomIdx], pClient);
+        Level::CLIENT_RevealRoomAndSendUnits(pClient->pGame, ppNewAdjacentRooms[nNewRoomIdx], pClient);
         nNewRoomCount = nNewRoomCountTmp;
         next_new_room:
         nNewRoomIdx++;
@@ -338,7 +339,7 @@ static void __stdcall GAME_OnClientRoomChange(D2RoomStrc * pRoom, D2ClientStrc *
           }
         }
 
-        RoomClearForClientAndHideMap(pClient->pGame, ppOldAdjacentRooms[nNewRoomIdx], pClient);
+        Level::RoomClearForClientAndHideMap(pClient->pGame, ppOldAdjacentRooms[nNewRoomIdx], pClient);
         nNewRoomCount = nNewRoomCountTmp;
         if (pClient->pRoom == ppOldAdjacentRooms[nNewRoomIdx]) {
           if (pClient->fClientFlags & 1) {
@@ -596,7 +597,7 @@ void __fastcall UpdateSingleClient(::SGAMEDATA * pGame, D2ClientStrc * pClient) 
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     GAME_SendRemoveObjectsForAdjacentRooms(pOldRoom, pClient);
-    SendAdjacentRoomUpdates(pGame, pOldRoom, pClient);
+    Level::SendAdjacentRoomUpdates(pGame, pOldRoom, pClient);
     D2Common::Stats::StatsEx::STATLIST_IterateChangedStats(pUnit, pUnit, PLAYER::PlayerMsg::SendAttributeUpdate);
     if (pUnit->eUnitFlagsEx >> 0x15 & 1) {
       ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit, 1, 1);
@@ -712,27 +713,6 @@ void __fastcall ClientSetDwSaveTo1(D2ClientStrc * pClient) {
     }
 
     pClient->dwSave = 1;
-}
-
-void * __fastcall GetSavePacketList(D2ClientStrc * pClient) {
-    if (!pClient) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7ff);
-      exit(-1);
-    }
-
-    return pClient->pSavePacketList;
-}
-
-// @wasnamed GetSavePacketList - one name on two different functions.
-// @evidence Writes pClient->pSavePacketList (line 0x80a). 00538350 reads it (line 0x7ff).
-// A setter had been given the getter's name.
-void __fastcall SetSavePacketList(D2ClientStrc * pClient, void * pSavePacketList) {
-    if (!pClient) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x80a);
-      exit(-1);
-    }
-
-    pClient->pSavePacketList = pSavePacketList;
 }
 
 // Returns the byte at pClient+0x1ad, beside the byte nAct; halts (line 2070) on NULL. Only this function and CLIENT_SetUnk0x1AD touch it.
@@ -2305,7 +2285,7 @@ void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, D2ClientStrc * pClien
 }
 
 // Routes a per-frame unit visibility update to the appropriate type-specific packet handler. If the unit's "new" flag is set and it is not the client's own player, sends an init-unit packet first (skipping missiles). Then dispatches by eUnitType: UNIT_PLAYER to PlayerModes::PacketUpdateForClient, UNIT_MONSTER to Item::PacketUpdateForClient, UNIT_OBJECT to ObjectsMode::PacketUpdateForClient, UNIT_ITEM to ItemMode::PacketUpdateForClient. Halts fatally if pUnit is null.
-static void __stdcall DispatchUnitUpdate(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit) {
+void __stdcall DispatchUnitUpdate(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit) {
     D2UnitStrc* pPlayerUnit_lcl;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15);
@@ -2339,45 +2319,6 @@ static void __stdcall DispatchUnitUpdate(::SGAMEDATA * pGame, D2ClientStrc * pCl
       case UNIT_ITEM:
         ITEMS::ItemMode::PacketUpdateForClient(pUnit, pClient);
     }
-}
-
-static void __stdcall SendRoomUnitUpdates(::SGAMEDATA * pGame, int32_t pRoomNode, D2ClientStrc * pClient) {
-    D2UnitStrc* pNextUnit;
-    if (!pRoomNode) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x44);
-      exit(-1);
-    }
-
-    D2UnitStrc* pUnit = *(D2UnitStrc**)(pRoomNode + 0x1c);
-    while (pUnit) {
-      pNextUnit = pUnit->pChangeNextUnit;
-      DispatchUnitUpdate(pGame, pClient, pUnit);
-      pUnit = pNextUnit;
-    }
-}
-
-void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
-    D2ClientStrc* pRoomEnd = pClient;
-    ::SGAMEDATA* pGameSave = pGame;
-    uint8_t bActNo = GetAct(pClient);
-    if (pGame->pAct[bActNo]->eLevelIdFirst == LEVEL_None) {
-      return;
-    }
-    if (!pRoom) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x57);
-      exit(-1);
-    }
-
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, (D2RoomStrc***)&pGameSave, (int*)&pClient);
-    D2ClientStrc* pRoomIdx = 0;
-    if (!pClient) {
-      return;
-    }
-
-    do {
-      SendRoomUnitUpdates(pGame, *(int32_t*)(pGameSave->szGameName + (int)pRoomIdx * 4 - 0x2a), pRoomEnd);
-      pRoomIdx = (D2ClientStrc*)((uintptr_t)&pRoomIdx->nClientNo + 1);
-    } while (pRoomIdx < pClient);
 }
 
 // pRoom in EAX, pClient in EDI: UNITS_SendUnitUpdateToClient for every unit in pRoom->pUnitList (pRoomNext chain); halts (line 98) on a NULL room.
@@ -2469,92 +2410,6 @@ void __fastcall FreePendingDrlgDeletes(::SGAMEDATA * pGame) {
       ppAct++;
       nActsLeft--;
     } while (nActsLeft);
-}
-
-// Reveals a room to a client and sends init-unit packets for all units in it. Sends SCMD 0x07 (MapReveal) with the room's level ID and tile coordinates, adds the client to the room's client count, and if this is the first or second client in the room triggers MONSTERAI_TriggerMageThink for all monsters. Then iterates the room's unit list and calls SERVER_SendInitUnitPacket for every unit except the client's own player. Halts fatally if pRoom is null.
-void __fastcall CLIENT_RevealRoomAndSendUnits(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
-    D2UnitStrc* pPlayerUnit_lcl;
-    D2DrlgRoomCoordsStrc sRoomCoords;
-    D2UnitStrc* pRoomUnit;
-    ::SGAMEDATA* pGameSave = pGame;
-    if (!pRoom) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcf);
-      exit(-1);
-    }
-
-    {
-      eD2UnitType eUnitType;
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
-      SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
-      D2Common::DUNGEON::Dungeon::DRLGROOM_AddClientToRoom(pRoom, pClient);
-      if ((uint32_t)pRoom->nClientsCount <= 1) {
-        for (pRoomUnit = pRoom->pUnitList; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
-          eUnitType = UNIT_COUNT;
-          eUnitType = pRoomUnit->eUnitType;
-          switch (eUnitType) {
-            case UNIT_MONSTER:
-              {
-                Monster::MONSTERAI_TriggerMageThink(pGameSave, pRoomUnit);
-                break;
-              }
-          }
-        }
-      }
-
-      pRoomUnit = pRoom->pUnitList;
-      pPlayerUnit_lcl = CLIENTS_GetControlUnit(pClient, 0);
-      for (; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
-        if (pPlayerUnit_lcl != pRoomUnit) {
-          UNIT::SUnitMsg::SERVER_SendInitUnitPacket(pGameSave, pRoomUnit, pClient);
-        }
-      }
-
-      return;
-    }
-}
-
-// Hides a room from a client and cleans up its units. Sends SendRemoveObject for every unit in the room, removes the client from the room's client count, and if nClientsCount drops to zero calls MONSTER_StartAiAndRegenTimers for all monsters (re-enabling AI/regen). Finally sends SCMD 0x08 (MapHide) with the room's level ID and tile coordinates. Halts fatally if pRoom is null.
-void __fastcall RoomClearForClientAndHideMap(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
-    D2DrlgRoomCoordsStrc sRoomCoords;
-    D2UnitStrc* pRoomUnit;
-    ::SGAMEDATA* pGameSave = pGame;
-    if (!pRoom) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x104);
-      exit(-1);
-    }
-
-    {
-      eD2UnitType eUnitType;
-      for (pRoomUnit = pRoom->pUnitList; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
-        UNIT::SUnitMsg::SendRemoveObject(pRoomUnit, pClient);
-      }
-
-      D2Common::DUNGEON::Dungeon::DRLGROOM_RemoveClientFromRoom(pRoom, pClient);
-      if (!pRoom->nClientsCount) {
-        pRoomUnit = pRoom->pUnitList;
-        while (true) {
-          if (!pRoomUnit) {
-            break;
-          }
-
-          eUnitType = UNIT_COUNT;
-          eUnitType = pRoomUnit->eUnitType;
-          switch (eUnitType) {
-            case UNIT_MONSTER:
-              {
-                Monster::MONSTER_StartAiAndRegenTimers(pGameSave, pRoomUnit);
-                break;
-              }
-          }
-
-          pRoomUnit = pRoomUnit->pRoomNext;
-        }
-      }
-
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
-      SCmd::NET_D2GS_SERVER_Send_0x08_REMOVEROOM(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
-      return;
-    }
 }
 
 void __fastcall MovementUpdateForClient(::SGAMEDATA * pGame, D2RoomStrc * * ppRoom, D2UnitStrc * pUnit) {

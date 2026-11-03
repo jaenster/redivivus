@@ -19,6 +19,46 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ]
+    },
+    {
+      "name": "UI_GetCursorFrameOffset",
+      "address": "00467e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467e40"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_GetCursorFrameOffset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "UI_GetCursorMaxFrames",
+      "address": "00467e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00467e90"
+        }
+      ],
+      "namespace": "D2Client::Cursor",
+      "calledFunctions": [
+        "UI_GetCursorMaxFrames",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
     }
   ]
 }

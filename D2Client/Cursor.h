@@ -31,5 +31,7 @@ namespace D2Client::Cursor {
 // Returns CursorData[nCursor].bAnimated. Halts (Cursor.cpp line 132, assert NUM_CURSORS == nCursorTableSize) unless gnCursorDataCount is 7, and (line 133) when nCursor >= 7.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __stdcall CURSOR_IsAnimated(int nCursor);
+int UI_GetCursorFrameOffset(int32_t nCursorIndex);
+int32_t UI_GetCursorMaxFrames(int32_t nCursorIndex);
 
 } // namespace D2Client::Cursor

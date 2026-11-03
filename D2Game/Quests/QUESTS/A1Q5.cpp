@@ -20,6 +20,7 @@
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
+#include "D2Game/D2ObjectInitFnArg.h"
 #include "D2Game/D2ObjectOperateFnArg.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Game/D2QuestGUIDStrc.h"
@@ -1053,6 +1054,22 @@ void __fastcall Q05_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->nSequenceQuestId = QUEST_ToolsOfTheTrade;
     memset(pQuestSpecificData, 0, 0x120);
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sQuestGUID);
+}
+
+// A1Q6 (Sisters to the Slaughter) object init-fn 04. Marks the quest object (Andariel-related) as updatable while the Forgotten Tower quest is still in its intro phase (!bIsNotIntroduction). Halts if quest data missing. No quest-state transitions.
+void __fastcall Objects_InitFn04_TowerTome(D2ObjectInitFnArg * pInitArg) {
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_ForgottenTower);
+    if (pQuestData) {
+      if (pQuestData->bIsNotIntroduction != '\0') {
+        return;
+      }
+
+      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 3);
+      return;
+    }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x423);
+    exit(-1);
 }
 
 } // namespace D2Game::Quests::QUESTS::A1Q5

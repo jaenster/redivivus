@@ -15,34 +15,11 @@ struct D2ObjectInitFnArg;
 struct D2QuestArgStrc;
 struct D2QuestDataStrc;
 struct D2RoomStrc;
-struct D2SkillCallbackContextStrc;
 struct D2UnitFindArgStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2States;
 typedef uint32_t eD2UnitType;
-#ifndef RECON_FPTD_fpAreaHitUnitFilter
-#define RECON_FPTD_fpAreaHitUnitFilter
-typedef BOOL (__fastcall *fpAreaHitUnitFilter)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-#endif
-
-// Data types
-struct D2AreaHitNearestCtx {
-    /* 0x00 */ struct D2UnitStrc * pNearest;
-    /* 0x04 */ int32_t nBestDistSq; // starts at 0x7fffffff
-    /* 0x08 */ int32_t nX;
-    /* 0x0C */ int32_t nY;
-    /* 0x10 */ BOOL (__fastcall *pfnFilter)(::SGAMEDATA *, struct D2UnitStrc *); // SKILLS_ApplyAreaHitAtUnit's 4th argument (0x5d8510 SKILL_CheckCorpseCanBeConsumed)
-};
-
-struct D2AreaHitNextGUIDCtx {
-    /* 0x00 */ struct D2UnitStrc * pNext; // unit with the smallest GUID above nAfterGUID; 0056bcf0
-    /* 0x04 */ uint32_t nNextGUID; // GUID of pNext, starts 0xffffffff; unsigned compare at 0056bce4 (JNC 0056bce7)
-    /* 0x08 */ struct D2UnitStrc * pLowest; // wrap-around fallback: unit with the smallest GUID <= nAfterGUID; 0056bd00
-    /* 0x0C */ uint32_t nLowestGUID; // GUID of pLowest, starts at nAfterGUID; 0056bd23
-    /* 0x10 */ uint32_t nAfterGUID; // search starts after this GUID (-1 = from the lowest); 0056bd26
-    /* 0x14 */ int32_t nCount; // units visited, written to *pnUnitCount; 0056bd7b
-};
 
 namespace D2Game {
 
@@ -83,12 +60,8 @@ void __fastcall IncrementObjectTypeCount(int * pThis, uint32_t nObjectType);
 void __fastcall PLRMODES_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 void __fastcall PARTY_RefreshPlayerListRelationships(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __stdcall TASK_InitializeClock();
-void __stdcall thunk_QueryPerformanceFrequency_B();
 // Task queue: calculates time until next scheduled task. Enters critical section for task slot (nParam & 0x1F), reads first task timestamp from priority queue, and returns delta from current timestamp.
 int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot);
-uint32_t __fastcall SKILLS_AreaEffect_FindNearestUnit(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
-uint32_t __fastcall SKILLS_AreaEffect_IncrementHitCount(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
-uint32_t __fastcall SKILLS_AreaEffect_TrackBestUnitByUnitId(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pTargetUnit);
 void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 uint32_t __fastcall UNIT_IsAlive(struct D2UnitStrc * pUnit, struct D2UnitFindArgStrc * pUnitFindArg);
 void __fastcall Q33_SetCompleteForPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
@@ -116,7 +89,6 @@ void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitS
 BOOL __fastcall Q26_PropagateCompletionToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall Objects_InitFn56_Seal(struct D2ObjectInitFnArg * pInitArg);
 BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall QUEST_StateHandler_PlayTomeHandInSound(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 BOOL __fastcall Q22_PropagateCompletionToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 BOOL __fastcall Q22_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);

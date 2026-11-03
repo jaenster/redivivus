@@ -4,30 +4,6 @@
   "file": "D2Game/Quests/QUESTS/A1Q6.cpp",
   "functions": [
     {
-      "name": "Objects_InitFn04_TowerTome",
-      "address": "00595a00",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00595a00"
-        }
-      ],
-      "namespace": "D2Game::Quests::QUESTS::A1Q6",
-      "calledFunctions": [
-        "Objects_InitFn04_TowerTome",
-        "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "D2ObjectInitFnArg",
-        "D2QuestDataStrc",
-        "int32_t"
-      ]
-    },
-    {
       "name": "Objects_InitFn47_CountessChest",
       "address": "00595a50",
       "lines": [

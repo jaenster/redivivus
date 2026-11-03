@@ -10,6 +10,7 @@
 
 // Forward declarations
 struct D2ClientStrc;
+struct D2RoomStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2LevelId;
@@ -17,6 +18,11 @@ typedef uint32_t eD2LevelId;
 namespace D2Game::GAME::Level {
 
 // Function declarations
+void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2ClientStrc * pClient);
+// Reveals a room to a client and sends init-unit packets for all units in it. Sends SCMD 0x07 (MapReveal) with the room's level ID and tile coordinates, adds the client to the room's client count, and if this is the first or second client in the room triggers MONSTERAI_TriggerMageThink for all monsters. Then iterates the room's unit list and calls SERVER_SendInitUnitPacket for every unit except the client's own player. Halts fatally if pRoom is null.
+void __fastcall CLIENT_RevealRoomAndSendUnits(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2ClientStrc * pClient);
+// Hides a room from a client and cleans up its units. Sends SendRemoveObject for every unit in the room, removes the client from the room's client count, and if nClientsCount drops to zero calls MONSTER_StartAiAndRegenTimers for all monsters (re-enabling AI/regen). Finally sends SCMD 0x08 (MapHide) with the room's level ID and tile coordinates. Halts fatally if pRoom is null.
+void __fastcall RoomClearForClientAndHideMap(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2ClientStrc * pClient);
 // Server-side act transition: warps a client's player unit to a destination act/level (e.g. waypoint/portal to another act). No-op in arena levels. Derives the target act from eLevel, lazily initializes the act's DRLG if absent, sets connection state, frees non-expansion pets, clears progressive states, spawns/finds a free room+coords (collision-checked with GetFreeCoordinates), then relinks the unit: clears old room, sends state command, sets client+unit act and pDrlgAct, tells the client to load the act, attaches the spawn room, sets the TELEPORTED flag, updates visibility, and re-manages pets at the new position. Halts via Fog::ErrorManager on failure paths.
 void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, eD2LevelId eLevel, int32_t nSpawnTypeOrMode);
 // @sourcefile .\GAME\Level.cpp
@@ -27,6 +33,6 @@ void __fastcall ProcessUnitUpdateFlags(::SGAMEDATA * pGame);
 // Counts the rooms of pGame->pAct[nAct] (DRLGROOM_GetRoomFromAct, pDrlgRoomNext chain); halts (line 660) when nAct >= 5.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall LEVEL_CountRoomsInAct(::SGAMEDATA * pGame, uint8_t nAct);
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Level

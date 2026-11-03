@@ -4,54 +4,6 @@
   "file": "D2Win/Src/D2WinImage.cpp",
   "functions": [
     {
-      "name": "D2WINTEXTBOX_SetTextFromAnsiSimple",
-      "address": "004fcf80",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004fcf80"
-        }
-      ],
-      "namespace": "D2Win::Src::D2WinImage",
-      "calledFunctions": [
-        "D2WINTEXTBOX_SetTextFromAnsiSimple",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "STRING_CopyCharToWCharWithSetMaxSize",
-        "SetText"
-      ],
-      "usedTypes": [
-        "D2WinTextBox",
-        "WCHAR",
-        "int32_t"
-      ]
-    },
-    {
-      "name": "D2WINTEXTBOX_SetTextFromAnsi",
-      "address": "004fcff0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004fcff0"
-        }
-      ],
-      "namespace": "D2Win::Src::D2WinImage",
-      "calledFunctions": [
-        "D2WINTEXTBOX_SetTextFromAnsi",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "STRING_ConvertCharToWchar",
-        "SetText"
-      ],
-      "usedTypes": [
-        "D2WinTextBox",
-        "WCHAR",
-        "int32_t"
-      ]
-    },
-    {
       "name": "D2WINTEXTBOX_SetTextW",
       "address": "004fd060",
       "lines": [
@@ -333,6 +285,28 @@
         "OnPress",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "D2WinImageEx",
+      "address": "004fd770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004fd770"
+        }
+      ],
+      "namespace": "D2Win::Src::D2WinImage",
+      "calledFunctions": [
+        "D2WinImageEx",
+        "AllocClientMemory",
+        "memset",
+        "FORMS_AddControlToGlobalList"
+      ],
+      "usedTypes": [
+        "D2WinImageEx",
+        "DC6",
+        "int32_t"
       ]
     }
   ]

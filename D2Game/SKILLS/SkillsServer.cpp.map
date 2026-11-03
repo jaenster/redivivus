@@ -215,6 +215,29 @@
       ]
     },
     {
+      "name": "SKILLS_AreaEffect_FindNearestUnit",
+      "address": "0056bb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056bb20"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillsServer",
+      "calledFunctions": [
+        "SKILLS_AreaEffect_FindNearestUnit",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2AreaHitNearestCtx",
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "SKILLS_ApplyAreaHitAtUnit",
       "address": "0056bbc0",
       "lines": [
@@ -240,6 +263,25 @@
       ]
     },
     {
+      "name": "SKILLS_AreaEffect_IncrementHitCount",
+      "address": "0056bc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056bc70"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillsServer",
+      "calledFunctions": [
+        "SKILLS_AreaEffect_IncrementHitCount"
+      ],
+      "usedTypes": [
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "SKILLS_ApplyAreaHitAtPos",
       "address": "0056bc80",
       "lines": [
@@ -258,6 +300,26 @@
         "SGAMEDATA",
         "eD2MissileHitFlags",
         "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SKILLS_AreaEffect_TrackBestUnitByUnitId",
+      "address": "0056bcd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056bcd0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillsServer",
+      "calledFunctions": [
+        "SKILLS_AreaEffect_TrackBestUnitByUnitId"
+      ],
+      "usedTypes": [
+        "D2AreaHitNextGUIDCtx",
+        "D2SkillCallbackContextStrc",
+        "D2UnitStrc",
         "uint32_t"
       ]
     },

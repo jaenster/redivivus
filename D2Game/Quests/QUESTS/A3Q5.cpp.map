@@ -4,35 +4,6 @@
   "file": "D2Game/Quests/QUESTS/A3Q5.cpp",
   "functions": [
     {
-      "name": "Q21_Callback08_MonsterKilled",
-      "address": "005bab60",
-      "lines": [
-        {
-          "line": 1,
-          "address": "005bab60"
-        }
-      ],
-      "namespace": "D2Game::Quests::QUESTS::A3Q5",
-      "calledFunctions": [
-        "Q21_Callback08_MonsterKilled",
-        "QUEST_DebugPrint",
-        "GetPlayerData",
-        "GetQuestState",
-        "ITEM_RewardItemToDrop",
-        "QUEST_SetStateFlag",
-        "QUEST_SetStateAndBroadcast"
-      ],
-      "usedTypes": [
-        "D2QuestArgStrc",
-        "D2QuestDataA3Q4Strc",
-        "D2QuestDataStrc",
-        "D2UnitDataPlayerStrc",
-        "D2UnitStrc",
-        "SGAMEDATA",
-        "int32_t"
-      ]
-    },
-    {
       "name": "Q21_CheckGoldenBirdDropConditions",
       "address": "005bac70",
       "lines": [

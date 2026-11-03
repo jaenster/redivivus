@@ -318,6 +318,27 @@
       ]
     },
     {
+      "name": "QUEST_StateHandler_PlayTomeHandInSound",
+      "address": "005b76e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b76e0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q1",
+      "calledFunctions": [
+        "QUEST_StateHandler_PlayTomeHandInSound",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataA3Q1Strc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ]
+    },
+    {
       "name": "Q18_Callback11_ScrollMessage",
       "address": "005b7740",
       "lines": [

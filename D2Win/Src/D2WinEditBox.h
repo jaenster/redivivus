@@ -33,7 +33,6 @@ typedef void (__stdcall *fpD2WinEditBoxSubmit)(uint16_t * wszText);
 namespace D2Win::Src::D2WinEditBox {
 
 // Function declarations
-void __fastcall D2WINEDITBOX_Destroy(int * pEditBox);
 uint32_t __fastcall D2WINEDITBOX_GetTextLength(uint16_t * pwChar);
 void __fastcall FORMS_DestroyD2WinEditBox(::D2WinEditBox * pWinEditBox);
 // Sets pEditBox->fpFilterCallback (+0x268), the per-key filter HandleKeyPress calls with (pEditBox, nCursorIndex, pointer to the key char) and whose 0 rejects the key. Every caller passes a code address in EDX (0042fde0, 0042fe60, 0042ff00, 00430590, 0042fef0, 0043dba0). Halts on NULL or a non-edit-box control.

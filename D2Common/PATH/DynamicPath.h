@@ -21,6 +21,7 @@ typedef uint32_t eD2UnitType;
 namespace D2Common::PATH::DynamicPath {
 
 // Function declarations
+void __stdcall STRUCT_FreePath(struct D2PoolManagerStrc * pMemory, void * pPath);
 int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx);
 int32_t __stdcall GetInteractSize(struct D2UnitStrc * pUnit, int32_t nSizeX);
 void __fastcall PATH_SetDirection(struct D2DynamicPathStrc * pDynamicPath, uint8_t bRawDirection);

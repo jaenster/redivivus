@@ -4,6 +4,7 @@
 #include "Bnclient/BNGatewayAccess.h"
 #include "Bnclient/BnMessQueue.h"
 #include "Bnclient/BnSend.h"
+#include "Bnclient/Cache.h"
 #include "Bnclient/Debug.h"
 #include "D2Client/D2BNetGatewayAccessStr.h"
 #include "D2Hell/D2Hell.h"
@@ -347,7 +348,7 @@ static BOOL __stdcall BnetDownloadFile(SOCKET hSocket, char * szText, FILETIME *
       } while (nBytesReceived < nFileSize);
     }
     if (bWriteFlags & 1) {
-      BNGatewayAccess::CACHE_WriteData(szText, (LPCVOID)*ppOutBuffer, nFileSize, (uint32_t*)&pTimestamp->dwLowDateTime, 0x13c680, 0x278d00);
+      Cache::CACHE_WriteData(szText, (LPCVOID)*ppOutBuffer, nFileSize, (uint32_t*)&pTimestamp->dwLowDateTime, 0x13c680, 0x278d00);
     }
     if (bWriteFlags & 2) {
       BNDOWNLOAD_WriteFileWithTimestamp(szText, (LPCVOID)*ppOutBuffer, nFileSize, pTimestamp);
@@ -895,7 +896,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownl
 
     D2BnetDownloadStateStrc* pCacheData = pDownloadCtx;
     uint32_t nDownloadFlags = dwDownloadFlags;
-    BOOL bCacheHit = BNGatewayAccess::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCachedBuf, (LPDWORD)&szText1);
+    BOOL bCacheHit = Cache::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCachedBuf, (LPDWORD)&szText1);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(pFileTime, &ftCacheTime);
@@ -905,11 +906,11 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(D2BnetDownloadStateStrc * pDownl
         }
 
         NET_BNFTP_CLIENT_ProcessFile((int32_t)pCacheData, nDownloadFlags, eFileType, (FILETIME*)nOpcode, (LPCSTR)pFileTime, szBufferInput, (uint32_t*)szText2, (size_t)pCachedBuf, (int32_t)szText1, 1);
-        BNGatewayAccess::CACHE_FreeMem(pCachedBuf, (uint32_t)szText1);
+        Cache::CACHE_FreeMem(pCachedBuf, (uint32_t)szText1);
         return;
       }
 
-      BNGatewayAccess::CACHE_FreeMem(pCachedBuf, (uint32_t)szText1);
+      Cache::CACHE_FreeMem(pCachedBuf, (uint32_t)szText1);
     }
 
     short int* pThreadCtx = (short int*)Storm::Source::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0xa6, 0);
@@ -1231,18 +1232,18 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t 
       return 0;
     }
 
-    bCacheHit = BNGatewayAccess::CACHE_ReadData((char*)pPatchList, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCacheData, &dwCachedSize);
+    bCacheHit = Cache::CACHE_ReadData((char*)pPatchList, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCacheData, &dwCachedSize);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(&ftZero, &ftCacheTime);
       if (!nTimeCmp) {
         BNDOWNLOAD_WriteFileWithTimestamp((LPCSTR)pPatchList, (LPCVOID)pCacheData, dwCachedSize, &ftZero);
         NET_BNFTP_CLIENT_ProcessFile(-0x7ffffffe, 2, 0, nullptr, (LPCSTR)&ftZero, (char*)pPatchList, nullptr, (size_t)pCacheData, dwCachedSize, 1);
-        BNGatewayAccess::CACHE_FreeMem(pCacheData, dwCachedSize);
+        Cache::CACHE_FreeMem(pCacheData, dwCachedSize);
         return 0;
       }
 
-      BNGatewayAccess::CACHE_FreeMem(pCacheData, dwCachedSize);
+      Cache::CACHE_FreeMem(pCacheData, dwCachedSize);
     }
 
     short int* pThreadCtx = (short int*)Storm::Source::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0x698, 0);

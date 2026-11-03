@@ -10,14 +10,11 @@
 
 // Forward declarations
 struct D2GameViewStrc;
-struct D2RoomStrc;
 struct D2UnitStrc;
 
 namespace D2Client::GAME::View {
 
 // Function declarations
-// Client-side light-map activation callback. Iterates the gpLightMap linked list looking for dynamic (nLightType==2) entries. For each, resolves the owning unit (client- or server-side lookup via bUnknown flag) and checks whether the light radius edge (±nRadiusX>>3 cells in X and Y) touches pRoom via DRLGROOM_FindBetterNearbyRoom. If the light bleeds into pRoom, marks bPixelMapReady=0 so the renderer will rebuild the pixel map for that room on the next frame.
-void __fastcall ACTCALLBACKFN(struct D2RoomStrc * pRoom);
 void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * pOutIntensity, uint8_t * pOutRed, uint8_t * pOutGreen, uint8_t * pOutBlue);
 void __stdcall DrawLight();
 void __stdcall VIEW_Init();

@@ -67,6 +67,8 @@ void __fastcall Q14_Callback14_PlayerJoinedGame(struct D2QuestDataStrc * pQuestD
 void __fastcall Q14_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A2Q6 "The Seven Tombs" — Q14_InitData: per-game quest init. Allocates the 0x68-byte A2Q6 specific-data block, wires the state-handler table (slot0=Callback_00 gossip, 2=Callback_02, 3=Callback_03, 8=Callback_08 chamber-enter, 0xa=Callback_10 participation, 0xb=Callback_11 main dialogue, 0xd=Callback_13 join, 0xe=Callback_14 staff-cleanup), sets fpStatusFilter/fpActiveFilter/fpSequenceFilter, nQuestIdReal=QUEST_TheSevenTombs, nInitNo=4, the NPC gossip table (Jerhyn 0xc9 / string 0x1ae), zeroes the block, nStateFlag=0. No record reads/writes here.
 void __fastcall Q14_InitData(struct D2QuestDataStrc * pQuestData);
+// Q14 core event: the Horadric Staff has been placed in the orifice. Completes The Horadric Staff quest record (Completed+JustCompleted) for the acting player and every party member, strips the staff component items, broadcasts event 3 (cinematic/quest log), flags Jerhyn to spawn (bShouldSpawnJerhyn) + field_0x0E, arms Q14_TimerCreatePortal (delay derived from missile 0x152 Range), and toggles HasPortal flags on the chamber rooms. This is the Seven Tombs / Tal Rasha chamber opening trigger.
+void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A2Q6

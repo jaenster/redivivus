@@ -156,6 +156,8 @@ void __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint3
 void __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning();
 // @sourcefile .\BnSend.cpp
 void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, size_t nSize);
+// @sourcefile .\BnSend.cpp
+void BNSEND_FreeRealmQueryData();
 int32_t __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId);
 // SID_QUERYREALMS2 (0x40) client request sender. Queries available Battle.net realms. Packet format: empty (no payload). Sends request, waits for 0x40 response containing realm list with names and descriptions. Returns gpRealmQueryData on success, 0 on send failure.
 void * __stdcall NET_SID_CLIENT_Send_0x40_QueryRealms2();

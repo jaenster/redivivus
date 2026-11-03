@@ -404,6 +404,10 @@ void __stdcall TASK_GameTickCallback(uint32_t nParam, D2TaskNodeStrc * pTaskNode
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0088caa8);
 }
 
+void __stdcall thunk_QueryPerformanceFrequency_B() {
+    /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ gbPerformanceCounterAvailable = QueryPerformanceFrequency(&gnPerformanceFrequency);
+}
+
 // @sourcefile .\GAME\Task.cpp
 void __stdcall TASK_FreeAllSlots() {
     D2LinkNodeStrc* pSlotLink;

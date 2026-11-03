@@ -4,6 +4,25 @@
   "file": "D2Common/Text.cpp",
   "functions": [
     {
+      "name": "STRUCT_AllocTxtMessageForPacket0x27",
+      "address": "00661240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661240"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "STRUCT_AllocTxtMessageForPacket0x27",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_TextStrc",
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
       "name": "TEXT_FreeAllMessages",
       "address": "00661270",
       "lines": [
@@ -152,6 +171,29 @@
       "namespace": "D2Common::Text::Text",
       "calledFunctions": [
         "OVERHEAD_GetMessageType1"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x27_EntryStrc",
+        "D2GSPacketSrv0x27_TextStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "BuildPacket0x27Messages",
+      "address": "00661480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661480"
+        }
+      ],
+      "namespace": "D2Common::Text::Text",
+      "calledFunctions": [
+        "BuildPacket0x27Messages",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
       ],
       "usedTypes": [
         "D2GSPacketSrv0x27_EntryStrc",

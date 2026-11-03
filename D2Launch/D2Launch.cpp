@@ -12,6 +12,7 @@
 #include "D2Win/Src/D2WinEditBox.h"
 #include "D2Win/Src/D2WinImage.h"
 #include "D2Win/Src/D2WinMain.h"
+#include "D2Win/Src/D2WinTextBox.h"
 #include "D2Win/Src/D2WinTimer.h"
 #include "Fog/Src/Safesock.h"
 #include "Storm/Source/SReg.h"
@@ -19,7 +20,6 @@
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
-#include "D2Win/Src/D2WinTextBox.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -54,7 +54,7 @@ uint32_t MAINMENU_ShowBnetConnectionError() {
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pDVar1, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromList(0xfe);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(pTextBox, "Can\'t connect to Battle.Net. Try again later.");
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(pTextBox, "Can\'t connect to Battle.Net. Try again later.");
     return 1;
 }
 

@@ -35,7 +35,6 @@
 #include "D2Game/UNIT/SUnitMsg.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
-#include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Common/Text.h"
 #include "D2Game/D2Game.h"
@@ -59,22 +58,6 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 #endif
 
 namespace D2Game::Quests::QUESTS::A1Q6 {
-
-// A1Q6 (Sisters to the Slaughter) object init-fn 04. Marks the quest object (Andariel-related) as updatable while the Forgotten Tower quest is still in its intro phase (!bIsNotIntroduction). Halts if quest data missing. No quest-state transitions.
-void __fastcall Objects_InitFn04_TowerTome(D2ObjectInitFnArg * pInitArg) {
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_ForgottenTower);
-    if (pQuestData) {
-      if (pQuestData->bIsNotIntroduction != '\0') {
-        return;
-      }
-
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 3);
-      return;
-    }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x423);
-    exit(-1);
-}
 
 // A1Q6 object init-fn 47. Registers this object's GUID into the A1Q6 quest-specific GUID list (dedup, max 8 entries), bumps the count, runs A1Q5 Countess death-effect, then fires game event 7 (delayed +10 frames) if the recorded flags warrant it. List/event bookkeeping; no GetQuestState/SetQuestState.
 void __fastcall Objects_InitFn47_CountessChest(D2ObjectInitFnArg * pInitArg) {

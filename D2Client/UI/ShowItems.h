@@ -27,6 +27,7 @@ struct D2GroundItemLabelStrc {
 namespace D2Client::UI::ShowItems {
 
 // Function declarations
+BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX);
 // @sourcefile .\UI\showitems.cpp
 void __stdcall DRAW_AltItems();
 void StaticInit_gaGroundItemLabels();

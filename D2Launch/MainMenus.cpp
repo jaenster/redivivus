@@ -632,7 +632,7 @@ BOOL __stdcall MAINMENU_OnPressShowBnetConnectFailedPopup(D2ControlMsg * pContro
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pDVar1, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xfe);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(pTextBox, "Can\'t connect to Battle.Net. Try again later.");
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(pTextBox, "Can\'t connect to Battle.Net. Try again later.");
     return 1;
 }
 
@@ -678,7 +678,7 @@ void __stdcall UIMENU_DownloadingPatch() {
     int nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_StopAnimation((int*)gpCtlPatchProgressAnimImage);
     D2Win::Src::D2WinImage::D2WINIMAGE_SetFrame(gpCtlPatchProgressAnimImage, nFrameCount * nProgressPercent / 100);
     sprintf(szPercentBuffer, "%d%%", nProgressPercent);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpPatchProgressTextBox, szPercentBuffer, 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpPatchProgressTextBox, szPercentBuffer, 0);
 }
 
 // Updates the progress bar display during patch download. Clears existing text, retrieves download percentage via revision check callback (capped at 100%), updates animation frame proportionally, formats "%d%%" into buffer with embedded color codes (\\r\\xFA B = blue), then sets textbox content.
@@ -697,7 +697,7 @@ void __stdcall MAINMENU_UpdateProgressBar() {
       return;
     }
 
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(gpPatchProgressTextBox, szPercentBuffer, 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpPatchProgressTextBox, szPercentBuffer, 0);
 }
 
 void __stdcall LAUNCHER_ClearPatchDownloadFlag() {
@@ -953,7 +953,7 @@ void __stdcall MAINMENU_UpdateIPAddressDisplay() {
       return;
     }
 
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlTcpIpLocalIpTextBox, szLocalIp);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlTcpIpLocalIpTextBox, szLocalIp);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlTcpIpConnectButton, 1);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlTcpIpAddressButton, 1);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlTcpIpConnectAddressLabel->sControl, 1);
@@ -990,7 +990,7 @@ void __stdcall UIMENU_TCPIPOptions() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pFormFourth);
     gpMainMenuTcpIpTimerControl = (::D2WinTimer*)FORMS_CreateAnyFormFromListExEx(0x10b);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuTcpIpTimerControl);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_Destroy((int*)gpMainMenuTcpIpTimerControl);
+    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy((int*)gpMainMenuTcpIpTimerControl);
     gpCtlTcpIpLocalIpTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x105);
     MAINMENU_UpdateIPAddressDisplay();
 }
@@ -1509,11 +1509,11 @@ BOOL __stdcall Test(D2ControlMsg * pControlMsg) {
 void __stdcall MAINMENU_AppendCreditsEnd() {
     int i = 0x32;
     do {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
       i--;
     } while (i);
 
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "The End");
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "The End");
     gnMainMenuCreditsFrameIndex = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuCreditsLineTextBox);
 }
 
@@ -1590,29 +1590,29 @@ void __stdcall MAINMENU_SyncCreditsColumns() {
     int nPosCol2 = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuCreditsPairLeftTextBox);
     int nPosCol3 = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuCreditsPairRightTextBox);
     while (nPosCol2 > nPosCol3) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
       nPosCol3 = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuCreditsPairRightTextBox);
     }
 
     while (nPosCol2 < nPosCol3) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
       nPosCol2 = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuCreditsPairLeftTextBox);
     }
 
     while (nPosCol1 > nPosCol2) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
       nPosCol2 = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuCreditsPairLeftTextBox);
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
     }
 
     while (nPosCol1 < nPosCol2) {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
       nPosCol1 = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(gpMainMenuCreditsLineTextBox);
     }
 
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
 }
 
 // @sourcefile .\Src\MainMenus.cpp
@@ -1642,9 +1642,9 @@ int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
 
     i = 0x32;
     do {
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
-      D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
       i--;
       nRemaining = nCharCount;
     } while (i);
@@ -1656,8 +1656,8 @@ int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
         return 1;
       }
       if (*pwCursor == L'*') {
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairLeftTextBox, "");
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsPairRightTextBox, "");
         bCopied1 = D2Lang::Unicode::UNISYS::STRING_CopyWideString(awLineBuf, pwCursor + 1);
         if (bCopied1) {
           D2Win::Src::D2WinTextBox::SetText(gpMainMenuCreditsLineTextBox, awLineBuf, 1, false, 0);
@@ -1716,7 +1716,7 @@ int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
           }
 
           D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pTargetBox, bCopied1);
-          D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuCreditsLineTextBox, "");
         } while (*pwCursor != L'*');
       }
 
@@ -1747,7 +1747,7 @@ BOOL __stdcall MAINMENU_InitCreditsScreen(D2ControlMsg * pControlMsg) {
     gpMainMenuCreditsLineTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(nFormIndex);
     gpMainMenuCreditTimerControl = FORMS_CreateAnyFormFromListExEx(0x2e);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuCreditTimerControl);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_Destroy((int*)gpMainMenuCreditTimerControl);
+    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy((int*)gpMainMenuCreditTimerControl);
     MAINMENU_DisplayCredits(0);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpMainMenuCreditsLineTextBox, 0x14);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpMainMenuCreditsPairLeftTextBox, 0x14);
@@ -2139,7 +2139,7 @@ BOOL __stdcall MAINMENU_OnPressStartTcpIpTimer(D2ControlMsg * pControlMsg) {
     FORMS_DestroyList();
     gpMainMenuTcpIpTimerControl = (::D2WinTimer*)FORMS_CreateAnyFormFromListExEx(0x10b);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuTcpIpTimerControl);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_Destroy((int*)gpMainMenuTcpIpTimerControl);
+    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy((int*)gpMainMenuTcpIpTimerControl);
     return 1;
 }
 
@@ -2898,7 +2898,7 @@ void __stdcall UIMENU_MainMenu() {
       Storm::Source::SSTR::SStrPrintf(szVersionText + nVersionLen, 0x40 - nVersionLen, " %d", 0x47);
     }
 
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsi(pCtlVersionText, szVersionText, 0);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pCtlVersionText, szVersionText, 0);
     int bMusicEnabled = D2Sound::Src::D2SoundFast::SOUND_GetOptionsMusic();
     if (!bMusicEnabled) {
       return;
@@ -3509,7 +3509,7 @@ BOOL __stdcall MAINMENU_OnPressShowGatewaySelect(D2ControlMsg * pControlMsg) {
       char* pszGatewayName;
       do {
         pszGatewayName = Bnclient::BNGatewayAccess::Name(pGatewayAccess, nGatewayIdx);
-        D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuGatewayListTextBox, pszGatewayName);
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpMainMenuGatewayListTextBox, pszGatewayName);
         nGatewayIdx++;
       } while (nGatewayIdx <= pGatewayAccess->nGatewayCount);
     }
@@ -4865,7 +4865,7 @@ void __stdcall MAINMENU_BnetConnectionProgress() {
     DWORD dwTickCount = GetTickCount();
     sprintf(szDots, "%.*s", (int)((dwTickCount - gbBNetConnectionProgressFlag) / 0xfa % 0x14) + 1, "....................");
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gbBnetConnectionTimerActive);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextFromAnsiSimple(gbBnetConnectionTimerActive, szDots);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gbBnetConnectionTimerActive, szDots);
 }
 
 static BOOL MAINMENU_IsValidEmailAddress(char * szText) {

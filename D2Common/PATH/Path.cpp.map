@@ -131,24 +131,6 @@
       ]
     },
     {
-      "name": "STRUCT_FreePath",
-      "address": "00648460",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00648460"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "STRUCT_FreePath",
-        "FreeServerMemory"
-      ],
-      "usedTypes": [
-        "D2PoolManagerStrc"
-      ]
-    },
-    {
       "name": "DRLGPATH_UpdateUnitRoom",
       "address": "0064fad0",
       "lines": [

@@ -4,6 +4,29 @@
   "file": "D2Direct3D/d3dTextureCache.cpp",
   "functions": [
     {
+      "name": "RENDERER_D3D_InitializeTextureCachePool",
+      "address": "006ba420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ba420"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dTextureCache",
+      "calledFunctions": [
+        "RENDERER_D3D_InitializeTextureCachePool",
+        "AllocClientMemory",
+        "memset",
+        "RENDERER_D3D_CreateSurfaceWithTexture",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D3DTextureCacheStrc"
+      ]
+    },
+    {
       "name": "D3DTEXCACHE_SetPalette",
       "address": "006ba550",
       "lines": [

@@ -18,8 +18,6 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Win/D2WinEditBox.h"
-#include "D2Win/D2WinTimer.h"
-#include "D2Win/Src/D2WinTimer.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -56,15 +54,6 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 #endif
 
 namespace D2Win::Src::D2WinEditBox {
-
-void __fastcall D2WINEDITBOX_Destroy(int * pEditBox) {
-    if (*pEditBox != 8) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45);
-      exit(-1);
-    }
-
-    pEditBox[8] = (int)D2WinTimer::D2WINTIMER_GetElapsed;
-}
 
 uint32_t __fastcall D2WINEDITBOX_GetTextLength(uint16_t * pwChar) {
     if (*pwChar < 0x100) {

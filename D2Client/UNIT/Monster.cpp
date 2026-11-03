@@ -1056,7 +1056,7 @@ void __fastcall FreeMonster(D2UnitStrc * pUnit) {
       CUnit::FreeLightMap(pUnit);
     }
 
-    D2Common::PATH::Path::STRUCT_FreePath(nullptr, pUnit->pPath.pStaticPath);
+    D2Common::PATH::DynamicPath::STRUCT_FreePath(nullptr, pUnit->pPath.pStaticPath);
     pUnit->pPath.pStaticPath = 0;
     D2LightMapStrc* pLightMap = D2Common::Skills::SwapLightMap(pUnit, nullptr);
     if (pLightMap) {

@@ -362,46 +362,6 @@
       ]
     },
     {
-      "name": "Q14_OnStaffUsedInOrifice",
-      "address": "0059dd80",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0059dd80"
-        }
-      ],
-      "namespace": "D2Game::Quests::QUESTS::A2Q7",
-      "calledFunctions": [
-        "Q14_TimerCreatePortal",
-        "Q14_OnStaffUsedInOrifice",
-        "GetPlayerData",
-        "SetQuestState",
-        "QUEST_RemoveQuestItemFromPlayer",
-        "GetPartyId",
-        "ExecuteFunctionForEveryPartyMember",
-        "NotifyPlayersAboutEvent",
-        "GetQuestDataByQuestNoInternal",
-        "AddQuestTimer",
-        "SetupUpdateFlag",
-        "UNITS_GetRoom",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "GetYPos",
-        "GetXPos",
-        "DRLGROOM_FindBetterNearbyRoom",
-        "ToggleHasPortalFlagRoom"
-      ],
-      "usedTypes": [
-        "D2MissilesTxt",
-        "D2QuestDataA2Q6Strc",
-        "D2UnitDataPlayerStrc",
-        "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2UnitType"
-      ]
-    },
-    {
       "name": "Q14_CheckUnitDistanceToTyrael",
       "address": "0059df30",
       "lines": [

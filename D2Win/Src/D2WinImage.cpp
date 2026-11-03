@@ -4,12 +4,10 @@
 #include "D2CMP/SRC/CelCmp.h"
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2GfxDataStrc.h"
-#include "D2Lang/Unicode/UNISYS.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Win/D2WinImage.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
-#include "D2Win/Forms/D2WinImageEx.h"
 #include "D2Win/Src/D2WinMain.h"
 #include "D2Win/Src/D2WinScrollbar.h"
 #include "D2Win/Src/D2WinTextBox.h"
@@ -33,6 +31,8 @@
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2WinImage) == 0x4c, "D2_NEW_AT(D2WinImage): the 32-bit layout must be the 0x4c bytes 1.14d allocates");
 
+static_assert(sizeof(void*) != 4 || sizeof(::D2WinImageEx) == 0x54, "D2_NEW_AT(D2WinImageEx): the 32-bit layout must be the 0x54 bytes 1.14d allocates");
+
 
 #ifndef RECON_FPTD_ImageHitArea
 #define RECON_FPTD_ImageHitArea
@@ -48,40 +48,6 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 #endif
 
 namespace D2Win::Src::D2WinImage {
-
-void __fastcall D2WINTEXTBOX_SetTextFromAnsiSimple(::D2WinTextBox * pTextBox, char * szText) {
-    int nClearCount;
-    uint16_t* pBufCursor;
-    uint16_t wszWorkBuf[1024];
-    if (!pTextBox) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x109);
-      exit(-1);
-    }
-
-    for (nClearCount = 0; nClearCount < 0x400; nClearCount++) {
-      wszWorkBuf[nClearCount] = L'\0';
-    }
-
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszWorkBuf, szText, 0x400);
-    D2WinTextBox::SetText(pTextBox, wszWorkBuf, 4, false, 0);
-}
-
-void __fastcall D2WINTEXTBOX_SetTextFromAnsi(::D2WinTextBox * pTextBox, char * szText, int32_t nLineStyle) {
-    int nClearCount;
-    uint16_t* pBufCursor;
-    uint16_t wszWorkBuf[1024];
-    for (nClearCount = 0; nClearCount < 0x400; nClearCount++) {
-      wszWorkBuf[nClearCount] = L'\0';
-    }
-
-    if (!pTextBox) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11e);
-      exit(-1);
-    }
-
-    D2Lang::Unicode::UNISYS::STRING_ConvertCharToWchar(wszWorkBuf, szText, 0x400);
-    D2WinTextBox::SetText(pTextBox, wszWorkBuf, nLineStyle, false, 0);
-}
 
 void __fastcall D2WINTEXTBOX_SetTextW(::D2WinTextBox * pTextBox, uint16_t * wszText) {
     D2WinTextBox::SetText(pTextBox, wszText, 4, false, 0);
@@ -115,7 +81,7 @@ void __fastcall FORMS_DestroyD2WinImage(::D2WinImage * pWinImage) {
     D2WinMain::FORMS_DestroyControl(&pWinImage->sControl);
 }
 
-void __fastcall FORMS_DestroyD2WinImageEx(::D2WinImageEx * pWinImageEx) {
+void __fastcall FORMS_DestroyD2WinImageEx(D2WinImageEx * pWinImageEx) {
     D2WinMain::FORMS_DestroyControl((D2ControlStrc*)pWinImageEx);
 }
 
@@ -287,7 +253,7 @@ static void __stdcall D2WinImage_Draw(D2GfxTileRectStrc * pScreenRect, D2GfxTile
     } while (nTileRepeatX);
 }
 
-BOOL __fastcall Draw(::D2WinImageEx * pImageEx) {
+BOOL __fastcall Draw(D2WinImageEx * pImageEx) {
     int nBorderY;
     D2GfxDataStrc sGfxData;
     D2GfxTileRectStrc sScreenRect;
@@ -419,6 +385,34 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     pNewImage->eDrawMode = DRAW_SOLID;
     D2WinMain::FORMS_AddControlToGlobalList(&pNewImage->sControl);
     return pNewImage;
+}
+
+// @sourcefile .\Src\D2WinImage.cpp
+D2WinImageEx * __fastcall Create_D2WinImageEx(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, int32_t nBorderX, int32_t nBorderY) {
+    D2WinImageEx* pNewImageEx = D2_NEW_AT(D2WinImageEx, ".\\Src\\D2WinImage.cpp", 0x3b);
+    memset(pNewImageEx, 0, 0x54);
+    pNewImageEx->sImage.sControl.neD2FormType = FORM_Image;
+    pNewImageEx->sImage.sControl.dwState |= gadwBitMasks[0];
+    pNewImageEx->sImage.sControl.dwState |= gadwBitMasks[2];
+    pNewImageEx->sImage.sControl.pDC6 = pDC6;
+    pNewImageEx->sImage.sControl.dwPosX = nPosX;
+    pNewImageEx->sImage.sControl.dwSizeX = nSizeX;
+    pNewImageEx->sImage.sControl.dwPosY = nPosY;
+    pNewImageEx->sImage.sControl.dwSizeY = nSizeY;
+    pNewImageEx->sImage.sControl.fpDraw = (::Draw)(BOOL (__fastcall *)(D2WinImageEx*))D2WinImage::Draw;
+    pNewImageEx->sImage.sControl.pNext = 0;
+    pNewImageEx->sImage.sControl.fpPush = D2WinImage::Push;
+    pNewImageEx->sImage.sControl.fpMouse = 0;
+    pNewImageEx->sImage.sControl.fpListCheck = 0;
+    pNewImageEx->sImage.sControl.fpKey = 0;
+    pNewImageEx->sImage.sControl.fpOnPress = 0;
+    pNewImageEx->sImage.pHitAreas = 0;
+    pNewImageEx->sImage.nFrame = 0;
+    pNewImageEx->sImage.eDrawMode = DRAW_SOLID;
+    pNewImageEx->nBorderX = nBorderX;
+    pNewImageEx->nBorderY = nBorderY;
+    D2WinMain::FORMS_AddControlToGlobalList((D2ControlStrc*)pNewImageEx);
+    return pNewImageEx;
 }
 
 } // namespace D2Win::Src::D2WinImage

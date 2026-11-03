@@ -1791,46 +1791,6 @@
       ]
     },
     {
-      "name": "UI_GetCursorFrameOffset",
-      "address": "00467e40",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00467e40"
-        }
-      ],
-      "namespace": "D2Client::UI::ui",
-      "calledFunctions": [
-        "UI_GetCursorFrameOffset",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "int32_t"
-      ]
-    },
-    {
-      "name": "UI_GetCursorMaxFrames",
-      "address": "00467e90",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00467e90"
-        }
-      ],
-      "namespace": "D2Client::UI::ui",
-      "calledFunctions": [
-        "UI_GetCursorMaxFrames",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "int32_t"
-      ]
-    },
-    {
       "name": "UI_HandleCursorMouseDown",
       "address": "00467ef0",
       "lines": [
@@ -4489,27 +4449,6 @@
       "calledFunctions": [
         "UI_OpenHoradricCubeWithNpcInteraction",
         "UI_ShowHoradricCubeTransmuteDialog"
-      ]
-    },
-    {
-      "name": "UI_DrawGroundItemTooltip",
-      "address": "004c0640",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004c0640"
-        }
-      ],
-      "namespace": "D2Client::UI::ui",
-      "calledFunctions": [
-        "UI_DrawGroundItemTooltip",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "int32_t",
-        "uint32_t"
       ]
     },
     {

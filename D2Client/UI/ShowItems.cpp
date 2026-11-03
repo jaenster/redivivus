@@ -26,6 +26,7 @@
 #include "D2gfx/D2GFX.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/File.h"
+#include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Launch/MainMenus.h"
 
@@ -33,6 +34,88 @@
 
 
 namespace D2Client::UI::ShowItems {
+
+BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX) {
+    int nOverlapDelta;
+    bool bOverlapX;
+    bool bOverlapY;
+    int nScreenBottom = ScreenSizeY - 0x30;
+    if (*pnX < nMinX) {
+      *pnRight += nMinX - *pnX;
+      *pnX = 6;
+    }
+    if (*pnY < 6) {
+      *pnBottom += 6 - *pnY;
+      *pnY = 6;
+    }
+
+    int iEntry = *pnRight;
+    if (iEntry >= nMaxX) {
+      nOverlapDelta = iEntry - nMaxX + 1;
+      *pnRight = iEntry - nOverlapDelta;
+      *pnX -= nOverlapDelta;
+    }
+
+    iEntry = *pnBottom;
+    if (iEntry >= nScreenBottom) {
+      *pnBottom = iEntry - (iEntry - nScreenBottom);
+      *pnY -= iEntry - nScreenBottom;
+    }
+    if (gItemDrawFlags >= 0x20) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x47);
+      exit(-1);
+    }
+
+    iEntry = 0;
+    if (gItemDrawFlags <= 0) {
+      return 1;
+    }
+
+    nOverlapDelta = *pnY;
+    int nTooltipIdx = *pnX;
+    do {
+      if (nTooltipIdx > (int)(uint32_t)gaGroundItemLabels[iEntry].nRight || *pnRight < (int)(uint32_t)gaGroundItemLabels[iEntry].nLeft) {
+        bOverlapX = false;
+      } else {
+        bOverlapX = true;
+      }
+      if (nOverlapDelta > (int)(uint32_t)gaGroundItemLabels[iEntry].nBottom || *pnBottom < (int)(uint32_t)gaGroundItemLabels[iEntry].nTop) {
+        bOverlapY = false;
+      } else {
+        bOverlapY = true;
+      }
+      if (bOverlapX && bOverlapY) {
+        if (nPlacementMode <= 6) {
+          if ((*pnBottom - nOverlapDelta) / 2 && nOverlapDelta <= nScreenBottom) {
+            nScreenBottom = gaGroundItemLabels[iEntry].nTop - *pnBottom - 3;
+            *pnY = nOverlapDelta + nScreenBottom;
+            *pnBottom += nScreenBottom;
+            return 0;
+          }
+
+          nScreenBottom = gaGroundItemLabels[iEntry].nBottom - nOverlapDelta + 5;
+          *pnY = nOverlapDelta + nScreenBottom;
+          *pnBottom += nScreenBottom;
+          return 0;
+        }
+        if ((*pnRight - nTooltipIdx) / 2 && nTooltipIdx >= nMaxX) {
+          nScreenBottom = gaGroundItemLabels[iEntry].nLeft - *pnRight - 1;
+          *pnX = nTooltipIdx + nScreenBottom;
+          *pnRight += nScreenBottom;
+          return 0;
+        }
+
+        nScreenBottom = gaGroundItemLabels[iEntry].nRight - nTooltipIdx + 1;
+        *pnX = nTooltipIdx + nScreenBottom;
+        *pnRight += nScreenBottom;
+        return 0;
+      }
+
+      iEntry++;
+    } while (iEntry < gItemDrawFlags);
+
+    return 1;
+}
 
 // @sourcefile .\UI\showitems.cpp
 void __stdcall DRAW_AltItems() {
@@ -166,7 +249,7 @@ void __stdcall DRAW_AltItems() {
               bLabelSlotFound = true;
               do {
                 nColorIdx = nMaxX;
-                bSocketedFlag = ui::UI_DrawGroundItemTooltip(&nItemX, &nItemNameHeight, &nPrecisionX, &nItemVisY, nDrawCount, nMaxX, nItemPosY);
+                bSocketedFlag = UI_DrawGroundItemTooltip(&nItemX, &nItemNameHeight, &nPrecisionX, &nItemVisY, nDrawCount, nMaxX, nItemPosY);
                 pItem = pCurrentItem;
                 if (bSocketedFlag) {
                   goto commit_label;

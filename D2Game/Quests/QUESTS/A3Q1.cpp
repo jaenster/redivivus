@@ -440,6 +440,33 @@ void __fastcall Q18_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerUpdateTomeState);
 }
 
+void __fastcall QUEST_StateHandler_PlayTomeHandInSound(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
+    int nPlayerGUID;
+    if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0xfe)) {
+      return;
+    }
+
+    D2QuestDataA3Q1Strc* pA3Q1Data = pQuestData->pQuestSpecificData.pA3Q1;
+    if (pA3Q1Data->bTomePickedUp != '\x01') {
+      return;
+    }
+
+    D2UnitStrc* pPlayerUnit = pQuestArgs->pPlayer;
+    if (!pPlayerUnit) {
+      nPlayerGUID = -1;
+    } else {
+      nPlayerGUID = pPlayerUnit->nUnitGUID;
+    }
+    if (nPlayerGUID != pA3Q1Data->nTomePickerGUID) {
+      return;
+    }
+    if (!pPlayerUnit || pPlayerUnit->nClassId != 6 && pPlayerUnit->nClassId != 5) {
+      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pQuestArgs->pPlayer, 0x43, pQuestArgs->pPlayer);
+    }
+
+    pA3Q1Data->bTomePickedUp = '\0';
+}
+
 // Q18_Callback_11 — Lam Esen's Tome, NPC-message handler for Alkor (monstats 0xfe). Only runs if record not yet Completed. msg 0x225: accept quest -> set live state 2 (a3q1.cpp:0x1a1), broadcast state 1, sync all players. msg 0x234 (hand in tome): if not Completed and player carries the Tome, remove it, mark bTomePickedUp + install the QUEST_StateHandler_PlayTomeHandInSound handler; then if bCanComplete run the completion pipeline over all players (CompleteQuestStates -> RewardStatPoints -> LockCompletingQuest), broadcast state 0xd (JustCompleted), add player to GUID list; if JustCompleted now set, advance to live state 5 and fire the sequence filter to unlock the next quest. The quest's terminal/commit path.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 void __fastcall Q18_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {

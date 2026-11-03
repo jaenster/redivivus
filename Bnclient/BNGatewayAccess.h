@@ -26,35 +26,6 @@ struct _TIME_ZONE_INFORMATION {
 
 #endif // _WIN32
 
-struct __attribute__((packed)) D2BnCacheEntryHeaderStrc {
-    /* 0x00 */ uint32_t dwHeaderSize; // always 0x144
-    /* 0x04 */ uint32_t dwUnk04;
-    /* 0x08 */ uint32_t dwUnk08;
-    /* 0x0C */ uint32_t dwHeaderCrc32;
-    /* 0x10 */ uint32_t dwDataCrc32;
-    /* 0x14 */ uint32_t dwUnk14;
-    /* 0x18 */ FILETIME ftCurrent;
-    /* 0x20 */ FILETIME ftFileTime;
-    /* 0x28 */ FILETIME ftNow;
-    /* 0x30 */ FILETIME ftExpiry;
-    /* 0x38 */ FILETIME ftCacheExpiry;
-    /* 0x40 */ char szKey[260];
-};
-
-struct D2BnCacheFileHeaderStrc {
-    /* 0x00 */ uint32_t dwSignature; // 'BN3\x1a' 0x1a334e42; 'BN2\x1a' 0x1a324e42 is the old format
-    /* 0x04 */ uint32_t dwHeaderSize; // 0x2c
-    /* 0x08 */ uint32_t dwFileSize; // end of data; each new entry is appended here and it grows by size+0x144
-    /* 0x0C */ uint32_t dwUnk0C;
-    /* 0x10 */ uint32_t dwHashTableOffset; // 0x2c
-    /* 0x14 */ uint32_t dwBlockTableOffset; // 0x402c
-    /* 0x18 */ uint32_t nHashTableSize; // 16-byte entries, power of two (default 0x400); size-1 is the hash mask
-    /* 0x1C */ uint32_t nBlockTableSize;
-    /* 0x20 */ uint32_t dwHeaderCrc32; // CRC32 of the 0x2c header with this field zeroed
-    /* 0x24 */ uint32_t dwHashTableCrc32;
-    /* 0x28 */ uint32_t dwBlockTableCrc32;
-};
-
 namespace Bnclient::BNGatewayAccess {
 
 // Function declarations
@@ -97,25 +68,16 @@ void __stdcall Load(struct D2BNetGatewayAccessStr * pGatewayAccess);
 // on a bad/empty buffer — the crash the 2nd shared-wineprefix client hits via the BNFTP path.
 // @sourcefile .\BNetGW.cpp
 void __stdcall UpdateGatewaysFromIni(struct D2BNetGatewayAccessStr * pClientSideData, char * szText);
+uint32_t CACHE_ComputeCRC32(int32_t nByteLen, uint8_t * pbData);
+void CACHE_DecryptBlock(uint32_t dwKey, uint32_t * pdwData, uint32_t nByteLen);
+void CACHE_EncryptBlock(uint32_t dwKey, uint32_t nByteLen, uint32_t * pdwData);
+LPFILETIME * CACHE_GetFileTime(uint32_t nSecondsFromNow);
+uint32_t __stdcall CACHE_HashString(int32_t nHashType, char * szText);
 void __stdcall CACHE_InitCryptTable();
+uint32_t __stdcall CACHE_FindHashEntry(uint32_t nLocale, char * szText);
+void CACHE_RemoveEntry(char * szText);
+void CACHE_BuildFilePath(LPSTR szText);
 // Closes and deletes the Fog cache file. Closes ghCacheFileHandle if open, builds cache file path to %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat, and deletes it via DeleteFileA.
 void __stdcall CACHE_DeleteFile();
-// Frees all Fog cache resources. Closes ghCacheFileHandle if open (setting to INVALID_HANDLE_VALUE), frees global hash table if allocated, and resets all cache state.
-// @sourcefile .\CACHE.CPP
-void __stdcall CACHE_FreeAll();
-// @sourcefile .\CACHE.CPP
-// EDX dwSize: callers pass the cached block's size; not read here.
-int __fastcall CACHE_FreeMem(void * pMem, uint32_t dwSize);
-// Opens the Fog cache file for reading/writing. Creates %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat if missing, reads hash table header, validates magic/version, allocates hash table memory. Sets ghCacheFileHandle to opened file handle or INVALID_HANDLE_VALUE on error.
-// @sourcefile .\CACHE.CPP
-int32_t __stdcall CACHE_Open();
-void __stdcall CACHE_Rebuild();
-// Reads cached data from bncache.dat using key lookup, validates CRC32, and returns decrypted data buffer
-// @sourcefile .\CACHE.CPP
-BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * ppDataBuf, LPDWORD pDataSizeOut);
-// Writes data to Fog cache file. Encrypts data using CACHE_EncryptBlock, computes CRC32, seeks to entry offset in ghCacheFileHandle, writes encrypted data. Updates hash table entry with file time, size, and offset.
-// @sourcefile .\CACHE.CPP
-BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_t nDataSize, uint32_t * pFileTime, uint32_t nExpiryTime, int32_t nCacheExpiry);
-// 8 internal functions (defined in .cpp)
 
 } // namespace Bnclient::BNGatewayAccess

@@ -555,48 +555,6 @@
       ]
     },
     {
-      "name": "GetSavePacketList",
-      "address": "00538350",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00538350"
-        }
-      ],
-      "namespace": "D2Game::GAME::Clients",
-      "calledFunctions": [
-        "GetSavePacketList",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "D2ClientStrc",
-        "int32_t"
-      ]
-    },
-    {
-      "name": "SetSavePacketList",
-      "address": "00538380",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00538380"
-        }
-      ],
-      "namespace": "D2Game::GAME::Clients",
-      "calledFunctions": [
-        "SetSavePacketList",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "D2ClientStrc",
-        "int32_t"
-      ]
-    },
-    {
       "name": "CLIENT_GetUnk0x1AD",
       "address": "005383b0",
       "lines": [
@@ -2288,57 +2246,6 @@
       ]
     },
     {
-      "name": "SendRoomUnitUpdates",
-      "address": "0053a5d0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0053a5d0"
-        }
-      ],
-      "namespace": "D2Game::GAME::Clients",
-      "calledFunctions": [
-        "SendRoomUnitUpdates",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "DispatchUnitUpdate"
-      ],
-      "usedTypes": [
-        "D2ClientStrc",
-        "D2UnitStrc",
-        "SGAMEDATA",
-        "int32_t"
-      ]
-    },
-    {
-      "name": "SendAdjacentRoomUpdates",
-      "address": "0053a620",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0053a620"
-        }
-      ],
-      "namespace": "D2Game::GAME::Clients",
-      "calledFunctions": [
-        "SendAdjacentRoomUpdates",
-        "GetAct",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "DRLGROOM_GetAdjacentRoomsList",
-        "SendRoomUnitUpdates"
-      ],
-      "usedTypes": [
-        "D2ClientStrc",
-        "D2RoomStrc",
-        "SGAMEDATA",
-        "int32_t",
-        "uint8_t"
-      ]
-    },
-    {
       "name": "CLIENT_SendRoomUnitUpdates",
       "address": "0053a6a0",
       "lines": [
@@ -2438,73 +2345,6 @@
         "D2DrlgActStrc *",
         "D2RoomStrc",
         "SGAMEDATA"
-      ]
-    },
-    {
-      "name": "CLIENT_RevealRoomAndSendUnits",
-      "address": "0053a8e0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0053a8e0"
-        }
-      ],
-      "namespace": "D2Game::GAME::Clients",
-      "calledFunctions": [
-        "CLIENT_RevealRoomAndSendUnits",
-        "DRLGROOM_GetRoomCoordinates",
-        "DRLGROOM_GetLevelIdFromRoom",
-        "NET_D2GS_SERVER_Send_0x07_MapReveal",
-        "DRLGROOM_AddClientToRoom",
-        "MONSTERAI_TriggerMageThink",
-        "CLIENTS_GetControlUnit",
-        "SERVER_SendInitUnitPacket",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "D2ClientStrc",
-        "D2DrlgRoomCoordsStrc",
-        "D2RoomStrc",
-        "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2LevelId",
-        "eD2UnitType",
-        "int32_t"
-      ]
-    },
-    {
-      "name": "RoomClearForClientAndHideMap",
-      "address": "0053a9b0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0053a9b0"
-        }
-      ],
-      "namespace": "D2Game::GAME::Clients",
-      "calledFunctions": [
-        "RoomClearForClientAndHideMap",
-        "SendRemoveObject",
-        "DRLGROOM_RemoveClientFromRoom",
-        "MONSTER_StartAiAndRegenTimers",
-        "DRLGROOM_GetRoomCoordinates",
-        "DRLGROOM_GetLevelIdFromRoom",
-        "NET_D2GS_SERVER_Send_0x08_REMOVEROOM",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "D2ClientStrc",
-        "D2DrlgRoomCoordsStrc",
-        "D2RoomStrc",
-        "D2UnitStrc",
-        "SGAMEDATA",
-        "eD2LevelId",
-        "eD2UnitType",
-        "int32_t"
       ]
     },
     {

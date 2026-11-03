@@ -578,6 +578,30 @@
         "D2QuestDataStrc",
         "SGAMEDATA"
       ]
+    },
+    {
+      "name": "Objects_InitFn04_TowerTome",
+      "address": "00595a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00595a00"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q5",
+      "calledFunctions": [
+        "Objects_InitFn04_TowerTome",
+        "GetQuestDataByQuestNoInternal",
+        "SetupUpdateFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg",
+        "D2QuestDataStrc",
+        "int32_t"
+      ]
     }
   ]
 }

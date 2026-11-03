@@ -11,7 +11,6 @@
 // Forward declarations
 struct D2DynamicPathStrc;
 struct D2PathTypeArg;
-struct D2PoolManagerStrc;
 struct D2RoomStrc;
 struct D2UnitStrc;
 
@@ -24,7 +23,6 @@ void __stdcall PATH_GetTargetCoordinates(int32_t nDirIndex, int32_t * pnOutX, in
 BOOL PATH_FindAlternateAroundObstacle(struct D2PathTypeArg * pPathState);
 void __stdcall PATH_GetScreenVelocity(struct D2UnitStrc * pUnit, int * pnVelocityX, int * pnVelocityY);
 uint32_t PATH_CanMonsterPathInArea(struct D2UnitStrc * pUnit, uint16_t * pPathData);
-void __stdcall STRUCT_FreePath(struct D2PoolManagerStrc * pMemory, void * pPath);
 // DRLGPATH_ClearPathPosition - Zeroes out a dynamic path's world and screen coordinates, resets path points, removes the unit from its room, and sets the pending-room-change flag (0x2).
 void __stdcall DRLGPATH_ClearPathPosition(struct D2DynamicPathStrc * pDynamicPath);
 // Given two 16.16 fixed-point coordinate pairs (from/to), computes a unit direction POINT (pPoint->x/y) and a 0..63 direction index (returned and written to *pnParam). Determines the dominant axis (X vs Y), normalizes the minor/major ratio to a 0..0x7f index, and looks up the vector components and base direction in the gnDrlgPathDirectionX / gaPathCalcDirectionVectorX tables, then applies octant/sign corrections (axis swap, Y-negate, X-negate, +8 rotation) to produce the final 64-direction value. __fastcall. Core direction primitive used by the DRLG path-building routines.

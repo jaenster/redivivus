@@ -44,15 +44,13 @@ struct D2GfxTileRectStrc {
 namespace D2Win::Src::D2WinImage {
 
 // Function declarations
-void __fastcall D2WINTEXTBOX_SetTextFromAnsiSimple(::D2WinTextBox * pTextBox, char * szText);
-void __fastcall D2WINTEXTBOX_SetTextFromAnsi(::D2WinTextBox * pTextBox, char * szText, int32_t nLineStyle);
 void __fastcall D2WINTEXTBOX_SetTextW(::D2WinTextBox * pTextBox, uint16_t * wszText);
 BOOL __stdcall D2WINIMAGE_SetCellFileAndHitAreas(::D2WinImage * pImage, struct DC6 * pDC6, struct D2WinImageHitArea * pHitAreas);
 // Sets the image control's position: writes nPosX/nPosY to sControl +0xc/+0x10; halts unless the control type is 2 (image); returns TRUE.
 // The asm stores both arguments to [EAX+0xc]/[EAX+0x10] (004fd0dd/004fd0e0).
 BOOL __stdcall D2WINIMAGE_SetPosition(::D2WinImage * pImage, int32_t nPosX, int32_t nPosY);
 void __fastcall FORMS_DestroyD2WinImage(::D2WinImage * pWinImage);
-void __fastcall FORMS_DestroyD2WinImageEx(::D2WinImageEx * pWinImageEx);
+void __fastcall FORMS_DestroyD2WinImageEx(struct D2WinImageEx * pWinImageEx);
 // Sets nFrame (+0x40), clamped to [0, IMAGE_GetFramesCount(pCellFile)-1]; halts unless the control type is 2 (image); returns TRUE.
 // The asm clamps the argument and stores it to [ESI+0x40] (004fd156).
 BOOL __stdcall D2WINIMAGE_SetFrame(::D2WinImage * pImage, int32_t nFrame);
@@ -61,10 +59,12 @@ BOOL __stdcall D2WINIMAGE_SetFrame(::D2WinImage * pImage, int32_t nFrame);
 BOOL __stdcall D2WINIMAGE_SetDrawModeSolid(::D2WinImage * pImage, DRAWMODE eDrawModeIgnored);
 int __stdcall D2WINIMAGE_StopAnimation(int * pImage);
 BOOL __fastcall Draw(::D2WinImage * pImage);
-BOOL __fastcall Draw(::D2WinImageEx * pImageEx);
+BOOL __fastcall Draw(struct D2WinImageEx * pImageEx);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 // @sourcefile .\Src\D2WinImage.cpp
 ::D2WinImage * __fastcall D2WinImage(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, struct DC6 * pDC6, OnPress pfnOnPress, struct D2WinImageHitArea * pHitAreas, ::Key pKey);
+// @sourcefile .\Src\D2WinImage.cpp
+struct D2WinImageEx * __fastcall Create_D2WinImageEx(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, struct DC6 * pDC6, int32_t nBorderX, int32_t nBorderY);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinImage

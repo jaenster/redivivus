@@ -56,8 +56,6 @@ void __fastcall Objects_InitFn21_HoradricOrifice(struct D2ObjectInitFnArg * pIni
 void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q14 object OperateFn (OBJOP_A2Q7_OpenArcaneNpcTrade): player operates the Horadric orifice. If the object is closed (Death anim) and player not busy trading: if player holds the assembled Horadric Staff (item 'hsu '), set interact target + send packet 0x58 to open the staff-in-orifice UI; otherwise play the "can't do that" sound. Closes the interaction when the object returns to Neutral. No quest-record state change here (that happens in Q14_OnStaffUsedInOrifice).
 BOOL __fastcall OBJOP_A2Q7_OpenArcaneNpcTrade(struct D2ObjectOperateFnArg * pOperation);
-// Q14 core event: the Horadric Staff has been placed in the orifice. Completes The Horadric Staff quest record (Completed+JustCompleted) for the acting player and every party member, strips the staff component items, broadcasts event 3 (cinematic/quest log), flags Jerhyn to spawn (bShouldSpawnJerhyn) + field_0x0E, arms Q14_TimerCreatePortal (delay derived from missile 0x152 Range), and toggles HasPortal flags on the chamber rooms. This is the Seven Tombs / Tal Rasha chamber opening trigger.
-void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // IterateAllUnits callback for Q14_IsNpcStationary: if the player is within collision
 // distance < 0xC of pA2Q6Data->pTyraelSpawnAnchor (+0x40), sets
 // pA2Q6Data->bTyraelSpawnSpotOccupied (+0x44). Q14_IsNpcStationary passes its pA2Q6Data as pArgs.

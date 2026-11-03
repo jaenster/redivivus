@@ -4,6 +4,24 @@
   "file": "D2Common/PATH/DynamicPath.cpp",
   "functions": [
     {
+      "name": "STRUCT_FreePath",
+      "address": "00648460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648460"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "STRUCT_FreePath",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc"
+      ]
+    },
+    {
       "name": "PATH_GetCollisionPatternFromMonStats",
       "address": "00648480",
       "lines": [

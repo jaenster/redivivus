@@ -33,6 +33,11 @@ struct __attribute__((packed)) D2WeaponSwapSlotStrc {
 namespace D2Game::ITEMS::ItemMode {
 
 // Function declarations
+void * __fastcall GetSavePacketList(struct D2ClientStrc * pClient);
+// @wasnamed GetSavePacketList - one name on two different functions.
+// @evidence Writes pClient->pSavePacketList (line 0x80a). 00538350 reads it (line 0x7ff).
+// A setter had been given the getter's name.
+void __fastcall SetSavePacketList(struct D2ClientStrc * pClient, void * pSavePacketList);
 struct D2MonStatsTxt * __fastcall GetMonsterData(struct D2UnitStrc * pUnit);
 // Server-side callback invoked when an item/stat modifier (op-function) changes a unit stat by (fParam1 old -> fParam2 new). Extracts the stat index from the eSkill packed param, looks up its ItemStatCost.txt line, and fires associated aura item-events. Switches on the affected stat: maxhp/maxmana/maxstamina proportionally rescales the current hitpoints/mana/stamina; item_addclassskills/addskill_tab/nonclassskill/singleskill grant or remove the granted skill (allocating, broadcasting via 0x21, updating passive/pet stats, deselecting if leveled to 0); state toggles a unit state and gfx; item_aura activates/deactivates a periodic aura; item_charged_skill adds/removes a charged item skill. Pure side-effects on pUnit's stats/skills/states.
 // @sourcefile .\ITEMS\ItemMode.cpp

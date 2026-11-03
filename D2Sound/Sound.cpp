@@ -217,7 +217,7 @@ void __stdcall SOUND_InitDirectSound() {
     DSBCAPS sPrimaryBufferCaps = {0};
     sPrimaryBufferCaps.dwSize = 0x14;
     gpDSoundPrimaryBuffer->lpVtbl->GetCaps(gpDSoundPrimaryBuffer, &sPrimaryBufferCaps);
-    SOUNDSMP_ClearBuffer(gpDSoundPrimaryBuffer, 0, sPrimaryBufferCaps.dwBufferBytes);
+    Src::D2SoundSmp::SOUNDSMP_ClearBuffer(gpDSoundPrimaryBuffer, 0, sPrimaryBufferCaps.dwBufferBytes);
     gpDSoundPrimaryBuffer->lpVtbl->Play(gpDSoundPrimaryBuffer, 0, 0, 1);
     Src::D2SoundSmp::SOUNDSMP_CreateSoundThread();
     SOUND_InitMusicBuffer(gbSoundInBackground);
