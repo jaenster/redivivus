@@ -1043,11 +1043,11 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q22_StatusFilter (BLACKENED TEMPLE) — fpStatusFilter: computes the quest-log status icon/string byte for this quest. If the player cannot yet reach Act III (QUEST_AbleGoToAct3 not Completed) writes 0 (hidden). Else starts from a base byte; if the quest is Completed, writes 0xb (or 0xd when JustCompleted just fired); else if at Step0x04 writes 0xd or 0x4 by the council-tracking flag. (NB: Q22_InitData actually assigns fpStatusFilter=null, so this is the historical/Mac status handler.) Read-only quest-record probes.
-uint32_t __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBufferStrc * pBitBuffer, char * szText) {
+bool __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBufferStrc * pBitBuffer, char * szText) {
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_AbleGoToAct3, QUESTSTATE_Completed);
     if (!bQuestState) {
       *szText = '\0';
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)szText >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return true;
     }
 
     *szText = *(char*)(pThis + 0xb);
@@ -1057,21 +1057,19 @@ uint32_t __thiscall Q22_StatusFilter(int32_t pThis, uint32_t param_1, D2BitBuffe
       /* GetQuestState(Blackened Temple=0x15, JustCompleted=0xd): bumps completed
                          status byte 0xb -> 0xd */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
       *szText = bQuestState != 0 ? 13 : 11;
-      return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)bQuestState >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+      return true;
     }
 
     /* GetQuestState(Blackened Temple=0x15, Step0x04=4): in-progress -> status byte
                          0x4 or 0xd by council-tracking flag */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
-    int nQuestSpecificDataPtr = 0;
     if (bQuestState) {
-      nQuestSpecificDataPtr = *(int*)(pThis + 0x18);
-      *szText = *(char*)(nQuestSpecificDataPtr + 0xc) != '\0' ? 0xd : 0x4;
+      *szText = *(char*)(*(int*)(pThis + 0x18) + 0xc) != '\0' ? 0xd : 0x4;
     }
     if (*(char*)(pThis + 9) == '\0') {
       *szText = '\0';
     }
 
-    return (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uint32_t)nQuestSpecificDataPtr >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+    return true;
 }
 
 // Q22_InitData (BLACKENED TEMPLE) — quest constructor. Allocates 0x50-byte quest-specific data, installs the NPC gossip table (Ormus msg 0x252, menu), and wires the state-handler vtable: [0]=Q22_Callback_00 (gossip), [2]=set later by cb3, [3]=Q22_Callback_03, [8]=Q22_Callback_08 (council-kill drops), [0xb]=Q22_Callback_11 (Ormus dialog/complete), [0xd]=Q22_Callback_13 (load/resume), [10]=Q22_Callback_10 (participation). Sets fpSequenceFilter=Q22_SequenceFilter, nSequenceQuestId=QUEST_TheGoldenBird, fpActiveFilter=Q22_ActiveFilter, fpStatusFilter=null, nInitNo=6, and crucially nQuestIdReal=QUEST_TheBlackenedTemple (0x15) — confirming this file = quest "The Blackened Temple" (Travincal council kill). No quest-record state calls.

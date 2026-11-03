@@ -241,7 +241,7 @@ void __fastcall SOUNDSMP_WriteToBuffer(D2SoundSmpStrc * ppSoundSmp, int nWritePo
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
 }
 
-void __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, size_t nBytesToClear) {
+BOOL __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, size_t nBytesToClear) {
     void* pLockedBuf = 0;
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14b);
@@ -252,12 +252,13 @@ void __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWri
     HRESULT nHResult = pSoundSmp->lpVtbl->Lock(pSoundSmp, dwWriteOffset, nBytesToClear, &pLockedBuf, (DWORD*)&nBytesToClear, nullptr, nullptr, 0);
     if (nHResult < 0) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
-      return;
+      return 0;
     }
 
     memset(pLockedBuf, 0, nBytesToClear);
     pSoundSmp->lpVtbl->Unlock(pSoundSmp, pLockedBuf, nBytesToClear, nullptr, 0);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
+    return 1;
 }
 
 BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc * pSoundSmp) {

@@ -774,7 +774,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(str
 // @wasnamed Send0x9DItemInSocket - one name on two different functions.
 // @evidence Loops INVENTORY_GetFirstItem/GetNextItem plus GetCarriedItem, sets
 // server flag 8 and sends one 0x9D per item. 0053d330 sends exactly one.
-void __fastcall Send0x9DAllSocketedItems(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint32_t eItemFlags);
+BOOL __fastcall Send0x9DAllSocketedItems(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint32_t eItemFlags);
 // Sends opcode 0x9C item-world packet to pClient. Fills D2GSPacketSrv0x9C with action, item GUID, container slot (relative to the client's player unit), then serialises the item into the bitstream with eItemFlag temporarily applied. Sends socketed children via Send0x9DItemInSocket. Halts if player unit is null or serialised size >= 0xFD.
 void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint8_t nItemAction, eD2ItemFlag eItemFlag, uint32_t bIsCrude);
 void __fastcall Send0x9CItemAddToGround(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, eD2ItemFlag eItemFlag);

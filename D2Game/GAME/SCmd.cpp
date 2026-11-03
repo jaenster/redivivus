@@ -2574,27 +2574,28 @@ void __fastcall NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(D2C
 // @wasnamed Send0x9DItemInSocket - one name on two different functions.
 // @evidence Loops INVENTORY_GetFirstItem/GetNextItem plus GetCarriedItem, sets
 // server flag 8 and sends one 0x9D per item. 0053d330 sends exactly one.
-void __fastcall Send0x9DAllSocketedItems(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint32_t eItemFlags) {
+BOOL __fastcall Send0x9DAllSocketedItems(D2ClientStrc * pClient, D2UnitStrc * pUnit, uint32_t eItemFlags) {
     int32_t _bHasInv;
     bool bHasInv;
     bool bIsRemoved;
-    D2UnitStrc* pSocketItem;
+    D2UnitStrc* pSocketedItem;
+    uint32_t nRemovedFlag;
     _bHasInv = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit);
-    if (!_bHasInv) {
-      return;
+    if (_bHasInv) {
+      D2UnitStrc* pSocketItem;
+      nRemovedFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(eItemFlags, ITEMFLAG_REMOVED);
+      if (!nRemovedFlag && pUnit->pInventory) {
+        for (pSocketItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory); pSocketItem; pSocketItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pSocketItem)) {
+          pSocketedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pSocketItem);
+          D2Common::ITEMS::Items::ITEM_SetServerSideFlag(&eItemFlags, 8, 1);
+          NET_D2GS_SERVER_Send_0x9D_ITEMUNITEX(pClient, pUnit, pSocketedItem, 0x13, eItemFlags, 0);
+        }
+
+        return 1;
+      }
     }
 
-    uint32_t nRemovedFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(eItemFlags, ITEMFLAG_REMOVED);
-    if (!(!nRemovedFlag && pUnit->pInventory)) {
-      return;
-    }
-
-    for (pSocketItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory); pSocketItem; pSocketItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pSocketItem)) {
-      D2UnitStrc* pSocketedItem;
-      pSocketedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pSocketItem);
-      D2Common::ITEMS::Items::ITEM_SetServerSideFlag(&eItemFlags, 8, 1);
-      NET_D2GS_SERVER_Send_0x9D_ITEMUNITEX(pClient, pUnit, pSocketedItem, 0x13, eItemFlags, 0);
-    }
+    return 0;
 }
 
 // Sends opcode 0x9C item-world packet to pClient. Fills D2GSPacketSrv0x9C with action, item GUID, container slot (relative to the client's player unit), then serialises the item into the bitstream with eItemFlag temporarily applied. Sends socketed children via Send0x9DItemInSocket. Halts if player unit is null or serialised size >= 0xFD.

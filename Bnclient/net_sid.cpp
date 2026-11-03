@@ -212,8 +212,9 @@ void __fastcall XSHA1(D2SHA1 * pOutput, char * szInput, size_t nInputSize) {
     pOutput->h[4] = state.state.h[4];
 }
 
-void __stdcall SID_SetReadyFlag() {
+BOOL __stdcall SID_SetReadyFlag() {
     g_bSIDProtocolReady = 1;
+    return 1;
 }
 
 BOOL __stdcall SID_GetReadyFlag() {

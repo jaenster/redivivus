@@ -159,8 +159,8 @@ void __fastcall MAINMENU_SetGlobalValue3(uint32_t bShowBNetRealmPanel);
 void __stdcall MAINMENU_UpdateIPAddressDisplay();
 BOOL __stdcall MAINMENU_OnPressUpdateIpAddressDisplay(struct D2ControlMsg * pControlMsg);
 void __stdcall UIMENU_TCPIPOptions();
-void __stdcall MAINMENU_DisableControlIfDataNonZero(int32_t pControlData);
-void __stdcall MAINMENU_DisableControlIfDataNonZero2(int32_t pControlData);
+BOOL __stdcall MAINMENU_DisableControlIfDataNonZero(int32_t pControlData);
+BOOL __stdcall MAINMENU_DisableControlIfDataNonZero2(int32_t pControlData);
 // Shows BNet account creation UI. Clears gbPasswordChangeInProgress, creates form with username/password/confirmation fields. Entry point for new account flow from main menu.
 void __stdcall UIMENU_CreateBattleNetAccount();
 void __stdcall UIMENU_BackgroundAndExpansionText();
@@ -205,7 +205,7 @@ BOOL __stdcall MAINMENU_SetBarbarianDescription(struct D2WinAnimImageNotifyStrc 
 // Provenance: asm 00430980 (PUSH 0x140c; PUSH 0xfa8; EDX=3; RET 4).
 BOOL __stdcall MAINMENU_SetPaladinDescription(struct D2WinAnimImageNotifyStrc * pNotify);
 void __stdcall LAUNCHER_SetExitAppModeResult();
-void __stdcall MAINMENU_AddRealmToList(struct D2BNetRealmEntryStrc * pRealmEntry);
+BOOL __stdcall MAINMENU_AddRealmToList(struct D2BNetRealmEntryStrc * pRealmEntry);
 // @sourcefile .\Src\MainMenus.cpp
 BOOL __stdcall MAINMENU_FreeRealmList();
 // qsort comparator for the realm list (g_pBNetRealmList elements): strcmp of the two entries' szName.

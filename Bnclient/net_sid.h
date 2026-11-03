@@ -105,7 +105,7 @@ void __fastcall XSHA1_Transform(struct D2SHA1ContextStrc * pShaCtx);
 // XSHA1 one-shot hash: SHA-1 IV, zero-padded final block with no 0x80 and no bit length, XSHA1_Transform per block.
 // Name per redivivus issue #36 (asm-verified hash variant).
 void __fastcall XSHA1(struct D2SHA1 * pOutput, char * szInput, size_t nInputSize);
-void __stdcall SID_SetReadyFlag();
+BOOL __stdcall SID_SetReadyFlag();
 BOOL __stdcall SID_GetReadyFlag();
 uint32_t __stdcall NET_SID_CLIENT_GetResponseCount2();
 uint32_t __stdcall NET_SID_CLIENT_GetResponseCount1();

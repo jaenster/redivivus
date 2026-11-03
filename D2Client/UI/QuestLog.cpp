@@ -660,13 +660,12 @@ static int32_t QUESTLOG_HitTestQuestIcon(int32_t nX, int32_t nY) {
     return -1;
 }
 
-static int32_t QUESTLOG_HitTestOpenButton(int32_t nPanelY, int32_t nPanelX) {
-    uint32_t dwHitResult = (uint32_t)(nPanelX - 0x116U >> 8) & 0xffffffu;
-    if (nPanelX - 0x116U <= 0x23 && nPanelY >= 0x188 && nPanelY <= 0x1a9) {
-      return (uint32_t)((uint32_t)((uint32_t)dwHitResult & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
+static bool QUESTLOG_HitTestOpenButton(int32_t nPanelY, int32_t nPanelX) {
+    if (nPanelX >= 0x116 && nPanelX <= 0x139 && nPanelY >= 0x188 && nPanelY <= 0x1a9) {
+      return true;
     }
 
-    return (uint32_t)dwHitResult << 8;
+    return false;
 }
 
 int __stdcall CloseQuestLogWeird(DWORD bAdjustMouse) {

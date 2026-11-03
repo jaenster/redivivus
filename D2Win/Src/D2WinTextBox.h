@@ -29,7 +29,7 @@ namespace D2Win::Src::D2WinTextBox {
 // Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 (set site 00441087) into D2WinEditBox+0x268 (fpFilterCallback). Clears the TCP/IP game-list selection then returns 1. Signature proven by RET 0xc (3 stack args, callee cleans).
 int __stdcall EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
 // @sourcefile .\Src\D2WinTextBox.cpp
-void __fastcall D2WINTEXTBOX_ClearAllLines(::D2WinTextBox * pTextBox);
+BOOL __fastcall D2WINTEXTBOX_ClearAllLines(::D2WinTextBox * pTextBox);
 int __fastcall D2WINTEXTBOX_SetLinePadding(::D2WinTextBox * pnTextBox, int32_t nPadLeft, int32_t nPadding);
 // @sourcefile .\Src\D2WinTextBox.cpp
 int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_t * wszText, int32_t nRow, int32_t nCol);

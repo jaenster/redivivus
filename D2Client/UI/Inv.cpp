@@ -3604,12 +3604,13 @@ void __stdcall INV_SetRepairMode() {
     g_nCurrentInventoryPage = 6;
 }
 
-void __stdcall INV_TrySetRepairMode() {
+BOOL __stdcall INV_TrySetRepairMode() {
     if (g_nCurrentInventoryPage == 6) {
-      return;
+      return 0;
     }
 
     g_nCurrentInventoryPage = 6;
+    return 1;
 }
 
 void __stdcall INV_SelectDefaultNpcButton() {

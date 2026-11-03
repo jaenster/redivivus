@@ -128,7 +128,7 @@ void __stdcall INV_HandleShopAction(DWORD nAction, struct D2UnitStrc * pTarget, 
 int __stdcall INV_EnterShopMode();
 void __stdcall INV_ReturnToShopFromRepair();
 void __stdcall INV_SetRepairMode();
-void __stdcall INV_TrySetRepairMode();
+BOOL __stdcall INV_TrySetRepairMode();
 void __stdcall INV_SelectDefaultNpcButton();
 void __stdcall INV_SetIdentifyMode();
 void __stdcall INV_ExitIdentifyMode();

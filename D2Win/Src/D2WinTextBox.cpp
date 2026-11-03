@@ -115,12 +115,12 @@ static void D2WINTEXTBOX_ComputeLineSpacingForLanguage(int32_t nFontIndex) {
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp
-void __fastcall D2WINTEXTBOX_ClearAllLines(::D2WinTextBox * pTextBox) {
+BOOL __fastcall D2WINTEXTBOX_ClearAllLines(::D2WinTextBox * pTextBox) {
     void* nErrorCode;
     void* pMemoryToFree;
     void* pNextLineNode;
     if (!pTextBox) {
-      return;
+      return 0;
     }
     if (pTextBox->sControl.neD2FormType != FORM_TextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);
@@ -150,6 +150,7 @@ void __fastcall D2WINTEXTBOX_ClearAllLines(::D2WinTextBox * pTextBox) {
     pTextBox->sStyleControl.dwPosX = 0;
     pTextBox->sStyleControl.dwSizeX = 0;
     pTextBox->sStyleControl.dwSizeY = 0;
+    return 1;
 }
 
 int __fastcall D2WINTEXTBOX_SetLinePadding(::D2WinTextBox * pnTextBox, int32_t nPadLeft, int32_t nPadding) {

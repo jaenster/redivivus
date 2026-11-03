@@ -145,7 +145,7 @@ void __fastcall Objects_InitFn25_Gidbinn(struct D2ObjectInitFnArg * pInitArg);
 BOOL __fastcall OBJOP_A3Q5_NihlathakPortalTrigger(struct D2ObjectOperateFnArg * pOperation);
 // A3Q3 "Khalim's Will" — accessor: returns the recorded serpent-killer/spawn GUID into *pnParam
 // (and true) when the quest is in real play and the relevant flag is set; else false. Read-only.
-uint32_t __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID);
+bool __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID);
 // A3Q3 "Khalim's Will" — accessor: when the serpent/orb-object "pending" flag (field_0x06) is set,
 // returns its location (field_0x10) and GUID into pdwParam[0..1] and 1; else 0. Read-only.
 BOOL __fastcall Q20_GetSerpentLocation(::SGAMEDATA * pGame, uint32_t * pdwOut);

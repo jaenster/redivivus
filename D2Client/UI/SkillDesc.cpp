@@ -5698,46 +5698,48 @@ static void __stdcall SKILLDESC_DescLine1A_SkillDamage(uint16_t * wszText, D2Ski
     SKILLDESC_FormatMissileDamage(nMinDmgRaw * 0x19 >> 8, nMaxDmgRaw * 0x19 >> 8, wDmgTypeStringId, wszText);
 }
 
-static void __stdcall SKILLDESC_DescLine3F_SignedPctRange(int32_t nValue, uint16_t wStatStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText) {
-    uint16_t* pLocalStr;
+static BOOL __stdcall SKILLDESC_DescLine3F_SignedPctRange(int32_t nValue, uint16_t wStatStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText) {
     uint16_t wszValueStr[32];
     char szFormattedA[32];
-    if (!nValue) {
-      return;
-    }
+    BOOL uResult = 0;
+    if (nValue) {
+      uint16_t* pLocalStr;
+      for (int iFill = 0; iFill < 32; iFill++) {
+        wszValueStr[iFill] = L'\0';
+      }
 
-    for (int iFill = 0; iFill < 32; iFill++) {
-      wszValueStr[iFill] = L'\0';
-    }
+      if (!bPrefixSign || nValue < 0) {
+        /* LPCSTR param_2 for wsprintfA */ wsprintfA(szFormattedA, "%d", nValue);
+      } else {
+        wsprintfA(szFormattedA, "+%d", nValue);
+      }
 
-    if (!bPrefixSign || nValue < 0) {
-      /* LPCSTR param_2 for wsprintfA */ wsprintfA(szFormattedA, "%d", nValue);
-    } else {
-      wsprintfA(szFormattedA, "+%d", nValue);
-    }
+      D2Lang::UTF8_ConvertToWideChar(wszValueStr, szFormattedA, 0x20);
+      if (wLabelStringId != 0x1506) {
+        pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wLabelStringId);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+        pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+        pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      }
 
-    D2Lang::UTF8_ConvertToWideChar(wszValueStr, szFormattedA, 0x20);
-    if (wLabelStringId != 0x1506) {
-      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wLabelStringId);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszValueStr);
+      if (bAppendPercent) {
+        pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xfa1);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      }
+
       pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    }
-
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszValueStr);
-    if (bAppendPercent) {
-      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xfa1);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wStatStringId);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      uResult = 1;
     }
 
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wStatStringId);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+    return uResult;
 }
 
 static void __stdcall SKILLDESC_DescLine2A_DecimalRange(int32_t nValueMax, uint16_t wSuffixStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText, int32_t nCalcA) {
@@ -5771,50 +5773,54 @@ static void __stdcall SKILLDESC_DescLine2A_DecimalRange(int32_t nValueMax, uint1
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
 }
 
-static void __stdcall SKILLDESC_DescLine40_DecimalLabel(uint16_t wSuffixStringId, int32_t nCalcA, int32_t bPrefixSign, uint16_t wLabelStringId, uint16_t * wszText, int32_t nSecondValue) {
+static BOOL __stdcall SKILLDESC_DescLine40_DecimalLabel(uint16_t wSuffixStringId, int32_t nCalcA, int32_t bPrefixSign, uint16_t wLabelStringId, uint16_t * wszText, int32_t nSecondValue) {
     uint16_t wszNumBuf[32];
     char szNumBuf[32];
-    if (!(wLabelStringId != 0x1506 && nCalcA && nSecondValue > 0)) {
-      return;
+    if (wLabelStringId != 0x1506 && nCalcA && nSecondValue > 0) {
+      uint16_t* pLocalStr;
+      Fog::File::CONTAINER_InitializeBuffer(wszNumBuf, 2, 0x20, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wLabelStringId);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      SKILLDESC_FormatIntValue(wszNumBuf, bPrefixSign, nCalcA);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(4000);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szNumBuf, "%d", nSecondValue);
+      D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szNumBuf, 0x20);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wSuffixStringId);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      return 1;
     }
 
-    Fog::File::CONTAINER_InitializeBuffer(wszNumBuf, 2, 0x20, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-    uint16_t* pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wLabelStringId);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    SKILLDESC_FormatIntValue(wszNumBuf, bPrefixSign, nCalcA);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(4000);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szNumBuf, "%d", nSecondValue);
-    D2Lang::UTF8_ConvertToWideChar(wszNumBuf, szNumBuf, 0x20);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumBuf);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wSuffixStringId);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+    return 0;
 }
 
-static void SKILLDESC_DescLine41_AppendStrings(uint16_t wDescTextA, uint16_t * wszText, uint16_t wDescTextB) {
-    if (!(wDescTextA != 0x1506 && wDescTextB != 0x1506)) {
-      return;
+static BOOL SKILLDESC_DescLine41_AppendStrings(uint16_t wDescTextA, uint16_t * wszText, uint16_t wDescTextB) {
+    if (wDescTextA != 0x1506 && wDescTextB != 0x1506) {
+      uint16_t* pLocalStr;
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wDescTextA);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wDescTextB);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+      return 1;
     }
 
-    uint16_t* pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wDescTextA);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wDescTextB);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+    return 0;
 }
 
 static void __stdcall SKILLDESC_DescLine45_DecimalLabel(uint16_t wValuePrefixStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText, int32_t nCalcA) {

@@ -28,7 +28,7 @@ DWORD __stdcall SOUND_GetHardwareAccelerationFlag();
 BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType);
 char * __fastcall SOUND_GetDirectSoundErrorString(int hResult);
 void __fastcall SOUNDSMP_WriteToBuffer(struct D2SoundSmpStrc * ppSoundSmp, int nWritePos, int nLockOffset, int nBytesToWrite);
-void __fastcall SOUNDSMP_ClearBuffer(struct IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, size_t nBytesToClear);
+BOOL __fastcall SOUNDSMP_ClearBuffer(struct IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, size_t nBytesToClear);
 BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, struct D2SoundSmpStrc * pSoundSmp);
 
 } // namespace D2Sound

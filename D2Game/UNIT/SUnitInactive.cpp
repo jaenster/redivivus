@@ -1495,6 +1495,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
 void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2ObjectsTxt* pObjectTxt;
     eD2States eState;
+    BOOL local_8;
     D2RoomStrc* pRoom;
     pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2UnitType eUnitType;
