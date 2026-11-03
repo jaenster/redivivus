@@ -352,11 +352,9 @@ static void SMSG_DeleteWindow(uint32_t hWnd) {
 
 // @blizzard InternalRegister (SMSG.CPP)
 static void __stdcall SMSG_InternalRegister(uint32_t hWnd, int32_t pCallback, uint32_t dwEventTag, uint32_t dwContext) {
-    if (!pCallback) {
-      Source::SErr::SErrSetLastError(0x57);
-      return;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pCallback);
+    D2_CHECKS_END_VOID(Source::SErr::SErrSetLastError(0x57));
     uint32_t nRecord = SMSG_FindWindow(hWnd);
     if (!nRecord) {
       SMSG_AddWindow(hWnd);
@@ -491,11 +489,9 @@ LRESULT __stdcall GenericWndProc(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPA
 }
 
 uint8_t * __stdcall WND_GetWndProc(int32_t nResourceId) {
-    if (nResourceId) {
-      Source::SErr::SErrSetLastError(0x57);
-      return nullptr;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(!nResourceId);
+    D2_CHECKS_END(Source::SErr::SErrSetLastError(0x57), nullptr);
     return (uint8_t*)GenericWndProc;
 }
 

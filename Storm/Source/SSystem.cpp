@@ -43,11 +43,10 @@ HMODULE __stdcall StormGetInstance() {
 uint32_t __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutValue, uint32_t * pnBufferSize) {
     uint32_t nBufferSize;
     uint32_t nOptionValue;
-    if (!pOutValue || !pnBufferSize) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pOutValue);
+    D2_CHECK(pnBufferSize);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     SErr::SErrSetLastError(0x57);
     switch (nOptionId) {
       case 1:
@@ -92,51 +91,50 @@ uint32_t __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutVa
 }
 
 void __stdcall SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t * pValue, int32_t nValueSize) {
-    if (!pValue) {
-      SErr::SErrSetLastError(0x57);
-    } else {
-      uint32_t nNewValue;
-      SErr::SErrSetLastError(0x57);
-      switch (nOptionId) {
-        case 1:
-          if (nValueSize == 4) {
-            gnSSystemOption1 = *pValue;
-            SErr::SErrSetLastError(0);
-            return;
-          }
-        break;
-        case 2:
-          if (nValueSize == 4 && (nNewValue = *pValue , nNewValue != 0) && (nNewValue - 1 ^ nNewValue) == nNewValue * 2 - 1) {
-            gnSSystemWaveBufferSize = nNewValue;
-            SErr::SErrSetLastError(0);
-            return;
-          }
-        break;
-        case 3:
-          if (nValueSize == 4) {
-            gnSSystemOption3 = *pValue;
-            SErr::SErrSetLastError(0);
-            return;
-          }
-        break;
-        case 4:
-          if (nValueSize == 4) {
-            gnSSystemAsyncReadSize = *pValue;
-            SErr::SErrSetLastError(0);
-            return;
-          }
-        break;
-        case 5:
-          if (nValueSize == 4) {
-            gbCompressionDebugOutput = *pValue;
-            SErr::SErrSetLastError(0);
-            return;
-          }
-        break;
-        default:
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pValue);
+    D2_CHECKS_END_VOID(SErr::SErrSetLastError(0x57));
+    uint32_t nNewValue;
+    SErr::SErrSetLastError(0x57);
+    switch (nOptionId) {
+      case 1:
+        if (nValueSize == 4) {
+          gnSSystemOption1 = *pValue;
           SErr::SErrSetLastError(0);
-        return;
-      }
+          return;
+        }
+      break;
+      case 2:
+        if (nValueSize == 4 && (nNewValue = *pValue , nNewValue != 0) && (nNewValue - 1 ^ nNewValue) == nNewValue * 2 - 1) {
+          gnSSystemWaveBufferSize = nNewValue;
+          SErr::SErrSetLastError(0);
+          return;
+        }
+      break;
+      case 3:
+        if (nValueSize == 4) {
+          gnSSystemOption3 = *pValue;
+          SErr::SErrSetLastError(0);
+          return;
+        }
+      break;
+      case 4:
+        if (nValueSize == 4) {
+          gnSSystemAsyncReadSize = *pValue;
+          SErr::SErrSetLastError(0);
+          return;
+        }
+      break;
+      case 5:
+        if (nValueSize == 4) {
+          gbCompressionDebugOutput = *pValue;
+          SErr::SErrSetLastError(0);
+          return;
+        }
+      break;
+      default:
+        SErr::SErrSetLastError(0);
+      return;
     }
 }
 

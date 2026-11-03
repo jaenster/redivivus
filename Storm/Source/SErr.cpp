@@ -228,11 +228,10 @@ void __stdcall SErrSetLastError(DWORD dwErrCode) {
 // @oracle-note The rival candidate SSYSTEM_LoadErrorString 0041c170 was ruled out: 1 parameter against the oracle's 3, and it calls LoadStringA rather than FormatMessage. It is a 1.14d-only helper that MWCC inlined into SErrDisplayError on the PPC side. Left under its descriptive name.
 // @corroboration Also called from Lng::LNG_FormatErrorMessageWithFallback, i.e. from D2 code outside the Storm module - the caller profile of an export.
 uint32_t __stdcall SErrGetErrorStr(DWORD dwMessageId, LPSTR szText, DWORD nBufferSize) {
-    if (!szText || !nBufferSize) {
-      SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECK(nBufferSize);
+    D2_CHECKS_END(SErrSetLastError(0x57), 0);
     SERR_InternalEnterCriticalSection();
     if (!gbFormatErrorModulesInitialized) {
       gbFormatErrorModulesInitialized = 1;

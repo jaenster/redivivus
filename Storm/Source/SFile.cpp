@@ -944,11 +944,9 @@ void __stdcall SFileRegisterLoadNotifyProc(pfnSFileOpenCallback pfnCallback, voi
 
 // Installs the process-wide IDirectSound device used by the Storm DDA (Direct Digital Audio) streaming service: rejects NULL with SetLastError(ERROR_INVALID_PARAMETER) and otherwise stores it in g_pDirectSound. Counterpart of SFileDdaDestroy, which clears the same global.
 BOOL __stdcall SFileDdaInitialize(IDirectSound * lpDS) {
-    if (!lpDS) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(lpDS);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     g_pDirectSound = lpDS;
     return 1;
 }
@@ -1253,11 +1251,9 @@ DWORD __stdcall SFileGetFileSize(D2MPQFileStrc * pMPQFile, LPDWORD pdwFileSizeHi
 
 int __stdcall SFILE_GetFileTimestamp(D2MPQFileStrc * pArchive, LPFILETIME pFileTime) {
     LPFILETIME ftLastWrite = pFileTime;
-    if (!pFileTime) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pFileTime);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTime);
     LPFILETIME pMPQFileSaved = pFileTime;
@@ -1298,10 +1294,9 @@ void __stdcall SFileSetAsyncBudget(uint32_t nBudgetBytesPerSec) {
 // @wasnamed SFILE_SetMaxFileHandles
 // @basis behaviour-confirmed, and a hard contradiction of the old name. The single parameter is a PATH STRING, not a handle count: it is length-checked against MAX_PATH (0x104, SetLastError(0xa1) = ERROR_BAD_PATHNAME on overflow), copied into the global base-path buffer lpFilename_00778f28, and a trailing backslash is appended if absent. An empty string clears the base path. Nothing in the body touches a handle table. Counterpart of SFileGetBasePath (004160a0).
 int32_t __stdcall SFileSetBasePath(char * szText) {
-    if (!szText) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (*szText == '\0') {
       szSFileBasePath[0] = '\0';
       return 1;
@@ -1329,11 +1324,9 @@ int32_t __stdcall SFileSetBasePath(char * szText) {
 // @wasnamed SFILE_GetMaxFileHandles
 // @basis behaviour-confirmed, and a hard contradiction of the old name in BOTH halves. It is a setter, not a getter - it writes its argument into the global. And the value is a chunk size, not a handle count: the argument is rejected unless it is a power of two ((n-1) & n == 0), and downstream the global is used as the read granularity in SFILE_ReadFile (nChunkCount = <global>) and as a byte-rate numerator in SFILE_AsyncIOWorkerThread (<global> * 1000 / gnSFileAsyncIOPriority). A maximum-file-handle count would need neither a power-of-two constraint nor a role in the read loop. NOTE: the global itself is still named gnSFileMaxFileHandles and inherits the same error; it should read gnSFileDataChunkSize.
 void __stdcall SFileSetDataChunkSize(uint32_t nChunkSize) {
-    if (nChunkSize - 1 & nChunkSize) {
-      SErr::SErrSetLastError(0x57);
-      return;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(!(nChunkSize - 1 & nChunkSize));
+    D2_CHECKS_END_VOID(SErr::SErrSetLastError(0x57));
     gnSFileDataChunkSize = nChunkSize;
 }
 
@@ -1420,11 +1413,9 @@ void __stdcall SFileSetPlatform(uint8_t byPlatform) {
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileUnloadFile (Storm 1.10b PPC)
 int32_t __stdcall SFileUnloadFile(void * pFile) {
-    if (!pFile) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pFile);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     SMem::SMemFree(pFile, ".\\SOURCE\\SFILE.CPP", 0x1407, 0);
     return 1;
 }
@@ -4354,21 +4345,17 @@ static void SFILE_SetRequestUrgentByBuffer(void * pReadBuffer, BOOL bUrgent) {
 
 // Cancels async request without returning status. Validates handle (sets ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0). Called by ASYNCDATA_Free to silently cancel pending I/O during cleanup.
 void __stdcall SFILE_CancelAsyncRequestNoReturn(int32_t nAsyncHandle) {
-    if (!nAsyncHandle) {
-      SErr::SErrSetLastError(0x57);
-      return;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(nAsyncHandle);
+    D2_CHECKS_END_VOID(SErr::SErrSetLastError(0x57));
     SFILE_CancelRequest(nAsyncHandle, nullptr);
 }
 
 // Cancels async request and returns status. Validates handle (returns 0 + ERROR_INVALID_PARAMETER if zero), then calls SFILE_CancelAsyncRequest(param1, 0) and returns its result (1=success, 0=failure).
 int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nRequestHandle) {
-    if (!nRequestHandle) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(nRequestHandle);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     int nResult = SFILE_CancelRequest(nRequestHandle, nullptr);
     return nResult;
 }
@@ -4425,11 +4412,9 @@ BOOL __stdcall SFileDdaEnd(D2MPQFileStrc * hFile) {
 
 // Re-prioritises the queued Storm reads into pReadBuffer: SFILE_SetRequestUrgentByBuffer(pReadBuffer, nPriority > 0), then signals ghAsyncIOEvent if nPriority > 0. SetLastError(0x57) on a NULL buffer. Fog AsyncData passes D2AsyncData_Line0x128.pReadBuffer (+0x3c).
 void __stdcall SFILE_SetRequestPriorityByBuffer(void * pReadBuffer, int nPriority) {
-    if (!pReadBuffer) {
-      SErr::SErrSetLastError(0x57);
-      return;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pReadBuffer);
+    D2_CHECKS_END_VOID(SErr::SErrSetLastError(0x57));
     SFILE_SetRequestUrgentByBuffer(pReadBuffer, (uint32_t)(nPriority > 0));
     if (nPriority < 1) {
       return;
@@ -4459,11 +4444,10 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
     if (pBytesRead) {
       *pBytesRead = 0;
     }
-    if (!pOutputBuffer) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
 
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pOutputBuffer);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     int nReadResult;
     nReadResult = SFILE_CheckFileHandle(pFileHandle, &pFileHandle);
@@ -4845,10 +4829,9 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
     uint32_t aRiffHeader[3];
     WAVEFORMATEX wFormatTag;
     uint32_t nChunkFound = dwBufferBytes;
-    if (!dwBufferBytes) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
+    D2_CHECKS_BEGIN;
+    D2_CHECK(dwBufferBytes);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (!g_pDirectSound) {
       SErr::SErrSetLastError(0x85100071);
       return 0;

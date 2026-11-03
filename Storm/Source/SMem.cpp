@@ -1441,11 +1441,10 @@ BOOL __stdcall SMemDumpState(pfnSMemDumpCallback pfnCallback, uint32_t dwCallbac
         return 0;
       }
     }
-    if (!pfnCallback) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
 
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pfnCallback);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     heapStats.dwSize = 0x128;
     uint32_t nHeapIndex = 0;
     int bHasNextHeap = SMemFindNextHeap(0, (int*)&nHeapIndex, &heapStats);

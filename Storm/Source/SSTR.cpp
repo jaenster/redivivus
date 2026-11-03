@@ -22,11 +22,9 @@ static uint64_t cSStrAtoDecimalPoint = 0x41f0000000000000; D2_STATIC_GUARD(cSStr
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CutStringBeginingTillFoundString
 char * __stdcall SStrChr(char * szText, char cTarget) {
-    if (!szText) {
-      SErr::SErrSetLastError(0x57);
-      return nullptr;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), nullptr);
     char cCur = *szText;
     while (true) {
       if (cCur == '\0') {
@@ -51,11 +49,9 @@ char * __stdcall SStrChr(char * szText, char cTarget) {
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_FindLastChar
 char * __stdcall SStrChrR(char * szText, char cTarget) {
-    if (!szText) {
-      SErr::SErrSetLastError(0x57);
-      return nullptr;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), nullptr);
     char* pLastMatch = 0;
     char cCur = *szText;
     while (cCur != '\0') {
@@ -74,10 +70,9 @@ char * __stdcall SStrChrR(char * szText, char cTarget) {
 
 char * __stdcall SSTR_FindChar(char * szText, char cTarget, int32_t bFromEnd) {
     char* pResult;
-    if (!szText) {
-      SErr::SErrSetLastError(0x57);
-      return nullptr;
-    }
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), nullptr);
     if (bFromEnd) {
       pResult = SStrChrR(szText, cTarget);
       return pResult;
@@ -94,11 +89,10 @@ char * __stdcall SSTR_FindChar(char * szText, char cTarget, int32_t bFromEnd) {
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringCaseSensitive
 int32_t __stdcall SStrCmp(char * str_1, char * str_2, size_t nMaxCount) {
-    if (!str_1 || !str_2) {
-      SErr::SErrSetLastError(0x57);
-      return (int)str_1 - (int)str_2;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(str_1);
+    D2_CHECK(str_2);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (int)str_1 - (int)str_2);
     int nResult = strncmp(str_1, str_2, nMaxCount);
     return nResult;
 }
@@ -109,11 +103,10 @@ int32_t __stdcall SStrCmp(char * str_1, char * str_2, size_t nMaxCount) {
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringNoCaseSensitive
 int32_t __stdcall SStrCmpI(char * str_1, char * str_2, size_t nMaxCount) {
-    if (!str_1 || !str_2) {
-      SErr::SErrSetLastError(0x57);
-      return (int)str_1 - (int)str_2;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(str_1);
+    D2_CHECK(str_2);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (int)str_1 - (int)str_2);
     int nResult = _strnicmp(str_1, str_2, nMaxCount);
     return nResult;
 }
@@ -133,9 +126,11 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
     uint32_t dwWord;
     int nOffsetPrev;
     char* pDstLast;
-    if (!szBufferOutput || !szBufferInput) {
-      SErr::SErrSetLastError(0x57);
-    } else if (nBufferOutputLength) {
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szBufferOutput);
+    D2_CHECK(szBufferInput);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    if (nBufferOutputLength) {
       pDstLast = szBufferOutput + nBufferOutputLength - 1;
       for (nOffset = (int)szBufferOutput - (int)pDstLast; (uint32_t)szBufferInput & 3 && nOffset; nOffset++) {
         dwWord = *(uint32_t*)szBufferInput;
@@ -235,11 +230,9 @@ uint32_t __stdcall SStrLen(char * szText) {
     DWORD dwAlignTemp;
     uint32_t dwAlignSaved;
     char* pNext;
-    if (!szText) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t dwCarry = -1;
     for (szToCheck = szText; pNext = szToCheck , dwAlignSaved = guStringAlignmentTemp , ((uint32_t)szToCheck & 3) != 0; szToCheck++) {
       if (*szToCheck == '\0') {
@@ -296,9 +289,11 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
     int nOffsetPrev;
     LPSTR pDstLast;
     uint32_t* pScanNext;
-    if (!szText || !szSource) {
-      SErr::SErrSetLastError(0x57);
-    } else if (nBufferLength) {
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECK(szSource);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    if (nBufferLength) {
       dwCarry = -1;
       pDstLast = szText + (nBufferLength - 1);
       pScan = szText;
@@ -454,11 +449,10 @@ static uint32_t D2vsprintf(char * szFormat, size_t nSize, char * pBuffer, va_lis
 size_t SStrPrintf(char * szOutput, size_t nSize, char * Format, ...) {
     va_list __va;
     va_start(__va, Format);
-    if (!szOutput || !Format) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szOutput);
+    D2_CHECK(Format);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t nWritten = D2vsprintf(Format, nSize, szOutput, __va);
     return nWritten;
 }
@@ -470,11 +464,10 @@ size_t SStrPrintf(char * szOutput, size_t nSize, char * Format, ...) {
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Vsnprintf
 uint32_t SStrVPrintf(char * szOutput, size_t nSize, char * szFormatString, va_list vaArgs) {
-    if (!szOutput || !szFormatString) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szOutput);
+    D2_CHECK(szFormatString);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t nWritten = D2vsprintf(szFormatString, nSize, szOutput, vaArgs);
     return nWritten;
 }
@@ -487,11 +480,9 @@ uint32_t SStrVPrintf(char * szOutput, size_t nSize, char * szFormatString, va_li
 // @wasnamed SSTR_AtoiSigned
 int32_t __stdcall SStrToInt(char * szText) {
     char cDigit;
-    if (!szText) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     char cSign = *szText;
     if (cSign == '-') {
       szText++;
@@ -526,26 +517,25 @@ int32_t __stdcall SStrToInt(char * szText) {
 uint32_t __stdcall SStrToUnsigned(char * szText) {
     uint32_t nDigit;
     char* pScan;
-    if (!szText) {
-      SErr::SErrSetLastError(0x57);
-    } else {
-      uint32_t nValue;
-      nValue = (int)*szText - 0x30;
-      if (nValue < 10) {
-        pScan = szText + 1;
-        nDigit = (int)szText[1] - 0x30;
-        if (nDigit >= 10) {
-          return nValue;
-        }
-
-        do {
-          pScan++;
-          nValue = nDigit + nValue * 10;
-          nDigit = (int)*pScan - 0x30;
-        } while (nDigit < 10);
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    uint32_t nValue;
+    nValue = (int)*szText - 0x30;
+    if (nValue < 10) {
+      pScan = szText + 1;
+      nDigit = (int)szText[1] - 0x30;
+      if (nDigit >= 10) {
         return nValue;
       }
+
+      do {
+        pScan++;
+        nValue = nDigit + nValue * 10;
+        nDigit = (int)*pScan - 0x30;
+      } while (nDigit < 10);
+
+      return nValue;
     }
 
     return 0;
@@ -682,11 +672,9 @@ uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSe
 }; D2_STATIC_GUARD(gnHashLowTable, "Storm::Source::SSTR::SStrHash::gnHashLowTable");
 
     uint32_t nChar;
-    if (!pszText) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pszText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     int nAccum;
     if (!nSeed) {
       nSeed = 0x7fed7fed;
@@ -797,11 +785,9 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
 
     uint32_t nChar;
     int64_t nAccum64;
-    if (!pszText) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pszText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     ULONGLONG UVar1;
     UVar1 = qwSeed;
     if (!qwSeed) {
@@ -1065,11 +1051,9 @@ void __stdcall SSTR_InitPow10Table() {
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Strdup
 char * __stdcall SStrDup(char * szText) {
-    if (!szText) {
-      SErr::SErrSetLastError(0x57);
-      return nullptr;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), nullptr);
     uint32_t nLen = SStrLen(szText);
     char* pCopy = (char*)SMem::SMemAlloc(nLen + 1, ".\\SOURCE\\SSTR.CPP", 0x1f2, 0);
     SMem::SMemCopy(pCopy, szText, nLen + 1);
@@ -1110,11 +1094,9 @@ int64_t __stdcall SStrToInt64(char * pStr) {
     double dVar1;
     int nAccumHi;
     uint64_t nResult;
-    if (!pStr) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pStr);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     char cSign;
     cSign = *pStr;
     if (cSign == '-') {
@@ -1215,10 +1197,9 @@ double __stdcall SStrToDouble(char * pStr) {
     int nFracDigits;
     double dAccumSlot;
     double dScale;
-    if (!pStr) {
-      SErr::SErrSetLastError(0x57);
-      return 0.0;
-    }
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pStr);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0.0);
     if (!gbSStrConversionTablesInitialized) {
       SSTR_InitConversionTables();
     }
@@ -1409,10 +1390,9 @@ float __stdcall SStrToFloat(char * pStr) {
     long double fPowBase;
     double dPow;
     double dScale;
-    if (!pStr) {
-      SErr::SErrSetLastError(0x57);
-      return 0.0;
-    }
+    D2_CHECKS_BEGIN;
+    D2_CHECK(pStr);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0.0);
     if (!gbSStrConversionTablesInitialized) {
       SSTR_InitConversionTables();
     }

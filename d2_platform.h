@@ -513,6 +513,20 @@ static inline int D2_StormNextLink(const void* pLink, int nLinkOffset) {
   return pThis->m_next + nLinkOffset;
 }
 
+// A parameter-check block (see param-check-block.ts): every D2_CHECK ANDs an all-ones or zero
+// mask into one accumulator, all checks are evaluated, and one test of it runs the failure arm.
+// VC8 compiles a check to neg/sbb and the accumulation to and; with the assumption after the block
+// it lays the block out as the original does. Other compilers need no assumption.
+#if defined(_MSC_VER)
+#define D2_CHECKS_ASSUME_(c) __assume(c)
+#else
+#define D2_CHECKS_ASSUME_(c) ((void)0)
+#endif
+#define D2_CHECKS_BEGIN do { int d2Checks_ = -1
+#define D2_CHECK(c) d2Checks_ &= (c) ? -1 : 0
+#define D2_CHECKS_END(fail, r) if (!d2Checks_) { fail; return r; } D2_CHECKS_ASSUME_(d2Checks_); } while (0)
+#define D2_CHECKS_END_VOID(fail) if (!d2Checks_) { fail; return; } D2_CHECKS_ASSUME_(d2Checks_); } while (0)
+
 // Diablo 2 PRNG — LCG with multiplier 0x6AC690C5
 #define D2_SEED_NEXT(seed) ((D2SeedStrc)((uint64_t)(uint32_t)(seed).nSeedLow * 0x6ac690c5u + (uint64_t)(uint32_t)(seed).nSeedHigh))
 #define D2_SEED_NEXT_VAL(sv) ((D2SeedStrc)((uint64_t)(uint32_t)(sv) * 0x6ac690c5u + ((uint64_t)(sv) >> 32)))

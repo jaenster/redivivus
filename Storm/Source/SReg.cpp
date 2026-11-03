@@ -17,10 +17,10 @@ namespace Storm::Source::SReg {
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSize) {
-    if (!szText || !nBufSize) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
+    D2_CHECKS_BEGIN;
+    D2_CHECK(szText);
+    D2_CHECK(nBufSize);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (byFlags & 2) {
       SSTR::SStrCopy(szText, "Software\\Battle.net\\", nBufSize);
       return 1;

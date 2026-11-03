@@ -471,11 +471,14 @@ static int __thiscall SBMP_WriteTGA(void * pPixels, void * hFile, uint8_t * nPal
 // @blizzard FlipImage (SBMP.CPP)
 static void __thiscall SBMP_FlipImage(int numRows, void * dst, void * src, int dstSize, int rowWidth, int srcStride) {
     size_t _Size;
-    if (!dst || !src || !dstSize || !rowWidth || !srcStride || !numRows) {
-      SErr::SErrSetLastError(0x57);
-      return;
-    }
-
+    D2_CHECKS_BEGIN;
+    D2_CHECK(dst);
+    D2_CHECK(src);
+    D2_CHECK(dstSize);
+    D2_CHECK(rowWidth);
+    D2_CHECK(srcStride);
+    D2_CHECK(numRows);
+    D2_CHECKS_END_VOID(SErr::SErrSetLastError(0x57));
     src = (void*)((int)src + (numRows - 1) * srcStride);
     void* _Dst = dst;
     while (true) {
