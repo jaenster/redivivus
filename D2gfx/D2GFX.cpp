@@ -1326,7 +1326,7 @@ void __fastcall D2GFX_DrawWallTileWithPerspective(uint8_t * pbTileData, uint8_t 
     uint32_t nRunLength;
     uint32_t nSkipCount;
     uint8_t* pbTileDataNext;
-    uint8_t (*pbLineBufRowPtr)[32] = gpLineBufferTileArray[nLightAccumX >> (byShift & 0x1f)] + (nLightAccumY >> (byShift & 0x1f));
+    uint8_t (*pbLineBufRowPtr)[32] = gpLineBufferTileArray[nLightAccumX >> D2_SHIFT_COUNT(byShift)] + (nLightAccumY >> D2_SHIFT_COUNT(byShift));
     uint8_t* pbDstWritePtr = pbDstRow;
     uint8_t* pbDstRowStart = pbDstRow;
     do {
@@ -1347,7 +1347,7 @@ void __fastcall D2GFX_DrawWallTileWithPerspective(uint8_t * pbTileData, uint8_t 
         nLightAccumY += nLightStepY;
         pbDstRow += gRenderBufferPitch;
         nRowsLeft--;
-        pbLineBufRowPtr = gpLineBufferTileArray[nLightAccumX >> (byShift & 0x1f)] + (nLightAccumY >> (byShift & 0x1f));
+        pbLineBufRowPtr = gpLineBufferTileArray[nLightAccumX >> D2_SHIFT_COUNT(byShift)] + (nLightAccumY >> D2_SHIFT_COUNT(byShift));
         pbTileData = pbTileDataNext;
         pbDstWritePtr = pbDstRow;
         pbDstRowStart = pbDstRow;

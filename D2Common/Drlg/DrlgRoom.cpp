@@ -509,7 +509,7 @@ void __fastcall DRLGWARP_InitWarpConnectionsBetweenLevels(D2DrlgStrc * pDrlg, ui
       DRLGACTMISC_GetWarpsIdIfExists(pSrcLevel->pDrlg, pSrcLevel->eD2LevelId);
       DRLGACTMISC_GetWarpsIdIfExists(pDstLevel->pDrlg, pDstLevel->eD2LevelId);
       for (pSrcRoomEx = pSrcLevel->pRoomExFirst; pSrcRoomEx; pSrcRoomEx = pSrcRoomEx->pRoomExNext) {
-        if (pSrcRoomEx->eRoomExFlags & 1 << (nSrcVisSlot + 4U & 0x1f)) {
+        if (pSrcRoomEx->eRoomExFlags & 1 << D2_SHIFT_COUNT(nSrcVisSlot + 4U)) {
           goto find_dst_warp_room;
         }
       }
@@ -517,7 +517,7 @@ void __fastcall DRLGWARP_InitWarpConnectionsBetweenLevels(D2DrlgStrc * pDrlg, ui
       pSrcRoomEx = 0;
       find_dst_warp_room:
       for (pDstRoomEx = pDstLevel->pRoomExFirst; pDstRoomEx; pDstRoomEx = pDstRoomEx->pRoomExNext) {
-        if (pDstRoomEx->eRoomExFlags & 1 << (nDstVisSlot + 4U & 0x1f)) {
+        if (pDstRoomEx->eRoomExFlags & 1 << D2_SHIFT_COUNT(nDstVisSlot + 4U)) {
           goto init_warp_rooms;
         }
       }
@@ -1276,7 +1276,7 @@ static BOOL __stdcall DRLGROOMEX_LinkNearRoomByDirection(uint8_t dstVisSlot, D2R
       if (!pDstRoomExIter) {
         return bLinkAdded;
       }
-      if (pDstRoomExIter->eRoomExFlags & 1 << (dstVisSlot + 4 & 0x1f)) {
+      if (pDstRoomExIter->eRoomExFlags & 1 << D2_SHIFT_COUNT(dstVisSlot + 4)) {
         if (warpDestLevel != -1) {
           DRLGROOMEX_ResizeArrayAndAddNewNearRoom(pRoomEx, pMemory, pDstRoomExIter, pDstRoomExIter);
           DRLGROOMEX_AllocRoomTile(pDstRoomExIter, srcVisSlot, pRoomEx);

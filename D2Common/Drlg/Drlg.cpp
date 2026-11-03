@@ -1798,7 +1798,7 @@ uint32_t __fastcall DRLGROOMEX_RollLevelSubstitutionMask(D2RoomExStrc * pRoomEx,
         sNewSeed = D2_SEED_NEXT(pRoomEx->sSeed);
         pRoomEx->sSeed = sNewSeed;
         if ((int)(sNewSeed.nSeedLow % 100) < pTxtLvlSubLine->Prob[nSubTheme]) {
-          dwSubMask |= 1 << (nSubIndex & 0x1f);
+          dwSubMask |= 1 << D2_SHIFT_COUNT(nSubIndex);
           D2TraceFmt("SUBMASK subType=%d row=%d type=%d dt1=%08X -> mask %08X|%08X",
                      (int)nSubType,
                      (int)(pTxtLvlSubLine - ::sgpTxtLvlSub),

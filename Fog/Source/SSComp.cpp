@@ -199,7 +199,7 @@ void __fastcall COMPRESS_BuildHuffmanDecodeTable(uint8_t * pCodeLengths) {
           nIndexC = nIndex + 0x101;
           nIndex++;
           nTmp--;
-          gabHuffmanNextTable[asSortedSymbols[nIndexC]] = (uint8_t)((int)(gabHuffmanNextTable[asSortedSymbols[nIndexA]] + 1) >> (*pCurSortedLen - asSortedSymbols[nIndexB] & 0x1f));
+          gabHuffmanNextTable[asSortedSymbols[nIndexC]] = (uint8_t)((int)(gabHuffmanNextTable[asSortedSymbols[nIndexA]] + 1) >> D2_SHIFT_COUNT(*pCurSortedLen - asSortedSymbols[nIndexB]));
         } while (nTmp);
 
         pDecodeBuf = gaHuffmanDecodeBuffer;
@@ -227,8 +227,8 @@ void __fastcall COMPRESS_BuildHuffmanDecodeTable(uint8_t * pCodeLengths) {
             pSymbolBase = asSortedSymbols + nLenIndex + 0x1ff;
             bySymbol = gabHuffmanNextTable[*pSymbolBase];
             pSymbolPtr = (uint8_t*)(uint32_t)bySymbol;
-            byPrefixIndex = bySymbol >> (byCodeLen - 8 & 0x1f);
-            anOffsets[0x10] = 1 << (byCodeLen - 8 & 0x1f);
+            byPrefixIndex = bySymbol >> D2_SHIFT_COUNT(byCodeLen - 8);
+            anOffsets[0x10] = 1 << D2_SHIFT_COUNT(byCodeLen - 8);
             nCodeLen = (uint32_t)byCodeLen;
             if (!((uint32_t)bySymbol & anOffsets[0x10] - 1U)) {
               gaHuffmanFastDecodeTable[byPrefixIndex] = (uint32_t)pDecodeBuf;
@@ -238,7 +238,7 @@ void __fastcall COMPRESS_BuildHuffmanDecodeTable(uint8_t * pCodeLengths) {
               if (anOffsets[0x10] > 0) {
                 pSymbolPtr = pSymbolBase;
                 do {
-                  nTmp = 1 << (byCodeLen - asSortedSymbols[nIndex + nLenIndex + 0xff] & 0x1f);
+                  nTmp = 1 << D2_SHIFT_COUNT(byCodeLen - asSortedSymbols[nIndex + nLenIndex + 0xff]);
                   if (nTmp) {
                     bySymbol = *pSymbolPtr;
                     pDecodeBuf += nTmp;

@@ -697,7 +697,7 @@ static void __stdcall SKILLS_UseChargedSkillCharge(::SGAMEDATA * pGame, D2SkillS
       return;
     }
 
-    uint32_t nLayer = (eSkillId << (sgptDataTable->nChargedSkillLevelBits & 0x1f)) + (sgptDataTable->dwChargedSkillLevelMask & nMaxChargeCount);
+    uint32_t nLayer = (eSkillId << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + (sgptDataTable->dwChargedSkillLevelMask & nMaxChargeCount);
     nChargedStatRaw = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(__frame0.pChargedStatList, UNITSTAT_item_charged_skill, nLayer);
     if (!nChargedStatRaw) {
       return;
@@ -746,7 +746,7 @@ void __fastcall CalculateManaUse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Ski
       return;
     }
 
-    int nManaCost = (int)pSkillTxt->lvlmana * ((int)(nSkillLevel - 1U) < 0 ? 0 : nSkillLevel - 1U) + (int)pSkillTxt->mana << (pSkillTxt->manashift & 0x1f);
+    int nManaCost = (int)pSkillTxt->lvlmana * ((int)(nSkillLevel - 1U) < 0 ? 0 : nSkillLevel - 1U) + (int)pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift);
     int nMinManaCost = pSkillTxt->minmana * 0x100;
     if (nMinManaCost > nManaCost) {
       nManaCost = nMinManaCost;
@@ -824,7 +824,7 @@ uint32_t __fastcall SKILL_CheckManaForCast(D2UnitStrc * pUnit) {
     }
 
     int nCurrentMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    return (uint32_t)(nCurrentMana >= sLvlMana * nSkillLevel + (int)sMana << (sManaShift & 0x1f));
+    return (uint32_t)(nCurrentMana >= sLvlMana * nSkillLevel + (int)sMana << D2_SHIFT_COUNT(sManaShift));
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
@@ -1270,7 +1270,7 @@ BOOL __fastcall SKILLS_SrvStFn02_Kick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
     memset(&sDamage, 0, 0x70);
     sDamage.wResultFlags = 9;
     sDamage.dwHitFlags = 2;
-    sDamage.dwPhysDamage = pSkillTxt->MinDam << (pSkillTxt->HitShift & 0x1fU);
+    sDamage.dwPhysDamage = pSkillTxt->MinDam << D2_SHIFT_COUNT(pSkillTxt->HitShift);
     sDamage.dwHitClass = 1;
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);
     return 1;

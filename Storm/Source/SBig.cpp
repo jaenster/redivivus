@@ -1859,7 +1859,7 @@ static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
       pResult->nCount = nChunkSize;
     }
 
-    pResult->pData[pResult->nStartWord + nIndex] = 1 << (nBitPos & 0x1f);
+    pResult->pData[pResult->nStartWord + nIndex] = 1 << D2_SHIFT_COUNT(nBitPos);
     nIndex = pResult->nStartWord + 1 + nIndex;
     if (nIndex > pResult->nCount && nIndex > pResult->nCapacity) {
       nNeededCount = pResult->nGrowStep;
@@ -1967,7 +1967,7 @@ static void __stdcall BigBuffer_Shl(BigBuffer * pSrc, BigBuffer * pResult, uint3
               nIndex = 0;
             }
 
-            dwWord += nIndex >> (0x20U - byShift & 0x1f);
+            dwWord += nIndex >> D2_SHIFT_COUNT(0x20U - byShift);
           }
         }
 
@@ -2047,7 +2047,7 @@ static void __stdcall BigBuffer_Shr(BigBuffer * pSrc, BigBuffer * pResult, uint3
             nAlignedCount = 0;
           }
 
-          dwWord += nAlignedCount << (0x20U - byShift & 0x1f);
+          dwWord += nAlignedCount << D2_SHIFT_COUNT(0x20U - byShift);
         }
 
         nSrcCount = pResult->nStartWord + i;

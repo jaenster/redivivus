@@ -272,7 +272,7 @@ static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * 
       D2UnitStrc* pOwner;
       pOwner = pStatList->pOwner;
       if (pOwner && (pOwner->eUnitType == UNIT_PLAYER || pOwner && pOwner->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
-        nLo = pItemStatCostLine->minaccr << (pItemStatCostLine->valshift & 0x1fU);
+        nLo = pItemStatCostLine->minaccr << D2_SHIFT_COUNT(pItemStatCostLine->valshift);
       }
     }
 
@@ -306,7 +306,7 @@ static int32_t __stdcall TXT_ItemStatCost_GetMinimumStatValueShifted(D2ItemStatC
       D2UnitStrc* pUnit;
       pUnit = pStatEx->pOwner;
       if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit && pUnit->eUnitType == UNIT_MONSTER) && nLo < pItemStatCostLine->minaccr) {
-        nLo = pItemStatCostLine->minaccr << (pItemStatCostLine->valshift & 0x1fU);
+        nLo = pItemStatCostLine->minaccr << D2_SHIFT_COUNT(pItemStatCostLine->valshift);
       }
     }
 
@@ -1419,11 +1419,11 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
               nApplyResult3 = TXT_ItemStatCost_GetMinimumStatValueShifted(nullptr, pStatList, (uint32_t)wBaseStat << 0x10);
               byValShift = pItemStatCostLine->valshift;
               add_opbase_scaled:
-              nApplyResult3 >>= byValShift & 0x1f;
+              nApplyResult3 >>= D2_SHIFT_COUNT(byValShift);
               if (nApplyResult3 > 0) {
                 nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10);
                 if (nRelatedStatVal) {
-                  nApplyResult2 = nRelatedStatVal * nApplyResult3 >> (*(uint8_t*)((int)pOpRelation + 3) & 0x1f);
+                  nApplyResult2 = nRelatedStatVal * nApplyResult3 >> D2_SHIFT_COUNT(*(uint8_t*)((int)pOpRelation + 3));
                   goto add_to_total;
                 }
               }
@@ -1460,11 +1460,11 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
               nApplyResult3 = TXT_ItemStatCost_GetMinimumStatValueShifted(nullptr, pStatList, (uint32_t)wBaseStat << 0x10);
               byValShift = pItemStatCostLine->valshift;
               add_opbase_scaled_percent:
-              nApplyResult3 >>= byValShift & 0x1f;
+              nApplyResult3 >>= D2_SHIFT_COUNT(byValShift);
               if (nApplyResult3 > 0) {
                 nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10);
                 if (nRelatedStatVal) {
-                  nApplyResult = nRelatedStatVal * nApplyResult3 >> (*(uint8_t*)((int)pOpRelation + 3) & 0x1f);
+                  nApplyResult = nRelatedStatVal * nApplyResult3 >> D2_SHIFT_COUNT(*(uint8_t*)((int)pOpRelation + 3));
                   goto add_percent;
                 }
               }

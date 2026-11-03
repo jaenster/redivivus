@@ -911,10 +911,10 @@ static int32_t __stdcall SKILLDESC_CalcStatGroupValue(D2UnitStrc * pUnit, eD2Uni
       }
 
       nRawStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, 0);
-      nStatValue = (nRawStatValue >> (pStatCostLine->valshift & 0x1fU)) * nStatValue >> (pItemStatCostTxt->opParam & 0x1f);
+      nStatValue = (nRawStatValue >> D2_SHIFT_COUNT(pStatCostLine->valshift)) * nStatValue >> D2_SHIFT_COUNT(pItemStatCostTxt->opParam);
     }
 
-    int32_t nShiftedValue = nStatValue >> (pItemStatCostTxt->valshift & 0x1fU);
+    int32_t nShiftedValue = nStatValue >> D2_SHIFT_COUNT(pItemStatCostTxt->valshift);
     if (eStat == UNITSTAT_item_undeaddamage_percent && pUnit && pUnit->eUnitType == UNIT_ITEM) {
       nBluntBonus = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Blunt);
       if (nBluntBonus) {
@@ -1193,7 +1193,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       wszSecondaryStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(nStatParam + 0x5a));
       break;
       case 0xf:
-        iVar1 = nStatParam >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+        iVar1 = nStatParam >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
       nStatParam = sgptDataTable->dwChargedSkillLevelMask & nStatParam;
       if (iVar1 <= 0) {
         return 0;
@@ -1355,7 +1355,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       break;
       case 0x18:
         nCharClassIndex = sgptDataTable->dwChargedSkillLevelMask & nStatParam;
-      wStrId = SKILLDESC_GetStatNameString(nStatParam >> (sgptDataTable->nChargedSkillLevelBits & 0x1f), 0);
+      wStrId = SKILLDESC_GetStatNameString(nStatParam >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits), 0);
       nStatParam = (int32_t)D2Lang::StrTable::strtable::GetLocaleString(wStrId);
       if (!(uint16_t*)nStatParam) {
         goto append_descstr2;
@@ -2090,7 +2090,7 @@ void __fastcall SKILLDESC_AppendItemBuffText(D2UnitStrc * pUnit, D2UnitStrc * pI
               if (iVar1 < nItemQuality) {
                 nSetStateIndex += -4;
               }
-              if (nEquippedSetMask & 1 << (nItemQuality & 0x1f)) {
+              if (nEquippedSetMask & 1 << D2_SHIFT_COUNT(nItemQuality)) {
                 SKILLDESC_BuildStatBuffDesc(pItem, wszOutputBuffer, nMaxBufferSize, 0, *(eD2States*)((int)gaeSetBonusStates + nSetStateIndex), STATE_none, 0, 1);
               }
             }
@@ -3272,12 +3272,12 @@ static void __stdcall SKILLDESC_DescLine1_SkillParams(D2SkillsTxt * pSkillsTxt, 
 
     uint16_t wStrIdMana = pSkillDescTxt->strMana;
     uint8_t byShift = (uint8_t)pSkillsTxt->manashift;
-    uint32_t nManaCost = (nSkillLevel - 1) * (int)pSkillsTxt->lvlmana + (int)sManaCostBase << (byShift & 0x1f);
+    uint32_t nManaCost = (nSkillLevel - 1) * (int)pSkillsTxt->lvlmana + (int)sManaCostBase << D2_SHIFT_COUNT(byShift);
     uint32_t nManaCostMin = pSkillsTxt->minmana * 0x100;
     if ((int)nManaCostMin > (int)nManaCost) {
       nManaCost = nManaCostMin;
     }
-    if (pSkillsTxt->manashift != 8 && (int)pSkillsTxt->lvlmana << (byShift & 0x1f) <= 0x100 && (int)nManaCost <= 0x1900) {
+    if (pSkillsTxt->manashift != 8 && (int)pSkillsTxt->lvlmana << D2_SHIFT_COUNT(byShift) <= 0x100 && (int)nManaCost <= 0x1900) {
       uint32_t nManaCostFrac;
       if (nCalcA <= 0xa) {
         nManaCostFrac = (int)nManaCost % 256;
@@ -4448,7 +4448,7 @@ void __fastcall SKILLDESC_DrawSkillDmgBasic(D2UnitStrc * pUnit, D2SkillStrc * pS
     char cDmgShift = pSkillsTxt->HitShift;
     int nMaxDmgShifted = pSkillsTxt->MinDam;
     int32_t nKickMinDmgStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_kickdamage, 0);
-    nMaxDmgShifted = (nMaxDmgShifted << (cDmgShift - 8U & 0x1f)) + nKickMinDmgStat;
+    nMaxDmgShifted = (nMaxDmgShifted << D2_SHIFT_COUNT(cDmgShift - 8U)) + nKickMinDmgStat;
     SKILLDESC_DrawDamageNumbers(nMaxDmgShifted, nMaxDmgShifted, 0, nY, nXRight, nXLeft);
 }
 
@@ -4977,8 +4977,8 @@ void __fastcall SKILLDESC_DrawSkillDmgBow(D2UnitStrc * pUnit, D2SkillStrc * pSki
     int32_t nMinDmgShifted = D2Common::Skills::SERVER_MinDamage(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 1);
     int32_t nMaxDmgShifted = D2Common::Skills::SERVER_MaxDamage(pUnitSaved, (int)pDVar1->skill, nSkillLevel, 1);
     nSkillLevel = SKILLDESC_ElemTypeToColorIndex((eD2ElementalDamageTypeDWORD)pDVar1->EType);
-    int32_t nMinDamage = ((nMinDmgTxtBase << (byDmgShift & 0x1f)) + nMinDmgShifted) * 0x4b >> 8;
-    pSkillsTxt = (D2SkillsTxt*)(((nMaxDmgTxtBase << (byDmgShift & 0x1f)) + nMaxDmgShifted) * 0x4b >> 8);
+    int32_t nMinDamage = ((nMinDmgTxtBase << D2_SHIFT_COUNT(byDmgShift)) + nMinDmgShifted) * 0x4b >> 8;
+    pSkillsTxt = (D2SkillsTxt*)(((nMaxDmgTxtBase << D2_SHIFT_COUNT(byDmgShift)) + nMaxDmgShifted) * 0x4b >> 8);
     SKILLDESC_DrawElemDamageWithRange(pUnitSaved, &nMinDamage, (int*)&pSkillsTxt, &nSkillLevel, nullptr, pSkill, (uint32_t)(uint8_t)pDVar1->SrcDam);
     SKILLDESC_DrawDamageNumbers(nMinDamage, (int32_t)pSkillsTxt, nSkillLevel, nY, nXRight, nXLeft);
 }

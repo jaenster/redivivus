@@ -139,7 +139,7 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
     uint32_t nClipRight;
     uint32_t nClipEnd;
     int iRow = 0;
-    uint8_t (*pbLineBufRowPtr)[32] = gpLineBufferTileArray[nLightAccumX >> (byShift & 0x1f)] + (nLightAccumY >> (byShift & 0x1f));
+    uint8_t (*pbLineBufRowPtr)[32] = gpLineBufferTileArray[nLightAccumX >> D2_SHIFT_COUNT(byShift)] + (nLightAccumY >> D2_SHIFT_COUNT(byShift));
     uint8_t* pRowStart = nDstRowBase;
     uint8_t* pbDstPixel = nDstRowBase;
     int nScreenY = nScreenYStart;
@@ -158,7 +158,7 @@ void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_
         iRow++;
         nScreenY++;
         nLightAccumX += nLightStepX;
-        pbLineBufRowPtr = gpLineBufferTileArray[nLightAccumX >> (byShift & 0x1f)] + (nLightAccumY >> (byShift & 0x1f));
+        pbLineBufRowPtr = gpLineBufferTileArray[nLightAccumX >> D2_SHIFT_COUNT(byShift)] + (nLightAccumY >> D2_SHIFT_COUNT(byShift));
         pbTileData = pbSrcPixel;
         pRowStart = nDstRowPtr;
         nDstRowBase = nDstRowPtr;

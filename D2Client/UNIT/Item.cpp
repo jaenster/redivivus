@@ -1001,7 +1001,7 @@ BOOL __fastcall ITEM_UpdateChargedSkillStat(D2UnitStrc * pUnit, int32_t nSkillId
     BOOL nChargeValue;
     uint32_t nLevel;
     uint32_t nChargeCount;
-    uint32_t nStatParamPacked = (nSkillId << (sgptDataTable->nChargedSkillLevelBits & 0x1f)) + (sgptDataTable->dwChargedSkillLevelMask & nStatLevel);
+    uint32_t nStatParamPacked = (nSkillId << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + (sgptDataTable->dwChargedSkillLevelMask & nStatLevel);
     for (pStatList = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 0x40); pStatList; pStatList = D2Common::Stats::StatsEx::STATLIST_FindStatListWithFlags(pStatList, 0x40)) {
       int nStatValue;
       nStatValue = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_item_charged_skill, nStatParamPacked);
@@ -1049,7 +1049,7 @@ void __fastcall ITEM_HandleStatUpdatePacket(DWORD nUnitGUID, char bSetStat, eD2U
     if (eUnitStat == UNITSTAT_item_charged_skill) {
       pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
       if (pPlayerUnit_lcl) {
-        ITEM_UpdateChargedSkillStat(pItem, (uint32_t)(nStatParam >> (sgptDataTable->nChargedSkillLevelBits & 0x1f)), sgptDataTable->dwChargedSkillLevelMask & (uint32_t)nStatParam, nValue & 0xff);
+        ITEM_UpdateChargedSkillStat(pItem, (uint32_t)(nStatParam >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)), sgptDataTable->dwChargedSkillLevelMask & (uint32_t)nStatParam, nValue & 0xff);
         return;
       }
     } else {

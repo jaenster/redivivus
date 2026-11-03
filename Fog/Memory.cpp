@@ -722,7 +722,7 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
         if (!nPoolIndex) {
           nBlockSize = 0x10;
         } else {
-          nBlockSize = 1 << (nPoolIndex + 4U & 0x1f);
+          nBlockSize = 1 << D2_SHIFT_COUNT(nPoolIndex + 4U);
         }
 
         pNewManager->pPools[nPoolIndex].nBlockSize = nBlockSize;

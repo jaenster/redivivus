@@ -3284,11 +3284,11 @@ int32_t __fastcall DAMAGE_SafeShiftMultiply(int32_t nMultiplicand, int32_t nMult
     }
 
     uint8_t byShift = (uint8_t)nShiftBits;
-    if (nMultiplicand > 0x7fffffff >> ((char)(nMultiplier >> (byShift & 0x1f)) + byShift & 0x1f)) {
-      return (nMultiplicand >> (byShift & 0x1f)) * nMultiplier;
+    if (nMultiplicand > 0x7fffffff >> D2_SHIFT_COUNT((char)(nMultiplier >> D2_SHIFT_COUNT(byShift)) + byShift)) {
+      return (nMultiplicand >> D2_SHIFT_COUNT(byShift)) * nMultiplier;
     }
 
-    nMultiplicand = nMultiplicand * nMultiplier >> (byShift & 0x1f);
+    nMultiplicand = nMultiplicand * nMultiplier >> D2_SHIFT_COUNT(byShift);
     return nMultiplicand;
 }
 
@@ -3304,11 +3304,11 @@ static int32_t __stdcall XP_ApplyLevelExpRatio(int32_t nLevel, int32_t nExperien
     }
 
     uint8_t byShift = (uint8_t)nExpRatioBase;
-    if (nExperience > 0x7fffffff >> ((char)((int)nExpRatioLevel >> (byShift & 0x1f)) + byShift & 0x1f)) {
-      return (nExperience >> (byShift & 0x1f)) * nExpRatioLevel;
+    if (nExperience > 0x7fffffff >> D2_SHIFT_COUNT((char)((int)nExpRatioLevel >> D2_SHIFT_COUNT(byShift)) + byShift)) {
+      return (nExperience >> D2_SHIFT_COUNT(byShift)) * nExpRatioLevel;
     }
 
-    nExperience = (int)(nExpRatioLevel * nExperience) >> (byShift & 0x1f);
+    nExperience = (int)(nExpRatioLevel * nExperience) >> D2_SHIFT_COUNT(byShift);
     return nExperience;
 }
 

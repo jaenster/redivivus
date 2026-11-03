@@ -365,7 +365,7 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
       break;
       case UNITSTAT_item_charged_skill:
         if (pUnit->eUnitType == UNIT_PLAYER) {
-          nSkillIdOrLevel = (int)(uint16_t)dwStatIdAndSubIndex >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+          nSkillIdOrLevel = (int)(uint16_t)dwStatIdAndSubIndex >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
           nChargeMax = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & dwStatIdAndSubIndex);
           if (pItem) {
             nItemGUID = pItem->nUnitGUID;

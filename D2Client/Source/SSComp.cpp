@@ -220,8 +220,8 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
         nBitCount += 0x10;
       }
 
-      dwCodeEntry = *(uint32_t*)(pLenCodeTable + ((1 << (nLenCodeBits & 0x1f)) - 1U & dwBitHold) * 4);
-      dwBitHold >>= (uint8_t)(dwCodeEntry >> 8) & 0x1f;
+      dwCodeEntry = *(uint32_t*)(pLenCodeTable + ((1 << D2_SHIFT_COUNT(nLenCodeBits)) - 1U & dwBitHold) * 4);
+      dwBitHold >>= D2_SHIFT_COUNT((uint8_t)(dwCodeEntry >> 8));
       nBitCount -= dwCodeEntry >> 8 & 0xff;
       while ((uint8_t)dwCodeEntry) {
         if (dwCodeEntry & 0x10) {
@@ -230,7 +230,7 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
           if (dwCodeEntry) {
             if (nBitCount < dwCodeEntry) {
               pInput++;
-              dwBitHold += (uint32_t)*pInput << (nBitCount & 0x1f);
+              dwBitHold += (uint32_t)*pInput << D2_SHIFT_COUNT(nBitCount);
               nBitCount += 8;
             }
 
@@ -245,9 +245,9 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
             nBitCount += 0x10;
           }
 
-          dwDistEntry = *(uint32_t*)(pDistCodeTable + ((1 << (nDistCodeBits & 0x1f)) - 1U & dwBitHold) * 4);
+          dwDistEntry = *(uint32_t*)(pDistCodeTable + ((1 << D2_SHIFT_COUNT(nDistCodeBits)) - 1U & dwBitHold) * 4);
           dwCodeEntry = (uint8_t)dwDistEntry;
-          dwBitHold >>= (uint8_t)(dwDistEntry >> 8) & 0x1f;
+          dwBitHold >>= D2_SHIFT_COUNT((uint8_t)(dwDistEntry >> 8));
           nBitCount -= dwDistEntry >> 8 & 0xff;
           if (!(dwDistEntry & 0x10)) {
             goto dodist;
@@ -268,8 +268,8 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
           goto bad_data;
         }
 
-        dwCodeEntry = *(uint32_t*)(pLenCodeTable + (((1 << (dwCodeEntry & 0x1f)) - 1U & dwBitHold) + (dwCodeEntry >> 0x10)) * 4);
-        dwBitHold >>= (uint8_t)(dwCodeEntry >> 8) & 0x1f;
+        dwCodeEntry = *(uint32_t*)(pLenCodeTable + (((1 << D2_SHIFT_COUNT(dwCodeEntry)) - 1U & dwBitHold) + (dwCodeEntry >> 0x10)) * 4);
+        dwBitHold >>= D2_SHIFT_COUNT((uint8_t)(dwCodeEntry >> 8));
         nBitCount -= dwCodeEntry >> 8 & 0xff;
       }
 
@@ -282,9 +282,9 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
           goto bad_data;
         }
 
-        dwDistEntry = *(uint32_t*)(pDistCodeTable + (((1 << (dwCodeEntry & 0x1f)) - 1U & dwBitHold) + (dwDistEntry >> 0x10)) * 4);
+        dwDistEntry = *(uint32_t*)(pDistCodeTable + (((1 << D2_SHIFT_COUNT(dwCodeEntry)) - 1U & dwBitHold) + (dwDistEntry >> 0x10)) * 4);
         dwCodeEntry = (uint8_t)dwDistEntry;
-        dwBitHold >>= (uint8_t)(dwDistEntry >> 8) & 0x1f;
+        dwBitHold >>= D2_SHIFT_COUNT((uint8_t)(dwDistEntry >> 8));
         nBitCount -= dwDistEntry >> 8 & 0xff;
         if (dwDistEntry & 0x10) {
           break;
@@ -296,10 +296,10 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
       pCopyByte = pInput;
       if (nBitCount < dwCodeEntry) {
         nDistance = nBitCount + 8;
-        dwBitHold += (uint32_t)pInput[1] << (nBitCount & 0x1f);
+        dwBitHold += (uint32_t)pInput[1] << D2_SHIFT_COUNT(nBitCount);
         pCopyByte = pInput + 1;
         if (nDistance < dwCodeEntry) {
-          dwBitHold += (uint32_t)pInput[2] << (nDistance & 0x1f);
+          dwBitHold += (uint32_t)pInput[2] << D2_SHIFT_COUNT(nDistance);
           nDistance = nBitCount + 0x10;
           pCopyByte = pInput + 2;
         }
@@ -326,7 +326,7 @@ void __fastcall ZLIB_InflateFast(uint8_t * * pInflateState, int32_t nEndPos) {
           pInflateState[4] = pOutputSafeEnd + (0x101 - (int)pOutput);
           pInflateState[1] = pInputSafeEnd + (5 - nWriteBase);
           *(int*)(pInternalState + 0x3c) = nWindowPos;
-          *(uint32_t*)(pInternalState + 0x38) = dwBitHold & (1 << (nWindowPos & 0x1f)) - 1U;
+          *(uint32_t*)(pInternalState + 0x38) = dwBitHold & (1 << D2_SHIFT_COUNT(nWindowPos)) - 1U;
           return;
         }
 
@@ -712,7 +712,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
     uint32_t nCurBits;
     nCurBits = 0;
     uint32_t nTableFill;
-    nTableFill = 1 << (nRootBits & 0x1f);
+    nTableFill = 1 << D2_SHIFT_COUNT(nRootBits);
     uint32_t nPrevIndex;
     nPrevIndex = -1;
     nLoopIdx = nTableFill - 1;
@@ -748,8 +748,8 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
           dwTableEntry = (uint32_t)((uint32_t)((uint32_t)byOpBits & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x60);
         }
 
-        nLeft = 1 << (byCurLength - byCurBits & 0x1f);
-        pFillEntry = pNextTable + (nHuffCode >> (byCurBits & 0x1f)) + nTableFill;
+        nLeft = 1 << D2_SHIFT_COUNT(byCurLength - byCurBits);
+        pFillEntry = pNextTable + (nHuffCode >> D2_SHIFT_COUNT(byCurBits)) + nTableFill;
         nFillIdx = nTableFill;
         do {
           nFillIdx -= nLeft;
@@ -759,7 +759,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
           pFillEntry->val = *(uint16_t*)((char*)&dwTableEntry + 2);
         } while (nFillIdx);
 
-        for (nFillIdx = 1 << (byCurLength - 1U & 0x1f); nHuffCode & nFillIdx; nFillIdx >>= 1) {}
+        for (nFillIdx = 1 << D2_SHIFT_COUNT(byCurLength - 1U); nHuffCode & nFillIdx; nFillIdx >>= 1) {}
 
         if (nFillIdx) {
           nHuffCode = (nFillIdx - 1 & nHuffCode) + nFillIdx;
@@ -795,7 +795,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
       pNextTable += nTableFill;
       nCurExtraBits = nCurLength - nCurBits;
       nLenIndex = nCurBits + nCurExtraBits;
-      nLeft = 1 << (nCurExtraBits & 0x1f);
+      nLeft = 1 << D2_SHIFT_COUNT(nCurExtraBits);
       if (nLenIndex < nMaxBits) {
         pCountEntry = aCount + nLenIndex;
         do {
@@ -811,7 +811,7 @@ static uint16_t gaZlibLengthExtraBitsTable[31] = {
         } while (nLenIndex < nMaxBits);
       }
 
-      nTableFill = 1 << (nCurExtraBits & 0x1f);
+      nTableFill = 1 << D2_SHIFT_COUNT(nCurExtraBits);
       nUsedEntries += nTableFill;
       if (nTableType == 1) {
         bTableSizeOk = nUsedEntries < 0x354;

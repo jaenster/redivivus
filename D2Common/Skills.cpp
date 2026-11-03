@@ -1343,7 +1343,7 @@ int32_t __stdcall SKILLS_CalculateManaCost(eD2Skills eSkillId, int32_t nSkillLev
       return 0;
     }
 
-    return (int)pSkillsTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillsTxt->mana << (pSkillsTxt->manashift & 0x1f);
+    return (int)pSkillsTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillsTxt->mana << D2_SHIFT_COUNT(pSkillsTxt->manashift);
 }
 
 int32_t __fastcall SKILLS_GetValueByLevelBreakpoints(int32_t nLevel, int * pLevelArray) {
@@ -1450,7 +1450,7 @@ int32_t __stdcall SERVER_MinDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t
 
     int32_t nDamage = SKILLS_GetValueByLevelBreakpoints(nSkillLevel, pSkillTxt->EMinLev);
     uint32_t uCalcResult = pSkillTxt->EDmgSymPerCalc;
-    nDamage = nDamage + pSkillTxt->EMin << (pSkillTxt->HitShift & 0x1fU);
+    nDamage = nDamage + pSkillTxt->EMin << D2_SHIFT_COUNT(pSkillTxt->HitShift);
     if (uCalcResult != -1 && (nDamage > 0x100 || pSkillTxt->EMinLev[0]) && pDataTable->pSkillsCode && uCalcResult < (uint32_t)pDataTable->nSkillsCodeSize) {
       D2SkillCalcContextStrc sCalcCtx;
       sCalcCtx.pUnit = pUnit;
@@ -1490,7 +1490,7 @@ int32_t __stdcall SERVER_MaxDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t
 
     int32_t nDamage = SKILLS_GetValueByLevelBreakpoints(nSkillLevel, pSkillTxt->EMaxLev);
     uint32_t uCalcResult = pSkillTxt->EDmgSymPerCalc;
-    nDamage = nDamage + pSkillTxt->EMax << (pSkillTxt->HitShift & 0x1fU);
+    nDamage = nDamage + pSkillTxt->EMax << D2_SHIFT_COUNT(pSkillTxt->HitShift);
     if (uCalcResult != -1 && pDataTable->pSkillsCode && uCalcResult < (uint32_t)pDataTable->nSkillsCodeSize) {
       D2SkillCalcContextStrc sCalcCtx;
       sCalcCtx.pUnit = pUnit;
@@ -2105,7 +2105,7 @@ int32_t __stdcall SKILLS_CalculateManaCostShifted(int32_t eSkillId, int32_t nSki
       exit(-1);
     }
 
-    nLine = (int)pSkillsTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillsTxt->mana << (pSkillsTxt->manashift & 0x1f) >> 8;
+    nLine = (int)pSkillsTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillsTxt->mana << D2_SHIFT_COUNT(pSkillsTxt->manashift) >> 8;
     if (nLine >= 0) {
       return nLine;
     }
@@ -2684,12 +2684,12 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
         if ((int)nSkillLevel <= 0) {
           return 0;
         }
-      return (int)((int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana << (pSkillTxt->manashift & 0x1f)) >> 8;
+      return (int)((int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift)) >> 8;
       case 0x16:
         if ((int)nSkillLevel <= 0) {
           return 0;
         }
-      return (int)(((int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana) * 0x19) / 2 << (pSkillTxt->manashift & 0x1f) >> 8;
+      return (int)(((int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana) * 0x19) / 2 << D2_SHIFT_COUNT(pSkillTxt->manashift) >> 8;
       case 0x17:
         uResult = SKILL_GetPassiveElementCalc(pUnit, eSkill, nSkillLevel, 0);
       return uResult;
@@ -2805,7 +2805,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
         if ((int)nSkillLevel <= 0) {
           return 0;
         }
-      return (int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana << (pSkillTxt->manashift & 0x1f);
+      return (int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift);
       case 0x2b:
 
       case 0x2d:
@@ -3447,7 +3447,7 @@ static BOOL SKILLS_HasEnoughManaForSkill(D2SkillStrc * pSkillStrc, D2UnitStrc * 
         nClampedLevel = 0;
       }
 
-      nManaCost = pSkillTxt2->lvlmana * nClampedLevel + (int)pSkillTxt2->mana << (pSkillTxt2->manashift & 0x1f);
+      nManaCost = pSkillTxt2->lvlmana * nClampedLevel + (int)pSkillTxt2->mana << D2_SHIFT_COUNT(pSkillTxt2->manashift);
       eVenomState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, STATE_blood_mana);
       if (eVenomState != STATE_none) {
         nCurrentStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_hitpoints, 0);
@@ -3830,7 +3830,7 @@ int32_t __stdcall SKILL_CalcMinDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
       }
     }
 
-    return nMinDmg << (pSkillTxt->HitShift & 0x1fU);
+    return nMinDmg << D2_SHIFT_COUNT(pSkillTxt->HitShift);
 }
 
 // Calculates the maximum damage for a skill at a given level. If the skill's flags2 bit 1 is set, delegates to SKILLS_CalculateBaseDamageFromStats. Otherwise, optionally scales weapon max damage by SrcDam (handling two-handed weapons), adds MaxLev breakpoint bonus and MaxDam base, optionally applies DmgSymPerCalc formula percent modifier, and finally left-shifts by HitShift. bUseWeaponDamage controls whether weapon damage contributes.
@@ -3869,7 +3869,7 @@ int32_t __stdcall SKILL_CalcMaxDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
       }
     }
 
-    return nMaxDmg << (pSkillTxt->HitShift & 0x1fU);
+    return nMaxDmg << D2_SHIFT_COUNT(pSkillTxt->HitShift);
 }
 
 // Evaluates a passive skill's elemental calc value for a specific element type (0=min fire/0x156, 1=min cold/0x157, 2=min lightning/0x158). Searches the skill's passivestat array for the matching stat ID, then calls D2GetSkillCalc on the corresponding passivecalc slot. Returns 0 if the skill/level is invalid or the element type is not found in passivestat.

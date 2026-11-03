@@ -4914,7 +4914,7 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
       SMem::SMemInitPerfCounters();
       iBitIdx = 0;
       do {
-        uCookie = 1 << (iBitIdx & 0x1f);
+        uCookie = 1 << D2_SHIFT_COUNT(iBitIdx);
         if (gadwBitMasks[iBitIdx] != uCookie) {
           nBadAddr = GetInstructionPointer();
           Safesock::WSACleanup();

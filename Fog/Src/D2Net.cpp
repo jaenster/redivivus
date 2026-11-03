@@ -99,7 +99,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
 
           nBitsFree = 8;
           pOut = pOutCur + 1;
-          *pOutCur = bVar1 >> (nNumBits & 0x1f) | byPending;
+          *pOutCur = bVar1 >> D2_SHIFT_COUNT(nNumBits) | byPending;
           byPending = 0;
           pOutCur = pOut;
           nBufferLeft = nRemaining;
@@ -107,7 +107,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
       }
       if (nNumBits) {
         nBitsFree -= nNumBits;
-        byPending |= bVar1 << (nBitsFree & 0x1f);
+        byPending |= bVar1 << D2_SHIFT_COUNT(nBitsFree);
       }
     } while (nBytesSize);
 
@@ -155,11 +155,11 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
         byEntryLen = *pBytes;
         nBitsAvail += -8;
         pBytes++;
-        uBitBuffer |= (uint32_t)byEntryLen << (nBitsAvail & 0x1f);
+        uBitBuffer |= (uint32_t)byEntryLen << D2_SHIFT_COUNT(nBitsAvail);
       }
 
       byEntryLen = *(uint8_t*)gaHuffmanFastDecodeTable[uBitBuffer >> 0x18];
-      byEntryLen = ((uint8_t*)gaHuffmanFastDecodeTable[uBitBuffer >> 0x18])[(uBitBuffer >> (0x18 - byEntryLen & 0x1f) & gadwHuffmanBitMasks[byEntryLen]) + 1];
+      byEntryLen = ((uint8_t*)gaHuffmanFastDecodeTable[uBitBuffer >> 0x18])[(uBitBuffer >> D2_SHIFT_COUNT(0x18 - byEntryLen) & gadwHuffmanBitMasks[byEntryLen]) + 1];
       byCodeLen = gabHuffmanCodeLengths[byEntryLen];
       nBitsAvail += (uint32_t)byCodeLen;
       if (nBitsAvail > 0x20) {
@@ -171,7 +171,7 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
 
       *pOut = byEntryLen;
       pOut++;
-      uBitBuffer <<= byCodeLen & 0x1f;
+      uBitBuffer <<= D2_SHIFT_COUNT(byCodeLen);
       nBufferLeft--;
     }
 

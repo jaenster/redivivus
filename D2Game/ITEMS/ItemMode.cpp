@@ -333,7 +333,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
         if (pItemOwner) {
           nChargedSkillParam = (uint16_t)fOldMaxStat;
           nChargedSkillId = sgptDataTable->dwChargedSkillLevelMask & nChargedSkillParam;
-          nSkillLevel = (int)nChargedSkillParam >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+          nSkillLevel = (int)nChargedSkillParam >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
           _bChargedCountActive = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItemOwner, eStat, (uint16_t)fOldMaxStat);
           nNewValue = _bChargedCountActive & 0xff;
           if (nNewValue) {
@@ -3808,11 +3808,11 @@ void __fastcall ITEMMODE_HandleCursorItem(::SGAMEDATA * pGame, D2UnitStrc * pUni
       uint32_t nMaxCharges;
       nSkillId = sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex;
       nMaxCharges = aStatBonusData[nChargedStatIdx].nStatValue >> 8;
-      nLevel = (int)(uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+      nLevel = (int)(uint32_t)(uint16_t)aStatBonusData[nChargedStatIdx].wSubIndex >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
       if ((int)(aStatBonusData[nChargedStatIdx].nStatValue & 0xffU) < (int)nMaxCharges) {
         D2Common::ITEMS::ItemMods::ITEMMOD_SetChargedSkillCharges(pItem, nLevel, nSkillId, nMaxCharges);
         if (pClient) {
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, '\x01', 0xcc, (uint8_t)nMaxCharges + nMaxCharges * 0x100, (short int)(nLevel << (sgptDataTable->nChargedSkillLevelBits & 0x1f)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nSkillId));
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItem, '\x01', 0xcc, (uint8_t)nMaxCharges + nMaxCharges * 0x100, (short int)(nLevel << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & (uint16_t)nSkillId));
         }
       }
     }

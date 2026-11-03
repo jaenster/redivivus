@@ -1469,7 +1469,7 @@ int32_t __stdcall GetPortalFlagFromLevelId(eD2LevelId eLevel) {
 
     do {
       if (eLevel == *pPortalLevelArray) {
-        return 1 << (nBitIndex & 0x1f);
+        return 1 << D2_SHIFT_COUNT(nBitIndex);
       }
 
       nBitIndex++;

@@ -2200,7 +2200,7 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
       if (nStateWordCount >= 0) {
         do {
           eState = nStateWordCount + nStateIdBitBase;
-          nStateBits &= ~(1 << (nStateWordCount & 0x1f));
+          nStateBits &= ~(1 << D2_SHIFT_COUNT(nStateWordCount));
           if (gadwBitMasks[eState & STATE_venomclaws] & sgptDataTable->pSingleStateDataTbl[6]->nStateBitmask[(int)eState >> 5]) {
             pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
             if (pStatList) {

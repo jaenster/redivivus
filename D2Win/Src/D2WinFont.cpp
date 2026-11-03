@@ -839,7 +839,7 @@ BOOL __fastcall D2WINFONT_IsFontCharacterValid(uint8_t nCharCode) {
       exit(-1);
     }
 
-    return gaFontCharValidBits[nCharCode >> 5] >> (nCharCode & 0x1f) & 1;
+    return gaFontCharValidBits[nCharCode >> 5] >> D2_SHIFT_COUNT(nCharCode) & 1;
 }
 
 // Draws text with background rect offset by -4px horizontally. Calculates text height, clamps to screen, draws inset rectangle, renders text. Used for UI tooltips with padding.

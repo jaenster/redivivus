@@ -980,7 +980,7 @@ int32_t __fastcall ITEMS_CalcChargedSkillPriceModifier(D2UnitStrc * pUnit, int32
     if (nNumStats > 0) {
       do {
         int nSkillLevel;
-        nSkillLevel = (int)(uint32_t)(uint16_t)aStatValues[nStatIdx].wSubIndex >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+        nSkillLevel = (int)(uint32_t)(uint16_t)aStatValues[nStatIdx].wSubIndex >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
         uVar1 = aStatValues[nStatIdx].nStatValue & 0xff;
         nMaxCharges = aStatValues[nStatIdx].nStatValue >> 8;
         pSkillsTxt = (int)uVar1 < nMaxCharges && nSkillLevel >= 0 && nSkillLevel < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillLevel : nullptr;
@@ -1044,7 +1044,7 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
         pStatCostTxt = nStatVal && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
         if (pStatCostTxt) {
           if (pStatCostTxt->valshift) {
-            nStatVal = (int)nStatVal >> (pStatCostTxt->valshift & 0x1fU);
+            nStatVal = (int)nStatVal >> D2_SHIFT_COUNT(pStatCostTxt->valshift);
           }
 
           switch (pStatCostTxt->encode) {
@@ -1075,7 +1075,7 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
             case '\x02':
 
             case '\x03':
-              nCostTmp = (int)(uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+              nCostTmp = (int)(uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
             nAvgDmgCost = sgptDataTable->dwChargedSkillLevelMask & (uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex;
             if (nCostTmp < 0 || nCostTmp >= sgptDataTable->nTxtSkillsCount) {
               pSkillsTxt = 0;
@@ -2051,7 +2051,7 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
                 nFileIndex = ITEM_GetItemData_nFileIndex(pCarriedItem);
                 pCurSetItemsTxt = D2Client::DataTbls::GetSetItemsLine(nFileIndex);
                 if (pCurSetItemsTxt && pCurSetItemsTxt->set == pSetItemsTxt->set) {
-                  nSetMask |= 1 << (pCurSetItemsTxt->setIndex & 0x1f);
+                  nSetMask |= 1 << D2_SHIFT_COUNT(pCurSetItemsTxt->setIndex);
                 }
               }
             }
@@ -2463,7 +2463,7 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
         }
 
         dwReadValue = Fog::BitBuffer::ReadUnsigned(pBitBuffer, (uint32_t)pStatCostTxt[0x164].saveBits[0]);
-        __frame0.nQuestDiffStatValue = dwReadValue - pStatCostTxt[0x164].saveAdd[0] << (pStatCostTxt[0x164].valshift & 0x1fU);
+        __frame0.nQuestDiffStatValue = dwReadValue - pStatCostTxt[0x164].saveAdd[0] << D2_SHIFT_COUNT(pStatCostTxt[0x164].valshift);
         pMemory = Stats::StatsEx::GetStatListByStateOrFlagsIfNotExists(pItem, STATE_none, 0x40);
         if (!pMemory) {
           if (!pItem) {
@@ -2597,7 +2597,7 @@ static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2Unit
     }
 
     uVar1 = Fog::BitBuffer::ReadUnsigned(pBitBuffer, nSaveBits);
-    Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, uVar1 - nSaveAdd << (pItemStatCost->valshift & 0x1fU), nParamLo);
+    Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, uVar1 - nSaveAdd << D2_SHIFT_COUNT(pItemStatCost->valshift), nParamLo);
 }
 
 // Deserializes the header fields of a D2 item from a packed bit-stream into a D2UnitDataItemDetailsStrc. Reads flags (32 bits), skips 10 bits (version + destination prefix), decodes the 3-bit destination: if stored/socketed (3 or 5) reads 16-bit x/y grid coords; otherwise reads body-loc, x, y, and inventory page. Handles the BODYPART (ear) special case for the item code tag, applies a legacy "nec " -> "neg " fixup for saves pre-version 0x5D, converts the 4-char code to a classId, and reads the socket count for non-compact non-crude items.
@@ -2657,7 +2657,7 @@ void __fastcall ITEMS_WriteClampedValueToBitBuffer(int32_t nBits, uint32_t nValu
     if (nBits != 0x20) {
       uint32_t uClamped;
       uClamped = nValue ? nValue : 0;
-      nValue = (1 << (nBits & 0x1f)) - 1;
+      nValue = (1 << D2_SHIFT_COUNT(nBits)) - 1;
       if (uClamped < nValue) {
         nValue = uClamped;
       }
@@ -2875,7 +2875,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       }
 
       nQuestDifficulty = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_questitemdifficulty, 0);
-      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pStatCostTxt[0x164].saveBits[0], (nQuestDifficulty >> (pStatCostTxt[0x164].valshift & 0x1fU)) + pStatCostTxt[0x164].saveAdd[0], pBitBuffer);
+      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pStatCostTxt[0x164].saveBits[0], (nQuestDifficulty >> D2_SHIFT_COUNT(pStatCostTxt[0x164].valshift)) + pStatCostTxt[0x164].saveAdd[0], pBitBuffer);
     }
     if (!pStatListEx) {
       return;
@@ -5272,7 +5272,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
               pStatCostTxt = D2Client::GAME::SCmd::TXT_ItemStatCost_GetLine(UNITSTAT_item_singleskill);
               nTmpVal2 = nSkillId;
               if (pStatCostTxt) {
-                nStatVal = (1 << (pStatCostTxt->saveBits[0] & 0x1f)) - 1;
+                nStatVal = (1 << D2_SHIFT_COUNT(pStatCostTxt->saveBits[0])) - 1;
               }
               if ((int)nSkillLevel > 0 && (int)nSkillLevel <= nStatVal) {
                 bIsStackable = Stats::StatsEx::SKILLS_ValidateSkillDescIndex(nSkillId);
@@ -5349,7 +5349,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
               }
 
               ItemMods::ITEMMODS_GetQualityAllFields(nBitVal, &nChargeMax, (uint32_t*)nChargeBuf, &nChargeSkillLevel, &nChargeSkillId);
-              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_charged_skill, (nChargeSkillLevel & 0xff) + nChargeSkillId * 0x100, (short int)(nChargeMax << (sgptDataTable->nChargedSkillLevelBits & 0x1f)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & nChargeBuf[0]));
+              Stats::StatsEx::STATLIST_SetStatValue(pStatsEx, UNITSTAT_item_charged_skill, (nChargeSkillLevel & 0xff) + nChargeSkillId * 0x100, (short int)(nChargeMax << D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits)) + ((uint16_t)sgptDataTable->dwChargedSkillLevelMask & nChargeBuf[0]));
               break;
               default:
                 deserialize_single_stat:
@@ -5384,7 +5384,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
           nParam1 = 0x40;
           goto read_stat_list;
         }
-        if (nSetBitMask & 1 << (nStatListIdx & 0x1f)) {
+        if (nSetBitMask & 1 << D2_SHIFT_COUNT(nStatListIdx)) {
           pItemStatCostTxt = (D2ItemStatCostTxt*)aSetItemsStateList[nStatListIdx];
           nParam1 = 0x2040;
           goto read_stat_list;
@@ -7252,7 +7252,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       nBitValue = nErrLine + pItemStatCostLine->saveAdd[0];
       if (bySaveBits != 0x20) {
         nClampedValue = nBitValue ? nBitValue : 0;
-        nBitValue = (1 << (bySaveBits & 0x1f)) - 1;
+        nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
         if (nClampedValue < nBitValue) {
           nBitValue = nClampedValue;
         }
@@ -7270,7 +7270,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       nBitValue = pItemStatCostLine->saveAdd[0] + nErrLine;
       if (bySaveBits != 0x20) {
         nClampedValue = nBitValue ? nBitValue : 0;
-        nBitValue = (1 << (bySaveBits & 0x1f)) - 1;
+        nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
         if (nClampedValue < nBitValue) {
           nBitValue = nClampedValue;
         }
@@ -7289,7 +7289,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         nBitValue = nStatValue + pItemStatCostLine->saveAdd[0];
         if (bySaveBits != 0x20) {
           nClampedValue = nBitValue ? nBitValue : 0;
-          nBitValue = (1 << (bySaveBits & 0x1f)) - 1;
+          nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
           if (nClampedValue < nBitValue) {
             nBitValue = nClampedValue;
           }
@@ -7311,7 +7311,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         nBitValue = pItemStatCostLine->saveAdd[0] + nErrLine;
         if (bySaveBits != 0x20) {
           nClampedValue = nBitValue ? nBitValue : 0;
-          nBitValue = (1 << (bySaveBits & 0x1f)) - 1;
+          nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
           if (nClampedValue < nBitValue) {
             nBitValue = nClampedValue;
           }
@@ -7371,7 +7371,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       nBitValue = Stats::StatsEx::SERVER_GetUnitStat(pItemUnit, UNITSTAT_item_numsockets, 0);
       if (bySaveBits != 0x20) {
         nClampedValue = nBitValue ? nBitValue : 0;
-        nBitValue = (1 << (bySaveBits & 0x1f)) - 1;
+        nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
         if (nClampedValue < nBitValue) {
           nBitValue = nClampedValue;
         }
@@ -7398,7 +7398,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         pCurStatList = Stats::StatsEx::GetStatList(pItemUnit, aSetItemsStateList[nStatValue], 0x2040);
         if (pCurStatList || (pCurStatList = Stats::StatsEx::GetStatList(pItemUnit, aSetItemsStateList[nStatValue], 0x40) , pCurStatList != 0)) {
           bIncludeNorm = nStatValue + 1;
-          nBitValue += 1 << (nStatValue & 0x1f);
+          nBitValue += 1 << D2_SHIFT_COUNT(nStatValue);
         }
 
         nStatValue++;
@@ -7458,7 +7458,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                 continue;
               }
 
-              nStatValue = aStat[i].nStatValue >> (pItemStatCostLine->valshift & 0x1fU);
+              nStatValue = aStat[i].nStatValue >> D2_SHIFT_COUNT(pItemStatCostLine->valshift);
               if (!nStatValue) {
                 continue;
               }
@@ -7482,7 +7482,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   nBitValue = pItemStatCostLine->saveAdd[0] + nStatValue;
                   if (bySaveBits != 0x20) {
                     nClampedValue = nBitValue ? nBitValue : 0;
-                    nBitValue = (1 << (bySaveBits & 0x1f)) - 1;
+                    nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
                     if (nClampedValue < nBitValue) {
                       nBitValue = nClampedValue;
                     }
@@ -7495,7 +7495,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   nClampedValue = pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x12];
                   if (nBitValue != 0x20) {
                     nSaveValue = nClampedValue ? nClampedValue : 0;
-                    nClampedValue = (1 << (pItemStatCostLine->saveBits[0] & 0x1f)) - 1;
+                    nClampedValue = (1 << D2_SHIFT_COUNT(pItemStatCostLine->saveBits[0])) - 1;
                     if (nSaveValue < nClampedValue) {
                       nClampedValue = nSaveValue;
                     }
@@ -7507,7 +7507,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   nBitValue = pItemStatCostLine->saveAdd[0] + nStatValue;
                   if (bySaveBits != 0x20) {
                     nClampedValue = nBitValue ? nBitValue : 0;
-                    nBitValue = (1 << (bySaveBits & 0x1f)) - 1;
+                    nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
                     if (nClampedValue < nBitValue) {
                       nBitValue = nClampedValue;
                     }
@@ -7522,7 +7522,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                     nSaveValue = nClampedValue;
                   } else {
                     nSaveValue = nClampedValue ? nClampedValue : 0;
-                    nClampedValue = (1 << (pItemStatCostLine->saveBits[0] & 0x1f)) - 1;
+                    nClampedValue = (1 << D2_SHIFT_COUNT(pItemStatCostLine->saveBits[0])) - 1;
                     if (nSaveValue >= nClampedValue) {
                       nSaveValue = nClampedValue;
                     }
@@ -7577,7 +7577,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   if (nParamBitWidth > 0) {
                     if (nParamBitWidth != 0x20) {
                       nClampedValue = nBitValue ? nBitValue : 0;
-                      nBitValue = (1 << (nParamBitWidth & 0x1f)) - 1;
+                      nBitValue = (1 << D2_SHIFT_COUNT(nParamBitWidth)) - 1;
                       if (nClampedValue < nBitValue) {
                         nBitValue = nClampedValue;
                       }
@@ -7592,7 +7592,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                     nSaveValue = pItemStatCostLine->saveAdd[0] + nStatValue;
                     if (nBitValue != 0x20) {
                       nClampedValue = nSaveValue ? nSaveValue : 0;
-                      nSaveValue = (1 << (bySaveBits & 0x1f)) - 1;
+                      nSaveValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
                       if (nClampedValue < nSaveValue) {
                         nSaveValue = nClampedValue;
                       }

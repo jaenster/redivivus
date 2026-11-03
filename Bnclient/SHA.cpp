@@ -467,7 +467,7 @@ void __fastcall SHA1_Final(uint8_t * pHashOut, uint32_t * pShaCtx) {
     uVar1 = 0;
     do {
       dwBitLen2 = uVar1 + 1;
-      pHashOut[uVar1] = (uint8_t)(*(uint32_t*)((int)pShaCtx + (uVar1 & -4)) >> (('\x03' - ((uint8_t)uVar1 & 3)) * '\b' & 0x1f));
+      pHashOut[uVar1] = (uint8_t)(*(uint32_t*)((int)pShaCtx + (uVar1 & -4)) >> D2_SHIFT_COUNT(('\x03' - ((uint8_t)uVar1 & 3)) * '\b'));
       uVar1 = dwBitLen2;
     } while (dwBitLen2 < 0x14);
 }

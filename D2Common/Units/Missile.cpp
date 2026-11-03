@@ -489,21 +489,21 @@ static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
 static void AddStatsToDamage(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, int32_t nShift) {
     int nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemindam, 0);
     uint8_t nShiftTmp = (uint8_t)nShift;
-    pMissileDamageData->nFireMinDamage += nStatValue << (nShiftTmp & 0x1f);
+    pMissileDamageData->nFireMinDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemaxdam, 0);
-    pMissileDamageData->nFireMaxDamage += nStatValue << (nShiftTmp & 0x1f);
+    pMissileDamageData->nFireMaxDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_lightmindam, 0);
-    pMissileDamageData->nLightMinDamage += nStatValue << (nShiftTmp & 0x1f);
+    pMissileDamageData->nLightMinDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_lightmaxdam, 0);
-    pMissileDamageData->nLightMaxDamage += nStatValue << (nShiftTmp & 0x1f);
+    pMissileDamageData->nLightMaxDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_magicmindam, 0);
-    pMissileDamageData->nMagicMinDamage += nStatValue << (nShiftTmp & 0x1f);
+    pMissileDamageData->nMagicMinDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_magicmaxdam, 0);
-    pMissileDamageData->nMagicMaxDamage += nStatValue << (nShiftTmp & 0x1f);
+    pMissileDamageData->nMagicMaxDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldmindam, 0);
-    pMissileDamageData->nColdMinDamage += nStatValue << (nShiftTmp & 0x1f);
+    pMissileDamageData->nColdMinDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldmaxdam, 0);
-    pMissileDamageData->nColdMaxDamage += nStatValue << (nShiftTmp & 0x1f);
+    pMissileDamageData->nColdMaxDamage += nStatValue << D2_SHIFT_COUNT(nShiftTmp);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldlength, 0);
     pMissileDamageData->nColdLength += nStatValue;
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmindam, 0);
@@ -724,7 +724,7 @@ int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
       }
     }
 
-    return nValue << (pMissileTxt->HitShift & 0x1fU);
+    return nValue << D2_SHIFT_COUNT(pMissileTxt->HitShift);
 }
 
 // Returns the maximum physical damage for a missile at a given level. Mirrors GetMinDamage but uses MaxDamage + MaxLevDam1 from D2MissilesTxt. Optionally scales by DmgSymPerCalc, then shifts by HitShift. Returns 0 for non-missile units or invalid missile IDs.
@@ -758,7 +758,7 @@ int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
       }
     }
 
-    return nValue << (pMissileTxt->HitShift & 0x1fU);
+    return nValue << D2_SHIFT_COUNT(pMissileTxt->HitShift);
 }
 
 uint8_t __stdcall GetElemTypeFromMissileId(int32_t nMissileId) {
@@ -801,7 +801,7 @@ int32_t __stdcall GetMinElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
       }
     }
 
-    return nValue << (pMissileTxt->HitShift & 0x1fU);
+    return nValue << D2_SHIFT_COUNT(pMissileTxt->HitShift);
 }
 
 // Returns the maximum elemental damage for a missile at a given level. Mirrors GetMinElemDamage but uses EMax + MaxELev1 from D2MissilesTxt. Optionally scales by EDmgSymPerCalc, then shifts by HitShift. Returns 0 for non-missile units or invalid IDs.
@@ -835,7 +835,7 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
       }
     }
 
-    return nValue << (pMissileTxt->HitShift & 0x1fU);
+    return nValue << D2_SHIFT_COUNT(pMissileTxt->HitShift);
 }
 
 int32_t __stdcall GetElementalLength(int32_t nUnused, D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel) {

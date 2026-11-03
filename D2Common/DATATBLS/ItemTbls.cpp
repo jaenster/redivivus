@@ -1444,7 +1444,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
       sgtDataTable.nChargedSkillLevelBits = 6;
     }
 
-    sgtDataTable.dwChargedSkillLevelMask = (1 << (sgtDataTable.nChargedSkillLevelBits & 0x1f)) - 1;
+    sgtDataTable.dwChargedSkillLevelMask = (1 << D2_SHIFT_COUNT(sgtDataTable.nChargedSkillLevelBits)) - 1;
     int nStatCount;
     nStatCount = 0;
     if (sgtDataTable.nTxtItemStatCostSize > 0) {

@@ -131,7 +131,7 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
       pMonStats2 = D2Client::DataTbls::MonsterTbls::TXT_MonStats_GetMonStats2((int)(short int)pMonData->nClassId);
       if (pMonStats2) {
         nBytesToCompare = (uint32_t)pMonData->pad;
-        nFreeSlots = (1 << (pMonStats2->byTotalFrames & 0x1f)) - nBytesToCompare;
+        nFreeSlots = (1 << D2_SHIFT_COUNT(pMonStats2->byTotalFrames)) - nBytesToCompare;
         if (nNumChampions > nFreeSlots) {
           nNumChampions = nFreeSlots;
         }
@@ -676,7 +676,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
         }
 
         apply_stat_value:
-        nStatScaled = nStatValue << (pStatCost->valshift & 0x1fU);
+        nStatScaled = nStatValue << D2_SHIFT_COUNT(pStatCost->valshift);
         if (nStatScaled > 0) {
           if (eUnitStat != UNITSTAT_hitpoints) {
             if (eUnitStat == UNITSTAT_hpregen) {
@@ -813,7 +813,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
           nStatValue <<= 8;
         }
 
-        nStatScaled = nStatValue << (pStatCost->valshift & 0x1fU);
+        nStatScaled = nStatValue << D2_SHIFT_COUNT(pStatCost->valshift);
         if (nStatScaled > 0) {
           if (eUnitStat != UNITSTAT_hitpoints) {
             if (eUnitStat == UNITSTAT_hpregen) {
@@ -2067,7 +2067,7 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     }
 
     uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
     if (!(!pDamage || pDamage->dwHitFlags & 0x20)) {
       return 0;
     }
@@ -2115,7 +2115,7 @@ BOOL __fastcall ITEMEVENT_CastOnStriking(::SGAMEDATA * pGame, uint32_t nUnitEven
     }
 
     uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
     if (!(pDamage && pDamage->wResultFlags & 4)) {
       return 0;
     }
@@ -2154,7 +2154,7 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
       return 0;
     }
 
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(sgptDataTable->nChargedSkillLevelBits);
     uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
     D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = DVar1;

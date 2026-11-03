@@ -96,9 +96,9 @@ uint32_t __fastcall deflatePrime(z_stream * pStream, int32_t nBits, uint32_t uVa
           }
 
           pDeflateState->bi_valid = nUsedBits + nChunkBits;
-          pDeflateState->bi_buf |= (uint16_t)(((1 << (nChunkBits & 0x1f)) - 1U & uValue) << (nUsedBits & 0x1f));
+          pDeflateState->bi_buf |= (uint16_t)(((1 << D2_SHIFT_COUNT(nChunkBits)) - 1U & uValue) << D2_SHIFT_COUNT(nUsedBits));
           trees::_tr_flush_bits(pDeflateState);
-          uValue = (int)uValue >> (nChunkBits & 0x1f);
+          uValue = (int)uValue >> D2_SHIFT_COUNT(nChunkBits);
           nBits -= nChunkBits;
         } while (nBits);
 
@@ -554,13 +554,13 @@ static void fill_window(deflate_state * pDeflateState) {
         nCurrPos = pDeflateState->strstart - nChecksum;
         nReadLen = (uint32_t)pDeflateState->window[nCurrPos];
         pDeflateState->ins_h = nReadLen;
-        pDeflateState->ins_h = (nReadLen << (pDeflateState->hash_shift & 0x1f) ^ (uint32_t)(pDeflateState->window + nCurrPos)[1]) & pDeflateState->hash_mask;
+        pDeflateState->ins_h = (nReadLen << D2_SHIFT_COUNT(pDeflateState->hash_shift) ^ (uint32_t)(pDeflateState->window + nCurrPos)[1]) & pDeflateState->hash_mask;
         do {
           if (!nChecksum) {
             break;
           }
 
-          nReadLen = ((uint32_t)pDeflateState->window[nCurrPos + 2] ^ pDeflateState->ins_h << (pDeflateState->hash_shift & 0x1f)) & pDeflateState->hash_mask;
+          nReadLen = ((uint32_t)pDeflateState->window[nCurrPos + 2] ^ pDeflateState->ins_h << D2_SHIFT_COUNT(pDeflateState->hash_shift)) & pDeflateState->hash_mask;
           pDeflateState->ins_h = nReadLen;
           pDeflateState->prev[pDeflateState->w_mask & nCurrPos] = pDeflateState->head[nReadLen];
           pDeflateState->head[pDeflateState->ins_h] = (uint16_t)nCurrPos;
@@ -801,7 +801,7 @@ int32_t __fastcall deflate_fast(deflate_state * pDeflateState, int32_t nFlush) {
         }
       }
       if (nHashHead >= 3) {
-        nHashHead = (pDeflateState->ins_h << (pDeflateState->hash_shift & 0x1f) ^ (uint32_t)pDeflateState->window[pDeflateState->strstart + 2]) & pDeflateState->hash_mask;
+        nHashHead = (pDeflateState->ins_h << D2_SHIFT_COUNT(pDeflateState->hash_shift) ^ (uint32_t)pDeflateState->window[pDeflateState->strstart + 2]) & pDeflateState->hash_mask;
         pDeflateState->ins_h = nHashHead;
         pDeflateState->prev[pDeflateState->w_mask & pDeflateState->strstart] = pDeflateState->head[nHashHead];
         nHashHead = (uint32_t)pDeflateState->prev[pDeflateState->strstart & pDeflateState->w_mask];
@@ -835,12 +835,12 @@ int32_t __fastcall deflate_fast(deflate_state * pDeflateState, int32_t nFlush) {
           pDeflateState->match_length = 0;
           nHashHead = (uint32_t)pDeflateState->window[pDeflateState->strstart];
           pDeflateState->ins_h = nHashHead;
-          pDeflateState->ins_h = (nHashHead << (pDeflateState->hash_shift & 0x1f) ^ (uint32_t)(pDeflateState->window + pDeflateState->strstart)[1]) & pDeflateState->hash_mask;
+          pDeflateState->ins_h = (nHashHead << D2_SHIFT_COUNT(pDeflateState->hash_shift) ^ (uint32_t)(pDeflateState->window + pDeflateState->strstart)[1]) & pDeflateState->hash_mask;
         } else {
           pDeflateState->match_length = nHashHead - 1;
           do {
             pDeflateState->strstart++;
-            nHashHead = ((uint32_t)pDeflateState->window[pDeflateState->strstart + 2] ^ pDeflateState->ins_h << (pDeflateState->hash_shift & 0x1f)) & pDeflateState->hash_mask;
+            nHashHead = ((uint32_t)pDeflateState->window[pDeflateState->strstart + 2] ^ pDeflateState->ins_h << D2_SHIFT_COUNT(pDeflateState->hash_shift)) & pDeflateState->hash_mask;
             pDeflateState->ins_h = nHashHead;
             pDeflateState->prev[pDeflateState->w_mask & pDeflateState->strstart] = pDeflateState->head[nHashHead];
             pDeflateState->head[pDeflateState->ins_h] = (uint16_t)pDeflateState->strstart;
@@ -973,7 +973,7 @@ int32_t __fastcall deflate_slow(deflate_state * pDeflateState, int32_t nFlush) {
 
       nHashHead = 0;
       if (nLookahead >= 3) {
-        nLookahead = (pDeflateState->ins_h << (pDeflateState->hash_shift & 0x1f) ^ (uint32_t)pDeflateState->window[pDeflateState->strstart + 2]) & pDeflateState->hash_mask;
+        nLookahead = (pDeflateState->ins_h << D2_SHIFT_COUNT(pDeflateState->hash_shift) ^ (uint32_t)pDeflateState->window[pDeflateState->strstart + 2]) & pDeflateState->hash_mask;
         pDeflateState->ins_h = nLookahead;
         pDeflateState->prev[pDeflateState->w_mask & pDeflateState->strstart] = pDeflateState->head[nLookahead];
         nHashHead = (uint32_t)pDeflateState->prev[pDeflateState->strstart & pDeflateState->w_mask];
@@ -1064,7 +1064,7 @@ int32_t __fastcall deflate_slow(deflate_state * pDeflateState, int32_t nFlush) {
           pDeflateState->strstart++;
           nLookahead = pDeflateState->strstart;
           if (nLookahead <= nHashHead - 3 + nLookaheadAtMatch) {
-            nInsHash = (pDeflateState->ins_h << (pDeflateState->hash_shift & 0x1f) ^ (uint32_t)pDeflateState->window[nLookahead + 2]) & pDeflateState->hash_mask;
+            nInsHash = (pDeflateState->ins_h << D2_SHIFT_COUNT(pDeflateState->hash_shift) ^ (uint32_t)pDeflateState->window[nLookahead + 2]) & pDeflateState->hash_mask;
             pDeflateState->ins_h = nInsHash;
             pDeflateState->prev[pDeflateState->w_mask & nLookahead] = pDeflateState->head[nInsHash];
             pDeflateState->head[pDeflateState->ins_h] = (uint16_t)pDeflateState->strstart;
@@ -1423,7 +1423,7 @@ int __fastcall deflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, u
             nHashInsPos = pDeflateState->strstart;
             nDictLength = pDeflateState->lookahead - 2;
             do {
-              nLookaheadSaved = ((uint32_t)pDeflateState->window[nHashInsPos + 2] ^ pDeflateState->ins_h << (pDeflateState->hash_shift & 0x1f)) & pDeflateState->hash_mask;
+              nLookaheadSaved = ((uint32_t)pDeflateState->window[nHashInsPos + 2] ^ pDeflateState->ins_h << D2_SHIFT_COUNT(pDeflateState->hash_shift)) & pDeflateState->hash_mask;
               pDeflateState->ins_h = nLookaheadSaved;
               pDeflateState->prev[pDeflateState->w_mask & nHashInsPos] = pDeflateState->head[nLookaheadSaved];
               pDeflateState->head[pDeflateState->ins_h] = (uint16_t)nHashInsPos;
@@ -1888,8 +1888,8 @@ int32_t __fastcall deflateInit2_(z_stream * pStream, uint32_t nLevel, int32_t nM
       pStream->state = pState;
       pState->wrap = nWrap;
       pState->w_bits = nWindowBits;
-      nWindowSize = 1 << (nWindowBits & 0x1f);
-      nHashSize = 1 << ((uint8_t)(nMemLevel + 7U) & 0x1f);
+      nWindowSize = 1 << D2_SHIFT_COUNT(nWindowBits);
+      nHashSize = 1 << D2_SHIFT_COUNT((uint8_t)(nMemLevel + 7U));
       pState->hash_bits = nMemLevel + 7U;
       pState->w_mask = nWindowSize - 1;
       pState->hash_size = nHashSize;
@@ -1903,7 +1903,7 @@ int32_t __fastcall deflateInit2_(z_stream * pStream, uint32_t nLevel, int32_t nM
       pHash = (uint16_t*)pStream->zalloc(pStream->opaque, pState->w_size, 2);
       pState->prev = pHash;
       pHash = (uint16_t*)pStream->zalloc(pStream->opaque, pState->hash_size, 2);
-      nHashSize = 1 << (nMemLevel + 6U & 0x1f);
+      nHashSize = 1 << D2_SHIFT_COUNT(nMemLevel + 6U);
       pState->head = pHash;
       pState->high_water = 0;
       pState->lit_bufsize = nHashSize;

@@ -518,7 +518,7 @@ void __fastcall HandleIncoming0x89(int32_t nEventId) {
       exit(-1);
     }
 
-    gdwDenOfEvilEventFlags |= 1 << (nEventId & 0x1f);
+    gdwDenOfEvilEventFlags |= 1 << D2_SHIFT_COUNT(nEventId);
     if (!CLIENT_QuestEventHandlers[nEventId]) {
       return;
     }

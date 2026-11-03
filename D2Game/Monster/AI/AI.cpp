@@ -19444,8 +19444,8 @@ void __fastcall AITHINK_Fn1_ZakarumPriest(::SGAMEDATA * pGame, D2UnitStrc * pUni
           nHpPct = 2;
         }
 
-        nFleeTargetX += nFleeTargetX - nRandHigh << (nHpPct & 0x1f);
-        nSelfY = nTargetY + (nTargetY - nSelfY << (nHpPct & 0x1f));
+        nFleeTargetX += nFleeTargetX - nRandHigh << D2_SHIFT_COUNT(nHpPct);
+        nSelfY = nTargetY + (nTargetY - nSelfY << D2_SHIFT_COUNT(nHpPct));
         uRandResult = AI_Monster_ValidateSkillAtPosition(pGame, pSelf, (int)pMonStats->aSkill[2], nullptr, nFleeTargetX, nSelfY);
         if (uRandResult) {
           SERVER_UNIT_CastSkill(pGame, pSelf, pMonStats->aSkMode[2], (int)pMonStats->aSkill[2], nullptr, nFleeTargetX, nSelfY);

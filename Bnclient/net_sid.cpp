@@ -106,7 +106,7 @@ void __fastcall XSHA1_Transform(D2SHA1ContextStrc * pShaCtx) {
     do {
       byRotAmount = ((uint8_t)pScheduleEntry[0xb] ^ (uint8_t)pScheduleEntry[6] ^ (uint8_t)pScheduleEntry[-2] ^ (uint8_t)*pScheduleEntry) & 0x1f;
       nExpandCount--;
-      pScheduleEntry[0xe] = 1 >> (0x20 - byRotAmount & 0x1f) | 1 << byRotAmount;
+      pScheduleEntry[0xe] = 1 >> D2_SHIFT_COUNT(0x20 - byRotAmount) | 1 << byRotAmount;
       pScheduleEntry++;
     } while (nExpandCount);
 

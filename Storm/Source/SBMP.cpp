@@ -519,7 +519,7 @@ static void __stdcall SBMP_FlushPacket(D2GifLzwEncoderStrc * pState, uint8_t * *
 // @blizzard Output (SBMP.CPP)
 static void __fastcall SBMP_Output(int value, uint8_t * * ppOutput, D2GifLzwEncoderStrc * pState) {
     int iVar1;
-    pState->nBitAccum |= value << (pState->nBitCount & 0x1f);
+    pState->nBitAccum |= value << D2_SHIFT_COUNT(pState->nBitCount);
     iVar1 = pState->nCodeSize + pState->nBitCount;
     pState->nBitCount = iVar1;
     while (iVar1 >= 8) {
@@ -544,7 +544,7 @@ static void __fastcall SBMP_Output(int value, uint8_t * * ppOutput, D2GifLzwEnco
       return;
     }
 
-    pState->nMaxCode = (1 << (pState->nCodeSize & 0x1f)) - 1;
+    pState->nMaxCode = (1 << D2_SHIFT_COUNT(pState->nCodeSize)) - 1;
 }
 
 // @blizzard CompressPcxRow (SBMP.CPP)
@@ -1008,7 +1008,7 @@ static void __stdcall SBMP_ClearBlock(D2GifLzwEncoderStrc * pState, uint8_t * * 
     pState->nNextCode = pState->nClearCode + 2;
     SBMP_Output(pState->nClearCode, pDstBuf, pState);
     pState->nCodeSize = pState->nInitCodeSize;
-    pState->nMaxCode = (1 << (pState->nInitCodeSize & 0x1f)) - 1;
+    pState->nMaxCode = (1 << D2_SHIFT_COUNT(pState->nInitCodeSize)) - 1;
 }
 
 // @blizzard CompressGifByte (SBMP.CPP)
