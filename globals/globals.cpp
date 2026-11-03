@@ -28585,7 +28585,7 @@ char * gaLanguageNames_007273a8[15] = {
 
 uint32_t gnCursorInvTypeAutoOpenC[5] = { 0x0, 0x1, 0x4, 0x2, 0x6 }; D2_GLOBAL_GUARD(gnCursorInvTypeAutoOpenC, "gnCursorInvTypeAutoOpenC");
 
-int bUnitSoundTableInit[11] = {
+int gaUnitSoundIdsAmazon[11] = {
     0xb3e,
     0xb43,
     0xb89,
@@ -28597,7 +28597,7 @@ int bUnitSoundTableInit[11] = {
     0xb79,
     0xb91,
     0xad0
-}; D2_GLOBAL_GUARD(bUnitSoundTableInit, "bUnitSoundTableInit");
+}; D2_GLOBAL_GUARD(gaUnitSoundIdsAmazon, "gaUnitSoundIdsAmazon");
 
 eD2Sounds eD2Sounds_ARRAY_00727f48[12] = {
     SOUND_NONE,

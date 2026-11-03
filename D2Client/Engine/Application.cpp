@@ -136,7 +136,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       Storm::Source::SReg::SRegSaveValue("Diablo II", "Resolution", 0, 0);
     }
     if (!pD2IniData->bNOSOUND && geD2ApplicationMode != APPMODE_server) {
-      D2Sound::Sound::SOUND_Initialize(*(uint32_t*)pD2IniData->bD2ExpMpqExistsOrLanugageCode, (HWND)(uint32_t)pD2IniData->bSOUNDBKG);
+      D2Sound::Sound::SOUND_Initialize(*(uint32_t*)pD2IniData->bD2ExpMpqExistsOrLanugageCode, (uint32_t)pD2IniData->bSOUNDBKG);
       __frame0.bSoundInit = 1;
     }
 

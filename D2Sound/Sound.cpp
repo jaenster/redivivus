@@ -220,13 +220,13 @@ void __stdcall SOUND_InitDirectSound() {
     SOUNDSMP_ClearBuffer(gpDSoundPrimaryBuffer, 0, sPrimaryBufferCaps.dwBufferBytes);
     gpDSoundPrimaryBuffer->lpVtbl->Play(gpDSoundPrimaryBuffer, 0, 0, 1);
     Src::D2SoundSmp::SOUNDSMP_CreateSoundThread();
-    SOUND_InitMusicBuffer((uint32_t)g_hwndSoundWindow);
+    SOUND_InitMusicBuffer(gbSoundInBackground);
     Src::D2SoundFast::SOUND_LoadRegistrySettings();
     Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
     gnDirectSoundInitialized = 1;
 }
 
-void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, HWND hWnd) {
+void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackground) {
     // Frame slots -12..-4 are ONE object: &dwVerMinor is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -243,7 +243,7 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, HWND hWnd) {
     uint32_t dwVerBuild;
     char* pszPath;
     LanguageCode = dwLanguageCode;
-    g_hwndSoundWindow = hWnd;
+    gbSoundInBackground = bSoundInBackground;
     g_bSoundDriverScanComplete = 0;
     DirectSoundEnumerateA(SOUND_DetectLegacySoundDrivers, 0);
     if (gbHasLegacyEMU10K1Driver) {
@@ -342,11 +342,11 @@ int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
     return pAmbientEntry;
 }
 
-void __fastcall SOUND_InitMusicBuffer(uint32_t dwHwnd) {
+void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {
     // Static local variables (originally global data)
     static uint32_t gnMusicBufferSize; D2_STATIC_GUARD_BSS(gnMusicBufferSize, "D2Sound::Sound::SOUND_InitMusicBuffer::gnMusicBufferSize");
 
-    gnMusicBufferSize = dwHwnd;
+    gnMusicBufferSize = bSoundInBackground;
     IDirectSound* pArchive = SOUND_GetSpeakerConfigFlag();
     Storm::Source::SFile::SFileDdaInitialize(pArchive);
     gpMusicStreamBuffer = Src::D2SoundSmp::CallSounds(1, gnMusicBufferSize);
