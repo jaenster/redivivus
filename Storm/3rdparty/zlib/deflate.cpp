@@ -11,6 +11,79 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static D2SSCompDeflateBlockEntryStrc gaSSCompDeflateBlockTable[10] = {
+    {
+        /* .nGoodLength = */ 0x0,
+        /* .nMaxLazy = */ 0x0,
+        /* .nNiceLength = */ 0x0,
+        /* .nMaxChain = */ 0x0,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_stored
+    },
+    {
+        /* .nGoodLength = */ 0x4,
+        /* .nMaxLazy = */ 0x4,
+        /* .nNiceLength = */ 0x8,
+        /* .nMaxChain = */ 0x4,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_fast
+    },
+    {
+        /* .nGoodLength = */ 0x4,
+        /* .nMaxLazy = */ 0x5,
+        /* .nNiceLength = */ 0x10,
+        /* .nMaxChain = */ 0x8,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_fast
+    },
+    {
+        /* .nGoodLength = */ 0x4,
+        /* .nMaxLazy = */ 0x6,
+        /* .nNiceLength = */ 0x20,
+        /* .nMaxChain = */ 0x20,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_fast
+    },
+    {
+        /* .nGoodLength = */ 0x4,
+        /* .nMaxLazy = */ 0x4,
+        /* .nNiceLength = */ 0x10,
+        /* .nMaxChain = */ 0x10,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_slow
+    },
+    {
+        /* .nGoodLength = */ 0x8,
+        /* .nMaxLazy = */ 0x10,
+        /* .nNiceLength = */ 0x20,
+        /* .nMaxChain = */ 0x20,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_slow
+    },
+    {
+        /* .nGoodLength = */ 0x8,
+        /* .nMaxLazy = */ 0x10,
+        /* .nNiceLength = */ 0x80,
+        /* .nMaxChain = */ 0x80,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_slow
+    },
+    {
+        /* .nGoodLength = */ 0x8,
+        /* .nMaxLazy = */ 0x20,
+        /* .nNiceLength = */ 0x80,
+        /* .nMaxChain = */ 0x100,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_slow
+    },
+    {
+        /* .nGoodLength = */ 0x20,
+        /* .nMaxLazy = */ 0x80,
+        /* .nNiceLength = */ 0x102,
+        /* .nMaxChain = */ 0x400,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_slow
+    },
+    {
+        /* .nGoodLength = */ 0x20,
+        /* .nMaxLazy = */ 0x102,
+        /* .nNiceLength = */ 0x102,
+        /* .nMaxChain = */ 0x1000,
+        /* .pfnDeflateBlock = */ &Storm::_3rdparty::zlib::deflate::deflate_slow
+    }
+}; D2_STATIC_GUARD(gaSSCompDeflateBlockTable, "gaSSCompDeflateBlockTable");
+
 namespace Storm::_3rdparty::zlib::deflate {
 
 int __fastcall deflateResetKeep(z_stream * pStream) {

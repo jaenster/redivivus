@@ -43,6 +43,14 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2AsyncDataStrc) == 0x3000, "D2_NEW
 static_assert(sizeof(void*) != 4 || sizeof(::D2AsyncData_Line0x128) == 0x54, "D2_NEW_AT(D2AsyncData_Line0x128): the 32-bit layout must be the 0x54 bytes 1.14d allocates");
 
 
+// also labelled: gpAsyncDataQueueBuffer
+static int gnAsyncDataPriorityDeferDepth = 0; D2_STATIC_GUARD(gnAsyncDataPriorityDeferDepth, "gnAsyncDataPriorityDeferDepth");
+// also labelled: gpAsyncDataLoadBuffer
+static D2AsyncData_Line0x128 * gpAsyncDataDeferredList = 0; D2_STATIC_GUARD(gpAsyncDataDeferredList, "gpAsyncDataDeferredList");
+static uint32_t gbAsyncDataInitialized = 0; D2_STATIC_GUARD(gbAsyncDataInitialized, "gbAsyncDataInitialized");
+static uint32_t gnAsyncDataHandleBufferSize = 0; D2_STATIC_GUARD(gnAsyncDataHandleBufferSize, "gnAsyncDataHandleBufferSize");
+static D2AsyncDataStrc * pD2AsyncDataStrc = 0; D2_STATIC_GUARD(pD2AsyncDataStrc, "pD2AsyncDataStrc");
+
 namespace Fog::Src::AsyncData {
 
 // Registers: nEnable in ECX; nReserved (EDX) is 0 at the only call site and not read.

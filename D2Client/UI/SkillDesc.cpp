@@ -73,9 +73,10 @@
 typedef void (__fastcall *pfnSkillDescWeaponDmgCalc)(D2UnitStrc * pUnit, int * pnParam, uint32_t * pnOut1, uint32_t dwParam0, uint32_t dwParam1, int32_t nParam, D2SkillStrc * pSkill, uint32_t dwParam2, D2UnitStrc * pUnit2);
 #endif
 
-namespace D2Client::UI::SkillDesc {
+static eD2States gaeSetBonusStates[6] = { STATE_itemset1, STATE_itemset2, STATE_itemset3, STATE_itemset4, STATE_itemset5, STATE_itemset6 }; D2_STATIC_GUARD(gaeSetBonusStates, "gaeSetBonusStates");
+static char gnMonsterGroupSizeThreshold[4] = { '+', '%', 'd', '\x00' }; D2_STATIC_GUARD(gnMonsterGroupSizeThreshold, "gnMonsterGroupSizeThreshold");
 
-static char gnMonsterGroupSizeThreshold[4] = { '+', '%', 'd', '\x00' }; D2_STATIC_GUARD(gnMonsterGroupSizeThreshold, "D2Client::UI::SkillDesc::gnMonsterGroupSizeThreshold");
+namespace D2Client::UI::SkillDesc {
 
 int __fastcall SKILLDESC_InitMissileBuffers(D2QuestLogStrc * pQuestLog) {
     int nEntriesLeft = 5;

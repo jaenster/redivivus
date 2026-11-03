@@ -105,6 +105,111 @@ typedef void (__fastcall *pfnPlayerModeNetMsg)(::SGAMEDATA * pGame, D2UnitStrc *
 typedef void (__fastcall *fpForEachClientFn)(D2ClientStrc * pClient, void * pContext);
 #endif
 
+static D2PlayerModeNetMsgStrc gaPlayerModeNetMsgTable[20] = {
+    {
+        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerStopAndAtributeUpdate,
+        /* .nMoveModeByte = */ 0x8,
+        /* .nObjModeByte = */ 0x8
+    },
+    {
+        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::PLRMSG_SendPlayerStopToOtherClient,
+        /* .nMoveModeByte = */ 0x7,
+        /* .nObjModeByte = */ 0x7
+    },
+    {
+        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerMoveOrObject,
+        /* .nMoveModeByte = */ 0x1,
+        /* .nObjModeByte = */ 0x0
+    },
+    {
+        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerMoveOrObject,
+        /* .nMoveModeByte = */ 0x17,
+        /* .nObjModeByte = */ 0x18
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendPlayerStop,
+        /* .nMoveModeByte = */ 0x6,
+        /* .nObjModeByte = */ 0x6
+    },
+    {
+        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::PLRMSG_SendPlayerStopToOtherClient,
+        /* .nMoveModeByte = */ 0x7,
+        /* .nObjModeByte = */ 0x7
+    },
+    {
+        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerMoveOrObject,
+        /* .nMoveModeByte = */ 0x1,
+        /* .nObjModeByte = */ 0x0
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendPlayerStop,
+        /* .nMoveModeByte = */ 0x12,
+        /* .nObjModeByte = */ 0x12
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendPlayerStop,
+        /* .nMoveModeByte = */ 0x9,
+        /* .nObjModeByte = */ 0x9
+    },
+    {
+        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
+        /* .nMoveModeByte = */ 0x15,
+        /* .nObjModeByte = */ 0x16
+    },
+    {
+        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerMove,
+        /* .nMoveModeByte = */ 0x14,
+        /* .nObjModeByte = */ 0x14
+    }
+}; D2_STATIC_GUARD(gaPlayerModeNetMsgTable, "gaPlayerModeNetMsgTable");
+static uint32_t g_bWhisperSquelched = 0; D2_STATIC_GUARD(g_bWhisperSquelched, "g_bWhisperSquelched");
+static uint32_t g_bWhisperDelivered = 0; D2_STATIC_GUARD(g_bWhisperDelivered, "g_bWhisperDelivered");
+
 namespace D2Game::PLAYER::PlayerMsg {
 
 D2WaypointStrc * __fastcall GetWaypointsForCurrentDifficulty(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

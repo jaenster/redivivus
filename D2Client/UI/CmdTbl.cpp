@@ -48,11 +48,22 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2CmdTbl_Line0x50f) == 0x47a, "D2_NEW_AT(D2CmdTbl_Line0x50f): the 32-bit layout must be the 0x47a bytes 1.14d allocates");
 
 
-namespace D2Client::UI::CmdTbl {
+static pfnVoidNoArgCallback gpfnMouseLeftButtonHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnMouseLeftButtonHandler, "gpfnMouseLeftButtonHandler");
+static pfnVoidNoArgCallback gpfnMouseRightButtonHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnMouseRightButtonHandler, "gpfnMouseRightButtonHandler");
+static D2KeyBindStrc gaKeyBindingsBackup[114] = {}; D2_STATIC_GUARD(gaKeyBindingsBackup, "gaKeyBindingsBackup");
+static pfnVoidNoArgCallback gpfnMouseMiddleButtonHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnMouseMiddleButtonHandler, "gpfnMouseMiddleButtonHandler");
+static D2KeyBindStrc g_KeyBindingsTable[114] = {}; D2_STATIC_GUARD(g_KeyBindingsTable, "g_KeyBindingsTable");
+static pfnVoidNoArgCallback gpfnScrollUpButtonHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnScrollUpButtonHandler, "gpfnScrollUpButtonHandler");
+static pfnVoidNoArgCallback gpfnScrollDownButtonHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnScrollDownButtonHandler, "gpfnScrollDownButtonHandler");
+static pfnVoidNoArgCallback gpKeyBindingsTableEnd = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpKeyBindingsTableEnd, "gpKeyBindingsTableEnd");
+static pfnVoidNoArgCallback gpfnMouseLeftButtonAltHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnMouseLeftButtonAltHandler, "gpfnMouseLeftButtonAltHandler");
+static pfnVoidNoArgCallback gpfnMouseRightButtonAltHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnMouseRightButtonAltHandler, "gpfnMouseRightButtonAltHandler");
+static pfnVoidNoArgCallback gpfnMouseMiddleButtonAltHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnMouseMiddleButtonAltHandler, "gpfnMouseMiddleButtonAltHandler");
+static unsigned int gbKeyBindingsEnabled = {}; D2_STATIC_GUARD(gbKeyBindingsEnabled, "gbKeyBindingsEnabled");
+static uint16_t gwKeyNameBuffer[4] = {}; D2_STATIC_GUARD(gwKeyNameBuffer, "gwKeyNameBuffer");
+static unsigned int gbKeyConfigModeActive = {}; D2_STATIC_GUARD(gbKeyConfigModeActive, "gbKeyConfigModeActive");
 
-static D2CmdBindingStrc gaCmdHandlerTable[57] = { {} }; D2_STATIC_GUARD(gaCmdHandlerTable, "D2Client::UI::CmdTbl::gaCmdHandlerTable");
-static D2CmdBindingStrc gnCmdTableMax[57] = { {} }; D2_STATIC_GUARD(gnCmdTableMax, "D2Client::UI::CmdTbl::gnCmdTableMax");
-static pfnVoidNoArgCallback gpKeyBindingsTableEnd = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpKeyBindingsTableEnd, "D2Client::UI::CmdTbl::gpKeyBindingsTableEnd");
+namespace D2Client::UI::CmdTbl {
 
 void __stdcall CMD_ToggleRunMode() {
     GAME::Game::SetRunKeyDown(1);

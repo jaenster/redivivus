@@ -14,6 +14,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static uint32_t gpServerMemHeap = 0x1; D2_STATIC_GUARD(gpServerMemHeap, "gpServerMemHeap");
+
 namespace Fog::Memory {
 
 void OutOfMemoryHandler(char * format, ...) {

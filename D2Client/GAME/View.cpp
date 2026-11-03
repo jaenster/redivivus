@@ -61,6 +61,8 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2GameViewStrc) == 0xeabc, "D2_NEW_AT(D2GameViewStrc): the 32-bit layout must be the 0xeabc bytes 1.14d allocates");
 
 
+static D2SeedStrc * gpArcaneStarsSeed = (D2SeedStrc *)&gaSpriteArcaneStarYOffset; D2_STATIC_GUARD(gpArcaneStarsSeed, "gpArcaneStarsSeed");
+
 namespace D2Client::GAME::View {
 
 void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * pOutIntensity, uint8_t * pOutRed, uint8_t * pOutGreen, uint8_t * pOutBlue) {

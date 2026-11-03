@@ -151,6 +151,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA2Q4Strc) == 0x48, "D2_N
 typedef uint8_t (__fastcall *QUESTUPDATE)(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData);
 #endif
 
+static BOOL DEBUGPRINT = 0; D2_STATIC_GUARD(DEBUGPRINT, "DEBUGPRINT");
+
 namespace D2Game::Quests::QUESTS {
 
 D2BitBufferStrc * __fastcall GetQuestBitBuffer(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

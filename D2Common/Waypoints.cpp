@@ -37,8 +37,6 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2WaypointStrc) == 0x10, "D2_NEW_AT
 
 namespace D2Common::Waypoints {
 
-static uint16_t aaWaypointsBitMasks_0__1_[112][2] = { 0 }; D2_STATIC_GUARD(aaWaypointsBitMasks_0__1_, "D2Common::Waypoints::aaWaypointsBitMasks_0__1_");
-
 BOOL __stdcall FindLevelIdByWaypointId(uint16_t nWaypointId, eD2LevelId * pLevelId) {
     *pLevelId = LEVEL_None;
     if (nWaypointId >= 0xff) {

@@ -54,9 +54,9 @@
 #endif
 
 
-namespace D2Client::Sound::SoundHdr {
+static float FLOAT_006d9108 = 400; D2_STATIC_GUARD(FLOAT_006d9108, "FLOAT_006d9108");
 
-static float FLOAT_006d9108 = 400; D2_STATIC_GUARD(FLOAT_006d9108, "D2Client::Sound::SoundHdr::FLOAT_006d9108");
+namespace D2Client::Sound::SoundHdr {
 
 static void SOUNDHDR_CompleteAsyncLoad(D2SoundsTxt * pSoundHdr) {
     void* nAddress;

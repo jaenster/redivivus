@@ -89,6 +89,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitDataItemStrc) == 0x74, "D2_NE
 typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, D2UnitStrc * pItem, D2UnitStrc * pPlayer);
 #endif
 
+static eD2States aSetItemsStateList[5] = { STATE_itemset1, STATE_itemset2, STATE_itemset3, STATE_itemset4, STATE_itemset5 }; D2_STATIC_GUARD(aSetItemsStateList, "aSetItemsStateList");
+
 namespace D2Common::ITEMS::Items {
 
 uint32_t __stdcall ITEMS_SearchItemCodeTable(D2UnitStrc * pUnit, int32_t dwContext, uint32_t nOffset) {

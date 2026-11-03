@@ -108,6 +108,8 @@ typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, D2UnitStrc 
 typedef void (__stdcall *pfnPetForEachCallback)(D2UnitStrc * pPetUnit, void * pContext);
 #endif
 
+static uint32_t gnMonsterSpawnTotalCount = 0; D2_STATIC_GUARD(gnMonsterSpawnTotalCount, "gnMonsterSpawnTotalCount");
+
 namespace D2Game::UNIT::SUNITNPC {
 
 // Server-side: allocates and initializes the NPC inventory/hireling-slot block (0x450 bytes) for a newly spawned NPC unit if not already initialized. Fills up to 10 hireling name slots drawn from GetHirelingNamesAndSize, seeding each slot via the NPC control RNG. Halts fatally if hireling name lookup fails.

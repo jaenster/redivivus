@@ -57,6 +57,9 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2ddDebugFont) == 0x3000, "D2_NEW_A
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 
+static uint32_t gnDDrawSurfaceWidth = 0; D2_STATIC_GUARD(gnDDrawSurfaceWidth, "gnDDrawSurfaceWidth");
+static uint32_t gnDDrawDisplayModeIndex = 0; D2_STATIC_GUARD(gnDDrawDisplayModeIndex, "gnDDrawDisplayModeIndex");
+
 namespace D2DDraw::Renderer::DirectDraw {
 
 BOOL __fastcall Initialize(HINSTANCE hInstance) {

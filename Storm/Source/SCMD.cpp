@@ -34,8 +34,6 @@ typedef int (__stdcall *pfnSCmdUnknownArgCallback)(char * szArg);
 typedef BOOL (__stdcall *SCMDCALLBACK)(CMDPARAMS * pParams, char * szCmdLine);
 #endif
 
-namespace Storm::Source {
-
 static char gszSCMD_Delim_1[9] = {
     ' ',
     ',',
@@ -46,7 +44,10 @@ static char gszSCMD_Delim_1[9] = {
     '\x0d',
     '\x1a',
     '\x00'
-}; D2_STATIC_GUARD(gszSCMD_Delim_1, "Storm::Source::gszSCMD_Delim_1");
+}; D2_STATIC_GUARD(gszSCMD_Delim_1, "gszSCMD_Delim_1");
+static uint32_t gbScmdHasPriorityCommand = 0; D2_STATIC_GUARD(gbScmdHasPriorityCommand, "gbScmdHasPriorityCommand");
+
+namespace Storm::Source {
 
 // Parses command-line boolean argument with optional +/- prefix. Updates bitmask in cmdDef based on flags (sets bits on +/true, clears bits on -/false). Also updates external bitmask pointer if provided.
 // @blizzard ConvertBool (SCMD.CPP)

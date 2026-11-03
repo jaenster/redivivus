@@ -10,6 +10,25 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static char s___AUTALLOCREC___00711480[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'T',
+    'A',
+    'L',
+    'L',
+    'O',
+    'C',
+    'R',
+    'E',
+    'C',
+    '@',
+    '@',
+    '\x00'
+}; D2_STATIC_GUARD(s___AUTALLOCREC___00711480, "s___AUTALLOCREC___00711480");
+
 namespace D2Client::Archive {
 
 // Writes formatted text to a file handle using wvsprintfA. Variadic printf-style format arguments follow pFormat on the stack. Epilogue is a bare RET (no stack cleanup by callee), so the convention is __cdecl, not __stdcall.

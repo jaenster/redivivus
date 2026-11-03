@@ -9,7 +9,12 @@
 #include "Storm/Source/SLog.h"
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
+#include "Bnclient/BnDownload.h"
+#include "Bnclient/BnSend.h"
 #include "Bnclient/Bnet.h"
+#include "Bnclient/Cache.h"
+#include "Bnclient/Debug.h"
+#include "D2Game/Objects/ObjectsRgn.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -17,6 +22,63 @@
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
+
+static D2BNetClientCallbacksStrc sgBNetClientCallbacks = {
+    /* .pfnSetLoggingFlag = */ (fnSetLoggingFlag)&Bnclient::Debug::DEBUG_SetLoggingFlag,
+    /* .pfnConnectToBattleNet = */ (fnConnectToBattleNet)&Bnclient::BnSend::ConnectingToBattleNet,
+    /* .pfnSendLogonRequest = */ &Bnclient::BnSend::BNCLIENT_SendLogonRequest,
+    /* .pfnWaitForLogonResponse = */ &Bnclient::BnSend::BNCLIENT_WaitForLogonResponse,
+    /* .pfnDisconnect = */ &Bnclient::BnSend::BNSEND_Disconnect,
+    /* .pfnSendChatCommand = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x0E_ChatCommand,
+    /* .pfnGetChannelNamePtr = */ &Bnclient::_net_sid::NET_SID_CLIENT_GetChannelNamePtr,
+    /* .pfnSendJoinChannel = */ (fnSendJoinChannel)&Bnclient::BnSend::NET_SID_CLIENT_Send_0x0C_JoinChannel,
+    /* .pfnSendGetChannelList = */ (fnSendGetChannelList)&Bnclient::BnSend::NET_SID_CLIENT_Send_0x0B_GetChannelList,
+    /* .pfnDequeueMessage = */ (fnDequeueMessage)&Bnclient::BNMESSQUEUE_DequeueMessage,
+    /* .pfnGetStateAndClear = */ &Bnclient::_net_sid::NET_SID_CLIENT_GetStateAndClear,
+    /* .pfnSendGetFileTime = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x33_GetFileTime,
+    /* .pfnSendCheckAd = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x15_CheckAd,
+    /* .pfnSendStartAdvEx3 = */ (fnSendStartAdvEx3)&Bnclient::BnSend::NET_SID_CLIENT_Send_0x1C_StartAdVex3,
+    /* .pfnSendGetAdvListEx = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x09_GetAdvListEx,
+    /* .pfnSendNotifyJoin = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x22_NotifyJoin,
+    /* .pfnSendQueryRealms2 = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x40_QueryRealms2,
+    /* .pfnSendLogonRealmEx = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x3E_LogonRealmEx,
+    /* .pfnApplyPrepatch = */ (fnApplyPrepatch)&Bnclient::BnDownload::BNDOWNLOAD_ApplyPrepatch,
+    /* .pfnGetDownloadProgress = */ &Bnclient::BnDownload::BNDOWNLOAD_GetProgress,
+    /* .pfnInitiatePatchDownload = */ (fnInitiatePatchDownload)&Bnclient::BnDownload::BNDOWNLOAD_InitiatePatchDownload,
+    /* .pfnEnterChatAndJoinChannel = */ &Bnclient::BnSend::BNCLIENT_EnterChatAndJoinChannel,
+    /* .pfnSendLeaveChat = */ &Bnclient::BnSend::thunk_NET_SID_CLIENT_Send_0x10_LeaveChat,
+    /* .pfnGetGameVersion = */ (fnGetGameVersion)&Bnclient::BnSend::GET_GameVersion,
+    /* .pfnSendCreateAccountRequest = */ &Bnclient::BnSend::BNCLIENT_SendCreateAccountRequest,
+    /* .pfnWaitForCreateAccountResponse = */ &Bnclient::BnSend::BNCLIENT_WaitForCreateAccountResponse,
+    /* .pfnIsSocketConnected = */ &Bnclient::BnSend::BNCLIENT_IsSocketConnected,
+    /* .pfnSendClickAd = */ (fnSendClickAd)&Bnclient::BnSend::NET_SID_CLIENT_Send_0x16_ClickAd,
+    /* .pfnSetDownloadCancelFlag = */ &Bnclient::BnDownload::BNDOWNLOAD_SetCancelFlag,
+    /* .pfnSendWriteUserData = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x27_WriteUserData,
+    /* .pfnSendReadUserData = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x26_ReadUserData,
+    /* .pfnGetStoredReadUserData = */ (fnGetStoredReadUserData)&Bnclient::BnSend::BNSEND_GetStoredReadUserData,
+    /* .pfnGetConnectionState = */ (fnGetConnectionState)&Bnclient::BnSend::BNSEND_GetConnectionState,
+    /* .pfnLogWriteLine = */ &Bnclient::Bnet::BnetLog_WriteLine,
+    /* .pfnLogIndent = */ (fnLogIndent)&Bnclient::Bnet::BNET_LogIndent,
+    /* .pfnGetEnterChatResponseFlags = */ &Bnclient::BnSend::BNCLIENT_GetEnterChatResponseFlags,
+    /* .pfnSendKeepAlive = */ &Bnclient::BnSend::BNCLIENT_SendKeepAlive,
+    /* .pfnDecodeCDKeys = */ &Bnclient::BnSend::BNNEWS_DecodeCDKeys,
+    /* .pfnBnetLoadAndReturn = */ (fnBnetLoadAndReturn)&Bnclient::BnSend::BnetLoadAndReturn,
+    /* .pfnSendChangePasswordRequest = */ &Bnclient::BnSend::BNCLIENT_SendChangePasswordRequest,
+    /* .pfnWaitForChangePasswordResponse = */ &Bnclient::BnSend::BNCLIENT_WaitForChangePasswordResponse,
+    /* .pfnSendQueryAdURL = */ (fnSendQueryAdURL)&Bnclient::BnSend::NET_SID_CLIENT_Send_0x41_QueryAdURL,
+    /* .pfnSendNewsInfo = */ (fnSendNewsInfo)&Bnclient::BnSend::NET_SID_CLIENT_Send_0x46_NewsInfo,
+    /* .pfnNewsShutdown = */ &Bnclient::BnSend::BNNEWS_Shutdown,
+    /* .pfnGetProtocolVersionChar = */ &Bnclient::BnSend::BNCLIENT_GetProtocolVersionChar,
+    /* .pfnIsEmailRequested = */ &Bnclient::BnSend::BNSEND_GetBNetThreadInitFlag,
+    /* .pfnSendSetEmail = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x59_SetEmail,
+    /* .pfnSendResetPassword = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x5A_ResetPassword,
+    /* .pfnSendChangeEmail = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x5B_ChangeEmail,
+    /* .pfnSendLeaveGame = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x1F_LeaveGame,
+    /* .pfnCacheFreeMem = */ (fnCacheFreeMem)&Bnclient::Cache::CACHE_FreeMem,
+    /* .pfnCacheReadData = */ (fnCacheReadData)&Bnclient::Cache::CACHE_ReadData,
+    /* .pfnCacheWriteData = */ (fnCacheWriteData)&Bnclient::Cache::CACHE_WriteData,
+    /* .pfnReserved = */ nullptr
+}; D2_STATIC_GUARD(sgBNetClientCallbacks, "sgBNetClientCallbacks");
 
 namespace Bnclient {
 

@@ -54,6 +54,34 @@ typedef void (__fastcall *pfnNewsEntryCallback)(uint32_t dwEntryId, char * szMes
 typedef void (__stdcall *pfnVoidNoArgCallback)();
 #endif
 
+static char * szBnNewsChannelName = s_BNNews_D2DV_006df210; D2_STATIC_GUARD(szBnNewsChannelName, "szBnNewsChannelName");
+static char s___AUItem_NewsTable___0072ff8c[24] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'I',
+    't',
+    'e',
+    'm',
+    '@',
+    'N',
+    'e',
+    'w',
+    's',
+    'T',
+    'a',
+    'b',
+    'l',
+    'e',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_STATIC_GUARD(s___AUItem_NewsTable___0072ff8c, "s___AUItem_NewsTable___0072ff8c");
+
 namespace Bnclient::BnSend {
 
 int __stdcall NET_SID_CLIENT_Send_0x1E_ClientId2() {

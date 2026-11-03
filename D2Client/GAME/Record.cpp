@@ -41,6 +41,8 @@ typedef void (*RecordCleanupFn)();
 typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpression);
 #endif
 
+static D2GameRecordStrc * gpCurrentGameRecord = (D2GameRecordStrc *)&gsGameRecordContext; D2_STATIC_GUARD(gpCurrentGameRecord, "gpCurrentGameRecord");
+
 namespace D2Client::GAME::Record {
 
 // @sourcefile .\GAME\Record.cpp

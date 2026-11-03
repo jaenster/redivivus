@@ -33,6 +33,12 @@
 #endif
 
 
+// also labelled: gnPacketSendCount_0x69
+static unsigned int gnD2GSBytesSentTotal = {}; D2_STATIC_GUARD(gnD2GSBytesSentTotal, "gnD2GSBytesSentTotal");
+// also labelled: gbNetworkPacketSyncFlag
+static uint32_t gnD2GSPacketsSentTotal = 0; D2_STATIC_GUARD(gnD2GSPacketsSentTotal, "gnD2GSPacketsSentTotal");
+static uint32_t gnLoadingProgressRatio = 0; D2_STATIC_GUARD(gnLoadingProgressRatio, "gnLoadingProgressRatio");
+
 namespace D2Client::GAME::Msg {
 
 void __stdcall NET_SendPacket0x3f_0x1a() {

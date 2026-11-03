@@ -78,6 +78,9 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2NpcPlayerInteractionStrc) == 0xc,
 typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArgs);
 #endif
 
+static D2NpcItemTablesStrc gaNpcItemTables[17] = {}; D2_STATIC_GUARD(gaNpcItemTables, "gaNpcItemTables");
+static uint8_t gbaNpcItemTableBuilt[17] = {}; D2_STATIC_GUARD(gbaNpcItemTableBuilt, "gbaNpcItemTableBuilt");
+
 namespace D2Game::UNIT::sunitproxy {
 
 D2MonsterAiStrc * __fastcall GetMonsterAI(D2UnitStrc * pUnit) {

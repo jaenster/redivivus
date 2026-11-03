@@ -20,6 +20,12 @@
 #endif
 
 
+static uint16_t gnUnicodeKamapEntryCount = 0; D2_STATIC_GUARD(gnUnicodeKamapEntryCount, "gnUnicodeKamapEntryCount");
+static uint8_t gnUnicodeKamapGroupCount = 0; D2_STATIC_GUARD(gnUnicodeKamapGroupCount, "gnUnicodeKamapGroupCount");
+static void * gpUnicodeKamapToCodeTable = 0; D2_STATIC_GUARD(gpUnicodeKamapToCodeTable, "gpUnicodeKamapToCodeTable");
+static void * g_pUnicodeKamapTable = 0; D2_STATIC_GUARD(g_pUnicodeKamapTable, "g_pUnicodeKamapTable");
+static uint16_t * gpUnicodeCodeToMapTable = 0; D2_STATIC_GUARD(gpUnicodeCodeToMapTable, "gpUnicodeCodeToMapTable");
+
 namespace D2Lang::Unicode::UNISYS {
 
 uint32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * wszText2) {

@@ -28,6 +28,8 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2NetDataStrc) == 0x78, "D2_NEW_AT(D2NetDataStrc): the 32-bit layout must be the 0x78 bytes 1.14d allocates");
 
 
+static char cp_0075d040[256] = {}; D2_STATIC_GUARD(cp_0075d040, "cp_0075d040");
+
 namespace Fog::Src::Safesock {
 
 int __fastcall closeSocket(SOCKET hSocket) {
@@ -448,7 +450,7 @@ void __fastcall SAFESOCK_DisableNonBlocking(D2NetDataStrc * pNetData) {
     ioctlsocket(hSocket, -0x7ffb9982, &nIoctlArg);
 }
 
-D2NetDataStrc * __fastcall Create_Flag0(char * szText1, int nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2) {
+D2NetDataStrc * __fastcall SAFESOCK_CreateBlocking(char * szText1, int nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szText2) {
     D2NetDataStrc* pNetData = Create(szText1, (u_short)nPort, pThreadProc, pThreadParam, szText2, 0);
     return pNetData;
 }

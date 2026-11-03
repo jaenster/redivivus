@@ -33,6 +33,9 @@
 typedef int (__stdcall *fpDialogFunc)();
 #endif
 
+static uint32_t gnTradeGoldUpdateBuffer = 0; D2_STATIC_GUARD(gnTradeGoldUpdateBuffer, "gnTradeGoldUpdateBuffer");
+static uint16_t gwszTradePartnerName[16] = {}; D2_STATIC_GUARD(gwszTradePartnerName, "gwszTradePartnerName");
+
 namespace D2Client::UI::Trade {
 
 int __stdcall ConfirmExchange() {

@@ -52,6 +52,84 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2DialogStrc) == 0xb10, "D2_NEW_AT(
 typedef int (__stdcall *fpDialogFunc)();
 #endif
 
+static D2UIFlagInitStrc g_UIFlagInitDialogMouseWheel = {
+    /* .eEventType = */ 0x0,
+    /* .nMessageOrKeyCode = */ 0x20a,
+    /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogMouseWheel
+}; D2_STATIC_GUARD(g_UIFlagInitDialogMouseWheel, "g_UIFlagInitDialogMouseWheel");
+static D2UIFlagInitStrc gsUIDialogFlagInit[14] = {
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogMouseUp
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogMouseUp
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogMouseDown
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x26,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogPageUp
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x28,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogPageDown
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x27,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogNavigateUp
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x25,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogNavigateDown
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogEnterKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogConfirm
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x102,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogKeyHandler
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogClickHandler
+    }
+}; D2_STATIC_GUARD(gsUIDialogFlagInit, "gsUIDialogFlagInit");
+
 namespace D2Client::UI::Dialog {
 
 static void UI_ScrollNpcMenuList(int32_t nScrollDelta, D2DialogStrc * pDialog) {

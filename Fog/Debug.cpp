@@ -177,6 +177,8 @@ typedef BOOL (__stdcall *pfnStackWalk)(DWORD MachineType, HANDLE hProcess, HANDL
 typedef DWORD (__stdcall *pfnUnDecorateSymbolName)(char * DecoratedName, char * UnDecoratedName, DWORD UndecoratedLength, DWORD Flags);
 #endif
 
+static HANDLE ghCurrentProcessHandle = INVALID_HANDLE_VALUE; D2_STATIC_GUARD(ghCurrentProcessHandle, "ghCurrentProcessHandle");
+
 namespace Fog::Debug {
 
 static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable);

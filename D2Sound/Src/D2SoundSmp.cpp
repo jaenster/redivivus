@@ -33,11 +33,9 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2SoundSmpStrc) == 0x60, "D2_NEW_AT(D2SoundSmpStrc): the 32-bit layout must be the 0x60 bytes 1.14d allocates");
 
 
-namespace D2Sound::Src::D2SoundSmp {
+static uint32_t gnSoundGlobalVolume = 0xff; D2_STATIC_GUARD(gnSoundGlobalVolume, "gnSoundGlobalVolume");
 
-static float gnSoundFrequency_22kHz = 2; D2_STATIC_GUARD(gnSoundFrequency_22kHz, "D2Sound::Src::D2SoundSmp::gnSoundFrequency_22kHz");
-static float gnSoundQuality_Low = 100; D2_STATIC_GUARD(gnSoundQuality_Low, "D2Sound::Src::D2SoundSmp::gnSoundQuality_Low");
-static double gnSoundAttenuation_Max = 0.0000999999974737875; D2_STATIC_GUARD(gnSoundAttenuation_Max, "D2Sound::Src::D2SoundSmp::gnSoundAttenuation_Max");
+namespace D2Sound::Src::D2SoundSmp {
 
 void __fastcall SOUNDSMP_WriteToBuffer(D2SoundSmpStrc * ppSoundSmp, int nWritePos, int nLockOffset, int nBytesToWrite) {
     // Frame slots -16..-4 are ONE object: &pBytesLocked2 is passed out and the callee reaches the rest by byte offset.

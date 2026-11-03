@@ -20,6 +20,8 @@
 typedef void (__fastcall *pfnTileEntryEnum)(D2TileLibraryEntryStrc * pTileEntry, void * pContext);
 #endif
 
+static uint8_t gaItemPaletteData[241920] = { 0 }; D2_STATIC_GUARD(gaItemPaletteData, "gaItemPaletteData");
+
 namespace D2CMP::Pallete {
 
 // Calls pfnCallback(pTileEntry, pContext) for every tile entry of every loaded tile project (gpTileProjectListHead); returns the call count.

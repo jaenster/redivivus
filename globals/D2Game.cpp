@@ -476,10 +476,6 @@ D2NET_SERVER_D2GS_ClientToServer NET_D2GS_SERVER_INCOMING[103] = {
     }
 }; D2_GLOBAL_GUARD(NET_D2GS_SERVER_INCOMING, "NET_D2GS_SERVER_INCOMING");
 
-int ganUnitHashTableBaseOffsets[6] = { 0x1120, 0x1320, 0x1520, 0x1920, 0x1720, 0x0 }; D2_GLOBAL_GUARD(ganUnitHashTableBaseOffsets, "ganUnitHashTableBaseOffsets");
-
-uint32_t gaStartingLevelByAct[5] = { 0x1, 0xf, 0x14, 0x1a, 0x20 }; D2_GLOBAL_GUARD(gaStartingLevelByAct, "gaStartingLevelByAct");
-
 uint32_t PlayerMultiplyer[9] = {
     0x0,
     0x0,
@@ -712,91 +708,6 @@ D2ShrinesTableEntryStrc OBJECTSHRINEFUNCTION[24] = {
 
 int gaMissileOffsets_LightningUniqueY[4] = { -0x1, 0x0, 0x1, 0x0 }; D2_GLOBAL_GUARD(gaMissileOffsets_LightningUniqueY, "gaMissileOffsets_LightningUniqueY");
 
-uint32_t gnAuraDamageScale_ManaAbsorb[3] = { 0xffffffff, 0x0, 0xffffffff }; D2_GLOBAL_GUARD(gnAuraDamageScale_ManaAbsorb, "gnAuraDamageScale_ManaAbsorb");
-
-uint8_t BYTE_ARRAY_006e3138[80] = {
-    0xa,
-    0x8,
-    0x16,
-    0x14,
-    0x12,
-    0x10,
-    0xe,
-    0xc,
-    0x1b,
-    0xe,
-    0xf,
-    0x3,
-    0x63,
-    0x7,
-    0x15,
-    0x16,
-    0x1f,
-    0x1a,
-    0xc,
-    0xd,
-    0x2,
-    0x63,
-    0x6,
-    0x13,
-    0x14,
-    0x1e,
-    0x19,
-    0xa,
-    0xb,
-    0x1,
-    0x63,
-    0x5,
-    0x11,
-    0x12,
-    0x1d,
-    0x18,
-    0x8,
-    0x9,
-    0x0,
-    0x63,
-    0x4,
-    0xf,
-    0x10,
-    0x1c,
-    0x1f,
-    0x16,
-    0x17,
-    0x7,
-    0x63,
-    0x3,
-    0xd,
-    0xe,
-    0x1b,
-    0x1e,
-    0x14,
-    0x7,
-    0x6,
-    0x63,
-    0x2,
-    0x1,
-    0xc,
-    0x1a,
-    0x1d,
-    0x12,
-    0x13,
-    0x5,
-    0x63,
-    0x1,
-    0x9,
-    0xa,
-    0x19,
-    0x1c,
-    0x10,
-    0x11,
-    0x4,
-    0x63,
-    0x0,
-    0x17,
-    0x8,
-    0x18
-}; D2_GLOBAL_GUARD(BYTE_ARRAY_006e3138, "BYTE_ARRAY_006e3138");
-
 D2UnitIdToNameFunc PFN_UnitTypeCallbackTable[5] = { &D2Game::GAME::Server::SERVER_GetPlayerClassName, &D2Game::GAME::Server::MonsterIdToName, &D2Game::GAME::Server::ObjectIdToName, &D2Game::GAME::Server::ItemIdToName, &D2Game::GAME::Server::MissileIdToname }; D2_GLOBAL_GUARD(PFN_UnitTypeCallbackTable, "PFN_UnitTypeCallbackTable");
 
 int NPCINTRO_ListAct1[6] = { 0x94, 0x9a, 0x96, 0x93, 0x9b, 0x109 }; D2_GLOBAL_GUARD(NPCINTRO_ListAct1, "NPCINTRO_ListAct1");
@@ -818,109 +729,6 @@ int NPCINTRO_ListAct2[11] = {
 int NPCINTRO_ListAct3[7] = { 0xf5, 0xfc, 0xfd, 0xfe, 0xff, 0x108, 0x129 }; D2_GLOBAL_GUARD(NPCINTRO_ListAct3, "NPCINTRO_ListAct3");
 
 int NPCINTRO_ListAct5[7] = { 0x208, 0x209, 0x1ff, 0x200, 0x201, 0x202, 0x203 }; D2_GLOBAL_GUARD(NPCINTRO_ListAct5, "NPCINTRO_ListAct5");
-
-D2PlayerModeNetMsgStrc gaPlayerModeNetMsgTable[20] = {
-    {
-        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerStopAndAtributeUpdate,
-        /* .nMoveModeByte = */ 0x8,
-        /* .nObjModeByte = */ 0x8
-    },
-    {
-        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::PLRMSG_SendPlayerStopToOtherClient,
-        /* .nMoveModeByte = */ 0x7,
-        /* .nObjModeByte = */ 0x7
-    },
-    {
-        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerMoveOrObject,
-        /* .nMoveModeByte = */ 0x1,
-        /* .nObjModeByte = */ 0x0
-    },
-    {
-        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerMoveOrObject,
-        /* .nMoveModeByte = */ 0x17,
-        /* .nObjModeByte = */ 0x18
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendPlayerStop,
-        /* .nMoveModeByte = */ 0x6,
-        /* .nObjModeByte = */ 0x6
-    },
-    {
-        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::PLRMSG_SendPlayerStopToOtherClient,
-        /* .nMoveModeByte = */ 0x7,
-        /* .nObjModeByte = */ 0x7
-    },
-    {
-        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerMoveOrObject,
-        /* .nMoveModeByte = */ 0x1,
-        /* .nObjModeByte = */ 0x0
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendPlayerStop,
-        /* .nMoveModeByte = */ 0x12,
-        /* .nObjModeByte = */ 0x12
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendPlayerStop,
-        /* .nMoveModeByte = */ 0x9,
-        /* .nObjModeByte = */ 0x9
-    },
-    {
-        /* .pfnSend = */ (pfnPlayerModeNetMsg)&D2Game::PLAYER::PlayerMsg::SendUnitCast0x4d,
-        /* .nMoveModeByte = */ 0x15,
-        /* .nObjModeByte = */ 0x16
-    },
-    {
-        /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerMove,
-        /* .nMoveModeByte = */ 0x14,
-        /* .nObjModeByte = */ 0x14
-    }
-}; D2_GLOBAL_GUARD(gaPlayerModeNetMsgTable, "gaPlayerModeNetMsgTable");
 
 int gnDirectionXOffsets[8] = { -0x1, 0x0, 0x1, -0x1, 0x1, -0x1, 0x0, 0x1 }; D2_GLOBAL_GUARD(gnDirectionXOffsets, "gnDirectionXOffsets");
 
@@ -1278,161 +1086,6 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
     nullptr,
     nullptr
 }; D2_GLOBAL_GUARD(SKILLSRVDOFUNCS, "SKILLSRVDOFUNCS");
-
-int gaNPCSpokenBitIndexMap[35][2] = {
-    { -0x1, 0x0 },
-    { 0x93, 0x1 },
-    { 0x94, 0x2 },
-    { 0x96, 0x3 },
-    { 0x9b, 0x4 },
-    { 0x9a, 0x5 },
-    { 0x109, 0x6 },
-    { 0xaf, 0x7 },
-    { 0xb0, 0x8 },
-    { 0xb1, 0x9 },
-    { 0xb2, 0xa },
-    { 0xca, 0xb },
-    { 0xc8, 0xc },
-    { 0xd2, 0xd },
-    { 0xc9, 0xe },
-    { 0xc6, 0xf },
-    { 0xc7, 0x10 },
-    { 0xf4, 0x11 },
-    { 0xf5, 0x12 },
-    { 0xf6, 0x13 },
-    { 0xfb, 0x14 },
-    { 0xfc, 0x15 },
-    { 0xfd, 0x16 },
-    { 0xfe, 0x17 },
-    { 0xff, 0x18 },
-    { 0x100, 0x19 },
-    { 0x101, 0x1a },
-    { 0x108, 0x1b },
-    { 0x129, 0x1c },
-    { 0x1ff, 0x1d },
-    { 0x200, 0x1e },
-    { 0x201, 0x1f },
-    { 0x202, 0x20 },
-    { 0x203, 0x21 },
-    { 0x208, 0x22 }
-}; D2_GLOBAL_GUARD(gaNPCSpokenBitIndexMap, "gaNPCSpokenBitIndexMap");
-
-PFN_ObjectOperateCallback gapObjectOperateCallbacks[10] = {
-    nullptr,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterA,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterB,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterC,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterD,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnCompanionChests,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterB,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnCompanionChests,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnRandomMonsters,
-    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnRandomMonsters
-}; D2_GLOBAL_GUARD(gapObjectOperateCallbacks, "gapObjectOperateCallbacks");
-
-D2ObjectOperateFnFunc OBJECTSOPERATEFN[101] = {
-    nullptr,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenChestSpawnMonster,
-    &D2Game::Objects::ObjectsMode::OBJOP_ActivateShrine,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenChestNoMonster,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenSparklyChest,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenTrapChestSkillTrigger,
-    &D2Game::Quests::QUESTS::A1Q5::OBJOP_A1Q5_ActivateCairnStone,
-    &D2Game::Objects::ObjectsMode::OBJOP_DetonateExplosiveBarrel,
-    &D2Game::Objects::ObjectsMode::OBJOP_ToggleDoor,
-    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_ActivateHoradricMalusSmith,
-    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_ActivateInifussTree,
-    &D2Game::Objects::ObjectsMode::OBJOP_ActivateNoOp,
-    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_UseScrollOfInifuss,
-    &D2Game::Objects::ObjectsMode::OBJOP_ActivateSimple,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenLockedChest,
-    &D2Game::Objects::ObjectsMode::Objects_OperateFn15_Portal,
-    &D2Game::Objects::ObjectsMode::OBJOP_UseStairway,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenHoradricCube,
-    &D2Game::Objects::ObjectsMode::OBJOP_DestroyDestructible,
-    &D2Game::Objects::ObjectsMode::OBJOP_SpawnExceptionalItemDrop,
-    &D2Game::Objects::ObjectsMode::OBJOP_SpawnNormalItemDrop,
-    &D2Game::Quests::QUESTS::A1Q3::OBJOP_A1Q3_UseMalus,
-    &D2Game::Objects::ObjectsMode::OBJOP_ActivateHealingWell,
-    &D2Game::Objects::ObjectsMode::OBJOP_ActivateWaypoint,
-    &D2Game::Quests::QUESTS::A2Q3::OBJOP_A2Q3_ActivateHoradricStaffAltar,
-    &D2Game::Quests::QUESTS::A2Q7::OBJOP_A2Q7_OpenArcaneNpcTrade,
-    &D2Game::Objects::ObjectsMode::OBJOP_SpawnQuestItemReward,
-    &D2Game::Objects::ObjectsMode::OBJOP_RevealAutomapArea,
-    &D2Game::Quests::QUESTS::A3Q1::OBJOP_A3Q1_KhalimsRelicAltar,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenBreakableContainer,
-    &D2Game::Objects::ObjectsMode::OBJOP_ExplodingTrap,
-    &D2Game::Quests::QUESTS::A3Q3::OBJOP_A3Q5_NihlathakPortalTrigger,
-    &D2Game::PLAYER::PlayerTrade::Objects_OperateFn32_OpenStash,
-    &D2Game::Objects::ObjectsMode::OBJOP_SpawnRewardItem,
-    &D2Game::Objects::ObjectsMode::OBJOP_A2Q2_ArcaneGateLevelTransition,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1,
-    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2,
-    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3,
-    &D2Game::Quests::QUESTS::A2Q4::OBJOP_A2Q4_StaffOfKingsAltar,
-    &D2Game::Objects::ObjectsMode::OBJOP_ActivatePortalObject,
-    &D2Game::Quests::QUESTS::A3Q2::OBJOP_UseStairDirect,
-    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimRelicPedestal,
-    &D2Game::Objects::ObjectsMode::Objects_OperateFn46_PortalToAct4,
-    &D2Game::Objects::ObjectsMode::OBJOP_UseWaygate,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenUnlockedChest,
-    &D2Game::Quests::QUESTS::A4Q3::OBJOP_A4Q3_HellforgeSmash,
-    &D2Game::Objects::ObjectsMode::OBJOP_UseStairAlias,
-    &D2Game::Objects::ObjectsMode::OBJOP_TimedDestructible,
-    &D2Game::Quests::QUESTS::A4Q2::OBJOP_A4Q2_DiabloSealActivateKillChaos,
-    &D2Game::Quests::QUESTS::A3Q5::OBJOP_A3Q5_NihlathakAltarLaunchOrb,
-    &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow1,
-    &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow2,
-    &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow3,
-    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimsRelicPortalDrop1,
-    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimsRelicPortalDrop2,
-    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimsRelicPortalDrop3,
-    nullptr,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenTimedDoor,
-    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsTriggerSound1,
-    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsTriggerSound2,
-    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsTriggerSound3,
-    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsAltarActivate,
-    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_WorldstonePortalActivate,
-    &D2Game::Quests::QUESTS::A5Q3::OBJOP_A5Q3_RescueAnyaFromPortal,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenBossChestSpawnUniques,
-    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsQuestStateQuery,
-    &D2Game::Quests::QUESTS::A5Q6::OBJOP_A5Q6_WorldstoneLevelTransition,
-    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_WorldstoneStairPortal,
-    &D2Game::Quests::QUESTS::A5Q6::OBJOP_A5Q6_TyraelPortalToEnd,
-    &D2Game::Quests::QUESTS::A4Q2::OBJOP_A4Q2_PandemoniumFortressGate,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr
-}; D2_GLOBAL_GUARD(OBJECTSOPERATEFN, "OBJECTSOPERATEFN");
 
 D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     {
@@ -2123,10 +1776,6 @@ _RTL_CRITICAL_SECTION gQServerGameListCs = {}; D2_GLOBAL_GUARD(gQServerGameListC
 
 SGAMEDATA * gaQServerGameByToken[1025] = {}; D2_GLOBAL_GUARD(gaQServerGameByToken, "gaQServerGameByToken");
 
-D2NpcItemTablesStrc gaNpcItemTables[17] = {}; D2_GLOBAL_GUARD(gaNpcItemTables, "gaNpcItemTables");
-
-uint8_t gbaNpcItemTableBuilt[17] = {}; D2_GLOBAL_GUARD(gbaNpcItemTableBuilt, "gbaNpcItemTableBuilt");
-
 D2ClientStrc * QServerClientBucketByName[256] = {}; D2_GLOBAL_GUARD(QServerClientBucketByName, "QServerClientBucketByName");
 
 D2ClientStrc * QServerClientBucketById[256] = {}; D2_GLOBAL_GUARD(QServerClientBucketById, "QServerClientBucketById");
@@ -2136,8 +1785,6 @@ CRITICAL_SECTION gQServerClientByIdCs = {}; D2_GLOBAL_GUARD(gQServerClientByIdCs
 
 // also labelled: lpCriticalSection_008846c0
 CRITICAL_SECTION gQServerClientByNameCs = {}; D2_GLOBAL_GUARD(gQServerClientByNameCs, "gQServerClientByNameCs");
-
-D2UniqueCandidatePoolStrc gUniqueCandidatePool = {}; D2_GLOBAL_GUARD(gUniqueCandidatePool, "gUniqueCandidatePool");
 
 D2TaskQueueSlotStrc * gaTaskQueueHeadArray[32] = {}; D2_GLOBAL_GUARD(gaTaskQueueHeadArray, "gaTaskQueueHeadArray");
 
@@ -2157,19 +1804,11 @@ _RTL_CRITICAL_SECTION lpCriticalSection_0088caa8 = {}; D2_GLOBAL_GUARD(lpCritica
 
 unsigned short QServerNextToken = 0x1; D2_GLOBAL_GUARD(QServerNextToken, "QServerNextToken");
 uint32_t GameSeed = -0x1; D2_GLOBAL_GUARD(GameSeed, "GameSeed");
-uint32_t dwCycleLastSecond = 0x19; D2_GLOBAL_GUARD(dwCycleLastSecond, "dwCycleLastSecond");
 int32_t Frames_PerSecond = 0x19; D2_GLOBAL_GUARD(Frames_PerSecond, "Frames_PerSecond");
 BOOL DontNoSafeGameBool = 0x1; D2_GLOBAL_GUARD(DontNoSafeGameBool, "DontNoSafeGameBool");
-uint32_t gpInactiveMonsterStateFlagSentinel = 0xdeaddead; D2_GLOBAL_GUARD(gpInactiveMonsterStateFlagSentinel, "gpInactiveMonsterStateFlagSentinel");
-uint32_t gnMonsterStateFlagMask1 = 0x1; D2_GLOBAL_GUARD(gnMonsterStateFlagMask1, "gnMonsterStateFlagMask1");
-uint32_t gnMonsterStateFlagMask2 = 0x2; D2_GLOBAL_GUARD(gnMonsterStateFlagMask2, "gnMonsterStateFlagMask2");
 uint8_t gbQuestReconnectMode = 0x1; D2_GLOBAL_GUARD(gbQuestReconnectMode, "gbQuestReconnectMode");
 int nQuestDataExtendedSize = 0x25; D2_GLOBAL_GUARD(nQuestDataExtendedSize, "nQuestDataExtendedSize");
 uint32_t gnObjectClassIdLight = 0x5; D2_GLOBAL_GUARD(gnObjectClassIdLight, "gnObjectClassIdLight");
-int gnActCount = 0x5; D2_GLOBAL_GUARD(gnActCount, "gnActCount");
-int gnNPCSpokenBitIndexMapCount = 0x23; D2_GLOBAL_GUARD(gnNPCSpokenBitIndexMapCount, "gnNPCSpokenBitIndexMapCount");
-int gnObjectOperateCallbackCount = 0xa; D2_GLOBAL_GUARD(gnObjectOperateCallbackCount, "gnObjectOperateCallbackCount");
-int SHRINESCOUNT = 0x18; D2_GLOBAL_GUARD(SHRINESCOUNT, "SHRINESCOUNT");
 int MISSILESSRVHITFUNCS_SIZE = 0x47; D2_GLOBAL_GUARD(MISSILESSRVHITFUNCS_SIZE, "MISSILESSRVHITFUNCS_SIZE");
 TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> * gpQServerGameState = 0; D2_GLOBAL_GUARD(gpQServerGameState, "gpQServerGameState");
 int StartingAct = 0; D2_GLOBAL_GUARD(StartingAct, "StartingAct");
@@ -2178,19 +1817,13 @@ int gbQServerSendPlayerPos = 0; D2_GLOBAL_GUARD(gbQServerSendPlayerPos, "gbQServ
 D2BattleNetEventCallbackTable * BattleNetServerService = 0; D2_GLOBAL_GUARD(BattleNetServerService, "BattleNetServerService");
 BOOL IsBattleNetServer = 0; D2_GLOBAL_GUARD(IsBattleNetServer, "IsBattleNetServer");
 uint32_t Frames_TimeBetweenFrames = 0; D2_GLOBAL_GUARD(Frames_TimeBetweenFrames, "Frames_TimeBetweenFrames");
-// also labelled: nCOMMAND_playersX
-int32_t PlayerCountOverride = 0; D2_GLOBAL_GUARD(PlayerCountOverride, "PlayerCountOverride");
 uint32_t gptItemCodeArmor = 0; D2_GLOBAL_GUARD(gptItemCodeArmor, "gptItemCodeArmor");
 uint32_t gptItemCodeSwordType = 0; D2_GLOBAL_GUARD(gptItemCodeSwordType, "gptItemCodeSwordType");
 int gQServerClientTablesInitialized = 0; D2_GLOBAL_GUARD(gQServerClientTablesInitialized, "gQServerClientTablesInitialized");
-BOOL DEBUGPRINT = 0; D2_GLOBAL_GUARD(DEBUGPRINT, "DEBUGPRINT");
-uint32_t g_bWhisperSquelched = 0; D2_GLOBAL_GUARD(g_bWhisperSquelched, "g_bWhisperSquelched");
-uint32_t g_bWhisperDelivered = 0; D2_GLOBAL_GUARD(g_bWhisperDelivered, "g_bWhisperDelivered");
 uint32_t gnSeedCounter = 0; D2_GLOBAL_GUARD(gnSeedCounter, "gnSeedCounter");
 uint32_t gnTaskQueueSlotCounter = 0; D2_GLOBAL_GUARD(gnTaskQueueSlotCounter, "gnTaskQueueSlotCounter");
 uint32_t gnTaskQueueTailIndex = 0; D2_GLOBAL_GUARD(gnTaskQueueTailIndex, "gnTaskQueueTailIndex");
 uint32_t gbPerformanceCounterAvailable = 0; D2_GLOBAL_GUARD(gbPerformanceCounterAvailable, "gbPerformanceCounterAvailable");
-uint32_t gnMonsterSpawnTotalCount = 0; D2_GLOBAL_GUARD(gnMonsterSpawnTotalCount, "gnMonsterSpawnTotalCount");
 
 namespace D2Common::Drlg::Maze {
 

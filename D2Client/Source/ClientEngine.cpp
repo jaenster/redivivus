@@ -70,6 +70,10 @@
 typedef int32_t (__fastcall *fnRoomUnitScanCallback)(D2UnitStrc * pSourceUnit, D2UnitStrc * pCandidate, D2UnitStrc * * ppBestUnit, int32_t * pnBestValue);
 #endif
 
+static int gnDenOfEvilLightTimerTick = -0x1; D2_STATIC_GUARD(gnDenOfEvilLightTimerTick, "gnDenOfEvilLightTimerTick");
+static int gnDiabloSpawnLightTimer = -0x1; D2_STATIC_GUARD(gnDiabloSpawnLightTimer, "gnDiabloSpawnLightTimer");
+static uint32_t gnQuestMonsterUnitId = -0x1; D2_STATIC_GUARD(gnQuestMonsterUnitId, "gnQuestMonsterUnitId");
+
 namespace D2Client::Source::ClientEngine {
 
 void __stdcall CLIENT_QuestEvent_CairnStonesPortal() {

@@ -30,6 +30,21 @@
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
 
+static char * gaErrorTypeNames[12] = {
+    s_No_Error_006ccbc8,
+    s_Unknown_Error_006ccbb8,
+    s_Out_of_Memory_Error_006ccba4,
+    s_File_Read_Error_006ccb94,
+    s_File_Write_Error_006ccb80,
+    s_Assertion_Failure_006ccb6c,
+    s_Halt_006ccb64,
+    s_Warning_006ccb5c,
+    s_Missing_Dll_006ccb50,
+    s_Registry_Error_006ccb40,
+    s_Deadlock_006ccb34,
+    (char*)0x006ccb30
+}; D2_STATIC_GUARD(gaErrorTypeNames, "gaErrorTypeNames");
+
 namespace Fog::Src::ErrorManager {
 
 BOOL __stdcall FOG_ReturnZeroCallback(char * szFileName, void * pContext) {

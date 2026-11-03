@@ -72,6 +72,9 @@
 typedef void (__fastcall *PFN_StatExpireCallback)(D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
 #endif
 
+static short gnWeaponHandClassId_Right = 0; D2_STATIC_GUARD(gnWeaponHandClassId_Right, "gnWeaponHandClassId_Right");
+static short gnWeaponHandClassId_Left = 0; D2_STATIC_GUARD(gnWeaponHandClassId_Left, "gnWeaponHandClassId_Left");
+
 namespace D2Client::UNIT {
 
 // Applies a socketed item's (pUnit2) stat mods to its host item (pUnit) and toggles whether those stats are active. If pUnit2 is a gem/rune, looks up its D2ItemsTxt + gem definition (TXT_Gems_GetLine via dwGemOffset) and applies the rune/gem stats via ApplyRuneAndGemStats (mode 2 gem, 5 rune); otherwise treats it as a set/equip item via ITEM_ProcessSetItemEquip. Then, unless the item is DISABLED, marks the stats active with STATLIST_SetItemStatActive: for players it accounts for dual-wield (a second equipped weapon stays inactive), and respects the BROKEN flag unless bForceActive is set. Halts via Fog::ErrorManager when a gem/rune host is not a UNIT_ITEM or txt lookups fail.

@@ -93,6 +93,8 @@ uint8_t gaEAXPropertyGuid_ObstructionParams[9] = {
     0xb7
 }; D2_GLOBAL_GUARD(gaEAXPropertyGuid_ObstructionParams, "gaEAXPropertyGuid_ObstructionParams");
 
+double gnSoundAttenuation_Max = 0.0000999999974737875; D2_GLOBAL_GUARD(gnSoundAttenuation_Max, "gnSoundAttenuation_Max");
+
 int gAmbientSoundTable[16] = {
     (int)(uintptr_t)s_data_global_music_common_options__006dea54,
     0x0,
@@ -134,18 +136,14 @@ int gaAmbientSoundEntryTable[16] = {
 // also labelled: lpCriticalSection_SoundPlay, lpCriticalSection_0088174c
 _RTL_CRITICAL_SECTION gSoundSmpCs = {}; D2_GLOBAL_GUARD(gSoundSmpCs, "gSoundSmpCs");
 
-_RTL_CRITICAL_SECTION lpCriticalSection_008817c4 = {}; D2_GLOBAL_GUARD(lpCriticalSection_008817c4, "lpCriticalSection_008817c4");
-
-D2SoundSmpStrc * gpaSoundEffectBuffers[8] = {}; D2_GLOBAL_GUARD(gpaSoundEffectBuffers, "gpaSoundEffectBuffers");
-
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-uint32_t gnSoundHardwareAcceleration = 0x1; D2_GLOBAL_GUARD(gnSoundHardwareAcceleration, "gnSoundHardwareAcceleration");
+float gnSoundFrequency_22kHz = 2; D2_GLOBAL_GUARD(gnSoundFrequency_22kHz, "gnSoundFrequency_22kHz");
+float gnSoundQuality_Low = 100; D2_GLOBAL_GUARD(gnSoundQuality_Low, "gnSoundQuality_Low");
 int gaAmbientSoundFlags = 0x8; D2_GLOBAL_GUARD(gaAmbientSoundFlags, "gaAmbientSoundFlags");
 uint32_t gnAmbientSoundCount = 0x8; D2_GLOBAL_GUARD(gnAmbientSoundCount, "gnAmbientSoundCount");
-uint32_t gnSoundGlobalVolume = 0xff; D2_GLOBAL_GUARD(gnSoundGlobalVolume, "gnSoundGlobalVolume");
 IKsPropertySet * gpDirectSoundEAXInterface = 0; D2_GLOBAL_GUARD(gpDirectSoundEAXInterface, "gpDirectSoundEAXInterface");
 BOOL gbSoundInBackground = 0; D2_GLOBAL_GUARD(gbSoundInBackground, "gbSoundInBackground");
 IDirectSound3DBuffer * gpEAXInterface1 = 0; D2_GLOBAL_GUARD(gpEAXInterface1, "gpEAXInterface1");
@@ -164,18 +162,8 @@ uint32_t gbHasLegacyEMU10K1Driver = 0; D2_GLOBAL_GUARD(gbHasLegacyEMU10K1Driver,
 uint32_t gbHasLegacySoundDriverCrlds3d = 0; D2_GLOBAL_GUARD(gbHasLegacySoundDriverCrlds3d, "gbHasLegacySoundDriverCrlds3d");
 uint32_t LanguageCode = 0; D2_GLOBAL_GUARD(LanguageCode, "LanguageCode");
 D2SoundSmpStrc * gpMusicStreamBuffer = 0; D2_GLOBAL_GUARD(gpMusicStreamBuffer, "gpMusicStreamBuffer");
-uint32_t gnMusicEnabled = 0; D2_GLOBAL_GUARD(gnMusicEnabled, "gnMusicEnabled");
-uint32_t gbSoundFastPathActive = 0; D2_GLOBAL_GUARD(gbSoundFastPathActive, "gbSoundFastPathActive");
 uint32_t gnAmbientSoundLanguageCode = 0; D2_GLOBAL_GUARD(gnAmbientSoundLanguageCode, "gnAmbientSoundLanguageCode");
 uint32_t gbAmbientSoundLangInitialized = 0; D2_GLOBAL_GUARD(gbAmbientSoundLangInitialized, "gbAmbientSoundLangInitialized");
-uint32_t g_nSoundMixerType = 0; D2_GLOBAL_GUARD(g_nSoundMixerType, "g_nSoundMixerType");
-uint32_t g_nSoundMasterVolume = 0; D2_GLOBAL_GUARD(g_nSoundMasterVolume, "g_nSoundMasterVolume");
-uint32_t g_nSoundMusicVolume = 0; D2_GLOBAL_GUARD(g_nSoundMusicVolume, "g_nSoundMusicVolume");
-uint32_t g_nSoundPositionalBias = 0; D2_GLOBAL_GUARD(g_nSoundPositionalBias, "g_nSoundPositionalBias");
-uint32_t g_nSoundNpcSpeech = 0; D2_GLOBAL_GUARD(g_nSoundNpcSpeech, "g_nSoundNpcSpeech");
-uint32_t g_nSoundOptionsMusic = 0; D2_GLOBAL_GUARD(g_nSoundOptionsMusic, "g_nSoundOptionsMusic");
-uint32_t gnSoundEffectSampleCount = 0; D2_GLOBAL_GUARD(gnSoundEffectSampleCount, "gnSoundEffectSampleCount");
-void * gpWavFileCacheListHead = 0; D2_GLOBAL_GUARD(gpWavFileCacheListHead, "gpWavFileCacheListHead");
 uint32_t g_nSoundSampleParam = 0; D2_GLOBAL_GUARD(g_nSoundSampleParam, "g_nSoundSampleParam");
 int * gpSoundSampleList = 0; D2_GLOBAL_GUARD(gpSoundSampleList, "gpSoundSampleList");
 HANDLE ghSoundThreadStopEvent = 0; D2_GLOBAL_GUARD(ghSoundThreadStopEvent, "ghSoundThreadStopEvent");

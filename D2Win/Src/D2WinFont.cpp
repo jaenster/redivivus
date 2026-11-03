@@ -38,6 +38,11 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2TextLineStrc) == 0x8, "D2_NEW_AT(D2TextLineStrc): the 32-bit layout must be the 0x8 bytes 1.14d allocates");
 
 
+static int32_t gnLastUsedFontId = 0x1; D2_STATIC_GUARD(gnLastUsedFontId, "gnLastUsedFontId");
+static uint32_t gnFontIdSmall = 0x10; D2_STATIC_GUARD(gnFontIdSmall, "gnFontIdSmall");
+static uint32_t gnFontIdLarge = 0x11; D2_STATIC_GUARD(gnFontIdLarge, "gnFontIdLarge");
+static uint32_t gnFontIdBody = 0x3; D2_STATIC_GUARD(gnFontIdBody, "gnFontIdBody");
+
 namespace D2Win::Src::D2WinFont {
 
 // Constructs full font file path: DATA\LOCAL\Font\{language}\{fontname}. Special case for Korean chat font (index 13). Uses global language code and font name table.

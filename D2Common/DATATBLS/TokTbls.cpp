@@ -24,6 +24,23 @@
 #endif
 
 
+static unsigned int nTxtMonModeSize = {}; D2_STATIC_GUARD(nTxtMonModeSize, "nTxtMonModeSize");
+static D2MonModeTxt * pTxtMonMode1 = 0; D2_STATIC_GUARD(pTxtMonMode1, "pTxtMonMode1");
+static D2MonModeTxt * pTxtMonMode2 = 0; D2_STATIC_GUARD(pTxtMonMode2, "pTxtMonMode2");
+static D2MonModeTxt * pTxtMonMode3 = 0; D2_STATIC_GUARD(pTxtMonMode3, "pTxtMonMode3");
+static unsigned int nTxtObjTypeModeSize = {}; D2_STATIC_GUARD(nTxtObjTypeModeSize, "nTxtObjTypeModeSize");
+static D2ObjTypeTxt * pTxtObjTypeMode = 0; D2_STATIC_GUARD(pTxtObjTypeMode, "pTxtObjTypeMode");
+static D2ObjTypeTxt * pTxtObjType = 0; D2_STATIC_GUARD(pTxtObjType, "pTxtObjType");
+static D2ObjModeTxt * pTxtObjMode = 0; D2_STATIC_GUARD(pTxtObjMode, "pTxtObjMode");
+static unsigned int nTxtPlrTypeModeSize = {}; D2_STATIC_GUARD(nTxtPlrTypeModeSize, "nTxtPlrTypeModeSize");
+static D2PlrTypeModeTxt * pTxtPlrTypeMode1 = 0; D2_STATIC_GUARD(pTxtPlrTypeMode1, "pTxtPlrTypeMode1");
+static D2PlrTypeModeTxt * pTxtPlrTypeMode2 = 0; D2_STATIC_GUARD(pTxtPlrTypeMode2, "pTxtPlrTypeMode2");
+static D2PlrTypeModeTxt * pTxtPlrTypeMode3 = 0; D2_STATIC_GUARD(pTxtPlrTypeMode3, "pTxtPlrTypeMode3");
+static D2ArmTypeTxt * pTxtArmType = 0; D2_STATIC_GUARD(pTxtArmType, "pTxtArmType");
+static D2CompositTxt * pTxtComposit = 0; D2_STATIC_GUARD(pTxtComposit, "pTxtComposit");
+static int nTxtInventorySize = 0; D2_STATIC_GUARD(nTxtInventorySize, "nTxtInventorySize");
+static D2InventoryTxt * pTxtInventory = 0; D2_STATIC_GUARD(pTxtInventory, "pTxtInventory");
+
 namespace D2Common::DATATBLS::TokTbls {
 
 // Loads and merges plrtype.txt and plrmode.txt token tables into a single contiguous server allocation. Compiles both tables (fields: name/ASCII, token/RAW4) via CompileTxt, concatenates them, frees the intermediate bins, and stores the combined pointer in pTxtPlrTypeMode1/2/3 with total count in nTxtPlrTypeModeSize.

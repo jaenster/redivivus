@@ -35,10 +35,53 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-namespace D2Common::PATH::Path {
+static int gaPathDirectionStepDeltas[41] = {
+    0x0,
+    0x1,
+    0x1,
+    0x1,
+    0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    0x0,
+    0x1,
+    0x1,
+    0x1,
+    0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x1,
+    0x1,
+    -0x1,
+    -0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x1,
+    -0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x1
+}; D2_STATIC_GUARD(gaPathDirectionStepDeltas, "gaPathDirectionStepDeltas");
+static uint32_t gnPathCalcDirectionVectorX_Pad0 = 0x0; D2_STATIC_GUARD(gnPathCalcDirectionVectorX_Pad0, "gnPathCalcDirectionVectorX_Pad0");
+static uint32_t gnPathCalcDirectionVectorY_Pad0 = 0x0; D2_STATIC_GUARD(gnPathCalcDirectionVectorY_Pad0, "gnPathCalcDirectionVectorY_Pad0");
 
-static uint32_t gnPathCalcDirectionVectorX_Pad0 = 0x0; D2_STATIC_GUARD(gnPathCalcDirectionVectorX_Pad0, "D2Common::PATH::Path::gnPathCalcDirectionVectorX_Pad0");
-static uint32_t gnPathCalcDirectionVectorY_Pad0 = 0x0; D2_STATIC_GUARD(gnPathCalcDirectionVectorY_Pad0, "D2Common::PATH::Path::gnPathCalcDirectionVectorY_Pad0");
+namespace D2Common::PATH::Path {
 
 void __fastcall PATH_CheckPathPointsInRoom(D2DynamicPathStrc * pPath) {
     int i;

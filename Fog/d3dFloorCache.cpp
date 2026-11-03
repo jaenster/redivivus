@@ -19,6 +19,12 @@
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 
+static uint32_t gnD3DBinkVideoYOffset = 0; D2_STATIC_GUARD(gnD3DBinkVideoYOffset, "gnD3DBinkVideoYOffset");
+static uint32_t gnD3DBinkVideoXOffset = 0; D2_STATIC_GUARD(gnD3DBinkVideoXOffset, "gnD3DBinkVideoXOffset");
+static void * gpBinkVideoD3D = 0; D2_STATIC_GUARD(gpBinkVideoD3D, "gpBinkVideoD3D");
+static uint32_t gnBinkDDSurfaceType = 0; D2_STATIC_GUARD(gnBinkDDSurfaceType, "gnBinkDDSurfaceType");
+static uint32_t gbBinkVideoShouldStop = 0; D2_STATIC_GUARD(gbBinkVideoShouldStop, "gbBinkVideoShouldStop");
+
 namespace Fog::d3dFloorCache {
 
 void __stdcall D3D_RenderBinkVideoFrame() {

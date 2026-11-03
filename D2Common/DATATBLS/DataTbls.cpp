@@ -74,8 +74,6 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2SkillsPerClassCounter) == 0x1c, "D2_NEW_AT(D2SkillsPerClassCounter): the 32-bit layout must be the 0x1c bytes 1.14d allocates");
 
 
-namespace D2Common::DATATBLS::DataTbls {
-
 static char gszMissileNameFormat[11] = {
     'm',
     'i',
@@ -88,8 +86,10 @@ static char gszMissileNameFormat[11] = {
     '%',
     'd',
     '\x00'
-}; D2_STATIC_GUARD(gszMissileNameFormat, "D2Common::DATATBLS::DataTbls::gszMissileNameFormat");
-static char gszTxtEventsTableName[7] = { 's', 'k', 'i', 'l', 'l', 's', '\x00' }; D2_STATIC_GUARD(gszTxtEventsTableName, "D2Common::DATATBLS::DataTbls::gszTxtEventsTableName");
+}; D2_STATIC_GUARD(gszMissileNameFormat, "gszMissileNameFormat");
+static char gszTxtEventsTableName[7] = { 's', 'k', 'i', 'l', 'l', 's', '\x00' }; D2_STATIC_GUARD(gszTxtEventsTableName, "gszTxtEventsTableName");
+
+namespace D2Common::DATATBLS::DataTbls {
 
 static void DATATBLS_NormalizeCodeTo4Chars(char * szText1, char * szText2) {
     char cChar;

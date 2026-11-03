@@ -48,30 +48,9 @@
 #endif
 
 
-namespace D2Common::DATATBLS::LvlTbls {
+static D2SeedStrc * psDataTableSeed = (D2SeedStrc *)&gsAutoMapSeed; D2_STATIC_GUARD(psDataTableSeed, "psDataTableSeed");
 
-static char gaAutomapTileNames[20][8] = {
-    { 'f', 'l', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 'l', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 'r', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 't', 'l', 'r', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 't', 'l', 'l', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 't', 'r', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 'b', 'l', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 'b', 'r', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 'l', 'd', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 'r', 'd', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 'l', 'e', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'w', 'r', 'e', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'c', 'o', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 's', 'h', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 't', 'r', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'r', 'f', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'l', 'd', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'r', 'd', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'f', 'd', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
-    { 'f', 'i', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' }
-}; D2_STATIC_GUARD(gaAutomapTileNames, "D2Common::DATATBLS::LvlTbls::gaAutomapTileNames");
+namespace D2Common::DATATBLS::LvlTbls {
 
 // Builds the 142-column field-descriptor table for Levels.txt (palette/act/teleport flags, monster levels and densities per difficulty, object groups/probabilities, the mon/nmon/umon/cmon spawn lists and their counts, themes, sound env, waypoint, and the LevelName/LevelWarp/EntryFile strings) and compiles it into sgtDataTable.pTxtLevels via CompileTxt (row stride 0x220). Halts via Fog ErrorManager if more than 0x3ff levels. Post-compile per level row: converts LevelName/LevelWarp keys to wide strings via the string table, and counts the populated entries in the mon/nmon/umon lists (terminated by a negative id, max 0x19), storing the three counts in bytes preceding the mon array. __fastcall, pMemory = data-table pool. Called once at data-table load.
 void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {

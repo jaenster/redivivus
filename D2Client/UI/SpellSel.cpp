@@ -60,23 +60,99 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-namespace D2Client::UI::SpellSel {
+static D2ClassIconWithNameStrc pSpellsClassSkillicon[7] = {
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\AmSkillicon"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\SoSkillicon"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\NeSkillicon"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\PaSkillicon"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\BaSkillicon"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\DrSkillicon"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\AsSkillicon"
+    }
+}; D2_STATIC_GUARD(pSpellsClassSkillicon, "pSpellsClassSkillicon");
+static int nSkillTreeActiveTab = 0x1; D2_STATIC_GUARD(nSkillTreeActiveTab, "nSkillTreeActiveTab");
+static D2ClassIconWithNameStrc pSpellsClassSkilltree[7] = {
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\skltree_a_back"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\skltree_s_back"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\skltree_n_back"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\skltree_p_back"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\skltree_b_back"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\skltree_d_back"
+    },
+    {
+        /* .pD2Archive = */ nullptr,
+        /* .szSpelliconPath = */ "Spells\\skltree_i_back"
+    }
+}; D2_STATIC_GUARD(pSpellsClassSkilltree, "pSpellsClassSkilltree");
+static int gnSkillTreeHighlightIndex = 0x1; D2_STATIC_GUARD(gnSkillTreeHighlightIndex, "gnSkillTreeHighlightIndex");
+static D2SpellSelGridRegionStrc gSpellSelGridRegion = {}; D2_STATIC_GUARD(gSpellSelGridRegion, "gSpellSelGridRegion");
+static int gSpellSelectionSkillIDs[16] = {}; D2_STATIC_GUARD(gSpellSelectionSkillIDs, "gSpellSelectionSkillIDs");
+static int gbSpellSelActiveRightSkillSlot = 0; D2_STATIC_GUARD(gbSpellSelActiveRightSkillSlot, "gbSpellSelActiveRightSkillSlot");
+static int32_t gSpellSelLeftSkillBindings[16] = {}; D2_STATIC_GUARD(gSpellSelLeftSkillBindings, "gSpellSelLeftSkillBindings");
+static int32_t gSpellSelLeftSkillSlot1[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot1, "gSpellSelLeftSkillSlot1");
+static int32_t gSpellSelLeftSkillSlot2[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot2, "gSpellSelLeftSkillSlot2");
+static int32_t gSpellSelLeftSkillSlot3[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot3, "gSpellSelLeftSkillSlot3");
+static int32_t gSpellSelLeftSkillSlot4[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot4, "gSpellSelLeftSkillSlot4");
+static int32_t gSpellSelLeftSkillSlot5[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot5, "gSpellSelLeftSkillSlot5");
+static int32_t gSpellSelLeftSkillSlot6[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot6, "gSpellSelLeftSkillSlot6");
+static int32_t gSpellSelLeftSkillSlot7[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot7, "gSpellSelLeftSkillSlot7");
+static int32_t gSpellSelLeftSkillSlot8[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot8, "gSpellSelLeftSkillSlot8");
+static int32_t gSpellSelLeftSkillSlot9[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot9, "gSpellSelLeftSkillSlot9");
+static int32_t gSpellSelLeftSkillSlot10[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot10, "gSpellSelLeftSkillSlot10");
+static int32_t gSpellSelLeftSkillSlot11[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot11, "gSpellSelLeftSkillSlot11");
+static int32_t gSpellSelLeftSkillSlot12[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot12, "gSpellSelLeftSkillSlot12");
+static int32_t gSpellSelLeftSkillSlot13[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot13, "gSpellSelLeftSkillSlot13");
+static int32_t gSpellSelLeftSkillSlot14[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot14, "gSpellSelLeftSkillSlot14");
+static int32_t gSpellSelLeftSkillSlot15[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot15, "gSpellSelLeftSkillSlot15");
+static int gSpellSelRightSkillBindings[16] = {}; D2_STATIC_GUARD(gSpellSelRightSkillBindings, "gSpellSelRightSkillBindings");
+static DC6 * gpSpellSelSkillIconDC6 = 0; D2_STATIC_GUARD(gpSpellSelSkillIconDC6, "gpSpellSelSkillIconDC6");
+static unsigned int gbSpellSelMouseHandFlag = {}; D2_STATIC_GUARD(gbSpellSelMouseHandFlag, "gbSpellSelMouseHandFlag");
+static int gbSpellSelSkillTreeNodeHovered[128] = {}; D2_STATIC_GUARD(gbSpellSelSkillTreeNodeHovered, "gbSpellSelSkillTreeNodeHovered");
+static int gaSpellSelSkillTreeState[128] = {}; D2_STATIC_GUARD(gaSpellSelSkillTreeState, "gaSpellSelSkillTreeState");
+static BOOL gbSpellSelSkillTreeBackground = 0; D2_STATIC_GUARD(gbSpellSelSkillTreeBackground, "gbSpellSelSkillTreeBackground");
+static uint32_t BooleanWaitingForSkillingMaybe = 0; D2_STATIC_GUARD(BooleanWaitingForSkillingMaybe, "BooleanWaitingForSkillingMaybe");
+static uint32_t gnSpellSelSkillTreeOffsetY = 0; D2_STATIC_GUARD(gnSpellSelSkillTreeOffsetY, "gnSpellSelSkillTreeOffsetY");
+static uint32_t gnSpellSelSkillTreeClickY = 0; D2_STATIC_GUARD(gnSpellSelSkillTreeClickY, "gnSpellSelSkillTreeClickY");
+static uint8_t gnSpellSelTabHighlightColor = 0; D2_STATIC_GUARD(gnSpellSelTabHighlightColor, "gnSpellSelTabHighlightColor");
 
-static int32_t gSpellSelLeftSkillSlot1[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot1, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot1");
-static int32_t gSpellSelLeftSkillSlot2[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot2, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot2");
-static int32_t gSpellSelLeftSkillSlot3[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot3, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot3");
-static int32_t gSpellSelLeftSkillSlot4[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot4, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot4");
-static int32_t gSpellSelLeftSkillSlot5[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot5, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot5");
-static int32_t gSpellSelLeftSkillSlot6[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot6, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot6");
-static int32_t gSpellSelLeftSkillSlot7[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot7, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot7");
-static int32_t gSpellSelLeftSkillSlot8[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot8, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot8");
-static int32_t gSpellSelLeftSkillSlot9[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot9, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot9");
-static int32_t gSpellSelLeftSkillSlot10[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot10, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot10");
-static int32_t gSpellSelLeftSkillSlot11[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot11, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot11");
-static int32_t gSpellSelLeftSkillSlot12[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot12, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot12");
-static int32_t gSpellSelLeftSkillSlot13[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot13, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot13");
-static int32_t gSpellSelLeftSkillSlot14[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot14, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot14");
-static int32_t gSpellSelLeftSkillSlot15[16] = { 0 }; D2_STATIC_GUARD(gSpellSelLeftSkillSlot15, "D2Client::UI::SpellSel::gSpellSelLeftSkillSlot15");
+namespace D2Client::UI::SpellSel {
 
 void __stdcall SPELLSEL_Initialize() {
     // Static local variables (originally global data)

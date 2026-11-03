@@ -141,6 +141,884 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2ServerCmdStrc) == 0x10, "D2_NEW_A
 typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT_Unit)(D2UnitStrc * pUnit, char * pBytes);
 #endif
 
+static D2NET_CLIENT_D2GS_ServerToClient NET_D2GS_CLIENT_INCOMING[175] = {
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x01_NEWGAME,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x02_LoadSuccess,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x03_NEWACT,
+        /* .nExpectedSize = */ 0xc,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x04_STARTACT,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x05_UnloadComplete,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x06_ENDGAME,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x07_NEWROOM,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x08_REMOVEROOM,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x09_AssignLevelWarp,
+        /* .nExpectedSize = */ 0xb,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x0A_RemoveObject,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x9,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0xd,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x0D_UNITCHANGE_XY
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0xc,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x0E_UNITCHANGE_ID
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x10,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x0F_UNITCHANGE_XYPOS
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x10,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x10_UNITCHANGE_IDPOS
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv0x12_Ignore,
+        /* .nExpectedSize = */ 0x1a,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv0x13_Ignore,
+        /* .nExpectedSize = */ 0xe,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv0x14_Ignore,
+        /* .nExpectedSize = */ 0x12,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x15_WarpXY,
+        /* .nExpectedSize = */ 0xb,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x16_UPDATE,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x17_UNITPATH
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG,
+        /* .nExpectedSize = */ 0xf,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA,
+        /* .nExpectedSize = */ 0x2,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA,
+        /* .nExpectedSize = */ 0x2,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA,
+        /* .nExpectedSize = */ 0x3,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA,
+        /* .nExpectedSize = */ 0x5,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA,
+        /* .nExpectedSize = */ 0x3,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA,
+        /* .nExpectedSize = */ 0x4,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x20,
+        /* .nExpectedSize = */ 0xa,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL,
+        /* .nExpectedSize = */ 0xc,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS,
+        /* .nExpectedSize = */ 0xc,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x23_SETSKILL,
+        /* .nExpectedSize = */ 0xd,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x5a,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x5a,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x26_CHATSTART,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x27_PRESETTALK,
+        /* .nExpectedSize = */ 0x28,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x28_INTERACTION_ENABLE,
+        /* .nExpectedSize = */ 0x67,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD,
+        /* .nExpectedSize = */ 0x61,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x2A_TRANSACTION_RESULTS,
+        /* .nExpectedSize = */ 0xf,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x2C_PLAY_SOUND,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x3E_ITEMUPDATESTAT,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x3F,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x40,
+        /* .nExpectedSize = */ 0xd,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x42,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv0x45_Ignore,
+        /* .nExpectedSize = */ 0xd,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_RecvRecalcEquippedItems,
+        /* .nExpectedSize = */ 0xb,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_RecvRecalcEquippedItems2,
+        /* .nExpectedSize = */ 0xb,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x10,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x4C_SKILL_ID
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x11,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x4E_ADDTOMERCENARYLIST,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x4F,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x50,
+        /* .nExpectedSize = */ 0xf,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x51_NEWOBJECT,
+        /* .nExpectedSize = */ 0xe,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x52,
+        /* .nExpectedSize = */ 0x2a,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x53,
+        /* .nExpectedSize = */ 0xa,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv0x54_Ignore,
+        /* .nExpectedSize = */ 0x3,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x57_CHANGEMONSTERUNIT,
+        /* .nExpectedSize = */ 0xe,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x58,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x59_NEWPLAYERUNIT,
+        /* .nExpectedSize = */ 0x1a,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x5A,
+        /* .nExpectedSize = */ 0x28,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x5B,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x5C,
+        /* .nExpectedSize = */ 0x5,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x5D,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x5E,
+        /* .nExpectedSize = */ 0x26,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x5F_PORTALFLAGS,
+        /* .nExpectedSize = */ 0x5,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x60_SETWARPDEST,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x61,
+        /* .nExpectedSize = */ 0x2,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x62_INTERACTION_STOP,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x63,
+        /* .nExpectedSize = */ 0x15,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv0x66_Ignore,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x10,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x67_UNITCHANGE_MONSTERXYPATH
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x15,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x68_UNITCHANGE_MONSTERIDPATH
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0xc,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x69_UNITCHANGE_MONSTERXYNOPATH
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0xc,
+        /* .fpIncomingHandlerUnit = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_RecvNpcStateToEntity
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x10,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x6B_UNITCHANGE_MONSTERXYPOSITION
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x10,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x6C_UNITCHANGE_MONSTERIDPOSITION
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0xa,
+        /* .fpIncomingHandlerUnit = */ (D2NET_CLIENT_D2GStoCLT_Unit)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ &D2Client::GAME::SCmd::SCMD_Rcv0x6E_UnitIgnore
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ &D2Client::GAME::SCmd::SCMD_Rcv0x6F_UnitIgnore
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ &D2Client::GAME::SCmd::SCMD_Rcv0x70_UnitIgnore
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ &D2Client::GAME::SCmd::SCMD_Rcv0x71_UnitIgnore
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ &D2Client::GAME::SCmd::SCMD_Rcv0x72_UnitIgnore
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x73_CreateMissile,
+        /* .nExpectedSize = */ 0x20,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x74,
+        /* .nExpectedSize = */ 0xa,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x75_UPDATEROSTER,
+        /* .nExpectedSize = */ 0xd,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x76,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x77,
+        /* .nExpectedSize = */ 0x2,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x78_TRADENAME,
+        /* .nExpectedSize = */ 0x15,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET,
+        /* .nExpectedSize = */ 0xd,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x7C_SETITEMUNUSED,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x7D,
+        /* .nExpectedSize = */ 0x12,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x7E,
+        /* .nExpectedSize = */ 0x5,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x7F,
+        /* .nExpectedSize = */ 0xa,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ nullptr,
+        /* .nExpectedSize = */ 0x4,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x81,
+        /* .nExpectedSize = */ 0x14,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x82_LINKTOWNPORTAL,
+        /* .nExpectedSize = */ 0x1d,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x89,
+        /* .nExpectedSize = */ 0x2,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x8A,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x8B_PLAYERBUTTON,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS,
+        /* .nExpectedSize = */ 0xb,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x8E_LINKDEADBODY,
+        /* .nExpectedSize = */ 0xa,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x8F,
+        /* .nExpectedSize = */ 0x21,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x90_PARTYLOCUPDATE,
+        /* .nExpectedSize = */ 0xd,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK,
+        /* .nExpectedSize = */ 0x1a,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x92_CLEARINVENTORY,
+        /* .nExpectedSize = */ 0x6,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_RecvSkillTabBonusDelta,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM,
+        /* .nExpectedSize = */ 0xd,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition,
+        /* .nExpectedSize = */ 0x9,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9,
+        /* .nExpectedSize = */ 0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID,
+        /* .nExpectedSize = */ 0x10,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9A_ITEM_SKILL_XY,
+        /* .nExpectedSize = */ 0x11,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9B_DEAD_HIRELING,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9C_ITEMEX,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9D,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .nExpectedSize = */ 0xa,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x9Eto0xA2,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL,
+        /* .nExpectedSize = */ 0x18,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER,
+        /* .nExpectedSize = */ 0x3,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL,
+        /* .nExpectedSize = */ 0x8,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xA6,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xA7,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xA9_UNITSTATE_OFF_EX,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xAB,
+        /* .nExpectedSize = */ 0x7,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xAC,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ &D2Client::GAME::SCmd::SCMD_Rcv_IgnoreShared,
+        /* .nExpectedSize = */ 0x0,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    },
+    {
+        /* .fpIncomingHandler = */ (D2NET_CLIENT_D2GStoCLT)&D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA,
+        /* .nExpectedSize = */ -0x1,
+        /* .fpIncomingHandlerUnit = */ nullptr
+    }
+}; D2_STATIC_GUARD(NET_D2GS_CLIENT_INCOMING, "NET_D2GS_CLIENT_INCOMING");
+
 namespace D2Client::GAME::SCmd {
 
 void __fastcall SCMD_SetOrClearBitFlag(D2UnitStrc * pUnit, uint32_t dwFlagMask, int32_t bSet) {

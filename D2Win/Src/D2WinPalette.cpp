@@ -19,6 +19,8 @@
 #endif
 
 
+static uint32_t gbPaletteGammaShiftEnabled = 0x1; D2_STATIC_GUARD(gbPaletteGammaShiftEnabled, "gbPaletteGammaShiftEnabled");
+
 namespace D2Win::Src::D2WinPalette {
 
 // Builds the 72-entry palette pointer table on the stack and hands it to D2GFX_SetPaletteTable. The table is one contiguous array: [0..2] the three act1 palette planes, [3..51] the 49 gamma/data palettes, [52..64] the 13 transpose palettes, [65..71] act2/act5/neutral/units/index-counter/menu-in-game palettes. GetPalettePointer indexes it at +0x00..+0x11c.

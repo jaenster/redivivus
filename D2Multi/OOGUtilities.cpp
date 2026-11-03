@@ -69,6 +69,44 @@ typedef int (__stdcall *pfnFramePump)(int nFrameIndex);
 typedef int (__stdcall *ChatDlgCallback)(uint32_t dwParam);
 #endif
 
+static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e920 = {
+    /* .neD2FormType = */ FORM_Button,
+    /* .aParams = */ { 0x1b1, 0x1b1, 0x60, 0x20 },
+    /* .nExtraParam = */ 0x0,
+    /* .nLabelAsLocaleStringId = */ 0x13ef,
+    /* .pDC6 = */ &gpLauncherImageResource2,
+    /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressProfileClose,
+    /* .pTypeArg1 = */ nullptr,
+    /* .pTypeArg2 = */ nullptr,
+    /* .nFlagsOrType = */ 0x0
+}; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e920, "FORMS_PredefinedFormStrc_0070e920");
+static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e950 = {
+    /* .neD2FormType = */ FORM_Button,
+    /* .aParams = */ { 0x29f, 0x1b1, 0x60, 0x20 },
+    /* .nExtraParam = */ 0x0,
+    /* .nLabelAsLocaleStringId = */ 0x13ee,
+    /* .pDC6 = */ &gpLauncherImageResource2,
+    /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressProfileOK,
+    /* .pTypeArg1 = */ nullptr,
+    /* .pTypeArg2 = */ nullptr,
+    /* .nFlagsOrType = */ 0x0
+}; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e950, "FORMS_PredefinedFormStrc_0070e950");
+static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e980 = {
+    /* .neD2FormType = */ FORM_Button,
+    /* .aParams = */ { 0x228, 0x1b1, 0x60, 0x20 },
+    /* .nExtraParam = */ 0x0,
+    /* .nLabelAsLocaleStringId = */ 0x14c3,
+    /* .pDC6 = */ &gpLauncherImageResource2,
+    /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressProfileLadder,
+    /* .pTypeArg1 = */ nullptr,
+    /* .pTypeArg2 = */ nullptr,
+    /* .nFlagsOrType = */ 0x0
+}; D2_STATIC_GUARD(FORMS_PredefinedFormStrc_0070e980, "FORMS_PredefinedFormStrc_0070e980");
+static char gszOogLevelRestrictionText[4] = { '4', '\x00', '\x00', '\x00' }; D2_STATIC_GUARD(gszOogLevelRestrictionText, "gszOogLevelRestrictionText");
+static char gszOogMaxPlayersText[4] = { '4', '\x00', '\x00', '\x00' }; D2_STATIC_GUARD(gszOogMaxPlayersText, "gszOogMaxPlayersText");
+static int32_t gnPendingGameInfoCharIndex = -0x1; D2_STATIC_GUARD(gnPendingGameInfoCharIndex, "gnPendingGameInfoCharIndex");
+static uint16_t gwLastGameInfoRequestId = 0; D2_STATIC_GUARD(gwLastGameInfoRequestId, "gwLastGameInfoRequestId");
+
 namespace D2Multi::OOGUtilities {
 
 int __stdcall OOG_DisableControlCallback(uint32_t dwParam) {

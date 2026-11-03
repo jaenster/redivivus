@@ -98,6 +98,19 @@
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/D2Game.h"
+#include "D2Game/Quests/QUESTS/A1Q3.h"
+#include "D2Game/Quests/QUESTS/A1Q4.h"
+#include "D2Game/Quests/QUESTS/A1Q5.h"
+#include "D2Game/Quests/QUESTS/A2Q2.h"
+#include "D2Game/Quests/QUESTS/A2Q3.h"
+#include "D2Game/Quests/QUESTS/A3Q1.h"
+#include "D2Game/Quests/QUESTS/A3Q2.h"
+#include "D2Game/Quests/QUESTS/A3Q3.h"
+#include "D2Game/Quests/QUESTS/A3Q5.h"
+#include "D2Game/Quests/QUESTS/A4Q2.h"
+#include "D2Game/Quests/QUESTS/A4Q3.h"
+#include "D2Game/Quests/QUESTS/A5Q3.h"
+#include "D2Game/Quests/QUESTS/A5Q6.h"
 #include "Fog/Src/Safesock.h"
 #include "Storm/H/stpl.h"
 
@@ -124,6 +137,124 @@ typedef void (__fastcall *fpD2ShrineTableHandler)(D2ObjectOperateFnArg * pArgume
 #define RECON_FPTD_pfnPetForEachCallback
 typedef void (__stdcall *pfnPetForEachCallback)(D2UnitStrc * pPetUnit, void * pContext);
 #endif
+
+static PFN_ObjectOperateCallback gapObjectOperateCallbacks[10] = {
+    nullptr,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterA,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterB,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterC,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterD,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnCompanionChests,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnSiegeMonsterB,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnCompanionChests,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnRandomMonsters,
+    &D2Game::Objects::ObjectsMode::OBJMODE_SpawnRandomMonsters
+}; D2_STATIC_GUARD(gapObjectOperateCallbacks, "gapObjectOperateCallbacks");
+static int gnObjectOperateCallbackCount = 0xa; D2_STATIC_GUARD(gnObjectOperateCallbackCount, "gnObjectOperateCallbackCount");
+static D2ObjectOperateFnFunc OBJECTSOPERATEFN[101] = {
+    nullptr,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenChestSpawnMonster,
+    &D2Game::Objects::ObjectsMode::OBJOP_ActivateShrine,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenChestNoMonster,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenSparklyChest,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenTrapChestSkillTrigger,
+    &D2Game::Quests::QUESTS::A1Q5::OBJOP_A1Q5_ActivateCairnStone,
+    &D2Game::Objects::ObjectsMode::OBJOP_DetonateExplosiveBarrel,
+    &D2Game::Objects::ObjectsMode::OBJOP_ToggleDoor,
+    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_ActivateHoradricMalusSmith,
+    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_ActivateInifussTree,
+    &D2Game::Objects::ObjectsMode::OBJOP_ActivateNoOp,
+    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_UseScrollOfInifuss,
+    &D2Game::Objects::ObjectsMode::OBJOP_ActivateSimple,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenLockedChest,
+    &D2Game::Objects::ObjectsMode::Objects_OperateFn15_Portal,
+    &D2Game::Objects::ObjectsMode::OBJOP_UseStairway,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenHoradricCube,
+    &D2Game::Objects::ObjectsMode::OBJOP_DestroyDestructible,
+    &D2Game::Objects::ObjectsMode::OBJOP_SpawnExceptionalItemDrop,
+    &D2Game::Objects::ObjectsMode::OBJOP_SpawnNormalItemDrop,
+    &D2Game::Quests::QUESTS::A1Q3::OBJOP_A1Q3_UseMalus,
+    &D2Game::Objects::ObjectsMode::OBJOP_ActivateHealingWell,
+    &D2Game::Objects::ObjectsMode::OBJOP_ActivateWaypoint,
+    &D2Game::Quests::QUESTS::A2Q3::OBJOP_A2Q3_ActivateHoradricStaffAltar,
+    &D2Game::Quests::QUESTS::A2Q6::OBJOP_A2Q7_OpenArcaneNpcTrade,
+    &D2Game::Objects::ObjectsMode::OBJOP_SpawnQuestItemReward,
+    &D2Game::Objects::ObjectsMode::OBJOP_RevealAutomapArea,
+    &D2Game::Quests::QUESTS::A3Q1::OBJOP_A3Q1_KhalimsRelicAltar,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenBreakableContainer,
+    &D2Game::Objects::ObjectsMode::OBJOP_ExplodingTrap,
+    &D2Game::Quests::QUESTS::A3Q3::OBJOP_A3Q5_NihlathakPortalTrigger,
+    &D2Game::PLAYER::PlayerTrade::Objects_OperateFn32_OpenStash,
+    &D2Game::Objects::ObjectsMode::OBJOP_SpawnRewardItem,
+    &D2Game::Objects::ObjectsMode::OBJOP_A2Q2_ArcaneGateLevelTransition,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1,
+    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2,
+    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3,
+    &D2Game::Quests::QUESTS::A2Q4::OBJOP_A2Q4_StaffOfKingsAltar,
+    &D2Game::Objects::ObjectsMode::OBJOP_ActivatePortalObject,
+    &D2Game::Quests::QUESTS::A3Q2::OBJOP_UseStairDirect,
+    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimRelicPedestal,
+    &D2Game::Objects::ObjectsMode::Objects_OperateFn46_PortalToAct4,
+    &D2Game::Objects::ObjectsMode::OBJOP_UseWaygate,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenUnlockedChest,
+    &D2Game::Quests::QUESTS::A4Q3::OBJOP_A4Q3_HellforgeSmash,
+    &D2Game::Objects::ObjectsMode::OBJOP_UseStairAlias,
+    &D2Game::Objects::ObjectsMode::OBJOP_TimedDestructible,
+    &D2Game::Quests::QUESTS::A4Q2::OBJOP_A4Q2_DiabloSealActivateKillChaos,
+    &D2Game::Quests::QUESTS::A3Q5::OBJOP_A3Q5_NihlathakAltarLaunchOrb,
+    &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow1,
+    &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow2,
+    &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow3,
+    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimsRelicPortalDrop1,
+    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimsRelicPortalDrop2,
+    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimsRelicPortalDrop3,
+    nullptr,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenTimedDoor,
+    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsTriggerSound1,
+    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsTriggerSound2,
+    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsTriggerSound3,
+    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsAltarActivate,
+    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_WorldstonePortalActivate,
+    &D2Game::Quests::QUESTS::A5Q3::OBJOP_A5Q3_RescueAnyaFromPortal,
+    &D2Game::Objects::ObjectsMode::OBJOP_OpenBossChestSpawnUniques,
+    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_AncientsQuestStateQuery,
+    &D2Game::Quests::QUESTS::A5Q6::OBJOP_A5Q6_WorldstoneLevelTransition,
+    &D2Game::Quests::QUESTS::A5Q5::OBJOP_A5Q5_WorldstoneStairPortal,
+    &D2Game::Quests::QUESTS::A5Q6::OBJOP_A5Q6_TyraelPortalToEnd,
+    &D2Game::Quests::QUESTS::A4Q2::OBJOP_A4Q2_PandemoniumFortressGate,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
+}; D2_STATIC_GUARD(OBJECTSOPERATEFN, "OBJECTSOPERATEFN");
+static int SHRINESCOUNT = 0x18; D2_STATIC_GUARD(SHRINESCOUNT, "SHRINESCOUNT");
 
 namespace D2Game::Objects::ObjectsMode {
 

@@ -14,6 +14,29 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static D2UIFlagInitStrc gaUIFlagInitMessageHandlers[4] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x2,
+        /* .pfHandler = */ &D2Client::_Message::MESSAGE_OnQuitMessage
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x1c,
+        /* .pfHandler = */ &D2Client::_Message::MESSAGE_OnActivate
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x84,
+        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::_Message::WndProcD
+    },
+    {
+        /* .eEventType = */ 0x1,
+        /* .nMessageOrKeyCode = */ 0x9ca4,
+        /* .pfHandler = */ (fnD2InitUIFlagFunction)&D2Client::_Message::MESSAGE_OnClose
+    }
+}; D2_STATIC_GUARD(gaUIFlagInitMessageHandlers, "gaUIFlagInitMessageHandlers");
+
 namespace D2Client::_Message {
 
 void __stdcall MESSAGE_OnQuitMessage(D2UIMouseMsgStrc * pMsg) {

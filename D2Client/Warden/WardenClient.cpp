@@ -24,6 +24,50 @@
 typedef D2WardenModuleObjectStrc * (__fastcall *pfnWardenCreateInterface)(::WardenClient * pClient);
 #endif
 
+// also labelled: gQServerClientConnection
+static uint8_t gabWardenEmbeddedModuleHash[16] = {
+    0x69,
+    0x3e,
+    0xe4,
+    0xdd,
+    0xf4,
+    0x73,
+    0x6e,
+    0x7a,
+    0x2,
+    0xa5,
+    0x24,
+    0x8c,
+    0xb0,
+    0x4c,
+    0x4b,
+    0x5c
+}; D2_STATIC_GUARD(gabWardenEmbeddedModuleHash, "gabWardenEmbeddedModuleHash");
+static uint8_t gabWardenModuleRc4Key[16] = {
+    0x58,
+    0x57,
+    0x6e,
+    0x8d,
+    0xd0,
+    0x5a,
+    0x64,
+    0x53,
+    0x30,
+    0xf4,
+    0x90,
+    0xb7,
+    0x89,
+    0xd7,
+    0xd4,
+    0xb0
+}; D2_STATIC_GUARD(gabWardenModuleRc4Key, "gabWardenModuleRc4Key");
+static uint32_t gpWardenModuleParam = -0x1; D2_STATIC_GUARD(gpWardenModuleParam, "gpWardenModuleParam");
+static void * gpWardenResponseData = 0; D2_STATIC_GUARD(gpWardenResponseData, "gpWardenResponseData");
+static uint32_t gnWardenResponseSize = 0; D2_STATIC_GUARD(gnWardenResponseSize, "gnWardenResponseSize");
+static D2WardenModuleStrc * gpWardenActiveModule = 0; D2_STATIC_GUARD(gpWardenActiveModule, "gpWardenActiveModule");
+static D2WardenModuleStrc * gpWardenPendingModule = 0; D2_STATIC_GUARD(gpWardenPendingModule, "gpWardenPendingModule");
+static D2BNetClientCallbacksStrc * sgpUnknownSequence = 0; D2_STATIC_GUARD(sgpUnknownSequence, "sgpUnknownSequence");
+
 namespace D2Client::Warden {
 
 void __thiscall WARDEN_RC4Decrypt(D2RC4StateStrc * pState, uint8_t * pData, uint32_t nLen) {

@@ -25,6 +25,10 @@
 typedef uint8_t (__stdcall *pfnRGBToPaletteIndex)(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 #endif
 
+static int32_t gnFastCmpEffectMapMaxRow[80] = {}; D2_STATIC_GUARD(gnFastCmpEffectMapMaxRow, "gnFastCmpEffectMapMaxRow");
+static int32_t gnFastCmpEffectMapMinRow[80] = {}; D2_STATIC_GUARD(gnFastCmpEffectMapMinRow, "gnFastCmpEffectMapMinRow");
+static uint32_t gaFastCmpEffectPixelOffsetTable[6400] = {}; D2_STATIC_GUARD(gaFastCmpEffectPixelOffsetTable, "gaFastCmpEffectPixelOffsetTable");
+
 namespace D2CMP::SRC::FastCmp {
 
 static void __stdcall FASTCMP_CompressToRLE(uint8_t * pSrcData, uint32_t nLineCount, uint8_t * pDirectionOrder, uint8_t * * ppRLEBuffer, uint8_t * * ppRLEEnd, uint8_t * pBaseData) {

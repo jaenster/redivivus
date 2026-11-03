@@ -33,6 +33,9 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static int gItemDrawFlags = 0; D2_STATIC_GUARD(gItemDrawFlags, "gItemDrawFlags");
+static D2GroundItemLabelStrc gaGroundItemLabels[32] = {}; D2_STATIC_GUARD(gaGroundItemLabels, "gaGroundItemLabels");
+
 namespace D2Client::UI::ShowItems {
 
 BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX) {

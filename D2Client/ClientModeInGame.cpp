@@ -63,6 +63,8 @@ typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t para
 typedef uint32_t (__stdcall *fpGameLoopFunction)(uint32_t param_1);
 #endif
 
+static TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> gQServerGameState; D2_STATIC_GUARD(gQServerGameState, "gQServerGameState");
+
 namespace D2Client::ClientModeInGame {
 
 fnAppModeRun * __fastcall AppModeClientInit(HMODULE hModule) {

@@ -105,6 +105,61 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2AutomapStrc) == 0x2804, "D2_NEW_A
 static_assert(sizeof(void*) != 4 || sizeof(::D2AutomapLayerStrc) == 0x1c, "D2_NEW_AT(D2AutomapLayerStrc): the 32-bit layout must be the 0x1c bytes 1.14d allocates");
 
 
+static POINT gaAutomapXMarkerPolyline[13] = {
+    {
+        /* .x = */ 0x0,
+        /* .y = */ -0x1
+    },
+    {
+        /* .x = */ 0x2,
+        /* .y = */ -0x2
+    },
+    {
+        /* .x = */ 0x4,
+        /* .y = */ -0x1
+    },
+    {
+        /* .x = */ 0x2,
+        /* .y = */ 0x0
+    },
+    {
+        /* .x = */ 0x4,
+        /* .y = */ 0x1
+    },
+    {
+        /* .x = */ 0x2,
+        /* .y = */ 0x2
+    },
+    {
+        /* .x = */ 0x0,
+        /* .y = */ 0x1
+    },
+    {
+        /* .x = */ -0x2,
+        /* .y = */ 0x2
+    },
+    {
+        /* .x = */ -0x4,
+        /* .y = */ 0x1
+    },
+    {
+        /* .x = */ -0x2,
+        /* .y = */ 0x0
+    },
+    {
+        /* .x = */ -0x4,
+        /* .y = */ -0x1
+    },
+    {
+        /* .x = */ -0x2,
+        /* .y = */ -0x2
+    },
+    {
+        /* .x = */ 0x0,
+        /* .y = */ -0x1
+    }
+}; D2_STATIC_GUARD(gaAutomapXMarkerPolyline, "gaAutomapXMarkerPolyline");
+
 namespace D2Client::UI::Automap {
 
 void __stdcall MoveY16Plus(D2UIMouseMsgStrc * pMsg) {

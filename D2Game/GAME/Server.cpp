@@ -1334,6 +1334,7 @@ static void UpdateClients(::SGAMEDATA * pGame) {
 // Tracks game performance metrics and memory usage. Every 1000+ milliseconds, calculates cycles per second (FPS metric) as (cycle_count * 1000) / elapsed_ticks, resets cycle counter and updates dwTickCount. Samples memory pool usage and updates global peak memory tracker. Resets peak memory tracking every 10 seconds (0x2711 ticks). Increments dwCycleCount every call. Used for server monitoring and diagnostics.
 static void UpdatePerformanceMetrics(::SGAMEDATA * pGame) {
     // Static local variables (originally global data)
+    static uint32_t dwCycleLastSecond = 0x19; D2_STATIC_GUARD(dwCycleLastSecond, "D2Game::GAME::Server::UpdatePerformanceMetrics::dwCycleLastSecond");
     static uint32_t maxMemoryUsageTick; D2_STATIC_GUARD_BSS(maxMemoryUsageTick, "D2Game::GAME::Server::UpdatePerformanceMetrics::maxMemoryUsageTick");
 
     DWORD dwCurrentTick = GetTickCount();

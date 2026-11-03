@@ -46,14 +46,10 @@ StormLinkedListStrc gFaultHandlerList = {
     }
 }; D2_GLOBAL_GUARD(gFaultHandlerList, "gFaultHandlerList");
 
-CRITICAL_SECTION gcsErrorHandlerList = {}; D2_GLOBAL_GUARD(gcsErrorHandlerList, "gcsErrorHandlerList");
-
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-uint32_t gbFaultHandlerListInitialized = 0; D2_GLOBAL_GUARD(gbFaultHandlerListInitialized, "gbFaultHandlerListInitialized");
-pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_GLOBAL_GUARD(g_pfnFaultErrorCallback, "g_pfnFaultErrorCallback");
 
 namespace D2Common::Drlg::Maze {
 

@@ -32,8 +32,6 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2TileProjectStrc) == 0x110, "D2_NEW_AT(D2TileProjectStrc): the 32-bit layout must be the 0x110 bytes 1.14d allocates");
 
 
-namespace D2CMP::SRC::TileProjects {
-
 static char gszSrcFileTileProjects[23] = {
     '.',
     '\\',
@@ -58,7 +56,9 @@ static char gszSrcFileTileProjects[23] = {
     'p',
     'p',
     '\x00'
-}; D2_STATIC_GUARD(gszSrcFileTileProjects, "D2CMP::SRC::TileProjects::gszSrcFileTileProjects");
+}; D2_STATIC_GUARD(gszSrcFileTileProjects, "gszSrcFileTileProjects");
+
+namespace D2CMP::SRC::TileProjects {
 
 // @sourcefile .\SRC\TileProjects.cpp
 void __stdcall Free() {

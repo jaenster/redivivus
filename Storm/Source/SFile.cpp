@@ -73,10 +73,10 @@ typedef BOOL (__stdcall *pfnCryptVerifySignatureA)(int hHash, void * pbSignature
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
 
-namespace Storm::Source::SFile {
+static char cSFileVerifyOpcode2[3] = { '\\', '\\', '\x00' }; D2_STATIC_GUARD(cSFileVerifyOpcode2, "cSFileVerifyOpcode2");
+static char cSFileVerifyOpcode[3] = { ':', '\\', '\x00' }; D2_STATIC_GUARD(cSFileVerifyOpcode, "cSFileVerifyOpcode");
 
-static char cSFileVerifyOpcode2[3] = { '\\', '\\', '\x00' }; D2_STATIC_GUARD(cSFileVerifyOpcode2, "Storm::Source::SFile::cSFileVerifyOpcode2");
-static char cSFileVerifyOpcode[3] = { ':', '\\', '\x00' }; D2_STATIC_GUARD(cSFileVerifyOpcode, "Storm::Source::SFile::cSFileVerifyOpcode");
+namespace Storm::Source::SFile {
 
 // Initializes a 4-element stream buffer structure by copying 4 sequential parameters into consecutive fields (param1→field[0], param2→field[1], param3→field[2], param4→field[3]). Used for stream buffer initialization in custom calling convention (ECX register for destination pointer).
 void __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwValues, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3) {

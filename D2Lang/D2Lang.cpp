@@ -8,6 +8,58 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static D2Utf8DecodeRowStrc gaUtf8DecodeTable[7] = {
+    {
+        /* .wMask = */ 0x80,
+        /* .wExpect = */ 0x0,
+        /* .wShift = */ 0x0,
+        /* .wPad = */ 0x0,
+        /* .dwCodePointMask = */ 0x7f,
+        /* .dwMinValue = */ 0x0
+    },
+    {
+        /* .wMask = */ 0xe0,
+        /* .wExpect = */ 0xc0,
+        /* .wShift = */ 0x6,
+        /* .wPad = */ 0x0,
+        /* .dwCodePointMask = */ 0x7ff,
+        /* .dwMinValue = */ 0x80
+    },
+    {
+        /* .wMask = */ 0xf0,
+        /* .wExpect = */ 0xe0,
+        /* .wShift = */ 0xc,
+        /* .wPad = */ 0x0,
+        /* .dwCodePointMask = */ 0xffff,
+        /* .dwMinValue = */ 0x800
+    },
+    {
+        /* .wMask = */ 0xf8,
+        /* .wExpect = */ 0xf0,
+        /* .wShift = */ 0x12,
+        /* .wPad = */ 0x0,
+        /* .dwCodePointMask = */ 0x1fffff,
+        /* .dwMinValue = */ 0x10000
+    },
+    {
+        /* .wMask = */ 0xfc,
+        /* .wExpect = */ 0xf8,
+        /* .wShift = */ 0x18,
+        /* .wPad = */ 0x0,
+        /* .dwCodePointMask = */ 0x3ffffff,
+        /* .dwMinValue = */ 0x200000
+    },
+    {
+        /* .wMask = */ 0xfe,
+        /* .wExpect = */ 0xfc,
+        /* .wShift = */ 0x1e,
+        /* .wPad = */ 0x0,
+        /* .dwCodePointMask = */ 0x7fffffff,
+        /* .dwMinValue = */ 0x4000000
+    },
+    {}
+}; D2_STATIC_GUARD(gaUtf8DecodeTable, "gaUtf8DecodeTable");
+
 namespace D2Lang {
 
 void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nNumber, int32_t nMaxLen) {

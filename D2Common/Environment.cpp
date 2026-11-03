@@ -33,9 +33,93 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgEnvironmentStrc) == 0x38, "D2
 #endif
 
 
-namespace D2Common::Environment {
+static char s_ENVIRONMENT_Env_cpp = '.'; D2_STATIC_GUARD(s_ENVIRONMENT_Env_cpp, "s_ENVIRONMENT_Env_cpp");
+static uint32_t aENVIRONMENTDATA1[18] = {
+    0x140,
+    0x3,
+    0xf3907d,
+    0x154,
+    0x3,
+    0x83b8d0,
+    0x0,
+    0x0,
+    0xffffff,
+    0xa0,
+    0x1,
+    0xffffff,
+    0xb4,
+    0x1,
+    0xc198c2,
+    0xc8,
+    0x2,
+    0xf3907d
+}; D2_STATIC_GUARD(aENVIRONMENTDATA1, "aENVIRONMENTDATA1");
+static D2DrlgActEnvironmentData aENVIRONMENTDATA3[6] = {
+    {
+        /* .nLenght = */ 0x154,
+        /* .nEnvData = */ 0x3,
+        /* .nLightColorRGB = */ 0xf346f3
+    },
+    {
+        /* .nLenght = */ 0x15e,
+        /* .nEnvData = */ 0x3,
+        /* .nLightColorRGB = */ 0x83b8d0
+    },
+    {
+        /* .nLenght = */ 0x0,
+        /* .nEnvData = */ 0x0,
+        /* .nLightColorRGB = */ 0x1414ff
+    },
+    {
+        /* .nLenght = */ 0xb4,
+        /* .nEnvData = */ 0x1,
+        /* .nLightColorRGB = */ 0x1effff
+    },
+    {
+        /* .nLenght = */ 0xbe,
+        /* .nEnvData = */ 0x1,
+        /* .nLightColorRGB = */ 0xc19814
+    },
+    {
+        /* .nLenght = */ 0xc8,
+        /* .nEnvData = */ 0x2,
+        /* .nLightColorRGB = */ 0xf3907d
+    }
+}; D2_STATIC_GUARD(aENVIRONMENTDATA3, "aENVIRONMENTDATA3");
+static D2DrlgActEnvironmentData aENVIRONMENTDATA2[6] = {
+    {
+        /* .nLenght = */ 0x12c,
+        /* .nEnvData = */ 0x3,
+        /* .nLightColorRGB = */ 0xf31e00
+    },
+    {
+        /* .nLenght = */ 0x0,
+        /* .nEnvData = */ 0x0,
+        /* .nLightColorRGB = */ 0xf41e00
+    },
+    {
+        /* .nLenght = */ 0x3c,
+        /* .nEnvData = */ 0x1,
+        /* .nLightColorRGB = */ 0xf31e00
+    },
+    {
+        /* .nLenght = */ 0x78,
+        /* .nEnvData = */ 0x2,
+        /* .nLightColorRGB = */ 0xf31e00
+    },
+    {
+        /* .nLenght = */ 0xb4,
+        /* .nEnvData = */ 0x2,
+        /* .nLightColorRGB = */ 0xf41e00
+    },
+    {
+        /* .nLenght = */ 0xf0,
+        /* .nEnvData = */ 0x2,
+        /* .nLightColorRGB = */ 0xf31e00
+    }
+}; D2_STATIC_GUARD(aENVIRONMENTDATA2, "aENVIRONMENTDATA2");
 
-static char s_ENVIRONMENT_Env_cpp = '.'; D2_STATIC_GUARD(s_ENVIRONMENT_Env_cpp, "D2Common::Environment::s_ENVIRONMENT_Env_cpp");
+namespace D2Common::Environment {
 
 // Per-tick update of the environment's global light intensity (nGlobalLightIntensity). Act 3 (Hell): clamps intensity toward a level-specific cap (Pandemonium=0x80, Outer Steppes=0x40, etc.) by ±1 per tick, resets to cap if it reaches 0. Other acts: during eclipse, ramps down toward 0x20 by 8 per tick; otherwise computes a day/night cosine curve and scales between day and night light values from the environment txt, capped at 0xFF (0xAA in Act 4). Special case: Arreat Summit is fixed at 200.
 static void DRLGENV_UpdateLightIntensity(eD2LevelId eLevel, D2DrlgEnvironmentStrc * pDrlgEnvironment, int32_t nActNo) {

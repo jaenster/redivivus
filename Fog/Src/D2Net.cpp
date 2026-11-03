@@ -7,6 +7,14 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static uint64_t gaServerSentPacketByteCounts[256] = {}; D2_STATIC_GUARD(gaServerSentPacketByteCounts, "gaServerSentPacketByteCounts");
+// also labelled: gnPacketLogWriteOffset0, gnPacketLogWriteOffset1
+static unsigned long long gnSentPacketRawBytes = 0; D2_STATIC_GUARD(gnSentPacketRawBytes, "gnSentPacketRawBytes");
+// also labelled: gnPacketLogWriteOffset2, gnPacketLogWriteOffset3
+static unsigned long long gnSentPacketWireBytes = 0; D2_STATIC_GUARD(gnSentPacketWireBytes, "gnSentPacketWireBytes");
+// also labelled: gdwPacketLogSequenceNum, gnPacketLogSequenceNumHigh
+static unsigned long long gnSentPacketHeaderBytes = 0; D2_STATIC_GUARD(gnSentPacketHeaderBytes, "gnSentPacketHeaderBytes");
+
 namespace Fog::Src::D2Net {
 
 void __stdcall NET_SERVER_SentPacketLog_Clear() {

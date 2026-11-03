@@ -8,6 +8,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static uint32_t gnSoundHardwareAcceleration = 0x1; D2_STATIC_GUARD(gnSoundHardwareAcceleration, "gnSoundHardwareAcceleration");
+
 namespace D2Sound {
 
 BOOL __stdcall SOUND_DetectLegacySoundDrivers(int nUnused, char * szDeviceName, char * szDriverVxd, DWORD dwUnused) {

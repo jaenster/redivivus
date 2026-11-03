@@ -44,9 +44,9 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-namespace D2Client::Draw::Weather {
+static uint32_t gnBlizzardSoundPlayed = 0x1; D2_STATIC_GUARD(gnBlizzardSoundPlayed, "gnBlizzardSoundPlayed");
 
-static DC6 * DC6_UncompOverlays_Rain2[4] = { 0 }; D2_STATIC_GUARD(DC6_UncompOverlays_Rain2, "D2Client::Draw::Weather::DC6_UncompOverlays_Rain2");
+namespace D2Client::Draw::Weather {
 
 float __stdcall Abs(float fValue) {
     return std::fabs(fValue);

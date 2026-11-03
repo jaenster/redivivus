@@ -36,6 +36,11 @@
 #endif
 
 
+static IDirectDrawSurface7 * gpD3DFloorTileSystemSurface = 0; D2_STATIC_GUARD(gpD3DFloorTileSystemSurface, "gpD3DFloorTileSystemSurface");
+static IDirect3DTexture2 * gpD3DFloorTileMemoryTexture = 0; D2_STATIC_GUARD(gpD3DFloorTileMemoryTexture, "gpD3DFloorTileMemoryTexture");
+static IDirectDrawSurface7 * gpD3DSubtileSystemSurface = 0; D2_STATIC_GUARD(gpD3DSubtileSystemSurface, "gpD3DSubtileSystemSurface");
+static IDirect3DTexture2 * gpD3DSubtileMemoryTexture = 0; D2_STATIC_GUARD(gpD3DSubtileMemoryTexture, "gpD3DSubtileMemoryTexture");
+
 namespace D2Direct3D::d3dFloorCache {
 
 int __fastcall D3DFLOOR_Initialize(D3DFloorCacheStrc * pCache, int nBaseMemoryUsed, int nAvailableMemory, uint32_t dwTextureSize) {

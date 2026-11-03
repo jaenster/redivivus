@@ -376,7 +376,7 @@
       ]
     },
     {
-      "name": "Create_Flag0",
+      "name": "SAFESOCK_CreateBlocking",
       "address": "0040e230",
       "lines": [
         {
@@ -386,7 +386,7 @@
       ],
       "namespace": "Fog::Src::Safesock",
       "calledFunctions": [
-        "Create_Flag0",
+        "SAFESOCK_CreateBlocking",
         "Create"
       ],
       "usedTypes": [

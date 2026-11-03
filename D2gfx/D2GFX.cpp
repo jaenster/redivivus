@@ -39,8 +39,6 @@ typedef void (__stdcall *fnBinkFrameCallback)();
 
 namespace D2gfx::D2GFX {
 
-static D2GfxSettingsStrc dwD2GFX_Gamma = {}; D2_STATIC_GUARD(dwD2GFX_Gamma, "D2gfx::D2GFX::dwD2GFX_Gamma");
-
 // JMP thunk
 BOOL __stdcall D2GFX_GetPerspectiveCapable_ForPerspectiveItem() {
     return ::D2gfx::D2GFX::D2GFX_GetPerspectiveCapable();

@@ -55,6 +55,8 @@ typedef void (__stdcall *fpD2WinScrollbarOnChange)(D2UIMouseMsgStrc * pUnderMous
 typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 #endif
 
+static uint32_t gnTextBoxLineSpacing = 0x4; D2_STATIC_GUARD(gnTextBoxLineSpacing, "gnTextBoxLineSpacing");
+
 namespace D2Win::Src::D2WinTextBox {
 
 // Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 (set site 00441087) into D2WinEditBox+0x268 (fpFilterCallback). Clears the TCP/IP game-list selection then returns 1. Signature proven by RET 0xc (3 stack args, callee cleans).

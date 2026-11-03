@@ -288,7 +288,7 @@
       ]
     },
     {
-      "name": "D2WinImageEx",
+      "name": "D2WINIMAGE_CreateImageEx",
       "address": "004fd770",
       "lines": [
         {
@@ -298,7 +298,7 @@
       ],
       "namespace": "D2Win::Src::D2WinImage",
       "calledFunctions": [
-        "D2WinImageEx",
+        "D2WINIMAGE_CreateImageEx",
         "AllocClientMemory",
         "memset",
         "FORMS_AddControlToGlobalList"

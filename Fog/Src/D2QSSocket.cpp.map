@@ -196,7 +196,7 @@
       "namespace": "Fog::Src::D2QSSocket",
       "calledFunctions": [
         "QSSOCKET_ThreadEntryPoint",
-        "Create_Flag0"
+        "SAFESOCK_CreateBlocking"
       ],
       "usedTypes": [
         "D2NetDataStrc"

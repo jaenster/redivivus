@@ -49,6 +49,8 @@ typedef void (__fastcall *PFN_TxtFieldLinker)(char * szText, void * pRecord, int
 typedef uint16_t (__fastcall *PFN_TxtKeyToWord)(char * szKey);
 #endif
 
+static char * gnExcelRecordFieldNotFound = (char *)0x006ccb30; D2_STATIC_GUARD(gnExcelRecordFieldNotFound, "gnExcelRecordFieldNotFound");
+
 namespace Fog::Src::Excel {
 
 // @sourcefile .\Src\Excel\Excel.cpp

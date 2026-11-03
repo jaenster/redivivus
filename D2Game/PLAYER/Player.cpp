@@ -89,6 +89,9 @@ typedef void (__fastcall *fpStatListExChangeCb)(::SGAMEDATA * pGame, D2UnitStrc 
 typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArgs);
 #endif
 
+// also labelled: nCOMMAND_playersX
+static int32_t PlayerCountOverride = 0; D2_STATIC_GUARD(PlayerCountOverride, "PlayerCountOverride");
+
 namespace D2Game::PLAYER::Player {
 
 void __fastcall PLAYER_AllocPlayerInteractedArray(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

@@ -27,8 +27,6 @@
 
 namespace D2Win::Src::D2WinArchive {
 
-static D2FogArchiveStrc * MPQ_d2kfixup_mpq = 0; D2_STATIC_GUARD(MPQ_d2kfixup_mpq, "D2Win::Src::D2WinArchive::MPQ_d2kfixup_mpq");
-
 // @sourcefile .\Src\D2WinArchive.cpp
 DC6 * __fastcall IMAGE_LoadDC6(char * szFilename, BOOL bUseDccExtension) {
     uint32_t nCopyCount;

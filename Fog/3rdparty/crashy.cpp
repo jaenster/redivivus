@@ -12,6 +12,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static char gszSystemGlobalString[1024] = {}; D2_STATIC_GUARD(gszSystemGlobalString, "gszSystemGlobalString");
+
 namespace Fog::_3rdparty::crashy {
 
 void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime) {

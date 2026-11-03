@@ -53,11 +53,6 @@ typedef int (__fastcall *CalcGetLinkerIndex_t)(char * szText, int * pOutHasResol
 
 namespace D2Common::DATATBLS::ItemTbls {
 
-static unsigned int gItemCommon_i_ItemTypeId = 0x646461; D2_STATIC_GUARD(gItemCommon_i_ItemTypeId, "D2Common::DATATBLS::ItemTbls::gItemCommon_i_ItemTypeId");
-static D2MagicAffixTableStrc pTxtMagicAffixes = {}; D2_STATIC_GUARD(pTxtMagicAffixes, "D2Common::DATATBLS::ItemTbls::pTxtMagicAffixes");
-static D2RareAffixTableStrc pTxtRareAffixes = {}; D2_STATIC_GUARD(pTxtRareAffixes, "D2Common::DATATBLS::ItemTbls::pTxtRareAffixes");
-static D2BooksTableStrc pTxtBooks = {}; D2_STATIC_GUARD(pTxtBooks, "D2Common::DATATBLS::ItemTbls::pTxtBooks");
-
 int32_t __fastcall ITEMTBLS_ParseItemStatCostOrBase(char * szFieldValue, int32_t * pResultType, int32_t nFieldType, int32_t nTableId) {
     int32_t nStatId;
     if (!(nFieldType == 1 && nTableId == 3)) {

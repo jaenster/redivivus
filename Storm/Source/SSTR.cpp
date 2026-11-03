@@ -8,9 +8,11 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-namespace Storm::Source::SSTR {
+static unsigned int guStringAlignmentTemp = {}; D2_STATIC_GUARD(guStringAlignmentTemp, "guStringAlignmentTemp");
+static uint32_t gbSStrConversionTablesInitialized = 0; D2_STATIC_GUARD(gbSStrConversionTablesInitialized, "gbSStrConversionTablesInitialized");
+static double gdPow10Table[200] = {}; D2_STATIC_GUARD(gdPow10Table, "gdPow10Table");
 
-static uint64_t cSStrAtoDecimalPoint = 0x41f0000000000000; D2_STATIC_GUARD(cSStrAtoDecimalPoint, "Storm::Source::SSTR::cSStrAtoDecimalPoint");
+namespace Storm::Source::SSTR {
 
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrChr(const char *, char)

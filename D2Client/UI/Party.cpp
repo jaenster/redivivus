@@ -64,6 +64,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UiPartyStrc) == 0xd1, "D2_NEW_AT(
 typedef void (__fastcall *fnSendChatCommand)(uint8_t * pbCmd);
 #endif
 
+static int32_t gpWaypointButtonHover = 0; D2_STATIC_GUARD(gpWaypointButtonHover, "gpWaypointButtonHover");
+
 namespace D2Client::UI::Party {
 
 void __stdcall SetPartyColors() {

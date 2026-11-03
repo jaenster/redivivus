@@ -21,6 +21,11 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static int sgCharTemplateLevelIndex[64] = {}; D2_STATIC_GUARD(sgCharTemplateLevelIndex, "sgCharTemplateLevelIndex");
+static D2CharTemplateTxt * sgpTxtCharTemplate = 0; D2_STATIC_GUARD(sgpTxtCharTemplate, "sgpTxtCharTemplate");
+static int nTxtCharTemplateSize = 0; D2_STATIC_GUARD(nTxtCharTemplateSize, "nTxtCharTemplateSize");
+static D2ArenaTxt * sgpTxtArena = 0; D2_STATIC_GUARD(sgpTxtArena, "sgpTxtArena");
+
 namespace D2Common::DATATBLS::ArenaTbls {
 
 // Defines the binary field layout for arena.txt (Suicide, PlayerKill, PlayerKillPercent, MonsterKill, PlayerDeath, PlayerDeathPercent, MonsterDeath — all INT) and calls CompileTxt to parse and store the result into sgpTxtArena. In: pMemory pool.

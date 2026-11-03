@@ -36,6 +36,35 @@
 static_assert(sizeof(void*) != 4 || sizeof(::POINT) == 0x8, "D2_NEW_AT(POINT): the 32-bit layout must be the 0x8 bytes 1.14d allocates");
 
 
+static int gaFieldStepDeltaX[9] = {
+    0x0,
+    0x1,
+    0x1,
+    0x1,
+    0x0,
+    -0x1,
+    -0x1,
+    -0x1,
+    0x0
+}; D2_STATIC_GUARD(gaFieldStepDeltaX, "gaFieldStepDeltaX");
+static int gaFieldStepDeltaY[9] = {
+    -0x1,
+    -0x1,
+    0x0,
+    0x1,
+    0x1,
+    0x1,
+    0x0,
+    -0x1,
+    0x0
+}; D2_STATIC_GUARD(gaFieldStepDeltaY, "gaFieldStepDeltaY");
+static void * gpFieldDataTable = 0; D2_STATIC_GUARD(gpFieldDataTable, "gpFieldDataTable");
+static unsigned int gnFieldDataTableWidth = {}; D2_STATIC_GUARD(gnFieldDataTableWidth, "gnFieldDataTableWidth");
+static unsigned int gnFieldDataTableHeight = {}; D2_STATIC_GUARD(gnFieldDataTableHeight, "gnFieldDataTableHeight");
+static int gnFieldDataTableSize = 0; D2_STATIC_GUARD(gnFieldDataTableSize, "gnFieldDataTableSize");
+static unsigned int gnFieldTableHalfWidth = {}; D2_STATIC_GUARD(gnFieldTableHalfWidth, "gnFieldTableHalfWidth");
+static unsigned int gnFieldTableHalfHeight = {}; D2_STATIC_GUARD(gnFieldTableHalfHeight, "gnFieldTableHalfHeight");
+
 namespace D2Common::DATATBLS::FieldTbls {
 
 // Loads expansion field data (expfield.d2) into global field tables.

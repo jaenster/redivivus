@@ -85,6 +85,24 @@
 typedef BOOL (__stdcall *ROOMCALLBACKFN)(D2RoomStrc * pRoom, void * pArgs);
 #endif
 
+static unsigned int gdwAmbientMusicLevelChangeTick = {}; D2_STATIC_GUARD(gdwAmbientMusicLevelChangeTick, "gdwAmbientMusicLevelChangeTick");
+static unsigned int gdwAmbientMusicRestartTick = {}; D2_STATIC_GUARD(gdwAmbientMusicRestartTick, "gdwAmbientMusicRestartTick");
+static int geCutsceneAmbientMusicSoundId = 0; D2_STATIC_GUARD(geCutsceneAmbientMusicSoundId, "geCutsceneAmbientMusicSoundId");
+static uint32_t geAmbientMusicLevelId = 0; D2_STATIC_GUARD(geAmbientMusicLevelId, "geAmbientMusicLevelId");
+static uint32_t gdwAmbientMusicChangeTime = 0; D2_STATIC_GUARD(gdwAmbientMusicChangeTime, "gdwAmbientMusicChangeTime");
+static uint32_t gbSoundSequenceActive = 0; D2_STATIC_GUARD(gbSoundSequenceActive, "gbSoundSequenceActive");
+static uint32_t geSoundSequenceSoundId = 0; D2_STATIC_GUARD(geSoundSequenceSoundId, "geSoundSequenceSoundId");
+static uint32_t gnSoundSequenceResumeIndex = 0; D2_STATIC_GUARD(gnSoundSequenceResumeIndex, "gnSoundSequenceResumeIndex");
+static uint32_t gbPendingSoundSequencePlay = 0; D2_STATIC_GUARD(gbPendingSoundSequencePlay, "gbPendingSoundSequencePlay");
+static uint32_t geDelayedSoundId = 0; D2_STATIC_GUARD(geDelayedSoundId, "geDelayedSoundId");
+static uint32_t gnDelayedSoundPlayIndex = 0; D2_STATIC_GUARD(gnDelayedSoundPlayIndex, "gnDelayedSoundPlayIndex");
+static uint32_t gbPendingDelayedSoundPlay = 0; D2_STATIC_GUARD(gbPendingDelayedSoundPlay, "gbPendingDelayedSoundPlay");
+static uint32_t gnSoundSequenceEndIndex = 0; D2_STATIC_GUARD(gnSoundSequenceEndIndex, "gnSoundSequenceEndIndex");
+static uint32_t geLastAmbientMusicLevelId = 0; D2_STATIC_GUARD(geLastAmbientMusicLevelId, "geLastAmbientMusicLevelId");
+static int UNIT_CenterXCoordsDiv5 = 0; D2_STATIC_GUARD(UNIT_CenterXCoordsDiv5, "UNIT_CenterXCoordsDiv5");
+static int gnPlayerTileGridIndex = 0; D2_STATIC_GUARD(gnPlayerTileGridIndex, "gnPlayerTileGridIndex");
+static int UNIT_CenterYCoordsDiv5 = 0; D2_STATIC_GUARD(UNIT_CenterYCoordsDiv5, "UNIT_CenterYCoordsDiv5");
+
 namespace D2Client::GAME::Wall2 {
 
 void __fastcall WALL2_InitUnitGfx(D2UnitStrc * pUnit) {

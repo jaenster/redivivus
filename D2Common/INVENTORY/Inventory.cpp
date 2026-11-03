@@ -64,6 +64,16 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2InventoryToBeUpdatedStrc) == 0x8,
 static_assert(sizeof(void*) != 4 || sizeof(::D2CorpseStrc) == 0x10, "D2_NEW_AT(D2CorpseStrc): the 32-bit layout must be the 0x10 bytes 1.14d allocates");
 
 
+static D2InventorySizesStrc gsInventoryBodyLocGridSize = {
+    /* .Width = */ 0xd,
+    /* .Height = */ 0x1
+}; D2_STATIC_GUARD(gsInventoryBodyLocGridSize, "gsInventoryBodyLocGridSize");
+static D2InventorySizesStrc g_InventorySizesDefaultConfig = {
+    /* .Width = */ 0x10,
+    /* .Height = */ 0x1
+}; D2_STATIC_GUARD(g_InventorySizesDefaultConfig, "g_InventorySizesDefaultConfig");
+static uint32_t gaItemTypeBaseIdTable[510] = {}; D2_STATIC_GUARD(gaItemTypeBaseIdTable, "gaItemTypeBaseIdTable");
+
 namespace D2Common::INVENTORY::Inventory {
 
 // Returns the item's inventory node (&pItemData->pInventory, D2UnitDataItemStrc +0x5c), not a D2InventoryStrc; NULL when pUnit is not an item or has no item data. Provenance: 1.14d asm 0063a7f0 ADD EAX,0x5c.

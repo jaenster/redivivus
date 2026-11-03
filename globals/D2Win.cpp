@@ -1767,12 +1767,6 @@ char gpSmackerVideoBuffer[260] = {}; D2_GLOBAL_GUARD(gpSmackerVideoBuffer, "gpSm
 uint32_t gbCursorVisible = 0x1; D2_GLOBAL_GUARD(gbCursorVisible, "gbCursorVisible");
 uint32_t gbWindowIsActive = 0x1; D2_GLOBAL_GUARD(gbWindowIsActive, "gbWindowIsActive");
 uint32_t gbMessageLoopActive = 0x1; D2_GLOBAL_GUARD(gbMessageLoopActive, "gbMessageLoopActive");
-uint32_t gbPaletteGammaShiftEnabled = 0x1; D2_GLOBAL_GUARD(gbPaletteGammaShiftEnabled, "gbPaletteGammaShiftEnabled");
-uint32_t gnTextBoxLineSpacing = 0x4; D2_GLOBAL_GUARD(gnTextBoxLineSpacing, "gnTextBoxLineSpacing");
-int32_t gnLastUsedFontId = 0x1; D2_GLOBAL_GUARD(gnLastUsedFontId, "gnLastUsedFontId");
-uint32_t gnFontIdSmall = 0x10; D2_GLOBAL_GUARD(gnFontIdSmall, "gnFontIdSmall");
-uint32_t gnFontIdLarge = 0x11; D2_GLOBAL_GUARD(gnFontIdLarge, "gnFontIdLarge");
-uint32_t gnFontIdBody = 0x3; D2_GLOBAL_GUARD(gnFontIdBody, "gnFontIdBody");
 uint32_t gnD2CompCOFLayerCount = 0x14; D2_GLOBAL_GUARD(gnD2CompCOFLayerCount, "gnD2CompCOFLayerCount");
 // also labelled: gnD2CompItemColorMappingCount
 unsigned int gnCompWeaponClassCodeMapCount = 0xd; D2_GLOBAL_GUARD(gnCompWeaponClassCodeMapCount, "gnCompWeaponClassCodeMapCount");
@@ -1789,6 +1783,7 @@ D2FogArchiveStrc * MPQ_d2char = 0; D2_GLOBAL_GUARD(MPQ_d2char, "MPQ_d2char");
 D2FogArchiveStrc * MPQ_d2video = 0; D2_GLOBAL_GUARD(MPQ_d2video, "MPQ_d2video");
 D2FogArchiveStrc * MPQ_d2Xtalk = 0; D2_GLOBAL_GUARD(MPQ_d2Xtalk, "MPQ_d2Xtalk");
 D2FogArchiveStrc * MPQ_d2data = 0; D2_GLOBAL_GUARD(MPQ_d2data, "MPQ_d2data");
+D2FogArchiveStrc * MPQ_d2kfixup_mpq = 0; D2_GLOBAL_GUARD(MPQ_d2kfixup_mpq, "MPQ_d2kfixup_mpq");
 D2FogArchiveStrc * MPQ_d2kfixup = 0; D2_GLOBAL_GUARD(MPQ_d2kfixup, "MPQ_d2kfixup");
 D2FogArchiveStrc * MPQ_d2speech = 0; D2_GLOBAL_GUARD(MPQ_d2speech, "MPQ_d2speech");
 D2FogArchiveStrc * MPQ_d2music = 0; D2_GLOBAL_GUARD(MPQ_d2music, "MPQ_d2music");
@@ -1821,7 +1816,6 @@ int gnPentaSpinCursorMaxFrames = 0; D2_GLOBAL_GUARD(gnPentaSpinCursorMaxFrames, 
 uint8_t gbSmackerVideoFlags = 0; D2_GLOBAL_GUARD(gbSmackerVideoFlags, "gbSmackerVideoFlags");
 uint32_t gbSmackerKeepTempFile = 0; D2_GLOBAL_GUARD(gbSmackerKeepTempFile, "gbSmackerKeepTempFile");
 DC6 * gpPentSpinCursorDC6 = 0; D2_GLOBAL_GUARD(gpPentSpinCursorDC6, "gpPentSpinCursorDC6");
-D2WinPopup * gpD2WinPopupControl = 0; D2_GLOBAL_GUARD(gpD2WinPopupControl, "gpD2WinPopupControl");
 
 namespace D2Common::Drlg::Maze {
 

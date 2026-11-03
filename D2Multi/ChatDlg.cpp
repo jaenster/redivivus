@@ -73,9 +73,22 @@ typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);
 #endif
 
-namespace D2Multi::ChatDlg {
+static char gaChatDlgHistoryBuffer[10][256] = {}; D2_STATIC_GUARD(gaChatDlgHistoryBuffer, "gaChatDlgHistoryBuffer");
+static char gaChatDlgHistoryBuffer_1__0_[10][256] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; D2_STATIC_GUARD(gaChatDlgHistoryBuffer_1__0_, "gaChatDlgHistoryBuffer_1__0_");
+static D2WinButton * gpCtlLadderBtnOverall = 0; D2_STATIC_GUARD(gpCtlLadderBtnOverall, "gpCtlLadderBtnOverall");
+static D2WinButton * gpCtlLadderBtnAmazon = 0; D2_STATIC_GUARD(gpCtlLadderBtnAmazon, "gpCtlLadderBtnAmazon");
+static D2WinButton * gpCtlLadderBtnSorceress = 0; D2_STATIC_GUARD(gpCtlLadderBtnSorceress, "gpCtlLadderBtnSorceress");
+static D2WinButton * gpCtlLadderBtnNecromancer = 0; D2_STATIC_GUARD(gpCtlLadderBtnNecromancer, "gpCtlLadderBtnNecromancer");
+static D2WinButton * gpCtlLadderBtnPaladin = 0; D2_STATIC_GUARD(gpCtlLadderBtnPaladin, "gpCtlLadderBtnPaladin");
+static D2WinButton * gpCtlLadderBtnBarbarian = 0; D2_STATIC_GUARD(gpCtlLadderBtnBarbarian, "gpCtlLadderBtnBarbarian");
+static D2WinButton * gpCtlLadderBtnDruid = 0; D2_STATIC_GUARD(gpCtlLadderBtnDruid, "gpCtlLadderBtnDruid");
+static D2WinButton * gpCtlLadderBtnAssassin = 0; D2_STATIC_GUARD(gpCtlLadderBtnAssassin, "gpCtlLadderBtnAssassin");
+static D2WinTextBox * g_pLadderBoardTextBox = 0; D2_STATIC_GUARD(g_pLadderBoardTextBox, "g_pLadderBoardTextBox");
+static void * gpChatMessageQueueHead = 0; D2_STATIC_GUARD(gpChatMessageQueueHead, "gpChatMessageQueueHead");
+static void * gpChatMessageQueueTail = 0; D2_STATIC_GUARD(gpChatMessageQueueTail, "gpChatMessageQueueTail");
+static void * gpChatPlayerNameListHead = 0; D2_STATIC_GUARD(gpChatPlayerNameListHead, "gpChatPlayerNameListHead");
 
-static char gaChatDlgHistoryBuffer_1__0_[10][256] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; D2_STATIC_GUARD(gaChatDlgHistoryBuffer_1__0_, "D2Multi::ChatDlg::gaChatDlgHistoryBuffer_1__0_");
+namespace D2Multi::ChatDlg {
 
 // OnPress of the chat-lobby user-list page-back button gpCtlLobbyUserListPrevPageButton: COMCALLBACK_ScrollChannelUserList(-10); returns 1.
 // Provenance: asm 0043d9e0 (RET 4); fpOnPressCallback of form record 0070d060 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fce8.

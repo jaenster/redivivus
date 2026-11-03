@@ -64,6 +64,10 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2CharSelStrc) == 0x350, "D2_NEW_AT
 typedef void (__stdcall *fpD2WinScrollbarOnChange)(D2UIMouseMsgStrc * pUnderMouse);
 #endif
 
+static int gnCharSelLoadMoreEntryIndex = -0x3e7; D2_STATIC_GUARD(gnCharSelLoadMoreEntryIndex, "gnCharSelLoadMoreEntryIndex");
+static int gnCharSelLoadingEntryIndex = -0x3e7; D2_STATIC_GUARD(gnCharSelLoadingEntryIndex, "gnCharSelLoadingEntryIndex");
+static int gnCharSelScreenSlotCount = 0x5; D2_STATIC_GUARD(gnCharSelScreenSlotCount, "gnCharSelScreenSlotCount");
+
 namespace D2Launch::CharSel {
 
 static uint32_t CHARSEL_FindRealmByName(char * szText) {

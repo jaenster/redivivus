@@ -27,6 +27,9 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static uint32_t g_nRealmLogonResult = 0xff; D2_STATIC_GUARD(g_nRealmLogonResult, "g_nRealmLogonResult");
+static uint32_t g_dwProductId = 0x1; D2_STATIC_GUARD(g_dwProductId, "g_dwProductId");
+
 namespace Bnclient::_net_sid {
 
 int __fastcall NET_SID_CLIENT_GetStateAndClear(int * pOutState) {

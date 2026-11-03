@@ -73,9 +73,14 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-namespace D2Client::UI::Panel {
+static int gnBeltPanelState = 0x2; D2_STATIC_GUARD(gnBeltPanelState, "gnBeltPanelState");
+static BOOL gbPanelClickProcessed = 0x1; D2_STATIC_GUARD(gbPanelClickProcessed, "gbPanelClickProcessed");
+static int32_t gnBeltSlotUnderCursor = -0x1; D2_STATIC_GUARD(gnBeltSlotUnderCursor, "gnBeltSlotUnderCursor");
+static int gnBeltTooltipX = -0x1; D2_STATIC_GUARD(gnBeltTooltipX, "gnBeltTooltipX");
+static int gnBeltTooltipY = -0x1; D2_STATIC_GUARD(gnBeltTooltipY, "gnBeltTooltipY");
+static uint32_t gaaBeltSlotHotkeyCommands[4] = { 0x17, 0x18, 0x19, 0x1a }; D2_STATIC_GUARD(gaaBeltSlotHotkeyCommands, "gaaBeltSlotHotkeyCommands");
 
-static uint32_t gaaBeltSlotHotkeyCommands[4] = { 0x17, 0x18, 0x19, 0x1a }; D2_STATIC_GUARD(gaaBeltSlotHotkeyCommands, "D2Client::UI::Panel::gaaBeltSlotHotkeyCommands");
+namespace D2Client::UI::Panel {
 
 // JMP thunk
 void __stdcall thunk_CMD_UseBeltSlot1() {

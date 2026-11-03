@@ -96,6 +96,9 @@ typedef void (__fastcall *fpStatListExChangeCb)(::SGAMEDATA * pGame, D2UnitStrc 
 typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 #endif
 
+static BOOL BOOL_007a5260 = 0; D2_STATIC_GUARD(BOOL_007a5260, "BOOL_007a5260");
+static BOOL bRecursionClick = 0; D2_STATIC_GUARD(bRecursionClick, "bRecursionClick");
+
 namespace D2Client::UNIT::Player {
 
 // Client-side reaction handler invoked when a unit stat changes; dwStatIdAndSubIndex packs the stat id (high 16 bits, eD2UnitStat) and a sub-index (low 16 bits), nValue is the new value. Dispatches on stat id: item_lightradius/item_lightcolor update the unit's rendered light; item_nonclassskill/item_singleskill add or remove a granted skill on a player (AddSkill when newly granted and class-eligible, SKILL_RemoveSkillCallback when value drops to 0 and skill level is gone); item_charged_skill adds/removes a charged item skill (decoding charge level/max from the sub-index and item charge count, gated on the item owner matching the player). All other stats are no-ops here. Player/UI-side only.

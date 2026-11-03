@@ -53,10 +53,13 @@
 #endif
 
 
-namespace D2Common::DATATBLS::MonsterTbls {
+static unsigned int gnTreasureClassArraySize = {}; D2_STATIC_GUARD(gnTreasureClassArraySize, "gnTreasureClassArraySize");
+static D2MonItemPercentTxt * pMonItemPercentTxt = 0; D2_STATIC_GUARD(pMonItemPercentTxt, "pMonItemPercentTxt");
+static D2UniqueNameTablesStrc gsTxtUniqueNameTables = {}; D2_STATIC_GUARD(gsTxtUniqueNameTables, "gsTxtUniqueNameTables");
+static unsigned int gnAutoItemTypeTCCount = {}; D2_STATIC_GUARD(gnAutoItemTypeTCCount, "gnAutoItemTypeTCCount");
+static unsigned short gwMonsterTblsDefaultId = {}; D2_STATIC_GUARD(gwMonsterTblsDefaultId, "gwMonsterTblsDefaultId");
 
-static unsigned int gDelim_A_Act = 0x4341; D2_STATIC_GUARD(gDelim_A_Act, "D2Common::DATATBLS::MonsterTbls::gDelim_A_Act");
-static char gDelim_n_NpcClass[4] = { 'n', 'p', 'c', '\x00' }; D2_STATIC_GUARD(gDelim_n_NpcClass, "D2Common::DATATBLS::MonsterTbls::gDelim_n_NpcClass");
+namespace D2Common::DATATBLS::MonsterTbls {
 
 static void FilterNameString(char * szText1, char * szText2) {
     char cChar;

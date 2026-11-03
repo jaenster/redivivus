@@ -4,16 +4,10 @@
  */
 
 #include "globals/globals.h"
-#include "Bnclient/BnDownload.h"
-#include "Bnclient/BnMessQueue.h"
 #include "Bnclient/BnSend.h"
-#include "Bnclient/Bnet.h"
-#include "Bnclient/Cache.h"
-#include "Bnclient/Debug.h"
 #include "Bnclient/SRP.h"
 #include "Bnclient/net_sid.h"
 #include "D2Client/D2BNetGatewayAccessStr.h"
-#include "D2Client/D2IniConfigStrc.h"
 
 
 // =============================================================================
@@ -446,12 +440,8 @@ pfnVoidNoArgCallback g_pfnNewsCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUAR
 uint32_t g_nFirstUnreadNewsIndex = 0; D2_GLOBAL_GUARD(g_nFirstUnreadNewsIndex, "g_nFirstUnreadNewsIndex");
 uint32_t g_dwNewsTimestamp = 0; D2_GLOBAL_GUARD(g_dwNewsTimestamp, "g_dwNewsTimestamp");
 unsigned int gnNetworkSendState = {}; D2_GLOBAL_GUARD(gnNetworkSendState, "gnNetworkSendState");
-unsigned int gbBnetDownloadCancelFlag = {}; D2_GLOBAL_GUARD(gbBnetDownloadCancelFlag, "gbBnetDownloadCancelFlag");
-LONG * lpAddend_00881d5c = 0; D2_GLOBAL_GUARD(lpAddend_00881d5c, "lpAddend_00881d5c");
 uint32_t g_nBattleNetConnectionData = 0; D2_GLOBAL_GUARD(g_nBattleNetConnectionData, "g_nBattleNetConnectionData");
 uint32_t g_nBattleNetConnectionState = 0; D2_GLOBAL_GUARD(g_nBattleNetConnectionState, "g_nBattleNetConnectionState");
-BnMessQueue * nLobbyChatCurrentMessage = 0; D2_GLOBAL_GUARD(nLobbyChatCurrentMessage, "nLobbyChatCurrentMessage");
-BnMessQueue * nLobbyChatQueueMessages = 0; D2_GLOBAL_GUARD(nLobbyChatQueueMessages, "nLobbyChatQueueMessages");
 uint32_t g_nSIDResponseCount1 = 0; D2_GLOBAL_GUARD(g_nSIDResponseCount1, "g_nSIDResponseCount1");
 uint32_t g_nSIDResponseCount2 = 0; D2_GLOBAL_GUARD(g_nSIDResponseCount2, "g_nSIDResponseCount2");
 uint32_t g_bSIDProtocolReady = 0; D2_GLOBAL_GUARD(g_bSIDProtocolReady, "g_bSIDProtocolReady");

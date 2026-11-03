@@ -77,6 +77,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static uint32_t gnAuraDamageScale_ManaAbsorb[3] = { 0xffffffff, 0x0, 0xffffffff }; D2_STATIC_GUARD(gnAuraDamageScale_ManaAbsorb, "gnAuraDamageScale_ManaAbsorb");
+
 namespace D2Game::SKILLS::SkillSor {
 
 int32_t __fastcall GetTxtTableParam6(int32_t nSkillId) {

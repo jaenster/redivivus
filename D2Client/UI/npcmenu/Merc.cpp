@@ -34,6 +34,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static uint8_t gnNpcMenuMercListCount = 0; D2_STATIC_GUARD(gnNpcMenuMercListCount, "gnNpcMenuMercListCount");
+
 namespace D2Client::UI::npcmenu::Merc {
 
 void __fastcall AddMercForHireToGlobalList(D2GSPacketSrv0x4E * pPacket) {

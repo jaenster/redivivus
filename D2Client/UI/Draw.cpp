@@ -73,6 +73,9 @@
 typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 #endif
 
+static uint32_t gbLoadScreenLevelLoadInProgress = 0; D2_STATIC_GUARD(gbLoadScreenLevelLoadInProgress, "gbLoadScreenLevelLoadInProgress");
+static int32_t gnLoadScreenAnimFrame = 0; D2_STATIC_GUARD(gnLoadScreenAnimFrame, "gnLoadScreenAnimFrame");
+
 namespace D2Client::UI::Draw {
 
 void __stdcall LoadingsScreen() {

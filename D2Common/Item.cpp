@@ -30,6 +30,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static int gaSetItemBonusStates[6] = { 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa }; D2_STATIC_GUARD(gaSetItemBonusStates, "gaSetItemBonusStates");
+
 namespace D2Common {
 
 // Enables/disables the partial-set-bonus states on a set item according to how many set pieces are currently equipped. Only acts on quality==5 (set) items whose setitems.txt addFunc is nonzero. For addFunc==1 it iterates the set's other members and toggles each gaSetItemBonusStates entry disabled/enabled via STATLIST_ToggleStateDisabled based on the corresponding bit in nEquippedMask (the equipped-pieces bitmask). For addFunc==2 it derives a piece count and enables the first N bonus states while disabling the rest. Returns 1 if a set-bonus update was applied, 0 otherwise.

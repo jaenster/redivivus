@@ -211,7 +211,7 @@
         "D2WinSmack",
         "D2WinProgressBar",
         "D2WinAccountList",
-        "D2WinImageEx"
+        "D2WINIMAGE_CreateImageEx"
       ],
       "usedTypes": [
         "D2ControlStrc",

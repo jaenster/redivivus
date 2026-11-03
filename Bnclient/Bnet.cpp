@@ -8,6 +8,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static _RTL_CRITICAL_SECTION lpCriticalSection_00881860 = {}; D2_STATIC_GUARD(lpCriticalSection_00881860, "lpCriticalSection_00881860");
+
 namespace Bnclient::Bnet {
 
 int BNET_LogIndent(int32_t nIndentAction, int32_t nDelta) {

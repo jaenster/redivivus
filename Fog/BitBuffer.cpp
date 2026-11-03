@@ -8,6 +8,18 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static uint32_t gdwBitBufferSeed[9] = {
+    0x0,
+    0x1,
+    0x3,
+    0x7,
+    0xf,
+    0x1f,
+    0x3f,
+    0x7f,
+    0xff
+}; D2_STATIC_GUARD(gdwBitBufferSeed, "gdwBitBufferSeed");
+
 namespace Fog::BitBuffer {
 
 void __stdcall SetBitAtOffset(char * pBuffer, uint32_t nOffset) {

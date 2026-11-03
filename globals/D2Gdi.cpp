@@ -8,25 +8,9 @@
 
 
 // =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-RGBQUAD prgbq_00989c40[256] = {}; D2_GLOBAL_GUARD(prgbq_00989c40, "prgbq_00989c40");
-
-BYTE * gpGlidePaletteTableData[72] = {}; D2_GLOBAL_GUARD(gpGlidePaletteTableData, "gpGlidePaletteTableData");
-
-D2SmackerGlideBufferStrc gnSmackerGlideYOffset = {}; D2_GLOBAL_GUARD(gnSmackerGlideYOffset, "gnSmackerGlideYOffset");
-
-// =============================================================================
 // Initialized scalars
 // =============================================================================
 
-HPALETTE RENDERER_WINDOWED_hPalette = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hPalette, "RENDERER_WINDOWED_hPalette");
-HBITMAP RENDERER_WINDOWED_hDIBitmap = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hDIBitmap, "RENDERER_WINDOWED_hDIBitmap");
-uint32_t RENDERER_WINDOWED_nScaleOffsetY = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_nScaleOffsetY, "RENDERER_WINDOWED_nScaleOffsetY");
-uint32_t RENDERER_WINDOWED_nScaleWidth = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_nScaleWidth, "RENDERER_WINDOWED_nScaleWidth");
-HFONT RENDERER_WINDOWED_hDebugFont = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hDebugFont, "RENDERER_WINDOWED_hDebugFont");
-uint32_t gnSmackerDecodeState = 0; D2_GLOBAL_GUARD(gnSmackerDecodeState, "gnSmackerDecodeState");
 
 namespace D2Common::Drlg::Maze {
 

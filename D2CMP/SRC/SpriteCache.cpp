@@ -57,32 +57,11 @@ typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
 typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
 #endif
 
-namespace D2CMP::SRC::SpriteCache {
+static uint32_t bUseCompressedData = 0x1; D2_STATIC_GUARD(bUseCompressedData, "bUseCompressedData");
+static void* gpszExtDcc = (void*)&gszExtDcc; D2_STATIC_GUARD(gpszExtDcc, "gpszExtDcc");
+static void* gpszExtDc6 = (void*)&gszExtDc6; D2_STATIC_GUARD(gpszExtDc6, "gpszExtDc6");
 
-static char gszSrcFileSpriteCache[22] = {
-    '.',
-    '\\',
-    'S',
-    'R',
-    'C',
-    '\\',
-    'S',
-    'p',
-    'r',
-    'i',
-    't',
-    'e',
-    'C',
-    'a',
-    'c',
-    'h',
-    'e',
-    '.',
-    'c',
-    'p',
-    'p',
-    '\x00'
-}; D2_STATIC_GUARD(gszSrcFileSpriteCache, "D2CMP::SRC::SpriteCache::gszSrcFileSpriteCache");
+namespace D2CMP::SRC::SpriteCache {
 
 void __stdcall SPRITECACHE_Init(BOOL bFreeAll) {
     if (gbSpriteCacheLruInitialized) {

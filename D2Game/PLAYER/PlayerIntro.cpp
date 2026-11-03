@@ -43,10 +43,48 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitDataPlayerInteractedNPCStrc) 
 #endif
 
 
-namespace D2Game::PLAYER::PlayerIntro {
+static int gnNPCSpokenBitIndexMapCount = 0x23; D2_STATIC_GUARD(gnNPCSpokenBitIndexMapCount, "gnNPCSpokenBitIndexMapCount");
+static int gaNPCSpokenBitIndexMap[35][2] = {
+    { -0x1, 0x0 },
+    { 0x93, 0x1 },
+    { 0x94, 0x2 },
+    { 0x96, 0x3 },
+    { 0x9b, 0x4 },
+    { 0x9a, 0x5 },
+    { 0x109, 0x6 },
+    { 0xaf, 0x7 },
+    { 0xb0, 0x8 },
+    { 0xb1, 0x9 },
+    { 0xb2, 0xa },
+    { 0xca, 0xb },
+    { 0xc8, 0xc },
+    { 0xd2, 0xd },
+    { 0xc9, 0xe },
+    { 0xc6, 0xf },
+    { 0xc7, 0x10 },
+    { 0xf4, 0x11 },
+    { 0xf5, 0x12 },
+    { 0xf6, 0x13 },
+    { 0xfb, 0x14 },
+    { 0xfc, 0x15 },
+    { 0xfd, 0x16 },
+    { 0xfe, 0x17 },
+    { 0xff, 0x18 },
+    { 0x100, 0x19 },
+    { 0x101, 0x1a },
+    { 0x108, 0x1b },
+    { 0x129, 0x1c },
+    { 0x1ff, 0x1d },
+    { 0x200, 0x1e },
+    { 0x201, 0x1f },
+    { 0x202, 0x20 },
+    { 0x203, 0x21 },
+    { 0x208, 0x22 }
+}; D2_STATIC_GUARD(gaNPCSpokenBitIndexMap, "gaNPCSpokenBitIndexMap");
+static int gaNPCSpokenBitIndexMap_0__1_[35][2] = { 0 }; D2_STATIC_GUARD(gaNPCSpokenBitIndexMap_0__1_, "gaNPCSpokenBitIndexMap_0__1_");
+static int gaNPCSpokenBitIndexMap_1__0_[35][2] = { 0 }; D2_STATIC_GUARD(gaNPCSpokenBitIndexMap_1__0_, "gaNPCSpokenBitIndexMap_1__0_");
 
-static int gaNPCSpokenBitIndexMap_0__1_[35][2] = { 0 }; D2_STATIC_GUARD(gaNPCSpokenBitIndexMap_0__1_, "D2Game::PLAYER::PlayerIntro::gaNPCSpokenBitIndexMap_0__1_");
-static int gaNPCSpokenBitIndexMap_1__0_[35][2] = { 0 }; D2_STATIC_GUARD(gaNPCSpokenBitIndexMap_1__0_, "D2Game::PLAYER::PlayerIntro::gaNPCSpokenBitIndexMap_1__0_");
+namespace D2Game::PLAYER::PlayerIntro {
 
 void __fastcall PLAYER_SetSpokenWithNPC(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nMonStatsId) {
     int i;

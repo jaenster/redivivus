@@ -87,6 +87,10 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2InactiveMonsterRecordStrc) == 0x5
 static_assert(sizeof(void*) != 4 || sizeof(::D2InactiveUnitRecordStrc) == 0x34, "D2_NEW_AT(D2InactiveUnitRecordStrc): the 32-bit layout must be the 0x34 bytes 1.14d allocates");
 
 
+static uint32_t gpInactiveMonsterStateFlagSentinel = 0xdeaddead; D2_STATIC_GUARD(gpInactiveMonsterStateFlagSentinel, "gpInactiveMonsterStateFlagSentinel");
+static uint32_t gnMonsterStateFlagMask1 = 0x1; D2_STATIC_GUARD(gnMonsterStateFlagMask1, "gnMonsterStateFlagMask1");
+static uint32_t gnMonsterStateFlagMask2 = 0x2; D2_STATIC_GUARD(gnMonsterStateFlagMask2, "gnMonsterStateFlagMask2");
+
 namespace D2Game::UNIT::SUnitInactive {
 
 // @sourcefile .\UNIT\SUnitInactive.cpp

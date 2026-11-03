@@ -24,9 +24,21 @@
 #endif
 
 
-namespace D2Sound::Src::D2SoundFast {
+static uint32_t gnMusicEnabled = 0; D2_STATIC_GUARD(gnMusicEnabled, "gnMusicEnabled");
+static uint32_t gbSoundFastPathActive = 0; D2_STATIC_GUARD(gbSoundFastPathActive, "gbSoundFastPathActive");
+static uint32_t g_nSoundMixerType = 0; D2_STATIC_GUARD(g_nSoundMixerType, "g_nSoundMixerType");
+static uint32_t g_nSoundMasterVolume = 0; D2_STATIC_GUARD(g_nSoundMasterVolume, "g_nSoundMasterVolume");
+static uint32_t g_nSoundMusicVolume = 0; D2_STATIC_GUARD(g_nSoundMusicVolume, "g_nSoundMusicVolume");
+static uint32_t g_nSoundPositionalBias = 0; D2_STATIC_GUARD(g_nSoundPositionalBias, "g_nSoundPositionalBias");
+static uint32_t g_nSoundNpcSpeech = 0; D2_STATIC_GUARD(g_nSoundNpcSpeech, "g_nSoundNpcSpeech");
+static uint32_t g_nSoundOptionsMusic = 0; D2_STATIC_GUARD(g_nSoundOptionsMusic, "g_nSoundOptionsMusic");
+static _RTL_CRITICAL_SECTION lpCriticalSection_008817c4 = {}; D2_STATIC_GUARD(lpCriticalSection_008817c4, "lpCriticalSection_008817c4");
+static D2SoundSmpStrc * gpaSoundEffectBuffers[8] = {}; D2_STATIC_GUARD(gpaSoundEffectBuffers, "gpaSoundEffectBuffers");
+static D2SoundSmpStrc * nSoundEffectIndexValue[8] = { 0 }; D2_STATIC_GUARD(nSoundEffectIndexValue, "nSoundEffectIndexValue");
+static uint32_t gnSoundEffectSampleCount = 0; D2_STATIC_GUARD(gnSoundEffectSampleCount, "gnSoundEffectSampleCount");
+static void * gpWavFileCacheListHead = 0; D2_STATIC_GUARD(gpWavFileCacheListHead, "gpWavFileCacheListHead");
 
-static D2SoundSmpStrc * nSoundEffectIndexValue[8] = { 0 }; D2_STATIC_GUARD(nSoundEffectIndexValue, "D2Sound::Src::D2SoundFast::nSoundEffectIndexValue");
+namespace D2Sound::Src::D2SoundFast {
 
 BOOL __stdcall SOUND_IsAmbientStreaming() {
     if (gpMusicStreamBuffer) {

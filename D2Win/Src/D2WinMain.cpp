@@ -36,7 +36,6 @@
 #include "Storm/Storm.h"
 #include "Storm/WindowHandle.h"
 #include "globals/globals.h"
-#include "support/d2_control.h"
 #include "D2Client/UI/Panel.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Win/D2WinAccountList.h"
@@ -268,7 +267,7 @@ D2ControlStrc * __stdcall FORMS_CreateAnyForm(FORMS_PredefinedFormStrc * pForm) 
         pAnimImage = D2WinAnimImage(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->nExtraParam, pForm->fpOnPressCallback, (FORMS_AnimFrameStrc*)pForm->pTypeArg1, pForm->nLabelAsLocaleStringId, (fpD2WinAnimImageNotify)pForm->pTypeArg2);
       return (D2ControlStrc*)pAnimImage;
       case FORM_ImageEx:
-        pImageEx = D2WinImage::Create_D2WinImageEx(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->nExtraParam, pForm->nLabelAsLocaleStringId);
+        pImageEx = D2WinImage::D2WINIMAGE_CreateImageEx(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->nExtraParam, pForm->nLabelAsLocaleStringId);
       return (D2ControlStrc*)pImageEx;
       case FORM_Scrollbar:
         pScrollbar = D2WinScrollbar::D2WinScrollbar(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->fpOnPressCallback);
@@ -1145,7 +1144,6 @@ void __stdcall MessagePump(pfnFramePump pfnFrameCallback) {
     uint32_t nBudgetAccum = 0;
     while (gbMessageLoopActive) {
       BOOL hasMessage;
-      D2CONTROL_Pump(); D2LOUD_GuardPump();   // in-process test channel: applies queued input on THIS thread; loud build: walks the guard zones
       /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ hasMessage = PeekMessageA(&windowMsg, (HWND)0x0, 0, 0, 0);
       if (hasMessage) {
         /* UINT wMsgFilterMax for GetMessageA */ /* UINT wMsgFilterMin for GetMessageA */ /* HWND hWnd for GetMessageA */ /* LPMSG lpMsg for GetMessageA */ gbMessageLoopActive = GetMessageA(&windowMsg, (HWND)0x0, 0, 0);

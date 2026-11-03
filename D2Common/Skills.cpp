@@ -91,6 +91,56 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2SkillStrc) == 0x40, "D2_NEW_AT(D2
 typedef int (__fastcall *fnSkillCalcMethod)(int32_t nCalcCode, void * pContext);
 #endif
 
+static int INT_ARRAY_006eb308[16] = {
+    0x0,
+    0x1,
+    0x2,
+    0x4,
+    0x7,
+    0x8,
+    0x9,
+    0xa,
+    0xd,
+    0xe,
+    0xf,
+    0x10,
+    0x11,
+    0x13,
+    0x12,
+    0x3
+}; D2_STATIC_GUARD(INT_ARRAY_006eb308, "INT_ARRAY_006eb308");
+static D2ItemsEventMethodStrc gaSkillCalcMethods[7] = {
+    {
+        /* .pfnMethod = */ (pfnSkillCalcOp)&D2Common::Skills::SKILLS_Min,
+        /* .nArgCount = */ 0x2
+    },
+    {
+        /* .pfnMethod = */ (pfnSkillCalcOp)&D2Common::Skills::SKILLS_Max,
+        /* .nArgCount = */ 0x2
+    },
+    {
+        /* .pfnMethod = */ (pfnSkillCalcOp)&D2Common::Skills::SKILLS_RandomRange,
+        /* .nArgCount = */ 0x2
+    },
+    {
+        /* .pfnMethod = */ (pfnSkillCalcOp)&D2Common::Skills::SKILLS_EvalSkillDescCalc_CurrentLevel,
+        /* .nArgCount = */ 0x2
+    },
+    {
+        /* .pfnMethod = */ (pfnSkillCalcOp)&D2Common::Skills::SKILLS_GetMissileSpecialParam,
+        /* .nArgCount = */ 0x2
+    },
+    {
+        /* .pfnMethod = */ (pfnSkillCalcOp)&D2Common::Skills::SKILLS_GetUnitStatValue,
+        /* .nArgCount = */ 0x2
+    },
+    {
+        /* .pfnMethod = */ (pfnSkillCalcOp)&D2Common::Skills::SKILLS_EvalSkillDescCalc_Chained,
+        /* .nArgCount = */ 0x3
+    }
+}; D2_STATIC_GUARD(gaSkillCalcMethods, "gaSkillCalcMethods");
+static int32_t gnSkillCalcMethodCount = 0x7; D2_STATIC_GUARD(gnSkillCalcMethodCount, "gnSkillCalcMethodCount");
+
 namespace D2Common::Skills {
 
 // Calculates a skill parameter value using Param[6] and Param[7] from SkillsTxt. Formula: (level - 1) * Param[7] + Param[6]. Returns 0 if skill ID or level is invalid.

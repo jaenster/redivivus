@@ -45,9 +45,12 @@ typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpre
 typedef BOOL (__stdcall *pfnStormErrorHandler)(DWORD dwErrorCode, char * szBuffer, DWORD dwBufferSize);
 #endif
 
-namespace D2Hell {
+static LPCSTR lpCaption_006cc848 = (LPCSTR)s_Diablo_2_EXE_006cc838; D2_STATIC_GUARD(lpCaption_006cc848, "lpCaption_006cc848");
+static CRITICAL_SECTION gcsErrorHandlerList = {}; D2_STATIC_GUARD(gcsErrorHandlerList, "gcsErrorHandlerList");
+static uint32_t gbFaultHandlerListInitialized = 0; D2_STATIC_GUARD(gbFaultHandlerListInitialized, "gbFaultHandlerListInitialized");
+static pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_STATIC_GUARD(g_pfnFaultErrorCallback, "g_pfnFaultErrorCallback");
 
-static LPCSTR lpCaption_006cc848 = (LPCSTR)s_Diablo_2_EXE_006cc838; D2_STATIC_GUARD(lpCaption_006cc848, "D2Hell::lpCaption_006cc848");
+namespace D2Hell {
 
 void __fastcall D2FILE_CreateProcess(LPCSTR szText) {
     _STARTUPINFOA processInfo;

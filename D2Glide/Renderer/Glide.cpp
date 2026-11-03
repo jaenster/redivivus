@@ -54,9 +54,22 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NE
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 
-namespace D2Glide::Renderer::Glide {
+static GrTexInfo gTexInfoBlocks0Glide = {
+    /* .smallLodLog2 = */ 0x8,
+    /* .largeLodLog2 = */ 0x8,
+    /* .aspectRatioLog2 = */ 0x2,
+    /* .format = */ 0xa,
+    /* .data = */ nullptr
+}; D2_STATIC_GUARD(gTexInfoBlocks0Glide, "gTexInfoBlocks0Glide");
+static GrTexInfo gTexInfoBlocks1Glide = {
+    /* .smallLodLog2 = */ 0x8,
+    /* .largeLodLog2 = */ 0x8,
+    /* .aspectRatioLog2 = */ 0x2,
+    /* .format = */ 0xa,
+    /* .data = */ nullptr
+}; D2_STATIC_GUARD(gTexInfoBlocks1Glide, "gTexInfoBlocks1Glide");
 
-static uint8_t gnFontKerningTracking = 0x0; D2_STATIC_GUARD(gnFontKerningTracking, "D2Glide::Renderer::Glide::gnFontKerningTracking");
+namespace D2Glide::Renderer::Glide {
 
 void __fastcall ClearCaches() {
     glFloorCache::GLFLOOR_Destroy(&gGlideFloorTextureCache.dwEntrySize, nullptr);

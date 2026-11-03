@@ -18,6 +18,8 @@
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
 
+static IgnoreList * gpIgnoreList = 0; D2_STATIC_GUARD(gpIgnoreList, "gpIgnoreList");
+
 namespace D2Common::Chat::Ignorelist {
 
 void __stdcall IGNORELIST_Shutdown() {

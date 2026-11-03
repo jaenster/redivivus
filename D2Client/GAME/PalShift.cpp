@@ -49,6 +49,12 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2GamePalShiftGreenBloodStrc) == 0x
 #endif
 
 
+static void * gpMonsterPalShiftList = 0; D2_STATIC_GUARD(gpMonsterPalShiftList, "gpMonsterPalShiftList");
+static void * gpPalShiftEntryListHead = 0; D2_STATIC_GUARD(gpPalShiftEntryListHead, "gpPalShiftEntryListHead");
+static uint8_t PalShift_RandTransform[7680] = {}; D2_STATIC_GUARD(PalShift_RandTransform, "PalShift_RandTransform");
+static int gbPalShiftRandTransformLoaded = 0; D2_STATIC_GUARD(gbPalShiftRandTransformLoaded, "gbPalShiftRandTransformLoaded");
+static D2GamePalShiftGreenBloodStrc * PalShift_GreenBlood = 0; D2_STATIC_GUARD(PalShift_GreenBlood, "PalShift_GreenBlood");
+
 namespace D2Client::GAME::PalShift {
 
 // @sourcefile .\GAME\PalShift.cpp

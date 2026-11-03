@@ -16,16 +16,20 @@
 typedef uint8_t (__stdcall *pfnRGBToPaletteIndex)(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 #endif
 
-namespace D2CMP::Draw {
+static uint32_t gbTransparentColorEnabled = 0; D2_STATIC_GUARD(gbTransparentColorEnabled, "gbTransparentColorEnabled");
+static uint32_t gnPaletteMaxIndex = 0; D2_STATIC_GUARD(gnPaletteMaxIndex, "gnPaletteMaxIndex");
+static uint32_t gaColorDistanceLookupTable[512] = {}; D2_STATIC_GUARD(gaColorDistanceLookupTable, "gaColorDistanceLookupTable");
+static uint8_t gaPaletteMaskData[256] = {}; D2_STATIC_GUARD(gaPaletteMaskData, "gaPaletteMaskData");
+static uint32_t gnPaletteColorDepth = 0; D2_STATIC_GUARD(gnPaletteColorDepth, "gnPaletteColorDepth");
+static uint32_t gbPaletteLoaded = 0; D2_STATIC_GUARD(gbPaletteLoaded, "gbPaletteLoaded");
+static D2PaletteEntryStrc gaGlobalPaletteRed[256] = {}; D2_STATIC_GUARD(gaGlobalPaletteRed, "gaGlobalPaletteRed");
+static D2PaletteEntryStrc bTransparentColorEnabled1[256] = { {} }; D2_STATIC_GUARD(bTransparentColorEnabled1, "bTransparentColorEnabled1");
+static D2PaletteEntryStrc bTransparentColorEnabled0[256] = { {} }; D2_STATIC_GUARD(bTransparentColorEnabled0, "bTransparentColorEnabled0");
+static uint32_t gnDrawTransparentColorRGB = 0; D2_STATIC_GUARD(gnDrawTransparentColorRGB, "gnDrawTransparentColorRGB");
+static uint32_t gbBlackColorIsTransparent = 0; D2_STATIC_GUARD(gbBlackColorIsTransparent, "gbBlackColorIsTransparent");
+static uint32_t gbPaletteMaskEnabled = 0; D2_STATIC_GUARD(gbPaletteMaskEnabled, "gbPaletteMaskEnabled");
 
-// also labelled: gWpnClass_w_WeaponClass5
-static double gdConst360 = 360; D2_STATIC_GUARD(gdConst360, "D2CMP::Draw::gdConst360");
-// also labelled: gWpnClass_w_WeaponClass4
-static double gdConst60 = 60; D2_STATIC_GUARD(gdConst60, "D2CMP::Draw::gdConst60");
-// also labelled: gMercenary_t_TownEnumValue2
-static double gdConst0_2 = 0.200000002980232; D2_STATIC_GUARD(gdConst0_2, "D2CMP::Draw::gdConst0_2");
-static D2PaletteEntryStrc bTransparentColorEnabled1[256] = { {} }; D2_STATIC_GUARD(bTransparentColorEnabled1, "D2CMP::Draw::bTransparentColorEnabled1");
-static D2PaletteEntryStrc bTransparentColorEnabled0[256] = { {} }; D2_STATIC_GUARD(bTransparentColorEnabled0, "D2CMP::Draw::bTransparentColorEnabled0");
+namespace D2CMP::Draw {
 
 void __fastcall DRAW_ConvertPaletteRGBtoHSL(D2HSLColorStrc * pHSLOut, uint8_t * pRGBIn) {
     double dVar2;

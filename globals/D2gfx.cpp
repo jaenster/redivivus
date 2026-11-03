@@ -30,6 +30,7 @@ D2GFXWindowPlacementStrc gaD2GFXWindowPlacements[4] = {}; D2_GLOBAL_GUARD(gaD2GF
 // Initialized scalars
 // =============================================================================
 
+D2GfxSettingsStrc dwD2GFX_Gamma = {}; D2_GLOBAL_GUARD(dwD2GFX_Gamma, "dwD2GFX_Gamma");
 BOOL bAspect = 0x1; D2_GLOBAL_GUARD(bAspect, "bAspect");
 uint32_t IsOSCursorVisible = 0x1; D2_GLOBAL_GUARD(IsOSCursorVisible, "IsOSCursorVisible");
 // also labelled: gnGFXUnknownA

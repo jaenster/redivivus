@@ -30,22 +30,22 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-namespace D2Common::Txt::Cube {
+static uint8_t gaCubeRecipeItemTypeFlags_25 = 0x65; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_25, "gaCubeRecipeItemTypeFlags_25");
+static uint8_t gaCubeRecipeItemTypeFlags_24 = 0x65; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_24, "gaCubeRecipeItemTypeFlags_24");
+static uint8_t gaCubeRecipeItemTypeFlags_21 = 0x65; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_21, "gaCubeRecipeItemTypeFlags_21");
+static uint8_t gaCubeRecipeItemTypeFlags_18 = 0x74; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_18, "gaCubeRecipeItemTypeFlags_18");
+static uint8_t gaCubeRecipeItemTypeFlags_17 = 0x63; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_17, "gaCubeRecipeItemTypeFlags_17");
+static uint8_t gaCubeRecipeItemTypeFlags_16 = 0x75; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_16, "gaCubeRecipeItemTypeFlags_16");
+static uint8_t gaCubeRecipeItemTypeFlags_15 = 0x72; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_15, "gaCubeRecipeItemTypeFlags_15");
+static uint8_t gaCubeRecipeItemTypeFlags_14 = 0x6d; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_14, "gaCubeRecipeItemTypeFlags_14");
+static uint8_t gaCubeRecipeItemTypeFlags_13 = 0x68; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_13, "gaCubeRecipeItemTypeFlags_13");
+static uint8_t gaCubeRecipeItemTypeFlags_12 = 0x6e; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_12, "gaCubeRecipeItemTypeFlags_12");
+static uint8_t gaCubeRecipeItemTypeFlags_11 = 0x6c; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_11, "gaCubeRecipeItemTypeFlags_11");
+static uint8_t gaCubeRecipeItemTypeFlags_10 = 0x71; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_10, "gaCubeRecipeItemTypeFlags_10");
+static char gaCubeRecipeItemTypeFlags_9[3] = { '=', ',', '\x00' }; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_9, "gaCubeRecipeItemTypeFlags_9");
+static char gaCubeRecipeItemTypeFlags_7[2] = { ',', '\x00' }; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_7, "gaCubeRecipeItemTypeFlags_7");
 
-static uint8_t gaCubeRecipeItemTypeFlags_25 = 0x65; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_25, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_25");
-static uint8_t gaCubeRecipeItemTypeFlags_24 = 0x65; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_24, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_24");
-static uint8_t gaCubeRecipeItemTypeFlags_21 = 0x65; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_21, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_21");
-static uint8_t gaCubeRecipeItemTypeFlags_18 = 0x74; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_18, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_18");
-static uint8_t gaCubeRecipeItemTypeFlags_17 = 0x63; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_17, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_17");
-static uint8_t gaCubeRecipeItemTypeFlags_16 = 0x75; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_16, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_16");
-static uint8_t gaCubeRecipeItemTypeFlags_15 = 0x72; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_15, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_15");
-static uint8_t gaCubeRecipeItemTypeFlags_14 = 0x6d; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_14, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_14");
-static uint8_t gaCubeRecipeItemTypeFlags_13 = 0x68; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_13, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_13");
-static uint8_t gaCubeRecipeItemTypeFlags_12 = 0x6e; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_12, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_12");
-static uint8_t gaCubeRecipeItemTypeFlags_11 = 0x6c; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_11, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_11");
-static uint8_t gaCubeRecipeItemTypeFlags_10 = 0x71; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_10, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_10");
-static char gaCubeRecipeItemTypeFlags_9[3] = { '=', ',', '\x00' }; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_9, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_9");
-static char gaCubeRecipeItemTypeFlags_7[2] = { ',', '\x00' }; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_7, "D2Common::Txt::Cube::gaCubeRecipeItemTypeFlags_7");
+namespace D2Common::Txt::Cube {
 
 // Pads item code strings with spaces to 4 characters. Copies input string to output buffer and fills remaining characters with spaces (0x20). Used when parsing cube recipe item codes from CubMain.txt to normalize them for comparison.
 static void CUBE_PadItemCodeString(char * szText1, char * szText2) {

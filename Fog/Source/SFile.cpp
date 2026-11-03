@@ -19,10 +19,9 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-namespace Fog::Source::SFile {
+static BOOL D2Ini_bUseDirect = 0x0; D2_STATIC_GUARD(D2Ini_bUseDirect, "D2Ini_bUseDirect");
 
-static double gdFogJulianDaysPerYear = 365.25; D2_STATIC_GUARD(gdFogJulianDaysPerYear, "Fog::Source::SFile::gdFogJulianDaysPerYear");
-static double gdFogJulianDaysPerMonth = 30.6001000000000; D2_STATIC_GUARD(gdFogJulianDaysPerMonth, "Fog::Source::SFile::gdFogJulianDaysPerMonth");
+namespace Fog::Source::SFile {
 
 void __fastcall SFILE_InitializeFileSystem(BOOL bResult, BOOL bSeekOptimization) {
     uint32_t dwSysOptionBuf[2];

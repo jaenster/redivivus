@@ -7,6 +7,91 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static D2UIFlagInitStrc gUIFlagGeneralInit[3] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::Cursor::UI_HandleMousePositionUpdate
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0xa0,
+        /* .pfHandler = */ &D2Client::Cursor::UI_HandleCursorMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::Cursor::UI_HandleCursorMouseUp
+    }
+}; D2_STATIC_GUARD(gUIFlagGeneralInit, "gUIFlagGeneralInit");
+static D2CursorDataStrc CursorData[7] = {
+    {
+        /* .bAnimated = */ 0x0,
+        /* .nFrameOffset = */ 0x0,
+        /* .nMaxFrames = */ 0x1,
+        /* .nAnimStep = */ 0x0,
+        /* .bKeyPressSwitch = */ 0x1,
+        /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
+        /* .szCursorname = */ s_Gaunt_006d6b80
+    },
+    {
+        /* .bAnimated = */ 0x1,
+        /* .nFrameOffset = */ 0x0,
+        /* .nMaxFrames = */ 0x8,
+        /* .nAnimStep = */ 0x0,
+        /* .bKeyPressSwitch = */ 0x1,
+        /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
+        /* .szCursorname = */ s_grasp_006d6b78
+    },
+    {
+        /* .bAnimated = */ 0x1,
+        /* .nFrameOffset = */ 0x0,
+        /* .nMaxFrames = */ 0x8,
+        /* .nAnimStep = */ 0x40,
+        /* .bKeyPressSwitch = */ 0x1,
+        /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
+        /* .szCursorname = */ s_ohand_006d6b70
+    },
+    {
+        /* .bAnimated = */ 0x1,
+        /* .nFrameOffset = */ 0x1,
+        /* .nMaxFrames = */ 0x8,
+        /* .nAnimStep = */ 0x20,
+        /* .bKeyPressSwitch = */ 0x1,
+        /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
+        /* .szCursorname = */ s_orotate_006d6b68
+    },
+    {
+        /* .bAnimated = */ 0x1,
+        /* .nFrameOffset = */ 0x1,
+        /* .nMaxFrames = */ 0x8,
+        /* .nAnimStep = */ 0x40,
+        /* .bKeyPressSwitch = */ 0x1,
+        /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
+        /* .szCursorname = */ s_ppress_006d6b60
+    },
+    {
+        /* .bAnimated = */ 0x1,
+        /* .nFrameOffset = */ 0x1,
+        /* .nMaxFrames = */ 0x8,
+        /* .nAnimStep = */ 0x40,
+        /* .bKeyPressSwitch = */ 0x1,
+        /* .pFunction = */ &D2Client::Cursor::MOUSE_DrawCursorSprite,
+        /* .szCursorname = */ s_protate_006d6b58
+    },
+    {
+        /* .bAnimated = */ 0x0,
+        /* .nFrameOffset = */ 0x0,
+        /* .nMaxFrames = */ 0x1,
+        /* .nAnimStep = */ 0x0,
+        /* .bKeyPressSwitch = */ 0x0,
+        /* .pFunction = */ &D2Client::Cursor::UI_DrawCursorIcon,
+        /* .szCursorname = */ s_buysell_006d6b50
+    }
+}; D2_STATIC_GUARD(CursorData, "CursorData");
+static int gnCursorDataCount = 0x7; D2_STATIC_GUARD(gnCursorDataCount, "gnCursorDataCount");
+static int gnCursorInitialized = 0; D2_STATIC_GUARD(gnCursorInitialized, "gnCursorInitialized");
+
 namespace D2Client::Cursor {
 
 // Returns CursorData[nCursor].bAnimated. Halts (Cursor.cpp line 132, assert NUM_CURSORS == nCursorTableSize) unless gnCursorDataCount is 7, and (line 133) when nCursor >= 7.

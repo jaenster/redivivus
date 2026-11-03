@@ -42,6 +42,16 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NE
 #endif
 
 
+static RGBQUAD prgbq_00989c40[256] = {}; D2_STATIC_GUARD(prgbq_00989c40, "prgbq_00989c40");
+static BYTE * gpGlidePaletteTableData[72] = {}; D2_STATIC_GUARD(gpGlidePaletteTableData, "gpGlidePaletteTableData");
+static HPALETTE RENDERER_WINDOWED_hPalette = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_hPalette, "RENDERER_WINDOWED_hPalette");
+static HBITMAP RENDERER_WINDOWED_hDIBitmap = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_hDIBitmap, "RENDERER_WINDOWED_hDIBitmap");
+static uint32_t RENDERER_WINDOWED_nScaleOffsetY = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_nScaleOffsetY, "RENDERER_WINDOWED_nScaleOffsetY");
+static uint32_t RENDERER_WINDOWED_nScaleWidth = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_nScaleWidth, "RENDERER_WINDOWED_nScaleWidth");
+static HFONT RENDERER_WINDOWED_hDebugFont = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_hDebugFont, "RENDERER_WINDOWED_hDebugFont");
+static D2SmackerGlideBufferStrc gnSmackerGlideYOffset = {}; D2_STATIC_GUARD(gnSmackerGlideYOffset, "gnSmackerGlideYOffset");
+static uint32_t gnSmackerDecodeState = 0; D2_STATIC_GUARD(gnSmackerDecodeState, "gnSmackerDecodeState");
+
 namespace D2Gdi::Renderer::Windowed {
 
 // @sourcefile .\Src\gdiCore.cpp

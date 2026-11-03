@@ -38,6 +38,8 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 typedef BOOL (__fastcall *DrawEx)(D2ControlStrc * pControl);
 #endif
 
+static D2WinPopup * gpD2WinPopupControl = 0; D2_STATIC_GUARD(gpD2WinPopupControl, "gpD2WinPopupControl");
+
 namespace D2Win::Src::D2WinPopup {
 
 // Destroys the global popup control if it exists. Calls FORMS_DestroyControl and clears the global pointer.

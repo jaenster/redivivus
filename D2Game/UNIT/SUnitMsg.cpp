@@ -84,9 +84,11 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStr
 typedef void (__fastcall *fnUpdateGameInformation)(int nCharClassId, int nLevelDelta);
 #endif
 
-namespace D2Game::UNIT::SUnitMsg {
+static uint32_t gaStartingLevelByAct[5] = { 0x1, 0xf, 0x14, 0x1a, 0x20 }; D2_STATIC_GUARD(gaStartingLevelByAct, "gaStartingLevelByAct");
+static uint32_t gaStartingLevelByAct_act5[5] = { 0 }; D2_STATIC_GUARD(gaStartingLevelByAct_act5, "gaStartingLevelByAct_act5");
+static int gnActCount = 0x5; D2_STATIC_GUARD(gnActCount, "gnActCount");
 
-static uint32_t gaStartingLevelByAct_act5[5] = { 0 }; D2_STATIC_GUARD(gaStartingLevelByAct_act5, "D2Game::UNIT::SUnitMsg::gaStartingLevelByAct_act5");
+namespace D2Game::UNIT::SUnitMsg {
 
 void __stdcall PLAYER_SetStartingLevelForAct(uint8_t nAct, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t uVar1 = (uint32_t)nAct;

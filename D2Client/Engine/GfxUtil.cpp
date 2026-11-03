@@ -66,6 +66,12 @@
 #endif
 
 
+static int gPlrModeTokens[20] = {}; D2_STATIC_GUARD(gPlrModeTokens, "gPlrModeTokens");
+static int gTxtCompositTokens[16] = {}; D2_STATIC_GUARD(gTxtCompositTokens, "gTxtCompositTokens");
+static int gObjModeTokens[8] = {}; D2_STATIC_GUARD(gObjModeTokens, "gObjModeTokens");
+static int gMonModeTokens[16] = {}; D2_STATIC_GUARD(gMonModeTokens, "gMonModeTokens");
+static int gArmTypeTokens[3] = {}; D2_STATIC_GUARD(gArmTypeTokens, "gArmTypeTokens");
+
 namespace D2Client::Engine::GfxUtil {
 
 static void GFXUTIL_PadTokenString(char * szText1, char * szText2) {

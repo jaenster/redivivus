@@ -106,6 +106,25 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2GfxInfoStrc) == 0x3c, "D2_NEW_AT(
 static_assert(sizeof(void*) != 4 || sizeof(::D2GfxUnknown_0xa8) == 0xa8, "D2_NEW_AT(D2GfxUnknown_0xa8): the 32-bit layout must be the 0xa8 bytes 1.14d allocates");
 
 
+static uint32_t gaMonsterModePrecacheEntries[15] = {
+    0xc,
+    0x0,
+    0x1,
+    0x2,
+    0xf,
+    0x4,
+    0x3,
+    0x5,
+    0x7,
+    0x6,
+    0xd,
+    0x8,
+    0x9,
+    0xa,
+    0xb
+}; D2_STATIC_GUARD(gaMonsterModePrecacheEntries, "gaMonsterModePrecacheEntries");
+static uint32_t gnMonsterModePrecacheCount = 0xf; D2_STATIC_GUARD(gnMonsterModePrecacheCount, "gnMonsterModePrecacheCount");
+
 namespace D2Client::Engine::Gfx {
 
 D2InventoryStrc * __fastcall CLIENT_GetEffectiveInventory(D2UnitStrc * pUnit, int * pUnit2) {

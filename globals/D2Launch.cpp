@@ -15,6 +15,10 @@
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
+char dwIntroFrameRate_24_36[8] = { "640x146" }; D2_GLOBAL_GUARD(dwIntroFrameRate_24_36, "dwIntroFrameRate_24_36");
+
+char dwIntroFrameRate_29_32[8] = { "640x292" }; D2_GLOBAL_GUARD(dwIntroFrameRate_29_32, "dwIntroFrameRate_29_32");
+
 uint8_t gaNewCharDefaultEquipTemplate[16] = {
     0x1,
     0x1,
@@ -3702,25 +3706,6 @@ FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
     }
 }; D2_GLOBAL_GUARD(gaPredefinedForms, "gaPredefinedForms");
 
-uint8_t gaNewCharDefaultAppearance[16] = {
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0x1,
-    0xff,
-    0xff,
-    0xff,
-    0x1,
-    0x1,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff
-}; D2_GLOBAL_GUARD(gaNewCharDefaultAppearance, "gaNewCharDefaultAppearance");
-
 D2ControlStrc * FORMS_pListExEx[64] = {}; D2_GLOBAL_GUARD(FORMS_pListExEx, "FORMS_pListExEx");
 
 D2ControlStrc * FORMS_pList[64] = {}; D2_GLOBAL_GUARD(FORMS_pList, "FORMS_pList");
@@ -3776,9 +3761,6 @@ char * gpszPaletteSkyPl2[4] = {}; D2_GLOBAL_GUARD(gpszPaletteSkyPl2, "gpszPalett
 // also labelled: gnClassDescriptionTooltipUnitId
 uint32_t gnClassDescriptionTooltipClassId = -0x1; D2_GLOBAL_GUARD(gnClassDescriptionTooltipClassId, "gnClassDescriptionTooltipClassId");
 int gnClassDescriptionTooltipState = -0x1; D2_GLOBAL_GUARD(gnClassDescriptionTooltipState, "gnClassDescriptionTooltipState");
-int gnCharSelLoadMoreEntryIndex = -0x3e7; D2_GLOBAL_GUARD(gnCharSelLoadMoreEntryIndex, "gnCharSelLoadMoreEntryIndex");
-int gnCharSelLoadingEntryIndex = -0x3e7; D2_GLOBAL_GUARD(gnCharSelLoadingEntryIndex, "gnCharSelLoadingEntryIndex");
-int gnCharSelScreenSlotCount = 0x5; D2_GLOBAL_GUARD(gnCharSelScreenSlotCount, "gnCharSelScreenSlotCount");
 uint32_t gbTermsOfServiceCancelled = 0; D2_GLOBAL_GUARD(gbTermsOfServiceCancelled, "gbTermsOfServiceCancelled");
 D2ControlStrc * bCharacterCreationInProgress = 0; D2_GLOBAL_GUARD(bCharacterCreationInProgress, "bCharacterCreationInProgress");
 // also labelled: gbPasswordChangeInProgress

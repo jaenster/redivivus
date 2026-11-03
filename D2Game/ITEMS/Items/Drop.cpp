@@ -76,6 +76,8 @@
 typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArgs);
 #endif
 
+static D2UniqueCandidatePoolStrc gUniqueCandidatePool = {}; D2_STATIC_GUARD(gUniqueCandidatePool, "gUniqueCandidatePool");
+
 namespace D2Game::ITEMS::Items::Drop {
 
 D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType) {

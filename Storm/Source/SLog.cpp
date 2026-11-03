@@ -10,6 +10,9 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static CRITICAL_SECTION gaSLogCritSect[4] = {}; D2_STATIC_GUARD(gaSLogCritSect, "gaSLogCritSect");
+static D2SLogStrc * gaSLogHead[4] = {}; D2_STATIC_GUARD(gaSLogHead, "gaSLogHead");
+
 namespace Storm::Source::SLog {
 
 // @blizzard FlushLog (SLOG.CPP)

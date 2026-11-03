@@ -6,6 +6,7 @@
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Win/D2WinImage.h"
+#include "D2Win/D2WinImageEx.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
 #include "D2Win/Src/D2WinMain.h"
@@ -15,7 +16,6 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
-#include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/Src/D2WinFont.h"
 
@@ -388,7 +388,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 }
 
 // @sourcefile .\Src\D2WinImage.cpp
-D2WinImageEx * __fastcall Create_D2WinImageEx(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, int32_t nBorderX, int32_t nBorderY) {
+D2WinImageEx * __fastcall D2WINIMAGE_CreateImageEx(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, int32_t nBorderX, int32_t nBorderY) {
     D2WinImageEx* pNewImageEx = D2_NEW_AT(D2WinImageEx, ".\\Src\\D2WinImage.cpp", 0x3b);
     memset(pNewImageEx, 0, 0x54);
     pNewImageEx->sImage.sControl.neD2FormType = FORM_Image;

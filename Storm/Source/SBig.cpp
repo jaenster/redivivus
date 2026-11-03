@@ -20,6 +20,10 @@
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
 
+static char s__I_00708874[4] = { '.', 'I', '\x00', '\x00' }; D2_STATIC_GUARD(s__I_00708874, "s__I_00708874");
+static char s__E_00708880[4] = { '.', 'E', '\x00', '\x00' }; D2_STATIC_GUARD(s__E_00708880, "s__E_00708880");
+static char s__D_0070888c[4] = { '.', 'D', '\x00', '\x00' }; D2_STATIC_GUARD(s__D_0070888c, "s__D_0070888c");
+
 namespace Storm::Source::SBig {
 
 //   pnAccum: ESI:4 (uint *) - points at a 64-bit lo/hi pair

@@ -37,6 +37,10 @@
 typedef int (__stdcall *pfnCheckRevision)(LPCSTR szFile1, LPCSTR szFile2, LPCSTR szFile3, LPCSTR szValueString, DWORD * pdwVersion, DWORD * pdwChecksum, uint8_t * pbStatstring);
 #endif
 
+static unsigned int gbBnetDownloadCancelFlag = {}; D2_STATIC_GUARD(gbBnetDownloadCancelFlag, "gbBnetDownloadCancelFlag");
+static char lpFileName_00881c58[260] = {}; D2_STATIC_GUARD(lpFileName_00881c58, "lpFileName_00881c58");
+static LONG * lpAddend_00881d5c = 0; D2_STATIC_GUARD(lpAddend_00881d5c, "lpAddend_00881d5c");
+
 namespace Bnclient::BnDownload {
 
 static void __stdcall BNDOWNLOAD_WriteFileWithTimestamp(LPCSTR pThis, LPCVOID pData, DWORD nNumberOfBytesToWrite, FILETIME * pFileTime) {

@@ -64,7 +64,7 @@ BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 // @sourcefile .\Src\D2WinImage.cpp
 ::D2WinImage * __fastcall D2WinImage(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, struct DC6 * pDC6, OnPress pfnOnPress, struct D2WinImageHitArea * pHitAreas, ::Key pKey);
 // @sourcefile .\Src\D2WinImage.cpp
-struct D2WinImageEx * __fastcall Create_D2WinImageEx(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, struct DC6 * pDC6, int32_t nBorderX, int32_t nBorderY);
+struct D2WinImageEx * __fastcall D2WINIMAGE_CreateImageEx(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, struct DC6 * pDC6, int32_t nBorderX, int32_t nBorderY);
 // 1 internal function (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinImage

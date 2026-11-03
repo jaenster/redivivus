@@ -15,265 +15,6 @@
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-uint8_t gaBnetCdKeyCharDecodeTable[256] = {
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0x0,
-    0xff,
-    0x1,
-    0xff,
-    0x2,
-    0x3,
-    0x4,
-    0x5,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0x6,
-    0x7,
-    0x8,
-    0x9,
-    0xa,
-    0xb,
-    0xc,
-    0xff,
-    0xd,
-    0xe,
-    0xff,
-    0xf,
-    0x10,
-    0xff,
-    0x11,
-    0xff,
-    0x12,
-    0xff,
-    0x13,
-    0xff,
-    0x14,
-    0x15,
-    0x16,
-    0xff,
-    0x17,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0x6,
-    0x7,
-    0x8,
-    0x9,
-    0xa,
-    0xb,
-    0xc,
-    0xff,
-    0xd,
-    0xe,
-    0xff,
-    0xf,
-    0x10,
-    0xff,
-    0x11,
-    0xff,
-    0x12,
-    0xff,
-    0x13,
-    0xff,
-    0x14,
-    0x15,
-    0x16,
-    0xff,
-    0x17,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff,
-    0xff
-}; D2_GLOBAL_GUARD(gaBnetCdKeyCharDecodeTable, "gaBnetCdKeyCharDecodeTable");
-
 char * gaszChatDlgProfileKeys[3] = { s_profile_sex_006d4ee0, s_profile_location_006d4ecc, s_profile_description_006d4eb8 }; D2_GLOBAL_GUARD(gaszChatDlgProfileKeys, "gaszChatDlgProfileKeys");
 
 FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
@@ -1698,73 +1439,6 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
     }
 }; D2_GLOBAL_GUARD(gaPredefinedForms_b, "gaPredefinedForms_b");
 
-FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e920 = {
-    /* .neD2FormType = */ FORM_Button,
-    /* .aParams = */ { 0x1b1, 0x1b1, 0x60, 0x20 },
-    /* .nExtraParam = */ 0x0,
-    /* .nLabelAsLocaleStringId = */ 0x13ef,
-    /* .pDC6 = */ &gpLauncherImageResource2,
-    /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressProfileClose,
-    /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ nullptr,
-    /* .nFlagsOrType = */ 0x0
-}; D2_GLOBAL_GUARD(FORMS_PredefinedFormStrc_0070e920, "FORMS_PredefinedFormStrc_0070e920");
-
-FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e950 = {
-    /* .neD2FormType = */ FORM_Button,
-    /* .aParams = */ { 0x29f, 0x1b1, 0x60, 0x20 },
-    /* .nExtraParam = */ 0x0,
-    /* .nLabelAsLocaleStringId = */ 0x13ee,
-    /* .pDC6 = */ &gpLauncherImageResource2,
-    /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressProfileOK,
-    /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ nullptr,
-    /* .nFlagsOrType = */ 0x0
-}; D2_GLOBAL_GUARD(FORMS_PredefinedFormStrc_0070e950, "FORMS_PredefinedFormStrc_0070e950");
-
-FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e980 = {
-    /* .neD2FormType = */ FORM_Button,
-    /* .aParams = */ { 0x228, 0x1b1, 0x60, 0x20 },
-    /* .nExtraParam = */ 0x0,
-    /* .nLabelAsLocaleStringId = */ 0x14c3,
-    /* .pDC6 = */ &gpLauncherImageResource2,
-    /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressProfileLadder,
-    /* .pTypeArg1 = */ nullptr,
-    /* .pTypeArg2 = */ nullptr,
-    /* .nFlagsOrType = */ 0x0
-}; D2_GLOBAL_GUARD(FORMS_PredefinedFormStrc_0070e980, "FORMS_PredefinedFormStrc_0070e980");
-
-char gszOogLevelRestrictionText[4] = { '4', '\x00', '\x00', '\x00' }; D2_GLOBAL_GUARD(gszOogLevelRestrictionText, "gszOogLevelRestrictionText");
-
-char gszOogMaxPlayersText[4] = { '4', '\x00', '\x00', '\x00' }; D2_GLOBAL_GUARD(gszOogMaxPlayersText, "gszOogMaxPlayersText");
-
-pfnComCallback gaComCallbackDispatch[24] = {
-    &D2Multi::ComCallback::COMCALLBACK_ReturnTrue,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AddChannelUser,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_Unused3,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleChannelUserLeave,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleWhisperReply,
-    &D2Multi::ComCallback::COMCALLBACK_HandleWhisperMessage,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AppendErrorMessage,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleJoinedChannel,
-    &D2Multi::ComCallback::COMCALLBACK_ReturnFalse,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleChannelJoin,
-    &D2Multi::ComCallback::COMCALLBACK_ProcessEmoteCommand,
-    &D2Multi::ComCallback::COMCALLBACK_ReturnFalse,
-    &D2Multi::ComCallback::COMCALLBACK_ReturnFalse,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleInfoRequest1,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleGameListError,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleInfoRequest2,
-    &D2Multi::ComCallback::COMCALLBACK_ReturnFalse,
-    &D2Multi::ComCallback::COMCALLBACK_ReturnFalse,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AppendErrorMessage,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AppendInfoMessage,
-    &D2Multi::ComCallback::COMCALLBACK_ReturnFalse,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AppendErrorMessage,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AppendErrorMessage,
-    &D2Multi::ComCallback::COMCALLBACK_ProcessWhisperCommand
-}; D2_GLOBAL_GUARD(gaComCallbackDispatch, "gaComCallbackDispatch");
-
 D2WinButton * gaChatUserListButtonArray[11] = {}; D2_GLOBAL_GUARD(gaChatUserListButtonArray, "gaChatUserListButtonArray");
 
 D2ControlStrc * FORMS_pListEx[32] = {}; D2_GLOBAL_GUARD(FORMS_pListEx, "FORMS_pListEx");
@@ -1783,8 +1457,6 @@ D2LobbyControlsStrc gpLobbyForm0 = {}; D2_GLOBAL_GUARD(gpLobbyForm0, "gpLobbyFor
 char * gapszProfileReadBuffers[3] = {}; D2_GLOBAL_GUARD(gapszProfileReadBuffers, "gapszProfileReadBuffers");
 
 char gszOogReplyCommandBuffer[256] = {}; D2_GLOBAL_GUARD(gszOogReplyCommandBuffer, "gszOogReplyCommandBuffer");
-
-char gaChatDlgHistoryBuffer[10][256] = {}; D2_GLOBAL_GUARD(gaChatDlgHistoryBuffer, "gaChatDlgHistoryBuffer");
 
 D2GameListEntryStrc gbLanGameListEntryNamePadding2[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding2, "gbLanGameListEntryNamePadding2");
 
@@ -1811,8 +1483,6 @@ uint32_t gbLadderExpansionEnabled = 0x1; D2_GLOBAL_GUARD(gbLadderExpansionEnable
 int gnChatTabCompletionIndex = -0x1; D2_GLOBAL_GUARD(gnChatTabCompletionIndex, "gnChatTabCompletionIndex");
 int gnLadderBoardSelectedRank = -0x1; D2_GLOBAL_GUARD(gnLadderBoardSelectedRank, "gnLadderBoardSelectedRank");
 uint32_t gnLadderRequestedCharIndex = -0x1; D2_GLOBAL_GUARD(gnLadderRequestedCharIndex, "gnLadderRequestedCharIndex");
-int32_t gnPendingGameInfoCharIndex = -0x1; D2_GLOBAL_GUARD(gnPendingGameInfoCharIndex, "gnPendingGameInfoCharIndex");
-uint32_t gnCurrentChannelContextId = -0x1; D2_GLOBAL_GUARD(gnCurrentChannelContextId, "gnCurrentChannelContextId");
 // also labelled: gnChatRoomListScrollStartPos
 int32_t gnLadderEntryTotal = 0; D2_GLOBAL_GUARD(gnLadderEntryTotal, "gnLadderEntryTotal");
 // also labelled: gnChatRoomListScrollPos
@@ -1823,7 +1493,6 @@ int gnLadderScrollPageSize = 0; D2_GLOBAL_GUARD(gnLadderScrollPageSize, "gnLadde
 uint32_t ghBannerAdProcess = 0; D2_GLOBAL_GUARD(ghBannerAdProcess, "ghBannerAdProcess");
 D2IniConfigStrc * D2IniData_multiplayer = 0; D2_GLOBAL_GUARD(D2IniData_multiplayer, "D2IniData_multiplayer");
 uint16_t LastGameRequestId = 0; D2_GLOBAL_GUARD(LastGameRequestId, "LastGameRequestId");
-uint16_t gwLastGameInfoRequestId = 0; D2_GLOBAL_GUARD(gwLastGameInfoRequestId, "gwLastGameInfoRequestId");
 void * gpChatFormList = 0; D2_GLOBAL_GUARD(gpChatFormList, "gpChatFormList");
 int FORMS_nListExCount = 0; D2_GLOBAL_GUARD(FORMS_nListExCount, "FORMS_nListExCount");
 uint32_t gbLadderNewsExpanded = 0; D2_GLOBAL_GUARD(gbLadderNewsExpanded, "gbLadderNewsExpanded");
@@ -1868,14 +1537,6 @@ DC6 * gpDC6PaladinTab = 0; D2_GLOBAL_GUARD(gpDC6PaladinTab, "gpDC6PaladinTab");
 DC6 * gpDC6BarbarianTab = 0; D2_GLOBAL_GUARD(gpDC6BarbarianTab, "gpDC6BarbarianTab");
 DC6 * gpDC6DruidTab = 0; D2_GLOBAL_GUARD(gpDC6DruidTab, "gpDC6DruidTab");
 DC6 * gpDC6AssassinTab = 0; D2_GLOBAL_GUARD(gpDC6AssassinTab, "gpDC6AssassinTab");
-D2WinButton * gpCtlLadderBtnOverall = 0; D2_GLOBAL_GUARD(gpCtlLadderBtnOverall, "gpCtlLadderBtnOverall");
-D2WinButton * gpCtlLadderBtnAmazon = 0; D2_GLOBAL_GUARD(gpCtlLadderBtnAmazon, "gpCtlLadderBtnAmazon");
-D2WinButton * gpCtlLadderBtnSorceress = 0; D2_GLOBAL_GUARD(gpCtlLadderBtnSorceress, "gpCtlLadderBtnSorceress");
-D2WinButton * gpCtlLadderBtnNecromancer = 0; D2_GLOBAL_GUARD(gpCtlLadderBtnNecromancer, "gpCtlLadderBtnNecromancer");
-D2WinButton * gpCtlLadderBtnPaladin = 0; D2_GLOBAL_GUARD(gpCtlLadderBtnPaladin, "gpCtlLadderBtnPaladin");
-D2WinButton * gpCtlLadderBtnBarbarian = 0; D2_GLOBAL_GUARD(gpCtlLadderBtnBarbarian, "gpCtlLadderBtnBarbarian");
-D2WinButton * gpCtlLadderBtnDruid = 0; D2_GLOBAL_GUARD(gpCtlLadderBtnDruid, "gpCtlLadderBtnDruid");
-D2WinButton * gpCtlLadderBtnAssassin = 0; D2_GLOBAL_GUARD(gpCtlLadderBtnAssassin, "gpCtlLadderBtnAssassin");
 DC6 * gpDC6SquelchAura = 0; D2_GLOBAL_GUARD(gpDC6SquelchAura, "gpDC6SquelchAura");
 DC6 * gpDC6SelectAura = 0; D2_GLOBAL_GUARD(gpDC6SelectAura, "gpDC6SelectAura");
 DC6 * gpDC6NumberArrows1 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows1, "gpDC6NumberArrows1");
@@ -1899,7 +1560,6 @@ D2ControlStrc * gpCtlChannelOkButton = 0; D2_GLOBAL_GUARD(gpCtlChannelOkButton, 
 D2ControlStrc * gpCtlChannelDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgCancelButton, "gpCtlChannelDlgCancelButton");
 // also labelled: gpChatDlgSendButtonControl
 D2WinEditBox * gpCtlChannelNameEditBox = 0; D2_GLOBAL_GUARD(gpCtlChannelNameEditBox, "gpCtlChannelNameEditBox");
-D2WinTextBox * g_pLadderBoardTextBox = 0; D2_GLOBAL_GUARD(g_pLadderBoardTextBox, "g_pLadderBoardTextBox");
 D2ControlStrc * ghWndGameNameEditBox = 0; D2_GLOBAL_GUARD(ghWndGameNameEditBox, "ghWndGameNameEditBox");
 DC6 * gpDC6CreateGameBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateGameBckg, "gpDC6CreateGameBckg");
 DC6 * gpDC6CreateGameButton = 0; D2_GLOBAL_GUARD(gpDC6CreateGameButton, "gpDC6CreateGameButton");
@@ -1926,9 +1586,6 @@ D2WinTextBox * BattleNetNews = 0; D2_GLOBAL_GUARD(BattleNetNews, "BattleNetNews"
 D2WinTextBox * gpControlJoinGameError = 0; D2_GLOBAL_GUARD(gpControlJoinGameError, "gpControlJoinGameError");
 uint32_t gnOpenBNetMode = 0; D2_GLOBAL_GUARD(gnOpenBNetMode, "gnOpenBNetMode");
 ChatDlgCallback gpfnChatDlgCallback = (ChatDlgCallback)0; D2_GLOBAL_GUARD(gpfnChatDlgCallback, "gpfnChatDlgCallback");
-void * gpChatMessageQueueHead = 0; D2_GLOBAL_GUARD(gpChatMessageQueueHead, "gpChatMessageQueueHead");
-void * gpChatMessageQueueTail = 0; D2_GLOBAL_GUARD(gpChatMessageQueueTail, "gpChatMessageQueueTail");
-void * gpChatPlayerNameListHead = 0; D2_GLOBAL_GUARD(gpChatPlayerNameListHead, "gpChatPlayerNameListHead");
 unsigned int gdwLastGameListRefreshTick = {}; D2_GLOBAL_GUARD(gdwLastGameListRefreshTick, "gdwLastGameListRefreshTick");
 D2WinTextBox * gpOOGGameListTextBox = 0; D2_GLOBAL_GUARD(gpOOGGameListTextBox, "gpOOGGameListTextBox");
 D2WinTextBox * gpOogGameListDetailsPanelControl = 0; D2_GLOBAL_GUARD(gpOogGameListDetailsPanelControl, "gpOogGameListDetailsPanelControl");

@@ -425,10 +425,6 @@ int gnPerspectiveScaleY = 0; D2_GLOBAL_GUARD(gnPerspectiveScaleY, "gnPerspective
 int gnPerspectiveScaleZ = 0; D2_GLOBAL_GUARD(gnPerspectiveScaleZ, "gnPerspectiveScaleZ");
 uint32_t g_aSmackerSurfaceArray = 0; D2_GLOBAL_GUARD(g_aSmackerSurfaceArray, "g_aSmackerSurfaceArray");
 void * pSmackerDecodeBuffer = 0; D2_GLOBAL_GUARD(pSmackerDecodeBuffer, "pSmackerDecodeBuffer");
-IDirectDrawSurface7 * gpD3DFloorTileSystemSurface = 0; D2_GLOBAL_GUARD(gpD3DFloorTileSystemSurface, "gpD3DFloorTileSystemSurface");
-IDirect3DTexture2 * gpD3DFloorTileMemoryTexture = 0; D2_GLOBAL_GUARD(gpD3DFloorTileMemoryTexture, "gpD3DFloorTileMemoryTexture");
-IDirectDrawSurface7 * gpD3DSubtileSystemSurface = 0; D2_GLOBAL_GUARD(gpD3DSubtileSystemSurface, "gpD3DSubtileSystemSurface");
-IDirect3DTexture2 * gpD3DSubtileMemoryTexture = 0; D2_GLOBAL_GUARD(gpD3DSubtileMemoryTexture, "gpD3DSubtileMemoryTexture");
 
 namespace D2Common::Drlg::Maze {
 

@@ -122,11 +122,46 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 #endif
 
-namespace D2Client::UI::Text {
+static unsigned int gnScrollingTextBoxTopY = 0xc; D2_STATIC_GUARD(gnScrollingTextBoxTopY, "gnScrollingTextBoxTopY");
+static D2UIFlagInitStrc gsUITextFlagInit[7] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::Text::TEXT_OnClickCloseNpcDialog
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Text::INPUT_TextClickHandler
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Text::INPUT_TextClickHandler
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Text::INPUT_TextDismiss
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Text::INPUT_TextDismiss
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x102,
+        /* .pfHandler = */ &D2Client::UI::Text::INPUT_TextKeyHandler
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x104,
+        /* .pfHandler = */ &D2Client::UI::Text::INPUT_TextKeyFilter
+    }
+}; D2_STATIC_GUARD(gsUITextFlagInit, "gsUITextFlagInit");
 
-static RECT gnTextBoxExclusionTop[16] = { 0 }; D2_STATIC_GUARD(gnTextBoxExclusionTop, "D2Client::UI::Text::gnTextBoxExclusionTop");
-static RECT gnTextBoxExclusionRight[16] = { 0 }; D2_STATIC_GUARD(gnTextBoxExclusionRight, "D2Client::UI::Text::gnTextBoxExclusionRight");
-static RECT gnTextBoxExclusionBottom[16] = { 0 }; D2_STATIC_GUARD(gnTextBoxExclusionBottom, "D2Client::UI::Text::gnTextBoxExclusionBottom");
+namespace D2Client::UI::Text {
 
 // JMP thunk
 void __stdcall thunk_TEXT_ClearChatMessages() {

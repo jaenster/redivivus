@@ -125,6 +125,21 @@ typedef BOOL (*fpRequiredUserAction)();
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 
+static eD2ArenaFlags CLIENT_ArenaFlags = ARENAFLAG_ClientUpdate; D2_STATIC_GUARD(CLIENT_ArenaFlags, "CLIENT_ArenaFlags");
+static eD2PlayerClassIDDWORD eD2PlayerClassIDDWORD_00712f00 = CLASS_SORCERESS; D2_STATIC_GUARD(eD2PlayerClassIDDWORD_00712f00, "eD2PlayerClassIDDWORD_00712f00");
+static char gbCutsceneActive = 0; D2_STATIC_GUARD(gbCutsceneActive, "gbCutsceneActive");
+static uint8_t gbLoggerStateInactive = 0; D2_STATIC_GUARD(gbLoggerStateInactive, "gbLoggerStateInactive");
+static uint8_t gbItemDescDirtyFlag = 0; D2_STATIC_GUARD(gbItemDescDirtyFlag, "gbItemDescDirtyFlag");
+static uint8_t geCutsceneCurrentSoundId = 0; D2_STATIC_GUARD(geCutsceneCurrentSoundId, "geCutsceneCurrentSoundId");
+static uint8_t aQuestAvailabilityPacket[37] = {}; D2_STATIC_GUARD(aQuestAvailabilityPacket, "aQuestAvailabilityPacket");
+static BOOL bReceivedQuestAvailabilityPacket = 0; D2_STATIC_GUARD(bReceivedQuestAvailabilityPacket, "bReceivedQuestAvailabilityPacket");
+static uint32_t gdwWarpFadeExpireTime = 0; D2_STATIC_GUARD(gdwWarpFadeExpireTime, "gdwWarpFadeExpireTime");
+static uint32_t gnBinkDDrawYOffset = 0; D2_STATIC_GUARD(gnBinkDDrawYOffset, "gnBinkDDrawYOffset");
+static uint32_t gnBinkDDrawXOffset = 0; D2_STATIC_GUARD(gnBinkDDrawXOffset, "gnBinkDDrawXOffset");
+static void * gpBinkVideoDirectDraw = 0; D2_STATIC_GUARD(gpBinkVideoDirectDraw, "gpBinkVideoDirectDraw");
+static uint32_t gnBinkDDrawSurfaceType = 0; D2_STATIC_GUARD(gnBinkDDrawSurfaceType, "gnBinkDDrawSurfaceType");
+static uint32_t g_bBinkDDrawVideoQuitRequested = 0; D2_STATIC_GUARD(g_bBinkDDrawVideoQuitRequested, "g_bBinkDDrawVideoQuitRequested");
+
 namespace D2Client {
 
 // @sourcefile .\CORE\WINMAIN.CPP

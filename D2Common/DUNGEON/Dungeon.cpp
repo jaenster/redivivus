@@ -100,6 +100,9 @@ typedef void (__stdcall *fTownAutoMap)(eD2LevelId eD2LevelId, int FileIndex, int
 typedef BOOL (__stdcall *ROOMCALLBACKFN)(D2RoomStrc * pRoom, void * pArgs);
 #endif
 
+static pfnRoomExActivationHandler gaRoomExActivationHandlers[4] = { &D2Common::DUNGEON::Dungeon::DUNGEON_ActivationHandler0_SetRoomExPriority0, &D2Common::DUNGEON::Dungeon::DRLGROOMEX_ActivateRoomEx, &D2Common::DUNGEON::Dungeon::DRLGROOMEX_DemoteIfReady, &D2Common::DUNGEON::Dungeon::DRLGROOMEX_InitTileDataAndPresets }; D2_STATIC_GUARD(gaRoomExActivationHandlers, "gaRoomExActivationHandlers");
+static pfnRoomExDeactivationHandler gaRoomExDeactivationHandlers[4] = { &D2Common::DUNGEON::Dungeon::DRLGROOMEX_RecalcPriority_Case4, &D2Common::DUNGEON::Dungeon::DRLGROOMEX_RecalcPriority_Case5, &D2Common::DUNGEON::Dungeon::DRLGROOMEX_RecalcPriority_Case6, &D2Common::DUNGEON::Dungeon::ClearRoomExIfFlag0x01 }; D2_STATIC_GUARD(gaRoomExDeactivationHandlers, "gaRoomExDeactivationHandlers");
+
 namespace D2Common::DUNGEON::Dungeon {
 
 // Allocates D2DrlgActStrc, fills core fields, allocates DRLG act misc (server/client path), allocates environment, and initializes tile cache.

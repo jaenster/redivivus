@@ -7,7 +7,6 @@
 #include "Fog/3rdparty/crashy/Report.h"
 #include "Fog/D2MemoryManagerStrc.h"
 #include "Fog/SMem.h"
-#include "Fog/Src/LogManager.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 
@@ -16,19 +15,11 @@
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-char cLogFileReadMode[2] = { 'r', '\x00' }; D2_GLOBAL_GUARD(cLogFileReadMode, "cLogFileReadMode");
+double gdFogJulianDaysPerYear = 365.25; D2_GLOBAL_GUARD(gdFogJulianDaysPerYear, "gdFogJulianDaysPerYear");
 
-uint32_t gdwBitBufferSeed[9] = {
-    0x0,
-    0x1,
-    0x3,
-    0x7,
-    0xf,
-    0x1f,
-    0x3f,
-    0x7f,
-    0xff
-}; D2_GLOBAL_GUARD(gdwBitBufferSeed, "gdwBitBufferSeed");
+double gdFogJulianDaysPerMonth = 30.6001000000000; D2_GLOBAL_GUARD(gdFogJulianDaysPerMonth, "gdFogJulianDaysPerMonth");
+
+char cLogFileReadMode[2] = { 'r', '\x00' }; D2_GLOBAL_GUARD(cLogFileReadMode, "cLogFileReadMode");
 
 D2IniConfigValuesStrc D2IniConfigValues[58] = {
     {
@@ -622,21 +613,6 @@ _SERVICE_STATUS lpServiceStatus_007065fc = {
     /* .dwCheckPoint = */ 0x0,
     /* .dwWaitHint = */ 0x0
 }; D2_GLOBAL_GUARD(lpServiceStatus_007065fc, "lpServiceStatus_007065fc");
-
-char * gaErrorTypeNames[12] = {
-    s_No_Error_006ccbc8,
-    s_Unknown_Error_006ccbb8,
-    s_Out_of_Memory_Error_006ccba4,
-    s_File_Read_Error_006ccb94,
-    s_File_Write_Error_006ccb80,
-    s_Assertion_Failure_006ccb6c,
-    s_Halt_006ccb64,
-    s_Warning_006ccb5c,
-    s_Missing_Dll_006ccb50,
-    s_Registry_Error_006ccb40,
-    s_Deadlock_006ccb34,
-    (char*)0x006ccb30
-}; D2_GLOBAL_GUARD(gaErrorTypeNames, "gaErrorTypeNames");
 
 uint8_t gabHuffmanCodeLengths[256] = {
     0x1,
@@ -1412,300 +1388,6 @@ float sinTable_f32[512] = {
     -0.01227136
 }; D2_GLOBAL_GUARD(sinTable_f32, "sinTable_f32");
 
-char gszLogFilePath[260] = {
-    'D',
-    '2',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(gszLogFilePath, "gszLogFilePath");
-
-char s___AUMessage_LogManager___00708124[28] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'M',
-    'e',
-    's',
-    's',
-    'a',
-    'g',
-    'e',
-    '@',
-    'L',
-    'o',
-    'g',
-    'M',
-    'a',
-    'n',
-    'a',
-    'g',
-    'e',
-    'r',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUMessage_LogManager___00708124, "s___AUMessage_LogManager___00708124");
-
 SERVICE_STATUS_HANDLE ghServiceCtrlHandler = nullptr; D2_GLOBAL_GUARD(ghServiceCtrlHandler, "ghServiceCtrlHandler");
 
 _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {
@@ -1727,47 +1409,7 @@ uint32_t gaHuffmanFastDecodeTable[256] = {}; D2_GLOBAL_GUARD(gaHuffmanFastDecode
 
 uint8_t gabHuffmanNextTable[256] = {}; D2_GLOBAL_GUARD(gabHuffmanNextTable, "gabHuffmanNextTable");
 
-uint64_t gaServerSentPacketByteCounts[256] = {}; D2_GLOBAL_GUARD(gaServerSentPacketByteCounts, "gaServerSentPacketByteCounts");
-
-// also labelled: gnPacketLogWriteOffset0, gnPacketLogWriteOffset1
-unsigned long long gnSentPacketRawBytes = 0; D2_GLOBAL_GUARD(gnSentPacketRawBytes, "gnSentPacketRawBytes");
-
-// also labelled: gnPacketLogWriteOffset2, gnPacketLogWriteOffset3
-unsigned long long gnSentPacketWireBytes = 0; D2_GLOBAL_GUARD(gnSentPacketWireBytes, "gnSentPacketWireBytes");
-
-// also labelled: gdwPacketLogSequenceNum, gnPacketLogSequenceNumHigh
-unsigned long long gnSentPacketHeaderBytes = 0; D2_GLOBAL_GUARD(gnSentPacketHeaderBytes, "gnSentPacketHeaderBytes");
-
 _RTL_CRITICAL_SECTION lpCriticalSection_0075cfbc = {}; D2_GLOBAL_GUARD(lpCriticalSection_0075cfbc, "lpCriticalSection_0075cfbc");
-
-char cp_0075d040[256] = {}; D2_GLOBAL_GUARD(cp_0075d040, "cp_0075d040");
-
-char gLogFileNameArray[20][16] = {}; D2_GLOBAL_GUARD(gLogFileNameArray, "gLogFileNameArray");
-
-_SYSTEMTIME gLogRealmStartupLocalTime = {}; D2_GLOBAL_GUARD(gLogRealmStartupLocalTime, "gLogRealmStartupLocalTime");
-
-int gLogFileSlotMutex[20] = {}; D2_GLOBAL_GUARD(gLogFileSlotMutex, "gLogFileSlotMutex");
-
-uint32_t gLogFileLastAccessTimeArray[20] = {}; D2_GLOBAL_GUARD(gLogFileLastAccessTimeArray, "gLogFileLastAccessTimeArray");
-
-char gLogFilePathArray[20][260] = {}; D2_GLOBAL_GUARD(gLogFilePathArray, "gLogFilePathArray");
-
-FILE * globalOpenFileHandleArray[20] = {}; D2_GLOBAL_GUARD(globalOpenFileHandleArray, "globalOpenFileHandleArray");
-
-uint32_t gLogFileLastWriteTimeArray[20] = {}; D2_GLOBAL_GUARD(gLogFileLastWriteTimeArray, "gLogFileLastWriteTimeArray");
-
-CRITICAL_SECTION gLogMessageQueueCS = {}; D2_GLOBAL_GUARD(gLogMessageQueueCS, "gLogMessageQueueCS");
-
-// also labelled: FileHandlesCriticalSection_Maybe
-_RTL_CRITICAL_SECTION gLogFileCS = {}; D2_GLOBAL_GUARD(gLogFileCS, "gLogFileCS");
-
-D2StormListHead gLogMessageQueueHead = {}; D2_GLOBAL_GUARD(gLogMessageQueueHead, "gLogMessageQueueHead");
-
-D2HighResTimestampStrc gHighResTimerInitTimestamp = D2HighResTimestampStrc(); D2_GLOBAL_GUARD(gHighResTimerInitTimestamp, "gHighResTimerInitTimestamp");
-
-CRITICAL_SECTION gHighResTimerCS = {}; D2_GLOBAL_GUARD(gHighResTimerCS, "gHighResTimerCS");
-
-char gszSystemGlobalString[1024] = {}; D2_GLOBAL_GUARD(gszSystemGlobalString, "gszSystemGlobalString");
 
 _RTL_CRITICAL_SECTION lpCriticalSection_0098a6c4 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0098a6c4, "lpCriticalSection_0098a6c4");
 
@@ -1784,14 +1426,9 @@ uint32_t gaEnumProcessModuleHandles[1028] = {}; D2_GLOBAL_GUARD(gaEnumProcessMod
 // =============================================================================
 
 _SERVICE_STATUS gszCommandLineLocaleCode = {}; D2_GLOBAL_GUARD(gszCommandLineLocaleCode, "gszCommandLineLocaleCode");
-uint32_t gpServerMemHeap = 0x1; D2_GLOBAL_GUARD(gpServerMemHeap, "gpServerMemHeap");
-char * gnExcelRecordFieldNotFound = (char *)0x006ccb30; D2_GLOBAL_GUARD(gnExcelRecordFieldNotFound, "gnExcelRecordFieldNotFound");
 uint32_t nTokenBucketMask = 0xf; D2_GLOBAL_GUARD(nTokenBucketMask, "nTokenBucketMask");
 uint32_t gnQServerIpConnCountModulo = 0x11; D2_GLOBAL_GUARD(gnQServerIpConnCountModulo, "gnQServerIpConnCountModulo");
 uint32_t gnQServerHacklistBucketCount = 0x1; D2_GLOBAL_GUARD(gnQServerHacklistBucketCount, "gnQServerHacklistBucketCount");
-HANDLE ghCurrentProcessHandle = INVALID_HANDLE_VALUE; D2_GLOBAL_GUARD(ghCurrentProcessHandle, "ghCurrentProcessHandle");
-HINSTANCE WinMain_hInstance = (HINSTANCE)0x00000000; D2_GLOBAL_GUARD(WinMain_hInstance, "WinMain_hInstance");
-BOOL D2Ini_bUseDirect = 0x0; D2_GLOBAL_GUARD(D2Ini_bUseDirect, "D2Ini_bUseDirect");
 uint32_t g_nProjectId = 0; D2_GLOBAL_GUARD(g_nProjectId, "g_nProjectId");
 char * szProduct = 0; D2_GLOBAL_GUARD(szProduct, "szProduct");
 char * g_szApplicationName = 0; D2_GLOBAL_GUARD(g_szApplicationName, "g_szApplicationName");
@@ -1807,27 +1444,9 @@ float fGameVersion = 0; D2_GLOBAL_GUARD(fGameVersion, "fGameVersion");
 uint32_t g_dwTotalPhysicalMemory = 0; D2_GLOBAL_GUARD(g_dwTotalPhysicalMemory, "g_dwTotalPhysicalMemory");
 uint32_t g_dwErrorState = 0; D2_GLOBAL_GUARD(g_dwErrorState, "g_dwErrorState");
 uint32_t gbFogErrorManagerInitialized = 0; D2_GLOBAL_GUARD(gbFogErrorManagerInitialized, "gbFogErrorManagerInitialized");
-// also labelled: gpAsyncDataQueueBuffer
-int gnAsyncDataPriorityDeferDepth = 0; D2_GLOBAL_GUARD(gnAsyncDataPriorityDeferDepth, "gnAsyncDataPriorityDeferDepth");
-// also labelled: gpAsyncDataLoadBuffer
-D2AsyncData_Line0x128 * gpAsyncDataDeferredList = 0; D2_GLOBAL_GUARD(gpAsyncDataDeferredList, "gpAsyncDataDeferredList");
-uint32_t gbAsyncDataInitialized = 0; D2_GLOBAL_GUARD(gbAsyncDataInitialized, "gbAsyncDataInitialized");
-uint32_t gnAsyncDataHandleBufferSize = 0; D2_GLOBAL_GUARD(gnAsyncDataHandleBufferSize, "gnAsyncDataHandleBufferSize");
-D2AsyncDataStrc * pD2AsyncDataStrc = 0; D2_GLOBAL_GUARD(pD2AsyncDataStrc, "pD2AsyncDataStrc");
 uint32_t gnDbgSymInitRefcount = 0; D2_GLOBAL_GUARD(gnDbgSymInitRefcount, "gnDbgSymInitRefcount");
-int gLogMessageQueueCount = 0; D2_GLOBAL_GUARD(gLogMessageQueueCount, "gLogMessageQueueCount");
-int gLogMessageQueueTotalBytes = 0; D2_GLOBAL_GUARD(gLogMessageQueueTotalBytes, "gLogMessageQueueTotalBytes");
-HANDLE gLogWriterThreadHandle = 0; D2_GLOBAL_GUARD(gLogWriterThreadHandle, "gLogWriterThreadHandle");
-uint32_t gLogManagerInitialized = 0; D2_GLOBAL_GUARD(gLogManagerInitialized, "gLogManagerInitialized");
-uint32_t gLogWriterThreadStopFlag = 0; D2_GLOBAL_GUARD(gLogWriterThreadStopFlag, "gLogWriterThreadStopFlag");
-LPDWORD gLogWriterThreadId = 0; D2_GLOBAL_GUARD(gLogWriterThreadId, "gLogWriterThreadId");
 SMemHeapStatsStrc gaSMemHeapStats[4096] = {}; D2_GLOBAL_GUARD(gaSMemHeapStats, "gaSMemHeapStats");
 int g_SMemLastTickCount = 0; D2_GLOBAL_GUARD(g_SMemLastTickCount, "g_SMemLastTickCount");
-uint32_t gnD3DBinkVideoYOffset = 0; D2_GLOBAL_GUARD(gnD3DBinkVideoYOffset, "gnD3DBinkVideoYOffset");
-uint32_t gnD3DBinkVideoXOffset = 0; D2_GLOBAL_GUARD(gnD3DBinkVideoXOffset, "gnD3DBinkVideoXOffset");
-void * gpBinkVideoD3D = 0; D2_GLOBAL_GUARD(gpBinkVideoD3D, "gpBinkVideoD3D");
-uint32_t gnBinkDDSurfaceType = 0; D2_GLOBAL_GUARD(gnBinkDDSurfaceType, "gnBinkDDSurfaceType");
-uint32_t gbBinkVideoShouldStop = 0; D2_GLOBAL_GUARD(gbBinkVideoShouldStop, "gbBinkVideoShouldStop");
 uint32_t gbQServerUseDedicatedIoWorkers = 0; D2_GLOBAL_GUARD(gbQServerUseDedicatedIoWorkers, "gbQServerUseDedicatedIoWorkers");
 unsigned int gdwHacklistLastLogTime = {}; D2_GLOBAL_GUARD(gdwHacklistLastLogTime, "gdwHacklistLastLogTime");
 HMODULE hDbgHelpDll = 0; D2_GLOBAL_GUARD(hDbgHelpDll, "hDbgHelpDll");

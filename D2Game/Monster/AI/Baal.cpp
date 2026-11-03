@@ -67,8 +67,6 @@ typedef BOOL (__fastcall *fpAiTargetPredicate)(D2UnitStrc * pUnit, D2UnitStrc * 
 typedef void (__fastcall *pfnMinionForEachCallback)(D2UnitStrc * pMinion, void * pContext, void * pArgument);
 #endif
 
-namespace D2Game::Monster::AI::Baal {
-
 static char gszSrcFileAiBaal[16] = {
     '.',
     '\\',
@@ -86,7 +84,9 @@ static char gszSrcFileAiBaal[16] = {
     'p',
     'p',
     '\x00'
-}; D2_STATIC_GUARD(gszSrcFileAiBaal, "D2Game::Monster::AI::Baal::gszSrcFileAiBaal");
+}; D2_STATIC_GUARD(gszSrcFileAiBaal, "gszSrcFileAiBaal");
+
+namespace D2Game::Monster::AI::Baal {
 
 uint32_t __fastcall AI_Baal_IsPortalInRange(uint32_t pGame, D2UnitStrc * pUnit, D2UnitStrc * portal, D2MonsterAiParameterStruct * pAiParam) {
     if (portal && portal->eUnitType == UNIT_OBJECT && portal->nClassId == 0x233) {

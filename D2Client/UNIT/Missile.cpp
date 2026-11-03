@@ -79,6 +79,78 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static D2Missile032SpreadStrc gaMissile032SpreadConstData[6] = {
+    {
+        /* .nFrameThreshold = */ 0x12c,
+        /* .nModulus = */ 0x19,
+        /* .nTargetX = */ 0x1
+    },
+    {
+        /* .nFrameThreshold = */ 0xfa,
+        /* .nModulus = */ 0xa,
+        /* .nTargetX = */ 0x3
+    },
+    {
+        /* .nFrameThreshold = */ 0x64,
+        /* .nModulus = */ 0x8,
+        /* .nTargetX = */ 0x4
+    },
+    {
+        /* .nFrameThreshold = */ 0x4b,
+        /* .nModulus = */ 0x6,
+        /* .nTargetX = */ 0x4
+    },
+    {
+        /* .nFrameThreshold = */ 0x1e,
+        /* .nModulus = */ 0x4,
+        /* .nTargetX = */ 0x3
+    },
+    {
+        /* .nFrameThreshold = */ 0x0,
+        /* .nModulus = */ 0x64,
+        /* .nTargetX = */ 0x0
+    }
+}; D2_STATIC_GUARD(gaMissile032SpreadConstData, "gaMissile032SpreadConstData");
+static uint32_t gnLightmapQualityLastCheck = 0x1; D2_STATIC_GUARD(gnLightmapQualityLastCheck, "gnLightmapQualityLastCheck");
+static D2MissileSrvDoFuncData MISSILECLTCOLLIDEFUNCS[9] = {
+    {
+        /* .pFunction = */ nullptr,
+        /* .nFlags = */ 0x0
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Client::UNIT::Missile::Missiles_SrvDoFuncData_01,
+        /* .nFlags = */ 0x84
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Client::UNIT::Missile::Missiles_SrvDoFuncData_02,
+        /* .nFlags = */ 0x104
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Client::UNIT::Missile::Missiles_SrvDoFuncData_03,
+        /* .nFlags = */ 0x184
+    },
+    {
+        /* .pFunction = */ nullptr,
+        /* .nFlags = */ 0x0
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Client::UNIT::Missile::Missiles_SrvDoFuncData_02,
+        /* .nFlags = */ 0x104
+    },
+    {
+        /* .pFunction = */ nullptr,
+        /* .nFlags = */ 0x4
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Client::UNIT::Missile::Missiles_SrvDoFuncData_07,
+        /* .nFlags = */ 0x40
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Client::UNIT::Missile::Missiles_SrvDoFuncData_03,
+        /* .nFlags = */ 0x185
+    }
+}; D2_STATIC_GUARD(MISSILECLTCOLLIDEFUNCS, "MISSILECLTCOLLIDEFUNCS");
+
 namespace D2Client::UNIT::Missile {
 
 int32_t __fastcall SEED_RollRangeInclusive(D2SeedStrc * pSeed, int32_t nMinValue, int32_t nMaxValue) {

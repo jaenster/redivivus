@@ -106,23 +106,6 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 
 namespace D2Client::UI::Inv {
 
-static D2NpcShopButtonStrc DRAW_UI_NPC_BUTTONS[4] = { {} }; D2_STATIC_GUARD(DRAW_UI_NPC_BUTTONS, "D2Client::UI::Inv::DRAW_UI_NPC_BUTTONS");
-static D2NpcShopButtonStrc gaNpcShopButtonStringIds[4] = { {} }; D2_STATIC_GUARD(gaNpcShopButtonStringIds, "D2Client::UI::Inv::gaNpcShopButtonStringIds");
-static D2NpcShopButtonStrc gnNpcShopButtonActionType[4] = { {} }; D2_STATIC_GUARD(gnNpcShopButtonActionType, "D2Client::UI::Inv::gnNpcShopButtonActionType");
-static D2NpcShopButtonStrc gnCurrentNpcButtonSelection[4] = { {} }; D2_STATIC_GUARD(gnCurrentNpcButtonSelection, "D2Client::UI::Inv::gnCurrentNpcButtonSelection");
-static D2NpcShopButtonStrc gnNpcShopButtonActionType_b[4] = { {} }; D2_STATIC_GUARD(gnNpcShopButtonActionType_b, "D2Client::UI::Inv::gnNpcShopButtonActionType_b");
-static D2NpcShopButtonStrc gnSomeUIOffset1[4] = { {} }; D2_STATIC_GUARD(gnSomeUIOffset1, "D2Client::UI::Inv::gnSomeUIOffset1");
-static D2NpcShopButtonStrc gnCurrentShopNpcButtonState[4] = { {} }; D2_STATIC_GUARD(gnCurrentShopNpcButtonState, "D2Client::UI::Inv::gnCurrentShopNpcButtonState");
-static D2NpcShopButtonStrc NpcButtonFirst[4] = { {} }; D2_STATIC_GUARD(NpcButtonFirst, "D2Client::UI::Inv::NpcButtonFirst");
-static D2NpcShopButtonStrc NpcButtonThird[4] = { {} }; D2_STATIC_GUARD(NpcButtonThird, "D2Client::UI::Inv::NpcButtonThird");
-static D2NpcShopButtonStrc gwInvNpcButton1TextId[4] = { {} }; D2_STATIC_GUARD(gwInvNpcButton1TextId, "D2Client::UI::Inv::gwInvNpcButton1TextId");
-static D2NpcShopButtonStrc gbInvNpcButtonState[4] = { {} }; D2_STATIC_GUARD(gbInvNpcButtonState, "D2Client::UI::Inv::gbInvNpcButtonState");
-static D2NpcShopButtonStrc gwInvNpcButton4TextId[4] = { {} }; D2_STATIC_GUARD(gwInvNpcButton4TextId, "D2Client::UI::Inv::gwInvNpcButton4TextId");
-static D2GridScreenCoordinates gnTradePage2ScreenTop = {}; D2_STATIC_GUARD(gnTradePage2ScreenTop, "D2Client::UI::Inv::gnTradePage2ScreenTop");
-static D2GridScreenCoordinates gnTradePage2ScreenBottom = {}; D2_STATIC_GUARD(gnTradePage2ScreenBottom, "D2Client::UI::Inv::gnTradePage2ScreenBottom");
-static D2GridScreenCoordinates gnTradePage2ScreenLeft = {}; D2_STATIC_GUARD(gnTradePage2ScreenLeft, "D2Client::UI::Inv::gnTradePage2ScreenLeft");
-static D2GridScreenCoordinates gnTradePage2ScreenRight = {}; D2_STATIC_GUARD(gnTradePage2ScreenRight, "D2Client::UI::Inv::gnTradePage2ScreenRight");
-
 void __stdcall InitializeiInventoryPages() {
     // Static local variables (originally global data)
     static D2GridScreenCoordinates pTrophyCasePageGridCoordinates = {}; D2_STATIC_GUARD(pTrophyCasePageGridCoordinates, "D2Client::UI::Inv::InitializeiInventoryPages::pTrophyCasePageGridCoordinates");

@@ -156,6 +156,8 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, void * pDismissCallback);
 #endif
 
+static uint8_t gbTradeWindowOpen = 0; D2_STATIC_GUARD(gbTradeWindowOpen, "gbTradeWindowOpen");
+
 namespace D2Client::UI::ui {
 
 void __stdcall INPUT_ClearChatMessages(D2UIMouseMsgStrc * pMsg) {

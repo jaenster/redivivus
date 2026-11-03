@@ -90,9 +90,6 @@ typedef BOOL (*fpRequiredUserAction)();
 
 namespace D2Launch::MainMenus {
 
-static char dwIntroFrameRate_24_36[8] = { "640x146" }; D2_STATIC_GUARD(dwIntroFrameRate_24_36, "D2Launch::MainMenus::dwIntroFrameRate_24_36");
-static char dwIntroFrameRate_29_32[8] = { "640x292" }; D2_STATIC_GUARD(dwIntroFrameRate_29_32, "D2Launch::MainMenus::dwIntroFrameRate_29_32");
-
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount) {
     uint32_t nIndex;
     for (nIndex = 0; nIndex < nCount; nIndex++) {

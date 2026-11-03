@@ -37,6 +37,25 @@
 typedef void (__stdcall *pfnUIMenuInstance)();
 #endif
 
+static uint8_t gaNewCharDefaultAppearance[16] = {
+    0x1,
+    0x1,
+    0x1,
+    0x1,
+    0x1,
+    0xff,
+    0xff,
+    0xff,
+    0x1,
+    0x1,
+    0xff,
+    0xff,
+    0xff,
+    0xff,
+    0xff,
+    0xff
+}; D2_STATIC_GUARD(gaNewCharDefaultAppearance, "gaNewCharDefaultAppearance");
+
 namespace D2Launch::Launcher {
 
 BOOL __stdcall CHARSEL_OnPressLoadCharListForPreferredRealm(D2ControlMsg * pControlMsg) {

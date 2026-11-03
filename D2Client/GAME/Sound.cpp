@@ -29,6 +29,9 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static uint32_t BackgroundSoundsActive = 0; D2_STATIC_GUARD(BackgroundSoundsActive, "BackgroundSoundsActive");
+static D2ClientSoundChannelStrc gaSoundChannels[16] = {}; D2_STATIC_GUARD(gaSoundChannels, "gaSoundChannels");
+
 namespace D2Client::GAME::Sound {
 
 // JMP thunk

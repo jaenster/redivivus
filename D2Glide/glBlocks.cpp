@@ -34,6 +34,29 @@
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 
+static GrTexInfo g_GrTexInfoGlBlocks = {
+    /* .smallLodLog2 = */ 0x5,
+    /* .largeLodLog2 = */ 0x5,
+    /* .aspectRatioLog2 = */ 0x0,
+    /* .format = */ 0x5,
+    /* .data = */ nullptr
+}; D2_STATIC_GUARD(g_GrTexInfoGlBlocks, "g_GrTexInfoGlBlocks");
+static GrTexInfo gTexInfoGlideSurfaceBlocks = {
+    /* .smallLodLog2 = */ 0x8,
+    /* .largeLodLog2 = */ 0x8,
+    /* .aspectRatioLog2 = */ 0x1,
+    /* .format = */ 0x5,
+    /* .data = */ nullptr
+}; D2_STATIC_GUARD(gTexInfoGlideSurfaceBlocks, "gTexInfoGlideSurfaceBlocks");
+static uint32_t gnGlideTMUId = 0; D2_STATIC_GUARD(gnGlideTMUId, "gnGlideTMUId");
+static void * gpGlBlocksWallBuffer = 0; D2_STATIC_GUARD(gpGlBlocksWallBuffer, "gpGlBlocksWallBuffer");
+static void * gpGlBlocksFloorBuffer = 0; D2_STATIC_GUARD(gpGlBlocksFloorBuffer, "gpGlBlocksFloorBuffer");
+static uint32_t gnBinkGlideYOffset = 0; D2_STATIC_GUARD(gnBinkGlideYOffset, "gnBinkGlideYOffset");
+static uint32_t gnBinkGlideXOffset = 0; D2_STATIC_GUARD(gnBinkGlideXOffset, "gnBinkGlideXOffset");
+static void * gpBinkVideoGlide = 0; D2_STATIC_GUARD(gpBinkVideoGlide, "gpBinkVideoGlide");
+static uint32_t gnGlideBinkSurfaceType = 0; D2_STATIC_GUARD(gnGlideBinkSurfaceType, "gnGlideBinkSurfaceType");
+static uint32_t g_bGlideBinkVideoQuitRequested = 0; D2_STATIC_GUARD(g_bGlideBinkVideoQuitRequested, "g_bGlideBinkVideoQuitRequested");
+
 namespace D2Glide::glBlocks {
 
 // @sourcefile .\Src\glBlocks.cpp

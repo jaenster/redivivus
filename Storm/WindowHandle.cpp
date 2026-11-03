@@ -23,6 +23,8 @@ typedef int (__stdcall *pfnStormMsgIdleCallback)(int nIdleIteration);
 typedef void (__stdcall *pfnSEvtHandler)(void * pData);
 #endif
 
+static uint32_t gpActiveWindow = 0; D2_STATIC_GUARD(gpActiveWindow, "gpActiveWindow");
+
 namespace Storm::WindowHandle {
 
 // @blizzard SMsgDoMessageLoop (SMSG.CPP)

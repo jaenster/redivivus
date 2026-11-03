@@ -70,6 +70,9 @@ typedef int (__fastcall *UNITFINDTEST)(D2UnitStrc * pUnit, D2UnitFindArgStrc * p
 typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pContext);
 #endif
 
+static uint32_t gnSelectConstant13_X = 0x13; D2_STATIC_GUARD(gnSelectConstant13_X, "gnSelectConstant13_X");
+static uint32_t gnSelectConstant13_Y = 0x13; D2_STATIC_GUARD(gnSelectConstant13_Y, "gnSelectConstant13_Y");
+
 namespace D2Client::GAME::Select {
 
 int __stdcall SELECT_GetConstant13_X() {

@@ -40,6 +40,19 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+static int gnMiniPanelButtonX[8] = {}; D2_STATIC_GUARD(gnMiniPanelButtonX, "gnMiniPanelButtonX");
+static uint32_t gnMiniPanelButtonY[8] = {}; D2_STATIC_GUARD(gnMiniPanelButtonY, "gnMiniPanelButtonY");
+static uint32_t gnMiniPanelButtonFrame[8] = {}; D2_STATIC_GUARD(gnMiniPanelButtonFrame, "gnMiniPanelButtonFrame");
+static uint32_t gnMiniPanelButtonState[8] = {}; D2_STATIC_GUARD(gnMiniPanelButtonState, "gnMiniPanelButtonState");
+static uint32_t gnMiniPanelButtonState6[8] = {}; D2_STATIC_GUARD(gnMiniPanelButtonState6, "gnMiniPanelButtonState6");
+static DC6 * gpMiniPanelBackgroundDC6 = 0; D2_STATIC_GUARD(gpMiniPanelBackgroundDC6, "gpMiniPanelBackgroundDC6");
+static DC6 * gpMiniPanelButtonsDC6 = 0; D2_STATIC_GUARD(gpMiniPanelButtonsDC6, "gpMiniPanelButtonsDC6");
+static uint32_t gnMiniPanelRightScreen = 0; D2_STATIC_GUARD(gnMiniPanelRightScreen, "gnMiniPanelRightScreen");
+static uint32_t gnMiniPanelLeftScreen = 0; D2_STATIC_GUARD(gnMiniPanelLeftScreen, "gnMiniPanelLeftScreen");
+static uint32_t gnMiniPanelMouseOverButton = 0; D2_STATIC_GUARD(gnMiniPanelMouseOverButton, "gnMiniPanelMouseOverButton");
+static uint32_t gbMiniPanelSinglePlayer = 0; D2_STATIC_GUARD(gbMiniPanelSinglePlayer, "gbMiniPanelSinglePlayer");
+static uint32_t gnMiniPanelHoverState = 0; D2_STATIC_GUARD(gnMiniPanelHoverState, "gnMiniPanelHoverState");
+
 namespace D2Client::UI::MiniPanel {
 
 void __stdcall SetGlobalAlwaysRun() {

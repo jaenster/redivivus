@@ -29,6 +29,7 @@
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "D2Client/D2Client.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Launch/MainMenus.h"
 
@@ -42,6 +43,68 @@
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
+
+static int gnChatHistoryReadIndex = 0x7; D2_STATIC_GUARD(gnChatHistoryReadIndex, "gnChatHistoryReadIndex");
+static uint32_t gnChatHistoryWriteIndex = 0x7; D2_STATIC_GUARD(gnChatHistoryWriteIndex, "gnChatHistoryWriteIndex");
+static D2UIFlagInitStrc gUIFlagChatInit[4] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x102,
+        /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleChatCharInput
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x26,
+        /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleChatScroll
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x28,
+        /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleChatScroll
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Chat::CHAT_CheckChatboxBounds
+    }
+}; D2_STATIC_GUARD(gUIFlagChatInit, "gUIFlagChatInit");
+static D2UIFlagInitStrc g_UIFlagInitChatPanel[7] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x282,
+        /* .pfHandler = */ &D2Client::UI::Chat::INPUT_HandleIMENotify
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x10f,
+        /* .pfHandler = */ &D2Client::INPUT_HandleIMEComposition
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x10d,
+        /* .pfHandler = */ &D2Client::INPUT_HandleIMEStartComposition
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x10e,
+        /* .pfHandler = */ &D2Client::INPUT_HandleIMEEndComposition
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x284,
+        /* .pfHandler = */ &D2Client::UI::Chat::CHAT_ResetIMEState
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x285,
+        /* .pfHandler = */ &D2Client::UI::Chat::CHAT_ResetIMEState
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x283,
+        /* .pfHandler = */ &D2Client::UI::Chat::CHAT_ResetIMEState
+    }
+}; D2_STATIC_GUARD(g_UIFlagInitChatPanel, "g_UIFlagInitChatPanel");
 
 namespace D2Client::UI::Chat {
 

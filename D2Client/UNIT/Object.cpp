@@ -77,27 +77,6 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitDataObjectStrc) == 0x38, "D2_
 
 namespace D2Client::UNIT::Object {
 
-static char cObjectDataPeriod[18] = {
-    '.',
-    '\\',
-    'U',
-    'N',
-    'I',
-    'T',
-    '\\',
-    'O',
-    'b',
-    'j',
-    'e',
-    'c',
-    't',
-    '.',
-    'c',
-    'p',
-    'p',
-    '\x00'
-}; D2_STATIC_GUARD(cObjectDataPeriod, "D2Client::UNIT::Object::cObjectDataPeriod");
-
 // Initialises a newly-created object unit: allocates and zeroes a D2UnitDataObjectStrc, links the Objects.txt record, sets UNITFLAG_TARGETABLE/CANBEATTACKED/PREDRAW/DRAWSHADOW from txt flags for the initial anim mode, initialises the static collision path, adds the unit to the room, and sets up auto-lighting (or explicit RGB light from txt). Special-cases class 0x3B (town portal) and 0x3C (portal to Tristram/Stony Field) to store the destination level id.
 void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, uint8_t nInitMode) {
     uD2UnitMode uVar1;

@@ -23,6 +23,9 @@ static_assert(sizeof(void*) != 4 || sizeof(::BnMessQueue) == 0x12c, "D2_NEW_AT(B
 #endif
 
 
+static BnMessQueue * nLobbyChatCurrentMessage = 0; D2_STATIC_GUARD(nLobbyChatCurrentMessage, "nLobbyChatCurrentMessage");
+static BnMessQueue * nLobbyChatQueueMessages = 0; D2_STATIC_GUARD(nLobbyChatQueueMessages, "nLobbyChatQueueMessages");
+
 namespace Bnclient {
 
 // JMP thunk

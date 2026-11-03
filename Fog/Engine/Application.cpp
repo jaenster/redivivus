@@ -54,6 +54,8 @@ typedef DWORD (__stdcall *pfnGetModuleBaseNameW)(HANDLE hProcess, void * hModule
 typedef HRESULT (__stdcall *pfnSHGetKnownFolderPath)(GUID * rfid, DWORD dwFlags, HANDLE hToken, LPWSTR * ppszPath);
 #endif
 
+static HINSTANCE WinMain_hInstance = (HINSTANCE)0x00000000; D2_STATIC_GUARD(WinMain_hInstance, "WinMain_hInstance");
+
 namespace Fog::Engine::Application {
 
 static uint32_t DEBUG_ParseNB01DebugInfo(void * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);

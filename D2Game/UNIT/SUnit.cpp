@@ -112,6 +112,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitDataObjectStrc) == 0x38, "D2_
 typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArgs);
 #endif
 
+static int ganUnitHashTableBaseOffsets[6] = { 0x1120, 0x1320, 0x1520, 0x1920, 0x1720, 0x0 }; D2_STATIC_GUARD(ganUnitHashTableBaseOffsets, "ganUnitHashTableBaseOffsets");
+
 namespace D2Game::UNIT::SUnit {
 
 // Stores pNext in pUnit->pListNext, the field GetNextUnit returns; halts (line 211) on NULL.
