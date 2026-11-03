@@ -1,25 +1,25 @@
-tree 408e38e70-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS; D2Client/ /GS-; D2DDraw/ /GS-; D2Direct3D/ /GS-; D2Gdi/ /GS-; D2Glide/ /GS-; D2Launch/ /GS-; D2Launch/Engine/ ; D2MCPClient/ /GS-; D2Multi/ /GS-; D2Sound/ /GS-; D2Win/ /GS-; D2gfx/ /GS-; D2Hell/ /Y- /O1 /Oy- /Ob1; Fog/3rdparty/crashy /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT
-Without the C runtime: 6493 of 14642 functions MATCH (44.35%), 534694 of 2602915 bytes (20.54%)
+tree c4ebefc85-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS; D2Client/ /GS-; D2DDraw/ /GS-; D2Direct3D/ /GS-; D2Gdi/ /GS-; D2Glide/ /GS-; D2Launch/ /GS-; D2Launch/Engine/ ; D2MCPClient/ /GS-; D2Multi/ /GS-; D2Sound/ /GS-; D2Win/ /GS-; D2gfx/ /GS-; D2Hell/ /Y- /O1 /Oy- /Ob1; Fog/3rdparty/crashy /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT
+Without the C runtime: 6495 of 14642 functions MATCH (44.36%), 539810 of 2602915 bytes (20.74%)
   runtime left out: 952 functions (143815 bytes): libmap pairs, the library run 00681a48..006b00b3, import thunks, runtime.tsv
   compiler EH code left out: 117 functions (2245 bytes): __ehhandler stubs and the unwind funclets their FuncInfo names
 byte kinds of the headline total: 2602915 bytes
-  kind whole        534694  20.54% functions that compile to the original bytes (MATCH)
-  kind ident       1245388  47.85% already right, but the function still differs elsewhere
-  kind operand      382803  14.71% same instruction, other registers or offsets
-  kind differ       372718  14.32% instructions with no matching partner
+  kind whole        539810  20.74% functions that compile to the original bytes (MATCH)
+  kind ident       1239980  47.64% already right, but the function still differs elsewhere
+  kind operand      383166  14.72% same instruction, other registers or offsets
+  kind differ       372647  14.32% instructions with no matching partner
   kind noncode       32823   1.26% switch tables and padding in functions that still differ
   kind uncompared    34489   1.33% original functions with no counterpart compared
 whole binary:
 original functions: 15711 (2748975 bytes of code)
 mapped and compared: 14129
-  MATCH               7050
+  MATCH               7052
   REF_DIFF               5
-  INSN_MATCH           382
+  INSN_MATCH           380
   INSN_COUNT_MATCH    1351
   OUR+-N              5341
   QUARANTINE             0
   MISSING                0
-matched code: 633399 bytes (23.04% of the original)
+matched code: 638515 bytes (23.23% of the original)
   of which the statically linked runtime (libmap.tsv): 628 compared (128002 bytes), 555 MATCH (98693 bytes)
 pairings by funcmap tier: sourcemap 12174, lib-exact 496, votes 433, exact 414, bracket 216, calls 159, lib-order 78, lib-similar 40, align 38, refs 34, string 19, lib-votes 14, name 11, import 3
 globals seen at aligned instructions: 2536, of which consistent 2463 (datamap.tsv)
