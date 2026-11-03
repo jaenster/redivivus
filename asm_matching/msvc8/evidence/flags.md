@@ -249,6 +249,41 @@ Fog/Archive, Storm/Source/SSystem, Bnclient, D2Common/DataTbls and D2Client and 
 only once its namespace moves to D2Hell. Pointed out by Mir Drualga (D2Hell was built
 `/O1` in earlier versions).
 
+## zlib, PKWARE and Bnclient SHA1 (Ghidra v1877 moves) - DONE, rejected
+
+Ghidra v1871-v1877 moved the zlib 1.2.8 objects into `Storm::_3rdparty::zlib`, the
+PKWARE DCL functions (006b01b0..006b1290) into `PKWARE` and SHA1
+Init/Update/Final/Transform into `Bnclient::SHA1`, so each is a TU of its own and
+can carry a row. Candidates: the genuine zlib 1.2.8 sources match 87/87 only
+with `/Gr /Ob2`; PKWARE omits its frame pointer; SHA1 is fastcall throughout.
+Tree a036800a1 (regen v1877), the same map; a = the rows above, b = a plus the
+candidate row:
+
+```
+module                    n  MATCH a  MATCH b  only a  only b    sim a    sim b
+Storm/3rdparty/zlib      87       30       30       0       0    0.713    0.713   b = /Y- /Ob2
+PKWARE/PKWARE            16        0        0       0       0    0.261    0.286   b = /Y- /Oy
+Bnclient/SHA1             4        1        1       0       0    0.518    0.518   b = /Gr
+```
+
+None gains a function; none is adopted.
+
+- zlib `/Y- /Gr /Ob2` does not compile: under `/Gr` the CRT headers' `__cdecl`
+  `_strrev` and d2_platform.h's redeclaration without a convention disagree
+  (C2373) in all nine TUs, and Storm and Warden then lose ten zlib symbols at the
+  link. `/Gr` is redundant anyway: the tree already spells `__fastcall` on 56 of
+  zlib's functions, which is what `/Gr` gave the original sources. Without it,
+  `/Ob2` (with `/Y-`, so the precompiled header does not drop it) changes no
+  function's code: the 57 non-matching zlib functions differ for other reasons.
+- PKWARE `/Y- /Oy` raises similarity but matches nothing.
+- SHA1 under the precompiled header: `/Gr` changes no byte, since its four
+  functions are explicitly `__fastcall`. Not tried with `/Y-`: it includes
+  d2_platform.h, which is what made zlib's `/Gr` fail.
+
+D2Hell's row (`/Y- /O1 /Oy- /Ob1`, above) now covers 36 mapped functions
+instead of 17 after the v1871 move of the misfiled block: 18 MATCH, against 9 at
+v1870 (897431ade).
+
 ## Symbol phase (the declarations ahead of a function) - DONE, not a flag
 
 Not a flag but the compile context, measured the same way. VC8 breaks some
