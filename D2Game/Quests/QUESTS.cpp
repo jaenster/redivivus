@@ -43,7 +43,6 @@
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
 #include "D2Game/Ai/AiGeneral.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/D2ObjectInitFnArg.h"
 #include "D2Game/D2ObjectOperateFnArg.h"
 #include "D2Game/D2ParsedTreasureClassStrc.h"

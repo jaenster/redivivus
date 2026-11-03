@@ -27,7 +27,6 @@ struct D2DrlgTileDataStrc;
 struct D2DrlgTileGridStrc;
 struct D2DrlgTileLinkStrc;
 struct D2DrlgVertexStrc;
-struct D2PathTypeArg;
 struct D2PoolManagerStrc;
 struct D2RoomExStrc;
 struct D2RoomStrc;
@@ -353,8 +352,6 @@ int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(struct D2DrlgLevelPlacement
 void __fastcall ACT1_fpLevelDataFn2_A(struct D2DrlgLevelStrc * pLevel, int nNodeOffset, eD2LevelId * nDirTableBase);
 // Lays out a connected group of DRLG levels from a level-data list. Seeds a temporary placement struct from the DRLG seed, fills each node's world size from LevelDefs (per difficulty), then drives a placement callback per node with backtracking (failed placement rewinds to the previous node). Second pass allocates each level (GetLevelAndAlloc), copies computed world position/size, sets the preset file for Rogue Encampment (1) / Lut Gholein (0x28) from the placement direction, and for Black Marsh (6) picks the Outer Cloister (0x1b) layout file via seed advance, invokes the optional per-level callback, and wires prev/next warp connections (skipped for act 4). Inputs: level-data list, two optional callbacks, target DRLG.
 void __stdcall DRLGLEVEL_ParseLevelData(struct D2DrlgLevelDataList * pLevelData, fpLevelDataFn1 fnPlacementValidator, fpLevelDataFn2 fnLevelDataCallback, struct D2DrlgStrc * pDrlg);
-// Pathfinding entry point for units that cannot reach their target directly (path type fallback). Builds a Bresenham waypoint list from the unit's current packed position toward the destination. For each waypoint, checks collision via CheckCollision_BlockPlayer_Type; on blockage, delegates to DRLGPATH_FindPathDualScan to find the best reachable point. After traversal, simplifies collinear waypoints via DRLGPATH_SimplifyCollinearWaypoints and returns the resulting waypoint count. Only valid for PLAYER or MONSTER unit owners; halts otherwise.
-int32_t __fastcall PATH_FindPathTowardFallback(struct D2PathTypeArg * pPathTypeArg);
 void __fastcall DRLGGRID_OrFlagOnCellList(struct D2DrlgGridStrc * nGridPtr, int * pnCellNode, int32_t nFlag);
 // Initializes the DRLG collision/tile grids for a room during level generation. Allocates three D2DrlgGridStrc grids (tile-type, wall, floor) sized to the room's world dimensions from the room's memory pool, seeds the floor grid's border cells, and runs Act-1 outdoor room grid setup for ACT_I. Decodes the room's waypoint and shrine sub-counts from eRoomExFlags and lays out their sub-tiles via SubTypeWpShrine using the level's SubWaypoint/SubShrine ids. Applies a level-type-specific grid flag (special areas) to empty floor cells, then finalizes the wall and floor grids. __fastcall, no return value.
 void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(struct D2RoomExStrc * pRoomEx);

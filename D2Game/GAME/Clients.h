@@ -48,6 +48,8 @@ void __fastcall AppearenceItems(struct D2ClientStrc * pClient, struct D2UnitStrc
 void __fastcall AppearenceItems2(uint32_t pClient, struct D2UnitStrc * pUnit, uint32_t * pAppearanceBuf, uint32_t nBufSize);
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall FreeClientList(::SGAMEDATA * pGame);
+// Updates the player's portal-visited bitmask: gets the level ID of the player's current room, maps it to the corresponding portal flag, and OR's it into the player's persistent portal flags. No-op if room or player unit is null.
+void __stdcall CLIENT_UpdatePortalFlags(struct D2ClientStrc * gameContext);
 // Builds a proximity-sorted list of up to nParam units from all adjacent rooms around the client's current room and serialises them into the client's packet buffer. Gets the player unit's world position, iterates every unit in adjacent rooms via CLIENT_AddUnitToProximitySortedList, then calls CLIENT_PopulateVisibilityPacketBuffer. Halts fatally if pClient->pRoom is null or the adjacent-room list is unavailable.
 void __fastcall GAME_CollectNearbyUnitPositions(struct D2ClientStrc * pClient, uint32_t nUnitLimit);
 // Per-frame update for one connected client. Sends remove-object packets for stale adjacent rooms, sends adjacent-room unit updates, flushes changed stats to the player, recalculates inventory if the refresh flag is set, increments the room ticker, and on a room change fires quest and NPC-intro callbacks and calls GAME_OnClientRoomChange. Finishes by linking the player unit into the update list.

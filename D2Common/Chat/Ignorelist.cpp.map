@@ -82,6 +82,35 @@
       ]
     },
     {
+      "name": "AddAccountMapping",
+      "address": "00611320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611320"
+        }
+      ],
+      "namespace": "D2Common::Chat::Ignorelist",
+      "calledFunctions": [
+        "AddAccountMapping",
+        "SMemZero",
+        "SMemCopy",
+        "Ptr",
+        "New",
+        "SMemFree",
+        "memset",
+        "SStrPack",
+        "SStrDup",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "MappingEntryNode",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "MISC_InitIgnorelist",
       "address": "006114e0",
       "lines": [

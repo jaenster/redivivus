@@ -51,6 +51,7 @@ void __stdcall COMCALLBACK_ClearChannelUserList();
 void __fastcall COMCALLBACK_FormatWhisperFrom(uint16_t * wszText, char * szSenderName);
 void __fastcall COMCALLBACK_FormatWhisperTo(uint16_t * wszText, char * szTargetName);
 BOOL __stdcall COMCALLBACK_ValidateGameJoinability();
+BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus2(struct D2ControlMsg * pControlMsg);
 void __stdcall COMCALLBACK_UpdateChannelUserList();
 void __stdcall COMCALLBACK_ClearChannelListView();
 // Handles BNet channel join event. Finds matching user in gpChannelUserListHead by username, then calls AddUserToChannelList to build the visual composite. Returns 1 on match, 0 if not found.

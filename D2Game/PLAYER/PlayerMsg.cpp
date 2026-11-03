@@ -90,7 +90,6 @@
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -4005,6 +4004,10 @@ static uint32_t __stdcall ValidateSyncWarpPath(::SGAMEDATA * pGame, D2UnitStrc *
 
     D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nSavedSP1X, (int16_t)nSavedSP1Y);
     return bPathReachable;
+}
+
+void __fastcall PLRMODES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
 // Relocates player to target position and applies STATE_sync_warped for a random duration. Records warp timestamp; if 5+ warps within 90 seconds on BNet, rolls penalty delay from weighted table: 50% chance 1500 frames (60s), 25% chance 3000 frames (2min), 25% chance 4500 frames (3min). Default delay 125 frames (5s) for non-BNet or under rate limit.

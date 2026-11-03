@@ -3194,7 +3194,7 @@ int32_t __stdcall DRLGPATH_GetSquaredDistancePacked(uint32_t nPackedA, uint32_t 
 }
 
 // Builds a list of coordinate points along a Bresenham line from source to destination. Stores packed (X,Y) coordinates in the output buffer and returns the point count. Sets the initial direction in *pnInitDir. Used by PathTypeFunc_15.
-int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t nDstPacked, int32_t nMaxSteps, uint32_t * pnInitDir, D2PathPointStrc * pwPointsBuf) {
+static int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t nDstPacked, int32_t nMaxSteps, uint32_t * pnInitDir, D2PathPointStrc * pwPointsBuf) {
     int32_t nStepY;
     uint32_t nCurX;
     int nMaxStepsM1 = nMaxSteps - 1;
@@ -3722,6 +3722,69 @@ int32_t __fastcall DRLGPATH_SimplifyCollinearWaypoints(D2PathPointStrc * pDstPoi
     }
 
     return nOutCount;
+}
+
+// Pathfinding entry point for units that cannot reach their target directly (path type fallback). Builds a Bresenham waypoint list from the unit's current packed position toward the destination. For each waypoint, checks collision via CheckCollision_BlockPlayer_Type; on blockage, delegates to DRLGPATH_FindPathDualScan to find the best reachable point. After traversal, simplifies collinear waypoints via DRLGPATH_SimplifyCollinearWaypoints and returns the resulting waypoint count. Only valid for PLAYER or MONSTER unit owners; halts otherwise.
+int32_t __fastcall PATH_FindPathTowardFallback(D2PathTypeArg * pPathTypeArg) {
+    int32_t nDualScanLen;
+    int32_t nPrevPointIdx;
+    int nPointCount_00;
+    D2PathPointStrc aBresenhamPoints[78];
+    uint32_t nInitialDir;
+    int32_t nErrorLine;
+    D2DynamicPathStrc* pDynamicPath = pPathTypeArg->pDynamicPath;
+    D2UnitStrc* pOwner = pDynamicPath->pOwner;
+    if (!pOwner || pOwner->eUnitType != UNIT_PLAYER && (!pOwner || pOwner->eUnitType != UNIT_MONSTER)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ad);
+      exit(-1);
+    }
+
+    D2RoomStrc* pRoom = pPathTypeArg->pRoom;
+    int32_t nUnitWidth = pPathTypeArg->nUnitWidth;
+    int32_t nCollisionPattern = pPathTypeArg->nCollisionPattern;
+    int32_t nPointIdx = 0;
+    uint32_t nMaxSteps = (uint32_t)pDynamicPath->nDistMax;
+    uint32_t nCurPacked = (uint32_t)((uint32_t)(uint16_t)pPathTypeArg->pCoords.nOffsetX | (uint32_t)(uint16_t)pPathTypeArg->pCoords.nPosX << 16);
+    int nBestPointIdx = 0;
+    if (pDynamicPath->pTargetUnit && pDynamicPath->nDistMax < 0x28) {
+      nMaxSteps = 0x28;
+    }
+
+    uint32_t nDstPacked = (uint32_t)((uint32_t)(uint16_t)pPathTypeArg->pCoords.nOffsetY | (uint32_t)(uint16_t)pPathTypeArg->pCoords.nPosY << 16);
+    uint32_t nStartPacked = nCurPacked;
+    nErrorLine = DRLGPATH_BuildBresenhamPointList(nCurPacked, nDstPacked, nMaxSteps, &nInitialDir, aBresenhamPoints);
+    int32_t nPointCount = nErrorLine;
+    if (nErrorLine <= 2) {
+      return 0;
+    }
+    if (nErrorLine > 0) {
+      do {
+        nDualScanLen = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)aBresenhamPoints[nPointIdx].nX, (uint32_t)aBresenhamPoints[nPointIdx].nY, nUnitWidth, nCollisionPattern);
+        nPrevPointIdx = nPointIdx;
+        if (nDualScanLen) {
+          nDualScanLen = DRLGPATH_FindPathDualScan((uint32_t*)pPathTypeArg, (int32_t)aBresenhamPoints, nCurPacked, &nBestPointIdx, &nPointCount, nMaxSteps - nPointIdx, nInitialDir);
+          nPrevPointIdx = nBestPointIdx;
+          nErrorLine = nPointCount;
+          nPointCount_00 = nBestPointIdx;
+          if (!nDualScanLen) {
+            nErrorLine = DRLGPATH_SimplifyCollinearWaypoints(pDynamicPath->PathPoints, aBresenhamPoints, nStartPacked, nPointCount_00);
+            return nErrorLine;
+          }
+        }
+
+        nPointIdx = nPrevPointIdx + 1;
+        nCurPacked = (uint32_t)((uint32_t)(uint16_t)aBresenhamPoints[nPrevPointIdx].nX | (uint32_t)(uint16_t)aBresenhamPoints[nPrevPointIdx].nY << 16);
+        nBestPointIdx = nPointIdx;
+      } while (nPointIdx < nErrorLine);
+    }
+
+    nPointCount_00 = nErrorLine;
+    if (!nErrorLine) {
+      return 0;
+    }
+
+    nErrorLine = DRLGPATH_SimplifyCollinearWaypoints(pDynamicPath->PathPoints, aBresenhamPoints, nStartPacked, nPointCount_00);
+    return nErrorLine;
 }
 
 } // namespace D2Common::Drlg::Path

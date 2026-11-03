@@ -2132,6 +2132,29 @@ int __stdcall MAINMENU_ClearLoopFlagPump(int nFrameIndex) {
     return 1;
 }
 
+BOOL __stdcall UIMENU_TCPIPAddressInput(D2ControlMsg * pControlMsg) {
+    D2GFX_SetPaletteForDraw("palette\\sky\\pal.dat", "palette\\sky\\pal.pl2");
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpMainMenuTcpIpTimerControl);
+    D2ControlStrc* pDVar1 = FORMS_CreateAnyFormFromList(0x10f);
+    D2Win::Src::D2WinMain::FORMS_SetGlobalFormImage(pDVar1, 0);
+    FORMS_CreateAnyFormFromList(0x10e);
+    ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0x10c);
+    uint16_t* wszText = D2Lang::StrTable::strtable::GetLocaleString(0x2b1f);
+    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pTextBox, wszText);
+    gpMainMenuFormPtrs = (::D2WinEditBox*)FORMS_CreateAnyFormFromList(0x10d);
+    if (gszLastTcpIpAddress[0] == '\0') {
+      Storm::Source::SReg::SRegLoadString("Diablo II", "LastTcpIp", 0, gszLastTcpIpAddress, 0x100);
+    }
+
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpMainMenuFormPtrs, gszLastTcpIpAddress);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpMainMenuFormPtrs->sControl);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SelectAll(gpMainMenuFormPtrs);
+    pDVar1 = FORMS_CreateAnyFormFromList(0x110);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pDVar1);
+    FORMS_CreateAnyFormFromList(0x111);
+    return 1;
+}
+
 BOOL __stdcall MAINMENU_OnPressStartTcpIpTimer(D2ControlMsg * pControlMsg) {
     FORMS_DestroyList();
     gpMainMenuTcpIpTimerControl = (::D2WinTimer*)FORMS_CreateAnyFormFromListExEx(0x10b);
@@ -2795,6 +2818,11 @@ void __fastcall UIMENU_CreateSmallPopup(uint16_t * wszTitle, pfnUIMenuInstance p
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
     MAINMENU_SetMultilineText(wszTitle, pTextBox, 0, '\0');
     gpCurrentUIMenuInstance = pfnMenuInstance;
+}
+
+BOOL __stdcall MAINMENU_DismissPopup(D2ControlStrc * pControl) {
+    FORMS_DestroyList();
+    return 1;
 }
 
 void __stdcall MAINMENU_PlayExpansionIntro() {

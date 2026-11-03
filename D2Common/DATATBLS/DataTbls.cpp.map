@@ -128,6 +128,38 @@
       ]
     },
     {
+      "name": "DATATBLS_CalcExpr_ParseTokenType",
+      "address": "00611930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00611930"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_CalcExpr_ParseTokenType",
+        "SStrCmpI"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "DATATBLS_CalcExpr_GetArgCount",
+      "address": "006119e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006119e0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::DataTbls",
+      "calledFunctions": [
+        "DATATBLS_CalcExpr_GetArgCount"
+      ]
+    },
+    {
       "name": "DATATBLS_LookupCalcCode",
       "address": "006119f0",
       "lines": [

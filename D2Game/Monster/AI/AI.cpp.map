@@ -7007,6 +7007,30 @@
       ]
     },
     {
+      "name": "AI_SelectTarget_SameLevelFilter",
+      "address": "005eeb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005eeb10"
+        }
+      ],
+      "namespace": "D2Game::Monster::AI",
+      "calledFunctions": [
+        "AI_SelectTarget_SameLevelFilter",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId"
+      ]
+    },
+    {
       "name": "AITHINK_AncientKoric",
       "address": "005eeb70",
       "lines": [

@@ -247,6 +247,27 @@
       ]
     },
     {
+      "name": "Q09_OnEndCallback",
+      "address": "00598f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00598f70"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q1",
+      "calledFunctions": [
+        "Q09_OnEndCallback",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataA2Q1Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
       "name": "Q09_CheckBookOfSkillAndSound",
       "address": "00598fa0",
       "lines": [

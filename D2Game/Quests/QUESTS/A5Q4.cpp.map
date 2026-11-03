@@ -243,6 +243,32 @@
       ]
     },
     {
+      "name": "Q34_SetCompleteForPartyMember",
+      "address": "0058b5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0058b5b0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A5Q4",
+      "calledFunctions": [
+        "Q34_SetCompleteForPartyMember",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
       "name": "Q34_PropagateCompleteToParty",
       "address": "0058b680",
       "lines": [

@@ -234,6 +234,15 @@ D2ObjectRngShrines * __fastcall GetShrinesRng(::SGAMEDATA * pGame) {
     return &pGame->pObjectControl->sShrinesRng;
 }
 
+void __fastcall IncrementObjectTypeCount(int * pThis, uint32_t nObjectType) {
+    if (nObjectType >= 100) {
+      return;
+    }
+
+    short int* pnTypeCount = (short int*)(pThis[0x43c] + 0x1048 + nObjectType * 2);
+    (*pnTypeCount)++;
+}
+
 void __fastcall Send_0x26_Chat(D2ClientStrc * pClient, char * * ppMessage) {
     GAME::SCmd::NET_D2GS_SERVER_Send_0x26_CHATSTART(pClient, (D2GSPacketSrv0x26*)*ppMessage);
 }

@@ -34,6 +34,8 @@ int32_t __stdcall TXT_Experience_GetMaxLevel(int32_t ePlayerClass);
 int __stdcall DATATBLS_GetLevelFromExperience(int32_t ePlayerClass, uint32_t nExperience);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * ppBuffer, int * pnSize, int * pnCapacity, void * pSrc, size_t nSize);
+int __fastcall DATATBLS_CalcExpr_ParseTokenType(char * szKey);
+int __fastcall DATATBLS_CalcExpr_GetArgCount(int nFunctionIndex);
 // Resolves a text code to a table row index for the given code type/subtype. For nCodeType==1 it dispatches on nSubType: 3=skills link, 4=missiles link, 5=itemstatcost link (with special-cased base/mod/accr names), 6=skill-calc link; on link-table miss it normalizes szText to a packed 4-char code and looks it up via Excel link tables. Writes the resolved type tag into *pdwOutType (1 = found via link index, 0 = resolved via class-id/code fallback). Returns the table index (or -1/0 on failure). __fastcall.
 int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToConstant, int nAST, int nKeywordNumber);
 void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);

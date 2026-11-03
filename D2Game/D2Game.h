@@ -11,11 +11,8 @@
 // Forward declarations
 struct D2ClientStrc;
 struct D2DrlgActStrc;
-struct D2ObjectInitFnArg;
-struct D2QuestArgStrc;
 struct D2QuestDataStrc;
 struct D2RoomStrc;
-struct D2UnitFindArgStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2States;
@@ -52,28 +49,13 @@ void __stdcall nullsub_7Arg(struct D2UnitStrc * pUnit, uint32_t dwParam2, uint32
 // about behaviour.
 void __stdcall nullsub_B(struct D2UnitStrc * pUnit, uint32_t dwParam2, uint32_t dwParam3);
 int __stdcall QSERVER_CountClientsWithStatusFlag0x20();
-// Updates the player's portal-visited bitmask: gets the level ID of the player's current room, maps it to the corresponding portal flag, and OR's it into the player's persistent portal flags. No-op if room or player unit is null.
-void __stdcall CLIENT_UpdatePortalFlags(struct D2ClientStrc * gameContext);
 // Clears the global gbQuestReconnectMode flag (sets to 0), disabling quest-reconnect mode. Called during game teardown or after reconnect handling is complete.
 void __stdcall GAME_ClearGlobalFlag();
-void __fastcall IncrementObjectTypeCount(int * pThis, uint32_t nObjectType);
-void __fastcall PLRMODES_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
-void __fastcall PARTY_RefreshPlayerListRelationships(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __stdcall TASK_InitializeClock();
 // Task queue: calculates time until next scheduled task. Enters critical section for task slot (nParam & 0x1F), reads first task timestamp from priority queue, and returns delta from current timestamp.
 int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot);
-void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
-uint32_t __fastcall UNIT_IsAlive(struct D2UnitStrc * pUnit, struct D2UnitFindArgStrc * pUnitFindArg);
 void __fastcall Q33_SetCompleteForPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// Q34_SetCompleteForPartyMember (Betrayal of Harrogath). Party-propagation worker (called by Q34_PropagateCompleteToParty for each member). Grants the kill to a party member who is in Act V and whose Betrayal isn't already Completed/CannotComplete/RewardAwaits/JustCompleted, provided Prison of Ice is done: sets their RewardAwaits + JustCompleted bits. Mirrors Q34_CheckNearNihlathak but keyed on party membership rather than room proximity.
-void __fastcall Q34_SetCompleteForPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-uint8_t __fastcall Q02_TimerNotifyCompletion(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
-void __fastcall fpExecuteOnUnitFunction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall Q03_AutoCompleteIfHighLevel(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall Q05_SetPartyMemberRewardStates(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
-void __fastcall Q6_DenOfEvil_OnComplete_ClearGUIDs(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArg);
-uint8_t __fastcall Q09_OnEndCallback(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 // A2Q3 - per-party-member cb (Q11_SetTaintedSunRewardOnPartyMember; invoked by Q11_PropagateRewardToParty).
 // For each in-game party member not already Completed/RewardAwaits, mark their record JustCompleted + RewardAwaits
 // so partymates near the destroyed altar also get the Tainted-Sun reward credit.
@@ -82,23 +64,9 @@ uint8_t __fastcall Q11_OnEndCallback(::SGAMEDATA * pGame, struct D2QuestDataStrc
 void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 uint8_t __fastcall Q11_TimerCheckDarkness(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 void __fastcall MONSTER_ScheduleDeathIfRunningOrDead(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
-void __fastcall MISSILESMODE_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
-BOOL __fastcall Q26_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-BOOL __fastcall Q26_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-BOOL __fastcall Q26_PropagateCompletionToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall Objects_InitFn56_Seal(struct D2ObjectInitFnArg * pInitArg);
-BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-BOOL __fastcall Q22_PropagateCompletionToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-BOOL __fastcall Q22_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-BOOL __fastcall Q22_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(struct D2UnitStrc * pUnit, void * pSkillData);
 void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 void __fastcall SKILLSASS_StatExpireCallback_ClearState2(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
-void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 void __fastcall MONSTERAI_FlagIfDeadOrNull(struct D2UnitStrc * pUnit, uint32_t * pdwDeadFlag, uint32_t dwArg1);
-BOOL __fastcall AI_SelectTarget_SameLevelFilter(struct D2UnitStrc * pSelf, struct D2UnitStrc * pTarget);
 
 } // namespace D2Game

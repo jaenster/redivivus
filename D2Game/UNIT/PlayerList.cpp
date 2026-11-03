@@ -19,6 +19,7 @@
 #include "D2Game/GAME/Targets.h"
 #include "D2Game/PLAYER/Player.h"
 #include "D2Game/PLAYER/PlayerTrade.h"
+#include "D2Game/UNIT/Party.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitInactive.h"
 #include "D2Game/UNIT/SUnitMsg.h"
@@ -445,6 +446,23 @@ void __fastcall PARTY_BroadcastPlayerToAllUnits(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYERLIST_AddBothWays, pUnit);
+}
+
+void __fastcall PARTY_RefreshPlayerListRelationships(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    int16_t nFoundPartyId;
+    D2UnitStrc* pUnit_00;
+    D2UnitPlayerListStrc* pPlayerListEntry;
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    for (pPlayerListEntry = pPlayerData->pPlayerList; pPlayerListEntry; pPlayerListEntry = pPlayerListEntry->pNext) {
+      if (pPlayerListEntry->bIsPartied == 2) {
+        pUnit_00 = SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pPlayerListEntry->nUnitGUID);
+        if (pUnit_00) {
+          nFoundPartyId = Party::GetPartyIdFromUnit(pGame, pUnit_00);
+          pPlayerListEntry->bIsPartied = (uint32_t)(nFoundPartyId != -1);
+          Send0x8bRelationshipStatus(pUnit, pUnit_00);
+        }
+      }
+    }
 }
 
 DWORD __fastcall GetHostileDelay(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {

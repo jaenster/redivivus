@@ -4,38 +4,6 @@
   "file": "D2Common/D2Common.cpp",
   "functions": [
     {
-      "name": "DATATBLS_CalcExpr_ParseTokenType",
-      "address": "00611930",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00611930"
-        }
-      ],
-      "namespace": "D2Common",
-      "calledFunctions": [
-        "DATATBLS_CalcExpr_ParseTokenType",
-        "SStrCmpI"
-      ],
-      "usedTypes": [
-        "int32_t"
-      ]
-    },
-    {
-      "name": "DATATBLS_CalcExpr_GetArgCount",
-      "address": "006119e0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006119e0"
-        }
-      ],
-      "namespace": "D2Common",
-      "calledFunctions": [
-        "DATATBLS_CalcExpr_GetArgCount"
-      ]
-    },
-    {
       "name": "DRLGROOMEX_SetFlagsFromNearCount",
       "address": "0061bb50",
       "lines": [

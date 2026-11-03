@@ -58,8 +58,8 @@
 #include "Fog/Save.h"
 #include "globals/globals.h"
 #include "D2Client/UI/QuestLog.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
 #include "Fog/Src/Safesock.h"
 

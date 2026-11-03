@@ -45,6 +45,7 @@ void __fastcall PARTY_SendRelationshipForPlayer(::SGAMEDATA * pGame, struct D2Un
 // Establishes a bidirectional player-list relationship between pUnit and pOtherPlayer: allocates entries for both directions, sends packet 0x8D (AssignPlayerToParty), clears bIsPartied flags, updates party membership based on current party ID, and broadcasts the full relationship table of pUnit to pOtherPlayer via 0x8C packets.
 void __fastcall PLAYERLIST_AddBothWays(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOtherPlayer);
 void __fastcall PARTY_BroadcastPlayerToAllUnits(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall PARTY_RefreshPlayerListRelationships(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 DWORD __fastcall GetHostileDelay(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer);
 void __fastcall PLAYERLIST_SetHostileDelay(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nDelayFrames);
 void __fastcall PLAYERLIST_RemoveFromListCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);

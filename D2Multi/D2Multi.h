@@ -25,6 +25,5 @@ BOOL __stdcall CHATDLG_DestroyFormsAndJoinGame(struct D2ControlMsg * pControlMsg
 // Provenance: asm 004467d0; fpOnPressCallback of record 0070cf70.
 BOOL __stdcall CHATDLG_DestroyFormsAndOpenCreateGameDialog(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus2(struct D2ControlMsg * pControlMsg);
 
 } // namespace D2Multi

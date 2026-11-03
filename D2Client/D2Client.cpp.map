@@ -1477,24 +1477,6 @@
       ]
     },
     {
-      "name": "NPCMENU_ConfirmTransactionReturn",
-      "address": "004b2f00",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004b2f00"
-        }
-      ],
-      "namespace": "D2Client",
-      "calledFunctions": [
-        "NPCMENU_ConfirmTransactionReturn",
-        "FreeDialogStrc",
-        "NPCMENU_BuildMercHireMenu",
-        "INV_ReturnToShopFromRepair",
-        "ClearSelectedUnit"
-      ]
-    },
-    {
       "name": "NPCMENU_GetCurrentMenuId",
       "address": "004b4cf0",
       "lines": [

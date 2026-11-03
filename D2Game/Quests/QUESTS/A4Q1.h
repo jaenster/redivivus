@@ -31,6 +31,10 @@ BOOL __fastcall Q26_PlayerNotifyCompleted(::SGAMEDATA * pGame, struct D2UnitStrc
 void __fastcall Q26_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Q26_Callback_00 — gossip-text selector (handler[0]). Chooses which Fallen Angel gossip line an NPC speaks based on quest state. Izual-spirit (0x196) before Step0x05 -> msg 3. RewardAwaits -> msg 3. Already-participated player -> msg 4. Else, before completion/intro, picks msg from gdwQ15QuestStateMessages[stateflag] (0xFFFFFFFF = stay silent). Emits via AddGossipMessageOnMonster.
 void __fastcall Q26_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
+BOOL __fastcall Q26_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q26_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q26_PropagateCompletionToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q26_Callback_10 — player-leave handler (handler[10]). Removes the departing player's GUID from this quest's participation list (sQuestGUID); uses -1 when no player. Cleans up party-participation tracking so reward/credit logic stays correct.
 void __fastcall Q26_Callback10_PlayerLeavesGame(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Q26_QuestUpdate_SpawnIzual — deferred quest timer (added in Callback_08). If stateflag just reached 4 (and prev wasn't 4/0xd), broadcast stateflag 3. Then, if a spawn was queued, spawn Izual's monster (classId 0x196) at the recorded subtile coords in Act4 (pAct[3]); tries skill-variant ids 1/3/5. Materializes the actual Izual demon unit for the kill.

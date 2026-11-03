@@ -14,7 +14,6 @@
 #include "D2Common/PATH/Path.h"
 #include "D2Common/Stats/StatsEx.h"
 #include "D2Common/Units.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/GAME/Clients.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/SCmd.h"
@@ -34,6 +33,7 @@
 #include "globals/globals.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -238,14 +238,14 @@ void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * 
       uVar1 = UNIT::Party::PARTY_CreateParty(pGame);
       UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pInvitee, (int32_t)pUnit);
       UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pUnit, (int32_t)pUnit);
-      PARTY_RefreshPlayerListRelationships(pGame, pInvitee);
+      UNIT::PlayerList::PARTY_RefreshPlayerListRelationships(pGame, pInvitee);
       *(uint16_t*)(char*)&pInvitee = uVar1;
     } else {
       UNIT::Party::PARTY_AddUnitToParty(pGame, nIsPartied, pUnit, (int32_t)pUnit);
       *(uint16_t*)(char*)&pInvitee = nIsPartied;
     }
 
-    PARTY_RefreshPlayerListRelationships(pGame, pUnit);
+    UNIT::PlayerList::PARTY_RefreshPlayerListRelationships(pGame, pUnit);
     if (!pInviteeCopy) {
       pUnitGid = -1;
     } else {

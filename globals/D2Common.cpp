@@ -7,6 +7,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
+#include "D2Common/Chat/Ignorelist.h"
 #include "D2Common/Chat/Ignorelist/ChatIgnoreList.h"
 #include "D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "D2Common/D2SeedStrc.h"
@@ -5195,7 +5196,7 @@ void * vftable[12] = {
     (void*)&D2Common::Chat::Ignorelist::IgnoreList::AddByAccountName,
     (void*)&D2Common::Chat::Ignorelist::IgnoreList::RemoveByAccountName,
     (void*)&D2Common::Chat::Ignorelist::IgnoreList::CheckAccountNameIgnored,
-    (void*)&D2Common::Chat::Ignorelist::IgnoreList::AddAccountMapping,
+    (void*)&D2Common::Chat::Ignorelist::AddAccountMapping,
     (void*)&D2Common::Chat::Ignorelist::IgnoreList::GetMappedValue,
     (void*)&D2Common::Chat::Ignorelist::IgnoreList::GetPersistentSetting,
     (void*)&D2Common::Chat::Ignorelist::IgnoreList::SavePersistentSetting,

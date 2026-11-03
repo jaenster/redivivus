@@ -1370,20 +1370,6 @@ void __fastcall MONSTER_FreeMonsterPath(int * pUnit) {
     *(uint32_t*)(nMonsterData + 0x2c) = 0;
 }
 
-int __stdcall NPCMENU_ConfirmTransactionReturn() {
-    UI::Dialog::FreeDialogStrc(UI::Dialog::gpNpcTransactionConfirmDialog);
-    UI::Dialog::gpNpcTransactionConfirmDialog = 0;
-    if (gnNpcMenuTransactionType == 5) {
-      UI::npcmenu::NPCMENU_BuildMercHireMenu();
-      return 1;
-    }
-
-    UI::Inv::INV_ReturnToShopFromRepair();
-    _Interaction::geNpcUiState = NPCUI_SHOP;
-    GAME::Select::ClearSelectedUnit();
-    return 1;
-}
-
 int __stdcall NPCMENU_GetCurrentMenuId() {
     GAME::Select::ClearSelectedUnit();
     Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);

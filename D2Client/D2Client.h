@@ -139,7 +139,6 @@ void __fastcall MONUNIQUE_Clt_ClearMonsterOverride(struct D2UnitStrc * pUnit, in
 void __fastcall MONUNIQUE_DispatchDeathEffect(struct D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion);
 void __fastcall MONUNIQUE_Clt_SpawnPainWormDeathExplosion(struct D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion);
 void __fastcall MONSTER_FreeMonsterPath(int * pUnit);
-int __stdcall NPCMENU_ConfirmTransactionReturn();
 int __stdcall NPCMENU_GetCurrentMenuId();
 void __fastcall TRADE_HandleTradeComplete(int32_t nValue, char bIsGoldAmount);
 int __stdcall D2CLIENT_GetTradeAcceptedFlags();

@@ -3489,6 +3489,26 @@
       ]
     },
     {
+      "name": "PLRMODES_StatExpireCallback_ClearState",
+      "address": "0054cc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0054cc30"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerMsg",
+      "calledFunctions": [
+        "PLRMODES_StatExpireCallback_ClearState",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
       "name": "RelocateAndApplySyncWarp",
       "address": "0054cc40",
       "lines": [

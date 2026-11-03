@@ -97,7 +97,6 @@
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/ITEMS/ItemMods.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/Quests/QUESTS/A1Q3.h"
 #include "D2Game/Quests/QUESTS/A1Q4.h"
 #include "D2Game/Quests/QUESTS/A1Q5.h"
@@ -1270,6 +1269,23 @@ BOOL __fastcall OBJOP_OpenHoradricCube(D2ObjectOperateFnArg * pOperation) {
     }
 
     return 1;
+}
+
+uint32_t __fastcall UNIT_IsAlive(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg) {
+    if (!pUnit) {
+      return 0;
+    }
+    if (pUnit->eUnitType == UNIT_MONSTER) {
+      BOOL BVar1;
+      BVar1 = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
+      if (!BVar1) {
+        return 1;
+      }
+    } else if (pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode != Death && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
+      return 1;
+    }
+
+    return 0;
 }
 
 // Returns 1 if pUnit is a valid targetable monster for pUnit2 (e.g. for shrine/object counter-attack targeting). Checks: pUnit != pUnit2, is UNIT_MONSTER, not an ally of pUnit2, neutral alignment, not dead, in Neutral or Walk anim mode, has the required monster stat flag (index 2), has a non-zero Height in MonStats2, and is neither a boss nor flagged by MonStatFlag bit 7 nor of type 0x1F. Returns 0 otherwise.

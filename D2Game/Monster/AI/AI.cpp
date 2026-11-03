@@ -14745,6 +14745,27 @@ void __fastcall AITHINK_Fn1_AncientStatue(::SGAMEDATA * pGame, D2UnitStrc * pUni
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
+BOOL __fastcall AI_SelectTarget_SameLevelFilter(D2UnitStrc * pSelf, D2UnitStrc * pTarget) {
+    eD2LevelId eSelfLevelId;
+    eD2LevelId eTargetLevelId;
+    if (!pSelf) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15ca);
+      exit(-1);
+    } else {
+      D2RoomStrc* pRoom;
+      if (!pTarget) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15cb);
+        exit(-1);
+      }
+
+      pRoom = D2Common::Units::UNITS_GetRoom(pSelf);
+      eSelfLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      pRoom = D2Common::Units::UNITS_GetRoom(pTarget);
+      eTargetLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      return (uint32_t)(eSelfLevelId == eTargetLevelId);
+    }
+}
+
 // AI think function for Koric, one of the Ancients (Act 5 Q5). If quest data is absent (ancients not yet activated), selects a combat target and evaluates a charge attack: rolls the unit seed against a difficulty-scaled probability; if it fires, launches the charge skill toward the target's position via MONSTERAI_ExecuteLifecycleTransition. Otherwise chooses randomly between two melee skill modes (slots 4 or 5) or idles at range if out of melee.
 void __fastcall AITHINK_AncientKoric(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRandRoll;

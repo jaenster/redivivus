@@ -127,6 +127,7 @@ void __fastcall NPCMENU_OnItemInShop(int32_t nUnitGUID);
 BOOL __fastcall NPCMENU_CalculateItemTransactionCost(struct D2UnitStrc * pUnit, int32_t nTransactionMode, int * pInventory, uint16_t * pszBuffer, int32_t nBufferMaxLen);
 uint32_t __stdcall NPCMENU_IsShopActive();
 BOOL __stdcall NPCMENU_ConfirmTransactionCallback();
+int __stdcall NPCMENU_ConfirmTransactionReturn();
 void __stdcall NPCMENU_ShowTransactionConfirmDialog();
 BOOL __fastcall GetInteractedUnitGuid(int * pNpcGUID);
 // Returns gpNpcMenuBitBuffer, the NPC menu's quest record.

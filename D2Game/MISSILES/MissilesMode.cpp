@@ -83,7 +83,6 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/SKILLS/SkillEMonst.h"
 #include "Fog/Src/Safesock.h"
 
@@ -4078,6 +4077,10 @@ static int getDamageTarget(D2UnitStrc * pUnit) {
     }
 
     return nDmgTargetMode;
+}
+
+void __fastcall MISSILESMODE_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, int32_t pStatList) {
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
 static void MISSMODE_ApplyNextHitState(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {

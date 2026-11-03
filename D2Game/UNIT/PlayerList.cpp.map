@@ -280,6 +280,31 @@
       ]
     },
     {
+      "name": "PARTY_RefreshPlayerListRelationships",
+      "address": "0055b650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0055b650"
+        }
+      ],
+      "namespace": "D2Game::UNIT::PlayerList",
+      "calledFunctions": [
+        "PARTY_RefreshPlayerListRelationships",
+        "GetPlayerData",
+        "FindUnitFromTable",
+        "GetPartyIdFromUnit",
+        "Send0x8bRelationshipStatus"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitPlayerListStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t"
+      ]
+    },
+    {
       "name": "GetHostileDelay",
       "address": "0055b6c0",
       "lines": [

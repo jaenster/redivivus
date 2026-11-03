@@ -50,7 +50,6 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
-#include "D2Common/D2Common.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -201,6 +200,45 @@ int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * ppBuffer, int * pnSize, 
     memcpy((void*)((int)*ppBuffer + nOffset), pSrc, nSize);
     *pnSize += nSize;
     return nOffset;
+}
+
+int __fastcall DATATBLS_CalcExpr_ParseTokenType(char * szKey) {
+    int32_t nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "min", 0x20);
+    if (!nCmpResult) {
+      return 0;
+    }
+
+    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "max", 0x20);
+    if (!nCmpResult) {
+      return 1;
+    }
+
+    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "rand", 0x20);
+    if (!nCmpResult) {
+      return 2;
+    }
+
+    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "skill", 0x20);
+    if (!nCmpResult) {
+      return 3;
+    }
+
+    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "miss", 0x20);
+    if (!nCmpResult) {
+      return 4;
+    }
+
+    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "stat", 0x20);
+    if (!nCmpResult) {
+      return 5;
+    }
+
+    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "sklvl", 0x20);
+    return (nCmpResult ? -7 : 0) + 6;
+}
+
+int __fastcall DATATBLS_CalcExpr_GetArgCount(int nFunctionIndex) {
+    return nFunctionIndex == 6 ? 3 : 2;
 }
 
 // Resolves a text code to a table row index for the given code type/subtype. For nCodeType==1 it dispatches on nSubType: 3=skills link, 4=missiles link, 5=itemstatcost link (with special-cased base/mod/accr names), 6=skill-calc link; on link-table miss it normalizes szText to a packed 4-char code and looks it up via Excel link tables. Writes the resolved type tag into *pdwOutType (1 = found via link index, 0 = resolved via class-id/code fallback). Returns the table index (or -1/0 on failure). __fastcall.

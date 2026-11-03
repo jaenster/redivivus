@@ -171,6 +171,28 @@
       ]
     },
     {
+      "name": "Q28_PartyMember_SetCannotComplete",
+      "address": "005b5bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b5bb0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A4Q3",
+      "calledFunctions": [
+        "Q28_PartyMember_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "OBJOP_A4Q3_HellforgeSmash",
       "address": "005b5c10",
       "lines": [

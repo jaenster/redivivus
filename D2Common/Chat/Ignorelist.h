@@ -19,6 +19,8 @@ void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, ch
 void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, int32_t nDstBuf, int32_t nBufLen);
 void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize);
 // @sourcefile .\Chat\Ignorelist.cpp
+void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nRawLen);
+// @sourcefile .\Chat\Ignorelist.cpp
 void __stdcall MISC_InitIgnorelist();
 // Lazy accessor - returns ppIgnoreListVTable, and only when that global is null
 // does it SMemAlloc 0x188 bytes (.\Chat\Ignorelist.cpp line 0x48) and run IGNORELIST_Ctor.

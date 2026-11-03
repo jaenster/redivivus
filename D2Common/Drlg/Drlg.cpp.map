@@ -1507,36 +1507,6 @@
       ]
     },
     {
-      "name": "PATH_FindPathTowardFallback",
-      "address": "0067c2d0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0067c2d0"
-        }
-      ],
-      "namespace": "D2Common::Drlg",
-      "calledFunctions": [
-        "PATH_FindPathTowardFallback",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "DRLGPATH_BuildBresenhamPointList",
-        "CheckCollision_BlockPlayer_Type",
-        "DRLGPATH_FindPathDualScan",
-        "DRLGPATH_SimplifyCollinearWaypoints"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2PathPointStrc",
-        "D2PathTypeArg",
-        "D2RoomStrc",
-        "D2UnitStrc",
-        "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "DRLGGRID_OrFlagOnCellList",
       "address": "0067c890",
       "lines": [

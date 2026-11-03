@@ -203,6 +203,26 @@
       ]
     },
     {
+      "name": "Q6_DenOfEvil_OnComplete_ClearGUIDs",
+      "address": "005961c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005961c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q6",
+      "calledFunctions": [
+        "Q6_DenOfEvil_OnComplete_ClearGUIDs",
+        "SetRewardAndFinishFlags",
+        "QUESTGUID_RemovePlayerFromList"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ]
+    },
+    {
       "name": "Q06_SetQuestCompletedAndReward",
       "address": "00596210",
       "lines": [

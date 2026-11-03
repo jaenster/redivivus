@@ -259,6 +259,28 @@
       ]
     },
     {
+      "name": "CLIENT_UpdatePortalFlags",
+      "address": "00537b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00537b00"
+        }
+      ],
+      "namespace": "D2Game::GAME::Clients",
+      "calledFunctions": [
+        "CLIENT_UpdatePortalFlags",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetPlayerPortalFlags",
+        "GetPortalFlagFromLevelId",
+        "SetPlayerPortalFlags"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "GAME_OnClientRoomChange",
       "address": "00537b50",
       "lines": [

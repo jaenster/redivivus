@@ -77,10 +77,4 @@ BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus(D2ControlMsg * pContro
     return 1;
 }
 
-BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus2(D2ControlMsg * pControlMsg) {
-    OOGUtilities::UIMENU_DialogWindowChatCommands();
-    Launcher::LAUNCHER_RestoreFocusToControl();
-    return 1;
-}
-
 } // namespace D2Multi

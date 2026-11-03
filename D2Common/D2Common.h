@@ -16,8 +16,6 @@ struct D2UnitStrc;
 namespace D2Common {
 
 // Function declarations
-int __fastcall DATATBLS_CalcExpr_ParseTokenType(char * szKey);
-int __fastcall DATATBLS_CalcExpr_GetArgCount(int nFunctionIndex);
 // Sets eRoomExFlags from a lookup table indexed by nDrlgRoomsExNearCount. Appears to set initialization flags based on the number of neighboring RoomEx entries.
 void __stdcall DRLGROOMEX_SetFlagsFromNearCount(struct D2RoomExStrc * pRoomEx);
 int __fastcall ITEMTBLS_CalcExpr_ParseTokenType(char * szKey);

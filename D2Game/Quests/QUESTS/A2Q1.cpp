@@ -34,7 +34,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Common/Text.h"
-#include "D2Game/D2Game.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -391,6 +391,17 @@ BOOL __fastcall Q09_CheckRadamentKillAndReward(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     return 0;
+}
+
+uint8_t __fastcall Q09_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
+    D2QuestDataA2Q1Strc* pA2Q1Data = pQuestData->pQuestSpecificData.pA2Q1;
+    if (pQuestData->nStateFlag == 4) {
+      pQuestData->nQuestPacketFlags = '\0';
+      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q09_NotifyRadamentComplete, true);
+    }
+
+    pA2Q1Data->bEndCallbackScheduled = false;
+    return '\x01';
 }
 
 // A2Q1: Book-of-Skill drop accounting + completion sound. Run per-player after Radament's death. If quest is in Step0x05 (reward earned, book not yet consumed) AND the player does NOT currently hold the Book of Skill quest item (code 0x20737361 = 'ass '), increments the pending book-drop counter (A2Q1 nBookOfSkillDropCount, via the A1Q1-aliased GUID slot) so the death handler drops a (re)book. Separately, if the quest is JustCompleted (0xd), plays the quest-complete sound event 0x32 on the player.

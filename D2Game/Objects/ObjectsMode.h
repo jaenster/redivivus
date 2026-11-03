@@ -17,6 +17,7 @@ struct D2RoomStrc;
 struct D2ShrinesTxt;
 struct D2SkillStrc;
 struct D2StatListExStrc;
+struct D2UnitFindArgStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2ItemQuality;
@@ -72,6 +73,7 @@ void __fastcall OBJMODE_SpawnSiegeMonsterD(::SGAMEDATA * pGame, struct D2UnitStr
 // Object operate-fn for the Horadric Cube chest object. If the cube is closed (Death mode or null) and the player is not already trading: checks the player's inventory for a Gem-type item (required to open the cube); if absent plays a sound. If a gem is present, sets interact info to the cube's GUID, marks the cube open (SetupUpdateFlag 3), and sends SCMD 0x58 (OpenUI) to the client. If the cube is already open (Run mode) and it matches the current NPC interaction, closes it (ClearInteractInfo, SetupUpdateFlag 1). Always returns 1.
 // @sourcefile .\OBJECTS\ObjMode.cpp
 BOOL __fastcall OBJOP_OpenHoradricCube(struct D2ObjectOperateFnArg * pOperation);
+uint32_t __fastcall UNIT_IsAlive(struct D2UnitStrc * pUnit, struct D2UnitFindArgStrc * pUnitFindArg);
 // Returns 1 if pUnit is a valid targetable monster for pUnit2 (e.g. for shrine/object counter-attack targeting). Checks: pUnit != pUnit2, is UNIT_MONSTER, not an ally of pUnit2, neutral alignment, not dead, in Neutral or Walk anim mode, has the required monster stat flag (index 2), has a non-zero Height in MonStats2, and is neither a boss nor flagged by MonStatFlag bit 7 nor of type 0x1F. Returns 0 otherwise.
 uint32_t __fastcall OBJECT_CanTargetMonster(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 struct D2StatListExStrc * __fastcall ApplyShrineBonus(struct D2UnitStrc * pUnit, struct D2UnitStrc * pAttacker, uint32_t nDurationInFrames, int32_t nSkillCalc, eD2UnitStat eStat, eD2States eAuraState, PFN_StatExpireCallback pFunction);

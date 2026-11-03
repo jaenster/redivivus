@@ -28,45 +28,6 @@
 
 namespace D2Common {
 
-int __fastcall DATATBLS_CalcExpr_ParseTokenType(char * szKey) {
-    int32_t nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "min", 0x20);
-    if (!nCmpResult) {
-      return 0;
-    }
-
-    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "max", 0x20);
-    if (!nCmpResult) {
-      return 1;
-    }
-
-    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "rand", 0x20);
-    if (!nCmpResult) {
-      return 2;
-    }
-
-    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "skill", 0x20);
-    if (!nCmpResult) {
-      return 3;
-    }
-
-    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "miss", 0x20);
-    if (!nCmpResult) {
-      return 4;
-    }
-
-    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "stat", 0x20);
-    if (!nCmpResult) {
-      return 5;
-    }
-
-    nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "sklvl", 0x20);
-    return (nCmpResult ? -7 : 0) + 6;
-}
-
-int __fastcall DATATBLS_CalcExpr_GetArgCount(int nFunctionIndex) {
-    return nFunctionIndex == 6 ? 3 : 2;
-}
-
 // Sets eRoomExFlags from a lookup table indexed by nDrlgRoomsExNearCount. Appears to set initialization flags based on the number of neighboring RoomEx entries.
 void __stdcall DRLGROOMEX_SetFlagsFromNearCount(D2RoomExStrc * pRoomEx) {
     pRoomEx->eRoomExFlags = gnTimeRates[pRoomEx->nDrlgRoomsExNearCount];

@@ -70,52 +70,6 @@
       ]
     },
     {
-      "name": "UIMENU_TCPIPAddressInput",
-      "address": "00431d20",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00431d20"
-        }
-      ],
-      "namespace": "D2Launch",
-      "calledFunctions": [
-        "UIMENU_TCPIPAddressInput",
-        "D2GFX_SetPaletteForDraw",
-        "FORMS_DestroyAnyForm",
-        "FORMS_CreateAnyFormFromList",
-        "FORMS_SetGlobalFormImage",
-        "GetLocaleString",
-        "D2WINTEXTBOX_SetTextW",
-        "SRegLoadString",
-        "D2WINEDITBOX_SetTextFromAnsi",
-        "D2WINMAIN_SetFocusedControl",
-        "D2WINEDITBOX_SelectAll",
-        "D2WINMAIN_SetFormFourth"
-      ],
-      "usedTypes": [
-        "D2ControlMsg"
-      ]
-    },
-    {
-      "name": "MAINMENU_DismissPopup",
-      "address": "004334d0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004334d0"
-        }
-      ],
-      "namespace": "D2Launch",
-      "calledFunctions": [
-        "MAINMENU_DismissPopup",
-        "FORMS_DestroyList"
-      ],
-      "usedTypes": [
-        "D2ControlStrc"
-      ]
-    },
-    {
       "name": "UIMENU_DisconnectAndReturnToMainMenu",
       "address": "00434dd0",
       "lines": [

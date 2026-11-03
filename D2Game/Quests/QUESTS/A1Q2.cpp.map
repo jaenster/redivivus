@@ -153,6 +153,26 @@
       ]
     },
     {
+      "name": "Q02_TimerNotifyCompletion",
+      "address": "00590bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00590bf0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q2",
+      "calledFunctions": [
+        "Q02_TimerNotifyCompletion",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
       "name": "Q02_Callback10_PlayerLeavesGame",
       "address": "00590c10",
       "lines": [
@@ -204,6 +224,32 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "fpExecuteOnUnitFunction",
+      "address": "00590d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00590d60"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q2",
+      "calledFunctions": [
+        "fpExecuteOnUnitFunction",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
       ]
     },
     {

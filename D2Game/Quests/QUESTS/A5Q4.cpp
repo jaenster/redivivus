@@ -37,8 +37,8 @@
 #include "globals/globals.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/Text.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -433,6 +433,69 @@ BOOL __fastcall Q34_CheckNearNihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     /* SetQuestState(Betrayal q0x26, JustCompleted=0xd): fire completion FX for
                          nearby player */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
     return 0;
+}
+
+// Q34_SetCompleteForPartyMember (Betrayal of Harrogath). Party-propagation worker (called by Q34_PropagateCompleteToParty for each member). Grants the kill to a party member who is in Act V and whose Betrayal isn't already Completed/CannotComplete/RewardAwaits/JustCompleted, provided Prison of Ice is done: sets their RewardAwaits + JustCompleted bits. Mirrors Q34_CheckNearNihlathak but keyed on party membership rather than room proximity.
+void __fastcall Q34_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Completed);
+    if (bQuestStateResult == 1) {
+      return;
+    }
+
+    bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_CannotCompleteQuestInGame);
+    if (bQuestStateResult == 1) {
+      return;
+    }
+
+    bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
+    if (bQuestStateResult == 1) {
+      return;
+    }
+
+    bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
+    if (bQuestStateResult == 1) {
+      return;
+    }
+
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
+      return;
+    }
+
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    if (eLevel == LEVEL_None) {
+      return;
+    }
+
+    eAct neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (neAct != ACT_V) {
+      return;
+    }
+
+    bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_Completed);
+    if (!bQuestStateResult) {
+      bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits);
+      if (!bQuestStateResult) {
+        return;
+      }
+    }
+
+    bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_Completed);
+    if (bQuestStateResult) {
+      return;
+    }
+
+    bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
+    if (bQuestStateResult) {
+      return;
+    }
+
+    /* SetQuestState(Betrayal q0x26, RewardAwaits=1): grant kill credit to self
+                         party member */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_RewardAwaits);
+    /* SetQuestState(Betrayal q0x26, JustCompleted=0xd): trigger completion
+                         FX/propagation for self party member */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BetrayalOfHaggorath, QUESTSTATE_JustCompleted);
 }
 
 // Q34_PropagateCompleteToParty (Betrayal of Harrogath). Per-player: if this player has the Betrayal JustCompleted bit, propagates completion to every party member via Q34_SetCompleteForPartyMember. Shares the Nihlathak kill credit with the party.

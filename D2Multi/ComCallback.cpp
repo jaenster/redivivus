@@ -1061,6 +1061,12 @@ BOOL __stdcall COMCALLBACK_ValidateGameJoinability() {
     return 1;
 }
 
+BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus2(D2ControlMsg * pControlMsg) {
+    OOGUtilities::UIMENU_DialogWindowChatCommands();
+    Launcher::LAUNCHER_RestoreFocusToControl();
+    return 1;
+}
+
 static int __fastcall PrintChannelText(char * szText, int32_t nColor) {
     int i;
     uint16_t* pStr;

@@ -45,7 +45,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/Text.h"
-#include "D2Game/D2Game.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 #include "D2Game/Quests/QUESTS/A3Q4.h"
 #include "Fog/Src/Safesock.h"
 
@@ -675,6 +675,85 @@ void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUn
 
     QUEST_SetStateFlag(pQuestData, nNewStateFlag, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", dwSrcLine);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerUpdateBlackenedTempleState);
+}
+
+void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    eD2QuestState eQuestState;
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
+      return;
+    }
+
+    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
+    if (BVar1 == 1) {
+      return;
+    }
+
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
+      return;
+    }
+
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    if (eLevel == LEVEL_None) {
+      return;
+    }
+
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_III) {
+      return;
+    }
+
+    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
+    if (BVar1) {
+      eQuestState = QUESTSTATE_Completed;
+    } else {
+      eQuestState = QUESTSTATE_Step0x04;
+    }
+
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, eQuestState);
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
+}
+
+BOOL __fastcall Q22_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
+    if (BVar2) {
+      uint16_t nPartyId;
+      nPartyId = UNIT::SUnit::GetPartyId(pUnit);
+      if (nPartyId != 0xffff) {
+        UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q22_PartyMember_SetCompleted, 0);
+      }
+    }
+
+    return 0;
+}
+
+BOOL __fastcall Q22_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
+    if (BVar2 != 1) {
+      BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
+      if (BVar2 != 1) {
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_CannotCompleteQuestInGame);
+        QUEST_SendQuestStatePacket(pUnit, 0x13, 0);
+      }
+    }
+
+    return 0;
+}
+
+BOOL __fastcall Q22_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
+    if (BVar2) {
+      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x40, pUnit);
+    }
+
+    return 0;
 }
 
 // Q22_PlayerCheckKhalimsWillItems (BLACKENED TEMPLE) — per-player tally callback (IteratePlayerOrMonsterUnits). For Act III players whose Khalim's Will is not Completed and who lack the flail items "qf1"/"qf2", increments the Khalim's-Will-needed counter (field 0x3c); also increments a separate counter (0x40) for players missing the "box " (Khalim's Will assembly box). Drives how many quest items the council drop must spawn. Read-only quest-record probe.

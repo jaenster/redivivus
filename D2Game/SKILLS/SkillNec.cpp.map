@@ -499,6 +499,27 @@
       ]
     },
     {
+      "name": "SKILLNEC_CorpseTarget_ValidateAndScheduleEvent",
+      "address": "005c3b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c3b30"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillNec",
+      "calledFunctions": [
+        "SKILLNEC_CorpseTarget_ValidateAndScheduleEvent",
+        "SKILLNEC_ValidateCorpseTarget",
+        "AI_SetSwitchAiTargetParams",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "Skills_SrvDoFunc_059_CastCorpseSkill",
       "address": "005c3b90",
       "lines": [

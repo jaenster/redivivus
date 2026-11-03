@@ -79,7 +79,6 @@
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Units/Missile.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/SKILLS/SkillSor.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -669,6 +668,25 @@ void __fastcall SKILLS_NecroShredAlignmentCallback(D2UnitStrc * pUnit, eD2States
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eAlignmentState, 0);
     ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
     GAME::Targets::MONSTER_FreeUnitNodes(pGame, pUnit);
+}
+
+void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUnit, void * pSkillData) {
+    int32_t nSwitchAiMode;
+    uint32_t nTargetGUID;
+    uint32_t bValidTarget = SKILLNEC_ValidateCorpseTarget(*(::SGAMEDATA**)pSkillData, *(D2UnitStrc**)((int)pSkillData + 4), pUnit);
+    if (!bValidTarget) {
+      return;
+    }
+    if (*(char*)((int)pSkillData + 0x10) == '\0') {
+      nTargetGUID = *(uint32_t*)((int)pSkillData + 0x14);
+      nSwitchAiMode = 1;
+    } else {
+      nTargetGUID = *(uint32_t*)((int)pSkillData + 0x14);
+      nSwitchAiMode = 2;
+    }
+
+    Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nSwitchAiMode, nTargetGUID);
+    GAME::Event::SetEvent(*(::SGAMEDATA**)pSkillData, pUnit, 10, (*(::SGAMEDATA**)pSkillData)->dwGameFrame + *(int*)((int)pSkillData + 0x18), 0, 0);
 }
 
 // Body continues at 005c3bcc, the JNZ target of 005c3bc0 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SKILLNEC_CastCorpseSkill'; that made EBP look like a parameter and turned this frame's locals into wild pointers.

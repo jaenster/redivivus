@@ -114,7 +114,5 @@ int32_t __thiscall AddByPattern(::IgnoreList * pThis, char * szPattern);
 int32_t __thiscall AddByAccountName(::IgnoreList * pThis, char * szAccountName);
 void __thiscall LoadFromFile(::IgnoreList * pThis);
 ::IgnoreList * __thiscall Constructor(::IgnoreList * pThis);
-// @sourcefile .\Chat\Ignorelist.cpp
-void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nRawLen);
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList

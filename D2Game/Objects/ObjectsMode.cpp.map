@@ -868,6 +868,26 @@
       ]
     },
     {
+      "name": "UNIT_IsAlive",
+      "address": "00582710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00582710"
+        }
+      ],
+      "namespace": "D2Game::Objects::ObjectsMode",
+      "calledFunctions": [
+        "UNIT_IsAlive",
+        "CheckIfMonsterIsDead"
+      ],
+      "usedTypes": [
+        "D2UnitFindArgStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "OBJECT_CanTargetMonster",
       "address": "00582750",
       "lines": [

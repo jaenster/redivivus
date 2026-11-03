@@ -58,7 +58,6 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Common/Chat.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A1Q4.h"
@@ -425,7 +424,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     &D2Game::Quests::QUESTS::A3Q5::Objects_InitFn53_MephistoDoor,
     &D2Game::Quests::QUESTS::A1Q4::Objects_InitFn54_CainStartPosition,
     &D2Game::Quests::QUESTS::A4Q2::Objects_InitFn55_DiabloStartPoint,
-    &D2Game::Objects_InitFn56_Seal,
+    &D2Game::Quests::QUESTS::A4Q2::Objects_InitFn56_Seal,
     &D2Game::Objects::Objects_InitFn57_SparklyChest,
     &D2Game::Objects::Objects_InitFn58_Fissure,
     &D2Game::Objects::Objects_InitFn59_VileDogAfterglow,

@@ -18,6 +18,7 @@ struct SGAMEDATA;
 typedef uint32_t eD2LevelId;
 typedef uint32_t eD2MonsterAnimMode;
 typedef uint32_t eD2Skills;
+typedef uint32_t eD2States;
 typedef uint32_t eD2UnitType;
 
 struct D2GSPacketSrv0x26;
@@ -878,6 +879,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x54_StopRunning(::SGAMEDATA * pGame, st
 eD2ServerIncomingStatus __fastcall SCMD_0x58_MarkQuestDone(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x58_MarkQuestDone * pPacket, uint32_t nSize);
 // C->S 0x59 Command NPC (17 bytes): [op:1][unitType:u32][unitGUID:u32][x:u32][y:u32]. Finds target unit within distance 0x32, verifies it is an interactable NPC (MonStats interact+npc flags), clears its path, fires AITHINK event, schedules next AI tick at gameFrame+1, and sets AI args 1/2/3 to 0x28/Y/X to direct the NPC toward the requested coordinates.
 eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x59_CommandNPC * pPacket, uint32_t nSize);
+void __fastcall PLRMODES_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 // Client-to-server position sync correction. When client detects desync with server position, sends [x:u16, y:u16]. Distance 15-45: validates walkable path then relocates instantly via SUNIT_RelocateUnit. Distance 5-14 or 46+: falls through to normal walk/run. Distance 0-4: rejected. On BNet, rate-limited: 5+ sync warps in 90 seconds triggers randomized lockout (50% 60s, 25% 2min, 25% 3min) via STATE_sync_warped.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 eD2ServerIncomingStatus __fastcall SCMD_0x5F_SyncPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pPacket, uint32_t nSize);

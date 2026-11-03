@@ -16,6 +16,7 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2LevelId;
 typedef uint32_t eD2Skills;
+typedef uint32_t eD2States;
 typedef uint32_t eD2UnitStat;
 typedef uint32_t eMissilesId;
 
@@ -174,6 +175,7 @@ BOOL __fastcall MISSMODE_RedemptionHitWithMana(::SGAMEDATA * pGame, struct D2Uni
 void __fastcall MISSMODE_PortalArrival(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 BOOL __fastcall Missiles_SrvHitFunc_SpawnTyraelAndOpenPortal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 void __fastcall MISSMODE_ExpireAndFree(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t bOnExpire);
+void __fastcall MISSILESMODE_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t pStatList);
 void __fastcall MISSILEEVENT_DefaultCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nIndex);
 // Server-side missile hit function: on impact, resolves the owning unit and skill parameters, looks up the HitSubMissile1 entry from MissilesTxt, computes AoE radius and max-count (from HitPar or skill calcs), applies damage to the primary target via MISSMODE_HitWithArmorReduction, then calls SKILLS_ApplyAreaEffect with MISSMODE_CreateSubMissileInvertFrame as the area callback to spawn inverted-frame sub-missiles around the impact point. Returns TRUE in all non-error paths.
 // @sourcefile .\MISSILES\MissMode.cpp

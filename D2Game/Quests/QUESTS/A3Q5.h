@@ -59,6 +59,10 @@ void __fastcall Q22_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuest
 // State flow: log council kill; broadcast live state 1/3; nStateFlag -> 4/5 by Lam Esen.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
 void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, struct D2UnitStrc * pKillerUnit);
+void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q22_PropagateCompletionToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q22_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q22_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q22_PlayerCheckKhalimsWillItems (BLACKENED TEMPLE) — per-player tally callback (IteratePlayerOrMonsterUnits). For Act III players whose Khalim's Will is not Completed and who lack the flail items "qf1"/"qf2", increments the Khalim's-Will-needed counter (field 0x3c); also increments a separate counter (0x40) for players missing the "box " (Khalim's Will assembly box). Drives how many quest items the council drop must spawn. Read-only quest-record probe.
 BOOL __fastcall Q22_PlayerCheckKhalimsWillItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q22_PlayerCompleteKhalimsWill (BLACKENED TEMPLE / Khalim's Will sub-quest) — party callback run when the Compelling Orb is shattered. If Khalim's Will already Completed for the player, just strips the 5 quest items. Otherwise, for an Act III player: sets Khalim's Will record Completed + JustCompleted, removes the 5 items (unless mid-trade), and if the Blackened Temple record is at Step0x04 but not yet Completed, promotes it straight to Completed.

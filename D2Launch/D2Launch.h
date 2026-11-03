@@ -26,8 +26,6 @@ fnAppModeRun * __fastcall AppModeLauncherInit(HMODULE hModule);
 void __stdcall AppModeLauncherShutdown();
 uint32_t MAINMENU_ShowBnetConnectionError();
 BOOL __stdcall UIMENU_ToggleHardcoreMode(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall UIMENU_TCPIPAddressInput(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_DismissPopup(struct D2ControlStrc * pControl);
 BOOL __stdcall UIMENU_DisconnectAndReturnToMainMenu(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_ConnectViaTCPIPAndSelectChar(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressSkipEmailAddress(struct D2ControlStrc * pControl);

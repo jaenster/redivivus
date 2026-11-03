@@ -16,6 +16,7 @@
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "D2Common/Drlg/Drlg.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Unit.h"
@@ -45,8 +46,8 @@
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/Text.h"
 #include "D2Common/Units/Missile.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 #include "Fog/Src/Safesock.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -798,6 +799,33 @@ BOOL __fastcall Q05_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pU
     return 0;
 }
 
+void __fastcall Q05_SetPartyMemberRewardStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
+    if (BVar1 == 1) {
+      return;
+    }
+
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
+      return;
+    }
+
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    if (eLevel == LEVEL_None) {
+      return;
+    }
+
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_I) {
+      return;
+    }
+
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
+}
+
 BOOL __fastcall Q05_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
@@ -839,6 +867,17 @@ void __fastcall Q05_SetCompletionForTrackedPlayers(::SGAMEDATA * pGame, D2QuestG
 
       i++;
     } while (i < (int)(uint32_t)pQuestGUIDBase->nPlayerCount);
+}
+
+uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
+    D2QuestDataA1Q5Strc* pA1Q4Data = pQuestData->pQuestSpecificData.pA1Q5;
+    if (pQuestData->nStateFlag == 5) {
+      pQuestData->nQuestPacketFlags = '\0';
+      QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, true);
+    }
+
+    pA1Q4Data->field_0x11c = '\0';
+    return '\x01';
 }
 
 // 1.14d: 0x5954f0 | A1Q5 "The Forgotten Tower" — Countess death visual/loot effect spawner.

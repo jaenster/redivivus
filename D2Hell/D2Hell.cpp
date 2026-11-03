@@ -52,18 +52,19 @@ static pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_STATIC_GUARD
 
 namespace D2Hell {
 
-void __fastcall D2FILE_CreateProcess(LPCSTR szText) {
+bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
     _STARTUPINFOA processInfo;
     _PROCESS_INFORMATION startupInfo;
     processInfo.cb = 0x44;
     memset(&processInfo.lpReserved, 0, 0x40);
     BOOL bCreated = CreateProcessA(szText, (LPSTR)0x0, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPVOID)0x0, (LPCSTR)0x0, &processInfo, &startupInfo);
     if (!bCreated) {
-      return;
+      return bCreated != 0;
     }
 
     /* HANDLE hObject for CloseHandle */ CloseHandle(startupInfo.hProcess);
     /* HANDLE hObject for CloseHandle */ CloseHandle(startupInfo.hThread);
+    return bCreated != 0;
 }
 
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)

@@ -154,6 +154,98 @@
       ]
     },
     {
+      "name": "Q26_PartyMember_SetCannotComplete",
+      "address": "005b3cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3cd0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A4Q1",
+      "calledFunctions": [
+        "Q26_PartyMember_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q26_PartyMember_PlayCompleteSound",
+      "address": "005b3d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3d30"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A4Q1",
+      "calledFunctions": [
+        "Q26_PartyMember_PlayCompleteSound",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q26_PartyMember_SetCompleted",
+      "address": "005b3d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3d70"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A4Q1",
+      "calledFunctions": [
+        "Q26_PartyMember_SetCompleted",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState",
+        "UnsetQuestStepStates"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q26_PropagateCompletionToParty",
+      "address": "005b3de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b3de0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A4Q1",
+      "calledFunctions": [
+        "Q26_PropagateCompletionToParty",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "Q26_Callback10_PlayerLeavesGame",
       "address": "005b3e30",
       "lines": [

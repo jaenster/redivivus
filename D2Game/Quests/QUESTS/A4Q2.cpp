@@ -54,7 +54,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/Text.h"
-#include "D2Game/D2Game.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 #include "D2Game/Quests/QUESTS/A4Q1.h"
 #include "Fog/Src/Safesock.h"
 
@@ -123,7 +123,7 @@ BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, int32_t pTargetUni
 
 // [A4Q1 Izual helper] Plays the Izual-complete sound to every player/monster unit in the game.
 void __fastcall Q26_PlayIzualCompleteSoundToAll(::SGAMEDATA * pGame) {
-    UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q26_PartyMember_PlayCompleteSound);
+    UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)A4Q1::Q26_PartyMember_PlayCompleteSound);
 }
 
 // [A4Q3 Terror's End] ActiveFilter for the Tyrael/Hadriel gossip NPCs (classId 0x16f=Tyrael, 0xf6=Hadriel/Hand-of-Justice angel). Decides whether a quest gossip entry is currently "active" for the NPC, gated on QUEST_TerrorsEnd states: Completed/FinishedInPreviousGame plus the per-NPC dialog-tracking steps 0x06/0x07 (classic) and 0x08/0x09 (expansion).
@@ -1070,6 +1070,10 @@ void __fastcall Objects_InitFn55_DiabloStartPoint(D2ObjectInitFnArg * pInitArg) 
     pQuestSpecificData->bDiabloKilled = 0;
     pQuestSpecificData->bDiabloSpawnStarted = 1;
     AddQuestTimer(pQuestData, QuitGameAfterDia, 1);
+}
+
+void __fastcall Objects_InitFn56_Seal(D2ObjectInitFnArg * pInitArg) {
+
 }
 
 // [A4Q3 Terror's End] Object operate-fn for the 5 Chaos Sanctuary seal objects (class 0x188-0x18c). On activation sets the corresponding per-seal flag in the A4Q2 struct; once all 5 seals + 3 seal-bosses are done, calls Q27_ActivateAllSealsKillChaos (summon Diablo) and arms the spawn timer.

@@ -41,7 +41,6 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2SeedStrc.h"
 #include "D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "D2Common/Drlg/Drlg.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -1554,7 +1553,7 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
     (D2PathTypeFunc)&D2Common::Drlg::Path::PATH_FindPathSmoothed,
     (D2PathTypeFunc)&D2Common::Drlg::Path::PATH_FindPathToward,
     nullptr,
-    (D2PathTypeFunc)&D2Common::Drlg::PATH_FindPathTowardFallback,
+    (D2PathTypeFunc)&D2Common::Drlg::Path::PATH_FindPathTowardFallback,
     (D2PathTypeFunc)&D2Common::Drlg::Path::PATH_FindPathAStar
 }; D2_STATIC_GUARD(PATHTYPEFUNC, "D2Common::PATH::DynamicPath::PATH_CalculatePath::PATHTYPEFUNC");
 

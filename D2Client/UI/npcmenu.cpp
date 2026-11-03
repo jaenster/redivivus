@@ -1641,6 +1641,20 @@ BOOL __stdcall NPCMENU_ConfirmTransactionCallback() {
     return 1;
 }
 
+int __stdcall NPCMENU_ConfirmTransactionReturn() {
+    Dialog::FreeDialogStrc(Dialog::gpNpcTransactionConfirmDialog);
+    Dialog::gpNpcTransactionConfirmDialog = 0;
+    if (gnNpcMenuTransactionType == 5) {
+      NPCMENU_BuildMercHireMenu();
+      return 1;
+    }
+
+    Inv::INV_ReturnToShopFromRepair();
+    _Interaction::geNpcUiState = NPCUI_SHOP;
+    GAME::Select::ClearSelectedUnit();
+    return 1;
+}
+
 void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     uint16_t* pszDialogStr;
     uint16_t nStrId;

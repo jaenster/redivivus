@@ -37,7 +37,7 @@
 #include "Fog/Memory.h"
 #include "globals/globals.h"
 #include "D2Common/Text.h"
-#include "D2Game/D2Game.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -411,6 +411,21 @@ BOOL __fastcall Q06_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     }
 
     return 0;
+}
+
+void __fastcall Q6_DenOfEvil_OnComplete_ClearGUIDs(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArg) {
+    int nPlayerGUID;
+    SetRewardAndFinishFlags(pQuestData, pQuestArg);
+    D2QuestDataA1Q6Strc* pQuestGUID = pQuestData->pQuestSpecificData.pA1Q6;
+    if (!pQuestArg->pPlayer) {
+      nPlayerGUID = -1;
+    } else {
+      nPlayerGUID = pQuestArg->pPlayer->nUnitGUID;
+    }
+
+    QUESTGUID_RemovePlayerFromList(&pQuestGUID->sQuestGUIDCain, nPlayerGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestGUID->sQuestGUIDAkara, nPlayerGUID);
+    QUESTGUID_RemovePlayerFromList(&pQuestGUID->sQuestGUIDKashya, nPlayerGUID);
 }
 
 // A1Q6 helper: mark Sisters-to-the-Slaughter complete + grant reward for one player. Sets JustCompleted and RewardAwaits in the player's quest record, then SetClientStatus(1, difficulty) to flag the act-progress/Act2-unlock client state. Called from Andariel-death and L4-entry paths.

@@ -329,6 +329,36 @@
       ]
     },
     {
+      "name": "SUNITDMG_StatExpireCallback_ResumeAI",
+      "address": "0057b170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0057b170"
+        }
+      ],
+      "namespace": "D2Game::UNIT::SUnitDmg",
+      "calledFunctions": [
+        "SUNITDMG_StatExpireCallback_ResumeAI",
+        "CheckForModeZeroDeath",
+        "STATES_IsStateActive",
+        "SetState",
+        "GetGamePointer",
+        "FreeCombatAndChangeAnimMode",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
       "name": "DAMAGE_ApplyFreeze",
       "address": "0057b230",
       "lines": [

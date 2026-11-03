@@ -400,6 +400,32 @@
       ]
     },
     {
+      "name": "Q05_SetPartyMemberRewardStates",
+      "address": "00595370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00595370"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q5",
+      "calledFunctions": [
+        "Q05_SetPartyMemberRewardStates",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
       "name": "Q05_PropagateRewardToParty",
       "address": "005953d0",
       "lines": [
@@ -448,6 +474,27 @@
         "SGAMEDATA",
         "eD2Quests",
         "int32_t"
+      ]
+    },
+    {
+      "name": "Q05_TimerNotifyCompletion",
+      "address": "005954c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005954c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q5",
+      "calledFunctions": [
+        "Q05_TimerNotifyCompletion",
+        "QUEST_SetStateAndBroadcast"
+      ],
+      "usedTypes": [
+        "D2QuestDataA1Q5Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
       ]
     },
     {

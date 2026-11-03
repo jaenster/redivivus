@@ -108,7 +108,7 @@ struct _CERT_INFO {
 namespace D2Hell {
 
 // Function declarations
-void __fastcall D2FILE_CreateProcess(LPCSTR szText);
+bool __fastcall D2FILE_CreateProcess(LPCSTR szText);
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText);
 BOOL __fastcall CheckIfFileExists(struct D2PoolManagerStrc * pMemory, char * szFilename, struct D2MPQFileStrc * * ppFile, BOOL bDontLogError);

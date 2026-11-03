@@ -67,8 +67,10 @@ void __fastcall Q05_CheckAndUpdateOnAreaEntry(::SGAMEDATA * pGame, struct D2Unit
 bool __fastcall Q05_SequenceFilter(struct D2QuestDataStrc * pQuestData);
 bool __fastcall Q05_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nTargetClassId, struct D2UnitStrc * pUnit, struct D2BitBufferStrc * pBitBuffer, struct D2UnitStrc * pUnitEx);
 BOOL __fastcall Q05_SetCannotCompleteInGame(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+void __fastcall Q05_SetPartyMemberRewardStates(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 BOOL __fastcall Q05_PropagateRewardToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall Q05_SetCompletionForTrackedPlayers(::SGAMEDATA * pGame, struct D2QuestGUIDStrc * pQuestGUIDBase, eD2Quests eQuest, int32_t nSoundId);
+uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 // 1.14d: 0x5954f0 | A1Q5 "The Forgotten Tower" — Countess death visual/loot effect spawner.
 // Guarded by quest-data flags (+0x118 set, +0x119 not yet fired) and a tracked-chest count (+0x88).
 // Walks the list of tracked chest object GUIDs (+0x68): for the first valid chest, spawns the death

@@ -372,6 +372,97 @@
       ]
     },
     {
+      "name": "Q22_PartyMember_SetCompleted",
+      "address": "005bb640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bb640"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q5",
+      "calledFunctions": [
+        "Q22_PartyMember_SetCompleted",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "SetQuestState"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eAct"
+      ]
+    },
+    {
+      "name": "Q22_PropagateCompletionToParty",
+      "address": "005bb6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bb6c0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q5",
+      "calledFunctions": [
+        "Q22_PropagateCompletionToParty",
+        "GetPlayerData",
+        "GetQuestState",
+        "GetPartyId",
+        "ExecuteFunctionForEveryPartyMember"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q22_PartyMember_SetCannotComplete",
+      "address": "005bb710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bb710"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q5",
+      "calledFunctions": [
+        "Q22_PartyMember_SetCannotComplete",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetQuestState",
+        "QUEST_SendQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
+      "name": "Q22_PartyMember_PlayCompleteSound",
+      "address": "005bb770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bb770"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A3Q5",
+      "calledFunctions": [
+        "Q22_PartyMember_PlayCompleteSound",
+        "GetPlayerData",
+        "GetQuestState",
+        "SetupUpdateEvent_AttachEventSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ]
+    },
+    {
       "name": "Q22_PlayerCheckKhalimsWillItems",
       "address": "005bb7b0",
       "lines": [

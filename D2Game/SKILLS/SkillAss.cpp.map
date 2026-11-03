@@ -1309,6 +1309,26 @@
       ]
     },
     {
+      "name": "SKILLSASS_StatExpireCallback_ClearStateSetFlag",
+      "address": "005d69b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005d69b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillAss",
+      "calledFunctions": [
+        "SKILLSASS_StatExpireCallback_ClearStateSetFlag",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
       "name": "SKILLASS_SrvStFn26_BladeFury",
       "address": "005d69d0",
       "lines": [

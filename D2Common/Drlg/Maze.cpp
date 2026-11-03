@@ -18,7 +18,6 @@
 #include "D2Common/Drlg/D2DrlgVertexStrc.h"
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/DrlgRoom.h"
-#include "D2Common/Drlg/Maze/Act3/Durance.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Game/Objects/Objects.h"
 #include "Fog/D2PoolManagerStrc.h"
@@ -26,8 +25,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Common/DUNGEON/Dungeon.h"
+#include "D2Common/Drlg/Maze/Act3/Durance.h"
 #include "D2Common/Drlg/Maze/Act5/IceCaves.h"
-#include "D2Common/Drlg/Maze/Act5/Temple.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -2741,6 +2740,70 @@ static void DRLGMAZE_ReplaceSewerRooms(D2DrlgLevelStrc * pDrlgLevelStrc) {
     ReplaceRoom(DRLG_ACT3_SEWERS_REPLACE_TWO + nVariant, pDrlgLevelStrc, &nVariant);
 }
 
+// Randomises the stair/Nilathak spawn layout for the Halls of Pain / Halls of Vaught area (Act 5 Temple levels 0x7b-0x7c). Rolls a seed-derived value mod 3 to pick one of three room replacement sets, then calls ReplaceRoom with gaDrlgRoomReplacementsA (non-Vaught) and/or gaDrlgRoomReplacementsB (level 0x7b only). Halts with an internal error if the Vaught level did not have its replacement applied by replacement set A.
+int32_t ReplaceRooms(D2DrlgLevelStrc * pLevel) {
+    // Static local variables (originally global data)
+    static D2DrlgReplaceRoomStrc gaDrlgRoomReplacementsA[3] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x412,
+        /* .nDestLevelPrestId = */ 0x416,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x413,
+        /* .nDestLevelPrestId = */ 0x417,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x415,
+        /* .nDestLevelPrestId = */ 0x418,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    }
+}; D2_STATIC_GUARD(gaDrlgRoomReplacementsA, "D2Common::Drlg::Maze::ReplaceRooms::gaDrlgRoomReplacementsA");
+    static D2DrlgReplaceRoomStrc gaDrlgRoomReplacementsB[3] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x412,
+        /* .nDestLevelPrestId = */ 0x419,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x413,
+        /* .nDestLevelPrestId = */ 0x41a,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x415,
+        /* .nDestLevelPrestId = */ 0x41c,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    }
+}; D2_STATIC_GUARD(gaDrlgRoomReplacementsB, "D2Common::Drlg::Maze::ReplaceRooms::gaDrlgRoomReplacementsB");
+
+    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
+    int32_t nRetValAfterA = (int32_t)(DVar1.nSeedLow * 0xaaaaaaab);
+    pLevel->sSeed = DVar1;
+    uint32_t nRollMod3 = DVar1.nSeedLow % 3;
+    uint32_t nRoll = nRollMod3;
+    if (pLevel->eD2LevelId != 0x7c) {
+      nRetValAfterA = (int32_t)ReplaceRoom(gaDrlgRoomReplacementsA + nRollMod3, pLevel, &nRoll);
+    }
+    if (pLevel->eD2LevelId == 0x7b) {
+      if (nRoll == nRollMod3) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5fc);
+        exit(-1);
+      }
+
+      nRetValAfterA = (int32_t)ReplaceRoom(gaDrlgRoomReplacementsB + nRoll, pLevel, &nRoll);
+    }
+
+    return nRetValAfterA;
+}
+
 // Places the red portal / next-level room presets for Act 5 Worldstone levels during maze generation. Advances the level seed (LCG step), picks a variant (seed & 3) from DRLG_WORLDSTONE_REPLACEMENT, calls ReplaceRoom. For level 0x81 (Worldstone Keep 3), also places waypoint rooms from DRLG_WORLDSTONE_WAYPOINT_ROOMS.
 static void PutRedNextLevelAreasInPlace(D2DrlgLevelStrc * pLevel) {
     // Static local variables (originally global data)
@@ -3433,7 +3496,7 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
       exit(-1);
       case 0x20:
         /* Temples picker */ DRLGMAZE_BuildRoomGrid(2, pLevel);
-      Act5::Temple::ReplaceRooms(pLevel);
+      Maze::ReplaceRooms(pLevel);
       break;
       case 0x21:
         /* Ice caves */ eLevelId = pLevel->eD2LevelId;

@@ -727,6 +727,23 @@
       ]
     },
     {
+      "name": "Objects_InitFn56_Seal",
+      "address": "005b5620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b5620"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A4Q2",
+      "calledFunctions": [
+        "Objects_InitFn56_Seal"
+      ],
+      "usedTypes": [
+        "D2ObjectInitFnArg"
+      ]
+    },
+    {
       "name": "OBJOP_A4Q2_DiabloSealActivateKillChaos",
       "address": "005b5630",
       "lines": [

@@ -268,6 +268,18 @@ void __fastcall FreeClientList(::SGAMEDATA * pGame) {
     }
 }
 
+// Updates the player's portal-visited bitmask: gets the level ID of the player's current room, maps it to the corresponding portal flag, and OR's it into the player's persistent portal flags. No-op if room or player unit is null.
+void __stdcall CLIENT_UpdatePortalFlags(D2ClientStrc * gameContext) {
+    if (!(gameContext->pRoom && gameContext->pPlayer)) {
+      return;
+    }
+
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(gameContext->pRoom);
+    uint32_t nCurrentPortalFlags = D2Common::Units::GetPlayerPortalFlags(gameContext->pPlayer);
+    uint32_t nLevelPortalFlag = D2Common::DUNGEON::Dungeon::GetPortalFlagFromLevelId(eLevel);
+    D2Common::Units::SetPlayerPortalFlags(gameContext->pPlayer, nCurrentPortalFlags | nLevelPortalFlag);
+}
+
 // Server-side handler invoked when a client's active room changes (pRoom = new room). If different from the client's current room, swaps room data/active-room-ex between the old and new levels, then diffs the adjacency lists: reveals and streams units for newly-adjacent rooms (CLIENT_RevealRoomAndSendUnits) and clears/hides map for rooms no longer adjacent (RoomClearForClientAndHideMap), re-resolving the client's player unit and issuing a movement/position packet update when the client's own room is cleared. Updates pClient->pRoom and OR-merges the new level's portal flag into the player's explored-portal flags. Custom calling convention: pClient in ESI, pRoom on stack.
 static void __stdcall GAME_OnClientRoomChange(D2RoomStrc * pRoom, D2ClientStrc * pClient) {
     int nOldRoomIdx;

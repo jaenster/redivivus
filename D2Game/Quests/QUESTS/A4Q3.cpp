@@ -54,7 +54,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Text.h"
-#include "D2Game/D2Game.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -255,6 +255,23 @@ void __fastcall Q28_PlayerCompleteForgeInAct4(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     pHellsForgeQuest->pQuestSpecificData.pA2Q6->nStatusCode++;
+}
+
+BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
+    BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_Completed);
+    if (BVar2 != 1) {
+      /* GetQuestState(QUEST_HellsForge=0x1b, RewardAwaits=1): skip members who
+                         already have the reward pending */ BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_RewardAwaits);
+      if (BVar2 != 1) {
+        /* SetQuestState(QUEST_HellsForge=0x1b, CannotCompleteQuestInGame=0xe): other
+                         party members who didn't smash it can no longer complete it self game */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_HellsForge, QUESTSTATE_CannotCompleteQuestInGame);
+        QUEST_SendQuestStatePacket(pUnit, 0x18, 0);
+      }
+    }
+
+    return 0;
 }
 
 // A4Q3 Hell's Forge — OBJOP_A4Q3_HellforgeSmash (Objects_OperateFn49): the Hellforge operate handler — the core quest action. Bails if Hell's Forge already Completed/RewardAwaits. Branches on the forge object's anim mode: Death(idle) — if player carries Mephisto's Soulstone 'mss ', plays anim, broadcasts internal state 3, consumes the soulstone (this places the stone on the anvil); else plays "can't" sound and bumps stateFlag to 1. Walk(active) — if player has the Hellforge Hammer 'hfh ' equipped as weapon and has struck 3x, this is the SMASH: removes the hammer, sets JustCompleted+RewardAwaits, clears step-states, runs Q28_PlayerCompleteForgeInAct4 for the whole party, sets stateFlag 4 then broadcasts state 0xd, schedules the rune-drop event, marks other party members CannotComplete, and fires NotifyPlayersAboutEvent(0xe). Item codes: 'mss '=0x2073736d (Mephisto's Soulstone), 'hfh '=0x20686668 (Hellforge Hammer).

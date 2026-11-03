@@ -13,11 +13,11 @@
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
+#include "D2Common/Drlg/Drlg.h"
 #include "D2Common/QuestRecord.h"
 #include "D2Common/Text.h"
 #include "D2Common/Unit.h"
 #include "D2Common/Units.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Game/GAME/Event.h"
 #include "D2Game/GAME/Targets.h"
@@ -259,6 +259,12 @@ void __fastcall Q02_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, iTargetId, nMessageIndex);
 }
 
+uint8_t __fastcall Q02_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
+    pQuestData->nQuestPacketFlags = '\0';
+    QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, true);
+    return '\x01';
+}
+
 // A1Q2 quest-state handler slot 0xa (Q02_Callback_10): player-leaves cleanup.
 // Removes the player's GUID from this quest's participant list
 // (QUESTGUID_RemovePlayerFromList); uses -1 when no player unit is present.
@@ -337,6 +343,38 @@ BOOL __fastcall Q02_SetRewardForNearbyPlayers(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     return 0;
+}
+
+void __fastcall fpExecuteOnUnitFunction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    BOOL bIsCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersBurialGrounds, QUESTSTATE_Completed);
+    if (bIsCompleted == 1) {
+      return;
+    }
+
+    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersBurialGrounds, QUESTSTATE_RewardAwaits);
+    if (BVar1 == 1) {
+      return;
+    }
+
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
+      return;
+    }
+
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    if (eLevel == LEVEL_None) {
+      return;
+    }
+
+    eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+    if (eActNo != ACT_I) {
+      return;
+    }
+
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SistersBurialGrounds, QUESTSTATE_JustCompleted);
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SistersBurialGrounds, QUESTSTATE_RewardAwaits);
 }
 
 // A1Q2 "cannot complete here" setter, iterated over players when Blood Raven

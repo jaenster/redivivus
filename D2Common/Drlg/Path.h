@@ -226,14 +226,14 @@ struct D2DrlgPathNodeStrc * __fastcall DRLGPATH_AllocPathNode(struct D2DrlgPathS
 int32_t __fastcall PATH_FindPathAStarLocalPool(struct D2PathTypeArg * pPathTypeArg);
 // Computes the squared Euclidean distance between two packed (X|Y) coordinates. Returns dx*dx + dy*dy. No callers found - likely referenced via function pointer table or dead code.
 int32_t __stdcall DRLGPATH_GetSquaredDistancePacked(uint32_t nPackedA, uint32_t nPackedB);
-// Builds a list of coordinate points along a Bresenham line from source to destination. Stores packed (X,Y) coordinates in the output buffer and returns the point count. Sets the initial direction in *pnInitDir. Used by PathTypeFunc_15.
-int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t nDstPacked, int32_t nMaxSteps, uint32_t * pnInitDir, struct D2PathPointStrc * pwPointsBuf);
 // Computes a direction lookup value from two packed coordinates using a table at 0x6F1E28. The index is computed as (dy*3 - srcX + dstX), suggesting a 3-state direction encoding. No callers found - likely used via function pointer.
 uint32_t __stdcall DRLGPATH_GetDirectionLookupFromPacked(uint32_t nSrcPacked, uint32_t nDstPacked);
 // Main pathfinding function for PathTypeFunc_15. Uses a dual-scanner approach: two independent directional scanners advance from the start toward the path endpoints. Handles loop detection, waypoint insertion, and selects the better of the two scan results based on squared distance to the target. Returns the best path length found.
 int32_t __fastcall DRLGPATH_FindPathDualScan(uint32_t * pPathGrid, int32_t nGridSize, uint32_t nStartPos, int * pStartX, int * pStartY, int32_t nEndX, uint32_t nEndY);
 // Simplifies a path by removing redundant collinear waypoints. Iterates through the input path, comparing consecutive direction deltas. Points that continue in the same direction are skipped. Diagonal shortcuts (where both dx and dy change simultaneously) are also compressed. Returns the simplified point count.
 int32_t __fastcall DRLGPATH_SimplifyCollinearWaypoints(struct D2PathPointStrc * pDstPoints, struct D2PathPointStrc * pSrcPoints, uint32_t nStartPacked, int32_t nPointCount);
-// 19 internal functions (defined in .cpp)
+// Pathfinding entry point for units that cannot reach their target directly (path type fallback). Builds a Bresenham waypoint list from the unit's current packed position toward the destination. For each waypoint, checks collision via CheckCollision_BlockPlayer_Type; on blockage, delegates to DRLGPATH_FindPathDualScan to find the best reachable point. After traversal, simplifies collinear waypoints via DRLGPATH_SimplifyCollinearWaypoints and returns the resulting waypoint count. Only valid for PLAYER or MONSTER unit owners; halts otherwise.
+int32_t __fastcall PATH_FindPathTowardFallback(struct D2PathTypeArg * pPathTypeArg);
+// 20 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::Path

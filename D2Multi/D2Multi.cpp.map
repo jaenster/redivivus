@@ -139,25 +139,6 @@
       "usedTypes": [
         "D2ControlMsg"
       ]
-    },
-    {
-      "name": "CHATDLG_OpenChatCommandsDialogRestoreFocus2",
-      "address": "00447a90",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00447a90"
-        }
-      ],
-      "namespace": "D2Multi",
-      "calledFunctions": [
-        "CHATDLG_OpenChatCommandsDialogRestoreFocus2",
-        "UIMENU_DialogWindowChatCommands",
-        "LAUNCHER_RestoreFocusToControl"
-      ],
-      "usedTypes": [
-        "D2ControlMsg"
-      ]
     }
   ]
 }

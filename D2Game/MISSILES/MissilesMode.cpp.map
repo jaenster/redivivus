@@ -2512,6 +2512,26 @@
       ]
     },
     {
+      "name": "MISSILESMODE_StatExpireCallback_ClearState",
+      "address": "005adaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005adaf0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::MissilesMode",
+      "calledFunctions": [
+        "MISSILESMODE_StatExpireCallback_ClearState",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2States",
+        "int32_t"
+      ]
+    },
+    {
       "name": "MISSMODE_ApplyNextHitState",
       "address": "005adb00",
       "lines": [

@@ -244,6 +244,7 @@ void __stdcall UIMENU_ShowRealmNameOnButton();
 BOOL __stdcall MAINMENU_CleanupSoundAndClearMessageLoop(struct D2ControlMsg * pControlMsg);
 int __stdcall MAINMENU_HandleNetworkPacket(int nFrameIndex);
 int __stdcall MAINMENU_ClearLoopFlagPump(int nFrameIndex);
+BOOL __stdcall UIMENU_TCPIPAddressInput(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressStartTcpIpTimer(struct D2ControlMsg * pControlMsg);
 int __stdcall MAINMENU_CreateGameServerThreadPump(int nFrameIndex);
 BOOL __stdcall MAINMENU_CheckCharacterSaveFileExists();
@@ -270,6 +271,7 @@ void __fastcall UIMENU_CrashingCantTestIt(uint16_t * wszText1, uint16_t * wszTex
 void __fastcall MAINMENU_ShowPopupDialog(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance, int32_t bHasCancel);
 void __fastcall MAINMENU_ShowPopupWithCancel(uint16_t * wszText, pfnUIMenuInstance pfnMenuInstance);
 void __fastcall UIMENU_CreateSmallPopup(uint16_t * wszTitle, pfnUIMenuInstance pfnMenuInstance);
+BOOL __stdcall MAINMENU_DismissPopup(struct D2ControlStrc * pControl);
 void __stdcall MAINMENU_PlayExpansionIntro();
 void __stdcall MAINMENU_PlayD2Intro();
 void __stdcall UIMENU_MainMenu();

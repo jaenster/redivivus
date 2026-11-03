@@ -3,22 +3,15 @@
 #include "D2Launch/D2Launch.h"
 #include "D2Client/D2ControlStrc.h"
 #include "D2Client/D2IniConfigStrc.h"
-#include "D2Lang/StrTable/strtable.h"
 #include "D2Launch/CharSel.h"
 #include "D2Launch/Launcher.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Sound/Src/D2SoundFast.h"
 #include "D2Win/DC6.h"
-#include "D2Win/Src/D2WinEditBox.h"
-#include "D2Win/Src/D2WinImage.h"
 #include "D2Win/Src/D2WinMain.h"
 #include "D2Win/Src/D2WinTextBox.h"
-#include "D2Win/Src/D2WinTimer.h"
 #include "Fog/Src/Safesock.h"
-#include "Storm/Source/SReg.h"
 #include "globals/globals.h"
-#include "D2Win/D2WinEditBox.h"
-#include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -60,34 +53,6 @@ uint32_t MAINMENU_ShowBnetConnectionError() {
 
 BOOL __stdcall UIMENU_ToggleHardcoreMode(D2ControlMsg * pControlMsg) {
     D2IniData_launcher->eCTEMP_eD2PlayerStatus ^= PLAYERSTATUS_Hardcore;
-    return 1;
-}
-
-BOOL __stdcall UIMENU_TCPIPAddressInput(D2ControlMsg * pControlMsg) {
-    MainMenus::D2GFX_SetPaletteForDraw("palette\\sky\\pal.dat", "palette\\sky\\pal.pl2");
-    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpMainMenuTcpIpTimerControl);
-    D2ControlStrc* pDVar1 = MainMenus::FORMS_CreateAnyFormFromList(0x10f);
-    D2Win::Src::D2WinMain::FORMS_SetGlobalFormImage(pDVar1, 0);
-    MainMenus::FORMS_CreateAnyFormFromList(0x10e);
-    ::D2WinTextBox* pTextBox = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromList(0x10c);
-    uint16_t* wszText = D2Lang::StrTable::strtable::GetLocaleString(0x2b1f);
-    D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pTextBox, wszText);
-    gpMainMenuFormPtrs = (::D2WinEditBox*)MainMenus::FORMS_CreateAnyFormFromList(0x10d);
-    if (gszLastTcpIpAddress[0] == '\0') {
-      Storm::Source::SReg::SRegLoadString("Diablo II", "LastTcpIp", 0, gszLastTcpIpAddress, 0x100);
-    }
-
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpMainMenuFormPtrs, gszLastTcpIpAddress);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpMainMenuFormPtrs->sControl);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SelectAll(gpMainMenuFormPtrs);
-    pDVar1 = MainMenus::FORMS_CreateAnyFormFromList(0x110);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pDVar1);
-    MainMenus::FORMS_CreateAnyFormFromList(0x111);
-    return 1;
-}
-
-BOOL __stdcall MAINMENU_DismissPopup(D2ControlStrc * pControl) {
-    MainMenus::FORMS_DestroyList();
     return 1;
 }
 

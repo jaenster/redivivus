@@ -36,8 +36,8 @@
 #include "globals/globals.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/Text.h"
-#include "D2Game/D2Game.h"
 #include "D2Game/D2QuestGUIDStrc.h"
+#include "D2Game/Quests/QUESTS/A1Q2.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

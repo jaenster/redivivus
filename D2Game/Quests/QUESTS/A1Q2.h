@@ -51,6 +51,7 @@ void __fastcall Q02_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData
 //     lookup table {.,0,1,2,3,4} indexed by nStateFlag (the in-progress chatter).
 // State ids: 0=Completed, 1=RewardAwaits.
 void __fastcall Q02_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
+uint8_t __fastcall Q02_TimerNotifyCompletion(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 // A1Q2 quest-state handler slot 0xa (Q02_Callback_10): player-leaves cleanup.
 // Removes the player's GUID from this quest's participant list
 // (QUESTGUID_RemovePlayerFromList); uses -1 when no player unit is present.
@@ -64,6 +65,7 @@ void __fastcall Q02_Callback10_PlayerLeavesGame(struct D2QuestDataStrc * pQuestD
 // Looks up Blood Raven via nBloodRavenGUID stashed by Q02_Callback_08.
 // State ids: 0=Completed,1=RewardAwaits,2=JustCompleted.
 BOOL __fastcall Q02_SetRewardForNearbyPlayers(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+void __fastcall fpExecuteOnUnitFunction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A1Q2 "cannot complete here" setter, iterated over players when Blood Raven
 // dies. For any player who is NOT already Completed and NOT RewardAwaits (i.e.
 // out of range / didn't get credit), sets QUESTSTATE_CannotCompleteQuestInGame and

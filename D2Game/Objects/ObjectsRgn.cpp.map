@@ -120,6 +120,23 @@
       ]
     },
     {
+      "name": "IncrementObjectTypeCount",
+      "address": "00546fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00546fc0"
+        }
+      ],
+      "namespace": "D2Game::Objects::ObjectsRgn",
+      "calledFunctions": [
+        "IncrementObjectTypeCount"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
       "name": "Send_0x26_Chat",
       "address": "00546fe0",
       "lines": [
