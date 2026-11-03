@@ -2,10 +2,10 @@
 
 #include "D2Sound/Src/D2SoundFast.h"
 #include "D2Client/Sound/Sound.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Sound/D2Sound.h"
 #include "D2Sound/Sound.h"
 #include "D2Sound/Src/D2SoundSmp.h"
-#include "Fog/Archive.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/D2MPQFileStrc.h"
@@ -350,7 +350,7 @@ void __fastcall SOUND_LoadWavFile(char * szText) {
       return;
     }
 
-    int* pArchive = (int*)Fog::Archive::D2FILE_AllocAndLoadD2File(nullptr, szText, &nAllocSize, ".\\Src\\D2SoundFast.cpp", 0x77);
+    int* pArchive = (int*)D2Hell::D2FILE_AllocAndLoadD2File(nullptr, szText, &nAllocSize, ".\\Src\\D2SoundFast.cpp", 0x77);
     if (!pArchive) {
       return;
     }

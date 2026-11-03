@@ -190,7 +190,6 @@ int __fastcall SKILLSCLT_CheckSkillIsValid(struct D2UnitStrc * pUnit, ::SGAMEDAT
 void __fastcall SKILLSASS_StatExpireCallback_ClearState(struct D2UnitStrc * pUnit, eD2States eState, int32_t nParam);
 void __stdcall BINK_RenderVideoFrame();
 void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFrameCallback pfnFrameCallback);
-void AtexitCleanup_FreeLinkedListAndCritSec();
 _EXCEPTION_DISPOSITION SehHandler_6ca218(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION SehHandler_6ca238(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 

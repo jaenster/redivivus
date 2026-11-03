@@ -12,7 +12,7 @@
 #include "D2Game/GAME/Event.h"
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitMsg.h"
-#include "Fog/Archive.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
@@ -48,7 +48,7 @@ D2AnimDataStrc * __fastcall TXT_AllocTxt_AnimTbls(D2PoolManagerStrc * pMemory) {
     D2AnimDataStrc* pAnimTbls = D2_NEW_POOL_AT(nullptr, D2AnimDataStrc, ".\\DATATBLS\\AnimTbls.cpp", 0x83);
     memset(pAnimTbls, 0, 0x4a4);
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\AnimData.d2", "DATA\\GLOBAL");
-    D2AnimDataBucketStrc* pArchive = (D2AnimDataBucketStrc*)Fog::Archive::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, nullptr, ".\\DATATBLS\\AnimTbls.cpp", 0x8a);
+    D2AnimDataBucketStrc* pArchive = (D2AnimDataBucketStrc*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, nullptr, ".\\DATATBLS\\AnimTbls.cpp", 0x8a);
     pAnimTbls->pRecords = (D2AnimDataRecordStrc*)pArchive;
     int nHashBucketCount = 0x100;
     D2AnimDataBucketStrc** pHashEntry = (D2AnimDataBucketStrc**)pAnimTbls;

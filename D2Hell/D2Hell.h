@@ -7,11 +7,18 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
-#include "Storm/Source/SSystem.h"
+#include "Storm/Source/SFile.h"
 
 // Forward declarations
+struct D2ArchiveStrc;
+struct D2FogArchiveStrc;
 struct D2MPQFileStrc;
 struct D2PoolManagerStrc;
+struct StormLinkedListStrc;
+#ifndef RECON_FPTD_fpRequiredUserAction
+#define RECON_FPTD_fpRequiredUserAction
+typedef BOOL (*fpRequiredUserAction)();
+#endif
 #ifndef RECON_FPTD_pfnFaultError
 #define RECON_FPTD_pfnFaultError
 typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpression);
@@ -22,6 +29,52 @@ typedef BOOL (__stdcall *pfnStormErrorHandler)(DWORD dwErrorCode, char * szBuffe
 #endif
 
 // Data types
+#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+
+typedef _CRYPTOAPI_BLOB CERT_NAME_BLOB;
+
+typedef _CERT_PUBLIC_KEY_INFO CERT_PUBLIC_KEY_INFO;
+
+typedef _CRYPT_ALGORITHM_IDENTIFIER CRYPT_ALGORITHM_IDENTIFIER;
+
+typedef _CRYPT_BIT_BLOB CRYPT_BIT_BLOB;
+
+typedef _CRYPTOAPI_BLOB CRYPT_INTEGER_BLOB;
+
+typedef void * HCERTSTORE;
+
+typedef void * HCRYPTMSG;
+
+typedef void * HLOCAL;
+
+typedef CERT_CONTEXT * PCCERT_CONTEXT;
+
+typedef struct _CERT_EXTENSION * PCERT_EXTENSION;
+
+#endif // _WIN32
+
+struct D2WinTrustData {
+    /* 0x00 */ uint32_t cbStruct;
+    /* 0x04 */ void * pPolicyCallbackData;
+    /* 0x08 */ void * pSIPClientData;
+    /* 0x0C */ uint32_t dwUIChoice;
+    /* 0x10 */ uint32_t fdwRevocationChecks;
+    /* 0x14 */ uint32_t dwUnionChoice;
+    /* 0x18 */ void * pUnion;
+    /* 0x1C */ uint32_t dwStateAction;
+    /* 0x20 */ void * hWVTStateData;
+    /* 0x24 */ void * pwszURLReference;
+    /* 0x28 */ uint32_t dwProvFlags;
+    /* 0x2C */ uint32_t dwUIContext;
+};
+
+struct __attribute__((packed)) D2WinTrustFileInfo {
+    /* 0x00 */ DWORD cbStruct;
+    /* 0x04 */ LPCWSTR pcwszFilePath;
+    /* 0x08 */ HANDLE hFile;
+    /* 0x0C */ GUID * pgKnownSubject;
+};
+
 struct StormFaultHandlerNode {
     /* 0x00 */ void * pPrevLink; // TSLink prev (Storm list: may hold ~&link)
     /* 0x04 */ struct StormFaultHandlerNode * pNext; // TSLink next; <=0 ends the walk next handler; the walk stops at a non-positive link (Storm list tag)
@@ -33,10 +86,32 @@ struct __attribute__((packed)) StormFaultHandlerNodeStrc {
     /* 0x08 */ BOOL (__stdcall *pfnHandler)(DWORD, char *, DWORD);
 };
 
+#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+
+struct _CERT_INFO {
+    /* 0x00 */ DWORD dwVersion;
+    /* 0x04 */ CRYPT_INTEGER_BLOB SerialNumber;
+    /* 0x0C */ CRYPT_ALGORITHM_IDENTIFIER SignatureAlgorithm;
+    /* 0x18 */ CERT_NAME_BLOB Issuer;
+    /* 0x20 */ FILETIME NotBefore;
+    /* 0x28 */ FILETIME NotAfter;
+    /* 0x30 */ CERT_NAME_BLOB Subject;
+    /* 0x38 */ CERT_PUBLIC_KEY_INFO SubjectPublicKeyInfo;
+    /* 0x50 */ CRYPT_BIT_BLOB IssuerUniqueId;
+    /* 0x5C */ CRYPT_BIT_BLOB SubjectUniqueId;
+    /* 0x68 */ DWORD cExtension;
+    /* 0x6C */ PCERT_EXTENSION rgExtension;
+};
+
+#endif // _WIN32
+
 namespace D2Hell {
 
 // Function declarations
 void __fastcall D2FILE_CreateProcess(LPCSTR szText);
+// NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
+char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText);
+BOOL __fastcall CheckIfFileExists(struct D2PoolManagerStrc * pMemory, char * szFilename, struct D2MPQFileStrc * * ppFile, BOOL bDontLogError);
 // Closes an open Storm file (ERRORMANAGER_FCloseFile) and halts on line 0x49 if pFile is null. ECX pMemory is unused; callers pass their pool or 0.
 // Provenance: 1.14d asm 00516e84..00516ea6.
 void __fastcall D2FILE_CloseFile(struct D2PoolManagerStrc * pMemory, struct D2MPQFileStrc * pFile);
@@ -47,11 +122,47 @@ void __fastcall D2FILE_SeekFile(struct D2PoolManagerStrc * pMemory, struct D2MPQ
 void __fastcall D2FILE_ReadFile(struct D2PoolManagerStrc * pMemory, struct D2MPQFileStrc * pFile, void * pBuffer, uint32_t nBytesToRead);
 void __stdcall D2FILE_ReadFile_HaltTail(int nLine);
 uint32_t __fastcall D2FILE_OpenAndReadFile(struct D2PoolManagerStrc * pMemory, char * szText, void * pBuffer, uint32_t nBufSize);
+// @sourcefile .\SRC\Archive.cpp
+void * __fastcall D2FILE_AllocAndLoadD2File(struct D2PoolManagerStrc * pMemory, char * szFilename, uint32_t * pSize, char * szFile, int32_t nLine);
+// @sourcefile .\SRC\Archive.cpp
+struct D2FogArchiveStrc * __fastcall ARCHIVE_LoadMPQ(char * szMpqFileName, int32_t nZero, ::fpRequiredUserAction nfpRequiredUserAction, int32_t nTimeTBC);
+// @sourcefile .\SRC\Archive.cpp
+void __fastcall ARCHIVE_FreeMpqFile(struct D2FogArchiveStrc * pFogArchive);
 pfnFaultError __fastcall RegisterExitFunction(pfnFaultError pfnNewCallback);
 void __stdcall FAULT_TerminateCurrentProcess();
 void __fastcall FAULT_ShowErrorAndTerminate(LPCSTR szText);
 void __fastcall FAULT_ShowErrorMessageBox(LPCSTR szText);
 void __fastcall FAULT_FormatAndShowError(LPCSTR szFile, int nLine, LPCSTR szExpression);
+struct StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(struct StormLinkStrc * pLink, int32_t nLinkOffset);
+// TSLink<TMESSAGESOURCE>::Unlink: removes one link from its list and clears it.
+// Named per redivivus issue #35; a TSLink member used by every TSList<TMESSAGESOURCE> operation.
+void __fastcall TSLink_TMESSAGESOURCE_Unlink(struct StormLinkStrc * pLink);
+struct StormLinkStrc * __thiscall LINKEDLIST_GetOffset(struct StormLinkedListStrc * pList, void * pItem);
+void __thiscall LINKEDLIST_SetNodeValue(struct StormLinkedListStrc * pNode, int32_t dwValue);
+void __thiscall LINKEDLIST_InsertNode(struct StormLinkedListStrc * pList, void * pNewItem, int32_t nInsertMode, void * pRefItem);
+int32_t __thiscall LINKEDLIST_GetNodeAt(int * pList, int32_t nOffset);
+void __thiscall LINKEDLIST_RemoveNode(int * pList, int32_t nOffset);
+// @wasnamed LINKEDLIST_GetCount - one name on two different functions.
+// @evidence Calls LINKEDLIST_GetOffset(nOffset,p) then returns node[+4].
+// It counts nothing. 00426a60 is the real count (returns max(pList[+8],0)).
+// @caveat no xrefs - an inlined Storm TS-list template instance. Name is body-derived, not recovered.
+int32_t __thiscall LINKEDLIST_GetNodeLinkAtOffset(int * pList, int32_t nOffset);
+// TSList<TMESSAGESOURCE>::UnlinkAll: unlinks every node without freeing it.
+// Named per redivivus issue #35; T from gFaultHandlerList, whose nodes are allocated with .?AUTMESSAGESOURCE@@ (0072f9fc).
+void __fastcall TSList_TMESSAGESOURCE_UnlinkAll(void * pList);
+// TSList<TMESSAGESOURCE>::~TSList: UnlinkAll, then unlinks the terminator link. No direct callers; byte-identical to 005176d3.
+// Named per redivivus issue #35; T from the UnlinkAll it calls.
+void __fastcall TSList_TMESSAGESOURCE_Destructor(void * pList);
+void * __thiscall LINKEDLIST_AllocAndInsertNode(struct StormLinkedListStrc * pList, int32_t nInsertMode, int32_t nExtraSize, uint32_t dwFlags);
+FILE * __thiscall LINKEDLIST_DetachNode(FILE * pFile, uint8_t bFree);
+// Second out-of-line copy of TSList<TMESSAGESOURCE>::~TSList, byte-identical to 00517658. No direct callers; the address suffix keeps the two apart.
+// Named per redivivus issue #35; T from the UnlinkAll it calls.
+void __fastcall TSList_TMESSAGESOURCE_Destructor_5176d3(void * pList);
+// TSList<TMESSAGESOURCE>::Clear: unlinks and SMemFrees every node.
+// Named per redivivus issue #35; T from the delete tag .?AUTMESSAGESOURCE@@ (0072f9fc).
+void __fastcall TSList_TMESSAGESOURCE_Clear(void * pListHead);
+int32_t __thiscall LINKEDLIST_FindNode(int * pList, void * pNode);
+void AtexitCleanup_FreeLinkedListAndCritSec();
 void __fastcall FAULT_RegisterErrorHandler(pfnStormErrorHandler pfnHandler);
 void __fastcall FAULT_LookupErrorString(uint32_t nErrorCode, char * szText, int32_t nMaxLen);
 void FAULT_ShowFormattedError(uint32_t nErrorCode, ...);
@@ -62,6 +173,9 @@ void __fastcall D2MEM_VirtualFree(LPVOID pAddress);
 void __fastcall D2MEM_CopyRows(char * pCharSelComp, uint32_t * pSrc, int32_t nDstStride, int32_t nSrcStride, int32_t nRows, uint32_t nBytesPerRow);
 uint32_t __fastcall D2MEM_CompareBytes(int * pBuf1, int * pBuf2, uint32_t nByteCount);
 int32_t D2MEM_FindLowestSetBit(uint32_t dwMask);
+int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText);
+// Extracts signer organization from signed file's certificate. Converts file path to wide char, queries certificate store, retrieves X.509 certificate, extracts organization field (OID 2.5.4.10), converts back to ANSI.
+bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, int32_t nOrgMaxLen);
 // @evidence MOV EAX,0x72fa18 / NOT EAX / MOV [0x72fa1c],EAX - writes the
 // end-of-list terminator into gFaultHandlerList.head.pNext. The .data image
 // already carries head.pPrevLink = &gFaultHandlerList.head (0x0072fa18); only
@@ -74,5 +188,6 @@ int32_t D2MEM_FindLowestSetBit(uint32_t dwMask);
 // the ORIGINAL image address. Address-relative, not a constant.
 void StaticInit_gFaultHandlerList();
 void StaticFini_gFaultHandlerList();
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Hell

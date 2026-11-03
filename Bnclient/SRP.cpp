@@ -2,6 +2,7 @@
 
 #include "Bnclient/SRP.h"
 #include "Bnclient/SHA.h"
+#include "Bnclient/SHA1.h"
 #include "Bnclient/net_sid.h"
 #include "Storm/D2Srp.h"
 #include "Storm/Source/SMem.h"
@@ -38,9 +39,9 @@ void __thiscall SRP_InitializeRandomState(D2Srp * pThis, uint32_t dwSeed) {
     sSeedEntropy.dwSeed = dwSeed;
     srand(dwSeed);
     sSeedEntropy.nRand = rand();
-    SHA::SHA1_Init(aShaCtx);
-    SHA::SHA1_Update(aShaCtx, &sSeedEntropy, 0xc);
-    SHA::SHA1_Final(pThis->aRandomPoolA, aShaCtx);
+    SHA1::SHA1_Init(aShaCtx);
+    SHA1::SHA1_Update(aShaCtx, &sSeedEntropy, 0xc);
+    SHA1::SHA1_Final(pThis->aRandomPoolA, aShaCtx);
     uint32_t dwPoolCopy1 = *(uint32_t*)(pThis->aRandomPoolA + 4);
     uint32_t dwPoolCopy2 = *(uint32_t*)(pThis->aRandomPoolA + 8);
     *(uint32_t*)pThis->aRandomPoolB = *(uint32_t*)pThis->aRandomPoolA;
@@ -65,11 +66,11 @@ void __thiscall SRP_ExtractSessionKeyBytes(void * pThis, void * pDst, uint32_t n
         memcpy(pDst, (void*)(iVar1 - nAvail + 0x48), nAvail);
         pDst = (void*)((int)pDst + *(int*)(*(int*)pThis + 0x48));
         nBytes -= *(int*)(*(int*)pThis + 0x48);
-        SHA::SHA1_Init(aShaCtx);
-        SHA::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0xc), 0x14);
-        SHA::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0x34), 0x14);
-        SHA::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0x20), 0x14);
-        SHA::SHA1_Final((uint8_t*)(*(int*)pThis + 0x34), aShaCtx);
+        SHA1::SHA1_Init(aShaCtx);
+        SHA1::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0xc), 0x14);
+        SHA1::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0x34), 0x14);
+        SHA1::SHA1_Update(aShaCtx, (void*)(*(int*)pThis + 0x20), 0x14);
+        SHA1::SHA1_Final((uint8_t*)(*(int*)pThis + 0x34), aShaCtx);
         *(uint32_t*)(*(int*)pThis + 0x48) = 0x14;
         iVar1 = *(int*)pThis;
         nAvail = *(uint32_t*)(iVar1 + 0x48);
@@ -89,18 +90,18 @@ void __thiscall SRP_ComputePasswordHash(D2Srp * pSrp, void * pSalt, char * szTex
 
     uint32_t sha1Ctx[23];
     uint8_t hashBuf[20];
-    SHA::SHA1_Init(sha1Ctx);
+    SHA1::SHA1_Init(sha1Ctx);
     uint32_t nStrLen = Storm::Source::SSTR::SStrLen(szText1);
-    SHA::SHA1_Update(sha1Ctx, szText1, nStrLen);
+    SHA1::SHA1_Update(sha1Ctx, szText1, nStrLen);
     nStrLen = Storm::Source::SSTR::SStrLen(g_pColonSeparator);
-    SHA::SHA1_Update(sha1Ctx, g_pColonSeparator, nStrLen);
+    SHA1::SHA1_Update(sha1Ctx, g_pColonSeparator, nStrLen);
     nStrLen = Storm::Source::SSTR::SStrLen(szText2);
-    SHA::SHA1_Update(sha1Ctx, szText2, nStrLen);
-    SHA::SHA1_Final(hashBuf, sha1Ctx);
-    SHA::SHA1_Init(sha1Ctx);
-    SHA::SHA1_Update(sha1Ctx, pSalt, 0x20);
-    SHA::SHA1_Update(sha1Ctx, hashBuf, 0x14);
-    SHA::SHA1_Final(hashBuf, sha1Ctx);
+    SHA1::SHA1_Update(sha1Ctx, szText2, nStrLen);
+    SHA1::SHA1_Final(hashBuf, sha1Ctx);
+    SHA1::SHA1_Init(sha1Ctx);
+    SHA1::SHA1_Update(sha1Ctx, pSalt, 0x20);
+    SHA1::SHA1_Update(sha1Ctx, hashBuf, 0x14);
+    SHA1::SHA1_Final(hashBuf, sha1Ctx);
     BigData* nHashResult = SHA::SHA1_FromBigIntBytes(hashBuf, 0x14);
     *ppPasswordHash = (int)nHashResult;
 }
@@ -115,9 +116,9 @@ void __thiscall SRP_HashBigNumToU32(D2Srp * pSrp, BigData * * ppBigNum, uint32_t
     uint8_t bigIntBytes[32];
     uint8_t aHash[20];
     uint32_t nByteLen = SHA::SHA1_ToBigIntBytes(*ppBigNum, bigIntBytes, 0x20);
-    SHA::SHA1_Init(sha1Ctx);
-    SHA::SHA1_Update(sha1Ctx, bigIntBytes, nByteLen);
-    SHA::SHA1_Final(aHash, sha1Ctx);
+    SHA1::SHA1_Init(sha1Ctx);
+    SHA1::SHA1_Update(sha1Ctx, bigIntBytes, nByteLen);
+    SHA1::SHA1_Final(aHash, sha1Ctx);
     *pdwOut = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)aHash[0] << 8 | (uint16_t)(uint8_t)aHash[1]) << 8 | (uint32_t)(uint8_t)aHash[2]) & 0xffffffu) << 8 | (uint32_t)(uint8_t)aHash[3]);
 }
 
@@ -207,13 +208,13 @@ void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * 
     uint8_t byXorC;
     uint8_t byXorD;
     uint32_t nByteLen = SHA::SHA1_ToBigIntBytes(*(BigData**)(pThis + 8), xorHashNPrime, 0x20);
-    SHA::SHA1_Init(sha1Ctx);
-    SHA::SHA1_Update(sha1Ctx, xorHashNPrime, nByteLen);
-    SHA::SHA1_Final(hashN, sha1Ctx);
+    SHA1::SHA1_Init(sha1Ctx);
+    SHA1::SHA1_Update(sha1Ctx, xorHashNPrime, nByteLen);
+    SHA1::SHA1_Final(hashN, sha1Ctx);
     nByteLen = SHA::SHA1_ToBigIntBytes(*(BigData**)(pThis + 4), xorHashNPrime, 0x20);
-    SHA::SHA1_Init(sha1Ctx);
-    SHA::SHA1_Update(sha1Ctx, xorHashNPrime, nByteLen);
-    SHA::SHA1_Final(hashG, sha1Ctx);
+    SHA1::SHA1_Init(sha1Ctx);
+    SHA1::SHA1_Update(sha1Ctx, xorHashNPrime, nByteLen);
+    SHA1::SHA1_Final(hashG, sha1Ctx);
     int i = 0;
     do {
       byXorC = hashN[i + 1];
@@ -232,28 +233,28 @@ void __thiscall SRP_ComputeClientProof(int32_t pThis, char * szUsername, void * 
       i += 5;
     } while (i < 0x14);
 
-    SHA::SHA1_Init(sha1Ctx);
+    SHA1::SHA1_Init(sha1Ctx);
     nByteLen = Storm::Source::SSTR::SStrLen(szUsername);
-    SHA::SHA1_Update(sha1Ctx, szUsername, nByteLen);
-    SHA::SHA1_Final(hashN, sha1Ctx);
-    SHA::SHA1_Init(sha1Ctx);
-    SHA::SHA1_Update(sha1Ctx, xorHashNPrime, 0x14);
-    SHA::SHA1_Update(sha1Ctx, hashN, 0x14);
-    SHA::SHA1_Update(sha1Ctx, pSalt, 0x20);
-    SHA::SHA1_Update(sha1Ctx, pClientPublic, 0x20);
-    SHA::SHA1_Update(sha1Ctx, pServerPublic, 0x20);
-    SHA::SHA1_Update(sha1Ctx, pSessionKey, 0x28);
-    SHA::SHA1_Final((uint8_t*)pClientProofOut, sha1Ctx);
+    SHA1::SHA1_Update(sha1Ctx, szUsername, nByteLen);
+    SHA1::SHA1_Final(hashN, sha1Ctx);
+    SHA1::SHA1_Init(sha1Ctx);
+    SHA1::SHA1_Update(sha1Ctx, xorHashNPrime, 0x14);
+    SHA1::SHA1_Update(sha1Ctx, hashN, 0x14);
+    SHA1::SHA1_Update(sha1Ctx, pSalt, 0x20);
+    SHA1::SHA1_Update(sha1Ctx, pClientPublic, 0x20);
+    SHA1::SHA1_Update(sha1Ctx, pServerPublic, 0x20);
+    SHA1::SHA1_Update(sha1Ctx, pSessionKey, 0x28);
+    SHA1::SHA1_Final((uint8_t*)pClientProofOut, sha1Ctx);
 }
 
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
 void __thiscall SRP_ComputeServerProof(D2Srp * pSrp, void * pClientPublic, void * pClientProof, void * pSessionKey, uint8_t * pHashOut) {
     uint32_t sha1Ctx[23];
-    SHA::SHA1_Init(sha1Ctx);
-    SHA::SHA1_Update(sha1Ctx, pClientPublic, 0x20);
-    SHA::SHA1_Update(sha1Ctx, pClientProof, 0x14);
-    SHA::SHA1_Update(sha1Ctx, pSessionKey, 0x28);
-    SHA::SHA1_Final(pHashOut, sha1Ctx);
+    SHA1::SHA1_Init(sha1Ctx);
+    SHA1::SHA1_Update(sha1Ctx, pClientPublic, 0x20);
+    SHA1::SHA1_Update(sha1Ctx, pClientProof, 0x14);
+    SHA1::SHA1_Update(sha1Ctx, pSessionKey, 0x28);
+    SHA1::SHA1_Final(pHashOut, sha1Ctx);
 }
 
 BOOL __fastcall SRP_IsContextInitialized(D2Srp * pSrp) {

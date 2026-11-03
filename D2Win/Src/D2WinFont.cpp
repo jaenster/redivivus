@@ -5,6 +5,7 @@
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/UI/Text.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
@@ -13,7 +14,6 @@
 #include "D2Win/Src/D2WinArchive.h"
 #include "D2Win/Src/D2WinPalette.h"
 #include "D2gfx/D2GFX.h"
-#include "Fog/Archive.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
@@ -95,7 +95,7 @@ static void InitFontCache(int32_t nFontIndex) {
 
     int32_t nAllocLine = 0xb5;
     char* szAllocFile = ".\\Src\\D2WinFont.cpp";
-    D2FontTableHeaderStrc* pFontTable = (D2FontTableHeaderStrc*)Fog::Archive::D2FILE_AllocAndLoadD2File(D2WinArchive::ReturnZero(), szFontTablePath, 0, szAllocFile, nAllocLine);
+    D2FontTableHeaderStrc* pFontTable = (D2FontTableHeaderStrc*)D2Hell::D2FILE_AllocAndLoadD2File(D2WinArchive::ReturnZero(), szFontTablePath, 0, szAllocFile, nAllocLine);
     gaFontCache[nFontIndex].pFontTable = pFontTable;
     gaFontCache[nFontIndex].pFontTableHeader = pFontTable;
     gaFontCache[nFontIndex].pGlyphs = (D2FontGlyphStrc*)(pFontTable + 1);

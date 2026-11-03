@@ -8,7 +8,6 @@
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "D2Client/GAME/Msg.h"
-#include "D2Client/Items/ItemMods.h"
 #include "D2Client/Renderer/Glide.h"
 #include "D2Client/UI/CmdTbl.h"
 #include "D2Client/UI/EscMenu.h"
@@ -21,7 +20,6 @@
 #include "D2Client/UNIT/Monster.h"
 #include "D2Client/UNIT/UnitSnd.h"
 #include "D2Common/D2SeedStrc.h"
-#include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Common/Merc.h"
 #include "D2Direct3D/Renderer/Direct3D.h"
@@ -30590,14 +30588,6 @@ int gaPerspectiveImageSizeTable[14] = {
     0x20
 }; D2_GLOBAL_GUARD(gaPerspectiveImageSizeTable, "gaPerspectiveImageSizeTable");
 
-StormLinkedListStrc gFaultHandlerList = {
-    /* .nLinkOffset = */ 0x0,
-    /* .head = */ {
-        /* .pPrevLink = */ (StormLinkStrc*)&gFaultHandlerList.head.pPrevLink,
-        /* .pNext = */ 0x0
-    }
-}; D2_GLOBAL_GUARD(gFaultHandlerList, "gFaultHandlerList");
-
 char * gaszLanguageNames[32] = {
     s_English_006cc81c,
     s_Spanish_006cc814,
@@ -31513,46 +31503,6 @@ char * gaLanguageNames_00745738[15] = {
     s_Unknown_006cc780,
     (char*)0x006cc77c
 }; D2_GLOBAL_GUARD(gaLanguageNames_00745738, "gaLanguageNames_00745738");
-
-fpProperties PROPERTIESFUNCTIONS[37] = {
-    nullptr,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_EnhancedIfItem,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_EnhancedAlways,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_PreserveRolledValue,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddMinDamage,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddMaxDamage,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddEnhancedDamage,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_Simple,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillBonus,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddClassSkillBonus,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillOnEvent,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_RandLevelAsLayer,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_WithMaxDurabilityReset,
-    (fpProperties)&D2Client::Items::ItemMods::ITEMPROP_SetSockets,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_SetFixedMinDamage,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_SetFixedMaxDamage,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_FixedOrRolledMaxDamageAware,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddTimedStat,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillCharges,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_SetIndestructible,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_WithLayerFromParam7,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_LayerFromParam4Lo,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_ApplyEthereal,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_WithLayerFromParam4,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    nullptr,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7
-}; D2_GLOBAL_GUARD(PROPERTIESFUNCTIONS, "PROPERTIESFUNCTIONS");
 
 D2MonSeqTxt D2MonSeqTxt_ARRAY_007466dc[7] = {
     {
@@ -37140,8 +37090,6 @@ uint8_t gpLineBufferTileArray[32][32][32] = {}; D2_GLOBAL_GUARD(gpLineBufferTile
 // also labelled: gPaletteBlendLookupTable
 uint8_t gaPaletteColorLUT[49][256] = {}; D2_GLOBAL_GUARD(gaPaletteColorLUT, "gaPaletteColorLUT");
 
-CRITICAL_SECTION gcsErrorHandlerList = {}; D2_GLOBAL_GUARD(gcsErrorHandlerList, "gcsErrorHandlerList");
-
 D2DataTableTxtStrc sgtDataTable = {}; D2_GLOBAL_GUARD(sgtDataTable, "sgtDataTable");
 
 unsigned long long gpItemTypeTableContext = 0; D2_GLOBAL_GUARD(gpItemTypeTableContext, "gpItemTypeTableContext");
@@ -38077,7 +38025,6 @@ grSstWinClose _GLIDEDLL_grSstWinClose_4 = (grSstWinClose)0; D2_GLOBAL_GUARD(_GLI
 HMODULE lpGLIDE3x_dll = 0; D2_GLOBAL_GUARD(lpGLIDE3x_dll, "lpGLIDE3x_dll");
 uint32_t gbPlayingCutScene = 0; D2_GLOBAL_GUARD(gbPlayingCutScene, "gbPlayingCutScene");
 IDirectDrawSurface1 * gpDDrawPrimarySurface = 0; D2_GLOBAL_GUARD(gpDDrawPrimarySurface, "gpDDrawPrimarySurface");
-uint32_t gbFaultHandlerListInitialized = 0; D2_GLOBAL_GUARD(gbFaultHandlerListInitialized, "gbFaultHandlerListInitialized");
 D2Srp * g_pSrpContext = 0; D2_GLOBAL_GUARD(g_pSrpContext, "g_pSrpContext");
 uint32_t gnQServerListenSocket = 0; D2_GLOBAL_GUARD(gnQServerListenSocket, "gnQServerListenSocket");
 unsigned int gpfnProfCoreInitCallback = {}; D2_GLOBAL_GUARD(gpfnProfCoreInitCallback, "gpfnProfCoreInitCallback");

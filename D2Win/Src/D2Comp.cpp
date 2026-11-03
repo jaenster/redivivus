@@ -8,7 +8,6 @@
 #include "D2Client/UI/SkillDesc.h"
 #include "D2Client/UNIT/Item.h"
 #include "D2Common/D2BinFieldExcelStrc.h"
-#include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Common/Txt/D2TxtLinkNodeStrc.h"
 #include "D2Game/D2QuestDataStrc.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
@@ -24,7 +23,6 @@
 #include "D2Win/Src/D2WinMain.h"
 #include "D2Win/Src/D2WinPalette.h"
 #include "D2gfx/D2GFX.h"
-#include "Fog/Archive.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/File.h"
 #include "Fog/Memory.h"
@@ -103,7 +101,7 @@ static void * __stdcall D2COMP_LoadAndValidateCOFFile(char * szCOFFilePath, uint
     int32_t nLineNum = 0x3eb;
     char* pszSourceFile = ".\\Src\\D2Comp.cpp";
     D2PoolManagerStrc* pMPQPool = D2WinArchive::ReturnZero();
-    void* nAddress = Fog::Archive::D2FILE_AllocAndLoadD2File(pMPQPool, szCOFFilePath, pnSize, pszSourceFile, nLineNum);
+    void* nAddress = D2Hell::D2FILE_AllocAndLoadD2File(pMPQPool, szCOFFilePath, pnSize, pszSourceFile, nLineNum);
     if (!nAddress) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ec);
       exit(-1);
@@ -1425,7 +1423,7 @@ void __stdcall D2COMP_FreeServerMemory(void * pMemory) {
 void * __stdcall D2COMP_LoadExcelTxtFile(D2PoolManagerStrc * pMemory, char * szFileBaseName, char * szFileExt, uint32_t * pnSize) {
     char szFilePath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szFileBaseName, szFileExt);
-    void* pFileData = Fog::Archive::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, pnSize, ".\\Src\\D2Comp.cpp", 0x958);
+    void* pFileData = D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, pnSize, ".\\Src\\D2Comp.cpp", 0x958);
     return pFileData;
 }
 
@@ -1441,7 +1439,7 @@ void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFie
     uint32_t nFileSize = 0;
     if (gbLoadBinFiles) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szTxtName, ".bin");
-      pArchive = (D2ArchiveStrc*)Fog::Archive::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, &nFileSize, ".\\Src\\D2Comp.cpp", 0x958);
+      pArchive = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, &nFileSize, ".\\Src\\D2Comp.cpp", 0x958);
     } else {
       int bIsCaseLevelDefs;
       bIsCaseLevelDefs = _stricmp(szTxtName, "leveldefs");
@@ -2152,7 +2150,7 @@ static void D2COMP_LoadItemPaletteFile(int32_t nPaletteSlot, char * szPaletteFil
 
     *(uint32_t*)((int)pDstScan + 1) = 0x7461642e;
     *(uint8_t*)((int)pDstScan + 5) = 0;
-    BOOL bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, szFullPath, &pFile, 1);
+    BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, szFullPath, &pFile, 1);
     if (!bFileExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd8);
       exit(-1);

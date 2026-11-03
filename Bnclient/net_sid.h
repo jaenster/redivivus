@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
-#include "Storm/D2SHA1.h"
+#include "Bnclient/BnSend.h"
 
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
@@ -24,14 +24,14 @@ struct D2CDKeyHashStrc {
     /* 0x10 */ uint8_t abHash[20]; // SHA-1 hash of token data
 };
 
-struct D2SHA1ContextStrc {
-    /* 0x00 */ D2SHA1 state;
-    /* 0x14 */ uint32_t aBlock[16];
-};
-
 struct D2SrpSaltVerifierStrc {
     /* 0x00 */ uint8_t aSalt[32]; // new-password SRP salt s
     /* 0x20 */ uint8_t aVerifier[32]; // new-password SRP verifier v
+};
+
+struct D2XSHA1ContextStrc {
+    /* 0x00 */ D2XSHA1Strc state;
+    /* 0x14 */ uint32_t aBlock[16];
 };
 
 struct SID_C2S_AuthAccountCreate {
@@ -101,10 +101,10 @@ void * __stdcall NET_SID_CLIENT_GetChannelNamePtr();
 BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, size_t nSize);
 // Battle.net "broken SHA-1" (XSHA1) block transform: schedule W[i] = ROL(1, (W[i-3]^W[i-8]^W[i-14]^W[i-16]) & 31), block copied without byte swap.
 // Name per redivivus issue #36 (asm-verified hash variant).
-void __fastcall XSHA1_Transform(struct D2SHA1ContextStrc * pShaCtx);
+void __fastcall XSHA1_Transform(struct D2XSHA1ContextStrc * pShaCtx);
 // XSHA1 one-shot hash: SHA-1 IV, zero-padded final block with no 0x80 and no bit length, XSHA1_Transform per block.
 // Name per redivivus issue #36 (asm-verified hash variant).
-void __fastcall XSHA1(struct D2SHA1 * pOutput, char * szInput, size_t nInputSize);
+void __fastcall XSHA1(struct D2XSHA1Strc * pOutput, char * szInput, size_t nInputSize);
 BOOL __stdcall SID_SetReadyFlag();
 BOOL __stdcall SID_GetReadyFlag();
 uint32_t __stdcall NET_SID_CLIENT_GetResponseCount2();

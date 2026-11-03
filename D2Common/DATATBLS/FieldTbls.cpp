@@ -9,7 +9,7 @@
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/D2DrlgDeleteStrc.h"
-#include "Fog/Archive.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
@@ -213,7 +213,7 @@ void __fastcall FIELDTBLS_LoadExpFieldFile(D2PoolManagerStrc * pMemory) {
     uint32_t nFileSize;
     char szFilePath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\expfield.d2", "DATA\\GLOBAL");
-    D2ExpFieldFileStrc* pArchive = (D2ExpFieldFileStrc*)Fog::Archive::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, &nFileSize, ".\\DATATBLS\\FieldTbls.cpp", 0x28);
+    D2ExpFieldFileStrc* pArchive = (D2ExpFieldFileStrc*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, &nFileSize, ".\\DATATBLS\\FieldTbls.cpp", 0x28);
     FIELDTBLS_InitFieldData(pArchive, nFileSize);
 }
 

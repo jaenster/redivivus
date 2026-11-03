@@ -12,80 +12,9 @@
 struct D2BNetClientCallbacksStrc;
 struct D2Srp;
 
-// Data types
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-
-typedef _CRYPTOAPI_BLOB CERT_NAME_BLOB;
-
-typedef _CERT_PUBLIC_KEY_INFO CERT_PUBLIC_KEY_INFO;
-
-typedef _CRYPT_ALGORITHM_IDENTIFIER CRYPT_ALGORITHM_IDENTIFIER;
-
-typedef _CRYPT_BIT_BLOB CRYPT_BIT_BLOB;
-
-typedef _CRYPTOAPI_BLOB CRYPT_INTEGER_BLOB;
-
-typedef void * HCERTSTORE;
-
-typedef void * HCRYPTMSG;
-
-typedef void * HLOCAL;
-
-typedef CERT_CONTEXT * PCCERT_CONTEXT;
-
-typedef struct _CERT_EXTENSION * PCERT_EXTENSION;
-
-#endif // _WIN32
-
-struct D2WinTrustData {
-    /* 0x00 */ uint32_t cbStruct;
-    /* 0x04 */ void * pPolicyCallbackData;
-    /* 0x08 */ void * pSIPClientData;
-    /* 0x0C */ uint32_t dwUIChoice;
-    /* 0x10 */ uint32_t fdwRevocationChecks;
-    /* 0x14 */ uint32_t dwUnionChoice;
-    /* 0x18 */ void * pUnion;
-    /* 0x1C */ uint32_t dwStateAction;
-    /* 0x20 */ void * hWVTStateData;
-    /* 0x24 */ void * pwszURLReference;
-    /* 0x28 */ uint32_t dwProvFlags;
-    /* 0x2C */ uint32_t dwUIContext;
-};
-
-struct __attribute__((packed)) D2WinTrustFileInfo {
-    /* 0x00 */ DWORD cbStruct;
-    /* 0x04 */ LPCWSTR pcwszFilePath;
-    /* 0x08 */ HANDLE hFile;
-    /* 0x0C */ GUID * pgKnownSubject;
-};
-
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-
-struct _CERT_INFO {
-    /* 0x00 */ DWORD dwVersion;
-    /* 0x04 */ CRYPT_INTEGER_BLOB SerialNumber;
-    /* 0x0C */ CRYPT_ALGORITHM_IDENTIFIER SignatureAlgorithm;
-    /* 0x18 */ CERT_NAME_BLOB Issuer;
-    /* 0x20 */ FILETIME NotBefore;
-    /* 0x28 */ FILETIME NotAfter;
-    /* 0x30 */ CERT_NAME_BLOB Subject;
-    /* 0x38 */ CERT_PUBLIC_KEY_INFO SubjectPublicKeyInfo;
-    /* 0x50 */ CRYPT_BIT_BLOB IssuerUniqueId;
-    /* 0x5C */ CRYPT_BIT_BLOB SubjectUniqueId;
-    /* 0x68 */ DWORD cExtension;
-    /* 0x6C */ PCERT_EXTENSION rgExtension;
-};
-
-#endif // _WIN32
-
 namespace Bnclient {
 
 // Function declarations
-// NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
-char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText);
-int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText);
-// Extracts signer organization from signed file's certificate. Converts file path to wide char, queries certificate store, retrieves X.509 certificate, extracts organization field (OID 2.5.4.10), converts back to ANSI.
-bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, int32_t nOrgMaxLen);
 int * __thiscall BNCLIENT_InitFilestream(int * pStream, char * szFilePath);
 void * __thiscall BNCLIENT_DestroyCompressor(void * pCompressor, uint8_t bFreeMemory);
 // Initializes the BNet lobby chat message queue via BNMESSQUEUE_Initialize, then returns a pointer to the global sgBNetClientCallbacks structure used for lobby chat callbacks.

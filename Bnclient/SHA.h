@@ -14,9 +14,6 @@ struct BigData;
 namespace Bnclient::SHA {
 
 // Function declarations
-void __fastcall SHA1_Init(uint32_t * pState);
-void __fastcall SHA1_Update(uint32_t * pShaCtx, void * pData, uint32_t nByteLen);
-void __fastcall SHA1_Final(uint8_t * pHashOut, uint32_t * pShaCtx);
 // Register params: pHashOut (ECX): uint8_t *, pWideStr (EDX): char *
 // @sourcefile .\SHA.cpp
 int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int32_t nLength);
@@ -27,14 +24,22 @@ int32_t __fastcall SHA1_CompareBigInt(struct BigData * pBigA, struct BigData * p
 // Compares pBigInt with the unsigned dwValue: builds a temporary BigData from dwValue (SBigNew + SBigFromUnsigned), returns SBIG_CompareBigBuffers_ForSha1(pBigInt, tmp) and frees the temporary.
 // Provenance: 1.14d asm 0052a2f0.
 int32_t __fastcall SHA1_BigIntCompareValue(struct BigData * pBigInt, uint32_t dwValue);
+// Thin wrapper: SBigShl(pResult, pBigSrc, nShiftBits). No callers in 1.14d.
+// Provenance: 1.14d asm 0052a330 (single call to SBigShl).
+void __fastcall SHA1_BigIntShl(struct BigData * pResult, struct BigData * pBigSrc, uint32_t nShiftBits);
 void __fastcall SHA1_BigIntAdd(struct BigData * pResult, struct BigData * pBigA, struct BigData * pBigB);
 void __fastcall SHA1_BigIntAddValue(struct BigData * pResult, struct BigData * pBigA, uint32_t dwValue);
 void __fastcall SHA1_BigIntSub(struct BigData * pResult, struct BigData * pBigIntA, struct BigData * pBigIntB);
+void __fastcall SHA1_BigIntSubValue(struct BigData * pResult, struct BigData * pBigA, uint32_t dwValue);
+void __fastcall SHA1_BigIntMul(struct BigData * pResult, struct BigData * pBigA, struct BigData * pBigB);
 void __fastcall SHA1_BigIntMulValue(struct BigData * pResult, struct BigData * pBigA, uint32_t dwValue);
+// Divides pBigA by the unsigned dwDivisor into pResult (SBigFromUnsigned + SBigDiv at 0052a496); former name SHA1_BigIntSquare kept as a label.
+void __fastcall SHA1_BigIntDivValue(struct BigData * pResult, struct BigData * pBigA, uint32_t dwDivisor);
+void __fastcall SHA1_BigIntMod(struct BigData * pResult, struct BigData * pBigA, struct BigData * pModulus);
+uint32_t __fastcall SHA1_BigIntModToInt(struct BigData * pBigInt, uint32_t dwModulus);
 void __fastcall SHA1_BigIntMulMod(struct BigData * pResult, struct BigData * pBigA, struct BigData * pBigB, struct BigData * pModulus);
 void __fastcall SHA1_BigIntPowMod(struct BigData * pResult, struct BigData * pBase, struct BigData * pExponent, struct BigData * pModulus);
 void __fastcall SHA1_BigIntPowModValue(struct BigData * pResult, struct BigData * pBase, uint32_t dwExponent, struct BigData * pModulus);
 void __fastcall SHA1_BigIntFree(struct BigData * pBigData);
-// 1 internal function (defined in .cpp)
 
 } // namespace Bnclient::SHA

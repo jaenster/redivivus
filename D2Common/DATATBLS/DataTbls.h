@@ -16,7 +16,6 @@ struct D2BinFieldInputStrc;
 struct D2CharStatsTxt;
 struct D2DifficultyLevelsTxt;
 struct D2InventoryToBeUpdatedStrc;
-struct D2MPQFileStrc;
 struct D2PoolManagerStrc;
 struct D2StatesDataTbls;
 struct D2UnitStrc;
@@ -25,7 +24,6 @@ typedef uint32_t eD2UnitType;
 namespace D2Common::DATATBLS::DataTbls {
 
 // Function declarations
-BOOL __fastcall CheckIfFileExists(struct D2PoolManagerStrc * pMemory, char * szFilename, struct D2MPQFileStrc * * ppFile, BOOL bDontLogError);
 uint16_t __fastcall DATATBLS_LookupStringId(char * szKey);
 uint32_t __stdcall DATATBLS_GetCompCodeByIndex(int32_t nIndex);
 DWORD __stdcall TXT_Experience_GetLineLevel(int32_t ePlayerClass, int32_t nLevel);

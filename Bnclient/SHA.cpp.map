@@ -4,76 +4,6 @@
   "file": "Bnclient/SHA.cpp",
   "functions": [
     {
-      "name": "SHA1_Transform",
-      "address": "00528c90",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00528c90"
-        }
-      ],
-      "namespace": "Bnclient::SHA",
-      "calledFunctions": [
-        "SHA1_Transform"
-      ],
-      "usedTypes": [
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SHA1_Init",
-      "address": "00529f50",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00529f50"
-        }
-      ],
-      "namespace": "Bnclient::SHA",
-      "calledFunctions": [
-        "SHA1_Init"
-      ]
-    },
-    {
-      "name": "SHA1_Update",
-      "address": "00529f80",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00529f80"
-        }
-      ],
-      "namespace": "Bnclient::SHA",
-      "calledFunctions": [
-        "SHA1_Update",
-        "memcpy",
-        "SHA1_Transform"
-      ],
-      "usedTypes": [
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "SHA1_Final",
-      "address": "0052a040",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0052a040"
-        }
-      ],
-      "namespace": "Bnclient::SHA",
-      "calledFunctions": [
-        "SHA1_Final",
-        "SHA1_Update",
-        "__security_check_cookie"
-      ],
-      "usedTypes": [
-        "uint32_t",
-        "uint8_t"
-      ]
-    },
-    {
       "name": "SHA1_HashWideString",
       "address": "0052a120",
       "lines": [
@@ -202,6 +132,25 @@
       ]
     },
     {
+      "name": "SHA1_BigIntShl",
+      "address": "0052a330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a330"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SBigShl",
+        "SHA1_BigIntShl"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "SHA1_BigIntAdd",
       "address": "0052a350",
       "lines": [
@@ -260,6 +209,46 @@
       ]
     },
     {
+      "name": "SHA1_BigIntSubValue",
+      "address": "0052a3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a3d0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntSubValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigSub",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntMul",
+      "address": "0052a410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a410"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntMul",
+        "SBigMul"
+      ],
+      "usedTypes": [
+        "BigData"
+      ]
+    },
+    {
       "name": "SHA1_BigIntMulValue",
       "address": "0052a430",
       "lines": [
@@ -274,6 +263,69 @@
         "SBigNew",
         "SBigFromUnsigned",
         "SBigMul",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntDivValue",
+      "address": "0052a470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a470"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntDivValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigDiv",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntMod",
+      "address": "0052a4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a4b0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntMod",
+        "SBigMod"
+      ],
+      "usedTypes": [
+        "BigData"
+      ]
+    },
+    {
+      "name": "SHA1_BigIntModToInt",
+      "address": "0052a4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a4d0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntModToInt",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigMod",
+        "SBigToBinaryBuffer",
         "SBigDel"
       ],
       "usedTypes": [

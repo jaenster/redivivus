@@ -9,7 +9,7 @@
 #include "d2_platform.h"
 #include "D2Net/in_addr.h"
 #include "Fog/D2QServerStrc.h"
-#include "Storm/Source/SSystem.h"
+#include "Storm/Source/SFile.h"
 
 // Forward declarations
 struct SGAMEDATA;

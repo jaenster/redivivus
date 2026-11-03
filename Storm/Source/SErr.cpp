@@ -3,6 +3,7 @@
 #include "Storm/Source/SErr.h"
 #include "Fog/3rdparty/crashy.h"
 #include "Fog/Source/SFile.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
@@ -221,6 +222,18 @@ void __stdcall SErrSetLastError(DWORD dwErrCode) {
     SetLastError(dwErrCode);
 }
 
+uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase) {
+    uint32_t nOffset = pNode[1];
+    if ((int)nOffset < 0) {
+      return ~nOffset;
+    }
+    if ((int)pBase < 0) {
+      pBase = (int*)((int)pNode - *(int*)(*pNode + 4));
+    }
+
+    return nOffset + (int)pBase;
+}
+
 // Looks the message-source module for (dwMessageId >> 16) & 0xfff out of gpErrorModuleList, then calls FormatMessageA with that module as lpSource. Returns nonzero on success.
 // @was FORMAT_FormatErrorMessage (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrGetErrorStr, code vector 10015c50 (TVector 100cbe7c).
@@ -256,6 +269,181 @@ uint32_t __stdcall SErrGetErrorStr(DWORD dwMessageId, LPSTR szText, DWORD nBuffe
     /* va_list * Arguments for FormatMessageA */ /* DWORD nSize for FormatMessageA */ /* LPSTR lpBuffer for FormatMessageA */ /* DWORD dwLanguageId for FormatMessageA */ /* DWORD dwMessageId for FormatMessageA */ /* LPCVOID lpSource for FormatMessageA */ /* DWORD dwFlags for FormatMessageA */ *szText = '\0';
     DWORD dwResult = FormatMessageA((lpSource ? -2048 : 0) + 0x1000, lpSource, dwMessageId, 0x400, szText, nBufferSize, nullptr);
     return (uint32_t)(dwResult != 0);
+}
+
+int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode) {
+    if (pNode) {
+      return pNode;
+    }
+
+    pNode = pList + 4;
+    return pNode;
+}
+
+void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget) {
+    int* ppPrevLink;
+    int** pEffectiveNode = pNode;
+    if (!pNode) {
+      pEffectiveNode = pList + 1;
+    }
+
+    int* pLink = *pEffectiveNode;
+    if (pLink) {
+      ppPrevLink = pEffectiveNode[1];
+      if ((int)ppPrevLink < 0) {
+        ppPrevLink = (int*)~(uint32_t)ppPrevLink;
+      } else {
+        ppPrevLink = (int*)((int)ppPrevLink + ((int)pEffectiveNode - pLink[1]));
+      }
+
+      *ppPrevLink = (int)pLink;
+      (*pEffectiveNode)[1] = (int)pEffectiveNode[1];
+      *pEffectiveNode = 0;
+      pEffectiveNode[1] = 0;
+    }
+    if (!ppTarget) {
+      ppTarget = pList + 1;
+    }
+
+    switch (nInsertMode) {
+      case 1:
+        {
+          *pEffectiveNode = (int*)ppTarget;
+          pEffectiveNode[1] = ppTarget[1];
+          pLink = *pList;
+          ppPrevLink = ppTarget[1];
+          if ((int)ppPrevLink < 0) {
+            *(int***)~(uint32_t)ppPrevLink = (int**)pEffectiveNode;
+            ppTarget[1] = (int*)pNode;
+            return;
+          }
+          if ((int)pLink < 0) {
+            pLink = (int*)((int)ppTarget - (*ppTarget)[1]);
+          }
+
+          *(int***)((int)ppPrevLink + (int)pLink) = (int**)pEffectiveNode;
+          ppTarget[1] = (int*)pNode;
+          return;
+        }
+      default:
+        {
+          pLink = *ppTarget;
+          *pEffectiveNode = pLink;
+          pEffectiveNode[1] = (int*)pLink[1];
+          pLink[1] = (int)pNode;
+          *ppTarget = (int*)pEffectiveNode;
+          return;
+        }
+    }
+}
+
+uint32_t __thiscall SSYSTEM_ListGetNext(int32_t pList, int32_t pNode) {
+    if (!pNode) {
+      pNode = pList + 4;
+    }
+
+    return (int)*(uint32_t*)(pNode + 4) <= 0 ? 0 : *(uint32_t*)(pNode + 4);
+}
+
+void __thiscall SSYSTEM_ListUnlink(int32_t pThis, int * pNode) {
+    int* pPrevLink;
+    if (!pNode) {
+      pNode = (int*)(pThis + 4);
+    }
+
+    int pNext = *pNode;
+    if (!pNext) {
+      return;
+    }
+
+    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+    *pPrevLink = pNext;
+    *(int*)(*pNode + 4) = pNode[1];
+    *pNode = 0;
+    pNode[1] = 0;
+}
+
+uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode) {
+    if (pNode) {
+      return *(uint32_t*)(pNode + 4);
+    }
+
+    return *(uint32_t*)(pList + 8);
+}
+
+// TSList<HANDLER>::UnlinkAll on SErr's handler list: unlinks every node without freeing it.
+// Named per redivivus issue #35; T from the list's delete tag .?AUHANDLER@@ (00708434).
+void __fastcall TSList_HANDLER_UnlinkAll(D2StormListHead * pList) {
+    int* pPrevLink;
+    int* pNode;
+    while (true) {
+      int pNext;
+      pNode = (int*)pList->pNext;
+      if ((int)pNode <= 0) {
+        break;
+      }
+
+      pNext = *pNode;
+      if (pNext) {
+        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+        *pPrevLink = pNext;
+        *(int*)(*pNode + 4) = pNode[1];
+        *pNode = 0;
+        pNode[1] = 0;
+      }
+    }
+}
+
+// TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
+// Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
+void __fastcall TSList_HANDLER_Destructor(D2StormListHead * pList) {
+    int* pPrevLink;
+    TSList_HANDLER_UnlinkAll(pList);
+    StormLinkStrc** pHead = &pList->pPrevLink;
+    StormLinkStrc* pNext = *pHead;
+    if (!pNext) {
+      return;
+    }
+
+    pPrevLink = (int*)D2_StormNextLink(pHead, -1);
+    *pPrevLink = (int)pNext;
+    (*pHead)->pNext = pList->pNext;
+    *pHead = 0;
+    pList->pNext = 0;
+}
+
+int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags) {
+    int** pNodeNew = (int**)SMem::SMemAlloc(nDataSize + 0xc, gszSSystemListAllocTag, -2, nAllocFlags | 8);
+    int** pNode;
+    if (pNodeNew) {
+      *pNodeNew = 0;
+      pNodeNew[1] = 0;
+      pNode = pNodeNew;
+    } else {
+      pNode = 0;
+    }
+    if (nInsertMode) {
+      SSYSTEM_ListUnlinkAndInsert(pList, pNode, nInsertMode, nullptr);
+    }
+
+    return pNode;
+}
+
+int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory) {
+    int pNext = *pNode;
+    if (pNext) {
+      int* pPrevLink;
+      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+      *pPrevLink = pNext;
+      *(int*)(*pNode + 4) = pNode[1];
+      *pNode = 0;
+      pNode[1] = 0;
+    }
+    if (bFreeMemory & 1) {
+      SMem::SMemFree(pNode, "delete", -1, 0);
+    }
+
+    return pNode;
 }
 
 // Under the error critical section, SMemAllocs a 12-byte list node, links it into gpStormErrorCallbackListHead and stores the caller's handler pointer at +8.
@@ -305,6 +493,31 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
     gnStormErrorCallbackCount.pNext = (int32_t)pNewCallback;
     pNewCallback[2] = (StormLinkStrc*)pfnCallback;
     SERR_InternalLeaveCriticalSection();
+}
+
+// TSList<HANDLER>::Clear: unlinks and SMemFrees every node.
+// Named per redivivus issue #35; T from the delete tag .?AUHANDLER@@ (00708434).
+void __fastcall TSList_HANDLER_Clear(int32_t pList) {
+    int* pPrevLink;
+    int* pNode;
+    while (true) {
+      int pNext;
+      pNode = *(int**)(pList + 8);
+      if ((int)pNode <= 0) {
+        break;
+      }
+
+      pNext = *pNode;
+      if (pNext) {
+        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
+        *pPrevLink = pNext;
+        *(int*)(*pNode + 4) = pNode[1];
+        *pNode = 0;
+        pNode[1] = 0;
+      }
+
+      SMem::SMemFree(pNode, gszSSystemListAllocTag, -2, 0);
+    }
 }
 
 uint32_t __thiscall SSYSTEM_ListRemoveAndFree(void * pList, int * pNode) {
@@ -663,7 +876,7 @@ void StaticInit_gStormErrorCallbackList() {
 // Runs at exit: removes every element from the Storm error callback list, then unlinks the list head itself.
 void StaticFini_gStormErrorCallbackList() {
     uint32_t* pBackLink;
-    SSystem::TSList_HANDLER_UnlinkAll(&gnStormErrorCallbackCount);
+    TSList_HANDLER_UnlinkAll(&gnStormErrorCallbackCount);
     if (!gnStormErrorCallbackCount.pPrevLink) {
       return;
     }

@@ -14,10 +14,10 @@
 #include "D2Client/UNIT/Player.h"
 #include "D2Client/UNIT/UnitMode.h"
 #include "D2Common/Stats/StatsEx.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Win/Src/D2WinArchive.h"
 #include "D2gfx/D2GFX.h"
-#include "Fog/Archive.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Fog.h"
 #include "Fog/Memory.h"
@@ -525,7 +525,7 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
     int nLine;
     nLine = 0x51e;
     pScan = ".\\UI\\CmdTbl.cpp";
-    pKeyData = (D2CmdTbl_Line0x50f*)Fog::Archive::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, 0, pScan, nLine);
+    pKeyData = (D2CmdTbl_Line0x50f*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, 0, pScan, nLine);
     apply_key_data:
     if (pKeyData) {
       if (pKeyData->wMagic == 0x5357 && pKeyData->wVersion == 0x25 && pKeyData->wSize == 0x47a) {

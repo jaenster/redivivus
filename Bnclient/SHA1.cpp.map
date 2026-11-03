@@ -1,0 +1,77 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Bnclient/SHA1.cpp",
+  "functions": [
+    {
+      "name": "SHA1_Transform",
+      "address": "00528c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00528c90"
+        }
+      ],
+      "namespace": "Bnclient::SHA1",
+      "calledFunctions": [
+        "SHA1_Transform"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_Init",
+      "address": "00529f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00529f50"
+        }
+      ],
+      "namespace": "Bnclient::SHA1",
+      "calledFunctions": [
+        "SHA1_Init"
+      ]
+    },
+    {
+      "name": "SHA1_Update",
+      "address": "00529f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00529f80"
+        }
+      ],
+      "namespace": "Bnclient::SHA1",
+      "calledFunctions": [
+        "SHA1_Update",
+        "memcpy",
+        "SHA1_Transform"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SHA1_Final",
+      "address": "0052a040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a040"
+        }
+      ],
+      "namespace": "Bnclient::SHA1",
+      "calledFunctions": [
+        "SHA1_Final",
+        "SHA1_Update",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

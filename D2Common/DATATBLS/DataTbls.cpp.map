@@ -4,27 +4,6 @@
   "file": "D2Common/DATATBLS/DataTbls.cpp",
   "functions": [
     {
-      "name": "CheckIfFileExists",
-      "address": "00516e46",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00516e46"
-        }
-      ],
-      "namespace": "D2Common::DATATBLS::DataTbls",
-      "calledFunctions": [
-        "CheckIfFileExists",
-        "ARCHIVE_OpenD2FileWrap",
-        "LOGFILE_WriteStringToFile"
-      ],
-      "usedTypes": [
-        "D2MPQFileStrc *",
-        "D2PoolManagerStrc",
-        "int32_t"
-      ]
-    },
-    {
       "name": "DATATBLS_NormalizeCodeTo4Chars",
       "address": "00611760",
       "lines": [

@@ -14,7 +14,6 @@
 #include "D2Common/D2SkillsTxt.h"
 #include "D2Common/D2StatListExStrc.h"
 #include "D2Common/D2UnitStrc.h"
-#include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Common/Drlg/D2DrlgActStrc.h"
 #include "D2Common/Drlg/Preset.h"
 #include "D2Common/Merc.h"
@@ -57,7 +56,7 @@ void __stdcall AllocPalShift_GreenBlood() {
     BOOL _bFileExists;
     bool bFileExists;
     D2MPQFileStrc* pFileHandle;
-    _bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\GreenBlood.dat", &pFileHandle, 1);
+    _bFileExists = D2Hell::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\GreenBlood.dat", &pFileHandle, 1);
     if (!_bFileExists) {
       return;
     }
@@ -84,14 +83,14 @@ void __stdcall InitPal() {
     }
 
     gpPalShiftEntryListHead = 0;
-    BOOL bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\RandTransforms.dat", &pRandTransformFile, 1);
+    BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\RandTransforms.dat", &pRandTransformFile, 1);
     if (bFileExists) {
       D2Hell::D2FILE_ReadFile(nullptr, pRandTransformFile, PalShift_RandTransform, 0x1e00);
       D2Hell::D2FILE_CloseFile(nullptr, pRandTransformFile);
       gbPalShiftRandTransformLoaded = 1;
     }
 
-    bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\GreenBlood.dat", &pGreenBloodFile, 1);
+    bFileExists = D2Hell::CheckIfFileExists(nullptr, "Data\\Global\\Monsters\\GreenBlood.dat", &pGreenBloodFile, 1);
     if (!bFileExists) {
       return;
     }
@@ -231,7 +230,7 @@ void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
     } while (pPathEnd2[1] != '\0');
 
     memcpy(pPathEnd2 + 1, "\\Cof\\palshift.dat", 0x12);
-    BOOL bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, szFilePath, &pFileHandle, 1);
+    BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, szFilePath, &pFileHandle, 1);
     if (!bFileExists) {
       return;
     }

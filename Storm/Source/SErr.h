@@ -9,6 +9,7 @@
 #include "d2_platform.h"
 
 // Forward declarations
+struct D2StormListHead;
 #ifndef RECON_FPTD_pfnBlizzardError
 #define RECON_FPTD_pfnBlizzardError
 typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, char * * ppszButtonText, uint32_t dwFlags, uint32_t dwErrorCode, bool bIsFatal);
@@ -89,6 +90,7 @@ int __stdcall SErrRegisterMessageSource(uint16_t wModuleId, HMODULE dwModuleBase
 // @oracle Storm 1.10b PPC export SErrSetLastError, code vector 10015680 (TVector 100cbec4).
 // @oracle-basis The PPC body is 80 B whose only callee is .SetLastError, alongside a store to a module global - the same two-step. 102 callers here, spread across every Storm module, which is the profile of the API every Storm entry point uses to report failure, and matches the oracle's use of SErrSetLastError inside SFile/SBig/SMem guard clauses.
 void __stdcall SErrSetLastError(DWORD dwErrCode);
+uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase);
 // Looks the message-source module for (dwMessageId >> 16) & 0xfff out of gpErrorModuleList, then calls FormatMessageA with that module as lpSource. Returns nonzero on success.
 // @was FORMAT_FormatErrorMessage (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrGetErrorStr, code vector 10015c50 (TVector 100cbe7c).
@@ -96,12 +98,28 @@ void __stdcall SErrSetLastError(DWORD dwErrCode);
 // @oracle-note The rival candidate SSYSTEM_LoadErrorString 0041c170 was ruled out: 1 parameter against the oracle's 3, and it calls LoadStringA rather than FormatMessage. It is a 1.14d-only helper that MWCC inlined into SErrDisplayError on the PPC side. Left under its descriptive name.
 // @corroboration Also called from Lng::LNG_FormatErrorMessageWithFallback, i.e. from D2 code outside the Storm module - the caller profile of an export.
 uint32_t __stdcall SErrGetErrorStr(DWORD dwMessageId, LPSTR szText, DWORD nBufferSize);
+int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode);
+void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget);
+uint32_t __thiscall SSYSTEM_ListGetNext(int32_t pList, int32_t pNode);
+void __thiscall SSYSTEM_ListUnlink(int32_t pThis, int * pNode);
+uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode);
+// TSList<HANDLER>::UnlinkAll on SErr's handler list: unlinks every node without freeing it.
+// Named per redivivus issue #35; T from the list's delete tag .?AUHANDLER@@ (00708434).
+void __fastcall TSList_HANDLER_UnlinkAll(struct D2StormListHead * pList);
+// TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
+// Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
+void __fastcall TSList_HANDLER_Destructor(struct D2StormListHead * pList);
+int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags);
+int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory);
 // Under the error critical section, SMemAllocs a 12-byte list node, links it into gpStormErrorCallbackListHead and stores the caller's handler pointer at +8.
 // @was SSYSTEM_RegisterErrorCallback (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrRegisterHandler, code vector 10015960 (TVector 100cbea4).
 // @oracle-basis Callee set {EnterCriticalSection, SMemAlloc, LeaveCriticalSection} is the oracle's exactly and is unique in the module - SErrRegisterMessageSource uses HeapAlloc, not SMemAlloc, which is what separates the two registration APIs in both builds. Arity 1 = 1.
 // @pairs-with SErrUnregisterHandler 0041d110, which walks the same list and removes the node whose +8 equals its argument.
 void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback);
+// TSList<HANDLER>::Clear: unlinks and SMemFrees every node.
+// Named per redivivus issue #35; T from the delete tag .?AUHANDLER@@ (00708434).
+void __fastcall TSList_HANDLER_Clear(int32_t pList);
 uint32_t __thiscall SSYSTEM_ListRemoveAndFree(void * pList, int * pNode);
 // Displays an error dialog with optional stack trace and custom message. Formats error information, logs to debugger, and either shows MessageBox or calls registered error handler callback.
 // @was SSYSTEM_DisplayErrorDialog (pass 6, 2026.08.28)

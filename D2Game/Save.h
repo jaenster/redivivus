@@ -14,5 +14,6 @@ namespace D2Game::Save {
 int __stdcall SAVEFILE_ReadEncodedInt14Bit(uint8_t * pBuffer);
 void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pBuffer, uint32_t nValue);
 int __stdcall SAVEFILE_ReadEncodedInt32Bit(uint8_t * pBuffer);
+uint32_t __stdcall FOG_ParseStringValue(char * szText, uint32_t nNumber);
 
 } // namespace D2Game::Save

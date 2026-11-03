@@ -2174,21 +2174,6 @@
       ]
     },
     {
-      "name": "AtexitCleanup_FreeLinkedListAndCritSec",
-      "address": "0051775a",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0051775a"
-        }
-      ],
-      "namespace": "D2Client",
-      "calledFunctions": [
-        "AtexitCleanup_FreeLinkedListAndCritSec",
-        "TSList_TMESSAGESOURCE_Clear"
-      ]
-    },
-    {
       "name": "SehHandler_6ca218",
       "address": "006ca218",
       "lines": [

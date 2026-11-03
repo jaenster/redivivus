@@ -1,0 +1,30 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/3rdparty/zlib/inftrees.cpp",
+  "functions": [
+    {
+      "name": "ZLIB_InflateTable",
+      "address": "0042e120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042e120"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inftrees",
+      "calledFunctions": [
+        "ZLIB_InflateTable",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "inflate_code",
+        "inflate_code *",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    }
+  ]
+}

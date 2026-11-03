@@ -18,22 +18,6 @@
       ]
     },
     {
-      "name": "FOG_ParseStringValue",
-      "address": "006bbfa0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006bbfa0"
-        }
-      ],
-      "calledFunctions": [
-        "FOG_ParseStringValue"
-      ],
-      "usedTypes": [
-        "uint32_t"
-      ]
-    },
-    {
       "name": "FOG_ParseFieldValue",
       "address": "006c9a76",
       "lines": [

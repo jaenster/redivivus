@@ -11,14 +11,6 @@ void thunk__strstr(char * szText1, char * szText2) {
     strstr(szText1, szText2);
 }
 
-uint32_t __stdcall FOG_ParseStringValue(char * szText, uint32_t nNumber) {
-    *szText = (char)(nNumber / 0xff) + (char)nNumber + '\x01';
-    szText[1] = (char)(nNumber / 0xff % 0xff) + '\x01';
-    szText[2] = (char)(nNumber / 0xfe01 % 0xff) + '\x01';
-    szText[3] = (char)(nNumber / 0xfd02ff % 0xff) + '\x01';
-    return (int)(nNumber / 0xfd02ff / 0xff);
-}
-
 uint32_t __fastcall FOG_ParseFieldValue(char * szText, char * * ppszCursor, int * pnOut) {
     // Static local variables (originally global data)
     static int gaCharTypeFlags[64] = {

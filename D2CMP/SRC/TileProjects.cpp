@@ -7,7 +7,6 @@
 #include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/SRC/Tilecmp.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
-#include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Hell/D2Hell.h"
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
@@ -128,7 +127,7 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
     } else {
       D2TileLibraryHashStrc* pNewHash;
       memset(pTileBuffer, 0, nFileSize);
-      D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, szFilename, &pFile, 0);
+      D2Hell::CheckIfFileExists(nullptr, szFilename, &pFile, 0);
       D2Hell::D2FILE_ReadFile(nullptr, pFile, pTileBuffer, nFileSize);
       D2Hell::D2FILE_CloseFile(nullptr, pFile);
       Tilecmp::TILECMP_FixupMinimalPointers(pTileBuffer, &pTileData, szFilename);

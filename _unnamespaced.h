@@ -10,7 +10,6 @@
 
 // Function declarations
 void thunk__strstr(char * szText1, char * szText2);
-uint32_t __stdcall FOG_ParseStringValue(char * szText, uint32_t nNumber);
 uint32_t __fastcall FOG_ParseFieldValue(char * szText, char * * ppszCursor, int * pnOut);
 char * __fastcall FOG_FindCharInString(char * szText, char cSearchChar);
 void StaticInit_6ca960();

@@ -2,10 +2,10 @@
 
 #include "D2Win/Src/D2WinPalette.h"
 #include "D2CMP/Draw.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Win/Src/D2Comp.h"
 #include "D2Win/Src/D2WinArchive.h"
 #include "D2gfx/D2GFX.h"
-#include "Fog/Archive.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
@@ -117,7 +117,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     char* szSrcFile = ".\\Src\\D2WinPalette.cpp";
     uint32_t* pFileSize = 0;
     D2PoolManagerStrc* pDatFileData = D2WinArchive::ReturnZero();
-    void* pDatFileHandle = Fog::Archive::D2FILE_AllocAndLoadD2File(pDatFileData, szText1, pFileSize, szSrcFile, nSrcLine);
+    void* pDatFileHandle = D2Hell::D2FILE_AllocAndLoadD2File(pDatFileData, szText1, pFileSize, szSrcFile, nSrcLine);
     uint32_t nPaletteIdx = 0;
     do {
       aAlphaTable[nPaletteIdx * 4] = 0;
@@ -128,7 +128,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     szSrcFile = ".\\Src\\D2WinPalette.cpp";
     pFileSize = 0;
     pDatFileData = D2WinArchive::ReturnZero();
-    PALETTEENTRY* pMemoryToFree = (PALETTEENTRY*)Fog::Archive::D2FILE_AllocAndLoadD2File(pDatFileData, szText2, pFileSize, szSrcFile, nSrcLine2);
+    PALETTEENTRY* pMemoryToFree = (PALETTEENTRY*)D2Hell::D2FILE_AllocAndLoadD2File(pDatFileData, szText2, pFileSize, szSrcFile, nSrcLine2);
     PALETTEENTRY* pSrcArchive = pMemoryToFree;
     PALETTEENTRY* pDstIndexCounter = MostLikelyCurrentPalletePtr;
     for (nCount = 0x100; nCount; nCount--) {

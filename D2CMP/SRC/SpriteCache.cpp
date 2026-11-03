@@ -12,7 +12,6 @@
 #include "D2Client/D2GfxDataStrc.h"
 #include "D2Client/D2GfxMemoryStrc.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
-#include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Hell/D2Hell.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
@@ -113,7 +112,7 @@ BOOL __stdcall SPRITECACHE_AllocEntry(D2TileLibraryEntryStrc * pTile, uint32_t d
     D2GroundSubTileStrc* pCacheData = (D2GroundSubTileStrc*)ppCacheNode->pBuf;
     pTileEntry->pSubTiles = pCacheData;
     memset(pCacheData, 0, pTileEntry->nBlockDataSize);
-    BOOL bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, pTileEntry->szFilePath, (D2MPQFileStrc**)&pTile, 0);
+    BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, pTileEntry->szFilePath, (D2MPQFileStrc**)&pTile, 0);
     if (!bFileExists) {
       return 0;
     }
@@ -135,7 +134,7 @@ void __stdcall SPRITECACHE_FreeEntry(D2TileLibraryEntryStrc * pTile) {
 int __fastcall SPRITECACHE_LoadFromFile(char * szFilename) {
     D2MPQFileStrc* pFile;
     char aFileHeader[276];
-    BOOL bFileExistsResult = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, szFilename, &pFile, 0);
+    BOOL bFileExistsResult = D2Hell::CheckIfFileExists(nullptr, szFilename, &pFile, 0);
     if (!bFileExistsResult) {
       return 0;
     }

@@ -117,7 +117,7 @@
 #include "Storm/Source/SCMD.h"
 #include "Storm/Source/SComp.h"
 #include "Storm/Source/SErr.h"
-#include "Storm/Source/SSystem.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Storm.h"
 #include "Storm/H/stpl.h"
 

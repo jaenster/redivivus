@@ -7,12 +7,12 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
-#include "Bnclient/net_sid.h"
-#include "Storm/D2SHA1.h"
 
 // Forward declarations
 struct D2BNetGatewayAccessStr;
+struct D2CDKeyHashStrc;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+struct __time32_t;
 struct sockaddr;
 #endif // _WIN32
 #ifndef RECON_FPTD_pfnNewsEntryCallback
@@ -39,17 +39,15 @@ struct __attribute__((packed)) BnCDKeyHashInput26 {
     /* 0x10 */ uint8_t abPrivateValue[10];
 };
 
-struct __attribute__((packed)) BnDoubleHashInput {
-    /* 0x00 */ uint32_t dwClientToken;
-    /* 0x04 */ uint32_t dwServerToken;
-    /* 0x08 */ D2SHA1 sHash;
-};
-
 struct D2BnNewsTableStrc {
     /* 0x00 */ uint32_t nCapacity; // unsigned JBE compares
     /* 0x04 */ uint32_t nCount;
     /* 0x08 */ void * pEntries; // 0x408-byte entries (IMUL 0x408); entry layout not modelled
     /* 0x0C */ uint32_t nGrowStep; // 0 -> BNNEWS_RoundToPowerOfTwo sets 8
+};
+
+struct D2XSHA1Strc {
+    /* 0x00 */ DWORD h[5];
 };
 
 struct SID_C2S_CheckAd {
@@ -93,13 +91,6 @@ struct SID_C2S_GetFileTime {
     /* 0x08 */ char szFilename[260];
 };
 
-struct __attribute__((packed)) SID_C2S_LogonResponse {
-    /* 0x00 */ uint32_t dwClientToken;
-    /* 0x04 */ uint32_t dwServerToken;
-    /* 0x08 */ D2SHA1 sPasswordHash;
-    /* 0x1C */ char szUsername[256];
-};
-
 struct SID_C2S_ReportVersion {
     /* 0x00 */ uint32_t dwPlatformId; // 'IX86'
     /* 0x04 */ uint32_t dwProductId; // 'D2DV' or 'D2XP'
@@ -133,6 +124,19 @@ struct __attribute__((packed)) SID_C2S_LocaleInfo {
     /* 0x18 */ LCID dwUserLCID;
     /* 0x1C */ uint32_t dwUserLangId;
     /* 0x20 */ char szStrings[256];
+};
+
+struct __attribute__((packed)) BnDoubleHashInput {
+    /* 0x00 */ uint32_t dwClientToken;
+    /* 0x04 */ uint32_t dwServerToken;
+    /* 0x08 */ D2XSHA1Strc sHash;
+};
+
+struct __attribute__((packed)) SID_C2S_LogonResponse {
+    /* 0x00 */ uint32_t dwClientToken;
+    /* 0x04 */ uint32_t dwServerToken;
+    /* 0x08 */ D2XSHA1Strc sPasswordHash;
+    /* 0x1C */ char szUsername[256];
 };
 
 namespace Bnclient::BnSend {

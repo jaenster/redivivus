@@ -5,7 +5,6 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SEVT.h"
 #include "Storm/Source/SFile.h"
-#include "Storm/Source/SSystem.h"
 #include "globals/globals.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

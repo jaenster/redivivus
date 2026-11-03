@@ -15,6 +15,7 @@
 #include "D2Common/Drlg/Drlg.h"
 #include "D2Common/Drlg/DrlgGrid.h"
 #include "D2Common/INVENTORY/Inventory.h"
+#include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/ITEMS/Items.h"
 #include "D2Common/Logging/ProfCore.h"
 #include "D2Common/Skills.h"
@@ -5467,6 +5468,46 @@ D2ItemsEventMethodStrc gaSkillCalcMethods[7] = {
         /* .nArgCount = */ 0x3
     }
 }; D2_GLOBAL_GUARD(gaSkillCalcMethods, "gaSkillCalcMethods");
+
+fpProperties PROPERTIESFUNCTIONS[37] = {
+    nullptr,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_EnhancedIfItem,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_EnhancedAlways,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_PreserveRolledValue,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddMinDamage,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddMaxDamage,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddEnhancedDamage,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_Simple,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillBonus,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddClassSkillBonus,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillOnEvent,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_RandLevelAsLayer,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_WithMaxDurabilityReset,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_SetSockets,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_SetFixedMinDamage,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_SetFixedMaxDamage,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_FixedOrRolledMaxDamageAware,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddTimedStat,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillCharges,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_SetIndestructible,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_WithLayerFromParam7,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_LayerFromParam4Lo,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_ApplyEthereal,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_WithLayerFromParam4,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7
+}; D2_GLOBAL_GUARD(PROPERTIESFUNCTIONS, "PROPERTIESFUNCTIONS");
 
 int gpsPresetObjectTable[750] = {
     0xc,

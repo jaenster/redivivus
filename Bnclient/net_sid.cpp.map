@@ -95,7 +95,7 @@
         "XSHA1_Transform"
       ],
       "usedTypes": [
-        "D2SHA1ContextStrc",
+        "D2XSHA1ContextStrc",
         "uint32_t",
         "uint8_t"
       ]
@@ -117,8 +117,8 @@
         "XSHA1_Transform"
       ],
       "usedTypes": [
-        "D2SHA1",
-        "D2SHA1ContextStrc",
+        "D2XSHA1ContextStrc",
+        "D2XSHA1Strc",
         "uint32_t"
       ]
     },
@@ -1216,7 +1216,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "D2SHA",
+        "D2XSHA1Strc",
         "uint32_t"
       ]
     },

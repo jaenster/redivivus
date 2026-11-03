@@ -11,6 +11,7 @@
 #include "D2Game/UNIT/sunitproxy.h"
 #include "Storm/SCMD.h"
 #include "Storm/Source/SErr.h"
+#include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSystem.h"

@@ -49,7 +49,7 @@
 #include "D2Game/Objects/Objects.h"
 #include "D2Game/Quests/QUESTS/A5Q3.h"
 #include "D2Game/UNIT/SUnitDmg.h"
-#include "Fog/Archive.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/SMem.h"
@@ -134,7 +134,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     uint32_t eCellUnitType;
     uint32_t* pnPosY;
     int32_t* pDs1File;
-    pDs1File = (int32_t*)Fog::Archive::D2FILE_AllocAndLoadD2File(pMemory, pBuffer, nullptr, ".\\DRLG\\Preset.cpp", 0x300);
+    pDs1File = (int32_t*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, pBuffer, nullptr, ".\\DRLG\\Preset.cpp", 0x300);
     pFile->pDS1File = pDs1File;
     __frame0.nDs1Version = *pDs1File;
     pFile->nWidth = pDs1File[1];

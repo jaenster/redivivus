@@ -4,9 +4,9 @@
 #include "Bnclient/BNGatewayAccess.h"
 #include "Bnclient/BnMessQueue.h"
 #include "Bnclient/BnSend.h"
-#include "Bnclient/Bnclient.h"
 #include "Bnclient/Debug.h"
 #include "D2Client/D2BNetGatewayAccessStr.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Net/sockaddr.h"
 #include "Fog/Fog.h"
 #include "Fog/Memory.h"
@@ -199,7 +199,7 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
         if (!__frame0.dwAuthResult || __frame0.dwAuthResult >= 5) {
           BVar1 = NET_CopyDllFromArchive(__frame0.pArchive, lpFileName_00881c58, __frame0.szDllPath);
           if (BVar1) {
-            bSigValid = D2FILE_VerifyFileSignature(__frame0.szDllPath);
+            bSigValid = D2Hell::D2FILE_VerifyFileSignature(__frame0.szDllPath);
             if (bSigValid != '\0') {
               /* LPCSTR lpLibFileName for LoadLibraryA */ hCheckRevDll = LoadLibraryA(__frame0.szDllPath);
               if (hCheckRevDll) {
@@ -276,7 +276,7 @@ static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2)
         return 1;
       }
 
-      cFirstChar = D2FILE_VerifyFileSignature(szText2);
+      cFirstChar = D2Hell::D2FILE_VerifyFileSignature(szText2);
       /* INT nShowCmd for ShellExecuteA */ /* LPCSTR lpDirectory for ShellExecuteA */ /* LPCSTR lpParameters for ShellExecuteA */ /* LPCSTR lpFile for ShellExecuteA */ /* LPCSTR lpOperation for ShellExecuteA */ /* HWND hwnd for ShellExecuteA */ if (cFirstChar == '\0') {
         break;
       }

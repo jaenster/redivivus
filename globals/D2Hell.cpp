@@ -8,9 +8,51 @@
 
 
 // =============================================================================
+// Initialized data (arrays, structs, tables)
+// =============================================================================
+
+char s___AUTMESSAGESOURCE___0072f9fc[24] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'T',
+    'M',
+    'E',
+    'S',
+    'S',
+    'A',
+    'G',
+    'E',
+    'S',
+    'O',
+    'U',
+    'R',
+    'C',
+    'E',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(s___AUTMESSAGESOURCE___0072f9fc, "s___AUTMESSAGESOURCE___0072f9fc");
+
+StormLinkedListStrc gFaultHandlerList = {
+    /* .nLinkOffset = */ 0x0,
+    /* .head = */ {
+        /* .pPrevLink = */ (StormLinkStrc*)&gFaultHandlerList.head.pPrevLink,
+        /* .pNext = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(gFaultHandlerList, "gFaultHandlerList");
+
+CRITICAL_SECTION gcsErrorHandlerList = {}; D2_GLOBAL_GUARD(gcsErrorHandlerList, "gcsErrorHandlerList");
+
+// =============================================================================
 // Initialized scalars
 // =============================================================================
 
+uint32_t gbFaultHandlerListInitialized = 0; D2_GLOBAL_GUARD(gbFaultHandlerListInitialized, "gbFaultHandlerListInitialized");
 pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_GLOBAL_GUARD(g_pfnFaultErrorCallback, "g_pfnFaultErrorCallback");
 
 namespace D2Common::Drlg::Maze {

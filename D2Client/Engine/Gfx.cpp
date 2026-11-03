@@ -58,13 +58,13 @@
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Win/DC6.h"
 #include "D2Win/DC6Block.h"
 #include "D2Win/Src/D2WinArchive.h"
 #include "D2Win/Src/D2WinPalette.h"
 #include "D2gfx/D2GFX.h"
 #include "D2gfx/D2GfxHelperStrc.h"
-#include "Fog/Archive.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Fog.h"
 #include "Fog/Memory.h"
@@ -221,7 +221,7 @@ static void * __stdcall GFX_LoadCofFile(void * pTextureCache, char * szPath) {
       pcSrcFile = ".\\ENGINE\\Gfx.cpp";
       pSize = pEntry + 2;
       pMPQ = D2Win::Src::D2WinArchive::ReturnZero();
-      nAddress = Fog::Archive::D2FILE_AllocAndLoadD2File(pMPQ, szPath, pSize, pcSrcFile, nSrcLine);
+      nAddress = D2Hell::D2FILE_AllocAndLoadD2File(pMPQ, szPath, pSize, pcSrcFile, nSrcLine);
       pEntry[5] = (uint32_t)(uintptr_t)nAddress;
       if (!nAddress) {
         return nullptr;
@@ -254,7 +254,7 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, int * pCache) {
     char* pcSrcFile = ".\\ENGINE\\Gfx.cpp";
     uint32_t* pSize = (uint32_t*)(pCache + 2);
     D2PoolManagerStrc* pMPQ = D2Win::Src::D2WinArchive::ReturnZero();
-    int* pEntry = (int*)Fog::Archive::D2FILE_AllocAndLoadD2File(pMPQ, szPath, pSize, pcSrcFile, nSrcLine);
+    int* pEntry = (int*)D2Hell::D2FILE_AllocAndLoadD2File(pMPQ, szPath, pSize, pcSrcFile, nSrcLine);
     pCache[1] = (int)pEntry;
     if (!pEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10c);

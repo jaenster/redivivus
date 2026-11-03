@@ -2278,6 +2278,62 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
     return nPropPtr;
 }
 
+// Sets the socket count on an item unit. Computes the socket cap from the item's grid dimensions (width*height, max 6) and the item's own max socket limit, rolls a random socket count if none supplied, clamps to [1, cap], then sets ITEMFLAG_SOCKETED and UNITSTAT_item_numsockets on the item. Returns the final socket count, or 0 if the item is invalid or has zero area.
+uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t dwParam4) {
+    uint8_t* nDimProduct;
+    uint8_t* nSocketMin;
+    uint8_t* nValue;
+    uint32_t nWidthOut;
+    D2UnitStrc* pItemUnit2 = pUnit2;
+    if (!pProperty) {
+      return 0;
+    }
+    if (pUnit2 && pUnit2->eUnitType == UNIT_ITEM) {
+      uint8_t nMaxSockCap;
+      nWidthOut = dwParam1 & 0xffffff;
+      pUnit2 = (D2UnitStrc*)((uint32_t)pUnit2 & 0xffffff);
+      Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemUnit2, (char*)((uintptr_t)&nWidthOut + 3), (char*)((uintptr_t)&pUnit2 + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
+      nDimProduct = (uint8_t*)(((uint32_t)pUnit2 >> 0x18) * (nWidthOut >> 0x18));
+      nValue = (uint8_t*)(void*)0x6;
+      if (nDimProduct < (uint8_t*)0x7) {
+        nValue = nDimProduct;
+        if (!nDimProduct) {
+          return 0;
+        }
+      }
+
+      nMaxSockCap = Items::ITEM_GetMaxSockCount(pItemUnit2);
+      if ((uint8_t*)(uint32_t)nMaxSockCap <= nValue) {
+        nMaxSockCap = Items::ITEM_GetMaxSockCount(pItemUnit2);
+        nValue = (uint8_t*)(uint32_t)nMaxSockCap;
+      }
+
+      nDimProduct = (uint8_t*)nRolledValue;
+      if ((int)nRolledValue <= 0) {
+        nDimProduct = (uint8_t*)ITEMMOD_RollRandomValue(pItemUnit2, pProperty->fmin, pProperty->fmax);
+        if ((int)nDimProduct <= 0) {
+          nDimProduct = (uint8_t*)pProperty->fparam;
+        }
+      }
+
+      nSocketMin = nDimProduct;
+      if ((int)nDimProduct <= 1) {
+        nSocketMin = (uint8_t*)0x1;
+      }
+      if ((int)nSocketMin < (int)nValue && (nValue = nDimProduct , (int)nDimProduct <= 1)) {
+        nValue = (uint8_t*)0x1;
+      } else if ((int)nValue <= 0) {
+        return 0;
+      }
+
+      Items::ITEM_EditItemData_eItemFlag(pItemUnit2, ITEMFLAG_SOCKETED, 1);
+      Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit2, UNITSTAT_item_numsockets, (int32_t)nValue, 0);
+      return (uint32_t)nValue;
+    }
+
+    return 0;
+}
+
 // Item-property applier for "skill charges" / charged-skill modifiers (the prop pointed to by nParam1 holds skill id at +4, charge spec at +8, level spec at +0xc). Validates pUnit2 is an item and the skill id is valid. Resolves the granted skill level: explicit value, or derived from (item level - skill req level)/4 +1 (clamped to 1..skill max level), or a negative spec meaning a per-level scaling. Resolves the max charge count (explicit, default 5, or per-skill-level computed), clamped to 1..0xff. Rolls a random initial current-charge count from the item seed (RANDOM_RandomNumberSelector). Then adds the charges stat onto the item's stat list (ITEMMOD_GetOrCreateStatList + D2AddStatToStatsListEx), packing current/max charges and the skill id+level into the stat value/param using the itemstatcost shift fields. Returns the max charge count (0 on validation failure).
 uint32_t __fastcall ITEMPROP_AddSkillCharges(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, uint32_t pContextUnit) {
     int32_t nReqLevel;

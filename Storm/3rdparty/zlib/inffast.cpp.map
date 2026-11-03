@@ -1,0 +1,27 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Storm/3rdparty/zlib/inffast.cpp",
+  "functions": [
+    {
+      "name": "ZLIB_InflateFast",
+      "address": "0042dca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dca0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inffast",
+      "calledFunctions": [
+        "ZLIB_InflateFast"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ]
+    }
+  ]
+}

@@ -19,7 +19,6 @@
 #include "Fog/Source/SSignature.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Safesock.h"
-#include "Storm/D2SHA1.h"
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
@@ -141,7 +140,7 @@ int __fastcall NET_SID_CLIENT_Send_0x3A_LogonResponse2(char * szText1, char * sz
 }
 
 int __fastcall NET_SID_CLIENT_Send_0x3D_CreateAccount2(char * szText1, char * szText2) {
-    D2SHA1 sha1Password;
+    D2XSHA1Strc sha1Password;
     char szUsername[256];
     char szPasswordLower[256];
     Storm::Source::SSTR::SStrCopy(szPasswordLower, szText2, 0x100);
@@ -159,8 +158,8 @@ int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * sz
     struct __frame0_t {
       uint32_t dwClientToken;
       uint32_t dwServerToken;
-      D2SHA1 sha1OldCombined;
-      D2SHA1 sha1NewPassword;
+      D2XSHA1Strc sha1OldCombined;
+      D2XSHA1Strc sha1NewPassword;
       char szUsername[256];
       BnDoubleHashInput dwTickCount;
       char szPasswordLower[256];
@@ -628,12 +627,12 @@ void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char
       *(uint32_t*)((char*)&abHashInput + 4) = g_nBNetServerToken;
       int nLen = (int)strlen(szPassword);
       *(uint32_t*)(char*)&abHashInput = gnBNetRealmClientToken;
-      _net_sid::XSHA1((D2SHA1*)(abHashInput + 8), szPassword, nLen);
+      _net_sid::XSHA1((D2XSHA1Strc*)(abHashInput + 8), szPassword, nLen);
       abPacketBuf[0] = (uint8_t)gnBNetRealmClientToken;
       abPacketBuf[1] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 1);
       abPacketBuf[2] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 2);
       abPacketBuf[3] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 3);
-      _net_sid::XSHA1((D2SHA1*)(abPacketBuf + 4), abHashInput, 0x1c);
+      _net_sid::XSHA1((D2XSHA1Strc*)(abPacketBuf + 4), abHashInput, 0x1c);
       uVar1 = Storm::Source::SSTR::SStrCopy(abPacketBuf + 0x18, szRealmName, 0x100);
       _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x3e);
       nSendLen = NET_SID_CLIENT_Send(0x3e, abPacketBuf, uVar1 + 0x19);
@@ -2929,7 +2928,7 @@ static int32_t __stdcall BNSEND_PrepareCDKeyHash(uint32_t nToken, uint32_t nServ
         pOutHash->nProduct = aCDKeyHashInput[3];
         pOutHash->nUnused = aCDKeyHashInput[4];
         pOutHash->nPublic = aCDKeyHashInput[2];
-        _net_sid::XSHA1((D2SHA1*)pOutHash->abHash, (char*)aCDKeyHashInput, 0x18);
+        _net_sid::XSHA1((D2XSHA1Strc*)pOutHash->abHash, (char*)aCDKeyHashInput, 0x18);
         return 1;
       }
     }

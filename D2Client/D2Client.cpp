@@ -95,7 +95,6 @@
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
-#include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Chat.h"
@@ -4071,14 +4070,6 @@ void __fastcall BINK_PlayVideoFile(char * szFileName, int32_t nParam, fnBinkFram
 
     BinkClose(gpBinkVideoDirectDraw);
     gpBinkVideoDirectDraw = 0;
-}
-
-void AtexitCleanup_FreeLinkedListAndCritSec() {
-    EnterCriticalSection(&gcsErrorHandlerList);
-    Storm::Source::SSystem::TSList_TMESSAGESOURCE_Clear(&gFaultHandlerList);
-    LeaveCriticalSection(&gcsErrorHandlerList);
-    DeleteCriticalSection(&gcsErrorHandlerList);
-    gbFaultHandlerListInitialized = 0;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

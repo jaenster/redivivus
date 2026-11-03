@@ -1921,7 +1921,7 @@ static BOOL __stdcall ITEMTBLS_CheckIfDataFileExists(char * szFileName, D2PoolMa
     D2MPQFileStrc* pFile;
     char szFilePath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szFileName, szFileExt);
-    BOOL fFileExistsCheck = DataTbls::CheckIfFileExists(pPoolManagerStrc, szFilePath, &pFile, 1);
+    BOOL fFileExistsCheck = D2Hell::CheckIfFileExists(pPoolManagerStrc, szFilePath, &pFile, 1);
     if (!fFileExistsCheck) {
       return 0;
     }

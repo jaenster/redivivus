@@ -1498,6 +1498,32 @@
       ]
     },
     {
+      "name": "ITEMPROP_SetSockets",
+      "address": "0065f590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065f590"
+        }
+      ],
+      "namespace": "D2Common::ITEMS::ItemMods",
+      "calledFunctions": [
+        "ITEMPROP_SetSockets",
+        "ITEM_GetItemsTxt_nWidthAndHeight",
+        "ITEM_GetMaxSockCount",
+        "ITEMMOD_RollRandomValue",
+        "ITEM_EditItemData_eItemFlag",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2SetsTxtFStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ]
+    },
+    {
       "name": "ITEMPROP_AddSkillCharges",
       "address": "0065f6a0",
       "lines": [

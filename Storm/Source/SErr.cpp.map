@@ -177,6 +177,23 @@
       ]
     },
     {
+      "name": "SSYSTEM_ListOffsetToPointer",
+      "address": "0041c3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c3a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListOffsetToPointer"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ]
+    },
+    {
       "name": "SErrGetErrorStr",
       "address": "0041c430",
       "lines": [
@@ -196,6 +213,173 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetPointer",
+      "address": "0041c560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c560"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListGetPointer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListUnlinkAndInsert",
+      "address": "0041c580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c580"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListUnlinkAndInsert"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetNext",
+      "address": "0041c630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c630"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListGetNext"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListUnlink",
+      "address": "0041c690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c690"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListUnlink"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetData",
+      "address": "0041c700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c700"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListGetData"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
+      "name": "TSList_HANDLER_UnlinkAll",
+      "address": "0041c770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c770"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "TSList_HANDLER_UnlinkAll"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TSList_HANDLER_Destructor",
+      "address": "0041c7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c7b0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "TSList_HANDLER_Destructor",
+        "TSList_HANDLER_UnlinkAll"
+      ],
+      "usedTypes": [
+        "D2StormListHead",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListAllocNode",
+      "address": "0041c840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c840"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListAllocNode",
+        "SMemAlloc",
+        "SSYSTEM_ListUnlinkAndInsert"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListFreeNode",
+      "address": "0041c8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c8a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListFreeNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {
@@ -219,6 +403,25 @@
         "StormLinkStrc *",
         "int32_t",
         "pfnSErrDisplayCallback",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "TSList_HANDLER_Clear",
+      "address": "0041c9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c9c0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "TSList_HANDLER_Clear",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "int32_t",
         "uint32_t"
       ]
     },

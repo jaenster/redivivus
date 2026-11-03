@@ -8,16 +8,6 @@
 #include <cstdarg>
 #include "d2_platform.h"
 
-// Forward declarations
-struct D2StormListHead;
-struct StormLinkedListStrc;
-
-// Data types
-struct StormLinkStrc {
-    /* 0x00 */ struct StormLinkStrc * pPrevLink; // points at the previous node's link, or at the list head's own link
-    /* 0x04 */ int pNext; // pointer to the NEXT ITEM (not its link); end of list is ~(int)&headLink, i.e. negative
-};
-
 namespace Storm::Source::SSystem {
 
 // Function declarations
@@ -31,55 +21,9 @@ uint32_t __fastcall SSYSTEM_InitializeAndReturn(uint32_t nFlags);
 char * ILT_strpbrk(char * _Str, char * _Control);
 void __stdcall __break();
 void __stdcall SSYSTEM_SetShutdownFlag(uint32_t bShutdown);
-uint32_t __thiscall SSYSTEM_ListOffsetToPointer(int * pNode, int * pBase);
-int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode);
-void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget);
-uint32_t __thiscall SSYSTEM_ListGetNext(int32_t pList, int32_t pNode);
-void __thiscall SSYSTEM_ListUnlink(int32_t pThis, int * pNode);
-uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode);
-// TSList<HANDLER>::UnlinkAll on SErr's handler list: unlinks every node without freeing it.
-// Named per redivivus issue #35; T from the list's delete tag .?AUHANDLER@@ (00708434).
-void __fastcall TSList_HANDLER_UnlinkAll(struct D2StormListHead * pList);
-// TSList<HANDLER>::~TSList: UnlinkAll, then unlinks the list's terminator link.
-// Named per redivivus issue #35; T from the UnlinkAll it calls (SErr's .?AUHANDLER@@ list).
-void __fastcall TSList_HANDLER_Destructor(struct D2StormListHead * pList);
-int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags);
-int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory);
-// TSList<HANDLER>::Clear: unlinks and SMemFrees every node.
-// Named per redivivus issue #35; T from the delete tag .?AUHANDLER@@ (00708434).
-void __fastcall TSList_HANDLER_Clear(int32_t pList);
 // TSFixedArray<unsigned int> constructor: zeroes the 20-byte array header.
 // Named per redivivus issue #35: SBIG_Constructor passes it with TSFixedArray_Ui_Destructor to the eh vector constructor iterator, so it is not a TSList helper.
 void __fastcall TSFixedArray_Ui_Constructor(void * pNode);
-struct StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(struct StormLinkStrc * pLink, int32_t nLinkOffset);
-// TSLink<TMESSAGESOURCE>::Unlink: removes one link from its list and clears it.
-// Named per redivivus issue #35; a TSLink member used by every TSList<TMESSAGESOURCE> operation.
-void __fastcall TSLink_TMESSAGESOURCE_Unlink(struct StormLinkStrc * pLink);
-struct StormLinkStrc * __thiscall LINKEDLIST_GetOffset(struct StormLinkedListStrc * pList, void * pItem);
-void __thiscall LINKEDLIST_SetNodeValue(struct StormLinkedListStrc * pNode, int32_t dwValue);
-void __thiscall LINKEDLIST_InsertNode(struct StormLinkedListStrc * pList, void * pNewItem, int32_t nInsertMode, void * pRefItem);
-int32_t __thiscall LINKEDLIST_GetNodeAt(int * pList, int32_t nOffset);
-void __thiscall LINKEDLIST_RemoveNode(int * pList, int32_t nOffset);
-// @wasnamed LINKEDLIST_GetCount - one name on two different functions.
-// @evidence Calls LINKEDLIST_GetOffset(nOffset,p) then returns node[+4].
-// It counts nothing. 00426a60 is the real count (returns max(pList[+8],0)).
-// @caveat no xrefs - an inlined Storm TS-list template instance. Name is body-derived, not recovered.
-int32_t __thiscall LINKEDLIST_GetNodeLinkAtOffset(int * pList, int32_t nOffset);
-// TSList<TMESSAGESOURCE>::UnlinkAll: unlinks every node without freeing it.
-// Named per redivivus issue #35; T from gFaultHandlerList, whose nodes are allocated with .?AUTMESSAGESOURCE@@ (0072f9fc).
-void __fastcall TSList_TMESSAGESOURCE_UnlinkAll(void * pList);
-// TSList<TMESSAGESOURCE>::~TSList: UnlinkAll, then unlinks the terminator link. No direct callers; byte-identical to 005176d3.
-// Named per redivivus issue #35; T from the UnlinkAll it calls.
-void __fastcall TSList_TMESSAGESOURCE_Destructor(void * pList);
-void * __thiscall LINKEDLIST_AllocAndInsertNode(struct StormLinkedListStrc * pList, int32_t nInsertMode, int32_t nExtraSize, uint32_t dwFlags);
-FILE * __thiscall LINKEDLIST_DetachNode(FILE * pFile, uint8_t bFree);
-// Second out-of-line copy of TSList<TMESSAGESOURCE>::~TSList, byte-identical to 00517658. No direct callers; the address suffix keeps the two apart.
-// Named per redivivus issue #35; T from the UnlinkAll it calls.
-void __fastcall TSList_TMESSAGESOURCE_Destructor_5176d3(void * pList);
-// TSList<TMESSAGESOURCE>::Clear: unlinks and SMemFrees every node.
-// Named per redivivus issue #35; T from the delete tag .?AUTMESSAGESOURCE@@ (0072f9fc).
-void __fastcall TSList_TMESSAGESOURCE_Clear(void * pListHead);
-int32_t __thiscall LINKEDLIST_FindNode(int * pList, void * pNode);
 void __stdcall SetCurrentThreadId();
 void __stdcall StaticInit_6ca890();
 

@@ -154,7 +154,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "D2SHA",
+        "D2XSHA1Strc",
         "uint32_t"
       ]
     },
@@ -179,7 +179,7 @@
       ],
       "usedTypes": [
         "BnDoubleHashInput",
-        "D2SHA",
+        "D2XSHA1Strc",
         "uint32_t"
       ]
     },

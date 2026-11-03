@@ -14,7 +14,6 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Safesock.h"
-#include "Storm/D2SHA1.h"
 #include "Storm/D2Srp.h"
 #include "Storm/Source/SFile.h"
 #include "Storm/Source/SMem.h"
@@ -78,7 +77,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, size_t nSize) {
 
 // Battle.net "broken SHA-1" (XSHA1) block transform: schedule W[i] = ROL(1, (W[i-3]^W[i-8]^W[i-14]^W[i-16]) & 31), block copied without byte swap.
 // Name per redivivus issue #36 (asm-verified hash variant).
-void __fastcall XSHA1_Transform(D2SHA1ContextStrc * pShaCtx) {
+void __fastcall XSHA1_Transform(D2XSHA1ContextStrc * pShaCtx) {
     uint32_t uVar1;
     uint32_t uVar4;
     uint32_t nStateE;
@@ -179,8 +178,8 @@ void __fastcall XSHA1_Transform(D2SHA1ContextStrc * pShaCtx) {
 
 // XSHA1 one-shot hash: SHA-1 IV, zero-padded final block with no 0x80 and no bit length, XSHA1_Transform per block.
 // Name per redivivus issue #36 (asm-verified hash variant).
-void __fastcall XSHA1(D2SHA1 * pOutput, char * szInput, size_t nInputSize) {
-    D2SHA1ContextStrc state;
+void __fastcall XSHA1(D2XSHA1Strc * pOutput, char * szInput, size_t nInputSize) {
+    D2XSHA1ContextStrc state;
     uint32_t nOffset = 0;
     state.state.h[0] = 0x67452301;
     state.state.h[1] = 0xefcdab89;
@@ -1537,7 +1536,7 @@ int __fastcall NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof(uint32_t nServer
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       DWORD dwClientToken;
-      D2SHA1 shaOldPasswordHash;
+      D2XSHA1Strc shaOldPasswordHash;
       uint8_t abSrpSaltCopy[64];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 88, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -1550,7 +1549,7 @@ int __fastcall NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof(uint32_t nServer
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 8, "frame group __frame1_t must reproduce the Ghidra frame layout");
     __frame1_t __frame1;
-    D2SHA1 shaUsernameHash;
+    D2XSHA1Strc shaUsernameHash;
     char szUsernameLower[256];
     __frame1.abUpgradeProofInput = GetTickCount();
     __frame1.uStack_120 = nServerToken;

@@ -7,7 +7,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "d2_platform.h"
-#include "Storm/Source/SSystem.h"
+#include "Storm/Source/SFile.h"
 
 // Forward declarations
 struct D2StormListHead;

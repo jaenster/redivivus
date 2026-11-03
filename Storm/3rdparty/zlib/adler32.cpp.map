@@ -1,7 +1,7 @@
 {
   "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
   "version": 2,
-  "file": "D2Client/Source/SSComp.cpp",
+  "file": "Storm/3rdparty/zlib/adler32.cpp",
   "functions": [
     {
       "name": "ZLIB_Adler32",
@@ -12,7 +12,7 @@
           "address": "0042b660"
         }
       ],
-      "namespace": "D2Client::Source::SSComp",
+      "namespace": "Storm::_3rdparty::zlib::adler32",
       "calledFunctions": [
         "ZLIB_Adler32"
       ],
@@ -30,7 +30,7 @@
           "address": "0042b8e0"
         }
       ],
-      "namespace": "D2Client::Source::SSComp",
+      "namespace": "Storm::_3rdparty::zlib::adler32",
       "calledFunctions": [
         "ZLIB_Adler32Combine",
         "_allrem"
@@ -49,7 +49,7 @@
           "address": "0042b990"
         }
       ],
-      "namespace": "D2Client::Source::SSComp",
+      "namespace": "Storm::_3rdparty::zlib::adler32",
       "calledFunctions": [
         "ZLIB_Adler32Combine32",
         "ZLIB_Adler32Combine"
@@ -67,56 +67,13 @@
           "address": "0042b9b0"
         }
       ],
-      "namespace": "D2Client::Source::SSComp",
+      "namespace": "Storm::_3rdparty::zlib::adler32",
       "calledFunctions": [
         "ZLIB_Adler32Combine64",
         "ZLIB_Adler32Combine"
       ],
       "usedTypes": [
         "uint32_t"
-      ]
-    },
-    {
-      "name": "ZLIB_InflateFast",
-      "address": "0042dca0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0042dca0"
-        }
-      ],
-      "namespace": "D2Client::Source::SSComp",
-      "calledFunctions": [
-        "ZLIB_InflateFast"
-      ],
-      "usedTypes": [
-        "int32_t",
-        "uint32_t",
-        "uint8_t",
-        "uint8_t *"
-      ]
-    },
-    {
-      "name": "ZLIB_InflateTable",
-      "address": "0042e120",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0042e120"
-        }
-      ],
-      "namespace": "D2Client::Source::SSComp",
-      "calledFunctions": [
-        "ZLIB_InflateTable",
-        "__security_check_cookie"
-      ],
-      "usedTypes": [
-        "inflate_code",
-        "inflate_code *",
-        "int32_t",
-        "uint16_t",
-        "uint32_t",
-        "uint8_t"
       ]
     }
   ]

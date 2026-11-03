@@ -5,7 +5,6 @@
 #include "D2CMP/SRC/SubTile.h"
 #include "D2CMP/SRC/TileProjects.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
-#include "D2Common/DATATBLS/DataTbls.h"
 #include "D2Hell/D2Hell.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/D2ArchiveStrc.h"
@@ -95,7 +94,7 @@ void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet) 
     strcat(nStrEndOffset1, ".dat");
     uint32_t nPaletteDataSize = 0x1500;
     char* szInlineNameBuf = szPaletteName;
-    BOOL bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, nStrEndOffset1, &pArchive, 1);
+    BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, nStrEndOffset1, &pArchive, 1);
     if (!bFileExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39);
       exit(-1);

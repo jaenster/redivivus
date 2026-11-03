@@ -20,6 +20,7 @@
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
+#include "D2Hell/D2Hell.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Excel.h"
@@ -814,14 +815,14 @@ void __fastcall CUBE_LoadCubeMainTable(D2PoolManagerStrc * pMemory) {
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
     wsprintfA(szFilePath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.bin");
-    _bFileExists = DATATBLS::DataTbls::CheckIfFileExists(pMemory, szFilePath, (D2MPQFileStrc**)&pFileData, 1);
+    _bFileExists = D2Hell::CheckIfFileExists(pMemory, szFilePath, (D2MPQFileStrc**)&pFileData, 1);
     if (_bFileExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2f0);
       exit(-1);
     }
 
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", "cubeserver.txt");
-    _bFileExists = DATATBLS::DataTbls::CheckIfFileExists(pMemory, szFilePath, (D2MPQFileStrc**)&pFileData, 1);
+    _bFileExists = D2Hell::CheckIfFileExists(pMemory, szFilePath, (D2MPQFileStrc**)&pFileData, 1);
     if (_bFileExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2f4);
       exit(-1);

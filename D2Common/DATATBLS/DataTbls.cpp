@@ -35,17 +35,15 @@
 #include "D2Game/UNIT/SUnit.h"
 #include "D2Game/UNIT/SUnitDmg.h"
 #include "D2Game/UNIT/SUnitMsg.h"
+#include "D2Hell/D2Hell.h"
 #include "D2Lang/D2Lang.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
-#include "Fog/Archive.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "Fog/Skills.h"
-#include "Fog/Source/SFile.h"
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Excel.h"
-#include "Fog/Src/LogManager.h"
 #include "Storm/D2ArchiveStrc.h"
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
@@ -92,24 +90,6 @@ static char gszMissileNameFormat[11] = {
     '\x00'
 }; D2_STATIC_GUARD(gszMissileNameFormat, "D2Common::DATATBLS::DataTbls::gszMissileNameFormat");
 static char gszTxtEventsTableName[7] = { 's', 'k', 'i', 'l', 'l', 's', '\x00' }; D2_STATIC_GUARD(gszTxtEventsTableName, "D2Common::DATATBLS::DataTbls::gszTxtEventsTableName");
-
-BOOL __fastcall CheckIfFileExists(D2PoolManagerStrc * pMemory, char * szFilename, D2MPQFileStrc * * ppFile, BOOL bDontLogError) {
-    BOOL bFileExists;
-    int32_t hFileHandle = Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(szFilename, ppFile);
-    if (hFileHandle) {
-      bFileExists = 1;
-    } else {
-      DWORD dwOpenResult;
-      dwOpenResult = GetLastError();
-      if (!bDontLogError || dwOpenResult != 2) {
-        Fog::Src::LogManager::LOGFILE_WriteStringToFile("Error opening file: %s", szFilename);
-      }
-
-      bFileExists = 0;
-    }
-
-    return bFileExists;
-}
 
 static void DATATBLS_NormalizeCodeTo4Chars(char * szText1, char * szText2) {
     char cChar;
@@ -587,7 +567,7 @@ void __stdcall StoreDataTables(uint32_t szFileName, D2InventoryToBeUpdatedStrc *
 D2ArchiveStrc * __fastcall ARCHIVE_LoadDataTables(D2PoolManagerStrc * pMemory, char * szTableName, char * szExtension, uint32_t * pSize, char * szFile, int32_t nLine) {
     char szFilePath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szTableName, szExtension);
-    D2ArchiveStrc* pDVar1 = (D2ArchiveStrc*)Fog::Archive::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, pSize, ".\\DATATBLS\\DataTbls.cpp", 0x82f);
+    D2ArchiveStrc* pDVar1 = (D2ArchiveStrc*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, pSize, ".\\DATATBLS\\DataTbls.cpp", 0x82f);
     return pDVar1;
 }
 
