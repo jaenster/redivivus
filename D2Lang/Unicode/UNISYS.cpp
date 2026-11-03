@@ -556,36 +556,33 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
     }
 }
 
-BOOL __fastcall UNICODE_CheckLineBreakPosition(int32_t pWszText, int32_t nPos) {
-    uint16_t wChar;
+BOOL __fastcall UNICODE_CheckLineBreakPosition(uint16_t * pWszText, int32_t nPos) {
+    int nIsSpace;
     if (!nPos) {
       return 1;
     }
 
     uint32_t nLangCode = StrTable::strtable::MISC_GetLanguageCode();
     if (nLangCode == 6 || (int)nLangCode > 7 && (int)nLangCode <= 9) {
-      wChar = *(uint16_t*)(pWszText + nPos * 2);
-      if (wChar != 0x2026 && wChar != 0x3001 && wChar != 0x3002 && wChar != 0xff01 && wChar != 0xff0c && wChar != 0xff0e && wChar != 0xff1f && wChar != 0xff61 && wChar != 0xff64 && (wChar < 0x61 || wChar > 0x7a) && (wChar < 0xff41 || wChar > 0xff5a) && (wChar < 0x41 || wChar > 0x5a) && (wChar < 0xff21 || wChar > 0xff3a) && (wChar < 0x30 || wChar > 0x39)) {
-        if (wChar < 0xff10) {
+      uint16_t WVar1;
+      WVar1 = pWszText[nPos];
+      if (WVar1 != L'\x2026' && WVar1 != L'\x3001' && WVar1 != L'\x3002' && WVar1 != L'\xff01' && WVar1 != L'\xff0c' && WVar1 != L'\xff0e' && WVar1 != L'\xff1f' && WVar1 != L'\xff61' && WVar1 != L'\xff64' && ((uint16_t)WVar1 < 0x61 || (uint16_t)WVar1 > 0x7a) && ((uint16_t)WVar1 < 0xff41 || (uint16_t)WVar1 > 0xff5a) && ((uint16_t)WVar1 < 0x41 || (uint16_t)WVar1 > 0x5a) && ((uint16_t)WVar1 < 0xff21 || (uint16_t)WVar1 > 0xff3a) && ((uint16_t)WVar1 < 0x30 || (uint16_t)WVar1 > 0x39)) {
+        if ((uint16_t)WVar1 < 0xff10) {
           return 1;
         }
-        if (wChar > 0xff19) {
+        if ((uint16_t)WVar1 > 0xff19) {
           return 1;
         }
       }
     } else {
-      int nIsSpace;
-      wChar = *(uint16_t*)(pWszText + nPos * 2);
-      if (wChar < 0x100) {
-        nIsSpace = isspace((uint32_t)wChar);
+      if ((uint16_t)pWszText[nPos] < 0x100) {
+        nIsSpace = isspace((uint32_t)(uint16_t)pWszText[nPos]);
         if (nIsSpace) {
           return 0;
         }
       }
-
-      wChar = *(uint16_t*)(pWszText - 2 + nPos * 2);
-      if (wChar < 0x100) {
-        nIsSpace = isspace((uint32_t)wChar);
+      if ((uint16_t)pWszText[nPos - 1] < 0x100) {
+        nIsSpace = isspace((uint32_t)(uint16_t)pWszText[nPos - 1]);
         if (nIsSpace) {
           return 1;
         }

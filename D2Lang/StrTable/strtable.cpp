@@ -392,7 +392,7 @@ void STRTABLE_UpdateCRC(uint16_t * pwCRC, uint8_t byData) {
     *pwCRC = *pwCRC << 8 ^ gwStrTableDefaultEncoding[(uint32_t)(*pwCRC >> 8) ^ (uint32_t)byData];
 }
 
-void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, int32_t pBuffer, uint32_t nOffset, uint32_t nEndOffset) {
+void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32_t nOffset, uint32_t nEndOffset) {
     uint8_t* pbData;
     if (nOffset >= nEndOffset) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ea);
@@ -401,7 +401,7 @@ void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, int32_t pBuffer, uint32_t
 
     *pwCRC = 0xffff;
     do {
-      pbData = (uint8_t*)(nOffset + pBuffer);
+      pbData = pBuffer + nOffset;
       nOffset++;
       *pwCRC = *pwCRC << 8 ^ gwStrTableDefaultEncoding[(uint32_t)*pbData ^ (uint32_t)(*pwCRC >> 8)];
     } while (nOffset < nEndOffset);

@@ -110,7 +110,7 @@ BOOL __fastcall SCMD_ProcessString(uint32_t * ppszCursor, int * pCmdCtx, uint32_
 // @oracle-source Storm export vector SCmdGetBool @100cbc84 -> code 10008b10 in Mac PPC 1.10b Storm
 // @rename-basis Cross-architecture body match, with the field offsets carrying the argument. PPC 10008b10 reads r3 only - one argument - then walks the two command-list heads at +8, compares node +0xc against the id and returns node +0x3c (10008b60: lwz r0,0xc(r3); cmplw r0,r25; 10008b6c: lwz r3,0x3c(r3)). This function does precisely that through the shared helper 006c4d70 and, unlike SCMD_GetUserData 006c4ca0 which returns the unrelated +0x38 field raw, normalises to a strict BOOL - which is what GetBool means. MWCC inlined the lookup; MSVC factored it out.
 // @former-name SCMD_ValidateCommand
-bool __stdcall SCmdGetBool(int nCmdId);
+BOOL __stdcall SCmdGetBool(int nCmdId);
 // Tokenises a command string and dispatches each token against the registered command list, optionally skipping the first token. Reports 0x8510006d through the error callback when a required argument was not supplied.
 // @oracle SCmdProcess
 // @oracle-source Storm export vector SCmdProcess @100cbc94 -> code 100086c0 = the traceback-named function .SCmdProcess, in Mac PPC 1.10b Storm

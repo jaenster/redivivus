@@ -47,7 +47,7 @@ uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * szKey);
 void __stdcall STRINGTABLE_FreeStringTables();
 void STRTABLE_InitCRC(uint16_t * pwCRC);
 void STRTABLE_UpdateCRC(uint16_t * pwCRC, uint8_t byData);
-void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, int32_t pBuffer, uint32_t nOffset, uint32_t nEndOffset);
+void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32_t nOffset, uint32_t nEndOffset);
 void __fastcall STRTABLE_NormalizeLanguageCode(char * szText);
 uint32_t __fastcall STRTABLE_GetLanguageId(char * szText);
 // @sourcefile .\StrTable\strtable.cpp

@@ -27,7 +27,7 @@ int32_t __fastcall STRING_GetWideStringLength(uint16_t * wszString);
 uint16_t * __fastcall UNICODE_FindSubstringNoCase(uint16_t * pwszHaystack, uint16_t * pwszNeedle);
 uint16_t * __fastcall UNICODE_FindSubstring(uint16_t * pwszHaystack, uint16_t * pwszNeedle);
 void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * wszFmt, ...);
-BOOL __fastcall UNICODE_CheckLineBreakPosition(int32_t pWszText, int32_t nPos);
+BOOL __fastcall UNICODE_CheckLineBreakPosition(uint16_t * pWszText, int32_t nPos);
 uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * pszBuffer, int32_t nSize);
 uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestination, char * szSource, int32_t nSize);
 char * __fastcall UNICODE_WideToMultiByte(char * pszDst, uint16_t * pwszSrc, int32_t nSize);

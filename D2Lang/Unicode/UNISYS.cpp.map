@@ -266,8 +266,8 @@
         "isspace"
       ],
       "usedTypes": [
+        "WCHAR",
         "int32_t",
-        "uint16_t",
         "uint32_t"
       ]
     },
