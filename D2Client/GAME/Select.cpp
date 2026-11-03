@@ -733,21 +733,22 @@ D2UnitStrc * __stdcall GetSelectedUnit() {
 }
 
 void __fastcall SELECT_UpdateUnitSelection(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      _Selection::bHasSelectedUnit = 0;
-      _Selection::bCanSelectUnit = 1;
-      return;
-    }
+    if (pUnit) {
+      uint32_t bIsOnScreen = UNIT::CUnit::HitTestScreen(pUnit, 0, 0, nullptr);
+      _Selection::bCanSelectUnit = 0;
+      if (bIsOnScreen) {
+        SetSelectedUnit_I(pUnit);
+        _Selection::bCanSelectUnit = 1;
+        return;
+      }
 
-    uint32_t bIsOnScreen = UNIT::CUnit::HitTestScreen(pUnit, 0, 0, nullptr);
-    _Selection::bCanSelectUnit = 0;
-    if (bIsOnScreen) {
-      SetSelectedUnit_I(pUnit);
-      _Selection::bCanSelectUnit = 1;
+      _Selection::bHasSelectedUnit = 0;
       return;
     }
 
     _Selection::bHasSelectedUnit = 0;
+    _Selection::bCanSelectUnit = 1;
+    return;
 }
 
 // Client-side hover/selection update: recomputes which unit the cursor is over. No-op while bCanSelectUnit lock is set. Reads mouse via SELECT_HandleMouseInput; if the currently selected unit still passes HitTestScreen it is kept. Otherwise scans the player's room plus adjacent rooms, hit-testing every candidate and choosing the best by per-unit-type priority (gnSelectTimeout), with special handling: skips items when suppressed, demotes dead monsters and attached-state monsters, resolves OBJECT vs door occlusion (SELECT_IsUnitBehindDoor / SELECT_IsDoorBlockingUnit), and breaks ties by squared distance to the player. Commits the winner via SetSelectedUnit_I. Resets the warp double-click id when the player changes room.
@@ -758,11 +759,13 @@ void __stdcall SELECT_UpdateSelectedUnit() {
     static void * gpSelectLastPlayerRoom; D2_STATIC_GUARD_BSS(gpSelectLastPlayerRoom, "D2Client::GAME::Select::SELECT_UpdateSelectedUnit::gpSelectLastPlayerRoom");
 
     uint32_t bHitTest;
+    int nIsActive;
     eD2States eUnitState;
     int32_t nBestDistSq;
     D2UnitStrc* pIterUnit;
     D2RoomStrc** ppRoomList;
     uint32_t nRoomCount;
+    uint32_t nRoomIndex;
     int nIterCount;
     D2UnitStrc* pPrevUnit;
     eD2UnitType eCurUnitType;
@@ -823,143 +826,137 @@ void __stdcall SELECT_UpdateSelectedUnit() {
     D2UnitStrc* pBestUnit;
     pBestUnit = 0;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, (int*)&nRoomCount);
-    uint32_t nRoomIndex;
-    nRoomIndex = 0;
-    if (nRoomCount) {
-      int nIsActive;
-      do {
-        pIterUnit = ppRoomList[nRoomIndex]->pUnitList;
-        pPrevUnit = 0;
-        nIterCount = 0;
-        nIsActive = nIterCount;
-        for (; nIterCount = nIsActive , pCurrentUnit = pIterUnit , pCandidate = pBestUnit , pIterUnit != 0; pIterUnit = pIterUnit->pRoomNext) {
-          if (!pIterUnit) {
-            eCurUnitType = UNIT_COUNT;
-            consider_candidate:
-            if (pPrevUnit == pIterUnit) {
-              break;
-            }
-            nIterCount = nIsActive + 1;
-            pPrevUnit = pIterUnit;
-            if (nIsActive > 30000) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x218);
-              exit(-1);
-            }
-            if (pIterUnit != pPlayerUnitLocal) {
-              bIsDeadOrDoor = SELECT_IsWarpDoubleClicked(nPlayerScreenY, nPlayerScreenX, pPlayerUnitLocal, nPlayerScreenY, nMouseX, nMouseY, &gnSelectedUnitId, pIterUnit);
+    for (nRoomIndex = 0; nRoomIndex < nRoomCount; nRoomIndex++) {
+      pIterUnit = ppRoomList[nRoomIndex]->pUnitList;
+      pPrevUnit = 0;
+      nIterCount = 0;
+      nIsActive = nIterCount;
+      for (; nIterCount = nIsActive , pCurrentUnit = pIterUnit , pCandidate = pBestUnit , pIterUnit != 0; pIterUnit = pIterUnit->pRoomNext) {
+        if (!pIterUnit) {
+          eCurUnitType = UNIT_COUNT;
+          consider_candidate:
+          if (pPrevUnit == pIterUnit) {
+            break;
+          }
+          nIterCount = nIsActive + 1;
+          pPrevUnit = pIterUnit;
+          if (nIsActive > 30000) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x218);
+            exit(-1);
+          }
+          if (pIterUnit != pPlayerUnitLocal) {
+            bIsDeadOrDoor = SELECT_IsWarpDoubleClicked(nPlayerScreenY, nPlayerScreenX, pPlayerUnitLocal, nPlayerScreenY, nMouseX, nMouseY, &gnSelectedUnitId, pIterUnit);
+            pCandidate = pBestUnit;
+            if (!bIsDeadOrDoor && (!pIterUnit || pIterUnit->eUnitType != UNIT_ITEM || !gbSuppressItemSelection)) {
+              bHitTest = UNIT::CUnit::HitTestScreen(pIterUnit, nMouseX, nMouseY, (D2ObjectsTxt*)0x1);
               pCandidate = pBestUnit;
-              if (!bIsDeadOrDoor && (!pIterUnit || pIterUnit->eUnitType != UNIT_ITEM || !gbSuppressItemSelection)) {
-                bHitTest = UNIT::CUnit::HitTestScreen(pIterUnit, nMouseX, nMouseY, (D2ObjectsTxt*)0x1);
-                pCandidate = pBestUnit;
-                if (bHitTest) {
-                  if (pSelectedUnit == pIterUnit) {
-                    bIsActive = UNIT::CUnit::IsActive(pIterUnit);
-                    pCandidate = pIterUnit;
-                    if (!bIsActive) {
-                      break;
+              if (bHitTest) {
+                if (pSelectedUnit == pIterUnit) {
+                  bIsActive = UNIT::CUnit::IsActive(pIterUnit);
+                  pCandidate = pIterUnit;
+                  if (!bIsActive) {
+                    break;
+                  }
+                }
+
+                pCandidate = pIterUnit;
+                if (pBestUnit) {
+                  eBestUnitType = pBestUnit->eUnitType;
+                  nBestPriority = gnSelectTimeout[eBestUnitType];
+                  nPriority = gnSelectTimeout[eCurUnitType];
+                  if (eCurUnitType == UNIT_PLAYER) {
+                    nIsActive = UNIT::CUnit::IsActive(pIterUnit);
+                    if (nIsActive) {
+                      nPriority = 1;
+                    }
+                  } else if (eCurUnitType == UNIT_MONSTER) {
+                    bIsDeadOrDoor = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pIterUnit);
+                    if (bIsDeadOrDoor) {
+                      nPriority = -8;
+                    }
+
+                    eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pIterUnit, STATE_attached);
+                    pCandidate = pBestUnit;
+                    if (eUnitState != STATE_none) {
+                      goto next_unit;
+                    }
+                  }
+                  if (eBestUnitType == UNIT_MONSTER) {
+                    bIsDeadOrDoor = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pBestUnit);
+                    if (bIsDeadOrDoor) {
+                      nBestPriority = -8;
                     }
                   }
 
-                  pCandidate = pIterUnit;
-                  if (pBestUnit) {
-                    eBestUnitType = pBestUnit->eUnitType;
-                    nBestPriority = gnSelectTimeout[eBestUnitType];
-                    nPriority = gnSelectTimeout[eCurUnitType];
-                    if (eCurUnitType == UNIT_PLAYER) {
-                      nIsActive = UNIT::CUnit::IsActive(pIterUnit);
-                      if (nIsActive) {
-                        nPriority = 1;
-                      }
-                    } else if (eCurUnitType == UNIT_MONSTER) {
-                      bIsDeadOrDoor = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pIterUnit);
+                  pCandidate = pBestUnit;
+                  pPlayerUnitLocal = pPlayerUnit_lcl;
+                  if (eCurUnitType != UNIT_OBJECT) {
+                    if (eBestUnitType == UNIT_OBJECT) {
+                      bIsDeadOrDoor = D2Common::Units::IsDoor(pBestUnit);
                       if (bIsDeadOrDoor) {
-                        nPriority = -8;
-                      }
-
-                      eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pIterUnit, STATE_attached);
-                      pCandidate = pBestUnit;
-                      if (eUnitState != STATE_none) {
-                        goto next_unit;
-                      }
-                    }
-                    if (eBestUnitType == UNIT_MONSTER) {
-                      bIsDeadOrDoor = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pBestUnit);
-                      if (bIsDeadOrDoor) {
-                        nBestPriority = -8;
-                      }
-                    }
-
-                    pCandidate = pBestUnit;
-                    pPlayerUnitLocal = pPlayerUnit_lcl;
-                    if (eCurUnitType != UNIT_OBJECT) {
-                      if (eBestUnitType == UNIT_OBJECT) {
-                        bIsDeadOrDoor = D2Common::Units::IsDoor(pBestUnit);
-                        if (bIsDeadOrDoor) {
-                          bHitTest = SELECT_IsDoorBlockingUnit(pIterUnit, pCandidate);
-                          pIterUnit = pCurrentUnit;
+                        bHitTest = SELECT_IsDoorBlockingUnit(pIterUnit, pCandidate);
+                        pIterUnit = pCurrentUnit;
+                        pCandidate = pBestUnit;
+                        if (bHitTest) {
+                          pBestUnit = pCurrentUnit;
                           pCandidate = pBestUnit;
-                          if (bHitTest) {
-                            pBestUnit = pCurrentUnit;
-                            pCandidate = pBestUnit;
-                          }
-                        } else {
-                          pick_higher_priority:
-                          pCandidate = pBestUnit;
-                          if (nBestPriority < nPriority) {
-                            pCandidate = pIterUnit;
-                          }
                         }
                       } else {
-                        compare_priority_or_distance:
-                        if (nBestPriority == nPriority) {
-                          eCurUnitType = SELECT_GetDistanceSquared(pIterUnit, pPlayerUnit_lcl);
-                          nBestDistSq = SELECT_GetDistanceSquared(pBestUnit, pPlayerUnitLocal);
-                          pCandidate = pBestUnit;
-                          if ((int)eCurUnitType < nBestDistSq) {
-                            pCandidate = pIterUnit;
-                          }
-                        } else if (nBestPriority < nPriority) {
+                        pick_higher_priority:
+                        pCandidate = pBestUnit;
+                        if (nBestPriority < nPriority) {
                           pCandidate = pIterUnit;
                         }
                       }
                     } else {
-                      if (eBestUnitType == UNIT_OBJECT) {
-                        goto compare_priority_or_distance;
-                      }
-
-                      bIsDeadOrDoor = D2Common::Units::IsDoor(pIterUnit);
-                      if (!bIsDeadOrDoor) {
-                        goto pick_higher_priority;
-                      }
-
-                      bHitTest = SELECT_IsUnitBehindDoor(pBestUnit, pIterUnit);
-                      pIterUnit = pCurrentUnit;
-                      pCandidate = pBestUnit;
-                      if (bHitTest && nBestPriority < nPriority) {
-                        pBestUnit = pCurrentUnit;
+                      compare_priority_or_distance:
+                      if (nBestPriority == nPriority) {
+                        eCurUnitType = SELECT_GetDistanceSquared(pIterUnit, pPlayerUnit_lcl);
+                        nBestDistSq = SELECT_GetDistanceSquared(pBestUnit, pPlayerUnitLocal);
                         pCandidate = pBestUnit;
+                        if ((int)eCurUnitType < nBestDistSq) {
+                          pCandidate = pIterUnit;
+                        }
+                      } else if (nBestPriority < nPriority) {
+                        pCandidate = pIterUnit;
                       }
+                    }
+                  } else {
+                    if (eBestUnitType == UNIT_OBJECT) {
+                      goto compare_priority_or_distance;
+                    }
+
+                    bIsDeadOrDoor = D2Common::Units::IsDoor(pIterUnit);
+                    if (!bIsDeadOrDoor) {
+                      goto pick_higher_priority;
+                    }
+
+                    bHitTest = SELECT_IsUnitBehindDoor(pBestUnit, pIterUnit);
+                    pIterUnit = pCurrentUnit;
+                    pCandidate = pBestUnit;
+                    if (bHitTest && nBestPriority < nPriority) {
+                      pBestUnit = pCurrentUnit;
+                      pCandidate = pBestUnit;
                     }
                   }
                 }
               }
             }
-          } else {
-            eCurUnitType = pIterUnit->eUnitType;
-            if (eCurUnitType != UNIT_MISSILE) {
-              goto consider_candidate;
-            }
           }
-
-          next_unit:
-          pBestUnit = pCandidate;
-          pPlayerUnitLocal = pPlayerUnit_lcl;
-          nIsActive = nIterCount;
+        } else {
+          eCurUnitType = pIterUnit->eUnitType;
+          if (eCurUnitType != UNIT_MISSILE) {
+            goto consider_candidate;
+          }
         }
 
+        next_unit:
         pBestUnit = pCandidate;
-        nRoomIndex++;
-      } while (nRoomIndex < nRoomCount);
+        pPlayerUnitLocal = pPlayerUnit_lcl;
+        nIsActive = nIterCount;
+      }
+
+      pBestUnit = pCandidate;
     }
 
     SetSelectedUnit_I(pBestUnit);

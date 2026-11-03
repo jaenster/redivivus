@@ -5056,7 +5056,7 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
     }
 
     SMem::SMemFree(pScanBuffer, ".\\SOURCE\\SFILE.CPP", 0x1106, 0);
-    uint32_t nHashKey = 0x200 << ((uint8_t)ppArchive->pMpqHeader->wSectorSizeShift & 0x1f);
+    uint32_t nHashKey = 0x200 << (ppArchive->pMpqHeader->wSectorSizeShift & 0x1f);
     ppArchive->nSectorSize = nHashKey;
     pScanBuffer = SMem::SMemAlloc(nHashKey, ".\\SOURCE\\SFILE.CPP", 0x110b, 0);
     ppArchive->pSectorBuffer = pScanBuffer;

@@ -1568,7 +1568,7 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
       nStrId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&sgtDataTable.pTxtHireling[nCounter].namelast[0], &pwStrLookup);
       sgtDataTable.pTxtHireling[nCounter].nNameLast = (short int)nStrId;
       if (bIsExpansion) {
-        if (!sgtDataTable.pTxtHireling[nCounter].nNameFirst) {
+        if (sgtDataTable.pTxtHireling[nCounter].nNameFirst <= 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x816);
           exit(-1);
         }

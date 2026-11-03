@@ -167,7 +167,7 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     }
 
     nSlotIndex = 0;
-    if (gnAsyncDataHandleBufferSize) {
+    if (gnAsyncDataHandleBufferSize > 0) {
       do {
         pCandidateSlot = (D2AsyncDataSlotStrc*)((uintptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nByteOffset);
         /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(*(HANDLE*)((uintptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nByteOffset), 0);

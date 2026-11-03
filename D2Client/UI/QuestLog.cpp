@@ -483,12 +483,12 @@ static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
     eQuestState = QUESTSTATE_Completed;
     eQuestId = QUEST_AbleGoToAct2;
     bQuestCompleted = D2Common::QuestRecord::GetQuestState(npcmenu::GetQuestInfo(), eQuestId, eQuestState);
-    if (bQuestCompleted) {
+    if (!bQuestCompleted) {
       gQuestLog.nQuestLogActiveAct = -1;
       gQuestLog.nQuestLogSelectedIcon = -1;
       memset(gQuestLog.aQuestLogIconFrame, 0, 6 * sizeof(gQuestLog.aQuestLogIconFrame[0]));
       memset(gQuestLog.aQuestLogIconLastTick, 0, 6 * sizeof(gQuestLog.aQuestLogIconLastTick[0]));
-      gQuestLog.nQuestLogActiveAct_b = nActIndex;
+      gQuestLog.nQuestLogActiveAct_b = 0;
       return;
     }
 
@@ -496,7 +496,8 @@ static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
     gQuestLog.nQuestLogSelectedIcon = -1;
     memset(gQuestLog.aQuestLogIconFrame, 0, 6 * sizeof(gQuestLog.aQuestLogIconFrame[0]));
     memset(gQuestLog.aQuestLogIconLastTick, 0, 6 * sizeof(gQuestLog.aQuestLogIconLastTick[0]));
-    gQuestLog.nQuestLogActiveAct_b = 0;
+    gQuestLog.nQuestLogActiveAct_b = nActIndex;
+    return;
 }
 
 void __stdcall QUESTLOG_SetActiveActFromPlayerRoom() {

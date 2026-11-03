@@ -1150,10 +1150,7 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
     }
 
     eMissilesId eMissileId = (eMissilesId)pDVar1->srvmissile[1];
-    if ((int)eMissileId < 0) {
-      return 0;
-    }
-    if ((int)eMissileId >= sgptDataTable->nTxtMissilesSize) {
+    if ((int)eMissileId < 0 || (int)eMissileId >= sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
     if (pDVar1->aurastate < 0) {

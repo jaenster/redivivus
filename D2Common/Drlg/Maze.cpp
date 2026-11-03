@@ -844,16 +844,16 @@ void __thiscall DRLGMAZE_ExpandCatacombsLevel(D2DrlgLevelStrc * pLevel, int32_t 
     D2SeedStrc sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
     pLevel->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
     pLevel->sSeed.nSeedLow = sNewSeed.nSeedLow;
-    if (!(sNewSeed.nSeedLow & 1)) {
+    if (sNewSeed.nSeedLow & 1) {
       pNewRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pStartRoom->pLevel, 2);
       pRoomSizeData = pNewRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
       pNewRoom->sCoords.WorldSize.x = pRoomSizeData->SizeX;
       pNewRoom->sCoords.WorldSize.y = pRoomSizeData->SizeY;
-      bReplaced = ReplaceRoomWithNewRoom(1, pNewRoom, pStartRoom);
+      bReplaced = ReplaceRoomWithNewRoom(0, pNewRoom, pStartRoom);
       if (!bReplaced) {
         DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pNewRoom);
       } else {
-        DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pStartRoom, pNewRoom, 1);
+        DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pStartRoom, pNewRoom, 0);
         DRLGMAZE_PickRoomPresets(pNewRoom);
         DrlgRoom::AddRoomExToLevel(pStartRoom->pLevel, pNewRoom);
         DRLGMAZE_PickRoomPreset(pStartRoom, 1);
@@ -864,21 +864,25 @@ void __thiscall DRLGMAZE_ExpandCatacombsLevel(D2DrlgLevelStrc * pLevel, int32_t 
       pRoomSizeData = pNewRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
       pNewRoom->sCoords.WorldSize.x = pRoomSizeData->SizeX;
       pNewRoom->sCoords.WorldSize.y = pRoomSizeData->SizeY;
-      bReplaced = ReplaceRoomWithNewRoom(3, pNewRoom, pStartRoom);
+      bReplaced = ReplaceRoomWithNewRoom(2, pNewRoom, pStartRoom);
       if (!bReplaced) {
         DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pNewRoom);
-      } else {
-        DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pStartRoom, pNewRoom, 3);
-        DRLGMAZE_PickRoomPresets(pNewRoom);
-        DrlgRoom::AddRoomExToLevel(pStartRoom->pLevel, pNewRoom);
-        DRLGMAZE_PickRoomPreset(pStartRoom, 1);
-        DRLGMAZE_PickRoomPreset(pNewRoom, 1);
+        pDVar1 = pStartRoom->pRoomExData.pRoomExDataPreset;
+        pDVar1->nLevelPrest = 0x120;
+        pDVar1->nFlags |= 2;
+        pDVar1->nPickedFile = -1;
+        return;
       }
 
-      pRoomData = pStartRoom->pRoomExData.pRoomExDataPreset;
-      pRoomData->nLevelPrest = 0x121;
-      pRoomData->nFlags |= 2;
-      pRoomData->nPickedFile = -1;
+      DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pStartRoom, pNewRoom, 2);
+      DRLGMAZE_PickRoomPresets(pNewRoom);
+      DrlgRoom::AddRoomExToLevel(pStartRoom->pLevel, pNewRoom);
+      DRLGMAZE_PickRoomPreset(pStartRoom, 1);
+      DRLGMAZE_PickRoomPreset(pNewRoom, 1);
+      pDVar1 = pStartRoom->pRoomExData.pRoomExDataPreset;
+      pDVar1->nLevelPrest = 0x120;
+      pDVar1->nFlags |= 2;
+      pDVar1->nPickedFile = -1;
       return;
     }
 
@@ -886,11 +890,11 @@ void __thiscall DRLGMAZE_ExpandCatacombsLevel(D2DrlgLevelStrc * pLevel, int32_t 
     pRoomSizeData = pNewRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
     pNewRoom->sCoords.WorldSize.x = pRoomSizeData->SizeX;
     pNewRoom->sCoords.WorldSize.y = pRoomSizeData->SizeY;
-    bReplaced = ReplaceRoomWithNewRoom(0, pNewRoom, pStartRoom);
+    bReplaced = ReplaceRoomWithNewRoom(1, pNewRoom, pStartRoom);
     if (!bReplaced) {
       DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pNewRoom);
     } else {
-      DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pStartRoom, pNewRoom, 0);
+      DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pStartRoom, pNewRoom, 1);
       DRLGMAZE_PickRoomPresets(pNewRoom);
       DrlgRoom::AddRoomExToLevel(pStartRoom->pLevel, pNewRoom);
       DRLGMAZE_PickRoomPreset(pStartRoom, 1);
@@ -901,25 +905,22 @@ void __thiscall DRLGMAZE_ExpandCatacombsLevel(D2DrlgLevelStrc * pLevel, int32_t 
     pRoomSizeData = pNewRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
     pNewRoom->sCoords.WorldSize.x = pRoomSizeData->SizeX;
     pNewRoom->sCoords.WorldSize.y = pRoomSizeData->SizeY;
-    bReplaced = ReplaceRoomWithNewRoom(2, pNewRoom, pStartRoom);
+    bReplaced = ReplaceRoomWithNewRoom(3, pNewRoom, pStartRoom);
     if (!bReplaced) {
       DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pNewRoom);
-      pDVar1 = pStartRoom->pRoomExData.pRoomExDataPreset;
-      pDVar1->nLevelPrest = 0x120;
-      pDVar1->nFlags |= 2;
-      pDVar1->nPickedFile = -1;
-      return;
+    } else {
+      DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pStartRoom, pNewRoom, 3);
+      DRLGMAZE_PickRoomPresets(pNewRoom);
+      DrlgRoom::AddRoomExToLevel(pStartRoom->pLevel, pNewRoom);
+      DRLGMAZE_PickRoomPreset(pStartRoom, 1);
+      DRLGMAZE_PickRoomPreset(pNewRoom, 1);
     }
 
-    DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pStartRoom, pNewRoom, 2);
-    DRLGMAZE_PickRoomPresets(pNewRoom);
-    DrlgRoom::AddRoomExToLevel(pStartRoom->pLevel, pNewRoom);
-    DRLGMAZE_PickRoomPreset(pStartRoom, 1);
-    DRLGMAZE_PickRoomPreset(pNewRoom, 1);
-    pDVar1 = pStartRoom->pRoomExData.pRoomExDataPreset;
-    pDVar1->nLevelPrest = 0x120;
-    pDVar1->nFlags |= 2;
-    pDVar1->nPickedFile = -1;
+    pRoomData = pStartRoom->pRoomExData.pRoomExDataPreset;
+    pRoomData->nLevelPrest = 0x121;
+    pRoomData->nFlags |= 2;
+    pRoomData->nPickedFile = -1;
+    return;
 }
 
 // Generates the Worldstone Keep or Tal Rasha's Tombs special rooms within a maze-type DRLG level. Iterates 3 times, allocating a new RoomEx per iteration and attempting to splice it into the level via ReplaceRoomWithNewRoom at a seed-derived roll position (0-3). Successful placements get nodes allocated and presets picked; failed allocations are freed. For level types 0x11 and 0x22, additionally patches the first room's data fields to mark a specific room variant and clear its predecessor link.
@@ -2868,7 +2869,7 @@ static void __stdcall DRLGMAZE_GenerateBarracksLayout(D2DrlgLevelStrc * pDrlgLev
     uint32_t nExitDir;
     D2DrlgReplaceRoomStrc* pReplaceData;
     D2RoomExStrc* pConnectorRoom;
-    int64_t lSeedProduct;
+    uint32_t lSeedProduct;
     uint32_t nSizeY;
     int* pLevelData;
     D2DrlgLevelStrc* pBarracksLevel = GetLevelAndAlloc(pDrlgLevelStrc->pDrlg, 0x1b);
@@ -3488,10 +3489,10 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
     finish_level:
     if (pLevel->eD2LevelId == 0x1c) {
       DRLGMAZE_GenerateBarracksLayout(pLevel);
-    } else if (pLevel->eD2LevelId == 0x6b) {
-      DRLGMAZE_GenerateRiverOfFlames(pLevel);
-    } else {
+    } else if (pLevel->eD2LevelId != 0x6b) {
       DRLGLEVEL_AdjustRoomCoordinates(pLevel);
+    } else {
+      DRLGMAZE_GenerateRiverOfFlames(pLevel);
     }
     ForAllButDenOfEvil(pLevel);
     pSearchRoom = pLevel->pRoomExFirst;

@@ -315,7 +315,10 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge(D2UnitStrc * p
     D2SkillArgStrc sSkillArg;
     int nUnitY;
     int nUnitX;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
@@ -433,7 +436,10 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_StreamMissile(D2UnitStrc * pUnit,
     }
 
     int32_t sCltMissileA = pSkillTxt->cltmissile[1];
-    if (!(sCltMissileA >= 0 && pSkillTxt->cltmissile[2] >= 0)) {
+    if (sCltMissileA < 0) {
+      return 0;
+    }
+    if (pSkillTxt->cltmissile[2] < 0) {
       return 0;
     }
 

@@ -141,12 +141,12 @@ static D2MonSoundsTxt * TxtGetSoundIdLineFromUnit(D2UnitStrc * pUnit) {
 
     DWORD nMonStatsId = GetSndUnitClassId(pUnit);
     if ((int)nMonStatsId < sgptDataTable->nTxtMonStatsSize) {
-      uint16_t nBossId;
+      int16_t nBossId;
       if (pUnit->eUnitType == UNIT_MONSTER) {
         BVar1 = Monster::IsMonsterSuperUnique(pUnit);
         if (BVar1) {
           nBossId = MonUnique::GetBossId(pUnit);
-          pSuperUniquesTxt = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine((int)(short int)nBossId);
+          pSuperUniquesTxt = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine((int)nBossId);
           if (pSuperUniquesTxt && pSuperUniquesTxt->MonSound > 0) {
             pMonSoundsResult = D2Common::DATATBLS::MonsterTbls::TxtGetMonSoundsLine(pSuperUniquesTxt->MonSound);
             return pMonSoundsResult;

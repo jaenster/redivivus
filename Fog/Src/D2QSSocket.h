@@ -31,7 +31,7 @@ void __stdcall D2QSSOCKET_BlockSocketIfValid(struct D2QSSocketStrc * pQSSocket);
 struct D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort, char * szName);
 // @sourcefile .\Src\D2QSSocket.cpp
 void __stdcall FreeD2QSSocket(struct D2QSSocketStrc * pSocket);
-void __stdcall QSSOCKET_WaitForEvent(struct D2QSSocketStrc * pQSSocket, DWORD dwTimeout);
+DWORD __stdcall QSSOCKET_WaitForEvent(struct D2QSSocketStrc * pQSSocket, DWORD dwTimeout);
 struct D2NetDataStrc * __stdcall NET_D2QSocket_GetSafesock(struct D2QSSocketStrc * pQSSocket);
 void __stdcall QSSOCKET_SignalEvent(struct D2QSSocketStrc * pQSSocket);
 int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(struct D2QSSocketStrc * pQSocket, char * pBytes, uint16_t nSize);

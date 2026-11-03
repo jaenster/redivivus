@@ -60,8 +60,6 @@ typedef void (__thiscall *fpWardenUnload)(struct D2WardenModuleObjectStrc * pThi
 typedef struct D2WardenModuleObjectStrc * (__fastcall *pfnWardenCreateInterface)(::WardenClient * pClient);
 #endif
 
-struct WardenClientVtable;
-
 // Data types
 struct D2RC4StateStrc {
     /* 0x000 */ uint8_t sbox[256]; // RC4 substitution box, 256-byte permutation array
@@ -88,10 +86,6 @@ struct D2WardenModuleStrc {
     /* 0x10 */ struct D2WardenModuleObjectStrc * (__fastcall *pfnCreateInterface)(::WardenClient *);
 };
 
-struct WardenClient {
-    /* 0x00 */ struct WardenClientVtable * _vfptr;
-};
-
 struct WardenClientVtable {
     /* 0x00 */ void (__thiscall *SendPacket)(::WardenClient *, void *, uint32_t);
     /* 0x04 */ bool (__thiscall *CheckModule)(::WardenClient *, uint8_t *, void *);
@@ -104,6 +98,10 @@ struct WardenClientVtable {
     /* 0x1D */ uint8_t field_0x1d;
     /* 0x1E */ uint8_t field_0x1e;
     /* 0x1F */ uint8_t field_0x1f;
+};
+
+struct WardenClient {
+    /* 0x00 */ struct WardenClientVtable * _vfptr;
 };
 
 namespace D2Client::Warden {

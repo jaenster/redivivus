@@ -1716,46 +1716,47 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
     }
     nPrevActiveTab = 0;
     nTmpResult = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_newskills, 0);
-    if (nTmpResult <= 0) {
+    if (nTmpResult > 0) {
+      nTmpResult = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
+      if (nTmpResult > 0) {
+        do {
+          eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nPrevActiveTab);
+          pSkillTxt = GAME::SCmd::TXT_Skills_GetLine(eSkill);
+          if (pSkillTxt) {
+            pSkillDesc = DataTbls::GetSkillDescription(eSkill);
+            if (pSkillDesc && nSkillTreeActiveTab == pSkillDesc->skillpage) {
+              nTmpResult = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow);
+              if ((int)nClickY > nTmpResult - 0x30 && (int)nClickY < nTmpResult) {
+                nTmpResult = SPELLSEL_GetSkillTreeColumnOffset(pSkillDesc->skillcolumn);
+                if ((int)nClickX > nTmpResult && (int)nClickX < nTmpResult + 0x30 && !gaSpellSelSkillTreeState[nPrevActiveTab]) {
+                  gaSpellSelSkillTreeState[nPrevActiveTab] = 1;
+                  gbSpellSelSkillTreeNodeHovered[nPrevActiveTab] = 3;
+                  ui::UI_HandleCursorMouseMove(pMsg);
+                  pMsg->bHandled = 1;
+                  pMsg->dwResult = 0;
+                  Sound::SOUND_PlaySound(SOUND_CURSOR_POINT_DROP, nullptr, 0, 0, 0);
+                  Storm::SMsgBreakHandlerChain(pMsg);
+                  return;
+                }
+              }
+            }
+          }
+
+          nPrevActiveTab++;
+          nTmpResult = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
+        } while (nPrevActiveTab < nTmpResult);
+      }
+
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
       Storm::SMsgBreakHandlerChain(pMsg);
       return;
     }
 
-    nTmpResult = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
-    if (nTmpResult > 0) {
-      do {
-        eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, nPrevActiveTab);
-        pSkillTxt = GAME::SCmd::TXT_Skills_GetLine(eSkill);
-        if (pSkillTxt) {
-          pSkillDesc = DataTbls::GetSkillDescription(eSkill);
-          if (pSkillDesc && nSkillTreeActiveTab == pSkillDesc->skillpage) {
-            nTmpResult = SPELLSEL_GetSkillTreeRowOffset(pSkillDesc->skillrow);
-            if ((int)nClickY > nTmpResult - 0x30 && (int)nClickY < nTmpResult) {
-              nTmpResult = SPELLSEL_GetSkillTreeColumnOffset(pSkillDesc->skillcolumn);
-              if ((int)nClickX > nTmpResult && (int)nClickX < nTmpResult + 0x30 && !gaSpellSelSkillTreeState[nPrevActiveTab]) {
-                gaSpellSelSkillTreeState[nPrevActiveTab] = 1;
-                gbSpellSelSkillTreeNodeHovered[nPrevActiveTab] = 3;
-                ui::UI_HandleCursorMouseMove(pMsg);
-                pMsg->bHandled = 1;
-                pMsg->dwResult = 0;
-                Sound::SOUND_PlaySound(SOUND_CURSOR_POINT_DROP, nullptr, 0, 0, 0);
-                Storm::SMsgBreakHandlerChain(pMsg);
-                return;
-              }
-            }
-          }
-        }
-
-        nPrevActiveTab++;
-        nTmpResult = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
-      } while (nPrevActiveTab < nTmpResult);
-    }
-
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
+    return;
 }
 
 void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {

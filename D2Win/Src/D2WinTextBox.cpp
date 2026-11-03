@@ -177,7 +177,10 @@ int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_
     if (!pnTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1f9);
       exit(-1);
-    } else if (pnTextBox->sControl.neD2FormType == FORM_TextBox) {
+    } else if (pnTextBox->sControl.neD2FormType != FORM_TextBox) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1fa);
+      exit(-1);
+    } else {
       if (!((int)pnTextBox->sStyleControl.fpPush > nCol)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1fb);
         exit(-1);
@@ -206,9 +209,6 @@ int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_
       }
 
       return 1;
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1fa);
-      exit(-1);
     }
 }
 

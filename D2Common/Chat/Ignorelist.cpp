@@ -31,31 +31,32 @@ void __stdcall IGNORELIST_Shutdown() {
 void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, char * pszDstBuf, int32_t nBufLen) {
     char cCurrent = *szText;
     uint32_t nCharIdx = 0;
-    if (cCurrent == '*') {
-      *pszDstBuf = '\0';
+    if (cCurrent != '*') {
+      char* pSrc = szText;
+      do {
+        if (cCurrent == '\0') {
+          break;
+        }
+        if (nCharIdx > 0x10) {
+          pszDstBuf[nCharIdx] = '\0';
+          return;
+        }
+        if (nCharIdx >= nBufLen - 1U) {
+          break;
+        }
+
+        nCharIdx++;
+        pSrc[(int)pszDstBuf - (int)szText] = cCurrent;
+        cCurrent = szText[nCharIdx];
+        pSrc = szText + nCharIdx;
+      } while (cCurrent != '*');
+
+      pszDstBuf[nCharIdx] = '\0';
       return;
     }
 
-    char* pSrc = szText;
-    do {
-      if (cCurrent == '\0') {
-        break;
-      }
-      if (nCharIdx > 0x10) {
-        pszDstBuf[nCharIdx] = '\0';
-        return;
-      }
-      if (nCharIdx >= nBufLen - 1U) {
-        break;
-      }
-
-      nCharIdx++;
-      pSrc[(int)pszDstBuf - (int)szText] = cCurrent;
-      cCurrent = szText[nCharIdx];
-      pSrc = szText + nCharIdx;
-    } while (cCurrent != '*');
-
-    pszDstBuf[nCharIdx] = '\0';
+    *pszDstBuf = '\0';
+    return;
 }
 
 void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, int32_t nDstBuf, int32_t nBufLen) {

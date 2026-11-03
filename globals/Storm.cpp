@@ -7263,7 +7263,7 @@ uint32_t gnScompTempBufferOwnerThreadId = 0; D2_GLOBAL_GUARD(gnScompTempBufferOw
 uint32_t gpActiveWindow = 0; D2_GLOBAL_GUARD(gpActiveWindow, "gpActiveWindow");
 uint32_t gnSevtSnapshotActive = 0; D2_GLOBAL_GUARD(gnSevtSnapshotActive, "gnSevtSnapshotActive");
 void * gpEventHashBuckets = 0; D2_GLOBAL_GUARD(gpEventHashBuckets, "gpEventHashBuckets");
-void * gaEventRegistryHead = 0; D2_GLOBAL_GUARD(gaEventRegistryHead, "gaEventRegistryHead");
+uint32_t gaEventRegistryHead = 0; D2_GLOBAL_GUARD(gaEventRegistryHead, "gaEventRegistryHead");
 uint32_t gnSevtRegisteredEventCount = 0; D2_GLOBAL_GUARD(gnSevtRegisteredEventCount, "gnSevtRegisteredEventCount");
 uint32_t gbScmdHasPriorityCommand = 0; D2_GLOBAL_GUARD(gbScmdHasPriorityCommand, "gbScmdHasPriorityCommand");
 

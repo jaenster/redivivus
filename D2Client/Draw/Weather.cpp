@@ -586,44 +586,47 @@ static void __stdcall WEATHER_GetLightingTint(uint8_t * pOutAlpha, int nIntensit
     D2RoomStrc* pCurrentRoom = UNIT::CUnit::GetCurrentRoom();
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pCurrentRoom);
     uint32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(sgpDrlgAct, nullptr);
-    if (nPeriodOfDay > 3) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x356);
-      exit(-1);
-    }
-    if (pOutTint) {
-      *pOutTint = gaWeatherLightTintData[nPeriodOfDay * 2];
-    }
-    if (!pOutAlpha) {
-      return;
-    }
+    if (nPeriodOfDay <= 3) {
+      if (pOutTint) {
+        *pOutTint = gaWeatherLightTintData[nPeriodOfDay * 2];
+      }
+      if (!pOutAlpha) {
+        return;
+      }
 
-    int nScaled = nIntensity * 0xc + (nIntensity * 0xc >> 0x1f & 7U);
-    int nIndex = nScaled >> 3;
-    if (bUseSoftwareRenderer) {
-      *pOutAlpha = gWeatherPaletteLightingSoftwareColors[nIndex];
-      return;
-    }
+      int nScaled = nIntensity * 0xc + (nIntensity * 0xc >> 0x1f & 7U);
+      int nIndex = nScaled >> 3;
+      if (bUseSoftwareRenderer) {
+        *pOutAlpha = gWeatherPaletteLightingSoftwareColors[nIndex];
+        return;
+      }
 
-    uint32_t nSignBits = nScaled >> 0x1f;
-    switch (nPeriodOfDay) {
-      case 2:
-        {
-          *pOutAlpha = gWeatherPaletteLightingNightColors[(int)(nIndex + (nSignBits & 3)) >> 2];
-          return;
-        }
-      default:
-        {
-          *pOutAlpha = gWeatherPaletteLightingNightColors[nIndex];
-          return;
-        }
-      case 1:
-        case 3:
+      uint32_t nSignBits = nScaled >> 0x1f;
+      switch (nPeriodOfDay) {
+        case 2:
           {
-            nIndex = (int)(nIndex - nSignBits) >> 1;
+            *pOutAlpha = gWeatherPaletteLightingNightColors[(int)(nIndex + (nSignBits & 3)) >> 2];
+            return;
+          }
+        default:
+          {
             *pOutAlpha = gWeatherPaletteLightingNightColors[nIndex];
             return;
           }
+        case 1:
+          case 3:
+            {
+              nIndex = (int)(nIndex - nSignBits) >> 1;
+              *pOutAlpha = gWeatherPaletteLightingNightColors[nIndex];
+              return;
+            }
+      }
+
+      return;
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x356);
+    exit(-1);
 }
 
 static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {

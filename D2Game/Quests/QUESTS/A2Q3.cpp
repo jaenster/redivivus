@@ -448,22 +448,23 @@ void __fastcall Q11_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
     Q11_OnPlayerInteract(pQuestData, pQuestArgs->pPlayer);
     /* GetQuestState(buf, A2Q3, 4=Step0x04) - set -> stateFlag=3 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_Step0x04);
-    if (!bQuestState) {
-      /* GetQuestState(buf, A2Q3, 3=Step0x03) - set -> stateFlag=2, else stateFlag=1
-                          */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_Step0x03);
-      if (bQuestState) {
-        pQuestData->nStateFlagPrev = 2;
-        pQuestData->nStateFlag = 2;
-        return;
-      }
-
-      pQuestData->nStateFlagPrev = 1;
-      pQuestData->nStateFlag = 1;
+    if (bQuestState) {
+      pQuestData->nStateFlagPrev = 2;
+      pQuestData->nStateFlag = 3;
       return;
     }
 
-    pQuestData->nStateFlagPrev = 2;
-    pQuestData->nStateFlag = 3;
+    /* GetQuestState(buf, A2Q3, 3=Step0x03) - set -> stateFlag=2, else stateFlag=1
+                          */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_Step0x03);
+    if (bQuestState) {
+      pQuestData->nStateFlagPrev = 2;
+      pQuestData->nStateFlag = 2;
+      return;
+    }
+
+    pQuestData->nStateFlagPrev = 1;
+    pQuestData->nStateFlag = 1;
+    return;
 }
 
 // A2Q3 - per-unit iterator cb (Q11_CheckViperAmuletRoomComplete): when a player is in the same level as the

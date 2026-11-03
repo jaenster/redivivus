@@ -11,31 +11,32 @@ namespace Fog::Source::SSComp {
 void __fastcall COMPRESS_HeapSiftDown(int32_t * pArray, int32_t nCount, int32_t nIndex) {
     int nChildBase;
     int nSiftValue = pArray[nIndex];
-    if (nIndex >= nCount / 2) {
+    if (!(nIndex >= nCount / 2)) {
+      while (true) {
+        int nChildIndex;
+        nChildBase = nIndex * 2;
+        nChildIndex = nChildBase + 1;
+        if (nChildIndex < nCount - 1 && pArray[nChildIndex] < pArray[nChildBase + 2]) {
+          nChildIndex = nChildBase + 2;
+        }
+        if (nSiftValue > pArray[nChildIndex]) {
+          break;
+        }
+
+        pArray[nIndex] = pArray[nChildIndex];
+        nIndex = nChildIndex;
+        if (nChildIndex >= nCount / 2) {
+          pArray[nChildIndex] = nSiftValue;
+          return;
+        }
+      }
+
       pArray[nIndex] = nSiftValue;
       return;
     }
 
-    while (true) {
-      int nChildIndex;
-      nChildBase = nIndex * 2;
-      nChildIndex = nChildBase + 1;
-      if (nChildIndex < nCount - 1 && pArray[nChildIndex] < pArray[nChildBase + 2]) {
-        nChildIndex = nChildBase + 2;
-      }
-      if (nSiftValue > pArray[nChildIndex]) {
-        break;
-      }
-
-      pArray[nIndex] = pArray[nChildIndex];
-      nIndex = nChildIndex;
-      if (nChildIndex >= nCount / 2) {
-        pArray[nChildIndex] = nSiftValue;
-        return;
-      }
-    }
-
     pArray[nIndex] = nSiftValue;
+    return;
 }
 
 void __fastcall COMPRESS_HeapSort(int32_t * pArray, int32_t nCount) {

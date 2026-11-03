@@ -86,7 +86,7 @@ uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, D
 }
 
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.
-void __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
+bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     // Static local variables (originally global data)
     static char * gaLanguageNames[15] = {
     s_English_006cc81c,
@@ -113,7 +113,7 @@ void __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     _SID_IDENTIFIER_AUTHORITY sNtAuthority;
     bool bVar1 = _3rdparty::crashy::IsOpen(pReport);
     if (!bVar1) {
-      return;
+      return false;
     }
 
     _3rdparty::crashy::Printf(pReport, "<Application>%s\n", g_szApplicationName);
@@ -201,6 +201,8 @@ void __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
 
       nLogIdx++;
     } while (nLogIdx < 0x15);
+
+    return true;
 }
 
 void __stdcall InitializeSystemInfo() {
@@ -551,7 +553,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
       if (iVar1 != '\0') {
         WriteCrashReportProcessInfo(&crashFile);
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.Summary:>\n%s\n<:Inspector.Summary>\n", szSummary, nAttachIndex);
-        if (nLineNumber) {
+        if (nLineNumber > 0) {
           _3rdparty::crashy::Printf(&crashFile, "<Inspector.LineNumber>%u\n", nLineNumber);
         }
 
@@ -4912,7 +4914,7 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
       SMem::SMemInitPerfCounters();
       iBitIdx = 0;
       do {
-        uCookie = 1 << ((uint8_t)iBitIdx & 0x1f);
+        uCookie = 1 << (iBitIdx & 0x1f);
         if (gadwBitMasks[iBitIdx] != uCookie) {
           nBadAddr = GetInstructionPointer();
           Safesock::WSACleanup();

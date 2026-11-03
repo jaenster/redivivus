@@ -1011,7 +1011,10 @@ int * __stdcall GetStateFlags(D2UnitStrc * pUnit) {
     }
 
     D2StatListExStrc* pStatsEx = pUnit->pStatsEx;
-    if (!(pStatsEx && pStatsEx->sStatList.nFlags & 0x80000000U)) {
+    if (!pStatsEx) {
+      return nullptr;
+    }
+    if (!(pStatsEx->sStatList.nFlags & 0x80000000U)) {
       return nullptr;
     }
 
@@ -1024,7 +1027,10 @@ int * __stdcall STATLIST_GetUnitGfxFlags(D2UnitStrc * pUnit) {
     }
 
     D2StatListExStrc* pStatsEx = pUnit->pStatsEx;
-    if (!(pStatsEx && pStatsEx->sStatList.nFlags & 0x80000000U)) {
+    if (!pStatsEx) {
+      return nullptr;
+    }
+    if (!(pStatsEx->sStatList.nFlags & 0x80000000U)) {
       return nullptr;
     }
 
@@ -1038,7 +1044,10 @@ int32_t __stdcall STATLIST_CopyStatsToBuffer(D2UnitStrc * pUnit, D2StatStrc * pS
     }
 
     D2StatListExStrc* pStatsEx = pUnit->pStatsEx;
-    if (!(pStatsEx && pStatsEx->sStatList.nFlags & 0x80000000U)) {
+    if (!pStatsEx) {
+      return 0;
+    }
+    if (!(pStatsEx->sStatList.nFlags & 0x80000000U)) {
       return 0;
     }
 

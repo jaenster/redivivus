@@ -238,7 +238,7 @@ static void DownloadSave(char * pBytes) {
     append_chunk:
     pDst = D2Game::Save::pRawSaveBuffer + D2Game::Save::nRawSaveBufferSize;
     int i = 0;
-    if (pBytes[1] != '\0') {
+    if ((uint8_t)pBytes[1] > '\0') {
       int nByteOffset;
       nByteOffset = 7 - (int)pDst;
       do {
@@ -766,41 +766,42 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x15_WarpXY(char * pBytes) {
 
     UNIT::CUnit::CLIENT_TeleportUnitToPosition(pUnit, (uint32_t)nX, (uint32_t)nY, (uint32_t)(uint8_t)pBytes[10]);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x538);
-      exit(-1);
-    }
-
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    eAct neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    pUnit->nAct = neAct;
-    pUnit->pDrlgAct = sgpDrlgAct;
-    if (pUnit->pPath.pStaticPath) {
-      BOOL bIsDead;
-      if (pUnit->eUnitType == UNIT_PLAYER) {
-        D2Common::PATH::DynamicPath::PATH_UpdateCollisionWidth(pUnit);
-        D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pUnit->pPath.pDynamicPath, 0x1c09);
-      } else if (pUnit->eUnitType == UNIT_MONSTER) {
-        bIsDead = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
-        if (!bIsDead) {
-          D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pUnit->pPath.pDynamicPath, 0x100);
+    if (pRoom) {
+      eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      eAct neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+      pUnit->nAct = neAct;
+      pUnit->pDrlgAct = sgpDrlgAct;
+      if (pUnit->pPath.pStaticPath) {
+        BOOL bIsDead;
+        if (pUnit->eUnitType == UNIT_PLAYER) {
+          D2Common::PATH::DynamicPath::PATH_UpdateCollisionWidth(pUnit);
+          D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pUnit->pPath.pDynamicPath, 0x1c09);
+        } else if (pUnit->eUnitType == UNIT_MONSTER) {
+          bIsDead = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
+          if (!bIsDead) {
+            D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pUnit->pPath.pDynamicPath, 0x100);
+          }
         }
       }
-    }
 
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    if (pUnit != pPlayerUnit_lcl) {
+      D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
+      if (pUnit != pPlayerUnit_lcl) {
+        return;
+      }
+
+      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+      int32_t nResult = D2Common::DUNGEON::Dungeon::Return0(pRoom);
+      if (nResult) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x81e);
+        exit(-1);
+      }
+
+      Game::GAMEDATA_ExtendTimeout(3000);
       return;
     }
 
-    pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    int32_t nResult = D2Common::DUNGEON::Dungeon::Return0(pRoom);
-    if (nResult) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x81e);
-      exit(-1);
-    }
-
-    Game::GAMEDATA_ExtendTimeout(3000);
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x538);
+    exit(-1);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x17_UNITPATH(D2UnitStrc * pUnit, char * pBytes) {

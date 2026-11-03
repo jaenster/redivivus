@@ -3166,15 +3166,16 @@ void __fastcall QServer_AlternativeDisconnect(uint32_t nClientId, uint32_t nDisc
     }
 
     BOOL bIsInGame = Clients::IsClientInGame(pGame, nClientId);
-    if (bIsInGame) {
-      D2ClientStrc* pClient;
-      pClient = Clients::SERVER_GetClientFromGmeByClientId(pGame, nClientId);
-      SERVER_DisconnectClient(pGame, pClient, (uint8_t)nDisconnectReason);
+    if (!bIsInGame) {
       Server::Unlock(pGame);
       return;
     }
 
+    D2ClientStrc* pClient;
+    pClient = Clients::SERVER_GetClientFromGmeByClientId(pGame, nClientId);
+    SERVER_DisconnectClient(pGame, pClient, (uint8_t)nDisconnectReason);
     Server::Unlock(pGame);
+    return;
 }
 
 BOOL __stdcall QSERVER_DisconnectClientByName(char * szClientName, uint32_t nReason) {

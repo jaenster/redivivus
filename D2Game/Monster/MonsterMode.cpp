@@ -1577,23 +1577,33 @@ static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, eD2Monst
 void __fastcall MONMODE_DispatchDeathDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     int nCurrentAnimMode = !pUnit ? 0 : pUnit->eAnimMode.eMonsterMode;
     D2AiDispatchCallbacksStrc* pDropHandler = GetDropHandler(pUnit, nCurrentAnimMode);
-    if (pDropHandler && pDropHandler->pFn2) {
-      pDropHandler->pFn2(pGame, (D2MonsterKillStrc*)pUnit);
+    if (!pDropHandler) {
+      MONSTER_InitiateDefaultDeath(pGame, nCurrentAnimMode, pUnit);
+      return;
+    }
+    if (!pDropHandler->pFn2) {
+      MONSTER_InitiateDefaultDeath(pGame, nCurrentAnimMode, pUnit);
       return;
     }
 
-    MONSTER_InitiateDefaultDeath(pGame, nCurrentAnimMode, pUnit);
+    pDropHandler->pFn2(pGame, (D2MonsterKillStrc*)pUnit);
+    return;
 }
 
 void __fastcall ExecuteDropHandlerFn3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     eD2MonsterAnimMode eUnitAnimMode = !pUnit ? Death : pUnit->eAnimMode.eMonsterMode;
     D2AiDispatchCallbacksStrc* pDropHandler = GetDropHandler(pUnit, eUnitAnimMode);
-    if (pDropHandler && pDropHandler->pFn3) {
-      pDropHandler->pFn3(pGame, pUnit);
+    if (!pDropHandler) {
+      MONSTER_InitiateDefaultDeath(pGame, eUnitAnimMode, pUnit);
+      return;
+    }
+    if (!pDropHandler->pFn3) {
+      MONSTER_InitiateDefaultDeath(pGame, eUnitAnimMode, pUnit);
       return;
     }
 
-    MONSTER_InitiateDefaultDeath(pGame, eUnitAnimMode, pUnit);
+    pDropHandler->pFn3(pGame, pUnit);
+    return;
 }
 
 // Server-side monster mode/lifecycle transition driver. Given a D2MonsterKillStrc (victim, attacker/target, requested nUnitMode), validates the victim is a monster, halts on a stuck uninterruptable state, then for non-GetHit modes sets the dynamic-path target/SP and recomputes combat stats & UMod-on-spawn. Looks up the per-mode AI drop/death handler (GetDropHandler) and invokes its pFn1; on a 0 result clears the current skill and schedules execution (PlanExecutionOfMonster). Flags MONMODEISCHANGING, re-inits the anim frame, applies velocity%, dispatches UMod-on-death, then re-resolves the handler for the unit's actual anim mode to (re)arm or clear anim timer events. Returns pFn1's result, or 0 (falling through to MONSTER_InitiateDefaultDeath) when no actual-mode handler exists. __stdcall(pGame,pMonsterKill,nParam).

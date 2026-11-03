@@ -509,7 +509,7 @@ void __fastcall DRLGWARP_InitWarpConnectionsBetweenLevels(D2DrlgStrc * pDrlg, ui
       DRLGACTMISC_GetWarpsIdIfExists(pSrcLevel->pDrlg, pSrcLevel->eD2LevelId);
       DRLGACTMISC_GetWarpsIdIfExists(pDstLevel->pDrlg, pDstLevel->eD2LevelId);
       for (pSrcRoomEx = pSrcLevel->pRoomExFirst; pSrcRoomEx; pSrcRoomEx = pSrcRoomEx->pRoomExNext) {
-        if (pSrcRoomEx->eRoomExFlags & 1 << ((char)nSrcVisSlot + 4U & 0x1f)) {
+        if (pSrcRoomEx->eRoomExFlags & 1 << (nSrcVisSlot + 4U & 0x1f)) {
           goto find_dst_warp_room;
         }
       }
@@ -517,7 +517,7 @@ void __fastcall DRLGWARP_InitWarpConnectionsBetweenLevels(D2DrlgStrc * pDrlg, ui
       pSrcRoomEx = 0;
       find_dst_warp_room:
       for (pDstRoomEx = pDstLevel->pRoomExFirst; pDstRoomEx; pDstRoomEx = pDstRoomEx->pRoomExNext) {
-        if (pDstRoomEx->eRoomExFlags & 1 << ((char)nDstVisSlot + 4U & 0x1f)) {
+        if (pDstRoomEx->eRoomExFlags & 1 << (nDstVisSlot + 4U & 0x1f)) {
           goto init_warp_rooms;
         }
       }

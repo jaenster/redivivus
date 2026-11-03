@@ -1346,8 +1346,7 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

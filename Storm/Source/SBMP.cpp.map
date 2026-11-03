@@ -270,6 +270,9 @@
       "namespace": "Storm::Source::SBMP",
       "calledFunctions": [
         "SBMP_DetermineImageType"
+      ],
+      "usedTypes": [
+        "uint16_t"
       ]
     },
     {

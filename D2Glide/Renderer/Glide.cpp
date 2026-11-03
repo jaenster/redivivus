@@ -106,7 +106,7 @@ BOOL __fastcall SetGamma(int32_t nGamma) {
         FVar1 = 0;
         if (nGrGetResult) {
           pGammaTable = (FxU32*)Storm::Source::SMem::SMemAlloc(nTableSize * 4, ".\\Src\\glCore.cpp", 0x42f, 0);
-          Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, pGammaTable, (double)gbWINDOWED, (uint32_t*)0x4, nTableSize, (1 << ((uint8_t)fGammaVal.nValue & 0x1f)) - 1);
+          Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, pGammaTable, (double)gbWINDOWED, (uint32_t*)0x4, nTableSize, (1 << (fGammaVal.nValue & 0x1f)) - 1);
           (*GLIDEDLL_grLoadGammaTable_16)(nTableSize, pGammaTable, pGammaTable, pGammaTable);
           nFreeResult = Storm::Source::SMem::SMemFree(pGammaTable, ".\\Src\\glCore.cpp", 0x43a, 0);
           return nFreeResult;

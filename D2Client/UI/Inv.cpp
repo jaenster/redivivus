@@ -1801,201 +1801,202 @@ void __stdcall szPrintfBuffer(D2UnitStrc * pUnit, uint16_t * wszText) {
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     uint32_t nTypeCheck = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_MissilePotion);
-    if (!nTypeCheck) {
-      BOOL BVar1;
-      bIsDamageModified = 0;
-      nElemMinDamage = D2Common::ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pPlayerUnit_lcl, pUnit);
-      if (nElemMinDamage) {
-        INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_secondary_mindamage, UNITSTAT_secondary_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
-        for (iDurationFrames = 0; iDurationFrames < 0x80; iDurationFrames++) {
-          wszTwoHandDamageBuffer[iDurationFrames] = L'\0';
-        }
-
-        pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd8a);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTwoHandDamageBuffer, pwLocaleStr);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwColorPrefix);
-        Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMinDamage);
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 5);
-        if (bIsDamageModified) {
-          ui::AppendAsWideChar(wszTempBuffer, 3);
-        }
-
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, wszTempBuffer);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwColorPrefix);
-        pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwLocaleStr);
-        Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMaxDamage);
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 5);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwColorPrefix);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, wszTempBuffer);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwColorSuffix);
-        INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_mindamage, UNITSTAT_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
-        pszBufCursor = wszDamageTextBuf + 0x80;
-        for (iDurationFrames = 0x40; iDurationFrames; iDurationFrames--) {
-          pszBufCursor[0] = L'\0';
-          pszBufCursor[1] = L'\0';
-          pszBufCursor += 2;
-        }
-
-        pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd89);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszDamageTextBuf + 0x80, pwLocaleStr);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwColorPrefix);
-        Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMinDamage);
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 5);
-        if (bIsDamageModified) {
-          ui::AppendAsWideChar(wszTempBuffer, 3);
-        }
-
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, wszTempBuffer);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwColorPrefix);
-        pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwLocaleStr);
-        Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMaxDamage);
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 5);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwColorPrefix);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, wszTempBuffer);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwColorSuffix);
-        ui::AppendAsWideChar(wszTwoHandDamageBuffer, 0);
-        ui::AppendAsWideChar(wszDamageTextBuf + 0x80, 0);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszTwoHandDamageBuffer);
-        pwLocaleStr = wszDamageTextBuf + 0x80;
-      } else {
-        BVar1 = D2Common::ITEMS::Items::IsTwoHanded(pUnit);
-        if (BVar1) {
-          INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_secondary_mindamage, UNITSTAT_secondary_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
-          wStringId = 0xd8a;
-        } else {
-          INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_mindamage, UNITSTAT_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
-          wStringId = 0xd89;
-        }
-        if (nMaxDamage <= (int)(nMinDamage + 1)) {
-          nMaxDamage = nMinDamage + 1;
-        }
-
-        pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwLocaleStr);
-        Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMinDamage);
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
-        if (bIsDamageModified) {
-          ui::AppendAsWideChar(wszTempBuffer, 3);
-        }
-
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszTempBuffer);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
-        pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwLocaleStr);
-        Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMaxDamage);
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszTempBuffer);
-        pwLocaleStr = pwColorSuffix;
+    if (nTypeCheck) {
+      nTypeCheck = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wMissileType(pUnit);
+      pszBufCursor = wszDamageTextBuf;
+      nMinDamage = nTypeCheck;
+      for (iDurationFrames = 0x80; iDurationFrames; iDurationFrames--) {
+        pszBufCursor[0] = L'\0';
+        pszBufCursor[1] = L'\0';
+        pszBufCursor += 2;
       }
 
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwLocaleStr);
-      bIsDamageModified = 0;
-      nElemMinDamage = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_mindamage_percent, 0);
-      if (nElemMinDamage || (nElemMinDamage = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_maxdamage_percent, 0) , nElemMinDamage != 0) || (nElemMinDamage = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_throw_mindamage, 0) , nElemMinDamage != 0) || (nElemMinDamage = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_throw_maxdamage, 0) , nElemMinDamage != 0)) {
-        bIsDamageModified = 1;
-      }
-
-      nElemMinDamage = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pUnit);
-      if (!nElemMinDamage) {
-        return;
-      }
-
-      for (iDurationFrames = 0; iDurationFrames < 0x100; iDurationFrames++) {
-        wszDamageTextBuf[iDurationFrames] = L'\0';
-      }
-
+      int nUnit = 0x0;
+      nElemMinDamage = D2Common::Units::Missile::GetMinElemDamage(nullptr, pPlayerUnit_lcl, nTypeCheck, 1);
+      nMaxDamage = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
       pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd8b);
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszDamageTextBuf, pwLocaleStr);
       ui::AppendAsWideChar(wszDamageTextBuf, 0);
-      INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_item_throw_mindamage, UNITSTAT_item_throw_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
-      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMinDamage);
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
-      nColor = bIsDamageModified ? 3 : 0;
-      ui::AppendAsWideChar(wszTempBuffer, nColor);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, wszTempBuffer);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
-      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwLocaleStr);
-      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMaxDamage);
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
-      ui::AppendAsWideChar(wszTempBuffer, nColor);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, wszTempBuffer);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorSuffix);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszDamageTextBuf);
-      return;
-    }
+      uint8_t bColorCode = D2Common::Units::Missile::GetElemTypeFromMissileId(nMinDamage);
+      switch (bColorCode) {
+        case 5:
+          nUnit = (int)(void*)0x2;
+        nElemDuration = D2Common::Units::Missile::GetElementalLength(0, pPlayerUnit_lcl, nMinDamage, 1);
+        iDurationFrames = nElemDuration / 0x19;
+        if (iDurationFrames <= 0) {
+          iDurationFrames = 1;
+        }
 
-    nTypeCheck = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wMissileType(pUnit);
-    pszBufCursor = wszDamageTextBuf;
-    nMinDamage = nTypeCheck;
-    for (iDurationFrames = 0x80; iDurationFrames; iDurationFrames--) {
-      pszBufCursor[0] = L'\0';
-      pszBufCursor[1] = L'\0';
-      pszBufCursor += 2;
-    }
-
-    int nUnit = 0x0;
-    nElemMinDamage = D2Common::Units::Missile::GetMinElemDamage(nullptr, pPlayerUnit_lcl, nTypeCheck, 1);
-    nMaxDamage = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
-    pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd8b);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszDamageTextBuf, pwLocaleStr);
-    ui::AppendAsWideChar(wszDamageTextBuf, 0);
-    uint8_t bColorCode = D2Common::Units::Missile::GetElemTypeFromMissileId(nMinDamage);
-    switch (bColorCode) {
-      case 5:
-        nUnit = (int)(void*)0x2;
-      nElemDuration = D2Common::Units::Missile::GetElementalLength(0, pPlayerUnit_lcl, nMinDamage, 1);
-      iDurationFrames = nElemDuration / 0x19;
-      if (iDurationFrames <= 0) {
-        iDurationFrames = 1;
+        nElemMinDamage /= iDurationFrames;
+        nMaxDamage /= iDurationFrames;
+        break;
+        case 4:
+          nUnit = 0x3;
+        break;
+        case 1:
+          nUnit = 0x1;
+        break;
+        case 2:
+          nUnit = (int)(void*)0x4;
+        break;
       }
 
-      nElemMinDamage /= iDurationFrames;
-      nMaxDamage /= iDurationFrames;
-      break;
-      case 4:
-        nUnit = 0x3;
-      break;
-      case 1:
-        nUnit = 0x1;
-      break;
-      case 2:
-        nUnit = (int)(void*)0x4;
-      break;
-    }
+      nElemDuration = D2Common::Units::Missile::GetMinDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
+      int nCalcMinDamage = nElemMinDamage + nElemDuration >> 8;
+      nElemMinDamage = D2Common::Units::Missile::GetMaxDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
+      iDurationFrames = nElemMinDamage + nMaxDamage >> 8;
+      if (iDurationFrames <= nCalcMinDamage) {
+        iDurationFrames = nCalcMinDamage;
+      }
 
-    nElemDuration = D2Common::Units::Missile::GetMinDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
-    int nCalcMinDamage = nElemMinDamage + nElemDuration >> 8;
-    nElemMinDamage = D2Common::Units::Missile::GetMaxDamage(nullptr, pPlayerUnit_lcl, nMinDamage, 1);
-    iDurationFrames = nElemMinDamage + nMaxDamage >> 8;
-    if (iDurationFrames <= nCalcMinDamage) {
-      iDurationFrames = nCalcMinDamage;
-    }
-
-    Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nCalcMinDamage);
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
-    ui::AppendAsWideChar(wszTempBuffer, nUnit);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, wszTempBuffer);
-    if (nCalcMinDamage != iDurationFrames) {
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
-      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwLocaleStr);
-      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", iDurationFrames);
+      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nCalcMinDamage);
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
       ui::AppendAsWideChar(wszTempBuffer, nUnit);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, wszTempBuffer);
+      if (nCalcMinDamage != iDurationFrames) {
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
+        pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwLocaleStr);
+        Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", iDurationFrames);
+        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
+        ui::AppendAsWideChar(wszTempBuffer, nUnit);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, wszTempBuffer);
+      }
+
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorSuffix);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszDamageTextBuf);
+      return;
     }
 
+    BOOL BVar1;
+    bIsDamageModified = 0;
+    nElemMinDamage = D2Common::ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pPlayerUnit_lcl, pUnit);
+    if (nElemMinDamage) {
+      INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_secondary_mindamage, UNITSTAT_secondary_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
+      for (iDurationFrames = 0; iDurationFrames < 0x80; iDurationFrames++) {
+        wszTwoHandDamageBuffer[iDurationFrames] = L'\0';
+      }
+
+      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd8a);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTwoHandDamageBuffer, pwLocaleStr);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwColorPrefix);
+      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMinDamage);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 5);
+      if (bIsDamageModified) {
+        ui::AppendAsWideChar(wszTempBuffer, 3);
+      }
+
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, wszTempBuffer);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwColorPrefix);
+      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwLocaleStr);
+      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMaxDamage);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 5);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwColorPrefix);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, wszTempBuffer);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszTwoHandDamageBuffer, pwColorSuffix);
+      INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_mindamage, UNITSTAT_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
+      pszBufCursor = wszDamageTextBuf + 0x80;
+      for (iDurationFrames = 0x40; iDurationFrames; iDurationFrames--) {
+        pszBufCursor[0] = L'\0';
+        pszBufCursor[1] = L'\0';
+        pszBufCursor += 2;
+      }
+
+      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd89);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszDamageTextBuf + 0x80, pwLocaleStr);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwColorPrefix);
+      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMinDamage);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 5);
+      if (bIsDamageModified) {
+        ui::AppendAsWideChar(wszTempBuffer, 3);
+      }
+
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, wszTempBuffer);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwColorPrefix);
+      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwLocaleStr);
+      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMaxDamage);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 5);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwColorPrefix);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, wszTempBuffer);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf + 0x80, pwColorSuffix);
+      ui::AppendAsWideChar(wszTwoHandDamageBuffer, 0);
+      ui::AppendAsWideChar(wszDamageTextBuf + 0x80, 0);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszTwoHandDamageBuffer);
+      pwLocaleStr = wszDamageTextBuf + 0x80;
+    } else {
+      BVar1 = D2Common::ITEMS::Items::IsTwoHanded(pUnit);
+      if (BVar1) {
+        INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_secondary_mindamage, UNITSTAT_secondary_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
+        wStringId = 0xd8a;
+      } else {
+        INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_mindamage, UNITSTAT_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
+        wStringId = 0xd89;
+      }
+      if (nMaxDamage <= (int)(nMinDamage + 1)) {
+        nMaxDamage = nMinDamage + 1;
+      }
+
+      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwLocaleStr);
+      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMinDamage);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
+      if (bIsDamageModified) {
+        ui::AppendAsWideChar(wszTempBuffer, 3);
+      }
+
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszTempBuffer);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
+      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwLocaleStr);
+      Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMaxDamage);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszTempBuffer);
+      pwLocaleStr = pwColorSuffix;
+    }
+
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwLocaleStr);
+    bIsDamageModified = 0;
+    nElemMinDamage = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_mindamage_percent, 0);
+    if (nElemMinDamage || (nElemMinDamage = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_maxdamage_percent, 0) , nElemMinDamage != 0) || (nElemMinDamage = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_throw_mindamage, 0) , nElemMinDamage != 0) || (nElemMinDamage = D2Common::Stats::StatsEx::STATLIST_GetStatBonusFromLists(pUnit, UNITSTAT_item_throw_maxdamage, 0) , nElemMinDamage != 0)) {
+      bIsDamageModified = 1;
+    }
+
+    nElemMinDamage = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pUnit);
+    if (!nElemMinDamage) {
+      return;
+    }
+
+    for (iDurationFrames = 0; iDurationFrames < 0x100; iDurationFrames++) {
+      wszDamageTextBuf[iDurationFrames] = L'\0';
+    }
+
+    pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd8b);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszDamageTextBuf, pwLocaleStr);
+    ui::AppendAsWideChar(wszDamageTextBuf, 0);
+    INV_CalcWeaponDamageRange(pPlayerUnit_lcl, UNITSTAT_item_throw_mindamage, UNITSTAT_item_throw_maxdamage, (int*)&nMinDamage, &nMaxDamage, &bIsDamageModified, pUnit);
+    Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMinDamage);
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
+    nColor = bIsDamageModified ? 3 : 0;
+    ui::AppendAsWideChar(wszTempBuffer, nColor);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, wszTempBuffer);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
+    pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwLocaleStr);
+    Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 0x100, "%i", nMaxDamage);
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempBuffer, szPrintfBuffer, 9);
+    ui::AppendAsWideChar(wszTempBuffer, nColor);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorPrefix);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, wszTempBuffer);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszDamageTextBuf, pwColorSuffix);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszDamageTextBuf);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszDamageTextBuf);
+    return;
 }
 
 static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt * pItemsTxt, D2UnitStrc * pUnit) {
@@ -3008,77 +3009,78 @@ static void __stdcall INV_UpdateItemUnderCursor(D2UnitStrc * pUnit, D2InventoryS
     int32_t nYPos = D2Common::Units::GetInventoryPage(pUnit, (uint8_t)nPage, bExpansion);
     uint32_t nCol = (nMouseX - pGridLayout->nPixelLeft) / (uint32_t)pGridLayout->nCellWidth;
     uint32_t nRow = (uint32_t)(nMouseY - pGridLayout->nTop) / (uint32_t)pGridLayout->nCellHeight;
-    if (!pCursorItem) {
-      D2UnitStrc* pItemAtCell;
-      pItemAtCell = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory, nCol, nRow, &nCellX, &nCellY, nYPos, (uint8_t)nPage);
-      if (pItemAtCell) {
-        gpInvItemUnderCursor = 1;
-        if (pItemAtCell != gpInvHoveredItem) {
-          D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemAtCell, (char*)((uintptr_t)&pCursorItem + 3), (char*)((uintptr_t)&nMouseX + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
-          nMouseY = Units::GetXPosFromDynamicPathUnit(pItemAtCell);
-          nYPos = Units::GetYPosFromDynamicPathUnit(pItemAtCell);
-          gaInventoryItemSlots = ((uint32_t)pCursorItem >> 0x18) * (uint32_t)pGridLayout->nCellWidth / 2 + (uint32_t)pGridLayout->nCellWidth * nMouseY + pGridLayout->nPixelLeft;
-          nInventoryContextMode = gaInventoryItemSlots;
-          pItemToDescribe = pItemAtCell;
-          gpInvHoveredItem = pItemAtCell;
-          gaInventoryState = (uint32_t)pGridLayout->nCellHeight * nYPos + pGridLayout->nTop;
-          pInventoryContextUi = ((nMouseX >> 0x18) + nYPos) * (uint32_t)pGridLayout->nCellHeight + pGridLayout->nTop;
-          return;
-        }
-      } else {
-        gpInvItemUnderCursor = 0;
-        gpInvHoveredItem = 0;
-        pItemToDescribe = 0;
+    if (pCursorItem) {
+      D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pCursorItem, (char*)((uintptr_t)&nPage + 3), (char*)((uintptr_t)&pUnit + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
+      Engine::GfxUtil::GFXUTIL_GetOverlayDimensions(pCursorItem, 0, 0, (uint32_t*)&pInventory, &nOverlayHeight);
+      bool bCentered = !(nPage & 0x1000000);
+      if (bCentered) {
+        nCol = (((uint32_t)pInventory >> 2) - pGridLayout->nPixelLeft + nMouseX) / (uint32_t)pGridLayout->nCellWidth;
       }
 
+      uint8_t byGridWidth = pGridLayout->nGridCols;
+      if (*(uint8_t*)((char*)&nPage + 3) == byGridWidth) {
+        nCol = (uint32_t)(byGridWidth >> 1);
+      }
+
+      bCentered = !((uint32_t)pUnit & 0x1000000);
+      if (bCentered) {
+        nRow = ((nOverlayHeight >> 2) - pGridLayout->nTop + nMouseY) / (uint32_t)pGridLayout->nCellHeight;
+      }
+
+      uint8_t byGridHeight = pGridLayout->nGridRows;
+      if (*(uint8_t*)((char*)&pUnit + 3) == byGridHeight) {
+        nRow = (uint32_t)(byGridHeight >> 1);
+      }
+      if (*(uint8_t*)((char*)&nPage + 3) > 1) {
+        nCol -= *(uint8_t*)((char*)&nPage + 3) >> 1;
+        if ((int)nCol < 0) {
+          nCol = 0;
+        }
+        if ((int)(*(uint8_t*)((char*)&nPage + 3) + nCol) > (int)(uint32_t)byGridWidth) {
+          return;
+        }
+      }
+      if (1 < *(uint8_t*)((char*)&pUnit + 3)) {
+        nRow -= *(uint8_t*)((char*)&pUnit + 3) >> 1;
+        if ((int)nRow < 0) {
+          nRow = 0;
+        }
+        if ((int)(*(uint8_t*)((char*)&pUnit + 3) + nRow) > (int)(uint32_t)byGridHeight) {
+          return;
+        }
+      }
+
+      gaInventorySelectState = nRow;
+      gpInventoryContextUi = nCol;
+      gpInvItemUnderCursor = 1;
+      gpInvHoveredItem = 0;
+      pItemToDescribe = 0;
       return;
     }
 
-    D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pCursorItem, (char*)((uintptr_t)&nPage + 3), (char*)((uintptr_t)&pUnit + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
-    Engine::GfxUtil::GFXUTIL_GetOverlayDimensions(pCursorItem, 0, 0, (uint32_t*)&pInventory, &nOverlayHeight);
-    bool bCentered = !(nPage & 0x1000000);
-    if (bCentered) {
-      nCol = (((uint32_t)pInventory >> 2) - pGridLayout->nPixelLeft + nMouseX) / (uint32_t)pGridLayout->nCellWidth;
-    }
-
-    uint8_t byGridWidth = pGridLayout->nGridCols;
-    if (*(uint8_t*)((char*)&nPage + 3) == byGridWidth) {
-      nCol = (uint32_t)(byGridWidth >> 1);
-    }
-
-    bCentered = !((uint32_t)pUnit & 0x1000000);
-    if (bCentered) {
-      nRow = ((nOverlayHeight >> 2) - pGridLayout->nTop + nMouseY) / (uint32_t)pGridLayout->nCellHeight;
-    }
-
-    uint8_t byGridHeight = pGridLayout->nGridRows;
-    if (*(uint8_t*)((char*)&pUnit + 3) == byGridHeight) {
-      nRow = (uint32_t)(byGridHeight >> 1);
-    }
-    if (*(uint8_t*)((char*)&nPage + 3) > 1) {
-      nCol -= *(uint8_t*)((char*)&nPage + 3) >> 1;
-      if ((int)nCol < 0) {
-        nCol = 0;
-      }
-      if ((int)(*(uint8_t*)((char*)&nPage + 3) + nCol) > (int)(uint32_t)byGridWidth) {
+    D2UnitStrc* pItemAtCell;
+    pItemAtCell = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory, nCol, nRow, &nCellX, &nCellY, nYPos, (uint8_t)nPage);
+    if (pItemAtCell) {
+      gpInvItemUnderCursor = 1;
+      if (pItemAtCell != gpInvHoveredItem) {
+        D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemAtCell, (char*)((uintptr_t)&pCursorItem + 3), (char*)((uintptr_t)&nMouseX + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
+        nMouseY = Units::GetXPosFromDynamicPathUnit(pItemAtCell);
+        nYPos = Units::GetYPosFromDynamicPathUnit(pItemAtCell);
+        gaInventoryItemSlots = ((uint32_t)pCursorItem >> 0x18) * (uint32_t)pGridLayout->nCellWidth / 2 + (uint32_t)pGridLayout->nCellWidth * nMouseY + pGridLayout->nPixelLeft;
+        nInventoryContextMode = gaInventoryItemSlots;
+        pItemToDescribe = pItemAtCell;
+        gpInvHoveredItem = pItemAtCell;
+        gaInventoryState = (uint32_t)pGridLayout->nCellHeight * nYPos + pGridLayout->nTop;
+        pInventoryContextUi = ((nMouseX >> 0x18) + nYPos) * (uint32_t)pGridLayout->nCellHeight + pGridLayout->nTop;
         return;
       }
-    }
-    if (1 < *(uint8_t*)((char*)&pUnit + 3)) {
-      nRow -= *(uint8_t*)((char*)&pUnit + 3) >> 1;
-      if ((int)nRow < 0) {
-        nRow = 0;
-      }
-      if ((int)(*(uint8_t*)((char*)&pUnit + 3) + nRow) > (int)(uint32_t)byGridHeight) {
-        return;
-      }
+    } else {
+      gpInvItemUnderCursor = 0;
+      gpInvHoveredItem = 0;
+      pItemToDescribe = 0;
     }
 
-    gaInventorySelectState = nRow;
-    gpInventoryContextUi = nCol;
-    gpInvItemUnderCursor = 1;
-    gpInvHoveredItem = 0;
-    pItemToDescribe = 0;
+    return;
 }
 
 static void __stdcall INV_UpdateBodySlotUnderCursor(int32_t nBodyLoc, D2UnitStrc * pUnit, D2InventoryStrc * pInventory) {
@@ -6994,6 +6996,170 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           pwFormatStr = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
           wsprintf(pwOutBuffer, pwFormatStr, pwLocaleStr, pwFmtStr, dwArgsEnd);
           break;
+          case 6:
+
+          case 8:
+
+          case 9:
+            nAffixId = D2Common::ITEMS::Items::GetRarePrefix(pUnit);
+          pPrefixAffix = (D2MagicAffixTxt*)D2Common::DATATBLS::ItemTbls::TXT_RareAffixes_GetLine((uint32_t)nAffixId);
+          pPrefixAffix2 = pPrefixAffix;
+          nAffixId = D2Common::ITEMS::Items::GetRareSuffix(pUnit);
+          pSuffixAffix = D2Common::DATATBLS::ItemTbls::TXT_RareAffixes_GetLine((uint32_t)nAffixId);
+          if (pPrefixAffix) {
+            if (*(uint16_t*)(pPrefixAffix->name + 0xc)) {
+              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pPrefixAffix->name + 0xc));
+              pcNameDst = (uint8_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
+              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pPrefixAffix2->name + 0xc));
+              D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPrefix, pwLocaleStr);
+            } else {
+              pwLocaleStr2 = (char*)((uintptr_t)&pPrefixAffix->mod[0].code + 2);
+              __frame0.szUtf8Buf[0] = 0x28;
+              __frame0.szUtf8Buf[1] = 0;
+              strcat((char*)__frame0.szUtf8Buf, pwLocaleStr2);
+              pcNameDst = __frame0.szUtf8Buf;
+              strcat((char*)__frame0.szUtf8Buf, ")");
+              pcNameDst = pcNameDst + strlen((char*)pcNameDst) + 1;
+              D2Lang::UTF8_ConvertToWideChar(wszPrefix, (char*)__frame0.szUtf8Buf, 0x200);
+              pcNameDst += -(int)(__frame0.szUtf8Buf + 1);
+              pUnit = pUnitSaved;
+              pItemsTxt = pItemsTxtSaved;
+            }
+          } else {
+            wszPrefix[0] = L'\0';
+            pcNameDst = wszEarLevel[0];
+          }
+          if (pSuffixAffix) {
+            if (pSuffixAffix->wNameStrId) {
+              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSuffixAffix->wNameStrId);
+              nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
+              pcNameDst += nErrorLine;
+              if (pPrefixAffix2) {
+                pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSuffixAffix->wNameStrId);
+                D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, pwLocaleStr);
+              } else {
+                pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSuffixAffix->wNameStrId);
+                D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSuffix, pwLocaleStr);
+              }
+            } else {
+              Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              pcNameSrc = pSuffixAffix->name;
+              __frame0.szUtf8Buf[0] = 0x28;
+              __frame0.szUtf8Buf[1] = 0;
+              strcat((char*)__frame0.szUtf8Buf, pSuffixAffix->name);
+              strcat((char*)__frame0.szUtf8Buf, ")");
+              D2Lang::UTF8_ConvertToWideChar(wszNameScratch, (char*)__frame0.szUtf8Buf, 0x200);
+              nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszNameScratch);
+              pcNameDst += nErrorLine;
+              if (pPrefixAffix2) {
+                D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, wszNameScratch);
+                pUnit = pUnitSaved;
+                pItemsTxt = pItemsTxtSaved;
+              } else {
+                D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSuffix, wszNameScratch);
+                pUnit = pUnitSaved;
+                pItemsTxt = pItemsTxtSaved;
+              }
+            }
+          } else {
+            wszSuffix[0] = L'\0';
+          }
+
+          pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
+          nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
+          if ((int)(pcNameDst + nErrorLine + 3) >= (int)nSize) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x822);
+            exit(-1);
+          }
+
+          Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBaseName, pwLocaleStr);
+          pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszBaseName);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLargeWorkBuf, pwLocaleStr);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(wszLargeWorkBuf, pwSeparator);
+          __frame0.wszRareName = L'\0';
+          Fog::File::CONTAINER_InitializeBuffer(__frame0.wszRareNameBuf, 2, 199, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          wsprintf(&__frame0.wszRareName, D2Lang::StrTable::strtable::GetLocaleString(0x6b6), wszPrefix, wszSuffix, 0);
+          Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          bFlagCheck = INV_FormatPlayerNameWithBase(wszScratch, &__frame0.wszRareName, pUnit);
+          pwLocaleStr = wszScratch;
+          if (!bFlagCheck) {
+            pwLocaleStr = &__frame0.wszRareName;
+          }
+
+          D2Lang::Unicode::UNISYS::AppendToBuffer(wszLargeWorkBuf, pwLocaleStr);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, wszLargeWorkBuf);
+          pUnit = pUnitSaved;
+          break;
+          case 7:
+            Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+          pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNameScratch, pwLocaleStr);
+          iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
+          if (iScratch >= 0) {
+            iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
+            pUniqueItemsTxt = DataTbls::INV_GetUniqueItemsTxtLine(iScratch);
+            if (pUniqueItemsTxt) {
+              if (pItemsTxt->bSkipName == '\0') {
+                pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszNameScratch);
+                D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
+                D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, pwSeparator);
+              }
+
+              Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pUniqueItemsTxt->wNameStr);
+              pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(pwLocaleStr);
+              bFlagCheck = INV_FormatPlayerNameWithBase(wszScratch, pwLocaleStr, pUnit);
+              if (bFlagCheck) {
+                D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, wszScratch);
+              } else {
+                pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pUniqueItemsTxt->wNameStr);
+                pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(pwLocaleStr);
+                D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, pwLocaleStr);
+              }
+
+              break;
+            }
+          }
+
+          pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszNameScratch);
+          D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
+          break;
+          case 5:
+            iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
+          pSetItemsTxt = DataTbls::GetSetItemsLine(iScratch);
+          pItemsTxt = pItemsTxtSaved;
+          if (pSetItemsTxt) {
+            Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+            pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxtSaved->wNameStr);
+            D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszScratch, pwLocaleStr);
+            pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszScratch);
+            pwOutCursor = pwOutBuffer;
+            D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
+            D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwSeparator);
+            pItemsTxt = pItemsTxtSaved;
+            if (pSetItemsTxt->stringId) {
+              Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId);
+              D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNameScratch, pwLocaleStr);
+              bFlagCheck = INV_FormatPlayerNameWithBase(wszBaseName, wszNameScratch, pUnit);
+              if (bFlagCheck) {
+                pwLocaleStr = wszBaseName;
+              } else {
+                __frame0.wszPossessive[0] = L'\0';
+                Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
+                wsprintf(__frame0.wszPossessive, D2Lang::StrTable::strtable::GetLocaleString(0x2769), wszNameScratch, 0);
+                pwLocaleStr = __frame0.wszPossessive;
+              }
+
+              D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwLocaleStr);
+              pItemsTxt = pItemsTxtSaved;
+            }
+          }
+
+          break;
           case 4:
             nAffixId = D2Common::ITEMS::Items::GetMagicPrefix(pUnit, 0);
           pPrefixAffix = D2Common::DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint32_t)nAffixId);
@@ -7076,170 +7242,6 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           }
 
           wsprintf(pwOutBuffer, D2Lang::StrTable::strtable::GetLocaleString(0x6b2), wszPrefix, D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr), wszSuffix, 0);
-          break;
-          case 5:
-            iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-          pSetItemsTxt = DataTbls::GetSetItemsLine(iScratch);
-          pItemsTxt = pItemsTxtSaved;
-          if (pSetItemsTxt) {
-            Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-            pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxtSaved->wNameStr);
-            D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszScratch, pwLocaleStr);
-            pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszScratch);
-            pwOutCursor = pwOutBuffer;
-            D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
-            D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwSeparator);
-            pItemsTxt = pItemsTxtSaved;
-            if (pSetItemsTxt->stringId) {
-              Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-              Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId);
-              D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNameScratch, pwLocaleStr);
-              bFlagCheck = INV_FormatPlayerNameWithBase(wszBaseName, wszNameScratch, pUnit);
-              if (!bFlagCheck) {
-                __frame0.wszPossessive[0] = L'\0';
-                Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-                wsprintf(__frame0.wszPossessive, D2Lang::StrTable::strtable::GetLocaleString(0x2769), wszNameScratch, 0);
-                pwLocaleStr = __frame0.wszPossessive;
-              } else {
-                pwLocaleStr = wszBaseName;
-              }
-
-              D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutCursor, pwLocaleStr);
-              pItemsTxt = pItemsTxtSaved;
-            }
-          }
-
-          break;
-          case 6:
-
-          case 8:
-
-          case 9:
-            nAffixId = D2Common::ITEMS::Items::GetRarePrefix(pUnit);
-          pPrefixAffix = (D2MagicAffixTxt*)D2Common::DATATBLS::ItemTbls::TXT_RareAffixes_GetLine((uint32_t)nAffixId);
-          pPrefixAffix2 = pPrefixAffix;
-          nAffixId = D2Common::ITEMS::Items::GetRareSuffix(pUnit);
-          pSuffixAffix = D2Common::DATATBLS::ItemTbls::TXT_RareAffixes_GetLine((uint32_t)nAffixId);
-          if (pPrefixAffix) {
-            if (!*(uint16_t*)(pPrefixAffix->name + 0xc)) {
-              pwLocaleStr2 = (char*)((uintptr_t)&pPrefixAffix->mod[0].code + 2);
-              __frame0.szUtf8Buf[0] = 0x28;
-              __frame0.szUtf8Buf[1] = 0;
-              strcat((char*)__frame0.szUtf8Buf, pwLocaleStr2);
-              pcNameDst = __frame0.szUtf8Buf;
-              strcat((char*)__frame0.szUtf8Buf, ")");
-              pcNameDst = pcNameDst + strlen((char*)pcNameDst) + 1;
-              D2Lang::UTF8_ConvertToWideChar(wszPrefix, (char*)__frame0.szUtf8Buf, 0x200);
-              pcNameDst += -(int)(__frame0.szUtf8Buf + 1);
-              pUnit = pUnitSaved;
-              pItemsTxt = pItemsTxtSaved;
-            } else {
-              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pPrefixAffix->name + 0xc));
-              pcNameDst = (uint8_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pPrefixAffix2->name + 0xc));
-              D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPrefix, pwLocaleStr);
-            }
-          } else {
-            wszPrefix[0] = L'\0';
-            pcNameDst = wszEarLevel[0];
-          }
-          if (pSuffixAffix) {
-            if (!pSuffixAffix->wNameStrId) {
-              Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-              pcNameSrc = pSuffixAffix->name;
-              __frame0.szUtf8Buf[0] = 0x28;
-              __frame0.szUtf8Buf[1] = 0;
-              strcat((char*)__frame0.szUtf8Buf, pSuffixAffix->name);
-              strcat((char*)__frame0.szUtf8Buf, ")");
-              D2Lang::UTF8_ConvertToWideChar(wszNameScratch, (char*)__frame0.szUtf8Buf, 0x200);
-              nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszNameScratch);
-              pcNameDst += nErrorLine;
-              if (!pPrefixAffix2) {
-                D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSuffix, wszNameScratch);
-                pUnit = pUnitSaved;
-                pItemsTxt = pItemsTxtSaved;
-              } else {
-                D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, wszNameScratch);
-                pUnit = pUnitSaved;
-                pItemsTxt = pItemsTxtSaved;
-              }
-            } else {
-              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSuffixAffix->wNameStrId);
-              nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-              pcNameDst += nErrorLine;
-              if (!pPrefixAffix2) {
-                pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSuffixAffix->wNameStrId);
-                D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSuffix, pwLocaleStr);
-              } else {
-                pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pSuffixAffix->wNameStrId);
-                D2Lang::Unicode::UNISYS::AppendToBuffer(wszSuffix, pwLocaleStr);
-              }
-            }
-          } else {
-            wszSuffix[0] = L'\0';
-          }
-
-          pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
-          nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-          if ((int)(pcNameDst + nErrorLine + 3) >= (int)nSize) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x822);
-            exit(-1);
-          }
-
-          Fog::File::CONTAINER_InitializeBuffer(wszBaseName, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBaseName, pwLocaleStr);
-          pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszBaseName);
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLargeWorkBuf, pwLocaleStr);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszLargeWorkBuf, pwSeparator);
-          __frame0.wszRareName = L'\0';
-          Fog::File::CONTAINER_InitializeBuffer(__frame0.wszRareNameBuf, 2, 199, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          wsprintf(&__frame0.wszRareName, D2Lang::StrTable::strtable::GetLocaleString(0x6b6), wszPrefix, wszSuffix, 0);
-          Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          bFlagCheck = INV_FormatPlayerNameWithBase(wszScratch, &__frame0.wszRareName, pUnit);
-          pwLocaleStr = wszScratch;
-          if (!bFlagCheck) {
-            pwLocaleStr = &__frame0.wszRareName;
-          }
-
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszLargeWorkBuf, pwLocaleStr);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, wszLargeWorkBuf);
-          pUnit = pUnitSaved;
-          break;
-          case 7:
-            Fog::File::CONTAINER_InitializeBuffer(wszNameScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-          pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszNameScratch, pwLocaleStr);
-          iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-          if (iScratch >= 0) {
-            iScratch = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-            pUniqueItemsTxt = DataTbls::INV_GetUniqueItemsTxtLine(iScratch);
-            if (pUniqueItemsTxt) {
-              if (pItemsTxt->bSkipName == '\0') {
-                pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszNameScratch);
-                D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
-                D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, pwSeparator);
-              }
-
-              Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Launch::MainMenus::STRING_ZeroOneWCHAR);
-              pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pUniqueItemsTxt->wNameStr);
-              pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(pwLocaleStr);
-              bFlagCheck = INV_FormatPlayerNameWithBase(wszScratch, pwLocaleStr, pUnit);
-              if (!bFlagCheck) {
-                pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pUniqueItemsTxt->wNameStr);
-                pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(pwLocaleStr);
-                D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, pwLocaleStr);
-              } else {
-                D2Lang::Unicode::UNISYS::AppendToBuffer(pwOutBuffer, wszScratch);
-              }
-
-              break;
-            }
-          }
-
-          pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszNameScratch);
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
           break;
           default:
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8ce);

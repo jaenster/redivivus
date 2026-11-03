@@ -460,30 +460,6 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
           }
 
           switch (wszFmtBuf[2]) {
-            case L'\0':
-              STRING_CopyWideString(wszDst, wszFmtBuf);
-            return;
-            default:
-              {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x154);
-                exit(-1);
-              }
-            case L'%':
-              nCharCount++;
-            if (nCharCount >= nMaxChars) {
-              return;
-            }
-
-            pFmtSpec = wszFmtBuf;
-            nDstOffset = (int)wszDst - (int)pFmtSpec;
-            do {
-              wFmtChar = *pFmtSpec;
-              *(uint16_t*)(nDstOffset + (int)pFmtSpec) = wFmtChar;
-              pFmtSpec++;
-            } while (wFmtChar != L'\0');
-
-            wszDst++;
-            break;
             case L'd':
 
             case L'u':
@@ -545,6 +521,31 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
 
             wszDst += nDstOffset;
             nCharCount += nDstOffset;
+            break;
+            case L'%':
+              nCharCount++;
+            if (nCharCount >= nMaxChars) {
+              return;
+            }
+
+            pFmtSpec = wszFmtBuf;
+            nDstOffset = (int)wszDst - (int)pFmtSpec;
+            do {
+              wFmtChar = *pFmtSpec;
+              *(uint16_t*)(nDstOffset + (int)pFmtSpec) = wFmtChar;
+              pFmtSpec++;
+            } while (wFmtChar != L'\0');
+
+            wszDst++;
+            break;
+            case L'\0':
+              STRING_CopyWideString(wszDst, wszFmtBuf);
+            return;
+            default:
+              {
+                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x154);
+                exit(-1);
+              }
           }
 
           wszFmt += 2;

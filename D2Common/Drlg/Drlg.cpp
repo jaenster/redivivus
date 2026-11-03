@@ -921,7 +921,7 @@ D2DrlgStrc * __fastcall DRLG_AllocDrlgActMisc(D2DrlgActStrc * pAct, eAct nActNo,
     int nDivTmp;
     uint32_t nStaffLevelOffset;
     char szPath[260];
-    int64_t seedRolled;
+    uint32_t seedRolled;
     uint64_t uSeedProduct;
     D2PoolManagerStrc* pMemory;
     pMemory = DUNGEON::Dungeon::GetMemPoolFromAct(pAct);
@@ -2901,7 +2901,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLeve
     D2DrlgLevelDataEntry* pCurLevelDataList;
     eD2DrlgType eDrlgType;
     D2DrlgLevelDataPresetArea* pOuterCloisterLevelData;
-    int64_t lSeedProductB;
+    uint32_t lSeedProductB;
     eD2LevelId eLevelIdCurrent;
     int64_t lSeedProductA;
     int nNodeEntryOffset;

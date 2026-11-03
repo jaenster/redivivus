@@ -638,7 +638,7 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
       }
 
       nIndex = 0;
-      if (*(int*)((int)pChunk + 4)) {
+      if ((uint32_t)*(int*)((int)pChunk + 4) > 0) {
         pEntryBase = 0;
         do {
           pEntries = *(int*)((int)pChunk + 8);

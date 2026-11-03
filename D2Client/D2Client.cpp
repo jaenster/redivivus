@@ -361,12 +361,13 @@ void __stdcall CMD_SelectSkillHotkeySlot(int nSlot) {
     }
 
     BVar1 = UI::ui::GetUIFlag(UI_SKILLSELECT);
-    if (!BVar1) {
-      UI::SpellSel::SPELLSEL_ActivateSkillSlot(nSlot);
+    if (BVar1) {
+      UI::SpellSel::SPELLSEL_HandleSkillSelection(nSlot);
       return;
     }
 
-    UI::SpellSel::SPELLSEL_HandleSkillSelection(nSlot);
+    UI::SpellSel::SPELLSEL_ActivateSkillSlot(nSlot);
+    return;
 }
 
 void __stdcall CMD_ActivateSkillSlot_F1() {
@@ -937,7 +938,7 @@ void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
         /* HIMC param_1 for ImmGetOpenStatus */ bImeOpen = ImmGetOpenStatus(hImc);
         if (bImeOpen) {
           /* DWORD dwBufLen for ImmGetCompositionStringA */ /* LPVOID lpBuf for ImmGetCompositionStringA */ /* DWORD param_2 for ImmGetCompositionStringA */ /* HIMC param_1 for ImmGetCompositionStringA */ nResultBufLen = ImmGetCompositionStringA(hImc, 8, (LPVOID)0x0, 0);
-          if (nResultBufLen) {
+          if (nResultBufLen > 0) {
             memset(szMultiByte, 0, 200);
             memset(wszWide, 0, 0x40);
             if (nResultBufLen > 199) {

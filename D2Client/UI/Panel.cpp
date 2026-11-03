@@ -990,17 +990,18 @@ static void __stdcall Draw_EquipmentNeedToRepairBody_1(int32_t bIsLeftSide, int3
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = nIconFrame;
     BOOL bAutomapShown = ui::GetUIFlag(UI_AUTOMAP);
-    if (!bAutomapShown) {
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - 0x3c, 0x6e, -1, DRAW_TRANSPARENT, nullptr);
+    if (bAutomapShown) {
+      bAutomapShown = GAME::Roster::ROSTER_CheckAnyPlayerHostileToMe();
+      if (bAutomapShown) {
+        nOffsetY = 0x2b;
+      }
+
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - 0x3c, nOffsetY + 0x8c, -1, DRAW_TRANSPARENT, nullptr);
       return;
     }
 
-    bAutomapShown = GAME::Roster::ROSTER_CheckAnyPlayerHostileToMe();
-    if (bAutomapShown) {
-      nOffsetY = 0x2b;
-    }
-
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - 0x3c, nOffsetY + 0x8c, -1, DRAW_TRANSPARENT, nullptr);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX - 0x3c, 0x6e, -1, DRAW_TRANSPARENT, nullptr);
+    return;
 }
 
 void __stdcall DRAW_EquipmentNeedArrows() {
@@ -2123,21 +2124,74 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     memset(gbPanelRightBeltArrowClicked, 0, 4 * sizeof(gbPanelRightBeltArrowClicked[0]));
     gbPanelLeftBeltArrowClicked = 0;
-    if (!gpPanelClickedButton) {
-      if (nMouseX - 0x75U <= 0x30 && nMouseY >= ScreenSizeY - 0x30 && nMouseY <= ScreenSizeY || nMouseX >= ScreenSizeX - 0xa5 && nMouseX <= ScreenSizeX - 0x75 && nMouseY >= ScreenSizeY - 0x30 && nMouseY <= ScreenSizeY) {
-        bFlag = ui::GetUIFlag(UI_SKILLSELECT);
+    if (gpPanelClickedButton) {
+      if (gnPanelBeltRowsExpanded) {
+        bFlag = PANEL_CalculateBeltSlotIndex(pMsg);
         if (bFlag) {
-          ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
+          iVar1 = ui::GetItemType();
+          if (iVar1 == 6) {
+            ui::UI_DropCursorItemOnGround();
+          } else {
+            iVar1 = ui::GetItemType();
+            if (iVar1 == 8) {
+              GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
+            }
+          }
+
+          ClickBelt(pPlayer->pInventory, nMouseX, nMouseY);
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
+          Storm::SMsgBreakHandlerChain(pMsg);
+          gpPanelClickedButton = 0;
+          gpPanelMenuButton = 0;
+          gpPanelRunButton = 0;
+          return;
         }
+
+        iVar1 = ScreenSizeX / 2;
+        if (nMouseX >= iVar1 - 8 && nMouseX <= iVar1 + 5 && nMouseY >= ScreenSizeY - 0x27 && nMouseY <= ScreenSizeY - 0xd) {
+          bFlag = ui::GetUIFlag(UI_MINIPANEL);
+          if (bFlag) {
+            ui::SetUIFlag(UI_MINIPANEL, UI_RESET, 0);
+            gpPanelClickedButton = 0;
+            gpPanelMenuButton = 0;
+            gpPanelRunButton = 0;
+            return;
+          }
+
+          ui::SetUIFlag(UI_MINIPANEL, UI_TOGGLE, 0);
+          gpPanelClickedButton = 0;
+          gpPanelMenuButton = 0;
+          gpPanelRunButton = 0;
+          return;
+        }
+        if (nMouseX - 0x75U <= 0x30 && nMouseY >= ScreenSizeY - 0x30 && nMouseY <= ScreenSizeY) {
+          ui::SetUIFlag(UI_SKILLSELECT, UI_TOGGLE, 0);
+          SpellSel::SPELLSEL_SetMouseHandFlag(1);
+          gpPanelClickedButton = 0;
+          gpPanelMenuButton = 0;
+          gpPanelRunButton = 0;
+          return;
+        }
+        if (nMouseX >= ScreenSizeX - 0xa5 && nMouseX <= ScreenSizeX - 0x75 && nMouseY >= ScreenSizeY - 0x30 && nMouseY <= ScreenSizeY) {
+          ui::SetUIFlag(UI_SKILLSELECT, UI_TOGGLE, 0);
+          SpellSel::SPELLSEL_SetMouseHandFlag(0);
+          gpPanelClickedButton = 0;
+          gpPanelMenuButton = 0;
+          gpPanelRunButton = 0;
+          return;
+        }
+        if (nMouseX >= iVar1 - 0x91 && nMouseX <= iVar1 - 0x80 && nMouseY >= ScreenSizeY - 0x1c && nMouseY <= ScreenSizeY - 8) {
+          bFlag = GAME::Game::GetGlobalAlwaysRun();
+          GAME::Game::SetGlobalAlwaysRun((uint32_t)!bFlag);
+        }
+
+        gpPanelClickedButton = 0;
+        gpPanelMenuButton = 0;
+        gpPanelRunButton = 0;
+        return;
       }
 
-      gpPanelClickedButton = 0;
-      pMsg->bHandled = 0;
-      gpPanelMenuButton = 0;
-      gpPanelRunButton = 0;
-      return;
-    }
-    if (!gnPanelBeltRowsExpanded) {
       eD2UIvarsSetType eSetType;
       if (!(nMouseY <= ScreenSizeY - 0x30)) {
         iVar1 = ScreenSizeX / 2;
@@ -2229,70 +2283,18 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
       gpPanelRunButton = 0;
       return;
     }
-
-    bFlag = PANEL_CalculateBeltSlotIndex(pMsg);
-    if (bFlag) {
-      iVar1 = ui::GetItemType();
-      if (iVar1 == 6) {
-        ui::UI_DropCursorItemOnGround();
-      } else {
-        iVar1 = ui::GetItemType();
-        if (iVar1 == 8) {
-          GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
-        }
-      }
-
-      ClickBelt(pPlayer->pInventory, nMouseX, nMouseY);
-      pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
-      gpPanelClickedButton = 0;
-      gpPanelMenuButton = 0;
-      gpPanelRunButton = 0;
-      return;
-    }
-
-    iVar1 = ScreenSizeX / 2;
-    if (nMouseX >= iVar1 - 8 && nMouseX <= iVar1 + 5 && nMouseY >= ScreenSizeY - 0x27 && nMouseY <= ScreenSizeY - 0xd) {
-      bFlag = ui::GetUIFlag(UI_MINIPANEL);
+    if (nMouseX - 0x75U <= 0x30 && nMouseY >= ScreenSizeY - 0x30 && nMouseY <= ScreenSizeY || nMouseX >= ScreenSizeX - 0xa5 && nMouseX <= ScreenSizeX - 0x75 && nMouseY >= ScreenSizeY - 0x30 && nMouseY <= ScreenSizeY) {
+      bFlag = ui::GetUIFlag(UI_SKILLSELECT);
       if (bFlag) {
-        ui::SetUIFlag(UI_MINIPANEL, UI_RESET, 0);
-        gpPanelClickedButton = 0;
-        gpPanelMenuButton = 0;
-        gpPanelRunButton = 0;
-        return;
+        ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
       }
-
-      ui::SetUIFlag(UI_MINIPANEL, UI_TOGGLE, 0);
-      gpPanelClickedButton = 0;
-      gpPanelMenuButton = 0;
-      gpPanelRunButton = 0;
-      return;
-    }
-    if (nMouseX - 0x75U <= 0x30 && nMouseY >= ScreenSizeY - 0x30 && nMouseY <= ScreenSizeY) {
-      ui::SetUIFlag(UI_SKILLSELECT, UI_TOGGLE, 0);
-      SpellSel::SPELLSEL_SetMouseHandFlag(1);
-      gpPanelClickedButton = 0;
-      gpPanelMenuButton = 0;
-      gpPanelRunButton = 0;
-      return;
-    }
-    if (nMouseX >= ScreenSizeX - 0xa5 && nMouseX <= ScreenSizeX - 0x75 && nMouseY >= ScreenSizeY - 0x30 && nMouseY <= ScreenSizeY) {
-      ui::SetUIFlag(UI_SKILLSELECT, UI_TOGGLE, 0);
-      SpellSel::SPELLSEL_SetMouseHandFlag(0);
-      gpPanelClickedButton = 0;
-      gpPanelMenuButton = 0;
-      gpPanelRunButton = 0;
-      return;
-    }
-    if (nMouseX >= iVar1 - 0x91 && nMouseX <= iVar1 - 0x80 && nMouseY >= ScreenSizeY - 0x1c && nMouseY <= ScreenSizeY - 8) {
-      bFlag = GAME::Game::GetGlobalAlwaysRun();
-      GAME::Game::SetGlobalAlwaysRun((uint32_t)!bFlag);
     }
 
     gpPanelClickedButton = 0;
+    pMsg->bHandled = 0;
     gpPanelMenuButton = 0;
     gpPanelRunButton = 0;
+    return;
 }
 
 void __stdcall PANEL_UpdatePanelFromMode(D2UIMouseMsgStrc * pMsg) {

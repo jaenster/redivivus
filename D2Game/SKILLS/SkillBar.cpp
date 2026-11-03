@@ -78,7 +78,10 @@ namespace D2Game::SKILLS::SkillBar {
 // Server-side skill start function for skill index 32 (likely Fist of the Heavens or similar melee/charge). Validates skill and retrieves the current attack target via GetTargetEx; returns 0 if target is in town. Applies an attack-rate buff from calc[2], performs a to-hit check via SKILLS_CalcToHit + DAMAGE_CalculateHitCheck, builds a D2DamageStrc with damage/conversion from calc[0]/calc[3], calls DAMAGE_CalculateAndApplyDamage, adds a combat-queue bonus from calc[1], and applies/creates the skill's aura state via D2SetAurastatsFromSkills.
 BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
@@ -110,7 +113,7 @@ BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2Un
       }
 
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      if (pSkillsTxt->EType != ELEMENTAL_NONE) {
+      if ((uint8_t)pSkillsTxt->EType > ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
         if (sDamage.dwConvPct > 0) {
           sDamage.nConvType = pSkillsTxt->EType;
@@ -646,12 +649,18 @@ BOOL __fastcall Skills_SrvDoFunc_075_GrimWard(::SGAMEDATA * pGame, D2UnitStrc * 
 // Generic server-side melee attack handler used by multiple Barbarian skills. Sets the target unit, calculates to-hit via SKILLS_CalcToHit, resolves hit/miss via DAMAGE_CalculateHitCheck, applies elemental damage conversion (EType/ConvPct from skills.txt), builds a D2DamageStrc, then calls DAMAGE_CalculateAndApplyDamage and DAMAGE_ProcessCombatQueueEntry. Stores hit result (1=hit, 0=miss) in skill param1.
 BOOL __fastcall SKILLBAR_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
     D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillsTxt && pTarget)) {
+    if (!pSkillsTxt) {
+      return 0;
+    }
+    if (!pTarget) {
       return 0;
     }
 
@@ -666,7 +675,7 @@ BOOL __fastcall SKILLBAR_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc * pUni
       }
 
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      if (pSkillsTxt->EType != ELEMENTAL_NONE) {
+      if ((uint8_t)pSkillsTxt->EType > ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
         if (sDamage.dwConvPct > 0) {
           sDamage.nConvType = pSkillsTxt->EType;
@@ -1148,7 +1157,10 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
 BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     int32_t nExpireGameFrame;
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 
@@ -1172,7 +1184,7 @@ BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUn
       }
 
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      if (pSkillsTxt->EType != ELEMENTAL_NONE) {
+      if ((uint8_t)pSkillsTxt->EType > ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
         if (sDamage.dwConvPct > 0) {
           sDamage.nConvType = pSkillsTxt->EType;
@@ -1532,20 +1544,20 @@ static BOOL __stdcall SKILL_InitTransportPath(D2SkillStrc * pSkill, D2UnitStrc *
 }
 
 // Computes the overshooting charge path for Barbarian Charge. Resolves the target unit from skill param3 (type) and param4 (GUID), sets skill flags to 1, forces sequence frame 0xC, snaps position to tile, then calculates an overshoot destination (3× caster origin − 2× target coords). Aborts if the overshoot lands in a town room. Sets path type 8, distance 5, and calls PATH_CalculatePath.
-static void __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t nPosX, int32_t nPosY, D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
+static BOOL __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t nPosX, int32_t nPosY, D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     if (!pSkill) {
-      return;
+      return 0;
     }
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
-      return;
+      return 0;
     }
 
     uint32_t nTargetGUID = D2Common::Skills::SKILL_GetParam4(pSkill);
     D2UnitStrc* pTarget = UNIT::SUnit::FindUnitFromTable(pGame, D2Common::Skills::SKILL_GetParam3(pSkill), nTargetGUID);
     if (!pTarget) {
-      return;
+      return 0;
     }
 
     D2Common::Skills::SKILL_SetFlags(pSkill, 1);
@@ -1566,7 +1578,7 @@ static void __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t 
       BOOL bIsInTown;
       bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
       if (bIsInTown) {
-        return;
+        return 0;
       }
     }
 
@@ -1574,6 +1586,7 @@ static void __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t 
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 8);
     D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, 5);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+    return 1;
 }
 
 // Called each server tick while a charging unit (player or monster) is en route to its charge destination. Reads target (nX, nY) from skill params 1/2. If the unit has reached the target: removes old collision, restores normal collision type and path type, fires UNITEVENTCALLBACK_ENDANIM, schedules a follow-up event, and sends a 0xA5 packet with the current skill ID. Special cases: Baal (monBaseId 0x4E) calls SKILLBAR_CalculateChargePath instead; Iron Golem (0x21C) adjusts sequence frame based on remaining distance. If not yet at target, advances the sequence frame (monsters) or resets the anim timer (players). Returns 1 when arrival is processed, 0 otherwise.
@@ -1827,7 +1840,7 @@ static BOOL __stdcall SKILLBAR_WhirlwindHitCycle(::SGAMEDATA * pGame, eD2Skills 
       sDamage.dwHitClass = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
       sDamage.dwHitFlags |= 0x20;
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-      if (pSkillsTxt->EType != ELEMENTAL_NONE) {
+      if ((uint8_t)pSkillsTxt->EType > ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
         if (sDamage.dwConvPct > 0) {
           sDamage.nConvType = pSkillsTxt->EType;

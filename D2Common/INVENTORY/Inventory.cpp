@@ -3076,24 +3076,25 @@ D2RoomStrc * * __stdcall CORPSE_GetData(D2CorpseStrc * pRoom) {
 }
 
 static void ITEM_GetBodyComponents(D2UnitStrc * pUnit, uint8_t * pComponents) {
-    if (!pUnit) {
-      memset(pComponents, 0, 6 * sizeof(pComponents[0]));
+    if (pUnit) {
+      int nClassId = pUnit->nClassId;
+      D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
+      if (!pItemsTxt) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x121e);
+        exit(-1);
+      }
+
+      *pComponents = pItemsTxt->bRArm;
+      pComponents[1] = pItemsTxt->bLArm;
+      pComponents[2] = pItemsTxt->bTorso;
+      pComponents[3] = pItemsTxt->bLegs;
+      pComponents[4] = pItemsTxt->bRSPad;
+      pComponents[5] = pItemsTxt->bLSPad;
       return;
     }
 
-    int nClassId = pUnit->nClassId;
-    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
-    if (!pItemsTxt) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x121e);
-      exit(-1);
-    }
-
-    *pComponents = pItemsTxt->bRArm;
-    pComponents[1] = pItemsTxt->bLArm;
-    pComponents[2] = pItemsTxt->bTorso;
-    pComponents[3] = pItemsTxt->bLegs;
-    pComponents[4] = pItemsTxt->bRSPad;
-    pComponents[5] = pItemsTxt->bLSPad;
+    memset(pComponents, 0, 6 * sizeof(pComponents[0]));
+    return;
 }
 
 // One-time initializer (guarded by gbItemTypeTableInitialized) that builds gaItemTypeBaseIdTable and gwItemTypeEquivByIndex — a compact lookup table mapping item base-type IDs to their item-type equivalence index. Iterates all Items.txt rows, filters out non-equippable types (no weapons/armor/shields/helms/circlets), deduplicates by base-type ID, and assigns slots by weapon/armor category match. Also seeds gaItemTypeStringBuffer literals ("lit", "med", "hvy") and gnItemTypeAltGfxSentinel=0xFF.

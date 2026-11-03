@@ -969,37 +969,36 @@ void __fastcall DIALOG_SetSelectedLine(D2DialogStrc * pDialog, int32_t nSubIndex
     int32_t* piStringEntryPtr;
     if (pDialog) {
       int iSubIndex;
-      if (nSubIndex < pDialog->nSubCounter) {
-        if (nSubIndex == -1) {
-          pDialog->nSelectedLine = -1;
-          return;
-        }
-
-        iSubIndex = 0;
-        if (pDialog->nSubCounter > 0) {
-          piStringEntryPtr = &pDialog->aStringData[0].nCallbackParam;
-          do {
-            if (nSubIndex == iSubIndex) {
-              if (!*piStringEntryPtr) {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50f);
-                exit(-1);
-              }
-
-              pDialog->nSelectedLine = nSubIndex;
-              return;
-            }
-
-            iSubIndex++;
-            piStringEntryPtr += 0x44;
-          } while (iSubIndex < pDialog->nSubCounter);
-        }
-
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x513);
-        exit(-1);
-      } else {
+      if (!(nSubIndex < pDialog->nSubCounter)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ed);
         exit(-1);
       }
+      if (nSubIndex == -1) {
+        pDialog->nSelectedLine = -1;
+        return;
+      }
+
+      iSubIndex = 0;
+      if (pDialog->nSubCounter > 0) {
+        piStringEntryPtr = &pDialog->aStringData[0].nCallbackParam;
+        do {
+          if (nSubIndex == iSubIndex) {
+            if (!*piStringEntryPtr) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50f);
+              exit(-1);
+            }
+
+            pDialog->nSelectedLine = nSubIndex;
+            return;
+          }
+
+          iSubIndex++;
+          piStringEntryPtr += 0x44;
+        } while (iSubIndex < pDialog->nSubCounter);
+      }
+
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x513);
+      exit(-1);
     } else {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e7);
       exit(-1);

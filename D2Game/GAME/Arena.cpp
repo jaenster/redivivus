@@ -213,7 +213,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
             exit(-1);
           }
           if (pUnit == pVictim) {
-            if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+            if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
               exit(-1);
             }
@@ -230,7 +230,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
               return;
             }
             if (pVictim->eUnitType == UNIT_PLAYER) {
-              if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+              if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
                 exit(-1);
               }
@@ -320,7 +320,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
               if (pVictim->eUnitType != UNIT_MONSTER) {
                 return;
               }
-              if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+              if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
                 exit(-1);
               }

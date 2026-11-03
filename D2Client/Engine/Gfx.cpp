@@ -922,22 +922,23 @@ static void GFX_LoadMonsterModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\ENGINE\\Gfx.cpp", 0x464);
     uint32_t bHasComponent = Source::ClientEngine::GetSomeMonsterStatFlag(nClassId, nComponent);
-    if (!bHasComponent) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x486);
-      exit(-1);
-    }
+    if (bHasComponent) {
+      uint8_t byComponent = GfxUtil::GFXUTIL_GetGfxInfoComponent(pUnit, nComponent);
+      if (byComponent) {
+        return;
+      }
 
-    uint8_t byComponent = GfxUtil::GFXUTIL_GetGfxInfoComponent(pUnit, nComponent);
-    if (byComponent) {
+      int bLoaded = GFX_LoadCompositCof(&nOutCofData, nComponent, pUnit);
+      if (!bLoaded) {
+        return;
+      }
+
+      GfxUtil::GFXUTIL_SetGfxInfoComponent(pUnit, nComponent, '\x01');
       return;
     }
 
-    int bLoaded = GFX_LoadCompositCof(&nOutCofData, nComponent, pUnit);
-    if (!bLoaded) {
-      return;
-    }
-
-    GfxUtil::GFXUTIL_SetGfxInfoComponent(pUnit, nComponent, '\x01');
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x486);
+    exit(-1);
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp

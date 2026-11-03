@@ -282,7 +282,7 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
       default:
         {
           dwTick = GetTickCount();
-          pAnimImage->nCurrentFrame = (int)((uint64_t)((dwTick - pAnimImage->dwAnimStartTick) / nFrameIntervalMs) % (uint64_t)(nFrameCount - 1));
+          pAnimImage->nCurrentFrame = (int)((dwTick - pAnimImage->dwAnimStartTick) / nFrameIntervalMs % (uint32_t)(nFrameCount - 1));
           return 1;
         }
     }

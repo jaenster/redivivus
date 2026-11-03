@@ -2066,7 +2066,7 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     }
 
     uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
     if (!(!pDamage || pDamage->dwHitFlags & 0x20)) {
       return 0;
     }
@@ -2114,7 +2114,7 @@ BOOL __fastcall ITEMEVENT_CastOnStriking(::SGAMEDATA * pGame, uint32_t nUnitEven
     }
 
     uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
     if (!(pDamage && pDamage->wResultFlags & 4)) {
       return 0;
     }
@@ -2153,7 +2153,7 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
       return 0;
     }
 
-    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+    eD2Skills eProcSkill = (int)(uint16_t)eSkill >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
     uint32_t eSkillLevel = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & eSkill);
     D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = DVar1;

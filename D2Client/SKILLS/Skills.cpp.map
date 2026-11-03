@@ -743,7 +743,8 @@
       "usedTypes": [
         "D2SkillStrc",
         "D2UnitStrc",
-        "eD2Skills"
+        "eD2Skills",
+        "uint32_t"
       ]
     },
     {

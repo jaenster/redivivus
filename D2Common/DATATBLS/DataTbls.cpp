@@ -1945,9 +1945,9 @@ void __fastcall TXT_AllocTxt_states(D2PoolManagerStrc * pMemory) {
 
     DATATBLS_BuildStatesDataList(&sgtDataTable.pAllStatesDataTblFlag0x04, (short int*)&sgtDataTable.nAllStatesDataTblFlag0x04Size, 4);
     DATATBLS_BuildStatesDataList(&sgtDataTable.pAllStatesDataTblFlag0x0B, (short int*)&sgtDataTable.nAllStatesDataTblFlag0x0BSize, 0xb);
-    DATATBLS_BuildStatesDataList(&sgtDataTable.pAllStatesDataTblFlag0x10, (short int*)&sgtDataTable.nAllStatesDataTblFlag0x10Size, 0x10);
-    DATATBLS_BuildStatesDataList(&sgtDataTable.pAllStatesDataTblFlag0x05, (short int*)&sgtDataTable.nAllStatesDataTblFlag0x05Size, 5);
-    TXT_States_AllocItemTypesStateDataTable(&sgtDataTable.pStatesItemTypesDataTbl, (short int*)&sgtDataTable.nStatesItemTypesDataTblSize, 0x2a);
+    DATATBLS_BuildStatesDataList((D2AllStatesDataTbl**)&sgtDataTable.pAllStatesDataTblFlag0x10, (short int*)&sgtDataTable.nAllStatesDataTblFlag0x10Size, 0x10);
+    DATATBLS_BuildStatesDataList((D2AllStatesDataTbl**)&sgtDataTable.pAllStatesDataTblFlag0x05, (short int*)&sgtDataTable.nAllStatesDataTblFlag0x05Size, 5);
+    TXT_States_AllocItemTypesStateDataTable((D2AllStatesDataTbl**)&sgtDataTable.pStatesItemTypesDataTbl, (short int*)&sgtDataTable.nStatesItemTypesDataTblSize, 0x2a);
 }
 
 // Frees all states.txt-derived allocations from sgtDataTable: the D2StatesDataTbls block, four D2AllStatesDataTbl flag-indexed blocks (0x04, 0x0B, 0x10, 0x05), zeroes the single-state array, frees pTxtStates (adjusting the pointer by -1 row if gpaMiscTxtTables is set), and releases the Excel txt-link. Sets each pointer to null after freeing.

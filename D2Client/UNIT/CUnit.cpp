@@ -1471,75 +1471,78 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
 
 // Client-side dispatcher for skill visual side-effects keyed by a numeric effect ID. Handles Hydra overlays (0x15f-0x161), Charged-Bolt clone particles (0x154-0x157), Worldstone-shake particle (0x209), Rise-from-grave particle (0x196), Feral-Rage overlay (0x1a1-0x1a2), poison-hit overlay (0x21f), and Mephisto/Blizzard overlays (0xf2/0x2c0). No-ops for unrecognised IDs.
 static void CLIENT_PlaySkillVisualEffect(D2UnitStrc * pUnit, int32_t nEffectId) {
-    if (nEffectId > 0x14d) {
-      int nClassId;
-      if (nEffectId <= 0x161) {
-        if (nEffectId >= 0x15f) {
-          if (!pUnit) {
-            nClassId = -1;
-          } else {
-            nClassId = pUnit->nClassId;
-          }
-
-          Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nClassId - OVERLAY_hydra_end2, 4, 0, nClassId - 0xb0, 0, 0, 0);
+    if (nEffectId <= 0x14d) {
+      if (nEffectId != 0x14d) {
+        if (nEffectId != 0xf2) {
           return;
         }
 
-        switch (nEffectId) {
-          case 0x154:
-            Engine::Particle::AllocParticle(pUnit);
-          Engine::Particle::SetPosVectorShifted(pUnit, -0x20, -0x20, 0);
-          return;
-          case 0x155:
-            Engine::Particle::AllocParticle(pUnit);
-          Engine::Particle::SetPosVectorShifted(pUnit, -0x20, 0x20, 0);
-          return;
-          case 0x156:
-            Engine::Particle::AllocParticle(pUnit);
-          Engine::Particle::SetPosVectorShifted(pUnit, 0x20, 0x20, 0);
-          return;
-          case 0x157:
-            Engine::Particle::AllocParticle(pUnit);
-          Engine::Particle::SetPosVectorShifted(pUnit, 0x20, -0x20, 0);
-          return;
-        }
-      } else if (nEffectId <= 0x209) {
-        if (nEffectId == 0x209) {
-          Source::ClientEngine::CLIENT_SpawnWorldstoneShakeParticle(pUnit);
-          return;
-        }
-        if (nEffectId == 0x196) {
-          Engine::Particle::AllocParticle(pUnit);
-          Engine::Particle::SetPosVectorShifted(pUnit, 0, 0, -0x37);
-          Engine::Particle::SetOffsetVector(pUnit, 0, 0, 1, 1);
-          Engine::Particle::PARTICLE_SetBoundsOffset(pUnit, 0, 0, 0x32, 0);
-          Engine::Particle::PARTICLE_SetReverseDirection(pUnit, 1);
-          return;
-        }
-        if (nEffectId > 0x1a0 && nEffectId <= 0x1a2 && pUnit) {
-          Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_feralrage5, 2, 0, 0, 0, 0, 0);
-          return;
-        }
-      } else if (nEffectId != 0x21f) {
-        if (nEffectId == 0x2c0) {
-          Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_mephisto, 3, 0, 0, 0, 0, 0);
-          return;
-        }
-      } else {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_poisonhit, 3, 0, 0, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_mephisto, 3, 0, 0, 0, 0, 0);
+        return;
       }
 
-      return;
-    }
-    if (nEffectId == 0x14d) {
       Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_light_cast_2, 2, 0, 0, 0, 0, 0);
       return;
     }
-    if (nEffectId != 0xf2) {
-      return;
+
+    int nClassId;
+    if (nEffectId <= 0x161) {
+      if (nEffectId >= 0x15f) {
+        if (!pUnit) {
+          nClassId = -1;
+        } else {
+          nClassId = pUnit->nClassId;
+        }
+
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nClassId - OVERLAY_hydra_end2, 4, 0, nClassId - 0xb0, 0, 0, 0);
+        return;
+      }
+
+      switch (nEffectId) {
+        case 0x154:
+          Engine::Particle::AllocParticle(pUnit);
+        Engine::Particle::SetPosVectorShifted(pUnit, -0x20, -0x20, 0);
+        return;
+        case 0x155:
+          Engine::Particle::AllocParticle(pUnit);
+        Engine::Particle::SetPosVectorShifted(pUnit, -0x20, 0x20, 0);
+        return;
+        case 0x156:
+          Engine::Particle::AllocParticle(pUnit);
+        Engine::Particle::SetPosVectorShifted(pUnit, 0x20, 0x20, 0);
+        return;
+        case 0x157:
+          Engine::Particle::AllocParticle(pUnit);
+        Engine::Particle::SetPosVectorShifted(pUnit, 0x20, -0x20, 0);
+        return;
+      }
+    } else if (nEffectId <= 0x209) {
+      if (nEffectId == 0x209) {
+        Source::ClientEngine::CLIENT_SpawnWorldstoneShakeParticle(pUnit);
+        return;
+      }
+      if (nEffectId == 0x196) {
+        Engine::Particle::AllocParticle(pUnit);
+        Engine::Particle::SetPosVectorShifted(pUnit, 0, 0, -0x37);
+        Engine::Particle::SetOffsetVector(pUnit, 0, 0, 1, 1);
+        Engine::Particle::PARTICLE_SetBoundsOffset(pUnit, 0, 0, 0x32, 0);
+        Engine::Particle::PARTICLE_SetReverseDirection(pUnit, 1);
+        return;
+      }
+      if (nEffectId > 0x1a0 && nEffectId <= 0x1a2 && pUnit) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_feralrage5, 2, 0, 0, 0, 0, 0);
+        return;
+      }
+    } else if (nEffectId != 0x21f) {
+      if (nEffectId == 0x2c0) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_mephisto, 3, 0, 0, 0, 0, 0);
+        return;
+      }
+    } else {
+      Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_poisonhit, 3, 0, 0, 0, 0, 0);
     }
 
-    Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_mephisto, 3, 0, 0, 0, 0, 0);
+    return;
 }
 
 // Client-side unit teardown dispatcher. Frees the unit's light maps (primary + skill swap), particles, and sound FX, then dispatches on eUnitType: players and monsters free hover text and call type-specific free fns + sound iteration; objects also free static path; missiles call MISSILE_FreeClientMissile; items free item unit + item data; warps remove from room. Finally frees event list, server cmd, clears pPlayerUnit if applicable, and calls Units::Free.
@@ -2235,9 +2238,9 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
 
     bResult = MonUnique::CheckMonTypeForMonster(pUnit, 2);
     if (bResult) {
-      uint16_t nBossIdLookup;
+      int16_t nBossIdLookup;
       nBossIdLookup = MonUnique::GetBossId(pUnit);
-      pSuperUnique = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine((int)(short int)nBossIdLookup);
+      pSuperUnique = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine((int)nBossIdLookup);
       byDifficulty = GAME::Game::GetDificulity();
       if (pSuperUnique->Utrans[byDifficulty] != '\0') {
         byDifficulty = GAME::Game::GetDificulity();

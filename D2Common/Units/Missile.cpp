@@ -157,15 +157,17 @@ void __stdcall SetTotalFrames(D2UnitStrc * pUnit, int32_t nTotalFrames) {
     if (!pUnitDataMissile) {
       return;
     }
-    if (nTotalFrames <= -0x8000) {
-      pUnitDataMissile->nTotalFrames = -0x8000;
+    if (nTotalFrames > -0x8000) {
+      if (nTotalFrames >= 0x7fff) {
+        nTotalFrames = 0x7fff;
+      }
+
+      pUnitDataMissile->nTotalFrames = (int16_t)nTotalFrames;
       return;
     }
-    if (nTotalFrames >= 0x7fff) {
-      nTotalFrames = 0x7fff;
-    }
 
-    pUnitDataMissile->nTotalFrames = (int16_t)nTotalFrames;
+    pUnitDataMissile->nTotalFrames = -0x8000;
+    return;
 }
 
 int32_t __stdcall GetTotalFrames(D2UnitStrc * pUnit) {
@@ -185,15 +187,17 @@ void __stdcall SetCurrentFrame(D2UnitStrc * pUnit, int32_t nCurrentFrame) {
     if (!pUnitDataMissile) {
       return;
     }
-    if (nCurrentFrame <= -0x8000) {
-      pUnitDataMissile->nCurrentFrame = -0x8000;
+    if (nCurrentFrame > -0x8000) {
+      if (nCurrentFrame >= 0x7fff) {
+        nCurrentFrame = 0x7fff;
+      }
+
+      pUnitDataMissile->nCurrentFrame = (int16_t)nCurrentFrame;
       return;
     }
-    if (nCurrentFrame >= 0x7fff) {
-      nCurrentFrame = 0x7fff;
-    }
 
-    pUnitDataMissile->nCurrentFrame = (int16_t)nCurrentFrame;
+    pUnitDataMissile->nCurrentFrame = -0x8000;
+    return;
 }
 
 int32_t __stdcall GetCurrentFrame(D2UnitStrc * pUnit) {
@@ -317,15 +321,17 @@ void __stdcall SetActivateFrame(D2UnitStrc * pUnit, int32_t nActivateFrame) {
     if (!pMissileData) {
       return;
     }
-    if (nActivateFrame <= -0x8000) {
-      pMissileData->nActivateFrame = -0x8000;
+    if (nActivateFrame > -0x8000) {
+      if (nActivateFrame >= 0x7fff) {
+        nActivateFrame = 0x7fff;
+      }
+
+      pMissileData->nActivateFrame = (int16_t)nActivateFrame;
       return;
     }
-    if (nActivateFrame >= 0x7fff) {
-      nActivateFrame = 0x7fff;
-    }
 
-    pMissileData->nActivateFrame = (int16_t)nActivateFrame;
+    pMissileData->nActivateFrame = -0x8000;
+    return;
 }
 
 int32_t __stdcall GetActivateFrame(D2UnitStrc * pUnit) {
@@ -348,15 +354,17 @@ void __stdcall SetAnimSpeed(D2UnitStrc * pUnit, int32_t nAnimSpeed) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
     }
-    if (nAnimSpeed <= -0x8000) {
-      pUnit->nAnimSpeed = -0x8000;
+    if (nAnimSpeed > -0x8000) {
+      if (nAnimSpeed >= 0x7fff) {
+        nAnimSpeed = 0x7fff;
+      }
+
+      pUnit->nAnimSpeed = (short int)nAnimSpeed;
       return;
     }
-    if (nAnimSpeed >= 0x7fff) {
-      nAnimSpeed = 0x7fff;
-    }
 
-    pUnit->nAnimSpeed = (short int)nAnimSpeed;
+    pUnit->nAnimSpeed = -0x8000;
+    return;
 }
 
 void __fastcall SetStream(D2UnitStrc * pUnit, D2MissileStreamStrc * pStream) {

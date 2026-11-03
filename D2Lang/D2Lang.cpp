@@ -139,7 +139,7 @@ static int32_t __stdcall EncodeUTF8CodePoint(uint16_t wCodePoint, uint8_t * pbyU
     }
 
     int nShiftBits = (int)(short int)gaUtf8DecodeTable[nByteWidth - 1].wShift;
-    *pbyUtf8Out = (uint8_t)((int)uCodePt >> ((uint8_t)gaUtf8DecodeTable[nByteWidth - 1].wShift & 0x1f)) | (uint8_t)gaUtf8DecodeTable[nByteWidth - 1].wExpect;
+    *pbyUtf8Out = (uint8_t)((int)uCodePt >> (gaUtf8DecodeTable[nByteWidth - 1].wShift & 0x1f)) | (uint8_t)gaUtf8DecodeTable[nByteWidth - 1].wExpect;
     if (nShiftBits <= 0) {
       return nByteWidth;
     }
@@ -147,7 +147,7 @@ static int32_t __stdcall EncodeUTF8CodePoint(uint16_t wCodePoint, uint8_t * pbyU
     do {
       nShiftBits += -6;
       pbyUtf8Out++;
-      *pbyUtf8Out = (uint8_t)((int)uCodePt >> ((uint8_t)nShiftBits & 0x1f)) & 0x3f | 0x80;
+      *pbyUtf8Out = (uint8_t)((int)uCodePt >> (nShiftBits & 0x1f)) & 0x3f | 0x80;
     } while (nShiftBits > 0);
 
     return nByteWidth;

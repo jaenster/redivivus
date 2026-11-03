@@ -114,7 +114,7 @@
         "D2MonStatsTxt",
         "D2SuperUniquesTxt",
         "D2UnitStrc",
-        "uint16_t"
+        "int16_t"
       ]
     },
     {

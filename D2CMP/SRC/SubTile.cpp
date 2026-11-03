@@ -173,7 +173,10 @@ void __fastcall SUBTILE_ConvertToIndexed(uint32_t * pDstFrame, uint32_t * pSrcFr
       if (!nAllocSize) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8e);
         exit(-1);
-      } else if ((int32_t)nAllocSize < 0x10000) {
+      } else if ((int32_t)nAllocSize >= 0x10000) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f);
+        exit(-1);
+      } else {
         nErrorAddr = D2_ALLOC_AT(nAllocSize, ".\\SRC\\SubTile.cpp", 0x90);
         pDstFrame[4] = (uint32_t)(uintptr_t)nErrorAddr;
         if (!nErrorAddr) {
@@ -208,9 +211,6 @@ void __fastcall SUBTILE_ConvertToIndexed(uint32_t * pDstFrame, uint32_t * pSrcFr
         } while (i < (int)nAllocSize);
 
         return;
-      } else {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f);
-        exit(-1);
       }
     }
 }

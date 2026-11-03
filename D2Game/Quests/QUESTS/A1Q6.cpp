@@ -310,37 +310,39 @@ void __fastcall Q06_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
         return;
       }
     }
-    if (!bRewardAwaits) {
-      int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
-      bRewardAwaits = QUEST_HasPlayerParticipated(pQuestData, nPlayerGUID);
-      if (bRewardAwaits == 1) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
+    if (bRewardAwaits) {
+      if (nNPCClassId != 0x109 && nNPCClassId != 0x94 && nNPCClassId != 0x96) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 3);
         return;
       }
 
-      nStateFlag = pQuestData->nStateFlag;
-      if (nStateFlag == 1 && nNPCClassId == 0x109 && !bCompleted) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 0);
-        return;
-      }
-      if (!(nStateFlag && (bCompleted != 1 || bParticipated) && (nStateFlag < 4 || bParticipated) && (bCompleted != 1 || bParticipated != 1))) {
-        return;
-      }
-
-      nGossipLineIdx = gdwQuestCallbackAddressQ41[nStateFlag];
-      if (!(nGossipLineIdx != -1 && nGossipLineIdx < 6)) {
-        return;
-      }
-
-      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, nGossipLineIdx);
-      return;
-    }
-    if (nNPCClassId != 0x109 && nNPCClassId != 0x94 && nNPCClassId != 0x96) {
-      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 3);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
       return;
     }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
+    int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
+    bRewardAwaits = QUEST_HasPlayerParticipated(pQuestData, nPlayerGUID);
+    if (bRewardAwaits == 1) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 4);
+      return;
+    }
+
+    nStateFlag = pQuestData->nStateFlag;
+    if (nStateFlag == 1 && nNPCClassId == 0x109 && !bCompleted) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 0);
+      return;
+    }
+    if (!(nStateFlag && (bCompleted != 1 || bParticipated) && (nStateFlag < 4 || bParticipated) && (bCompleted != 1 || bParticipated != 1))) {
+      return;
+    }
+
+    nGossipLineIdx = gdwQuestCallbackAddressQ41[nStateFlag];
+    if (!(nGossipLineIdx != -1 && nGossipLineIdx < 6)) {
+      return;
+    }
+
+    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, nGossipLineIdx);
+    return;
 }
 
 // A1Q6 "entered level" / area-trigger callback (state slot 3). On entering the relevant area (index field): if first time, bumps stateFlag to 3, and broadcasts state 2 (started, idx 0x25) or state 1 via QUEST_SetStateAndBroadcast(Q06_NotifyQuestStateToPlayer), then syncs all players. Also handles re-entry (textControl==1): removes player from list and, if stateFlag==2 and player record not Completed/RewardAwaits, advances to flag 3 and re-syncs. Drives quest start from walking into the Catacombs.

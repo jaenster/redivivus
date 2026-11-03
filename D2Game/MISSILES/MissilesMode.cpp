@@ -1889,7 +1889,10 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2
     int nMonsterLevel;
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
     int32_t nSkillLvl = D2Common::Units::Missile::GetLevel(pUnit);
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0) {
+      return 1;
+    }
+    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 1;
     }
 
@@ -5887,7 +5890,10 @@ int __fastcall MISSILESMODE_SrvDoFn29_RecyclerDelay(::SGAMEDATA * pGame, D2UnitS
     }
 
     int nMissileClassId = pUnit->nClassId;
-    if (!(nMissileClassId >= 0 && nMissileClassId < sgptDataTable->nTxtMissilesSize)) {
+    if (nMissileClassId < 0) {
+      return 2;
+    }
+    if (!(nMissileClassId < sgptDataTable->nTxtMissilesSize)) {
       return 2;
     }
 
@@ -5897,7 +5903,10 @@ int __fastcall MISSILESMODE_SrvDoFn29_RecyclerDelay(::SGAMEDATA * pGame, D2UnitS
     }
 
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 2;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 2;
     }
 
@@ -5952,7 +5961,10 @@ int __fastcall MISSILESMODE_SrvDoFn33_VineRecyclerDelay(::SGAMEDATA * pGame, D2U
     }
 
     int nMissileClassId = pUnit->nClassId;
-    if (!(nMissileClassId >= 0 && nMissileClassId < sgptDataTable->nTxtMissilesSize)) {
+    if (nMissileClassId < 0) {
+      return 2;
+    }
+    if (!(nMissileClassId < sgptDataTable->nTxtMissilesSize)) {
       return 2;
     }
 
@@ -5962,7 +5974,10 @@ int __fastcall MISSILESMODE_SrvDoFn33_VineRecyclerDelay(::SGAMEDATA * pGame, D2U
     }
 
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 2;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 2;
     }
 

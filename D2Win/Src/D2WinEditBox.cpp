@@ -152,7 +152,7 @@ char * __stdcall D2WINEDITBOX_GetTextBuffer() {
     return gszClipboardTextBuffer;
 }
 
-void __fastcall D2WINEDITBOX_ValidateInput(char * szText) {
+BOOL __fastcall D2WINEDITBOX_ValidateInput(char * szText) {
     // Static local variables (originally global data)
     static HANDLE ghClipboardMem; D2_STATIC_GUARD_BSS(ghClipboardMem, "D2Win::Src::D2WinEditBox::D2WINEDITBOX_ValidateInput::ghClipboardMem");
 
@@ -165,7 +165,7 @@ void __fastcall D2WINEDITBOX_ValidateInput(char * szText) {
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
     BOOL bOpened = OpenClipboard(hWnd);
     if (!bOpened) {
-      return;
+      return 0;
     }
 
     EmptyClipboard();
@@ -173,7 +173,7 @@ void __fastcall D2WINEDITBOX_ValidateInput(char * szText) {
     /* SIZE_T dwBytes for GlobalAlloc */ /* UINT uFlags for GlobalAlloc */ ghClipboardMem = GlobalAlloc(0x2000, _Size + 1);
     if (!ghClipboardMem) {
       CloseClipboard();
-      return;
+      return 0;
     }
 
     LPVOID pGlobalBuf = GlobalLock(ghClipboardMem);
@@ -183,6 +183,7 @@ void __fastcall D2WINEDITBOX_ValidateInput(char * szText) {
     GlobalUnlock(hGlobalMem);
     /* HANDLE hMem for SetClipboardData */ /* UINT uFormat for SetClipboardData */ SetClipboardData(1, ghClipboardMem);
     CloseClipboard();
+    return 1;
 }
 
 // Returns TRUE when the edit box has a non-empty selection: nSelAnchor (+0x54) != -1 and
@@ -636,10 +637,7 @@ BOOL __stdcall D2WINEDITBOX_CreateControl(D2ControlMsg * pControl, int eFormType
 
     uint32_t dwState;
     dwState = pEditBox->sControl.dwState;
-    if (!(gadwBitMasks[2] & dwState)) {
-      return 0;
-    }
-    if (!(gadwBitMasks[0] & dwState)) {
+    if (!(gadwBitMasks[2] & dwState) || !(gadwBitMasks[0] & dwState)) {
       return 0;
     }
 
@@ -872,41 +870,79 @@ static void D2WINEDITBOX_UpdateCursorPosition(::D2WinEditBox * pEditBox) {
     if (nCursorPos != nTextLen) {
       nLoopCount = nTextPixels;
     }
-    if (nLoopCount <= nMaxLinePixels) {
-      pEditBox->nScrollEnd = nTextLen - 1;
-      pEditBox->nScrollStart = 0;
-      return;
-    }
+    if (!(nLoopCount <= nMaxLinePixels)) {
+      nLoopCount = nMaxLinePixels;
+      if (nCursorPos == nTextLen) {
+        nLoopCount = nMaxLinePixels - nCursorPixels;
+      }
+      if ((int)nCursorPos > pEditBox->nScrollEnd) {
+        nScrollStart = nCursorPos - 1;
+        pEditBox->nScrollEnd = nCursorPos;
+        pEditBox->nScrollStart = nScrollStart;
+        while (true) {
+          if (!nScrollStart) {
+            break;
+          }
 
-    nLoopCount = nMaxLinePixels;
-    if (nCursorPos == nTextLen) {
-      nLoopCount = nMaxLinePixels - nCursorPixels;
-    }
-    if ((int)nCursorPos > pEditBox->nScrollEnd) {
-      nScrollStart = nCursorPos - 1;
-      pEditBox->nScrollEnd = nCursorPos;
-      pEditBox->nScrollStart = nScrollStart;
-      while (true) {
-        if (!nScrollStart) {
-          break;
+          nTextPixels = D2WinFont::D2WINFONT_GetStringPixelWidth(wszDisplayText + pEditBox->nScrollStart, pEditBox->nScrollEnd - pEditBox->nScrollStart + 1);
+          if (nTextPixels >= nLoopCount) {
+            break;
+          }
+
+          pEditBox->nScrollStart--;
+          nScrollStart = pEditBox->nScrollStart;
         }
 
-        nTextPixels = D2WinFont::D2WINFONT_GetStringPixelWidth(wszDisplayText + pEditBox->nScrollStart, pEditBox->nScrollEnd - pEditBox->nScrollStart + 1);
-        if (nTextPixels >= nLoopCount) {
-          break;
+        pEditBox->nScrollStart++;
+        return;
+      }
+      if ((int)nCursorPos <= pEditBox->nScrollStart + 1) {
+        nCursorPos = (int)(nCursorPos - 1) < 0 ? 0 : nCursorPos - 1;
+        pEditBox->nScrollStart = nCursorPos;
+        nScrollStart = nCursorPos + 1;
+        pEditBox->nScrollEnd = nScrollStart;
+        while (true) {
+          if (nScrollStart >= (int)nTextLen) {
+            break;
+          }
+
+          nTextPixels = D2WinFont::D2WINFONT_GetStringPixelWidth(wszDisplayText + pEditBox->nScrollStart, pEditBox->nScrollEnd - pEditBox->nScrollStart + 1);
+          if (nTextPixels >= nLoopCount) {
+            break;
+          }
+
+          pEditBox->nScrollEnd++;
+          nScrollStart = pEditBox->nScrollEnd;
         }
 
-        pEditBox->nScrollStart--;
-        nScrollStart = pEditBox->nScrollStart;
+        pEditBox->nScrollEnd--;
+        return;
       }
 
-      pEditBox->nScrollStart++;
-      return;
-    }
-    if ((int)nCursorPos <= pEditBox->nScrollStart + 1) {
-      nCursorPos = (int)(nCursorPos - 1) < 0 ? 0 : nCursorPos - 1;
-      pEditBox->nScrollStart = nCursorPos;
-      nScrollStart = nCursorPos + 1;
+      nTextPixels = D2WinFont::DRAW_text0(wszDisplayText + pEditBox->nScrollStart);
+      if (nTextPixels < nLoopCount) {
+        nScrollStart = nTextLen - 2;
+        pEditBox->nScrollEnd = nTextLen - 1;
+        pEditBox->nScrollStart = nScrollStart;
+        while (true) {
+          if (!nScrollStart) {
+            break;
+          }
+
+          nTextPixels = D2WinFont::DRAW_text0(wszDisplayText + pEditBox->nScrollStart);
+          if (nTextPixels >= nLoopCount) {
+            break;
+          }
+
+          pEditBox->nScrollStart--;
+          nScrollStart = pEditBox->nScrollStart;
+        }
+
+        pEditBox->nScrollStart++;
+        return;
+      }
+
+      nScrollStart = pEditBox->nScrollStart + 1;
       pEditBox->nScrollEnd = nScrollStart;
       while (true) {
         if (nScrollStart >= (int)nTextLen) {
@@ -926,46 +962,9 @@ static void D2WINEDITBOX_UpdateCursorPosition(::D2WinEditBox * pEditBox) {
       return;
     }
 
-    nTextPixels = D2WinFont::DRAW_text0(wszDisplayText + pEditBox->nScrollStart);
-    if (nTextPixels < nLoopCount) {
-      nScrollStart = nTextLen - 2;
-      pEditBox->nScrollEnd = nTextLen - 1;
-      pEditBox->nScrollStart = nScrollStart;
-      while (true) {
-        if (!nScrollStart) {
-          break;
-        }
-
-        nTextPixels = D2WinFont::DRAW_text0(wszDisplayText + pEditBox->nScrollStart);
-        if (nTextPixels >= nLoopCount) {
-          break;
-        }
-
-        pEditBox->nScrollStart--;
-        nScrollStart = pEditBox->nScrollStart;
-      }
-
-      pEditBox->nScrollStart++;
-      return;
-    }
-
-    nScrollStart = pEditBox->nScrollStart + 1;
-    pEditBox->nScrollEnd = nScrollStart;
-    while (true) {
-      if (nScrollStart >= (int)nTextLen) {
-        break;
-      }
-
-      nTextPixels = D2WinFont::D2WINFONT_GetStringPixelWidth(wszDisplayText + pEditBox->nScrollStart, pEditBox->nScrollEnd - pEditBox->nScrollStart + 1);
-      if (nTextPixels >= nLoopCount) {
-        break;
-      }
-
-      pEditBox->nScrollEnd++;
-      nScrollStart = pEditBox->nScrollEnd;
-    }
-
-    pEditBox->nScrollEnd--;
+    pEditBox->nScrollEnd = nTextLen - 1;
+    pEditBox->nScrollStart = 0;
+    return;
 }
 
 // Deletes the selected text: nDelStart = min(nSelAnchor +0x54, nSelCursor +0x58), nDelEnd = max;

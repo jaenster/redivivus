@@ -864,113 +864,113 @@ static void LIGHTMAP_ApplyCollisionOccludedLight(D2LightMapStrc * pLightMap) {
 
     int32_t nUnitX;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (pRoom) {
-      eCollisionFlags eCollision;
-      nUnitX = Units::GetXPosFromDynamicPathUnit(pUnit);
-      nUnitY = Units::GetYPosFromDynamicPathUnit(pUnit);
-      nCollisionY = 0;
-      pCollisionCell = (int32_t*)gaLightmapInterpBuffer;
-      do {
-        nCellRight = 0;
-        do {
-          eCollision = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, nCellRight + nUnitX - 0x20, nCollisionY + nUnitY - 0x20, COLLIDE_BLANK | COLLIDE_BLOCK_MISSILE);
-          *pCollisionCell = eCollision != COLLIDE_NONE ? 0x10 : 0;
-          nCellRight++;
-          pCollisionCell++;
-        } while (nCellRight < 0x40);
-
-        nCollisionY++;
-      } while ((int)pCollisionCell < (intptr_t)((char*)&gaLightmapInterpBuffer + sizeof(gaLightmapInterpBuffer)));
-
-      if (nRadiusCells >= 2) {
-        nCoordYBottom = nGridCellY * 8 + 0x14;
-        nCoordXRightEdge = nGridCellX * 8 + 0x14;
-        nCollisionY = nGridCellY * 8 - 0xc;
-        nCoordXLeftEdge = nGridCellX * 8 - 0xc;
-        nYBuffer = 0x22;
-        nXBuffer = 0x1e;
-        do {
-          if (-1 < nYBuffer - 0x20) {
-            nCoordYTop = nGridCellY * 8 + 4;
-            nCoordXLeft = nGridCellX * 8 + 4;
-            nCellRight = 0x20;
-            nXCellsLeft = nYBuffer - 0x1f;
-            nBufferX = 0x20;
-            nCoordYBot = nCoordYTop;
-            nCoordXRight = nCoordXLeft;
-            do {
-              LIGHTMAP_ComputeInterpolationDir(nCoordXLeft, nCollisionY, pLightMap);
-              LIGHTMAP_InterpolateCell(nBufferX, nXBuffer);
-              LIGHTMAP_ComputeInterpolationDir(nCoordXRight, nCollisionY, pLightMap);
-              LIGHTMAP_InterpolateCell(nCellRight, nXBuffer);
-              LIGHTMAP_ComputeInterpolationDir(nCoordXLeft, nCoordYBottom, pLightMap);
-              LIGHTMAP_InterpolateCell(nBufferX, nYBuffer);
-              LIGHTMAP_ComputeInterpolationDir(nCoordXRight, nCoordYBottom, pLightMap);
-              LIGHTMAP_InterpolateCell(nCellRight, nYBuffer);
-              LIGHTMAP_ComputeInterpolationDir(nCoordXRightEdge, nCoordYTop, pLightMap);
-              LIGHTMAP_InterpolateCell(nYBuffer, nBufferX);
-              LIGHTMAP_ComputeInterpolationDir(nCoordXRightEdge, nCoordYBot, pLightMap);
-              LIGHTMAP_InterpolateCell(nYBuffer, nCellRight);
-              LIGHTMAP_ComputeInterpolationDir(nCoordXLeftEdge, nCoordYTop, pLightMap);
-              LIGHTMAP_InterpolateCell(nXBuffer, nBufferX);
-              LIGHTMAP_ComputeInterpolationDir(nCoordXLeftEdge, nCoordYBot, pLightMap);
-              LIGHTMAP_InterpolateCell(nXBuffer, nCellRight);
-              nCoordXRight += 8;
-              nCoordYBot += 8;
-              nCoordXLeft += -8;
-              nCoordYTop += -8;
-              nBufferX--;
-              nCellRight++;
-              nXCellsLeft--;
-            } while (nXCellsLeft);
-          }
-
-          nXBuffer--;
-          nCoordXRightEdge += 8;
-          nCoordYBottom += 8;
-          nCoordXLeftEdge += -8;
-          nCollisionY += -8;
-          nCellRight = nYBuffer - 0x1f;
-          nYBuffer++;
-        } while (nCellRight <= nRadiusCells);
-      }
-      if (pLightMap->bPixelMapReady) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x454);
-        exit(-1);
-      }
-
-      pDstPixel = (uint32_t*)pLightMap->pPixelMap;
-      if (!pDstPixel) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x455);
-        exit(-1);
-      }
-      if (nCellSpan >= 0) {
-        nCellSpan++;
-        pSrcCell = gLightMapBuffer + (0x20 - (pLightMap->nRadiusX >> 3)) * 0x41;
-        nRadiusCells = nCellSpan;
-        nYCopyLeft = nCellSpan;
-        pSrcRow = pSrcCell;
-        do {
-          do {
-            *pDstPixel = *pSrcCell;
-            pDstPixel++;
-            pSrcCell++;
-            nRadiusCells--;
-          } while (nRadiusCells);
-
-          pSrcCell = pSrcRow + 0x40;
-          nYCopyLeft--;
-          nRadiusCells = nCellSpan;
-          pSrcRow = pSrcCell;
-        } while (nYCopyLeft);
-      }
-
-      pLightMap->bPixelMapReady = 1;
-      return;
-    } else {
+    if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x414);
       exit(-1);
     }
+
+    eCollisionFlags eCollision;
+    nUnitX = Units::GetXPosFromDynamicPathUnit(pUnit);
+    nUnitY = Units::GetYPosFromDynamicPathUnit(pUnit);
+    nCollisionY = 0;
+    pCollisionCell = (int32_t*)gaLightmapInterpBuffer;
+    do {
+      nCellRight = 0;
+      do {
+        eCollision = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, nCellRight + nUnitX - 0x20, nCollisionY + nUnitY - 0x20, COLLIDE_BLANK | COLLIDE_BLOCK_MISSILE);
+        *pCollisionCell = eCollision != COLLIDE_NONE ? 0x10 : 0;
+        nCellRight++;
+        pCollisionCell++;
+      } while (nCellRight < 0x40);
+
+      nCollisionY++;
+    } while ((int)pCollisionCell < (intptr_t)((char*)&gaLightmapInterpBuffer + sizeof(gaLightmapInterpBuffer)));
+
+    if (nRadiusCells >= 2) {
+      nCoordYBottom = nGridCellY * 8 + 0x14;
+      nCoordXRightEdge = nGridCellX * 8 + 0x14;
+      nCollisionY = nGridCellY * 8 - 0xc;
+      nCoordXLeftEdge = nGridCellX * 8 - 0xc;
+      nYBuffer = 0x22;
+      nXBuffer = 0x1e;
+      do {
+        if (-1 < nYBuffer - 0x20) {
+          nCoordYTop = nGridCellY * 8 + 4;
+          nCoordXLeft = nGridCellX * 8 + 4;
+          nCellRight = 0x20;
+          nXCellsLeft = nYBuffer - 0x1f;
+          nBufferX = 0x20;
+          nCoordYBot = nCoordYTop;
+          nCoordXRight = nCoordXLeft;
+          do {
+            LIGHTMAP_ComputeInterpolationDir(nCoordXLeft, nCollisionY, pLightMap);
+            LIGHTMAP_InterpolateCell(nBufferX, nXBuffer);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXRight, nCollisionY, pLightMap);
+            LIGHTMAP_InterpolateCell(nCellRight, nXBuffer);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXLeft, nCoordYBottom, pLightMap);
+            LIGHTMAP_InterpolateCell(nBufferX, nYBuffer);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXRight, nCoordYBottom, pLightMap);
+            LIGHTMAP_InterpolateCell(nCellRight, nYBuffer);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXRightEdge, nCoordYTop, pLightMap);
+            LIGHTMAP_InterpolateCell(nYBuffer, nBufferX);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXRightEdge, nCoordYBot, pLightMap);
+            LIGHTMAP_InterpolateCell(nYBuffer, nCellRight);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXLeftEdge, nCoordYTop, pLightMap);
+            LIGHTMAP_InterpolateCell(nXBuffer, nBufferX);
+            LIGHTMAP_ComputeInterpolationDir(nCoordXLeftEdge, nCoordYBot, pLightMap);
+            LIGHTMAP_InterpolateCell(nXBuffer, nCellRight);
+            nCoordXRight += 8;
+            nCoordYBot += 8;
+            nCoordXLeft += -8;
+            nCoordYTop += -8;
+            nBufferX--;
+            nCellRight++;
+            nXCellsLeft--;
+          } while (nXCellsLeft);
+        }
+
+        nXBuffer--;
+        nCoordXRightEdge += 8;
+        nCoordYBottom += 8;
+        nCoordXLeftEdge += -8;
+        nCollisionY += -8;
+        nCellRight = nYBuffer - 0x1f;
+        nYBuffer++;
+      } while (nCellRight <= nRadiusCells);
+    }
+    if (pLightMap->bPixelMapReady) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x454);
+      exit(-1);
+    }
+
+    pDstPixel = (uint32_t*)pLightMap->pPixelMap;
+    if (!pDstPixel) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x455);
+      exit(-1);
+    }
+    if (nCellSpan >= 0) {
+      nCellSpan++;
+      pSrcCell = gLightMapBuffer + (0x20 - (pLightMap->nRadiusX >> 3)) * 0x41;
+      nRadiusCells = nCellSpan;
+      nYCopyLeft = nCellSpan;
+      pSrcRow = pSrcCell;
+      do {
+        do {
+          *pDstPixel = *pSrcCell;
+          pDstPixel++;
+          pSrcCell++;
+          nRadiusCells--;
+        } while (nRadiusCells);
+
+        pSrcCell = pSrcRow + 0x40;
+        nYCopyLeft--;
+        nRadiusCells = nCellSpan;
+        pSrcRow = pSrcCell;
+      } while (nYCopyLeft);
+    }
+
+    pLightMap->bPixelMapReady = 1;
+    return;
 }
 
 static void LIGHTMAP_ApplyLightWithPixelMap(D2LightMapStrc * pLightMap) {
@@ -1099,21 +1099,23 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
       LIGHTMAP_ApplyStaticLightWithShadow(pLightMap);
       return;
     }
-    if (pLightMap->nLightType != 2) {
-      LIGHTMAP_ApplyPointLight(nQuality, pLightMap);
-      return;
-    }
-    if (!pLightMap->bPixelMapReady) {
-      if (!pLightMap->pPixelMap) {
-        nRadius = (pLightMap->nRadiusX >> 3) * 2 + 1;
-        pPixelMap = (int*)D2_ALLOC_AT(nRadius * nRadius * 4, ".\\DRAW\\dLightMap.cpp", 0x4f1);
-        pLightMap->pPixelMap = pPixelMap;
+    if (pLightMap->nLightType == 2) {
+      if (!pLightMap->bPixelMapReady) {
+        if (!pLightMap->pPixelMap) {
+          nRadius = (pLightMap->nRadiusX >> 3) * 2 + 1;
+          pPixelMap = (int*)D2_ALLOC_AT(nRadius * nRadius * 4, ".\\DRAW\\dLightMap.cpp", 0x4f1);
+          pLightMap->pPixelMap = pPixelMap;
+        }
+
+        LIGHTMAP_ApplyCollisionOccludedLight(pLightMap);
       }
 
-      LIGHTMAP_ApplyCollisionOccludedLight(pLightMap);
+      LIGHTMAP_ApplyLightWithPixelMap(pLightMap);
+      return;
     }
 
-    LIGHTMAP_ApplyLightWithPixelMap(pLightMap);
+    LIGHTMAP_ApplyPointLight(nQuality, pLightMap);
+    return;
 }
 
 void __stdcall LIGHTMAP_BuildCollisionFlags() {

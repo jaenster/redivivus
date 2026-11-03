@@ -559,107 +559,109 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
     pTradeState->dwLastTradeTick = dwTickCount;
     int32_t nFailCount = 0;
     D2GameNpcStrc* pGameNpc = sunitproxy::GetGameNpcByUnit(pGame, pNpcUnit, &nNpcIndex);
-    if (!pGameNpc) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c9);
-      exit(-1);
-    }
-
-    int32_t nPlayerLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0);
-    int32_t nStoreItemLevel = SUNITNPC_GetActCappedLevel(pGame, pNpcUnit, nPlayerLevel + 5);
-    int32_t nTradeIdx = 0;
-    if (pGameNpc->sTrade.nTradeList1 > 0) {
-      eD2ItemQuality eQuality;
-      nTradeListOffset = 0;
-      do {
-        pTradeItemTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*(uint32_t*)(nTradeListOffset + 4 + (int)pTradeState->pTradeList1), &nTradeItemClassId);
-        pItemTxtTmp = pTradeItemTxt;
-        if ((int)(uint32_t)(uint8_t)pTradeItemTxt->nLevel <= nStoreItemLevel) {
-          if (nStoreItemLevel >= 0x19) {
-            nItemsToGen = 0;
-          } else {
-            pvVar1 = pGameNpc->sTrade.pTradeList1;
-            nItemsToGen = D2Client::SEED_RollRange(pNpcControl, (uint32_t)*(uint8_t*)((int)pvVar1 + nTradeListOffset), *(uint8_t*)((int)pvVar1 + nTradeListOffset + 1) + 1);
-          }
-          if ((uint16_t)pTradeItemTxt->wVersion < 100 || (pItemTxtTmp = pTradeItemTxt , 99 < pGame2->wItemFormat)) {
-            pTradeItemTxt = 0;
-            if ((uint32_t)nItemsToGen > 0) {
-              do {
-                eQuality = SUNITNPC_RollStoreItemQuality(pNpcControl, nStoreItemLevel);
-                pGeneratedItem = SUNITNPC_GenerateNpcItems(pNpcUnit, *(uint32_t*)((int)pGameNpc->sTrade.pTradeList1 + nTradeListOffset + 4), pGame2, 1, eQuality, nStoreItemLevel, nPlayerLevel);
-                if (!pGeneratedItem) {
-                  nFailCount++;
-                }
-                if (nFailCount > 0x20) {
-                  return;
-                }
-
-                pTradeItemTxt = (D2ItemsTxt*)(pTradeItemTxt->szFlippyFile + 1);
-              } while ((uintptr_t)pTradeItemTxt < (uint32_t)nItemsToGen);
-            }
-
-            D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*(uint32_t*)(nTradeListOffset + 4 + (int)pTradeState->pTradeList1), (int*)&nItemClassId);
-            bIsStackable = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x01(nItemClassId);
-            pItemTxtTmp = pTradeItemTxt;
-            if (bIsStackable == 1 && (int)(uint32_t)*(uint8_t*)(nTradeListOffset + 8 + (int)pTradeState->pTradeList1) <= nStoreItemLevel) {
-              nScrollCountBonus = 1;
-              if (nStoreItemLevel >= 0x19) {
-                nRolledMax = D2Client::SEED_RollRange(pNpcControl, 1, 3);
-                nScrollCountBonus = nRolledMax + 1;
-              }
-
+    if (pGameNpc) {
+      int32_t nPlayerLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0);
+      int32_t nStoreItemLevel = SUNITNPC_GetActCappedLevel(pGame, pNpcUnit, nPlayerLevel + 5);
+      int32_t nTradeIdx = 0;
+      if (pGameNpc->sTrade.nTradeList1 > 0) {
+        eD2ItemQuality eQuality;
+        nTradeListOffset = 0;
+        do {
+          pTradeItemTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*(uint32_t*)(nTradeListOffset + 4 + (int)pTradeState->pTradeList1), &nTradeItemClassId);
+          pItemTxtTmp = pTradeItemTxt;
+          if ((int)(uint32_t)(uint8_t)pTradeItemTxt->nLevel <= nStoreItemLevel) {
+            if (nStoreItemLevel >= 0x19) {
+              nItemsToGen = 0;
+            } else {
               pvVar1 = pGameNpc->sTrade.pTradeList1;
-              nScrollsToGen = D2Client::SEED_RollRange(pNpcControl, (uint32_t)*(uint8_t*)((int)pvVar1 + nTradeListOffset + 2), (uint32_t)*(uint8_t*)((int)pvVar1 + nTradeListOffset + 3) + nScrollCountBonus);
+              nItemsToGen = D2Client::SEED_RollRange(pNpcControl, (uint32_t)*(uint8_t*)((int)pvVar1 + nTradeListOffset), *(uint8_t*)((int)pvVar1 + nTradeListOffset + 1) + 1);
+            }
+            if ((uint16_t)pTradeItemTxt->wVersion < 100 || (pItemTxtTmp = pTradeItemTxt , 99 < pGame2->wItemFormat)) {
+              pTradeItemTxt = 0;
+              if ((uint32_t)nItemsToGen > 0) {
+                do {
+                  eQuality = SUNITNPC_RollStoreItemQuality(pNpcControl, nStoreItemLevel);
+                  pGeneratedItem = SUNITNPC_GenerateNpcItems(pNpcUnit, *(uint32_t*)((int)pGameNpc->sTrade.pTradeList1 + nTradeListOffset + 4), pGame2, 1, eQuality, nStoreItemLevel, nPlayerLevel);
+                  if (!pGeneratedItem) {
+                    nFailCount++;
+                  }
+                  if (nFailCount > 0x20) {
+                    return;
+                  }
+
+                  pTradeItemTxt = (D2ItemsTxt*)(pTradeItemTxt->szFlippyFile + 1);
+                } while ((uintptr_t)pTradeItemTxt < (uint32_t)nItemsToGen);
+              }
+
+              D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*(uint32_t*)(nTradeListOffset + 4 + (int)pTradeState->pTradeList1), (int*)&nItemClassId);
+              bIsStackable = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x01(nItemClassId);
               pItemTxtTmp = pTradeItemTxt;
-              while (true) {
-                pTradeItemTxt = (D2ItemsTxt*)nScrollsToGen;
-                if (!pTradeItemTxt) {
-                  break;
+              if (bIsStackable == 1 && (int)(uint32_t)*(uint8_t*)(nTradeListOffset + 8 + (int)pTradeState->pTradeList1) <= nStoreItemLevel) {
+                nScrollCountBonus = 1;
+                if (nStoreItemLevel >= 0x19) {
+                  nRolledMax = D2Client::SEED_RollRange(pNpcControl, 1, 3);
+                  nScrollCountBonus = nRolledMax + 1;
                 }
 
-                pGeneratedItem = SUNITNPC_GenerateNpcItems(pNpcUnit, *(uint32_t*)((int)pGameNpc->sTrade.pTradeList1 + nTradeListOffset + 4), pGame2, 1, QUALITY_MAGIC, nStoreItemLevel, nPlayerLevel);
-                if (!pGeneratedItem) {
-                  nFailCount++;
-                }
+                pvVar1 = pGameNpc->sTrade.pTradeList1;
+                nScrollsToGen = D2Client::SEED_RollRange(pNpcControl, (uint32_t)*(uint8_t*)((int)pvVar1 + nTradeListOffset + 2), (uint32_t)*(uint8_t*)((int)pvVar1 + nTradeListOffset + 3) + nScrollCountBonus);
+                pItemTxtTmp = pTradeItemTxt;
+                while (true) {
+                  pTradeItemTxt = (D2ItemsTxt*)nScrollsToGen;
+                  if (!pTradeItemTxt) {
+                    break;
+                  }
 
-                pItemTxtTmp = (D2ItemsTxt*)((uintptr_t)&pTradeItemTxt[-1].pad422 + 1);
-                nScrollsToGen = (int32_t)pItemTxtTmp;
+                  pGeneratedItem = SUNITNPC_GenerateNpcItems(pNpcUnit, *(uint32_t*)((int)pGameNpc->sTrade.pTradeList1 + nTradeListOffset + 4), pGame2, 1, QUALITY_MAGIC, nStoreItemLevel, nPlayerLevel);
+                  if (!pGeneratedItem) {
+                    nFailCount++;
+                  }
+
+                  pItemTxtTmp = (D2ItemsTxt*)((uintptr_t)&pTradeItemTxt[-1].pad422 + 1);
+                  nScrollsToGen = (int32_t)pItemTxtTmp;
+                }
               }
             }
           }
+
+          pTradeItemTxt = pItemTxtTmp;
+          nTradeIdx++;
+          nTradeListOffset += 0xc;
+          pGame = pGame2;
+        } while (nTradeIdx < pGameNpc->sTrade.nTradeList1);
+      }
+
+      nTradeIdx = 0;
+      if (pGameNpc->sTrade.nTradeList2 <= 0) {
+        return;
+      }
+
+      while (true) {
+        pGeneratedItem = SUNITNPC_GenerateNpcItems(pNpcUnit, *(uint32_t*)((int)pGameNpc->sTrade.pTradeList2 + nTradeIdx * 4), pGame, 1, QUALITY_NORMAL, nStoreItemLevel, nPlayerLevel);
+        if (pGeneratedItem) {
+          pItemTxtTmp = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*(uint32_t*)((int)pTradeState->pTradeList2 + nTradeIdx * 4), &nTradeItemClassId);
+          if (pItemTxtTmp->dwCode == 0x20767163 || pItemTxtTmp->dwCode == 0x20767161) {
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGeneratedItem, UNITSTAT_quantity, D2Common::ITEMS::Items::ITEM_GetMaxStack(pGeneratedItem), 0);
+          }
+        } else {
+          nFailCount++;
+        }
+        if (nFailCount > 0x20) {
+          break;
         }
 
-        pTradeItemTxt = pItemTxtTmp;
         nTradeIdx++;
-        nTradeListOffset += 0xc;
         pGame = pGame2;
-      } while (nTradeIdx < pGameNpc->sTrade.nTradeList1);
-    }
+        if (nTradeIdx >= pGameNpc->sTrade.nTradeList2) {
+          return;
+        }
+      }
 
-    nTradeIdx = 0;
-    if (pGameNpc->sTrade.nTradeList2 <= 0) {
       return;
     }
 
-    while (true) {
-      pGeneratedItem = SUNITNPC_GenerateNpcItems(pNpcUnit, *(uint32_t*)((int)pGameNpc->sTrade.pTradeList2 + nTradeIdx * 4), pGame, 1, QUALITY_NORMAL, nStoreItemLevel, nPlayerLevel);
-      if (pGeneratedItem) {
-        pItemTxtTmp = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(*(uint32_t*)((int)pTradeState->pTradeList2 + nTradeIdx * 4), &nTradeItemClassId);
-        if (pItemTxtTmp->dwCode == 0x20767163 || pItemTxtTmp->dwCode == 0x20767161) {
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGeneratedItem, UNITSTAT_quantity, D2Common::ITEMS::Items::ITEM_GetMaxStack(pGeneratedItem), 0);
-        }
-      } else {
-        nFailCount++;
-      }
-      if (nFailCount > 0x20) {
-        break;
-      }
-
-      nTradeIdx++;
-      pGame = pGame2;
-      if (nTradeIdx >= pGameNpc->sTrade.nTradeList2) {
-        return;
-      }
-    }
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c9);
+    exit(-1);
 }
 
 // @sourcefile .\UNIT\SUNITNPC.CPP
@@ -2262,15 +2264,11 @@ void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // Strips all active hireable-only states (flag array 12) from a unit by iterating every state in sgptDataTable->nTxtStatesSize. For each active state that has the hireable flag set and owns a stat list, calls STATLIST_RemoveAndRecalc then FreeStatList. Returns non-zero if any state was removed.
 BOOL __fastcall SUNITNPC_HandleHireableAction(D2UnitStrc * pUnit) {
-    bool _bStateRemoved;
-    bool _bAnyStateRemoved;
-    bool bAnyStateRemoved;
     uint32_t bHasStateFlag;
     D2StatListExStrc* pStatList;
     eD2States eState;
-    bool bStateRemoved;
-    _bStateRemoved = 0;
-    _bAnyStateRemoved = 0;
+    BOOL bAnyStateRemoved = 0;
+    BOOL bStateRemoved = 0;
     if (sgptDataTable->nTxtStatesSize > 0) {
       eD2States eActiveState;
       eState = STATE_none;
@@ -2283,17 +2281,17 @@ BOOL __fastcall SUNITNPC_HandleHireableAction(D2UnitStrc * pUnit) {
             if (pStatList) {
               D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
               D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
-              _bStateRemoved = 1;
+              bStateRemoved = 1;
             }
           }
         }
 
         eState += STATE_freeze;
-        _bAnyStateRemoved = _bStateRemoved;
+        bAnyStateRemoved = bStateRemoved;
       } while ((int)eState < sgptDataTable->nTxtStatesSize);
     }
 
-    return _bAnyStateRemoved;
+    return bAnyStateRemoved;
 }
 
 void __stdcall HealByPlayerPetsByNPC(D2UnitStrc * pUnit, BOOL * pbChanged) {

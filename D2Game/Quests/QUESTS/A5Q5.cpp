@@ -507,60 +507,61 @@ void __fastcall Q35_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     if (pQuestData->bIsNotIntroduction == '\0') {
       return;
     }
-    if (!bIsCompleted) {
-      uint32_t nGossipMsgIndex;
-      if ((int)nNpcId >= 0x219 && (int)nNpcId <= 0x21b && !pQuestSpecificData->bAncientsActive) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcId, 4);
+    if (bIsCompleted) {
+      bIsCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
+      switch (nNpcId) {
+        case MonsterUnitLarzuk:
+          eQuestState = QUESTSTATE_Step0x05;
+        nQuestId = pQuestData->nQuestIdReal;
+        break;
+        case MonsterUnitDeckardCain6:
+          nQuestId = pQuestData->nQuestIdReal;
+        eQuestState = QUESTSTATE_Step0x06;
+        break;
+        case MonsterUnitDrehya1:
+          nQuestId = pQuestData->nQuestIdReal;
+        eQuestState = QUESTSTATE_Step0x07;
+        break;
+        case MonsterUnitMalah:
+          eQuestState = QUESTSTATE_Step0x08;
+        nQuestId = pQuestData->nQuestIdReal;
+        break;
+        default:
+          return;
+        case MonsterUnitQualkehk:
+          nQuestId = pQuestData->nQuestIdReal;
+        eQuestState = QUESTSTATE_Step0x09;
+        break;
       }
 
-      nGossipMsgIndex = gdwQuestCallbackAddressQ35[pQuestData->nStateFlag];
-      if (nGossipMsgIndex == -1) {
+      BOOL bNpcTalkFlagSet = D2Common::QuestRecord::GetQuestState(pBitBuffer, nQuestId, eQuestState);
+      if (!bNpcTalkFlagSet) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcId, 5);
         return;
       }
-      if (nGossipMsgIndex >= 9) {
+      if (!bIsCompleted) {
         return;
       }
 
-      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcId, nGossipMsgIndex);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcId, 3);
       return;
     }
 
-    bIsCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
-    switch (nNpcId) {
-      case MonsterUnitLarzuk:
-        eQuestState = QUESTSTATE_Step0x05;
-      nQuestId = pQuestData->nQuestIdReal;
-      break;
-      case MonsterUnitDeckardCain6:
-        nQuestId = pQuestData->nQuestIdReal;
-      eQuestState = QUESTSTATE_Step0x06;
-      break;
-      case MonsterUnitDrehya1:
-        nQuestId = pQuestData->nQuestIdReal;
-      eQuestState = QUESTSTATE_Step0x07;
-      break;
-      case MonsterUnitMalah:
-        eQuestState = QUESTSTATE_Step0x08;
-      nQuestId = pQuestData->nQuestIdReal;
-      break;
-      default:
-        return;
-      case MonsterUnitQualkehk:
-        nQuestId = pQuestData->nQuestIdReal;
-      eQuestState = QUESTSTATE_Step0x09;
-      break;
+    uint32_t nGossipMsgIndex;
+    if ((int)nNpcId >= 0x219 && (int)nNpcId <= 0x21b && !pQuestSpecificData->bAncientsActive) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcId, 4);
     }
 
-    BOOL bNpcTalkFlagSet = D2Common::QuestRecord::GetQuestState(pBitBuffer, nQuestId, eQuestState);
-    if (!bNpcTalkFlagSet) {
-      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcId, 5);
+    nGossipMsgIndex = gdwQuestCallbackAddressQ35[pQuestData->nStateFlag];
+    if (nGossipMsgIndex == -1) {
       return;
     }
-    if (!bIsCompleted) {
+    if (nGossipMsgIndex >= 9) {
       return;
     }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcId, 3);
+    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNpcId, nGossipMsgIndex);
+    return;
 }
 
 // A5Q5 (Rite of Passage) XP reward function. Grants 1,400,000 / 20,000,000 / 40,000,000 XP for Normal/Nightmare/Hell respectively, capped to one level's worth of experience. Loops awarding XP until the cap is exhausted or the level table is exceeded. Caller is responsible for setting Completed/JustCompleted quest states.

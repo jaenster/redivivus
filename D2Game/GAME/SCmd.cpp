@@ -641,21 +641,23 @@ void __fastcall NET_D2GS_SERVER_Send_0x0A_REMOVEUNIT(D2ClientStrc * pClient, uin
 // Server-to-client experience gain notification. Uses size-based opcode encoding: 0x1A (2 bytes), 0x1B (3 bytes), 0x1C (5 bytes).
 void __fastcall NET_D2GS_SERVER_Send_0x1A_0x1B_0x1C_Experience(D2ClientStrc * pClient, uint32_t nCurrentExp, uint32_t nPreviousExp) {
     uint32_t nExpDelta = nCurrentExp - nPreviousExp;
-    if (nExpDelta > 0xfffe) {
-      D2GSPacketSrv0x1C byOpcode;
-      byOpcode.dwExpDelta = nCurrentExp;
-      byOpcode.nPacketId = '\x1c';
-      SCMD_QueuePacketForClient(&byOpcode.nPacketId, 5, pClient);
-      return;
-    }
-    if ((int)nExpDelta < 0xff) {
-      nPreviousExp = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nPreviousExp + 2) << 8 | (uint32_t)(uint8_t)(char)nExpDelta) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x1a);
-      SCMD_QueuePacketForClient((uint8_t*)&nPreviousExp, 2, pClient);
+    if (nExpDelta <= 0xfffe) {
+      if ((int)nExpDelta < 0xff) {
+        nPreviousExp = (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nPreviousExp + 2) << 8 | (uint32_t)(uint8_t)(char)nExpDelta) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x1a);
+        SCMD_QueuePacketForClient((uint8_t*)&nPreviousExp, 2, pClient);
+        return;
+      }
+
+      d2_store24((char*)&nPreviousExp, (uint32_t)((uint32_t)((uint32_t)(uint16_t)(short int)nExpDelta << 8 | (uint32_t)(uint8_t)0x1b) & 0xffffffu));
+      SCMD_QueuePacketForClient((uint8_t*)&nPreviousExp, 3, pClient);
       return;
     }
 
-    d2_store24((char*)&nPreviousExp, (uint32_t)((uint32_t)((uint32_t)(uint16_t)(short int)nExpDelta << 8 | (uint32_t)(uint8_t)0x1b) & 0xffffffu));
-    SCMD_QueuePacketForClient((uint8_t*)&nPreviousExp, 3, pClient);
+    D2GSPacketSrv0x1C byOpcode;
+    byOpcode.dwExpDelta = nCurrentExp;
+    byOpcode.nPacketId = '\x1c';
+    SCMD_QueuePacketForClient(&byOpcode.nPacketId, 5, pClient);
+    return;
 }
 
 // Server-to-client attribute update (life, mana, stamina). Size-based opcode: 0x1D (3 bytes), 0x1E (4), 0x1F (6). The attribute id is 16-bit: 0053be46 is CMP DX,0xff, not a byte compare, so typing it from DL truncated the range check that selects the opcode.
@@ -763,32 +765,33 @@ void __fastcall NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience(D2ClientStrc 
       SCMD_QueuePacketForClient(&aPacket.nPacketId, 7, pClient);
       return;
     }
-    if (0xfffe < nExpDelta) {
-      aPacket.nPacketId = 0xa0;
-      uint32_t dwMercGUIDValue;
+    if (0xfffe >= nExpDelta) {
+      aPacket.nPacketId = 0xa2;
       if (!pUnit) {
-        dwMercGUIDValue = -1;
-      } else {
-        dwMercGUIDValue = pUnit->nUnitGUID;
+        aPacket.dwMercGUID = -1;
+        aPacket.uValue.nValue16 = (short int)nExpDelta;
+        SCMD_QueuePacketForClient(&aPacket.nPacketId, 8, pClient);
+        return;
       }
 
-      aPacket.dwMercGUID = dwMercGUIDValue;
-      aPacket.uValue.nValue32 = nMercGUID;
-      SCMD_QueuePacketForClient(&aPacket.nPacketId, 10, pClient);
-      return;
-    }
-
-    aPacket.nPacketId = 0xa2;
-    if (!pUnit) {
-      aPacket.dwMercGUID = -1;
+      aPacket.dwMercGUID = pUnit->nUnitGUID;
       aPacket.uValue.nValue16 = (short int)nExpDelta;
       SCMD_QueuePacketForClient(&aPacket.nPacketId, 8, pClient);
       return;
     }
 
-    aPacket.dwMercGUID = pUnit->nUnitGUID;
-    aPacket.uValue.nValue16 = (short int)nExpDelta;
-    SCMD_QueuePacketForClient(&aPacket.nPacketId, 8, pClient);
+    aPacket.nPacketId = 0xa0;
+    uint32_t dwMercGUIDValue;
+    if (!pUnit) {
+      dwMercGUIDValue = -1;
+    } else {
+      dwMercGUIDValue = pUnit->nUnitGUID;
+    }
+
+    aPacket.dwMercGUID = dwMercGUIDValue;
+    aPacket.uValue.nValue32 = nMercGUID;
+    SCMD_QueuePacketForClient(&aPacket.nPacketId, 10, pClient);
+    return;
 }
 
 // Server-to-client skill event: skill id, skill level, caster type+GUID, target type+GUID, two params. Opcode 0xA3.
@@ -1244,7 +1247,13 @@ static BOOL __stdcall SCMD_CheckMonsterPositionDesync(D2UnitStrc * pUnit, D2Unit
     }
 
     D2UnitDataPlayerStrc* pDVar1 = pUnit2->pUnitData.pUnitDataPlayer;
-    if (!(pDVar1 && &pDVar1->nOwnerGUID && pDVar1->nNecroPet != nNewPos)) {
+    if (!pDVar1) {
+      return 0;
+    }
+    if (!&pDVar1->nOwnerGUID) {
+      return 0;
+    }
+    if (pDVar1->nNecroPet == nNewPos) {
       return 0;
     }
 

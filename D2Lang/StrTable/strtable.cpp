@@ -269,45 +269,45 @@ uint32_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText
 
     uint32_t nBaseResult;
     uint16_t* pTranslated;
-    if (gpStringTableBase) {
-      uint16_t uVar1;
-      if (!gpStringTablePatchD2) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 699);
-        exit(-1);
-      } else {
-        if (!pbKey) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c0);
-          exit(-1);
-        }
-        if (!*pbKey) {
-          *ppwszText = (uint16_t*)&gwStrTableLanguageCode;
-          return (uint32_t)ppwszText & -65536;
-        }
-
-        uVar1 = STRTABLE_FindStringByKey(gpStringIndexPatchD2, pbKey, (int*)ppwszText, gpStringTablePatchD2);
-        if (uVar1 != 0xffff) {
-          return uVar1 + 10000;
-        }
-        if (gpStringTableExpansion) {
-          uVar1 = STRTABLE_FindStringByKey(gpStringIndexExpansion, pbKey, (int*)ppwszText, gpStringTableExpansion);
-          if (uVar1 != 0xffff) {
-            return uVar1 + 20000;
-          }
-        }
-
-        uVar1 = STRTABLE_FindStringByKey(gpStringIndexBase, pbKey, (int*)ppwszText, gpStringTableBase);
-        nBaseResult = (uint32_t)uVar1;
-        if (uVar1 == 0xffff) {
-          pTranslated = STRTABLE_GetTranslatedString(pbKey);
-          *ppwszText = pTranslated;
-          nBaseResult = (uint32_t)pTranslated & -65536;
-        }
-
-        return nBaseResult;
-      }
-    } else {
+    if (!gpStringTableBase) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ba);
       exit(-1);
+    }
+
+    uint16_t uVar1;
+    if (!gpStringTablePatchD2) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 699);
+      exit(-1);
+    } else {
+      if (!pbKey) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c0);
+        exit(-1);
+      }
+      if (!*pbKey) {
+        *ppwszText = (uint16_t*)&gwStrTableLanguageCode;
+        return (uint32_t)ppwszText & -65536;
+      }
+
+      uVar1 = STRTABLE_FindStringByKey(gpStringIndexPatchD2, pbKey, (int*)ppwszText, gpStringTablePatchD2);
+      if (uVar1 != 0xffff) {
+        return uVar1 + 10000;
+      }
+      if (gpStringTableExpansion) {
+        uVar1 = STRTABLE_FindStringByKey(gpStringIndexExpansion, pbKey, (int*)ppwszText, gpStringTableExpansion);
+        if (uVar1 != 0xffff) {
+          return uVar1 + 20000;
+        }
+      }
+
+      uVar1 = STRTABLE_FindStringByKey(gpStringIndexBase, pbKey, (int*)ppwszText, gpStringTableBase);
+      nBaseResult = (uint32_t)uVar1;
+      if (uVar1 == 0xffff) {
+        pTranslated = STRTABLE_GetTranslatedString(pbKey);
+        *ppwszText = pTranslated;
+        nBaseResult = (uint32_t)pTranslated & -65536;
+      }
+
+      return nBaseResult;
     }
 }
 
@@ -673,7 +673,7 @@ void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nValueLo, int32_
           nDigitCount--;
           nOutPos2 = nOutPos - 1;
           nCommaCounter++;
-          wszText[nOutPos2] = (short int)*(char*)((int)wszFallback + nDigitBufIdx);
+          wszText[nOutPos2] = (short int)szDigitBuf[nDigitBufIdx - 4];
           if (nCommaCounter >= 3) {
             nCommaCounter = 0;
             if (nOutPos2 > 0) {
@@ -716,13 +716,7 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwVa
     _ui64toa((uint64_t)((uint64_t)(uint32_t)dwValueHi << 32 | (uint64_t)(uint32_t)dwValueLo), szDigitBuf, 10);
     int nDigitCount;
     nDigitCount = (int)strlen(szDigitBuf);
-    if (!nDigitCount) {
-      write_placeholder:
-      wszFallback[0] = L'\0';
-      wszFallback[1] = L'\0';
-      UTF8_ConvertToWideChar(wszFallback, "*", 2);
-      Unicode::UNISYS::STRING_CopyWideString(wszText, wszFallback);
-    } else {
+    if (nDigitCount) {
       int nOutPos;
       nMagnitude = (nDigitCount - 1) / 3 - 1;
       if (nMagnitude >= 4) {
@@ -786,6 +780,12 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwVa
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x580);
         exit(-1);
       }
+    } else {
+      write_placeholder:
+      wszFallback[0] = L'\0';
+      wszFallback[1] = L'\0';
+      UTF8_ConvertToWideChar(wszFallback, "*", 2);
+      Unicode::UNISYS::STRING_CopyWideString(wszText, wszFallback);
     }
 }
 

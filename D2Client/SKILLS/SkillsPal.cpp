@@ -715,12 +715,13 @@ void __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, shor
     } else {
       D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pSavedTarget);
     }
-    if (!(eSavedUnitFlags >> 6 & 1)) {
-      pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
+    if (eSavedUnitFlags >> 6 & 1) {
+      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       return;
     }
 
-    pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+    pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
+    return;
 }
 
 void __fastcall SKILL_ExecuteItemCastOnUnit(D2UnitStrc * pUnit, eD2Skills eSkill, short * pSkillLevelData, D2UnitStrc * pTargetUnit, uint16_t bHasTarget) {

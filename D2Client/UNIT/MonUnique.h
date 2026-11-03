@@ -18,7 +18,7 @@ namespace D2Client::UNIT::MonUnique {
 uint8_t * __fastcall GetMonUModList(struct D2UnitStrc * pUnit);
 void __fastcall SetNameSeed(struct D2UnitStrc * pUnit, uint16_t nNameSeed);
 void __fastcall SetBossId(struct D2UnitStrc * pUnit, int16_t nBossId);
-uint16_t __fastcall GetBossId(struct D2UnitStrc * pUnit);
+int16_t __fastcall GetBossId(struct D2UnitStrc * pUnit);
 // Registers: pUnit in ECX; nTypeFlagMask in DX is tested against the monster's type flags (callers pass 2, 8, 0x80).
 BOOL __fastcall CheckMonTypeForMonster(struct D2UnitStrc * pUnit, uint16_t nTypeFlagMask);
 void __fastcall SetUnsetMonsterType(struct D2UnitStrc * pUnit, uint16_t eMonsterType, BOOL bSetUnset);

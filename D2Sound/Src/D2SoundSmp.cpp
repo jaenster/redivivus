@@ -346,25 +346,26 @@ void __fastcall SOUNDSMP_SetGlobalVolume(uint32_t nVolume) {
     if (!(nErrLineOrFlag && nVolume != gnSoundGlobalVolume)) {
       return;
     }
-    if (nVolume > 0xff) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3b9);
-      exit(-1);
-    }
+    if (nVolume <= 0xff) {
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
+      gnSoundGlobalVolume = nVolume;
+      for (pSampleEntry = gpSoundSampleList; pSampleEntry; pSampleEntry = (int*)pSampleEntry[1]) {
+        D2SoundSmpStrc* ppSoundSmp;
+        ppSoundSmp = (D2SoundSmpStrc*)*pSampleEntry;
+        if (!ppSoundSmp) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e4);
+          exit(-1);
+        }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
-    gnSoundGlobalVolume = nVolume;
-    for (pSampleEntry = gpSoundSampleList; pSampleEntry; pSampleEntry = (int*)pSampleEntry[1]) {
-      D2SoundSmpStrc* ppSoundSmp;
-      ppSoundSmp = (D2SoundSmpStrc*)*pSampleEntry;
-      if (!ppSoundSmp) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e4);
-        exit(-1);
+        SOUNDSMP_SetVolume(ppSoundSmp, ppSoundSmp->nVolume);
       }
 
-      SOUNDSMP_SetVolume(ppSoundSmp, ppSoundSmp->nVolume);
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
+      return;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3b9);
+    exit(-1);
 }
 
 uint32_t __stdcall SOUNDSMP_GetEffectiveVolume() {
@@ -470,27 +471,27 @@ void __fastcall SOUNDSMP_CheckBufferLost(D2SoundSmpStrc * ppnParam) {
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
     HRESULT nHResult = ppnParam->pDSBuffer->lpVtbl->GetStatus(ppnParam->pDSBuffer, (DWORD*)&dwBufferStatus);
-    if (nHResult >= 0) {
-      if ((uint32_t)dwBufferStatus & 2) {
-        do {
-          while (true) {
-            nHResult = ppnParam->pDSBuffer->lpVtbl->Restore(ppnParam->pDSBuffer);
-            if (nHResult != -0x7787ff6a) {
-              break;
-            }
-
-            /* DWORD dwMilliseconds for Sleep */ Sleep(10);
-          }
-        } while (nHResult < 0);
-
-        SOUNDSMP_Stop(ppnParam);
-      }
-
+    if (nHResult < 0) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
       return;
     }
+    if ((uint32_t)dwBufferStatus & 2) {
+      do {
+        while (true) {
+          nHResult = ppnParam->pDSBuffer->lpVtbl->Restore(ppnParam->pDSBuffer);
+          if (nHResult != -0x7787ff6a) {
+            break;
+          }
+
+          /* DWORD dwMilliseconds for Sleep */ Sleep(10);
+        }
+      } while (nHResult < 0);
+
+      SOUNDSMP_Stop(ppnParam);
+    }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
+    return;
 }
 
 // The local holding the EAX interface was typed IUnknown *. It is IKsPropertySet *, the declared type

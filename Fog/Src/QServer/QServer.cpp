@@ -1793,7 +1793,20 @@ void __fastcall RecvForClient(D2QServerStrc * pQServer, D2QServerClientConnectio
       nByteCount = pClient->nBytesRead;
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pClient->clientLock);
       nClassifyResult = pQServer->pfnPacketClassifier((uint8_t*)pClient->aRecvBuffer, nByteCount, &__frame0.nPacketEnd, &__frame0.nPayloadStart, &__frame0.nQueueModeIdx, &__frame0.nClassifierOut0, pClient->nClientToken, pClient->nServerToken, pClient->ipAddress.S_un.S_addr);
-      if (nClassifyResult == 2) {
+      if (nClassifyResult != 2) {
+        if (nClassifyResult == 3) {
+          return;
+        }
+        if (nClassifyResult == 4) {
+          /* in_addr in for inet_ntoa */ szIpStr = inet_ntoa((in_addr)pClient->ipAddress.S_un.S_un_b);
+          LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  User at %s banned due to PACKET_INVALID in QSrvProcessMsg", szIpStr);
+          HACKL_DisconnectAndBanClient(pClient->nClientToken, ".\\Src\\QServer\\QServer.cpp", 0x635, pQServer);
+          return;
+        }
+        if (nClassifyResult != 5) {
+          goto enqueue_packet;
+        }
+      } else {
         if (pQServer->bUseQServerHack) {
           fSpamResult = QSSpamCheck(pClient, pQServer, __frame0.nClassifierOut0);
           if (!fSpamResult) {
@@ -1846,19 +1859,6 @@ void __fastcall RecvForClient(D2QServerStrc * pQServer, D2QServerClientConnectio
 
         pQServer->ppModePacketQueueTails[__frame0.nQueueModeIdx] = pPacketNode;
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csClientLifecycle);
-      } else {
-        if (nClassifyResult == 3) {
-          return;
-        }
-        if (nClassifyResult == 4) {
-          /* in_addr in for inet_ntoa */ szIpStr = inet_ntoa((in_addr)pClient->ipAddress.S_un.S_un_b);
-          LogManager::LOGMANAGER_TraceToModuleLog("HACK", "[HACKLIST]  User at %s banned due to PACKET_INVALID in QSrvProcessMsg", szIpStr);
-          HACKL_DisconnectAndBanClient(pClient->nClientToken, ".\\Src\\QServer\\QServer.cpp", 0x635, pQServer);
-          return;
-        }
-        if (nClassifyResult != 5) {
-          goto enqueue_packet;
-        }
       }
 
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pClient->clientLock);

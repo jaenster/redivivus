@@ -479,18 +479,19 @@ void __fastcall FillGrid(D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHe
     int nRowOffset = 0;
     int nRowIdx = 0;
     pDrlgGrid->pCellsRowOffsets = pCellRowOffsets;
-    if (nHeight <= 0) {
+    if (nHeight > 0) {
+      do {
+        pDrlgGrid->pCellsRowOffsets[nRowIdx] = nRowOffset;
+        nRowIdx++;
+        nRowOffset += nWidth;
+      } while (nRowIdx < nHeight);
+
       pDrlgGrid->bIsSubGrid = 0;
       return;
     }
 
-    do {
-      pDrlgGrid->pCellsRowOffsets[nRowIdx] = nRowOffset;
-      nRowIdx++;
-      nRowOffset += nWidth;
-    } while (nRowIdx < nHeight);
-
     pDrlgGrid->bIsSubGrid = 0;
+    return;
 }
 
 // Allocates grid with row offset lookup table.

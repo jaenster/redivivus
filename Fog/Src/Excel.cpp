@@ -555,64 +555,64 @@ D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(D2ArchiveS
     char cCurChar;
     cCurChar = *(char*)&pD2Archive->pPrevLink;
     *(char*)&pScanPos->pPrevLink = '\0';
-    if (cCurChar == '\n') {
-      int32_t nCmp;
-      pBinFieldExcel->nColumnCount++;
-      pScanPos = (D2ArchiveStrc*)((uintptr_t)&pScanPos->pPrevLink + 2);
-      if (pScanPos >= pCurPos) {
-        error:
-        D2_FREE_AT(pBinFieldExcel->pD2Archive, ".\\Src\\Excel\\Excel.cpp", 0x9a);
-        D2_FREE_POOL_AT(nullptr, pBinFieldExcel, ".\\Src\\Excel\\Excel.cpp", 0x9b);
-        return nullptr;
-      }
-      if ((uint32_t)pBinFieldExcel->nColumnCount <= 0x118) {
-        pBinFieldExcel->pDataStart = (char*)pScanPos;
-        pLineStart = pScanPos;
-        do {
-          pNextLineStart = pScanPos;
-          if (pNextLineStart < pCurPos) {
-            pScanPos = (D2ArchiveStrc*)((uintptr_t)&pNextLineStart->pPrevLink + 1);
-            if (*(char*)&pNextLineStart->pPrevLink == '\t') {
-              *(char*)&pNextLineStart->pPrevLink = '\0';
-              continue;
-            }
-            if (*(char*)&pNextLineStart->pPrevLink != '\r') {
-              continue;
-            }
-
-            cNextChar = *(char*)&pScanPos->pPrevLink;
-            *(char*)&pNextLineStart->pPrevLink = '\0';
-            if (cNextChar != '\n') {
-              ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x75);
-              exit(-1);
-            }
-
-            pNextLineStart = (D2ArchiveStrc*)((uintptr_t)&pNextLineStart->pPrevLink + 2);
-            /* Count lines and add value */ pBinFieldExcel->nLinesCount++;
-          }
-
-          nCmp = Storm::Source::SSTR::SStrCmp((char*)pLineStart, "Expansion", 10);
-          if (!nCmp) {
-            pBinFieldExcel->nLinesCount--;
-            Storm::Source::SMem::SMemCopy(pLineStart, pNextLineStart, (int)pCurPos - (int)pNextLineStart);
-            pCurPos = (D2ArchiveStrc*)((int)pCurPos + ((int)pLineStart - (int)pNextLineStart));
-            pNextLineStart = pLineStart;
-          }
-
-          pScanPos = pNextLineStart;
-          pLineStart = pNextLineStart;
-          if (pNextLineStart >= pCurPos) {
-            return pBinFieldExcel;
-          }
-        } while (true);
-      }
-
-      ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x67);
-      exit(-1);
-    } else {
+    if (cCurChar != '\n') {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x5c);
       exit(-1);
     }
+
+    int32_t nCmp;
+    pBinFieldExcel->nColumnCount++;
+    pScanPos = (D2ArchiveStrc*)((uintptr_t)&pScanPos->pPrevLink + 2);
+    if (pScanPos >= pCurPos) {
+      error:
+      D2_FREE_AT(pBinFieldExcel->pD2Archive, ".\\Src\\Excel\\Excel.cpp", 0x9a);
+      D2_FREE_POOL_AT(nullptr, pBinFieldExcel, ".\\Src\\Excel\\Excel.cpp", 0x9b);
+      return nullptr;
+    }
+    if ((uint32_t)pBinFieldExcel->nColumnCount <= 0x118) {
+      pBinFieldExcel->pDataStart = (char*)pScanPos;
+      pLineStart = pScanPos;
+      do {
+        pNextLineStart = pScanPos;
+        if (pNextLineStart < pCurPos) {
+          pScanPos = (D2ArchiveStrc*)((uintptr_t)&pNextLineStart->pPrevLink + 1);
+          if (*(char*)&pNextLineStart->pPrevLink == '\t') {
+            *(char*)&pNextLineStart->pPrevLink = '\0';
+            continue;
+          }
+          if (*(char*)&pNextLineStart->pPrevLink != '\r') {
+            continue;
+          }
+
+          cNextChar = *(char*)&pScanPos->pPrevLink;
+          *(char*)&pNextLineStart->pPrevLink = '\0';
+          if (cNextChar != '\n') {
+            ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x75);
+            exit(-1);
+          }
+
+          pNextLineStart = (D2ArchiveStrc*)((uintptr_t)&pNextLineStart->pPrevLink + 2);
+          /* Count lines and add value */ pBinFieldExcel->nLinesCount++;
+        }
+
+        nCmp = Storm::Source::SSTR::SStrCmp((char*)pLineStart, "Expansion", 10);
+        if (!nCmp) {
+          pBinFieldExcel->nLinesCount--;
+          Storm::Source::SMem::SMemCopy(pLineStart, pNextLineStart, (int)pCurPos - (int)pNextLineStart);
+          pCurPos = (D2ArchiveStrc*)((int)pCurPos + ((int)pLineStart - (int)pNextLineStart));
+          pNextLineStart = pLineStart;
+        }
+
+        pScanPos = pNextLineStart;
+        pLineStart = pNextLineStart;
+        if (pNextLineStart >= pCurPos) {
+          return pBinFieldExcel;
+        }
+      } while (true);
+    }
+
+    ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x67);
+    exit(-1);
 }
 
 // Two passes over the txt rows: pass 1 resolves link-type columns (CODE*/NAME_I*), pass 2 parses every
@@ -889,11 +889,7 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                   case 0:
                     cCurChar = *pCurDataPos;
                   pDstChar = pCurDataPos;
-                  if (cCurChar == '\0') {
-                    terminate_string:
-                    pDstChar = pCurDataPos + 1;
-                    *pFieldCursor = '\0';
-                  } else {
+                  if (cCurChar != '\0') {
                     do {
                       pCurDataPos = pDstChar;
                       if (pFieldCursor >= pFieldEnd) {
@@ -914,54 +910,10 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
 
                     pDstChar = pCurDataPos + 2;
                     *pFieldCursor = '\0';
-                  }
-
-                  break;
-                  case 1:
-                    pDstChar = pCurDataPos;
-                  if (*pCurDataPos == '-') {
+                  } else {
+                    terminate_string:
                     pDstChar = pCurDataPos + 1;
-                  }
-
-                  nFieldValue = 0;
-                  cCurChar = *pDstChar;
-                  while (cCurChar != '\0') {
-                    pDstChar++;
-                    nFieldValue = cCurChar - 0x30 + nFieldValue * 10;
-                    cCurChar = *pDstChar;
-                  }
-
-                  if (*pCurDataPos == '-') {
-                    nFieldValue = -nFieldValue;
-                  }
-
-                  pDstChar++;
-                  switch (pBinFieldInput[nFieldMapIdx].eType) {
-                    case FIELDTYPE_INT:
-
-                    case FIELDTYPE_UINT:
-                      goto store_int;
-                    case FIELDTYPE_SHORT:
-                      case_FIELDTYPE_SHORT:
-                      *(short int*)pFieldCursor = (short int)nFieldValue;
-                    break;
-                    case FIELDTYPE_CHAR:
-
-                    case FIELDTYPE_BYTE:
-                      case_FIELDTYPE_CHAR:
-                      *pFieldCursor = (char)nFieldValue;
-                    break;
-                    case FIELDTYPE_BOOL:
-                      if (pCurDataPos + 1 != pDstChar) {
-                        *pFieldCursor = (char)nFieldValue;
-                      }
-                    break;
-                    case FIELDTYPE_BIT:
-                      if (!nFieldValue) {
-                        BitBuffer::UnsetBitAtOffset(pFieldCursor, nFieldSize);
-                      } else {
-                        BitBuffer::SetBitAtOffset(pFieldCursor, nFieldSize);
-                      }
+                    *pFieldCursor = '\0';
                   }
 
                   break;
@@ -1125,6 +1077,54 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                     case FIELDTYPE_NAME_CHAR:
                       {
                         goto case_FIELDTYPE_CHAR;
+                      }
+                  }
+
+                  break;
+                  case 1:
+                    pDstChar = pCurDataPos;
+                  if (*pCurDataPos == '-') {
+                    pDstChar = pCurDataPos + 1;
+                  }
+
+                  nFieldValue = 0;
+                  cCurChar = *pDstChar;
+                  while (cCurChar != '\0') {
+                    pDstChar++;
+                    nFieldValue = cCurChar - 0x30 + nFieldValue * 10;
+                    cCurChar = *pDstChar;
+                  }
+
+                  if (*pCurDataPos == '-') {
+                    nFieldValue = -nFieldValue;
+                  }
+
+                  pDstChar++;
+                  switch (pBinFieldInput[nFieldMapIdx].eType) {
+                    case FIELDTYPE_INT:
+
+                    case FIELDTYPE_UINT:
+                      goto store_int;
+                    case FIELDTYPE_SHORT:
+                      case_FIELDTYPE_SHORT:
+                      *(short int*)pFieldCursor = (short int)nFieldValue;
+                    break;
+                    case FIELDTYPE_CHAR:
+
+                    case FIELDTYPE_BYTE:
+                      case_FIELDTYPE_CHAR:
+                      *pFieldCursor = (char)nFieldValue;
+                    break;
+                    case FIELDTYPE_BOOL:
+                      if (pCurDataPos + 1 != pDstChar) {
+                        *pFieldCursor = (char)nFieldValue;
+                      }
+                    break;
+                    case FIELDTYPE_BIT:
+                      if (!nFieldValue) {
+                        BitBuffer::UnsetBitAtOffset(pFieldCursor, nFieldSize);
+                      } else {
+                        BitBuffer::SetBitAtOffset(pFieldCursor, nFieldSize);
                       }
                   }
 

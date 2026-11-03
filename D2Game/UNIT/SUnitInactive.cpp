@@ -240,13 +240,14 @@ static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(::SGAMEDATA * pGa
     }
 
     SUnit::FreeServerUnit(pGame, pUnit);
-    if (!pOutInactiveRecord) {
-      *pNewInactiveRecord = (int)pInactiveList->pInactiveItems;
-      pInactiveList->pInactiveItems = (D2InactiveItemRecordStrc*)pNewInactiveRecord;
+    if (pOutInactiveRecord) {
+      *pOutInactiveRecord = (D2InactiveItemRecordStrc*)pNewInactiveRecord;
       return;
     }
 
-    *pOutInactiveRecord = (D2InactiveItemRecordStrc*)pNewInactiveRecord;
+    *pNewInactiveRecord = (int)pInactiveList->pInactiveItems;
+    pInactiveList->pInactiveItems = (D2InactiveItemRecordStrc*)pNewInactiveRecord;
+    return;
 }
 
 // Locates and removes an inactive monster record matching nClassId (record +8, stored from pUnit->nClassId by SUNITINACTIVE_DeactivateMonster at 005422b1) from the bucket list indexed by byActNo in the game's inactive monster table. On match: unlinks the node, clears its minion list via ClearMinionList, frees its AI/spawn-point list, and frees the record. Searches all D2InactiveUnitListStrc chained entries in the bucket.

@@ -130,7 +130,10 @@ BOOL __fastcall Skills_SrvDoFunc_033_PsychicHammer(::SGAMEDATA * pGame, D2UnitSt
     int32_t nCalcResult;
     uint32_t nTargetHp;
     D2DamageStrc sDamage;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
@@ -723,7 +726,10 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
     D2SeedStrc sSeedAdvanced = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed.nSeedHigh = sSeedAdvanced.nSeedHigh;
     pUnit->sSeed.nSeedLow = sSeedAdvanced.nSeedLow;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
@@ -1230,7 +1236,10 @@ BOOL __fastcall Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter(::SGAMEDA
     D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
     pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
@@ -1265,7 +1274,10 @@ BOOL __fastcall Skills_SrvDoFunc_143_ChargeRelease_GroundStrike(::SGAMEDATA * pG
     D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
     pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
@@ -1326,7 +1338,13 @@ BOOL __fastcall Skills_SrvDoFunc_041_BladeFury(::SGAMEDATA * pGame, D2UnitStrc *
     pUnit->sSeed = DVar1;
     ::SGAMEDATA* pGameCopy = pGame;
     D2Common::Seed::InitSeed_Param_666(&sSeedCopy, DVar1.nSeedLow);
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+      return 0;
+    }
+    if (!(sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
 
@@ -2056,7 +2074,10 @@ BOOL __fastcall Skills_SrvDoFunc_045_SummonTrapSentry(::SGAMEDATA * pGame, D2Uni
     bool bHasPos;
     uint32_t nTargetX;
     eD2Skills eSkillSaved = eSkill;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
@@ -2095,7 +2116,7 @@ static void __stdcall SKILLASS_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc 
       SKILLASS_ApplyProgressiveDamageToTarget(pUnit2, &sDamage);
       nEnDmgCalc = D2Common::Skills::D2GetSkillCalc(pUnit2, pSkillTxt->calc[0], eSkill, nSkillLvl);
       sDamage.dwEnDmgPct += nEnDmgCalc;
-      if (pSkillTxt->EType != ELEMENTAL_NONE) {
+      if ((uint8_t)pSkillTxt->EType > ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit2, pSkillTxt->calc[3], eSkill, nSkillLvl);
         if (sDamage.dwConvPct > 0) {
           sDamage.nConvType = pSkillTxt->EType;
@@ -2179,7 +2200,7 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
       if (nStateWordCount >= 0) {
         do {
           eState = nStateWordCount + nStateIdBitBase;
-          nStateBits &= ~(1 << ((uint8_t)nStateWordCount & 0x1f));
+          nStateBits &= ~(1 << (nStateWordCount & 0x1f));
           if (gadwBitMasks[eState & STATE_venomclaws] & sgptDataTable->pSingleStateDataTbl[6]->nStateBitmask[(int)eState >> 5]) {
             pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
             if (pStatList) {
@@ -2639,7 +2660,10 @@ BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2Un
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
-    if ((int)eSkill < 0 || (int)eSkill >= sgptDataTable->nTxtSkillsCount) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if ((int)eSkill >= sgptDataTable->nTxtSkillsCount) {
       return 0;
     }
 

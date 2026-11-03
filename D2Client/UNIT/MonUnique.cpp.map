@@ -72,7 +72,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "uint16_t"
+        "int16_t"
       ]
     },
     {

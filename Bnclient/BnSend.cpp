@@ -919,15 +919,16 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
     return (uint32_t)(nSendResult >= 0);
 }
 
-void __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash() {
+BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash() {
     char szCrashDumpBuf[1500];
     size_t nCrashDumpSize = 0x5dc;
     BOOL bHasCrashDump = Fog::Debug::LoadPreviousCrashDump((uint8_t*)szCrashDumpBuf, (int*)&nCrashDumpSize);
     if (!bHasCrashDump) {
-      return;
+      return 0;
     }
 
-    NET_SID_CLIENT_Send(0x5d, szCrashDumpBuf, nCrashDumpSize);
+    int32_t nSendResult = NET_SID_CLIENT_Send(0x5d, szCrashDumpBuf, nCrashDumpSize);
+    return (uint32_t)(nSendResult >= 0);
 }
 
 // @sourcefile .\BnSend.cpp
@@ -2372,7 +2373,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
         g_nFirstUnreadNewsIndex = 0;
         __frame0.nLastEntryId = 0;
         __frame0.nEntriesRead = 0;
-        if (nEntryCount) {
+        if (nEntryCount > 0) {
           do {
             nEntryCount = g_nNewsMaxCacheSize.nCount + 1;
             if (nEntryCount > g_nNewsMaxCacheSize.nCapacity) {

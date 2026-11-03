@@ -352,14 +352,15 @@ static void __stdcall PLRMODES_StartPathAndChangeMode(::SGAMEDATA * pGame, eD2Pl
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     nErrorLine = D2Common::PATH::DynamicPath::GetPathPointsSize(pDynamicPath);
-    if (nErrorLine) {
-      UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, eAnimMode);
-      UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);
-      UNIT::SUnit::UNITS_ClearAnimAndTriggerEndAnim(pGame, pUnit);
+    if (!nErrorLine) {
+      PLRMODES_SetIdleMode(pGame, pUnit, 1, 0, 0);
       return;
     }
 
-    PLRMODES_SetIdleMode(pGame, pUnit, 1, 0, 0);
+    UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, eAnimMode);
+    UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);
+    UNIT::SUnit::UNITS_ClearAnimAndTriggerEndAnim(pGame, pUnit);
+    return;
 }
 
 void __fastcall PLRMODES_SetTargetAndStartPath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nModeIndex, D2UnitStrc * pTargetUnit) {

@@ -192,7 +192,7 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
 void __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText);
 BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * szText2);
 BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szText2, char * szNewEmail);
-void __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash();
+BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash();
 // @sourcefile .\BnSend.cpp
 void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, size_t nSize);
 // @sourcefile .\BnSend.cpp

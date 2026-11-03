@@ -83,12 +83,18 @@ int32_t __fastcall CheckMonStatId(int32_t nMonStatsId) {
 }
 
 int32_t __fastcall TXT_Skills_GetSkillRange(eD2Skills eSkill, int32_t pnSkillLevel) {
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
     D2SkillsTxt* pSkillsTxtLine = sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillsTxtLine && pnSkillLevel > 0)) {
+    if (!pSkillsTxtLine) {
+      return 0;
+    }
+    if (pnSkillLevel <= 0) {
       return 0;
     }
 

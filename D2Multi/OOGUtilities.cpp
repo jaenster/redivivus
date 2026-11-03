@@ -2711,27 +2711,28 @@ void __stdcall OOGMENU_RequestGameList() {
     char aRequestBuf[24];
     gpChatFormList = (void*)0x3;
     nGameListDifficultyFilter = 0;
-    if (D2IniData_multiplayer->nScreenToShow != 2) {
-      OOGUTIL_RequestGameListFromServer();
+    if (D2IniData_multiplayer->nScreenToShow == 2) {
+      memset(aRequestBuf, 0, 24 * sizeof(aRequestBuf[0]));
+      if (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
+        aRequestBuf[0x14] = '\0';
+        aRequestBuf[0x15] = '\b';
+        aRequestBuf[0x16] = '\0';
+        aRequestBuf[0x17] = '\0';
+      }
+
+      do {
+        wRequestId = CreateJoinGameRequestId + 1;
+        CreateJoinGameRequestId = 0;
+      } while (!wRequestId);
+
+      CreateJoinGameRequestId = wRequestId;
+      D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x05_GameList(aRequestBuf, wRequestId);
+      LastGameRequestId = CreateJoinGameRequestId;
       return;
     }
 
-    memset(aRequestBuf, 0, 24 * sizeof(aRequestBuf[0]));
-    if (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
-      aRequestBuf[0x14] = '\0';
-      aRequestBuf[0x15] = '\b';
-      aRequestBuf[0x16] = '\0';
-      aRequestBuf[0x17] = '\0';
-    }
-
-    do {
-      wRequestId = CreateJoinGameRequestId + 1;
-      CreateJoinGameRequestId = 0;
-    } while (!wRequestId);
-
-    CreateJoinGameRequestId = wRequestId;
-    D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x05_GameList(aRequestBuf, wRequestId);
-    LastGameRequestId = CreateJoinGameRequestId;
+    OOGUTIL_RequestGameListFromServer();
+    return;
 }
 
 BOOL __stdcall OOGUTIL_SendGamePassword(DWORD dwParam1, DWORD dwParam2, char * szText) {

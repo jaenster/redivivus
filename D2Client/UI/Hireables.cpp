@@ -595,42 +595,44 @@ void __stdcall UI_HandleHirelingTooltipHoverTimer(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall UI_ToggleHirelingIconsVisibility() {
     eD2GSGameType eGameType;
-    if (!gnHireDisplayMode) {
-      eGameType = GAME::Game::CLIENT_GetD2GSGameType();
-      if (eGameType == GAMETYPE_SINGLEPLAYER) {
-        gnHireDisplayMode = 2;
-        gnHireIconHoverIndex = 0;
-        ui::SetUIFlag(UI_HIREICONS, UI_RESET, 0);
-        return;
-      }
+    if (gnHireDisplayMode) {
+      switch (gnHireDisplayMode) {
+        case 1:
+          {
+            eGameType = GAME::Game::CLIENT_GetD2GSGameType();
+            if (eGameType == GAMETYPE_SINGLEPLAYER) {
+              gnHireDisplayMode = 0;
+              ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
+              return;
+            }
 
-      gnHireDisplayMode = 1;
-      ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
-      return;
-    }
-
-    switch (gnHireDisplayMode) {
-      case 1:
-        {
-          eGameType = GAME::Game::CLIENT_GetD2GSGameType();
-          if (eGameType == GAMETYPE_SINGLEPLAYER) {
+            gnHireDisplayMode = 2;
+            gnHireIconHoverIndex = 0;
+            ui::SetUIFlag(UI_HIREICONS, UI_RESET, 0);
+            return;
+          }
+        default:
+          {
             gnHireDisplayMode = 0;
             ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
             return;
           }
+      }
 
-          gnHireDisplayMode = 2;
-          gnHireIconHoverIndex = 0;
-          ui::SetUIFlag(UI_HIREICONS, UI_RESET, 0);
-          return;
-        }
-      default:
-        {
-          gnHireDisplayMode = 0;
-          ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
-          return;
-        }
+      return;
     }
+
+    eGameType = GAME::Game::CLIENT_GetD2GSGameType();
+    if (eGameType == GAMETYPE_SINGLEPLAYER) {
+      gnHireDisplayMode = 2;
+      gnHireIconHoverIndex = 0;
+      ui::SetUIFlag(UI_HIREICONS, UI_RESET, 0);
+      return;
+    }
+
+    gnHireDisplayMode = 1;
+    ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
+    return;
 }
 
 void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {

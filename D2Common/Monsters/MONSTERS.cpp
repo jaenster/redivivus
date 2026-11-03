@@ -422,12 +422,21 @@ BOOL __stdcall MONSTER_IsAndarielNormal(D2UnitStrc * pUnit, int32_t nParam) {
 }
 
 uint32_t __stdcall IsDemon(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if (!pUnit) {
+      return 0;
+    }
+    if (pUnit->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 
     int pMonStatsTxt = pUnit->nClassId;
-    if (!(pMonStatsTxt >= 0 && pMonStatsTxt < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + pMonStatsTxt)) {
+    if (pMonStatsTxt < 0) {
+      return 0;
+    }
+    if (!(pMonStatsTxt < sgptDataTable->nTxtMonStatsSize)) {
+      return 0;
+    }
+    if (!(sgptDataTable->pTxtMonStats + pMonStatsTxt)) {
       return 0;
     }
 
@@ -655,12 +664,21 @@ int32_t __stdcall GetMonsterBaseId(D2RoomStrc * pRoom, int32_t nMonsterId) {
 }
 
 uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if (!pUnit) {
+      return 0;
+    }
+    if (pUnit->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 
     int pMonStatsTxt = pUnit->nClassId;
-    if (!(pMonStatsTxt >= 0 && pMonStatsTxt < sgptDataTable->nTxtMonStatsSize && sgptDataTable->pTxtMonStats + pMonStatsTxt)) {
+    if (pMonStatsTxt < 0) {
+      return 0;
+    }
+    if (!(pMonStatsTxt < sgptDataTable->nTxtMonStatsSize)) {
+      return 0;
+    }
+    if (!(sgptDataTable->pTxtMonStats + pMonStatsTxt)) {
       return 0;
     }
 

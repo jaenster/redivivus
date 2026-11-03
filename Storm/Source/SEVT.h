@@ -24,6 +24,13 @@ struct D2SevtHandlerNodeStrc {
     /* 0x0C */ struct D2SevtHandlerNodeStrc * pNext; // next node in the hash bucket chain
 };
 
+struct D2SevtHandlerTableStrc {
+    /* 0x00 */ struct D2SevtHandlerNodeStrc * * pBuckets; // bucket heads, nBucketCount entries
+    /* 0x04 */ uint32_t nBucketCount; // power of two; bucket = key & (nBucketCount - 1)
+    /* 0x08 */ uint32_t nHandlerCount; // decremented by SEvtUnregisterHandler
+    /* 0x0C */ struct D2SevtHandlerTableStrc * pPrevState; // table saved by SEvtPushState, restored by SEvtPopState
+};
+
 struct __attribute__((packed)) StormBreakCmdStrc {
     /* 0x00 */ StormLinkStrc link;
     /* 0x08 */ void * pData;
@@ -36,7 +43,7 @@ namespace Storm::Source::SEVT {
 uint32_t __fastcall SEVT_NextPowerOf2(int nValue);
 // @sourcefile .\SOURCE\SEVT.CPP
 // @blizzard CopyIdHashTable (SEVT.CPP)
-void __stdcall SEVT_CopyIdHashTable(uint32_t * * pDstTable, int * pSrcTable);
+void __stdcall SEVT_CopyIdHashTable(struct D2SevtHandlerTableStrc * pDstTable, struct D2SevtHandlerTableStrc * pSrcTable);
 // Destroys all registered event handlers and cleans up the global event hash table. Iterates through all hash buckets, frees handler tables for each event, deallocates event structures, and resets global state. Thread-safe via critical section.
 // @oracle SEvtDestroy
 // @oracle-source Storm export name list, and the PEF traceback-named body .SEvtDestroy @10018210 in Mac PPC 1.10b Storm

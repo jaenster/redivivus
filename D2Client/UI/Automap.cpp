@@ -351,7 +351,12 @@ void __stdcall AUTOMAP_RebalanceTreeLeft(D2AutomapCellStrc * * ppCell) {
     D2AutomapCellStrc* pCell = *ppCell;
     D2AutomapCellStrc* pRight = pCell->pMore;
     D2AutomapCellStrc** ppMore = &pCell->pMore;
-    if (pRight->wWeight == -1) {
+    if (pRight->wWeight != -1) {
+      if (pRight->wWeight != 1) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x294);
+        exit(-1);
+      }
+    } else {
       int nGrandChildWeight;
       pRightLeft = pRight->pLess;
       nGrandChildWeight = (int)pRightLeft->wWeight;
@@ -388,9 +393,6 @@ void __stdcall AUTOMAP_RebalanceTreeLeft(D2AutomapCellStrc * * ppCell) {
       pRight->pLess = pCell;
       *ppCell = pRight;
       return;
-    } else if (pRight->wWeight != 1) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x294);
-      exit(-1);
     }
 
     pCell->wWeight = 0;
@@ -1337,7 +1339,7 @@ void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2Au
 
     pTiles = D2Common::DUNGEON::Dungeon::DRLGROOM_GetWallTilesFromRoom(pRoom, (int*)&nTileCount);
     i = 0;
-    if (nTileCount) {
+    if (nTileCount > 0) {
       pnTileFlags = &pTiles->nFlags;
       do {
         if (!(*pnTileFlags & 8U) && (*pnTileFlags & 0x20000U || bAutoMapRevealAll || bForceReveal)) {

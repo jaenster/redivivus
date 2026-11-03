@@ -164,66 +164,67 @@ void __stdcall DRAW_UI_FPSStats() {
       fps = gnFPSFrameCounter;
       gnFPSFrameCounter = 0;
     }
-    if (gbFPSStatsEnabled) {
-      int32_t nStat;
-      nStat = Game::GetFPSSkip();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 2, "%d FPS  %d Skip", fps, nStat);
-      nStatValue = Game::GetPing();
-      D2gfx::D2GFX::D2GFX_DrawString(0xa0, 2, "Ping: %d", nStatValue);
-      /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ memStatus.dwLength = 0x20;
-      GlobalMemoryStatus(&memStatus);
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x10, "Phys:%d/%dm", (memStatus.dwTotalPhys - memStatus.dwAvailPhys >> 0x14) + 1, (memStatus.dwTotalPhys >> 0x14) + 1);
-      D2gfx::D2GFX::D2GFX_DrawString(0xa0, 0x10, "Page:%d/%dm", (memStatus.dwTotalPageFile - memStatus.dwAvailPageFile >> 0x14) + 1, (memStatus.dwTotalPageFile >> 0x14) + 1);
-      eRendererMode_lcl = D2gfx::D2GFX::D2GFX_GetRendererMode();
-      switch (eRendererMode_lcl) {
-        case RENDERER_Windowed:
-          szRendererName = "Software";
-        break;
-        case RENDERED_DirectDraw:
-          szRendererName = "DirectDraw";
-        break;
-        case RENDERER_Glide:
-          szRendererName = "Glide";
-        break;
-        case RENDERED_Unused5:
-          szRendererName = "OpenGL";
-        break;
-        case RENDERER_Direct3D:
-          szRendererName = "Direct3D";
-        break;
-        case RENDERER_Unused2:
-          szRendererName = "Software";
-        break;
-        case RENDERER_COUNT:
-          szRendererName = "RAVE";
-        break;
-        default:
-          szRendererName = "Unknown";
-      }
-
-      sprintf(szVideoMode, szRendererName);
-      D2gfx::D2GFX::D2GFX_DrawString(500, 2, "Video: %s", szVideoMode);
-      if (gbHideExtendedFPSStats) {
-        return;
-      }
-
-      nMemory = Engine::Gfx::GFX_GetCofCacheFlags();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x78, "GFX Memory->%i", nMemory);
-      nMemory = Engine::Gfx::GFX_GetGfxSystemFlags();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x84, "COF Memory->%i of %i", Engine::Gfx::GFX_GetCofCacheMemUsage(), nMemory);
-      dwSpriteCacheSize = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCacheSize();
-      nCacheTotal = D2CMP::SRC::SpriteCache::SPRITECACHE_GetTotalEntries();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x90, "Sprite Cache Memory->%i of %i", nCacheTotal, dwSpriteCacheSize);
-      nAsyncFiles = Fog::FOG_GetAsyncFileCount_ReturnZero();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0x9c, "Async Files->%i", nAsyncFiles);
-      nCelCacheCurrent = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCurrentSize();
-      D2gfx::D2GFX::D2GFX_DrawString(10, 0xa8, "CelData Cache Memory->%i of %i", D2CMP::SRC::SpriteCache::SPRITECACHE_GetMaxSize(), nCelCacheCurrent);
-      D2Client::Sound::SoundHdr::SOUNDHDR_Nop();
-      DrawRenderStats();
+    if (!gbFPSStatsEnabled) {
+      gdwFPSStatsStartTick = gbFPSStatsEnabled;
       return;
     }
 
-    gdwFPSStatsStartTick = gbFPSStatsEnabled;
+    int32_t nStat;
+    nStat = Game::GetFPSSkip();
+    D2gfx::D2GFX::D2GFX_DrawString(10, 2, "%d FPS  %d Skip", fps, nStat);
+    nStatValue = Game::GetPing();
+    D2gfx::D2GFX::D2GFX_DrawString(0xa0, 2, "Ping: %d", nStatValue);
+    /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ memStatus.dwLength = 0x20;
+    GlobalMemoryStatus(&memStatus);
+    D2gfx::D2GFX::D2GFX_DrawString(10, 0x10, "Phys:%d/%dm", (memStatus.dwTotalPhys - memStatus.dwAvailPhys >> 0x14) + 1, (memStatus.dwTotalPhys >> 0x14) + 1);
+    D2gfx::D2GFX::D2GFX_DrawString(0xa0, 0x10, "Page:%d/%dm", (memStatus.dwTotalPageFile - memStatus.dwAvailPageFile >> 0x14) + 1, (memStatus.dwTotalPageFile >> 0x14) + 1);
+    eRendererMode_lcl = D2gfx::D2GFX::D2GFX_GetRendererMode();
+    switch (eRendererMode_lcl) {
+      case RENDERER_Windowed:
+        szRendererName = "Software";
+      break;
+      case RENDERED_DirectDraw:
+        szRendererName = "DirectDraw";
+      break;
+      case RENDERER_Glide:
+        szRendererName = "Glide";
+      break;
+      case RENDERED_Unused5:
+        szRendererName = "OpenGL";
+      break;
+      case RENDERER_Direct3D:
+        szRendererName = "Direct3D";
+      break;
+      case RENDERER_Unused2:
+        szRendererName = "Software";
+      break;
+      case RENDERER_COUNT:
+        szRendererName = "RAVE";
+      break;
+      default:
+        szRendererName = "Unknown";
+    }
+
+    sprintf(szVideoMode, szRendererName);
+    D2gfx::D2GFX::D2GFX_DrawString(500, 2, "Video: %s", szVideoMode);
+    if (gbHideExtendedFPSStats) {
+      return;
+    }
+
+    nMemory = Engine::Gfx::GFX_GetCofCacheFlags();
+    D2gfx::D2GFX::D2GFX_DrawString(10, 0x78, "GFX Memory->%i", nMemory);
+    nMemory = Engine::Gfx::GFX_GetGfxSystemFlags();
+    D2gfx::D2GFX::D2GFX_DrawString(10, 0x84, "COF Memory->%i of %i", Engine::Gfx::GFX_GetCofCacheMemUsage(), nMemory);
+    dwSpriteCacheSize = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCacheSize();
+    nCacheTotal = D2CMP::SRC::SpriteCache::SPRITECACHE_GetTotalEntries();
+    D2gfx::D2GFX::D2GFX_DrawString(10, 0x90, "Sprite Cache Memory->%i of %i", nCacheTotal, dwSpriteCacheSize);
+    nAsyncFiles = Fog::FOG_GetAsyncFileCount_ReturnZero();
+    D2gfx::D2GFX::D2GFX_DrawString(10, 0x9c, "Async Files->%i", nAsyncFiles);
+    nCelCacheCurrent = D2CMP::SRC::SpriteCache::SPRITECACHE_GetCurrentSize();
+    D2gfx::D2GFX::D2GFX_DrawString(10, 0xa8, "CelData Cache Memory->%i of %i", D2CMP::SRC::SpriteCache::SPRITECACHE_GetMaxSize(), nCelCacheCurrent);
+    D2Client::Sound::SoundHdr::SOUNDHDR_Nop();
+    DrawRenderStats();
+    return;
 }
 
 void __stdcall ResetStats() {

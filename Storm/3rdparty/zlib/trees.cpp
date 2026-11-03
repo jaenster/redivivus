@@ -51,35 +51,36 @@ static void __stdcall pqdownheap(int32_t nIndex, deflate_state * pDeflateState, 
     int nSiftNode = pDeflateState->heap[nIndex];
     int nChild = nIndex * 2;
     bool bSignedLess = nChild < nHeapLen;
-    if (nChild > nHeapLen) {
+    if (!(nChild > nHeapLen)) {
+      while (true) {
+        int nHeapLenTmp;
+        nHeapLen = nChild;
+        if (bSignedLess && (pTree[pDeflateState->heap[nChild + 1]].fc < pTree[pDeflateState->heap[nChild]].fc || pTree[pDeflateState->heap[nChild + 1]].fc == pTree[pDeflateState->heap[nChild]].fc && pDeflateState->depth[pDeflateState->heap[nChild + 1]] <= pDeflateState->depth[pDeflateState->heap[nChild]])) {
+          nHeapLen = nChild + 1;
+        }
+
+        nSmaller = pDeflateState->heap[nHeapLen];
+        if (pTree[nSiftNode].fc < pTree[nSmaller].fc || pTree[nSiftNode].fc == pTree[nSmaller].fc && pDeflateState->depth[nSiftNode] <= pDeflateState->depth[nSmaller]) {
+          break;
+        }
+
+        pDeflateState->heap[nIndex] = nSmaller;
+        nHeapLenTmp = pDeflateState->heap_len;
+        nChild = nHeapLen * 2;
+        nIndex = nHeapLen;
+        bSignedLess = nChild < nHeapLenTmp;
+        if (nChild > nHeapLenTmp) {
+          pDeflateState->heap[nHeapLen] = nSiftNode;
+          return;
+        }
+      }
+
       pDeflateState->heap[nIndex] = nSiftNode;
       return;
     }
 
-    while (true) {
-      int nHeapLenTmp;
-      nHeapLen = nChild;
-      if (bSignedLess && (pTree[pDeflateState->heap[nChild + 1]].fc < pTree[pDeflateState->heap[nChild]].fc || pTree[pDeflateState->heap[nChild + 1]].fc == pTree[pDeflateState->heap[nChild]].fc && pDeflateState->depth[pDeflateState->heap[nChild + 1]] <= pDeflateState->depth[pDeflateState->heap[nChild]])) {
-        nHeapLen = nChild + 1;
-      }
-
-      nSmaller = pDeflateState->heap[nHeapLen];
-      if (pTree[nSiftNode].fc < pTree[nSmaller].fc || pTree[nSiftNode].fc == pTree[nSmaller].fc && pDeflateState->depth[nSiftNode] <= pDeflateState->depth[nSmaller]) {
-        break;
-      }
-
-      pDeflateState->heap[nIndex] = nSmaller;
-      nHeapLenTmp = pDeflateState->heap_len;
-      nChild = nHeapLen * 2;
-      nIndex = nHeapLen;
-      bSignedLess = nChild < nHeapLenTmp;
-      if (nChild > nHeapLenTmp) {
-        pDeflateState->heap[nHeapLen] = nSiftNode;
-        return;
-      }
-    }
-
     pDeflateState->heap[nIndex] = nSiftNode;
+    return;
 }
 
 static void gen_bitlen(tree_desc * pTreeDesc, deflate_state * pDeflateState) {
@@ -276,15 +277,15 @@ static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nM
             nBitBufLen = pDeflateState->bi_valid;
             if (nBitBufLen > (int)(0x10 - nSymBitLen)) {
               wCode = pDeflateState->bl_tree[nCurLen].fc;
-              pDeflateState->bi_buf |= wCode << ((uint8_t)nBitBufLen & 0x1f);
+              pDeflateState->bi_buf |= wCode << (nBitBufLen & 0x1f);
               pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
               pDeflateState->pending++;
               pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
               pDeflateState->pending++;
               nBitBufLen = pDeflateState->bi_valid - 0x10;
-              pDeflateState->bi_buf = wCode >> (0x10U - (char)pDeflateState->bi_valid & 0x1f);
+              pDeflateState->bi_buf = wCode >> (0x10U - pDeflateState->bi_valid & 0x1f);
             } else {
-              pDeflateState->bi_buf |= pDeflateState->bl_tree[nCurLen].fc << ((uint8_t)nBitBufLen & 0x1f);
+              pDeflateState->bi_buf |= pDeflateState->bl_tree[nCurLen].fc << (nBitBufLen & 0x1f);
             }
 
             nRepeatCount--;
@@ -302,7 +303,7 @@ static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nM
               pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
               pDeflateState->pending++;
               nBitBufLen = pDeflateState->bi_valid - 0x10;
-              pDeflateState->bi_buf = wCode >> (0x10U - (char)pDeflateState->bi_valid & 0x1f);
+              pDeflateState->bi_buf = wCode >> (0x10U - pDeflateState->bi_valid & 0x1f);
             } else {
               nBitBufLen = pDeflateState->bi_valid;
               pDeflateState->bi_buf |= pDeflateState->bl_tree[nCurLen].fc << (byBitCount & 0x1f);
@@ -322,7 +323,7 @@ static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nM
             pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
             pDeflateState->pending++;
             nBitBufLen = pDeflateState->bi_valid - 0x10;
-            pDeflateState->bi_buf = wCode >> (0x10U - (char)pDeflateState->bi_valid & 0x1f);
+            pDeflateState->bi_buf = wCode >> (0x10U - pDeflateState->bi_valid & 0x1f);
           } else {
             nBitBufLen = pDeflateState->bi_valid;
             pDeflateState->bi_buf |= pDeflateState->bl_tree[0x10].fc << (byBitCount & 0x1f);
@@ -332,16 +333,16 @@ static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nM
           nRepeatCount += -3;
           pDeflateState->bi_valid = nBitBufLen;
           if (nBitBufLen > 0xe) {
-            pDeflateState->bi_buf |= (uint16_t)(nRepeatCount << ((uint8_t)nBitBufLen & 0x1f));
+            pDeflateState->bi_buf |= (uint16_t)(nRepeatCount << (nBitBufLen & 0x1f));
             pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
             pDeflateState->pending++;
             pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
             pDeflateState->pending++;
             nBitBufLen = pDeflateState->bi_valid;
             pDeflateState->bi_valid = nBitBufLen - 0xe;
-            pDeflateState->bi_buf = (uint16_t)nRepeatCount >> (0x10U - (char)nBitBufLen & 0x1f);
+            pDeflateState->bi_buf = (uint16_t)nRepeatCount >> (0x10U - nBitBufLen & 0x1f);
           } else {
-            pDeflateState->bi_buf |= (uint16_t)(nRepeatCount << ((uint8_t)nBitBufLen & 0x1f));
+            pDeflateState->bi_buf |= (uint16_t)(nRepeatCount << (nBitBufLen & 0x1f));
             iVar1 = nBitBufLen + 2;
             pDeflateState->bi_valid = iVar1;
           }
@@ -357,7 +358,7 @@ static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nM
               pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
               pDeflateState->pending++;
               nBitBufLen = pDeflateState->bi_valid - 0x10;
-              pDeflateState->bi_buf = wCode >> (0x10U - (char)pDeflateState->bi_valid & 0x1f);
+              pDeflateState->bi_buf = wCode >> (0x10U - pDeflateState->bi_valid & 0x1f);
             } else {
               nBitBufLen = pDeflateState->bi_valid;
               pDeflateState->bi_buf |= pDeflateState->bl_tree[0x11].fc << (byBitCount & 0x1f);
@@ -367,16 +368,16 @@ static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nM
             nCount += -2;
             pDeflateState->bi_valid = nBitBufLen;
             if (nBitBufLen > 0xd) {
-              pDeflateState->bi_buf |= (uint16_t)(nCount << ((uint8_t)nBitBufLen & 0x1f));
+              pDeflateState->bi_buf |= (uint16_t)(nCount << (nBitBufLen & 0x1f));
               pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
               pDeflateState->pending++;
               pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
               pDeflateState->pending++;
               nBitBufLen = pDeflateState->bi_valid;
               pDeflateState->bi_valid = nBitBufLen - 0xd;
-              pDeflateState->bi_buf = (uint16_t)nCount >> (0x10U - (char)nBitBufLen & 0x1f);
+              pDeflateState->bi_buf = (uint16_t)nCount >> (0x10U - nBitBufLen & 0x1f);
             } else {
-              pDeflateState->bi_buf |= (uint16_t)(nCount << ((uint8_t)nBitBufLen & 0x1f));
+              pDeflateState->bi_buf |= (uint16_t)(nCount << (nBitBufLen & 0x1f));
               iVar1 = nBitBufLen + 3;
               pDeflateState->bi_valid = iVar1;
             }
@@ -391,7 +392,7 @@ static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nM
               pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
               pDeflateState->pending++;
               nBitBufLen = pDeflateState->bi_valid - 0x10;
-              pDeflateState->bi_buf = wCode >> (0x10U - (char)pDeflateState->bi_valid & 0x1f);
+              pDeflateState->bi_buf = wCode >> (0x10U - pDeflateState->bi_valid & 0x1f);
             } else {
               nBitBufLen = pDeflateState->bi_valid;
               pDeflateState->bi_buf |= pDeflateState->bl_tree[0x12].fc << (byBitCount & 0x1f);
@@ -401,16 +402,16 @@ static void send_tree(deflate_state * pDeflateState, ct_data * pTree, int32_t nM
             nCount += -10;
             pDeflateState->bi_valid = nBitBufLen;
             if (nBitBufLen > 9) {
-              pDeflateState->bi_buf |= (uint16_t)(nCount << ((uint8_t)nBitBufLen & 0x1f));
+              pDeflateState->bi_buf |= (uint16_t)(nCount << (nBitBufLen & 0x1f));
               pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
               pDeflateState->pending++;
               pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
               pDeflateState->pending++;
               nBitBufLen = pDeflateState->bi_valid;
               pDeflateState->bi_valid = nBitBufLen - 9;
-              pDeflateState->bi_buf = (uint16_t)nCount >> (0x10U - (char)nBitBufLen & 0x1f);
+              pDeflateState->bi_buf = (uint16_t)nCount >> (0x10U - nBitBufLen & 0x1f);
             } else {
-              pDeflateState->bi_buf |= (uint16_t)(nCount << ((uint8_t)nBitBufLen & 0x1f));
+              pDeflateState->bi_buf |= (uint16_t)(nCount << (nBitBufLen & 0x1f));
               iVar1 = nBitBufLen + 7;
               pDeflateState->bi_valid = iVar1;
             }
@@ -443,46 +444,46 @@ static void __stdcall send_all_trees(int32_t nLCodes, int32_t nDCodes, int32_t n
     uint16_t wCode;
     int nBitCount = pDeflateState->bi_valid;
     if (nBitCount > 0xb) {
-      pDeflateState->bi_buf |= (uint16_t)(nLCodes - 0x101 << ((uint8_t)nBitCount & 0x1f));
+      pDeflateState->bi_buf |= (uint16_t)(nLCodes - 0x101 << (nBitCount & 0x1f));
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
       pDeflateState->pending++;
       pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
       nBitCount = pDeflateState->bi_valid;
       pDeflateState->pending++;
       pDeflateState->bi_valid = nBitCount - 0xb;
-      pDeflateState->bi_buf = (uint16_t)(nLCodes - 0x101) >> (0x10U - (char)nBitCount & 0x1f);
+      pDeflateState->bi_buf = (uint16_t)(nLCodes - 0x101) >> (0x10U - nBitCount & 0x1f);
     } else {
-      pDeflateState->bi_buf |= (uint16_t)(nLCodes - 0x101 << ((uint8_t)nBitCount & 0x1f));
+      pDeflateState->bi_buf |= (uint16_t)(nLCodes - 0x101 << (nBitCount & 0x1f));
       pDeflateState->bi_valid = nBitCount + 5;
     }
 
     nBitCount = pDeflateState->bi_valid;
     if (nBitCount > 0xb) {
-      pDeflateState->bi_buf |= (uint16_t)(nDCodes - 1 << ((uint8_t)nBitCount & 0x1f));
+      pDeflateState->bi_buf |= (uint16_t)(nDCodes - 1 << (nBitCount & 0x1f));
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
       pDeflateState->pending++;
       pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
       nBitCount = pDeflateState->bi_valid;
       pDeflateState->pending++;
       pDeflateState->bi_valid = nBitCount - 0xb;
-      pDeflateState->bi_buf = (uint16_t)(nDCodes - 1) >> (0x10U - (char)nBitCount & 0x1f);
+      pDeflateState->bi_buf = (uint16_t)(nDCodes - 1) >> (0x10U - nBitCount & 0x1f);
     } else {
-      pDeflateState->bi_buf |= (uint16_t)(nDCodes - 1 << ((uint8_t)nBitCount & 0x1f));
+      pDeflateState->bi_buf |= (uint16_t)(nDCodes - 1 << (nBitCount & 0x1f));
       pDeflateState->bi_valid = nBitCount + 5;
     }
 
     nBitCount = pDeflateState->bi_valid;
     if (nBitCount > 0xc) {
-      pDeflateState->bi_buf |= (uint16_t)(nBlCodes - 4 << ((uint8_t)nBitCount & 0x1f));
+      pDeflateState->bi_buf |= (uint16_t)(nBlCodes - 4 << (nBitCount & 0x1f));
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
       pDeflateState->pending++;
       pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
       nBitCount = pDeflateState->bi_valid;
       pDeflateState->pending++;
       pDeflateState->bi_valid = nBitCount - 0xc;
-      pDeflateState->bi_buf = (uint16_t)(nBlCodes - 4) >> (0x10U - (char)nBitCount & 0x1f);
+      pDeflateState->bi_buf = (uint16_t)(nBlCodes - 4) >> (0x10U - nBitCount & 0x1f);
     } else {
-      pDeflateState->bi_buf |= (uint16_t)(nBlCodes - 4 << ((uint8_t)nBitCount & 0x1f));
+      pDeflateState->bi_buf |= (uint16_t)(nBlCodes - 4 << (nBitCount & 0x1f));
       pDeflateState->bi_valid = nBitCount + 4;
     }
 
@@ -491,15 +492,15 @@ static void __stdcall send_all_trees(int32_t nLCodes, int32_t nDCodes, int32_t n
       nBitBufLenLoop = pDeflateState->bi_valid;
       if (nBitBufLenLoop > 0xd) {
         wCode = pDeflateState->bl_tree[gZlibExtraLBitsBlOrder.bl_order[nBitCount]].dl;
-        pDeflateState->bi_buf |= wCode << ((uint8_t)nBitBufLenLoop & 0x1f);
+        pDeflateState->bi_buf |= wCode << (nBitBufLenLoop & 0x1f);
         pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
         pDeflateState->pending++;
         pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
         pDeflateState->pending++;
-        pDeflateState->bi_buf = wCode >> (0x10U - (char)pDeflateState->bi_valid & 0x1f);
+        pDeflateState->bi_buf = wCode >> (0x10U - pDeflateState->bi_valid & 0x1f);
         pDeflateState->bi_valid += -0xd;
       } else {
-        pDeflateState->bi_buf |= pDeflateState->bl_tree[gZlibExtraLBitsBlOrder.bl_order[nBitCount]].dl << ((uint8_t)nBitBufLenLoop & 0x1f);
+        pDeflateState->bi_buf |= pDeflateState->bl_tree[gZlibExtraLBitsBlOrder.bl_order[nBitCount]].dl << (nBitBufLenLoop & 0x1f);
         pDeflateState->bi_valid = nBitBufLenLoop + 3;
       }
     }
@@ -618,15 +619,15 @@ static int gaZlibBaseDist[30] = {
           nBitCount = pDeflateState->bi_valid;
           if (nBitCount > (int)(0x10 - nDist)) {
             wCode = pLTree[nLc].fc;
-            pDeflateState->bi_buf |= wCode << ((uint8_t)nBitCount & 0x1f);
+            pDeflateState->bi_buf |= wCode << (nBitCount & 0x1f);
             pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
             pDeflateState->pending++;
             pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
             pDeflateState->pending++;
             nBitCount = pDeflateState->bi_valid - 0x10 + nDist;
-            pDeflateState->bi_buf = wCode >> (0x10U - (char)pDeflateState->bi_valid & 0x1f);
+            pDeflateState->bi_buf = wCode >> (0x10U - pDeflateState->bi_valid & 0x1f);
           } else {
-            pDeflateState->bi_buf |= pLTree[nLc].fc << ((uint8_t)nBitCount & 0x1f);
+            pDeflateState->bi_buf |= pLTree[nLc].fc << (nBitCount & 0x1f);
             nBitCount += nDist;
           }
 
@@ -644,7 +645,7 @@ static int gaZlibBaseDist[30] = {
             nBitCount2 = pDeflateState->bi_valid;
             pDeflateState->pending++;
             pDeflateState->bi_valid = nBitCount2 - 0x10 + nCodeLen;
-            pDeflateState->bi_buf = wCode >> (0x10U - (char)nBitCount2 & 0x1f);
+            pDeflateState->bi_buf = wCode >> (0x10U - nBitCount2 & 0x1f);
           } else {
             pDeflateState->bi_buf |= pLTree[nCode + 0x101].fc << (byBitCount & 0x1f);
             pDeflateState->bi_valid += nCodeLen;
@@ -655,16 +656,16 @@ static int gaZlibBaseDist[30] = {
             nExtra = nLc - gaZlibBaseLength[nCode];
             nBitCount = pDeflateState->bi_valid;
             if (nBitCount > 0x10 - nBitCount2) {
-              pDeflateState->bi_buf |= (uint16_t)(nExtra << ((uint8_t)nBitCount & 0x1f));
+              pDeflateState->bi_buf |= (uint16_t)(nExtra << (nBitCount & 0x1f));
               pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
               pDeflateState->pending++;
               pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
               nBitCount = pDeflateState->bi_valid;
               pDeflateState->pending++;
               pDeflateState->bi_valid = nBitCount - 0x10 + nBitCount2;
-              pDeflateState->bi_buf = (uint16_t)nExtra >> (0x10U - (char)nBitCount & 0x1f);
+              pDeflateState->bi_buf = (uint16_t)nExtra >> (0x10U - nBitCount & 0x1f);
             } else {
-              pDeflateState->bi_buf |= (uint16_t)(nExtra << ((uint8_t)nBitCount & 0x1f));
+              pDeflateState->bi_buf |= (uint16_t)(nExtra << (nBitCount & 0x1f));
               pDeflateState->bi_valid = nBitCount + nBitCount2;
             }
           }
@@ -680,16 +681,16 @@ static int gaZlibBaseDist[30] = {
           nBitCount2 = pDeflateState->bi_valid;
           if (nBitCount2 > (int)(0x10 - nDist)) {
             wCode = pDTree[byBitCount].fc;
-            pDeflateState->bi_buf |= wCode << ((uint8_t)nBitCount2 & 0x1f);
+            pDeflateState->bi_buf |= wCode << (nBitCount2 & 0x1f);
             pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
             pDeflateState->pending++;
             pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
             nBitCount2 = pDeflateState->bi_valid;
             pDeflateState->pending++;
             pDeflateState->bi_valid = nBitCount2 - 0x10 + nDist;
-            pDeflateState->bi_buf = wCode >> (0x10U - (char)nBitCount2 & 0x1f);
+            pDeflateState->bi_buf = wCode >> (0x10U - nBitCount2 & 0x1f);
           } else {
-            pDeflateState->bi_buf |= pDTree[byBitCount].fc << ((uint8_t)nBitCount2 & 0x1f);
+            pDeflateState->bi_buf |= pDTree[byBitCount].fc << (nBitCount2 & 0x1f);
             pDeflateState->bi_valid = nBitCount2 + nDist;
           }
 
@@ -698,16 +699,16 @@ static int gaZlibBaseDist[30] = {
             nExtra = nLc - gaZlibBaseDist[byBitCount];
             nBitCount = pDeflateState->bi_valid;
             if (!(nBitCount <= 0x10 - nBitCount2)) {
-              pDeflateState->bi_buf |= (uint16_t)(nExtra << ((uint8_t)nBitCount & 0x1f));
+              pDeflateState->bi_buf |= (uint16_t)(nExtra << (nBitCount & 0x1f));
               pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
               pDeflateState->pending++;
               pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
               nBitCount = pDeflateState->bi_valid;
               pDeflateState->pending++;
               pDeflateState->bi_valid = nBitCount - 0x10 + nBitCount2;
-              pDeflateState->bi_buf = (uint16_t)nExtra >> (0x10U - (char)nBitCount & 0x1f);
+              pDeflateState->bi_buf = (uint16_t)nExtra >> (0x10U - nBitCount & 0x1f);
             } else {
-              pDeflateState->bi_buf |= (uint16_t)(nExtra << ((uint8_t)nBitCount & 0x1f));
+              pDeflateState->bi_buf |= (uint16_t)(nExtra << (nBitCount & 0x1f));
               nBitCount += nBitCount2;
               pDeflateState->bi_valid = nBitCount;
             }
@@ -718,21 +719,22 @@ static int gaZlibBaseDist[30] = {
 
     nLx = (uint32_t)pLTree[0x100].dl;
     nBitCount2 = pDeflateState->bi_valid;
-    if (nBitCount2 <= (int)(0x10 - nLx)) {
-      pDeflateState->bi_buf |= pLTree[0x100].fc << ((uint8_t)nBitCount2 & 0x1f);
-      pDeflateState->bi_valid = nBitCount2 + nLx;
+    if (!(nBitCount2 <= (int)(0x10 - nLx))) {
+      wCode = pLTree[0x100].fc;
+      pDeflateState->bi_buf |= wCode << (nBitCount2 & 0x1f);
+      pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
+      pDeflateState->pending++;
+      pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
+      nBitCount2 = pDeflateState->bi_valid;
+      pDeflateState->pending++;
+      pDeflateState->bi_valid = nBitCount2 - 0x10 + nLx;
+      pDeflateState->bi_buf = wCode >> (0x10U - nBitCount2 & 0x1f);
       return;
     }
 
-    wCode = pLTree[0x100].fc;
-    pDeflateState->bi_buf |= wCode << ((uint8_t)nBitCount2 & 0x1f);
-    pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
-    pDeflateState->pending++;
-    pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
-    nBitCount2 = pDeflateState->bi_valid;
-    pDeflateState->pending++;
-    pDeflateState->bi_valid = nBitCount2 - 0x10 + nLx;
-    pDeflateState->bi_buf = wCode >> (0x10U - (char)nBitCount2 & 0x1f);
+    pDeflateState->bi_buf |= pLTree[0x100].fc << (nBitCount2 & 0x1f);
+    pDeflateState->bi_valid = nBitCount2 + nLx;
+    return;
 }
 
 static BOOL detect_data_type(deflate_state * pDeflateState) {
@@ -1051,7 +1053,7 @@ void __fastcall _tr_stored_block(deflate_state * pDeflateState, char * pbBuf, ui
     int nBitCount = pDeflateState->bi_valid;
     if (nBitCount > 0xd) {
       uint8_t byBitBufHi;
-      pDeflateState->bi_buf |= (uint16_t)(nLast << ((uint8_t)nBitCount & 0x1f));
+      pDeflateState->bi_buf |= (uint16_t)(nLast << (nBitCount & 0x1f));
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
       byBitBufHi = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
       pDeflateState->pending++;
@@ -1059,13 +1061,13 @@ void __fastcall _tr_stored_block(deflate_state * pDeflateState, char * pbBuf, ui
       nBitCount = pDeflateState->bi_valid;
       pDeflateState->pending++;
       pDeflateState->bi_valid = nBitCount - 0xd;
-      pDeflateState->bi_buf = (uint16_t)nLast >> (0x10U - (char)nBitCount & 0x1f);
+      pDeflateState->bi_buf = (uint16_t)nLast >> (0x10U - nBitCount & 0x1f);
       copy_block(nStoredLen, (uint8_t*)pbBuf, 1, pDeflateState);
       return;
     }
 
     pDeflateState->bi_valid = nBitCount + 3;
-    pDeflateState->bi_buf |= (uint16_t)(nLast << ((uint8_t)nBitCount & 0x1f));
+    pDeflateState->bi_buf |= (uint16_t)(nLast << (nBitCount & 0x1f));
     copy_block(nStoredLen, (uint8_t*)pbBuf, 1, pDeflateState);
 }
 
@@ -1075,7 +1077,7 @@ void __fastcall _tr_flush_bits(deflate_state * pDeflateState) {
 
 void __fastcall _tr_align(deflate_state * pDeflateState) {
     int nBitCount = pDeflateState->bi_valid;
-    pDeflateState->bi_buf |= (uint16_t)(2 << ((uint8_t)nBitCount & 0x1f));
+    pDeflateState->bi_buf |= (uint16_t)(2 << (nBitCount & 0x1f));
     if (nBitCount > 0xd) {
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
       pDeflateState->pending++;
@@ -1083,13 +1085,13 @@ void __fastcall _tr_align(deflate_state * pDeflateState) {
       nBitCount = pDeflateState->bi_valid;
       pDeflateState->pending++;
       pDeflateState->bi_valid = nBitCount - 0xd;
-      pDeflateState->bi_buf = 2 >> (0x10U - (char)nBitCount & 0x1f);
+      pDeflateState->bi_buf = 2 >> (0x10U - nBitCount & 0x1f);
     } else {
       pDeflateState->bi_valid = nBitCount + 3;
     }
 
     nBitCount = pDeflateState->bi_valid;
-    pDeflateState->bi_buf |= (uint16_t)(0 << ((uint8_t)nBitCount & 0x1f));
+    pDeflateState->bi_buf |= (uint16_t)(0 << (nBitCount & 0x1f));
     if (nBitCount > 9) {
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
       pDeflateState->pending++;
@@ -1097,7 +1099,7 @@ void __fastcall _tr_align(deflate_state * pDeflateState) {
       pDeflateState->pending++;
       nBitCount = pDeflateState->bi_valid;
       pDeflateState->bi_valid = nBitCount - 9;
-      pDeflateState->bi_buf = 0 >> (0x10U - (char)nBitCount & 0x1f);
+      pDeflateState->bi_buf = 0 >> (0x10U - nBitCount & 0x1f);
       bi_flush(pDeflateState);
       return;
     }
@@ -1141,16 +1143,16 @@ void __fastcall _tr_flush_block(deflate_state * pDeflateState, char * pbBuf, uin
         nBitCount = pDeflateState->bi_valid;
         nBlockHeader = nLast + 2;
         if (nBitCount > 0xd) {
-          pDeflateState->bi_buf |= (uint16_t)(nBlockHeader << ((uint8_t)nBitCount & 0x1f));
+          pDeflateState->bi_buf |= (uint16_t)(nBlockHeader << (nBitCount & 0x1f));
           pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
           pDeflateState->pending++;
           pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
           nBitCount = pDeflateState->bi_valid;
           pDeflateState->pending++;
           pDeflateState->bi_valid = nBitCount - 0xd;
-          pDeflateState->bi_buf = (uint16_t)nBlockHeader >> (0x10U - (char)nBitCount & 0x1f);
+          pDeflateState->bi_buf = (uint16_t)nBlockHeader >> (0x10U - nBitCount & 0x1f);
         } else {
-          pDeflateState->bi_buf |= (uint16_t)(nBlockHeader << ((uint8_t)nBitCount & 0x1f));
+          pDeflateState->bi_buf |= (uint16_t)(nBlockHeader << (nBitCount & 0x1f));
           pDeflateState->bi_valid = nBitCount + 3;
         }
 
@@ -1160,16 +1162,16 @@ void __fastcall _tr_flush_block(deflate_state * pDeflateState, char * pbBuf, uin
         nBitCount = pDeflateState->bi_valid;
         nBlockHeader = nLast + 4;
         if (nBitCount > 0xd) {
-          pDeflateState->bi_buf |= (uint16_t)(nBlockHeader << ((uint8_t)nBitCount & 0x1f));
+          pDeflateState->bi_buf |= (uint16_t)(nBlockHeader << (nBitCount & 0x1f));
           pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
           pDeflateState->pending++;
           pDeflateState->pending_buf[pDeflateState->pending] = *(uint8_t*)((uintptr_t)&pDeflateState->bi_buf + 1);
           nBitCount = pDeflateState->bi_valid;
           pDeflateState->pending++;
           pDeflateState->bi_valid = nBitCount - 0xd;
-          pDeflateState->bi_buf = (uint16_t)nBlockHeader >> (0x10U - (char)nBitCount & 0x1f);
+          pDeflateState->bi_buf = (uint16_t)nBlockHeader >> (0x10U - nBitCount & 0x1f);
         } else {
-          pDeflateState->bi_buf |= (uint16_t)(nBlockHeader << ((uint8_t)nBitCount & 0x1f));
+          pDeflateState->bi_buf |= (uint16_t)(nBlockHeader << (nBitCount & 0x1f));
           pDeflateState->bi_valid = nBitCount + 3;
         }
 

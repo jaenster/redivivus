@@ -288,25 +288,27 @@ static void __stdcall DAMAGE_ApplyStun(D2UnitStrc * pUnit, int32_t nStunFrames, 
     pStunStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, STATE_stunned);
     ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
     int nTimeout = pGame->dwGameFrame + nStunFrames;
-    if (pStunStatList) {
-      D2Common::Stats::StatsEx::SetTimeout_WithFlag(pStunStatList, nTimeout);
+    if (!pStunStatList) {
+      if (!pUnit) {
+        nAttackerGUID = -1;
+        eAttackerType = UNIT_COUNT;
+      } else {
+        nAttackerGUID = pUnit->nUnitGUID;
+        eAttackerType = pUnit->eUnitType;
+      }
+
+      pStunStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nTimeout, eAttackerType, nAttackerGUID);
       GAME::Event::SetEvent(pGame, pUnit2, 0xc, nTimeout, 0, 0);
+      D2Common::Stats::StatsEx::SetState(pStunStatList, STATE_stunned);
+      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStunStatList, SKILLS::SkillsServer::DefaultExpireFunction);
+      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pStunStatList, 1);
+      D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_stunned, 1);
       return;
     }
-    if (!pUnit) {
-      nAttackerGUID = -1;
-      eAttackerType = UNIT_COUNT;
-    } else {
-      nAttackerGUID = pUnit->nUnitGUID;
-      eAttackerType = pUnit->eUnitType;
-    }
 
-    pStunStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nTimeout, eAttackerType, nAttackerGUID);
+    D2Common::Stats::StatsEx::SetTimeout_WithFlag(pStunStatList, nTimeout);
     GAME::Event::SetEvent(pGame, pUnit2, 0xc, nTimeout, 0, 0);
-    D2Common::Stats::StatsEx::SetState(pStunStatList, STATE_stunned);
-    D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStunStatList, SKILLS::SkillsServer::DefaultExpireFunction);
-    D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pStunStatList, 1);
-    D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_stunned, 1);
+    return;
 }
 
 // Applies poison damage-over-time to pUnit2. nParam1=drain rate (UNITSTAT_hpregen penalty per frame), nParam2=duration in frames. If no existing STATE_poison stat list, allocates a new one and sets it up with the attacker's GUID/type and expiry event. If one already exists, extends duration and stacks rate if the new hit is stronger. Triggers STATREGEN timer for monster targets.
@@ -602,7 +604,7 @@ static void __stdcall DAMAGE_ApplyFreeze(D2UnitStrc * pUnit, int32_t nFreezeFram
     }
 
     GAME::Event::SetEvent(pGame, pUnit2, 0xc, nFreezeDelay, 0, 0);
-    if (!pUnit2 || pUnit2->eUnitType != UNIT_MONSTER) {
+    if ((pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x276);
       exit(-1);
     }
@@ -1544,19 +1546,20 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 uint32_t __thiscall DAMAGE_GetMonsterDrainEffectiveness(void * pThis, D2UnitStrc * pUnit) {
-    if (!pThis || *(int*)pThis != 1) {
-      return 100;
-    }
-    if (!*(int**)((int)pThis + 0x14)) {
-      return 0;
+    if (!(!pThis || *(int*)pThis != 1)) {
+      if (!*(int**)((int)pThis + 0x14)) {
+        return 0;
+      }
+
+      int nMonsterIndex = **(int**)((int)pThis + 0x14);
+      if (!nMonsterIndex) {
+        return 0;
+      }
+
+      return (uint32_t)*(uint8_t*)(*(uint8_t*)((uintptr_t)&pUnit->uSideData + 9) + 0xa0 + nMonsterIndex);
     }
 
-    int nMonsterIndex = **(int**)((int)pThis + 0x14);
-    if (!nMonsterIndex) {
-      return 0;
-    }
-
-    return (uint32_t)*(uint8_t*)(*(uint8_t*)((uintptr_t)&pUnit->uSideData + 9) + 0xa0 + nMonsterIndex);
+    return 100;
 }
 
 // LEECH CALCULATION: % of physical damage dealt, AFTER DR.
@@ -3133,52 +3136,53 @@ void __fastcall DAMAGE_ApplyAreaOfEffectDamage(::SGAMEDATA * pGame, D2UnitStrc *
     D2Common::Units::UnitFinds::InitializeUnitFindData(pGame->pMemoryPool, &sUnitFindData, pBestRoom, nCenterX, nCenterY, nRadius, nullptr, &sUnitFindArg);
     D2Common::Units::UnitFinds::UNITFINDS_FindCullRange(&sUnitFindData);
     D2UnitStrc* pOwner = SUnit::GetOwnerUnit(pGame, pUnit);
-    if (!pOwner) {
-      D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);
-      return;
-    }
-
-    D2UnitStrc* pOwnerOwner = SUnit::GetOwnerUnit(pGame, pOwner);
-    int nUnitIdx = 0;
-    if (sUnitFindData.nCountedUnits > 0) {
-      uint32_t bCanAttack;
-      for (; nUnitIdx < sUnitFindData.nCountedUnits; nUnitIdx++) {
-        pTargetUnit = sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx];
-        if ((pOwnerOwner != pTargetUnit || bHitOwnerOwner) && (pOwner != pTargetUnit || bHitOwner)) {
-          bCanAttack = SUnit::UNITS_CheckIfCanAttackTarget(pGameLocal, pOwner, pTargetUnit);
-          if (bCanAttack) {
-            bCanAttack = D2Common::Skills::SKILLS_HasLineOfSightToUnit(nCenterX, nCenterY, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx], 0x805);
+    if (pOwner) {
+      D2UnitStrc* pOwnerOwner = SUnit::GetOwnerUnit(pGame, pOwner);
+      int nUnitIdx = 0;
+      if (sUnitFindData.nCountedUnits > 0) {
+        uint32_t bCanAttack;
+        for (; nUnitIdx < sUnitFindData.nCountedUnits; nUnitIdx++) {
+          pTargetUnit = sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx];
+          if ((pOwnerOwner != pTargetUnit || bHitOwnerOwner) && (pOwner != pTargetUnit || bHitOwner)) {
+            bCanAttack = SUnit::UNITS_CheckIfCanAttackTarget(pGameLocal, pOwner, pTargetUnit);
             if (bCanAttack) {
-              pDmgSrc = pDamage;
-              pDmgDst = &sDamage;
-              for (nCopyIdx = 0x1c; nCopyIdx; nCopyIdx--) {
-                pDmgDst->dwHitFlags = pDmgSrc->dwHitFlags;
-                pDmgSrc = (D2DamageStrc*)&pDmgSrc->wResultFlags;
-                pDmgDst = (D2DamageStrc*)&pDmgDst->wResultFlags;
-              }
-
-              if (pfnProc) {
-                /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pfnProc);
-                if (bBadCodePtr) {
-                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda6);
-                  exit(-1);
+              bCanAttack = D2Common::Skills::SKILLS_HasLineOfSightToUnit(nCenterX, nCenterY, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx], 0x805);
+              if (bCanAttack) {
+                pDmgSrc = pDamage;
+                pDmgDst = &sDamage;
+                for (nCopyIdx = 0x1c; nCopyIdx; nCopyIdx--) {
+                  pDmgDst->dwHitFlags = pDmgSrc->dwHitFlags;
+                  pDmgSrc = (D2DamageStrc*)&pDmgSrc->wResultFlags;
+                  pDmgDst = (D2DamageStrc*)&pDmgDst->wResultFlags;
                 }
 
-                nProcResult = (*pfnProc)(pGameLocal, pMissileUnit, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx]);
-                if (!nProcResult) {
-                  continue;
-                }
-              }
+                if (pfnProc) {
+                  /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pfnProc);
+                  if (bBadCodePtr) {
+                    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda6);
+                    exit(-1);
+                  }
 
-              MISSILES::MissilesMode::MISSMODE_ApplyMissileHitDamage(pGameLocal, pMissileUnit, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx], &sDamage);
-              bAnyHit = 1;
+                  nProcResult = (*pfnProc)(pGameLocal, pMissileUnit, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx]);
+                  if (!nProcResult) {
+                    continue;
+                  }
+                }
+
+                MISSILES::MissilesMode::MISSMODE_ApplyMissileHitDamage(pGameLocal, pMissileUnit, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx], &sDamage);
+                bAnyHit = 1;
+              }
             }
           }
         }
       }
+
+      D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);
+      return;
     }
 
     D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);
+    return;
 }
 
 void __fastcall DAMAGE_AddSkillBonusDamage(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, D2DamageStrc * pDamage) {
@@ -3459,7 +3463,7 @@ BOOL __fastcall ExperienceLoopOverPlayers(uint32_t pGame, D2UnitStrc * pUnit, D2
 // Distributes kill XP among all party members near the victim. Calls ExperienceLoopOverPlayers to collect eligible players into D2PartyExperienceStrc. For a solo kill, computes and grants XP directly. For parties, computes each member's share proportionally by level and calls SERVER_PlayerUpdateExperience per member.
 static void __stdcall SERVER_PartyShareExperience(int32_t nBaseExperience, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pVictim, int32_t nAttackerLevel, int32_t nVictimLevel) {
     uint32_t nXpForPlayer;
-    uint64_t nXpShareRatio;
+    uint32_t nXpShareRatio;
     D2PartyExperienceStrc sParty;
     D2UnitStrc* pPartyPlayer;
     memset(&sParty, 0, 0x4c);

@@ -55,7 +55,7 @@ void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t * pnCon
 
 uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value) {
     uint64_t modResult;
-    uint64_t tempDividend;
+    uint32_t tempDividend;
     if (value <= 1) {
       return value;
     }
@@ -77,9 +77,9 @@ uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value) {
         return y;
       }
 
-      tempDividend = (uint64_t)remainder;
-      remainder = (uint32_t)(tempDividend % modResult);
-      x += (int)(tempDividend / modResult) * y;
+      tempDividend = remainder;
+      remainder = (uint32_t)((uint64_t)tempDividend % modResult);
+      x += (int)((uint64_t)tempDividend / modResult) * y;
     } while (remainder != 1);
 
     return 1U - x & 0xffff;

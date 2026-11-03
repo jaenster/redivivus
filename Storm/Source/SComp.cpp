@@ -51,7 +51,7 @@ uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitC
       uint16_t wWord;
       wWord = **pBitBuffer;
       pBitBuffer[2] = nBitPos + 8;
-      pBitBuffer[1] = (uint16_t*)((uint32_t)pBitBuffer[1] | (uint32_t)wWord << ((uint8_t)(uintptr_t)nBitPos & 0x1f));
+      pBitBuffer[1] = (uint16_t*)((uint32_t)pBitBuffer[1] | (uint32_t)wWord << ((uintptr_t)nBitPos & 0x1f));
       (*pBitBuffer)++;
     }
 
@@ -59,7 +59,7 @@ uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitC
 }
 
 void __thiscall LINKEDLIST_Clear(int32_t pBitBuffer, int32_t nBits) {
-    *(uint32_t*)(pBitBuffer + 4) >>= (uint8_t)nBits & 0x1f;
+    *(uint32_t*)(pBitBuffer + 4) >>= nBits & 0x1f;
     *(int*)(pBitBuffer + 8) -= nBits;
 }
 
@@ -78,7 +78,7 @@ int32_t __fastcall BITBUFFER_GetRemainingBits(int * pBitStream) {
 
 void __thiscall BITSTREAM_WriteBits(D2BitStreamWriterStrc * pBitStream, int32_t nBitsValue, int32_t nBitCount) {
     uint32_t nBitsHeld;
-    pBitStream->nBitAccum |= nBitsValue << ((uint8_t)pBitStream->nBitsHeld & 0x1f);
+    pBitStream->nBitAccum |= nBitsValue << (pBitStream->nBitsHeld & 0x1f);
     nBitsHeld = pBitStream->nBitsHeld + nBitCount;
     pBitStream->nBitsHeld = nBitsHeld;
     while (nBitsHeld >= 8) {
@@ -254,7 +254,7 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
         wHeader = (uint16_t)((uint32_t)wHeader & 0xffu | (uint32_t)(uint8_t)((uint16_t)wHeader >> 8) << 8);
         nStepBase = nStepSize >> ((uint8_t)((uint16_t)wHeader >> 8) & 0x1f);
         nBitMask = 0;
-        nChannelTmp = 1 << ((char)nBitCount - 2U & 0x1f);
+        nChannelTmp = 1 << (nBitCount - 2U & 0x1f);
         nAccum = 0;
         nInSize = 1;
         nBitCount = 0x20;
@@ -1001,13 +1001,13 @@ uint32_t __thiscall BITBUFFER_ReadBits(uint16_t * * pBitBuf, uint16_t * nBits, u
       uint16_t wWord;
       wWord = **pBitBuf;
       pBitBuf[2] = pBitPos + 8;
-      pBitBuf[1] = (uint16_t*)((uint32_t)pBitBuf[1] | (uint32_t)wWord << ((uint8_t)(uintptr_t)pBitPos & 0x1f));
+      pBitBuf[1] = (uint16_t*)((uint32_t)pBitBuf[1] | (uint32_t)wWord << ((uintptr_t)pBitPos & 0x1f));
       (*pBitBuf)++;
     }
 
     pBitPos = pBitBuf[1];
     pBitBuf[2] = (uint16_t*)((int)pBitBuf[2] - (int)nBits);
-    pBitBuf[1] = (uint16_t*)((uint32_t)pBitPos >> ((uint8_t)(uintptr_t)nBits & 0x1f));
+    pBitBuf[1] = (uint16_t*)((uint32_t)pBitPos >> ((uintptr_t)nBits & 0x1f));
     return (uint32_t)pBitPos & nMask;
 }
 
@@ -1111,7 +1111,7 @@ int32_t __thiscall HUFFMAN_DecodeSymbol(int32_t pThis, uint16_t * * pBitBuf) {
       return (int32_t)pTreeNode[2];
     }
 
-    uint32_t nQuickIdx = 0xffffffffU >> (0x20 - (uint8_t)nBitCount & 0x1f) & (uint32_t)dwBitAccum & 0x7f;
+    uint32_t nQuickIdx = 0xffffffffU >> (0x20 - nBitCount & 0x1f) & (uint32_t)dwBitAccum & 0x7f;
     nQuickStep = 1 << (uint8_t)nBitCount;
     uint32_t* pQuickFill = (uint32_t*)(pThis + 0x347c + nQuickIdx * 0xc);
     do {
@@ -4126,7 +4126,7 @@ int __thiscall HUFFMAN_DecompressBlock(uint32_t * pDecoderCtx, uint8_t * pDst, i
         if (puVar1 < (uint16_t*)0x9) {
           wRefill = **pBitBufAlias;
           pBitBufAlias[2] = puVar1 + 8;
-          pBitBufAlias[1] = (uint16_t*)((uint32_t)pBitBufAlias[1] | (uint32_t)wRefill << ((uint8_t)(uintptr_t)puVar1 & 0x1f));
+          pBitBufAlias[1] = (uint16_t*)((uint32_t)pBitBufAlias[1] | (uint32_t)wRefill << ((uintptr_t)puVar1 & 0x1f));
           (*pBitBufAlias)++;
         }
 
@@ -4651,7 +4651,7 @@ int PKWARE_GetItemDataValue(TDcmpStruct * pClientSideData, int nMatchLength) {
         return 0;
       }
     } else {
-      uDataValue = uDataValue << ((uint8_t)pClientSideData->dsize_bits & 0x1f) | pClientSideData->dsize_mask & pClientSideData->bit_buff;
+      uDataValue = uDataValue << (pClientSideData->dsize_bits & 0x1f) | pClientSideData->dsize_mask & pClientSideData->bit_buff;
       nRangeCheckResult = PKWARE_CheckItemDataRange(pClientSideData, pClientSideData->dsize_bits);
       if (nRangeCheckResult) {
         return 0;
@@ -4666,12 +4666,12 @@ BOOL PKWARE_CheckItemDataRange(TDcmpStruct * pClientSideData, uint32_t nBitCount
     uint32_t dwBitBuffer = pClientSideData->extra_bits;
     if (dwBitBuffer >= nBitCount) {
       pClientSideData->extra_bits = dwBitBuffer - nBitCount;
-      pClientSideData->bit_buff >>= (uint8_t)nBitCount & 0x1f;
+      pClientSideData->bit_buff >>= nBitCount & 0x1f;
       return 0;
     }
 
     uint32_t* pInPos = &pClientSideData->in_pos;
-    pClientSideData->bit_buff >>= (uint8_t)dwBitBuffer & 0x1f;
+    pClientSideData->bit_buff >>= dwBitBuffer & 0x1f;
     if (*pInPos == pClientSideData->in_bytes) {
       *pInPos = 0x800;
       dwBitBuffer = pClientSideData->read_buf(pClientSideData->in_buff, pInPos, pClientSideData->param);
@@ -4687,7 +4687,7 @@ BOOL PKWARE_CheckItemDataRange(TDcmpStruct * pClientSideData, uint32_t nBitCount
     (*pInPos)++;
     dwBitBuffer = (uint32_t)bNextByte << 8 | pClientSideData->bit_buff;
     pClientSideData->bit_buff = dwBitBuffer;
-    pClientSideData->bit_buff = dwBitBuffer >> ((uint8_t)nBitCount - (char)pClientSideData->extra_bits & 0x1f);
+    pClientSideData->bit_buff = dwBitBuffer >> (nBitCount - pClientSideData->extra_bits & 0x1f);
     pClientSideData->extra_bits = pClientSideData->extra_bits - nBitCount + 8;
     return 0;
 }
@@ -5942,7 +5942,7 @@ void PKWARE_ProcessMemoryBlock(TCmpStruct * pCmp) {
             pbWindowCursor++;
             PKWARE_CalculateOffset(pCmp, 2, pCmp->distance & 3);
           } else {
-            nBytesRead = pCmp->distance >> ((uint8_t)pCmp->dsize_bits & 0x1f);
+            nBytesRead = pCmp->distance >> (pCmp->dsize_bits & 0x1f);
             PKWARE_CalculateOffset(pCmp, (uint32_t)pCmp->dist_bits[nBytesRead], (uint32_t)pCmp->dist_codes[nBytesRead]);
             pbWindowCursor = (uint16_t*)((int)pbWindowCursor + nDictSize);
             PKWARE_CalculateOffset(pCmp, pCmp->dsize_bits, pCmp->dsize_mask & pCmp->distance);

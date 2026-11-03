@@ -683,15 +683,17 @@ void __fastcall ExtraFast(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     }
 
     int32_t nValue = (int)(0x800 / (int)nBaseVelocity) - 0x80;
-    if (nValue <= 0xa) {
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, 10, 0);
+    if (nValue > 0xa) {
+      if (nValue >= 100) {
+        nValue = 100;
+      }
+
+      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, nValue, 0);
       return;
     }
-    if (nValue >= 100) {
-      nValue = 100;
-    }
 
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, nValue, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, 10, 0);
+    return;
 }
 
 // Applies the Fire Enchanted monster modifier (umod) to pUnit. Requires a live UNIT_MONSTER with a game pointer. Derives difficulty (0-2) and a single/multiplayer flag (BNET_HOST + SINGLEPLAYER => 0 else 1), reads the unit level, and indexes monlvl.txt DM[mp*3+diff] for a base damage. Computes fire min/max damage from GetUmodConstant: index diff+0x10/+0x13 when bUnknown==0 else diff+0x1c/+0x1f (min uses a /100 reciprocal-multiply, max uses *base/100), adds UNITSTAT_firemindam/firemaxdam, then chains MagicResist. No-op if unit/game null or monlvl row out of range.

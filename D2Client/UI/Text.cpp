@@ -4159,21 +4159,21 @@ void __stdcall TEXT_DrawQuestScrollUI() {
     }
 
     int nBlockTag = *(int*)((int)gpQuestScrollTextBlock + 0x80);
-    if (nBlockTag != 0x20736b62) {
-      if (nBlockTag == 0x20646b62) {
-        if (!gpQuestScrollUI) {
-          TEXT_DrawQuestScrollAnimation(1);
-          return;
-        }
-      } else if (nBlockTag != 0x20317274) {
+    if (nBlockTag == 0x20736b62) {
+      TEXT_DrawQuestScrollAnimation(0);
+      return;
+    }
+    if (nBlockTag == 0x20646b62) {
+      if (!gpQuestScrollUI) {
+        TEXT_DrawQuestScrollAnimation(1);
         return;
       }
-
-      TEXT_DrawScrollBackground();
+    } else if (nBlockTag != 0x20317274) {
       return;
     }
 
-    TEXT_DrawQuestScrollAnimation(0);
+    TEXT_DrawScrollBackground();
+    return;
 }
 
 void __fastcall TEXT_HandleScrollLinePacket(D2GSPacketSrv0x50 * pPacket) {
@@ -5748,25 +5748,26 @@ void __fastcall TEXT_HandleOverheadTextPacket(D2GSPacketSrv0x27 * pPacket) {
       D2Common::Text::TEXT_SortMessageList(gpOverHeadStrc);
       return;
     }
-    if (pPacket->eUnitType != 2) {
-      D2Common::Text::STRUCT_FreeTxtMessageForPacket0x27(gpOverHeadStrc);
-      gpOverHeadStrc = 0;
+    if (pPacket->eUnitType == 2) {
+      pUnit = UNIT::Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_OBJECT);
+      if (pPacket->aMessages[0].bShow == '\x03') {
+        TEXT_ShowStaticTextPopup(pPacket->aMessages[0].nMessage);
+        return;
+      }
+
+      gpOverHeadUnitClassId = 0;
+      gpOverHeadUnitGUID = pPacket->nUnitGUID;
+      if (pUnit) {
+        gpOverHeadUnitClassId = (short int)pUnit->nClassId;
+      }
+
+      TEXT_ShowScrollingText(pPacket->aMessages[0].nMessage, 0, 1);
       return;
     }
 
-    pUnit = UNIT::Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_OBJECT);
-    if (pPacket->aMessages[0].bShow == '\x03') {
-      TEXT_ShowStaticTextPopup(pPacket->aMessages[0].nMessage);
-      return;
-    }
-
-    gpOverHeadUnitClassId = 0;
-    gpOverHeadUnitGUID = pPacket->nUnitGUID;
-    if (pUnit) {
-      gpOverHeadUnitClassId = (short int)pUnit->nClassId;
-    }
-
-    TEXT_ShowScrollingText(pPacket->aMessages[0].nMessage, 0, 1);
+    D2Common::Text::STRUCT_FreeTxtMessageForPacket0x27(gpOverHeadStrc);
+    gpOverHeadStrc = 0;
+    return;
 }
 
 void __stdcall TEXT_CloseNpcDialog() {

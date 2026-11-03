@@ -859,28 +859,29 @@ void __fastcall Q23_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
     /* GetQuestState(Guardian=0x16, Step0x04=0x04): saved step ->
                          nStateFlag=4,prev=2 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x04);
-    if (bQuestState != 1) {
-      /* GetQuestState(Guardian=0x16, Step0x03=0x03): saved step ->
-                         nStateFlag=2,prev=2 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x03);
-      if (bQuestState == 1) {
-        pQuestData->nStateFlag = 2;
-        pQuestData->nStateFlagPrev = 2;
-        return;
-      }
-
-      /* GetQuestState(Guardian=0x16, Step0x02=0x02): saved step ->
-                         nStateFlag=3,prev=2 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x02);
-      if (bQuestState != 1) {
-        return;
-      }
-
-      pQuestData->nStateFlag = 3;
+    if (bQuestState == 1) {
+      pQuestData->nStateFlag = 4;
       pQuestData->nStateFlagPrev = 2;
       return;
     }
 
-    pQuestData->nStateFlag = 4;
+    /* GetQuestState(Guardian=0x16, Step0x03=0x03): saved step ->
+                         nStateFlag=2,prev=2 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x03);
+    if (bQuestState == 1) {
+      pQuestData->nStateFlag = 2;
+      pQuestData->nStateFlagPrev = 2;
+      return;
+    }
+
+    /* GetQuestState(Guardian=0x16, Step0x02=0x02): saved step ->
+                         nStateFlag=3,prev=2 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Step0x02);
+    if (bQuestState != 1) {
+      return;
+    }
+
+    pQuestData->nStateFlag = 3;
     pQuestData->nStateFlagPrev = 2;
+    return;
 }
 
 // [The Guardian (Q23)] Quest INIT (nInitNo=6). Allocates the 0x34-byte A3Q6 quest-specific struct, zeroes

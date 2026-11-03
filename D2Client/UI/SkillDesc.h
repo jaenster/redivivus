@@ -1023,11 +1023,11 @@ struct __attribute__((packed)) D2DataTableTxtStrc {
     /* 0x170 */ int nAllStatesDataTblFlag0x04Size;
     /* 0x174 */ struct D2AllStatesDataTbl * pAllStatesDataTblFlag0x0B;
     /* 0x178 */ int nAllStatesDataTblFlag0x0BSize;
-    /* 0x17C */ struct D2AllStatesDataTbl * pAllStatesDataTblFlag0x10;
+    /* 0x17C */ uint16_t * pAllStatesDataTblFlag0x10;
     /* 0x180 */ int nAllStatesDataTblFlag0x10Size;
-    /* 0x184 */ struct D2AllStatesDataTbl * pAllStatesDataTblFlag0x05;
+    /* 0x184 */ uint16_t * pAllStatesDataTblFlag0x05;
     /* 0x188 */ int nAllStatesDataTblFlag0x05Size;
-    /* 0x18C */ struct D2AllStatesDataTbl * pStatesItemTypesDataTbl;
+    /* 0x18C */ uint16_t * pStatesItemTypesDataTbl;
     /* 0x190 */ int nStatesItemTypesDataTblSize;
     /* 0x194 */ struct D2SoundsTxtSmall * pTxtSounds;
     /* 0x198 */ struct D2TxtLinkStrc * pTxtSoundsLink;

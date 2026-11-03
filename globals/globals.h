@@ -2430,7 +2430,7 @@ extern D2SLogStrc * gaSLogHead[4];
 extern uint32_t gpActiveWindow;
 extern uint32_t gnSevtSnapshotActive;
 extern void * gpEventHashBuckets;
-extern void * gaEventRegistryHead;
+extern uint32_t gaEventRegistryHead;
 extern uint32_t gnSevtRegisteredEventCount;
 // lpCriticalSection parameter of LeaveCriticalSection
 // lpCriticalSection parameter of EnterCriticalSection
@@ -2902,7 +2902,9 @@ extern int gConnectShortTimeoutStartTick;
 extern uint32_t gbBloodFlag;
 // End-game UI state block (congrats/cutscene flags).
 extern D2EndGameUiState gEndGameUiState;
+// End-game cutscene/congrats flag set by quest log (advances difficulty).
 extern D2EndGameUiState gShowEndGameCutscene;
+// Congrats screen OK clicked; DRAW_Congratz exits when set.
 extern D2EndGameUiState gCongratzOkClicked;
 extern uint8_t CLIENT_nDifficulty;
 // Beta screen slideshow index (page).
@@ -2916,6 +2918,7 @@ extern BOOL D2CLIENT_ExitVar3;
 extern BOOL gLevelLoadInProgress;
 // Exit cutscene state: pending id + played flag.
 extern D2ExitCutsceneState gExitCutsceneState;
+// Exit cutscene played/active flag; suppresses connection-refused handling and drives end-game flow.
 extern D2ExitCutsceneState gExitCutscenePlayed;
 extern D2DrlgActStrc * sgpDrlgAct;
 extern D2Game_Line0x546 * D2GameGame0x546;

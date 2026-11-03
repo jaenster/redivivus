@@ -1084,7 +1084,7 @@ static void __stdcall TILECMP_CompressSubTile(uint32_t * pSrcSubTile, uint32_t *
     char* nRLEBufPtr = (char*)pDstSubTile[4];
     int iPixel = 0;
     char* pByteScan = nRLEBufPtr;
-    if (*(short int*)((int)pDstSubTile + 10)) {
+    if ((uint16_t)*(short int*)((int)pDstSubTile + 10) > 0) {
       do {
         if (*pByteScan != '\0') {
           if (pDstSubTile[2] & 0x1000) {

@@ -99,7 +99,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
 
           nBitsFree = 8;
           pOut = pOutCur + 1;
-          *pOutCur = bVar1 >> ((uint8_t)nNumBits & 0x1f) | byPending;
+          *pOutCur = bVar1 >> (nNumBits & 0x1f) | byPending;
           byPending = 0;
           pOutCur = pOut;
           nBufferLeft = nRemaining;
@@ -107,7 +107,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
       }
       if (nNumBits) {
         nBitsFree -= nNumBits;
-        byPending |= bVar1 << ((uint8_t)nBitsFree & 0x1f);
+        byPending |= bVar1 << (nBitsFree & 0x1f);
       }
     } while (nBytesSize);
 
@@ -155,7 +155,7 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
         byEntryLen = *pBytes;
         nBitsAvail += -8;
         pBytes++;
-        uBitBuffer |= (uint32_t)byEntryLen << ((uint8_t)nBitsAvail & 0x1f);
+        uBitBuffer |= (uint32_t)byEntryLen << (nBitsAvail & 0x1f);
       }
 
       byEntryLen = *(uint8_t*)gaHuffmanFastDecodeTable[uBitBuffer >> 0x18];

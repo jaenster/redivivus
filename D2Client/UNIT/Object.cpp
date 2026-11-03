@@ -793,22 +793,24 @@ void __fastcall SetShrineTextInfo(D2UnitStrc * pUnit) {
 
 void __fastcall ObjectMessage(int32_t eMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage) {
     BOOL BVar1;
-    if (eMessageType == 3) {
-      OBJECT_UpdateModeAndProperties(pUnit, pMessage);
-      BVar1 = D2Common::Units::IsShrine(pUnit);
-      if (!BVar1) {
-        return;
+    if (eMessageType != 3) {
+      if (eMessageType != 0x15) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39c);
+        exit(-1);
       }
 
-      OBJECT_DispatchShrineClientFunc(pUnit);
+      OBJECT_DispatchShrineServerActivate((int*)pMessage, pUnit);
       return;
     }
-    if (eMessageType != 0x15) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39c);
-      exit(-1);
+
+    OBJECT_UpdateModeAndProperties(pUnit, pMessage);
+    BVar1 = D2Common::Units::IsShrine(pUnit);
+    if (!BVar1) {
+      return;
     }
 
-    OBJECT_DispatchShrineServerActivate((int*)pMessage, pUnit);
+    OBJECT_DispatchShrineClientFunc(pUnit);
+    return;
 }
 
 // ClientFn 0x2 handler, slot 2 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Enters mode OP once every 64 calls (counter in dwTickCount, random start 0..63 on first call, flag at +0xc8); on mode ON re-seeds the counter and returns to NU.

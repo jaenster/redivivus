@@ -1469,7 +1469,7 @@ int32_t __stdcall GetPortalFlagFromLevelId(eD2LevelId eLevel) {
 
     do {
       if (eLevel == *pPortalLevelArray) {
-        return 1 << ((uint8_t)nBitIndex & 0x1f);
+        return 1 << (nBitIndex & 0x1f);
       }
 
       nBitIndex++;
@@ -2029,40 +2029,41 @@ void __stdcall DRLGROOMEX_UpdateClientRoomExActivation(D2DrlgStrc * pDrlg) {
       sgtDataTable.nRoomDataGenerationA = pDrlg->nRoomDataGeneration;
       sgtDataTable.nRoomDataFreeGenerationA = pDrlg->nRoomDataFreeGeneration;
     }
-    if (pDrlg->nRoomInitBatchCount <= 1) {
-      D2RoomExStrc* pRoomEx;
-      pCountdown = &pDrlg->nActivationCountdown;
-      (*pCountdown)--;
-      if (*pCountdown) {
-        return;
-      }
-
-      bIsClientSide = Drlg::DRLGACTMISC_CheckFlag0x1(pDrlg);
-      pDrlg->nActivationCountdown = !bIsClientSide * '\x02' + 5;
-      if (!pDrlg->pActivationIterator || pDrlg->pActivationIterator->fRoomStatus != '\x02') {
-        pDrlg->pActivationIterator = pDrlg->aSubA0[2].pStatusNext;
-      }
-
-      pIteratorStart = pDrlg->pActivationIterator;
-      pRoomEx = pIteratorStart;
-      if (!pIteratorStart) {
-        return;
-      }
-
-      do {
-        if (!(pRoomEx->eRoomExFlags & 0x100000U) && pRoomEx != pDrlg->aSubA0 + 2 && !pRoomEx->pRoom) {
-          DRLGROOMEX_InitRoomExData(pDrlg->pMemoryPool, pRoomEx);
-        }
-
-        pRoomEx = pRoomEx->pStatusNext;
-      } while (pRoomEx != pIteratorStart && pDrlg->nRoomInitBatchCount < 1);
-
-      pDrlg->pActivationIterator = pRoomEx;
+    if (pDrlg->nRoomInitBatchCount > 1) {
       pDrlg->nRoomInitBatchCount = 0;
       return;
     }
 
+    D2RoomExStrc* pRoomEx;
+    pCountdown = &pDrlg->nActivationCountdown;
+    (*pCountdown)--;
+    if (*pCountdown) {
+      return;
+    }
+
+    bIsClientSide = Drlg::DRLGACTMISC_CheckFlag0x1(pDrlg);
+    pDrlg->nActivationCountdown = !bIsClientSide * '\x02' + 5;
+    if (!pDrlg->pActivationIterator || pDrlg->pActivationIterator->fRoomStatus != '\x02') {
+      pDrlg->pActivationIterator = pDrlg->aSubA0[2].pStatusNext;
+    }
+
+    pIteratorStart = pDrlg->pActivationIterator;
+    pRoomEx = pIteratorStart;
+    if (!pIteratorStart) {
+      return;
+    }
+
+    do {
+      if (!(pRoomEx->eRoomExFlags & 0x100000U) && pRoomEx != pDrlg->aSubA0 + 2 && !pRoomEx->pRoom) {
+        DRLGROOMEX_InitRoomExData(pDrlg->pMemoryPool, pRoomEx);
+      }
+
+      pRoomEx = pRoomEx->pStatusNext;
+    } while (pRoomEx != pIteratorStart && pDrlg->nRoomInitBatchCount < 1);
+
+    pDrlg->pActivationIterator = pRoomEx;
     pDrlg->nRoomInitBatchCount = 0;
+    return;
 }
 
 // eLevel in ESI: returns 0 when LEVEL_CheckIfLevelIsTown(eLevel), else eLevel != LEVEL_ArreatSummit (0x78).

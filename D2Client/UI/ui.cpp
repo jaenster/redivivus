@@ -3608,21 +3608,21 @@ void __stdcall UI_AnimateCursorForward() {
       gCursorAnimationFrame -= nMaxFrames;
       return;
     }
-    if (ItemTypeOnHand != 2) {
-      if (ItemTypeOnHand == 5) {
-        ItemTypeOnHand = 1;
-        Cursor::nCursorDataIndex = nSavedCursorIndex;
-        gCursorAnimationFrame = 0;
-        return;
-      }
-
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e9);
-      exit(-1);
+    if (ItemTypeOnHand == 2) {
+      ItemTypeOnHand = 4;
+      Cursor::nCursorDataIndex = 3;
+      gCursorAnimationFrame = 0;
+      return;
+    }
+    if (ItemTypeOnHand == 5) {
+      ItemTypeOnHand = 1;
+      Cursor::nCursorDataIndex = nSavedCursorIndex;
+      gCursorAnimationFrame = 0;
+      return;
     }
 
-    ItemTypeOnHand = 4;
-    Cursor::nCursorDataIndex = 3;
-    gCursorAnimationFrame = 0;
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e9);
+    exit(-1);
 }
 
 void __stdcall UI_AnimateCursorBackward() {
@@ -4443,39 +4443,40 @@ void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps) {
     scroll_to_selection:
     nNewSelectedRow = g_ControlConfigUIState;
     int nNewScrollOffset = gnUICtrlConfigScrollOffset;
-    if (g_ControlConfigUIState >= gnUICtrlConfigScrollOffset) {
-      int nVisibleMaxRow;
-      while (true) {
-        nVisibleMaxRow = nNewScrollOffset;
-        for (nNewSelectedRow = 0; nVisibleMaxRow < nCount && nNewSelectedRow < 0xf; nNewSelectedRow++) {
-          nVisibleMaxRow++;
-        }
-
-        if (g_ControlConfigUIState < nVisibleMaxRow) {
-          break;
-        }
-
-        lRowCount = UI_GetControlConfigRowCount();
-        nVisibleMaxRow = (int)lRowCount;
-        nNewSelectedRow = nNewScrollOffset;
-        if (nNewScrollOffset < nVisibleMaxRow) {
-          nNewSelectedRow = nNewScrollOffset + 1;
-        }
-        if (nNewSelectedRow <= nVisibleMaxRow) {
-          nNewScrollOffset = nNewSelectedRow;
-        }
-
-        gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * nNewScrollOffset / nVisibleMaxRow + 0x2f + (WindowSizeY - 0x1a4) / 2;
-      }
-
-      gnUICtrlConfigScrollOffset = nNewScrollOffset;
+    if (!(g_ControlConfigUIState >= gnUICtrlConfigScrollOffset)) {
+      nCount = WindowSizeY - 0x1a4;
+      gnUICtrlConfigScrollOffset = g_ControlConfigUIState;
+      lRowCount = UI_GetControlConfigRowCount();
+      gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * nNewSelectedRow / (int)lRowCount + 0x2f + nCount / 2;
       return;
     }
 
-    nCount = WindowSizeY - 0x1a4;
-    gnUICtrlConfigScrollOffset = g_ControlConfigUIState;
-    lRowCount = UI_GetControlConfigRowCount();
-    gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * nNewSelectedRow / (int)lRowCount + 0x2f + nCount / 2;
+    int nVisibleMaxRow;
+    while (true) {
+      nVisibleMaxRow = nNewScrollOffset;
+      for (nNewSelectedRow = 0; nVisibleMaxRow < nCount && nNewSelectedRow < 0xf; nNewSelectedRow++) {
+        nVisibleMaxRow++;
+      }
+
+      if (g_ControlConfigUIState < nVisibleMaxRow) {
+        break;
+      }
+
+      lRowCount = UI_GetControlConfigRowCount();
+      nVisibleMaxRow = (int)lRowCount;
+      nNewSelectedRow = nNewScrollOffset;
+      if (nNewScrollOffset < nVisibleMaxRow) {
+        nNewSelectedRow = nNewScrollOffset + 1;
+      }
+      if (nNewSelectedRow <= nVisibleMaxRow) {
+        nNewScrollOffset = nNewSelectedRow;
+      }
+
+      gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * nNewScrollOffset / nVisibleMaxRow + 0x2f + (WindowSizeY - 0x1a4) / 2;
+    }
+
+    gnUICtrlConfigScrollOffset = nNewScrollOffset;
+    return;
 }
 
 static int32_t UI_GetControlConfigRowAtY(int32_t nMouseY) {
@@ -5206,45 +5207,47 @@ void __stdcall INPUT_SkillTreeScroll(D2UIMouseMsgStrc * pMsg) {
 void __stdcall INPUT_SkillTreeNavigateUp(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     D2ConfigControlDescStrc* pStatTable = gpStatDescriptorTable;
-    if (!bExitFlag) {
-      int nPrevRow = g_ControlConfigUIState;
-      do {
-        UI_ScrollConfigListHorizontal(-1);
-      } while (pStatTable[g_ControlConfigUIState].nCmdIndex == 0x39);
-
-      if (nPrevRow != g_ControlConfigUIState) {
-        Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-      }
-
-      pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
+    if (bExitFlag) {
+      pMsg->bHandled = 0;
       return;
     }
 
-    pMsg->bHandled = 0;
+    int nPrevRow = g_ControlConfigUIState;
+    do {
+      UI_ScrollConfigListHorizontal(-1);
+    } while (pStatTable[g_ControlConfigUIState].nCmdIndex == 0x39);
+
+    if (nPrevRow != g_ControlConfigUIState) {
+      Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
+    }
+
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
+    Storm::SMsgBreakHandlerChain(pMsg);
+    return;
 }
 
 void __stdcall INPUT_SkillTreeNavigateDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     D2ConfigControlDescStrc* pStatTable = gpStatDescriptorTable;
-    if (!bExitFlag) {
-      int nPrevRow = g_ControlConfigUIState;
-      do {
-        UI_ScrollConfigListHorizontal(1);
-      } while (pStatTable[g_ControlConfigUIState].nCmdIndex == 0x39);
-
-      if (nPrevRow != g_ControlConfigUIState) {
-        Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-      }
-
-      pMsg->bHandled = 1;
-      pMsg->dwResult = 0;
-      Storm::SMsgBreakHandlerChain(pMsg);
+    if (bExitFlag) {
+      pMsg->bHandled = 0;
       return;
     }
 
-    pMsg->bHandled = 0;
+    int nPrevRow = g_ControlConfigUIState;
+    do {
+      UI_ScrollConfigListHorizontal(1);
+    } while (pStatTable[g_ControlConfigUIState].nCmdIndex == 0x39);
+
+    if (nPrevRow != g_ControlConfigUIState) {
+      Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
+    }
+
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
+    Storm::SMsgBreakHandlerChain(pMsg);
+    return;
 }
 
 void __stdcall INPUT_ConfigToggleLeft(D2UIMouseMsgStrc * pMsg) {
@@ -6020,24 +6023,25 @@ void __stdcall DRAW_UI_NewStatPoints_II() {
     wszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf92);
     D2Win::Src::D2WinFont::DRAW_text0(wszLabel);
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-    if (eResMode == 2) {
-      nBaseX = UI_GetNewStatPointsCount();
-      if (nBaseX) {
-        bEscOpen = GetUIFlag(UI_ESCMENU);
-        if (!bEscOpen) {
-          nTextWidth = 1;
-          nBaseX = ScreenSizeY - 0x32;
-          nButtonWidth = 0;
-          bMouseOnButton = ScreenSizeX / 2;
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf92), bMouseOnButton - 0xb3, nBaseX, nButtonWidth, nTextWidth);
-        }
-      }
-
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 - 0xc2, ScreenSizeY - 8, -1, DRAW_SOLID, nullptr);
+    if (eResMode != 2) {
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBaseX + 3, ScreenSizeY - 0x6d, -1, DRAW_SOLID, nullptr);
       return;
     }
 
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBaseX + 3, ScreenSizeY - 0x6d, -1, DRAW_SOLID, nullptr);
+    nBaseX = UI_GetNewStatPointsCount();
+    if (nBaseX) {
+      bEscOpen = GetUIFlag(UI_ESCMENU);
+      if (!bEscOpen) {
+        nTextWidth = 1;
+        nBaseX = ScreenSizeY - 0x32;
+        nButtonWidth = 0;
+        bMouseOnButton = ScreenSizeX / 2;
+        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf92), bMouseOnButton - 0xb3, nBaseX, nButtonWidth, nTextWidth);
+      }
+    }
+
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 - 0xc2, ScreenSizeY - 8, -1, DRAW_SOLID, nullptr);
+    return;
 }
 
 // Returns a byte in AL (callers test AL); EAX is not an argument.
@@ -6169,24 +6173,25 @@ void __stdcall Draw_UI_NewStatPoints() {
     wszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf93);
     D2Win::Src::D2WinFont::DRAW_text0(wszLabel);
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-    if (eResMode == 2) {
-      iVar2 = UI_GetNewSkillPointsCount();
-      if (iVar2) {
-        bEscMenuOpen = GetUIFlag(UI_ESCMENU);
-        if (!bEscMenuOpen) {
-          nTextWidth = 1;
-          iVar2 = ScreenSizeY - 0x32;
-          nButtonWidth = 0;
-          bMouseOnButton = ScreenSizeX / 2;
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf93), bMouseOnButton + 0xb2, iVar2, nButtonWidth, nTextWidth);
-        }
-      }
-
-      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 + 0xa3, ScreenSizeY - 8, -1, DRAW_SOLID, nullptr);
+    if (eResMode != 2) {
+      D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 - 0x46, ScreenSizeY - 0x6d, -1, DRAW_SOLID, nullptr);
       return;
     }
 
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 - 0x46, ScreenSizeY - 0x6d, -1, DRAW_SOLID, nullptr);
+    iVar2 = UI_GetNewSkillPointsCount();
+    if (iVar2) {
+      bEscMenuOpen = GetUIFlag(UI_ESCMENU);
+      if (!bEscMenuOpen) {
+        nTextWidth = 1;
+        iVar2 = ScreenSizeY - 0x32;
+        nButtonWidth = 0;
+        bMouseOnButton = ScreenSizeX / 2;
+        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf93), bMouseOnButton + 0xb2, iVar2, nButtonWidth, nTextWidth);
+      }
+    }
+
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 + 0xa3, ScreenSizeY - 8, -1, DRAW_SOLID, nullptr);
+    return;
 }
 
 void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nPositionY, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t dwColor) {
@@ -7459,27 +7464,28 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
 
     nLine = pNpcUnit->nClassId;
     bMonInteractFlag = DataTbls::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
-    if (!bMonInteractFlag) {
-      npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-      SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+    if (bMonInteractFlag) {
+      bIsSideNpc = npcmenu::inline_NPC_IsInteractableSideNpc(nLine);
+      if (bIsSideNpc) {
+        _Interaction::bInteractingWithNpc = 1;
+        _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;
+        _Interaction::nCurrentInteractedNpcClassId = pNpcUnit->nClassId;
+        npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+        SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+        return;
+      }
+
+      Inv::INV_ResetHoverAndContextState();
+      UI_CloseActivePanels(0, 0);
+      npcmenu::NPCMENU_HandleMenuSelection(0, pNpcUnit);
       gnNpcMenuShopMode = 0;
       return;
     }
 
-    bIsSideNpc = npcmenu::inline_NPC_IsInteractableSideNpc(nLine);
-    if (bIsSideNpc) {
-      _Interaction::bInteractingWithNpc = 1;
-      _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;
-      _Interaction::nCurrentInteractedNpcClassId = pNpcUnit->nClassId;
-      npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-      SetUIFlag(UI_NPCMENU, UI_RESET, 0);
-      return;
-    }
-
-    Inv::INV_ResetHoverAndContextState();
-    UI_CloseActivePanels(0, 0);
-    npcmenu::NPCMENU_HandleMenuSelection(0, pNpcUnit);
+    npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+    SetUIFlag(UI_NPCMENU, UI_RESET, 0);
     gnNpcMenuShopMode = 0;
+    return;
 }
 
 void __stdcall UI_ResetTradeGlobals() {
@@ -7657,21 +7663,22 @@ void __stdcall PACKET_SendUnitInteraction0x44(D2UIMouseMsgStrc * pMsg) {
 
       ITEM_SetItemOnHand(pPlayerOrCursorItem);
     }
-    if (nHoradricCubeUIState) {
-      npcmenu::NPCMENU_CloseStashUI();
+    if (!nHoradricCubeUIState) {
+      pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
+      if (!pPlayerOrCursorItem) {
+        nUnitType = -1;
+      } else {
+        nUnitType = pPlayerOrCursorItem->nUnitGUID;
+      }
+
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nUnitType, gnNpcShopActiveTab, 0, 2);
       UseItem::UI_CloseHoradricCubeWindow();
       return;
     }
 
-    pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
-    if (!pPlayerOrCursorItem) {
-      nUnitType = -1;
-    } else {
-      nUnitType = pPlayerOrCursorItem->nUnitGUID;
-    }
-
-    GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nUnitType, gnNpcShopActiveTab, 0, 2);
+    npcmenu::NPCMENU_CloseStashUI();
     UseItem::UI_CloseHoradricCubeWindow();
+    return;
 }
 
 void __stdcall DRAW_UI_CASH() {
@@ -7682,13 +7689,13 @@ void __stdcall DRAW_UI_CASH() {
     int nDC6Handle;
     uint32_t nItemWidth;
     uint32_t nItemHeightPx;
-    if (!gnPlayerCashDisplay) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x31d);
-      exit(-1);
-    }
+    if (gnPlayerCashDisplay) {
+      uint32_t bPlayerDead = UNIT::Player::IsPlayerDead();
+      if (bPlayerDead) {
+        UseItem::UI_CloseHoradricCubeWindow();
+        return;
+      }
 
-    uint32_t bPlayerDead = UNIT::Player::IsPlayerDead();
-    if (!bPlayerDead) {
       D2UnitStrc* pUnit;
       UseItem::TEXT_DrawCashDisplay();
       if (gnPlayerCashDisplay != 2) {
@@ -7723,7 +7730,8 @@ void __stdcall DRAW_UI_CASH() {
       return;
     }
 
-    UseItem::UI_CloseHoradricCubeWindow();
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x31d);
+    exit(-1);
 }
 
 BOOL __stdcall NPCSHOP_IsRepairTabActive() {
@@ -7771,31 +7779,33 @@ void __stdcall UI_ShowHoradricCubeTransmuteDialog() {
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagMapInit, 8);
     Inv::INV_SetMercInventoryMode();
     DWORD bUIAlreadyOpen = SetUIFlag(UI_ANVIL, UI_SET, 0);
-    if (bUIAlreadyOpen) {
-      GAME::Game::UI_ResetInputState();
-      nExcludeLeft.top = 0x5b;
-      nExcludeLeft.left = 0x6b;
-      nExcludeLeft.bottom = 0x116;
-      nExcludeLeft.right = 0xde;
-      GAME::Select::SELECT_SetExclusionRect(&nExcludeLeft);
-      return;
-    }
-    if (!nHoradricCubeUIState) {
-      D2UnitStrc* pPlayerUnit_lcl;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      if (!pPlayerUnit_lcl) {
-        nUnitType = -1;
-      } else {
-        nUnitType = pPlayerUnit_lcl->nUnitGUID;
+    if (!bUIAlreadyOpen) {
+      if (!nHoradricCubeUIState) {
+        D2UnitStrc* pPlayerUnit_lcl;
+        pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
+        if (!pPlayerUnit_lcl) {
+          nUnitType = -1;
+        } else {
+          nUnitType = pPlayerUnit_lcl->nUnitGUID;
+        }
+
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nUnitType, gnNpcShopActiveTab, 0, 2);
+        UseItem::UI_CloseHoradricCubeWindow();
+        return;
       }
 
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nUnitType, gnNpcShopActiveTab, 0, 2);
+      npcmenu::NPCMENU_CloseStashUI();
       UseItem::UI_CloseHoradricCubeWindow();
       return;
     }
 
-    npcmenu::NPCMENU_CloseStashUI();
-    UseItem::UI_CloseHoradricCubeWindow();
+    GAME::Game::UI_ResetInputState();
+    nExcludeLeft.top = 0x5b;
+    nExcludeLeft.left = 0x6b;
+    nExcludeLeft.bottom = 0x116;
+    nExcludeLeft.right = 0xde;
+    GAME::Select::SELECT_SetExclusionRect(&nExcludeLeft);
+    return;
 }
 
 // JMP thunk

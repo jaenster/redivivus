@@ -96,7 +96,7 @@ void __fastcall SetBossId(D2UnitStrc * pUnit, int16_t nBossId) {
     pUnit->pUnitData.pUnitDataMonster->nBossNo = nBossId;
 }
 
-uint16_t __fastcall GetBossId(D2UnitStrc * pUnit) {
+int16_t __fastcall GetBossId(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return 0;
     }

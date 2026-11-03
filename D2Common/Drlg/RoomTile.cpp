@@ -420,36 +420,37 @@ void __fastcall DRLGROOMTILE_CompactTileDataArray(D2RoomExStrc * pRoomEx) {
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     int nRoofCount = pTileGrid->nShadows;
-    if (nRoofCount) {
-      int nTileOffset;
-      if (pTileGrid->sRoomTiles.nRoofTilesCount <= nRoofCount) {
-        return;
+    if (!nRoofCount) {
+      pReallocated = pTileGrid->sRoomTiles.pRoofTiles;
+      if (pReallocated) {
+        D2_FREE_POOL_AT(pMemory, pReallocated, ".\\DRLG\\RoomTile.cpp", 599);
       }
 
-      pReallocated = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pTileGrid->sRoomTiles.pRoofTiles, nRoofCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x25f);
-      pTileGrid->sRoomTiles.pRoofTiles = pReallocated;
-      nRoofCount = 0;
-      if (pTileGrid->nShadows != 1 && -1 < pTileGrid->nShadows - 1) {
-        nTileOffset = 0;
-        do {
-          pReallocated = pTileGrid->sRoomTiles.pRoofTiles;
-          *(int*)((uintptr_t)&pReallocated->pNext + nTileOffset) = (uintptr_t)&pReallocated[1].nScreenX + nTileOffset;
-          nRoofCount++;
-          nTileOffset += 0x30;
-        } while (nRoofCount < pTileGrid->nShadows - 1);
-      }
-
-      pTileGrid->sRoomTiles.pRoofTiles[nRoofCount].pNext = 0;
-      pTileGrid->sRoomTiles.nRoofTilesCount = pTileGrid->nShadows;
+      pTileGrid->sRoomTiles.pRoofTiles = 0;
       return;
     }
 
-    pReallocated = pTileGrid->sRoomTiles.pRoofTiles;
-    if (pReallocated) {
-      D2_FREE_POOL_AT(pMemory, pReallocated, ".\\DRLG\\RoomTile.cpp", 599);
+    int nTileOffset;
+    if (pTileGrid->sRoomTiles.nRoofTilesCount <= nRoofCount) {
+      return;
     }
 
-    pTileGrid->sRoomTiles.pRoofTiles = 0;
+    pReallocated = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pTileGrid->sRoomTiles.pRoofTiles, nRoofCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x25f);
+    pTileGrid->sRoomTiles.pRoofTiles = pReallocated;
+    nRoofCount = 0;
+    if (pTileGrid->nShadows != 1 && -1 < pTileGrid->nShadows - 1) {
+      nTileOffset = 0;
+      do {
+        pReallocated = pTileGrid->sRoomTiles.pRoofTiles;
+        *(int*)((uintptr_t)&pReallocated->pNext + nTileOffset) = (uintptr_t)&pReallocated[1].nScreenX + nTileOffset;
+        nRoofCount++;
+        nTileOffset += 0x30;
+      } while (nRoofCount < pTileGrid->nShadows - 1);
+    }
+
+    pTileGrid->sRoomTiles.pRoofTiles[nRoofCount].pNext = 0;
+    pTileGrid->sRoomTiles.nRoofTilesCount = pTileGrid->nShadows;
+    return;
 }
 
 // Returns the warp direction byte based on the tile orientation. Returns 0x72 for orientation 0xb (special case), or 0x6c otherwise. From RoomTile.cpp.

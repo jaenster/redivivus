@@ -183,7 +183,10 @@ BOOL __fastcall Skills_CltStFunc_FindClosestMeleeTargetSetParams(D2UnitStrc * pU
 // Client StFunc for Amazon melee skills (e.g. Jab, Impale). Validates skill bounds and retrieves current skill. Computes melee range, searches for a confirmed or nearest target via SKILL_FindClosestTargetWithStats. If no target, clears param1 and returns. Otherwise stores the skill calc[0] result in param1, steers the unit's path toward the target, and stores target eUnitType in param2 and GUID in param3 for use by the DoFunc.
 BOOL __fastcall Skills_CltStFunc_FindMeleeTargetSetCalcParam(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetX;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 

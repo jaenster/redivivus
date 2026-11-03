@@ -2715,7 +2715,10 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
     if (nNodeIdx < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x164);
       exit(-1);
-    } else if (nNodeIdx < pCache->nMaxNodes) {
+    } else if (!(nNodeIdx < pCache->nMaxNodes)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x165);
+      exit(-1);
+    } else {
       iCacheNodeIdx = *pnCacheNodeIdx * 0x20;
       nTmp = *(int*)(iCacheNodeIdx - 0x10 + ((int*)((uint8_t*)&gD3DGenericTextureCache - 0x4))[iMipLevel * 7]);
       iMipLevel = iCacheNodeIdx - 0x20 + ((int*)((uint8_t*)&gD3DGenericTextureCache - 0x4))[iMipLevel * 7];
@@ -2732,7 +2735,10 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
       } else if (!pMemPool) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x171);
         exit(-1);
-      } else if (pTexInfo->nTexArea <= 0x10000) {
+      } else if (pTexInfo->nTexArea > 0x10000) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x172);
+        exit(-1);
+      } else {
         memset(pMemPool, 0, pTexInfo->nTexArea);
         switch (nMipIdx) {
           case 1:
@@ -2828,13 +2834,7 @@ static int32_t __thiscall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfo
           RENDERER_DIRECT3D_ErrorLog("Failed to set texture", dwHResult);
           return 1;
         }
-      } else {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x172);
-        exit(-1);
       }
-    } else {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x165);
-      exit(-1);
     }
 }
 
@@ -4502,86 +4502,87 @@ void __stdcall RENDERER_D3D_InitGroundTileCache() {
     }
 
     dwHResult = g_pD3DGroundTileVB->lpVtbl->Lock(g_pD3DGroundTileVB, 0x21, &__frame0.pLockedVB, nullptr);
-    if (!dwHResult) {
-      int iCol;
-      iRow = 0;
-      do {
-        iCol = 0;
-        do {
-          nDiagDiff = 0;
-          fTexUStep.fValue = 0.0;
-          if (!iCol) {
-            fTexUStep.nValue = 1;
-            nDiagDiff = 1;
-          } else if (iCol == 5) {
-            nDiagDiff = -1;
-            fTexUStep.nValue = -1;
-          }
-          if (!iRow) {
-            nDiagDiff--;
-            fTexUStep.nValue++;
-          } else if (iRow == 5) {
-            nDiagDiff++;
-            fTexUStep.nValue--;
-          }
-
-          nAdjY = iCol - iRow;
-          fBlockSizeInner = (float)(int)gnD3DTextureCacheBlockSize;
-          nAdjX = iCol + iRow;
-          iCol++;
-          fTexV = (float)nAdjX * __frame0.fTexVStep + (float)fTexUStep.nValue / (float)gnD3DTextureCacheCount;
-          *(uint32_t*)((int)__frame0.pLockedVB + 8) = 0x3f000000;
-          *(uint32_t*)((int)__frame0.pLockedVB + 0xc) = 0x3f800000;
-          *(float*)((int)__frame0.pLockedVB + 0x18) = (float)nAdjY * (160.0 / fBlockSize / 10.0) + (float)(nDiagDiff + 0x50) / fBlockSizeInner;
-          *(float*)((int)__frame0.pLockedVB + 0x1c) = fTexV;
-          __frame0.pLockedVB = (void*)((int)__frame0.pLockedVB + 0x20);
-        } while (iCol < 6);
-
-        iRow++;
-      } while (iRow < 6);
-
-      __frame0.fTexVStep = fTexV;
-      dwHResult = g_pD3DGroundTileVB->lpVtbl->Unlock(g_pD3DGroundTileVB);
-      if (dwHResult) {
-        DIRECTD3D_LogError("Vertex buffer unlock failed!", dwHResult);
-        return;
-      }
-
-      iRow = 0;
-      psIndexBuf = aStripIndices + 1;
-      do {
-        iCol = 0;
-        sRowBase = (short int)iRow * 6;
-        do {
-          psIndexBuf[-1] = sRowBase + (short int)iCol;
-          *psIndexBuf = sRowBase + 6 + (short int)iCol;
-          iCol++;
-          psIndexBuf += 2;
-        } while (iCol < 6);
-
-        iRow++;
-      } while (iRow < 5);
-
-      puDestIndex = gpD3DGroundTileVertexBuffer + 0xc;
-      psIndexBuf = aStripIndices;
-      iRow = 5;
-      do {
-        *(uint32_t*)(puDestIndex - 0xc) = *(uint32_t*)psIndexBuf;
-        *(uint32_t*)(puDestIndex - 10) = *(uint32_t*)(psIndexBuf + 2);
-        *(uint32_t*)(puDestIndex - 8) = *(uint32_t*)(psIndexBuf + 4);
-        *(uint32_t*)(puDestIndex - 6) = *(uint32_t*)(psIndexBuf + 6);
-        *(uint32_t*)(puDestIndex - 4) = *(uint32_t*)(psIndexBuf + 8);
-        *(uint32_t*)(puDestIndex - 2) = *(uint32_t*)(psIndexBuf + 10);
-        *puDestIndex = puDestIndex[-1];
-        puDestIndex += 0xd;
-        psIndexBuf += 0xc;
-        iRow--;
-      } while (iRow);
-
+    if (dwHResult) {
+      DIRECTD3D_LogError("Vertex buffer lock failed!", dwHResult);
       return;
     }
 
-    DIRECTD3D_LogError("Vertex buffer lock failed!", dwHResult);
+    int iCol;
+    iRow = 0;
+    do {
+      iCol = 0;
+      do {
+        nDiagDiff = 0;
+        fTexUStep.fValue = 0.0;
+        if (!iCol) {
+          fTexUStep.nValue = 1;
+          nDiagDiff = 1;
+        } else if (iCol == 5) {
+          nDiagDiff = -1;
+          fTexUStep.nValue = -1;
+        }
+        if (!iRow) {
+          nDiagDiff--;
+          fTexUStep.nValue++;
+        } else if (iRow == 5) {
+          nDiagDiff++;
+          fTexUStep.nValue--;
+        }
+
+        nAdjY = iCol - iRow;
+        fBlockSizeInner = (float)(int)gnD3DTextureCacheBlockSize;
+        nAdjX = iCol + iRow;
+        iCol++;
+        fTexV = (float)nAdjX * __frame0.fTexVStep + (float)fTexUStep.nValue / (float)gnD3DTextureCacheCount;
+        *(uint32_t*)((int)__frame0.pLockedVB + 8) = 0x3f000000;
+        *(uint32_t*)((int)__frame0.pLockedVB + 0xc) = 0x3f800000;
+        *(float*)((int)__frame0.pLockedVB + 0x18) = (float)nAdjY * (160.0 / fBlockSize / 10.0) + (float)(nDiagDiff + 0x50) / fBlockSizeInner;
+        *(float*)((int)__frame0.pLockedVB + 0x1c) = fTexV;
+        __frame0.pLockedVB = (void*)((int)__frame0.pLockedVB + 0x20);
+      } while (iCol < 6);
+
+      iRow++;
+    } while (iRow < 6);
+
+    __frame0.fTexVStep = fTexV;
+    dwHResult = g_pD3DGroundTileVB->lpVtbl->Unlock(g_pD3DGroundTileVB);
+    if (dwHResult) {
+      DIRECTD3D_LogError("Vertex buffer unlock failed!", dwHResult);
+      return;
+    }
+
+    iRow = 0;
+    psIndexBuf = aStripIndices + 1;
+    do {
+      iCol = 0;
+      sRowBase = (short int)iRow * 6;
+      do {
+        psIndexBuf[-1] = sRowBase + (short int)iCol;
+        *psIndexBuf = sRowBase + 6 + (short int)iCol;
+        iCol++;
+        psIndexBuf += 2;
+      } while (iCol < 6);
+
+      iRow++;
+    } while (iRow < 5);
+
+    puDestIndex = gpD3DGroundTileVertexBuffer + 0xc;
+    psIndexBuf = aStripIndices;
+    iRow = 5;
+    do {
+      *(uint32_t*)(puDestIndex - 0xc) = *(uint32_t*)psIndexBuf;
+      *(uint32_t*)(puDestIndex - 10) = *(uint32_t*)(psIndexBuf + 2);
+      *(uint32_t*)(puDestIndex - 8) = *(uint32_t*)(psIndexBuf + 4);
+      *(uint32_t*)(puDestIndex - 6) = *(uint32_t*)(psIndexBuf + 6);
+      *(uint32_t*)(puDestIndex - 4) = *(uint32_t*)(psIndexBuf + 8);
+      *(uint32_t*)(puDestIndex - 2) = *(uint32_t*)(psIndexBuf + 10);
+      *puDestIndex = puDestIndex[-1];
+      puDestIndex += 0xd;
+      psIndexBuf += 0xc;
+      iRow--;
+    } while (iRow);
+
+    return;
 }
 
 void __stdcall RENDERER_D3D_ReleaseGroundTileCache() {
@@ -4598,7 +4599,7 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     static uint16_t gdwRendererMode[4] = { 0x0, 0x5, 0x23, 0x1e }; D2_STATIC_GUARD(gdwRendererMode, "D2Direct3D::Renderer::DrawGroundTile::gdwRendererMode");
 
     DWORD DVar2;
-    uint32_t* lpwIndices;
+    uint16_t* lpwIndices;
     DWORD dwIndexCount;
     uint8_t byLightIntensity;
     BOOL BVar1;
@@ -4657,7 +4658,7 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       }
 
       dwIndexCount = 4;
-      lpwIndices = (uint32_t*)&gdwRendererMode;
+      lpwIndices = gdwRendererMode;
       DVar2 = 6;
     } else {
       uint8_t* pLightCursor;
@@ -4716,11 +4717,11 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       }
 
       dwIndexCount = 0x41;
+      lpwIndices = gpD3DGroundTileVertexBuffer;
       DVar2 = 5;
-      lpwIndices = (uint32_t*)&gpD3DGroundTileVertexBuffer;
     }
 
-    g_pD3DDevice->lpVtbl->DrawIndexedPrimitiveVB(g_pD3DDevice, DVar2, g_pD3DGroundTileVB, (WORD*)lpwIndices, dwIndexCount, 0x1c);
+    g_pD3DDevice->lpVtbl->DrawIndexedPrimitiveVB(g_pD3DDevice, DVar2, g_pD3DGroundTileVB, lpwIndices, dwIndexCount, 0x1c);
 }
 
 // Builds 256x256 lighting lookup table at 0x00971740 for color modulation. Each entry[row][col] = clamp((row+col) / 255, 0, 255). Used by RENDERER_D3D_ApplyShadowTextureCoords and RENDERER_D3D_SetTextureStageColor to apply dynamic lighting to vertices. Total table size: 64KB.

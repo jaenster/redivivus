@@ -43,7 +43,7 @@ void __fastcall D2WINEDITBOX_SetFilterCallback(::D2WinEditBox * pEditBox, fpD2Wi
 // It sets a callback.
 void __fastcall D2WINEDITBOX_SetChangeCallback(::D2WinEditBox * pEditBox, fpD2WinEditBoxChange fpChangeCallback);
 char * __stdcall D2WINEDITBOX_GetTextBuffer();
-void __fastcall D2WINEDITBOX_ValidateInput(char * szText);
+BOOL __fastcall D2WINEDITBOX_ValidateInput(char * szText);
 // Clears the selection: nSelAnchor = -1, nSelCursor = 0. Halts (lines 0x1A4/0x1A6) unless
 // pEditBox is a non-null FORM_EditBox. It does not touch focus.
 void __fastcall D2WINEDITBOX_ClearSelection(::D2WinEditBox * pEditBox);

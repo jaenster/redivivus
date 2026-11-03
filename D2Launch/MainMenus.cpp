@@ -3297,53 +3297,54 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
     }
 
     FORMS_DestroyList();
-    if (gpRealmQueryResultBuffer) {
-      gnRealmListCount = *(int*)(gpRealmQueryResultBuffer + 4);
-      if (!(gnRealmListCount < 0x200)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1181);
-        exit(-1);
-      }
-
-      pszSrc = (char*)(gpRealmQueryResultBuffer + 8);
-      MAINMENU_FreeRealmList();
-      nRemaining = gnRealmListCount;
-      if (!gnRealmListCount) {
-        return;
-      }
-
-      nAllocSize = gnRealmListCount * 4;
-      pRealmArray = (D2BNetRealmEntryStrc**)D2_ALLOC_AT(nAllocSize, ".\\Src\\MainMenus.cpp", 0x118c);
-      g_pBNetRealmList = pRealmArray;
-      memset(pRealmArray, 0, nAllocSize);
-      if (nRemaining > 0) {
-        do {
-          pRealmEntry = D2_NEW_AT(D2BNetRealmEntryStrc, ".\\Src\\MainMenus.cpp", 0x1192);
-          pszNameSrc = pszSrc + 4;
-          pszDescDst = pszNameSrc;
-          pszDescDst = pszDescDst + strlen(pszDescDst) + 1;
-          pszDescDst += 1 - (int)(pszSrc + 5);
-          pszSrc = (char*)D2_ALLOC_AT((size_t)pszDescDst, ".\\Src\\MainMenus.cpp", 0x119f);
-          pRealmEntry->szName = pszSrc;
-          Storm::Source::SSTR::SStrCopy(pszSrc, pszNameSrc, (int32_t)pszDescDst);
-          pszNameSrc += (int)pszDescDst;
-          pszSrc = pszNameSrc;
-          pszSrc = pszSrc + strlen(pszSrc) + 1;
-          pszSrc += 1 - (int)(pszNameSrc + 1);
-          pszDescDst = (char*)D2_ALLOC_AT((size_t)pszSrc, ".\\Src\\MainMenus.cpp", 0x11a4);
-          pRealmEntry->szDescription = pszDescDst;
-          Storm::Source::SSTR::SStrCopy(pszDescDst, pszNameSrc, (int32_t)pszSrc);
-          pszSrc = pszNameSrc + (int)pszSrc;
-          MAINMENU_AddRealmToList(pRealmEntry);
-          nRemaining--;
-          pRealmArray = g_pBNetRealmList;
-        } while (nRemaining);
-      }
-
-      qsort(pRealmArray, gnRealmListCount, 4, MAINMENU_CompareRealmNames);
+    if (!gpRealmQueryResultBuffer) {
+      gnRealmListCount = -1;
       return;
     }
 
-    gnRealmListCount = -1;
+    gnRealmListCount = *(int*)(gpRealmQueryResultBuffer + 4);
+    if (!(gnRealmListCount < 0x200)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1181);
+      exit(-1);
+    }
+
+    pszSrc = (char*)(gpRealmQueryResultBuffer + 8);
+    MAINMENU_FreeRealmList();
+    nRemaining = gnRealmListCount;
+    if (!gnRealmListCount) {
+      return;
+    }
+
+    nAllocSize = gnRealmListCount * 4;
+    pRealmArray = (D2BNetRealmEntryStrc**)D2_ALLOC_AT(nAllocSize, ".\\Src\\MainMenus.cpp", 0x118c);
+    g_pBNetRealmList = pRealmArray;
+    memset(pRealmArray, 0, nAllocSize);
+    if (nRemaining > 0) {
+      do {
+        pRealmEntry = D2_NEW_AT(D2BNetRealmEntryStrc, ".\\Src\\MainMenus.cpp", 0x1192);
+        pszNameSrc = pszSrc + 4;
+        pszDescDst = pszNameSrc;
+        pszDescDst = pszDescDst + strlen(pszDescDst) + 1;
+        pszDescDst += 1 - (int)(pszSrc + 5);
+        pszSrc = (char*)D2_ALLOC_AT((size_t)pszDescDst, ".\\Src\\MainMenus.cpp", 0x119f);
+        pRealmEntry->szName = pszSrc;
+        Storm::Source::SSTR::SStrCopy(pszSrc, pszNameSrc, (int32_t)pszDescDst);
+        pszNameSrc += (int)pszDescDst;
+        pszSrc = pszNameSrc;
+        pszSrc = pszSrc + strlen(pszSrc) + 1;
+        pszSrc += 1 - (int)(pszNameSrc + 1);
+        pszDescDst = (char*)D2_ALLOC_AT((size_t)pszSrc, ".\\Src\\MainMenus.cpp", 0x11a4);
+        pRealmEntry->szDescription = pszDescDst;
+        Storm::Source::SSTR::SStrCopy(pszDescDst, pszNameSrc, (int32_t)pszSrc);
+        pszSrc = pszNameSrc + (int)pszSrc;
+        MAINMENU_AddRealmToList(pRealmEntry);
+        nRemaining--;
+        pRealmArray = g_pBNetRealmList;
+      } while (nRemaining);
+    }
+
+    qsort(pRealmArray, gnRealmListCount, 4, MAINMENU_CompareRealmNames);
+    return;
 }
 
 BOOL __stdcall MAINMENU_OnPressCreditsEndCheck(D2ControlMsg * pControlMsg) {

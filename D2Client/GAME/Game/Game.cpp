@@ -814,32 +814,33 @@ void __stdcall DrawLoadingMessage() {
 
     draw_message:
     nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wMessage);
-    if (nTextWidth >= WindowSizeX - 0x28) {
-      D2TextLineStrc* pLineList;
-      D2Win::Src::D2WinFont::SetAndReturnLastFont(2);
-      pLineList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wMessage, (int*)&nLineCount, 600);
-      if (nLineCount > 0) {
-        iLine = 0;
-        pLine = pLineList;
-        do {
-          nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pLine->wszLine);
-          bSceneBegun = 0;
-          nLineX = WindowSizeX - nTextWidth;
-          D2Win::Src::D2WinFont::DRAW_text(pLine->wszLine, nLineX >> 1, D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight() * iLine * 2 + 200, 0, bSceneBegun);
-          pLine = pLine->pNext;
-          iLine++;
-        } while (iLine < nLineCount);
-      }
-
-      D2Win::Src::D2WinFont::D2WINFONT_FreeWordWrapList((void**)&pLineList->wszLine);
+    if (!(nTextWidth >= WindowSizeX - 0x28)) {
+      D2Win::Src::D2WinFont::DRAW_text(wMessage, WindowSizeX - nTextWidth >> 1, 200, 0, 0);
       D2Win::Src::D2WinMain::RENDERER_DrawOutOfGameScene();
       D2gfx::D2GFX::D2GFX_EndScene();
       return;
     }
 
-    D2Win::Src::D2WinFont::DRAW_text(wMessage, WindowSizeX - nTextWidth >> 1, 200, 0, 0);
+    D2TextLineStrc* pLineList;
+    D2Win::Src::D2WinFont::SetAndReturnLastFont(2);
+    pLineList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wMessage, (int*)&nLineCount, 600);
+    if (nLineCount > 0) {
+      iLine = 0;
+      pLine = pLineList;
+      do {
+        nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pLine->wszLine);
+        bSceneBegun = 0;
+        nLineX = WindowSizeX - nTextWidth;
+        D2Win::Src::D2WinFont::DRAW_text(pLine->wszLine, nLineX >> 1, D2Win::Src::D2WinFont::D2WINFONT_GetCurrentFontHeight() * iLine * 2 + 200, 0, bSceneBegun);
+        pLine = pLine->pNext;
+        iLine++;
+      } while (iLine < nLineCount);
+    }
+
+    D2Win::Src::D2WinFont::D2WINFONT_FreeWordWrapList((void**)&pLineList->wszLine);
     D2Win::Src::D2WinMain::RENDERER_DrawOutOfGameScene();
     D2gfx::D2GFX::D2GFX_EndScene();
+    return;
 }
 
 // Compute frame-skip level based on elapsed ticks and fps_drawn.

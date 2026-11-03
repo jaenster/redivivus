@@ -378,82 +378,82 @@ static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit)
     if (!pItemsTxt) {
       return;
     }
-    if (pGfxData->nMode != 4) {
-      if (pGfxData->nMode != 3) {
+    if (pGfxData->nMode == 4) {
+      *(uint8_t*)(char*)&nVariant = D2Common::ITEMS::Items::ITEM_GetItemData_bVariant(pUnit);
+      BOOL bItemIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x196, ".\\ENGINE\\GfxUtil.cpp");
+      if (bItemIdentified) {
+        int eQuality;
+        eQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
+        if (eQuality == 5) {
+          nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
+          pSetItemsTxt = DataTbls::GetSetItemsLine(nFileIndex);
+          if (pSetItemsTxt && (szGfxFile = pSetItemsTxt->invfile , *szGfxFile != '\0') || (szGfxFile = pItemsTxt->szSetInvFile , pItemsTxt->szSetInvFile[0] != '\0')) {
+            pGfxData->dwFlags |= 0x10;
+            pGfxData->szFilename = szGfxFile;
+            return;
+          }
+        }
+      }
+
+      bItemIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x1ae, ".\\ENGINE\\GfxUtil.cpp");
+      if (bItemIdentified) {
+        nQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
+        if (nQuality == 7 && ((iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit) , iVar1 > 0 && (pUniqueItemsTxt = DataTbls::INV_GetUniqueItemsTxtLine(iVar1) , pUniqueItemsTxt && (pcGfxFile = pUniqueItemsTxt->invfile , *pcGfxFile != '\0'))) || (pcGfxFile = pItemsTxt->szUniqueInvFile , pItemsTxt->szUniqueInvFile[0] != '\0'))) {
+          pGfxData->dwFlags |= 1;
+          pGfxData->szFilename = pcGfxFile;
+          return;
+        }
+      }
+
+      uint8_t bHasVarInvGfx = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit);
+      if (bHasVarInvGfx) {
+        char* pacInvGfx = *D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx(pUnit, (uint32_t)(uint8_t)nVariant);
+        pGfxData->szFilename = pacInvGfx;
         return;
       }
 
-      pGfxData->szFilename = pItemsTxt->szFlippyFile;
-      nQuality2 = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-      if (nQuality2 == 7) {
-        iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        if (iVar1 < 0) {
-          return;
-        }
-
-        iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        pUniqueItemsTxtFlippy = DataTbls::INV_GetUniqueItemsTxtLine(iVar1);
-        if (!pUniqueItemsTxtFlippy) {
-          return;
-        }
-
-        szGfxFile = pUniqueItemsTxtFlippy->flippyfile;
-      } else {
-        nQuality3 = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-        if (nQuality3 != 5) {
-          return;
-        }
-
-        iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        pSetItemsTxtFlippy = DataTbls::GetSetItemsLine(iVar1);
-        if (!pSetItemsTxtFlippy) {
-          return;
-        }
-
-        szGfxFile = pSetItemsTxtFlippy->flippyfile;
-      }
-      if (*szGfxFile == '\0') {
-        return;
-      }
-
-      pGfxData->szFilename = szGfxFile;
-      return;
-    }
-
-    *(uint8_t*)(char*)&nVariant = D2Common::ITEMS::Items::ITEM_GetItemData_bVariant(pUnit);
-    BOOL bItemIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x196, ".\\ENGINE\\GfxUtil.cpp");
-    if (bItemIdentified) {
-      int eQuality;
-      eQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-      if (eQuality == 5) {
-        nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-        pSetItemsTxt = DataTbls::GetSetItemsLine(nFileIndex);
-        if (pSetItemsTxt && (szGfxFile = pSetItemsTxt->invfile , *szGfxFile != '\0') || (szGfxFile = pItemsTxt->szSetInvFile , pItemsTxt->szSetInvFile[0] != '\0')) {
-          pGfxData->dwFlags |= 0x10;
-          pGfxData->szFilename = szGfxFile;
-          return;
-        }
-      }
-    }
-
-    bItemIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x1ae, ".\\ENGINE\\GfxUtil.cpp");
-    if (bItemIdentified) {
-      nQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-      if (nQuality == 7 && ((iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit) , iVar1 > 0 && (pUniqueItemsTxt = DataTbls::INV_GetUniqueItemsTxtLine(iVar1) , pUniqueItemsTxt && (pcGfxFile = pUniqueItemsTxt->invfile , *pcGfxFile != '\0'))) || (pcGfxFile = pItemsTxt->szUniqueInvFile , pItemsTxt->szUniqueInvFile[0] != '\0'))) {
-        pGfxData->dwFlags |= 1;
-        pGfxData->szFilename = pcGfxFile;
-        return;
-      }
-    }
-
-    uint8_t bHasVarInvGfx = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit);
-    if (!bHasVarInvGfx) {
       pGfxData->szFilename = pItemsTxt->szInvFile;
       return;
     }
+    if (pGfxData->nMode != 3) {
+      return;
+    }
 
-    char* pacInvGfx = *D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx(pUnit, (uint32_t)(uint8_t)nVariant);
-    pGfxData->szFilename = pacInvGfx;
+    pGfxData->szFilename = pItemsTxt->szFlippyFile;
+    nQuality2 = D2Common::ITEMS::Items::GetItemQuality(pUnit);
+    if (nQuality2 == 7) {
+      iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
+      if (iVar1 < 0) {
+        return;
+      }
+
+      iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
+      pUniqueItemsTxtFlippy = DataTbls::INV_GetUniqueItemsTxtLine(iVar1);
+      if (!pUniqueItemsTxtFlippy) {
+        return;
+      }
+
+      szGfxFile = pUniqueItemsTxtFlippy->flippyfile;
+    } else {
+      nQuality3 = D2Common::ITEMS::Items::GetItemQuality(pUnit);
+      if (nQuality3 != 5) {
+        return;
+      }
+
+      iVar1 = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
+      pSetItemsTxtFlippy = DataTbls::GetSetItemsLine(iVar1);
+      if (!pSetItemsTxtFlippy) {
+        return;
+      }
+
+      szGfxFile = pSetItemsTxtFlippy->flippyfile;
+    }
+    if (*szGfxFile == '\0') {
+      return;
+    }
+
+    pGfxData->szFilename = szGfxFile;
+    return;
 }
 
 static int32_t GFXUTIL_GetOverlayNumDirections(int32_t nOverlayId) {

@@ -697,7 +697,7 @@ static void __stdcall SKILLS_UseChargedSkillCharge(::SGAMEDATA * pGame, D2SkillS
       return;
     }
 
-    uint32_t nLayer = (eSkillId << ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f)) + (sgptDataTable->dwChargedSkillLevelMask & nMaxChargeCount);
+    uint32_t nLayer = (eSkillId << (sgptDataTable->nChargedSkillLevelBits & 0x1f)) + (sgptDataTable->dwChargedSkillLevelMask & nMaxChargeCount);
     nChargedStatRaw = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(__frame0.pChargedStatList, UNITSTAT_item_charged_skill, nLayer);
     if (!nChargedStatRaw) {
       return;
@@ -746,7 +746,7 @@ void __fastcall CalculateManaUse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Ski
       return;
     }
 
-    int nManaCost = (int)pSkillTxt->lvlmana * ((int)(nSkillLevel - 1U) < 0 ? 0 : nSkillLevel - 1U) + (int)pSkillTxt->mana << ((uint8_t)pSkillTxt->manashift & 0x1f);
+    int nManaCost = (int)pSkillTxt->lvlmana * ((int)(nSkillLevel - 1U) < 0 ? 0 : nSkillLevel - 1U) + (int)pSkillTxt->mana << (pSkillTxt->manashift & 0x1f);
     int nMinManaCost = pSkillTxt->minmana * 0x100;
     if (nMinManaCost > nManaCost) {
       nManaCost = nMinManaCost;
@@ -824,7 +824,7 @@ uint32_t __fastcall SKILL_CheckManaForCast(D2UnitStrc * pUnit) {
     }
 
     int nCurrentMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    return (uint32_t)(nCurrentMana >= sLvlMana * nSkillLevel + (int)sMana << ((uint8_t)sManaShift & 0x1f));
+    return (uint32_t)(nCurrentMana >= sLvlMana * nSkillLevel + (int)sMana << (sManaShift & 0x1f));
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
@@ -2084,11 +2084,11 @@ D2UnitStrc * __fastcall SKILL_CreateSummon(::SGAMEDATA * pGame, D2MonsterCastPet
     }
 
     pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGame, pRoom, nTargetX, nTargetY, pPetCreation->classId, pPetCreation->nMode, 4, 0x42);
-    if (pMonster) {
-      goto init_summon;
+    if (!pMonster) {
+      return nullptr;
     }
 
-    return nullptr;
+    goto init_summon;
 }
 
 // Creates and drops an item of the given 4-char code at the caster's position. Converts szItemCode to an item class ID, finds the best nearby spawn tile via FindBestSpotToSpawnItem, builds a D2ItemGenContextStrc with the caster's level and given quality, and calls ITEM_CreateItemInstance to spawn and place the item in the game world.
@@ -3783,54 +3783,54 @@ void __fastcall SKILLS_PeriodicSkillsCallback(::SGAMEDATA * pGame, D2UnitStrc * 
     int nAuraStatListSkillId;
     D2SkillsTxt* pSkillsTxt;
     short int eAuraState;
-    if (nSkillId != -1) {
-      if (nSkillId <= 0) {
-        return;
+    if (nSkillId == -1) {
+      pSkill = D2Common::Units::GetRightSkill(pUnit);
+      if (pSkill) {
+        eD2Skills eSkill;
+        eSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0xcbb);
+        nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+        if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x4) & (uint8_t)gadwBitMasks[5]) {
+          bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+          if (!bIsDead) {
+            SKILL_SpawnMissileFunction(pGame, pUnit, eSkill, nSkillLevel, 1, 0, 0);
+            SKILLS_SetPeriodicSkillTimer(pGame, pUnit, eSkill, nSkillLevel, 1);
+            return;
+          }
+        }
       }
 
-      pSkillsTxt = nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
-      if (pSkillsTxt) {
-        eAuraState = pSkillsTxt->aurastate;
-        if (eAuraState >= 0 && (int)eAuraState < sgptDataTable->nTxtStatesSize) {
-          eAuraActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)eAuraState);
-          if (eAuraActiveState != STATE_none) {
-            pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillsTxt->aurastate);
-            if (pStatList) {
-              nSkillLevel = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
-              pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, nSkillId);
-              if (pSkill) {
-                nAuraStatListSkillId = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
-                if (nSkillId == nAuraStatListSkillId) {
-                  SKILL_SpawnMissileFunction(pGame, pUnit, nSkillId, nSkillLevel, 1, 0, 0);
-                  SKILLS_SetPeriodicSkillTimer(pGame, pUnit, nSkillId, nSkillLevel, 0);
-                  return;
-                }
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
+      return;
+    }
+    if (nSkillId <= 0) {
+      return;
+    }
+
+    pSkillsTxt = nSkillId < sgptDataTable->nTxtSkillsCount ? sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    if (pSkillsTxt) {
+      eAuraState = pSkillsTxt->aurastate;
+      if (eAuraState >= 0 && (int)eAuraState < sgptDataTable->nTxtStatesSize) {
+        eAuraActiveState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)eAuraState);
+        if (eAuraActiveState != STATE_none) {
+          pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillsTxt->aurastate);
+          if (pStatList) {
+            nSkillLevel = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_level, 0);
+            pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, nSkillId);
+            if (pSkill) {
+              nAuraStatListSkillId = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
+              if (nSkillId == nAuraStatListSkillId) {
+                SKILL_SpawnMissileFunction(pGame, pUnit, nSkillId, nSkillLevel, 1, 0, 0);
+                SKILLS_SetPeriodicSkillTimer(pGame, pUnit, nSkillId, nSkillLevel, 0);
+                return;
               }
             }
           }
         }
       }
-
-      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nSkillId);
-      return;
     }
 
-    pSkill = D2Common::Units::GetRightSkill(pUnit);
-    if (pSkill) {
-      eD2Skills eSkill;
-      eSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0xcbb);
-      nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-      if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount && sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&sgptDataTable->pTxtSkills[eSkill] + 0x4) & (uint8_t)gadwBitMasks[5]) {
-        bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-        if (!bIsDead) {
-          SKILL_SpawnMissileFunction(pGame, pUnit, eSkill, nSkillLevel, 1, 0, 0);
-          SKILLS_SetPeriodicSkillTimer(pGame, pUnit, eSkill, nSkillLevel, 1);
-          return;
-        }
-      }
-    }
-
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
+    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, nSkillId);
+    return;
 }
 
 void __fastcall SKILLS_PeriodicStatsCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, int32_t nSkillId) {

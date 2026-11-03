@@ -1094,7 +1094,7 @@ static BOOL __stdcall RollPrefixes(D2ItemGenContextStrc * pItemGenContext, D2Uni
 
     int nAffixRollCount;
     nAffixRollCount = D2Client::Seed::RollBetweenMinAndMax(pSeed, nMin, nMax);
-    if (!nAffixRollCount) {
+    if ((uint32_t)nAffixRollCount <= 0) {
       return 0;
     }
 

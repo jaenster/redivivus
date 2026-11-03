@@ -360,12 +360,13 @@ void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
     gnD2GSBytesSentTotal = gnD2GSBytesSentTotal + nBytesCopied + 7U;
     gnD2GSPacketsSentTotal++;
     D2_FREE_AT(pReadPtr, ".\\GAME\\Msg.cpp", 0x262);
-    if (nTotalChunks) {
-      gnLoadingProgressRatio = (nTotalChunks << 8) / nTotalChunks;
+    if (!nTotalChunks) {
+      gnLoadingProgressRatio = nTotalChunks;
       return;
     }
 
-    gnLoadingProgressRatio = nTotalChunks;
+    gnLoadingProgressRatio = (nTotalChunks << 8) / nTotalChunks;
+    return;
 }
 
 // Client-side outbound D2GS packet sender. Asserts size < 0x200, copies up to 512 bytes to a stack buffer and forwards via NET_D2GS_CLIENT_SendPacketAfterChecks. Performs a duplicate-suppression throttle keyed on the packet opcode (*pBytes): movement-ish opcodes 5-0x11 are dropped if identical to the last sent packet within 0x32ms; other opcodes within 0xC8ms; opcode 0x3a always sends. On send, caches the packet in gpLastSentPacketBuffer + gdwLastPacketSendTick and bumps gnPacketSendCount_0x69 / network sync flag. Inputs: pBytes (raw packet), nSize (length).

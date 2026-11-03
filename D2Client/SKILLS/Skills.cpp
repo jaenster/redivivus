@@ -1379,15 +1379,16 @@ uint32_t __fastcall SKILL_ExecuteClientDoFunc(D2UnitStrc * pUnit, eD2Skills eSki
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
-void __fastcall SKILLS_CltSetSkillFromCurrent(D2UnitStrc * pUnit) {
+uint32_t __fastcall SKILLS_CltSetSkillFromCurrent(D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
-      return;
+      return 0;
     }
 
     eD2Skills eSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x697);
     int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-    SKILL_ExecuteClientDoFunc(pUnit, eSkill, nSkillLevel, 0);
+    uint32_t uVar1 = SKILL_ExecuteClientDoFunc(pUnit, eSkill, nSkillLevel, 0);
+    return uVar1;
 }
 
 // Invokes a skill's client progress function (SkillsTxt.cltprgfunc[0]) for pUnit, temporarily redirecting the unit's target/SP1 to the supplied target unit (pUnit2) or target coords (nTargetX/nTargetY) and stashing bDirection in nInitSeed. Looks up the cltprgfunc in the SKILLCLTDOFUNCS dispatch table and calls it (pUnit,eSkill,nSkillLevel); on success plays the skill's dosound, the target's tgtsound, and adds the tgtoverlay to the confirmed target. Restores the unit's original target, SP1 coordinates and nInitSeed before returning. No-op if unit null or eSkill out of range.
@@ -1678,40 +1679,42 @@ void __stdcall SKILLS_CreateMissileRing(D2SkillArgStrc * pSkillArg1, D2SkillArgS
     D2UnitStrc* pMissileUnit;
     D2SeedStrc sRandSeed;
     int nTableOffset = 0;
-    if (!pSkillArg1) {
+    if (pSkillArg1) {
+      int nRingTableOffset = 0;
       do {
-        pSkillArg2->nUnitX = ganMissileRingCosOffsets[nTableOffset];
-        pSkillArg2->nUnitY = ganMissileRingSinOffsets[nTableOffset];
-        if (pSkillArg2->nMissileTxtNo == MISSILE_Diabfire) {
-          pSkillArg2->nFlags ^= 0x4000;
+        D2SkillArgStrc* pChosenArg;
+        pMissileUnit = pSkillArg2->pOwner;
+        sRandSeed = D2_SEED_NEXT(pMissileUnit->sSeed);
+        pMissileUnit->sSeed = sRandSeed;
+        if (sRandSeed.nSeedLow % 6 != 0) {
+          pSkillArg2->nUnitX = ganMissileRingCosOffsets[nRingTableOffset];
+          pSkillArg2->nUnitY = ganMissileRingSinOffsets[nRingTableOffset];
+          pChosenArg = pSkillArg2;
+        } else {
+          pSkillArg1->nUnitX = ganMissileRingCosOffsets[nRingTableOffset];
+          pSkillArg1->nUnitY = ganMissileRingSinOffsets[nRingTableOffset];
+          pChosenArg = pSkillArg1;
         }
 
-        UNIT::Missile::MakeMissile(pSkillArg2);
-        nTableOffset++;
-      } while (nTableOffset < 64);
+        UNIT::Missile::MakeMissile(pChosenArg);
+        nRingTableOffset++;
+      } while (nRingTableOffset < 64);
 
       return;
     }
 
-    int nRingTableOffset = 0;
     do {
-      D2SkillArgStrc* pChosenArg;
-      pMissileUnit = pSkillArg2->pOwner;
-      sRandSeed = D2_SEED_NEXT(pMissileUnit->sSeed);
-      pMissileUnit->sSeed = sRandSeed;
-      if (sRandSeed.nSeedLow % 6 != 0) {
-        pSkillArg2->nUnitX = ganMissileRingCosOffsets[nRingTableOffset];
-        pSkillArg2->nUnitY = ganMissileRingSinOffsets[nRingTableOffset];
-        pChosenArg = pSkillArg2;
-      } else {
-        pSkillArg1->nUnitX = ganMissileRingCosOffsets[nRingTableOffset];
-        pSkillArg1->nUnitY = ganMissileRingSinOffsets[nRingTableOffset];
-        pChosenArg = pSkillArg1;
+      pSkillArg2->nUnitX = ganMissileRingCosOffsets[nTableOffset];
+      pSkillArg2->nUnitY = ganMissileRingSinOffsets[nTableOffset];
+      if (pSkillArg2->nMissileTxtNo == MISSILE_Diabfire) {
+        pSkillArg2->nFlags ^= 0x4000;
       }
 
-      UNIT::Missile::MakeMissile(pChosenArg);
-      nRingTableOffset++;
-    } while (nRingTableOffset < 64);
+      UNIT::Missile::MakeMissile(pSkillArg2);
+      nTableOffset++;
+    } while (nTableOffset < 64);
+
+    return;
 }
 
 // Fires one or two missile types at a target unit's world position. Builds a D2SkillArgStrc from the target's path (static or dynamic), sets owner/skill/level. If eMissilesId2 is -2 (sentinel), fires a full 360° ring via ganMissileRingCosOffsets/SinOffsets (64 missiles). Otherwise copies the arg and fires a second missile ring via SKILLS_CreateMissileRing using eMissilesId2. Optional nParam overrides missile velocity.
@@ -1852,7 +1855,7 @@ void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
 
     do {
       eD2States eUnitState;
-      eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x05[nStateListIdx].nStateId;
+      eState = (eD2States)(short int)sgptDataTable->pAllStatesDataTblFlag0x05[nStateListIdx];
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
       pStatesTxt = eUnitState != STATE_none && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize ? sgptDataTable->pTxtStates + eState : nullptr;
       if (pStatesTxt) {

@@ -570,15 +570,10 @@ void __fastcall GAME_CollectNearbyUnitPositions(D2ClientStrc * pClient, uint32_t
       pClient->nPacketBuffer.nCount = 0;
       aProximityNodes[0].nNext = 0;
       aProximityNodes[0].nDistance = 0;
-      nRoomIdx = 0;
-      if (nAdjacentRoomCount) {
-        do {
-          for (pPlayerUnit_lcl = ppAdjacentRooms[nRoomIdx]->pUnitList; pPlayerUnit_lcl; pPlayerUnit_lcl = pPlayerUnit_lcl->pRoomNext) {
-            CLIENT_AddUnitToProximitySortedList(nX, pPlayerUnit_lcl, nY, &pnMaxDist, pClient, nMaxUnits, aProximityNodes);
-          }
-
-          nRoomIdx++;
-        } while (nRoomIdx < nAdjacentRoomCount);
+      for (nRoomIdx = 0; nRoomIdx < nAdjacentRoomCount; nRoomIdx++) {
+        for (pPlayerUnit_lcl = ppAdjacentRooms[nRoomIdx]->pUnitList; pPlayerUnit_lcl; pPlayerUnit_lcl = pPlayerUnit_lcl->pRoomNext) {
+          CLIENT_AddUnitToProximitySortedList(nX, pPlayerUnit_lcl, nY, &pnMaxDist, pClient, nMaxUnits, aProximityNodes);
+        }
       }
 
       CLIENT_PopulateVisibilityPacketBuffer(aProximityNodes, pClient);
@@ -1070,80 +1065,80 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
     uint64_t qwNewAvgPing;
     int64_t qwPingAccum;
     ::SGAMEDATA* pGame = Server::NET_SERVER_FindGameByClientId(nClientId);
-    if (!pGame) {
-      if (!gQServerClientTablesInitialized) {
-        return;
-      }
-
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerClientByIdCs);
-      pClient = QServerClientBucketById[nClientId & 0xff];
+    if (pGame) {
+      pClient = pGame->pClient;
       if (pClient) {
+        D2QServerClientStrcExt* pQSExt;
         while (pClient->nClientNo != nClientId) {
-          pClient = pClient->pServerNext;
+          pClient = pClient->pNext;
           if (!pClient) {
-            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
+            Server::Unlock(pGame);
             return;
           }
         }
 
         dwNowTick = GetTickCount();
+        pClient->tQServerExt.dwPingSamples[pClient->tQServerExt.nHeartbeatSampleCount & 0xf] = dwNowTick - dwSendTick - dwClientTick;
+        pClient->tQServerExt.nHeartbeatSampleCount++;
         nSamplesToAvg = pClient->tQServerExt.nHeartbeatSampleCount;
-        if (nSamplesToAvg < 10) {
-          qwPingAccum = (int64_t)nSamplesToAvg * (int64_t)pClient->tQServerExt.qwAveragePingTicks;
-          qwPingAccum += (int)(dwNowTick - dwSendTick - dwClientTick);
-          pClient->tQServerExt.nHeartbeatSampleCount = nSamplesToAvg + 1;
-          qwNewAvgPing = qwPingAccum / (nSamplesToAvg + 1);
-          pClient->tQServerExt.qwAveragePingTicks = qwNewAvgPing;
+        nSampleCount = 0;
+        dwPingAccumHi = 0;
+        if (nSamplesToAvg > 0x10) {
+          nSamplesToAvg = 0x10;
+        }
+        if ((int)nSamplesToAvg > 0) {
+          pQSExt = &pClient->tQServerExt;
+          nRemaining = nSamplesToAvg;
+          do {
+            bCarry = (uint32_t)((uint32_t)nSampleCount + (uint32_t)pQSExt->dwPingSamples[0]) < (uint32_t)nSampleCount;
+            nSampleCount += pQSExt->dwPingSamples[0];
+            dwPingAccumHi += bCarry;
+            pQSExt = (D2QServerClientStrcExt*)(pQSExt->dwPingSamples + 1);
+            nRemaining--;
+          } while (nRemaining);
         }
 
+        qwNewAvgPing = _aulldiv(nSampleCount, dwPingAccumHi, nSamplesToAvg, (int)nSamplesToAvg >> 0x1f);
+        pClient->tQServerExt.qwAveragePingTicks = qwNewAvgPing;
         SCmd::NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(pClient);
-        pClient->tQServerExt.nHeartbeatSampleCount++;
         pClient->dwTimeOut = dwNowTick;
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
+      Server::Unlock(pGame);
+      return;
+    }
+    if (!gQServerClientTablesInitialized) {
       return;
     }
 
-    pClient = pGame->pClient;
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerClientByIdCs);
+    pClient = QServerClientBucketById[nClientId & 0xff];
     if (pClient) {
-      D2QServerClientStrcExt* pQSExt;
       while (pClient->nClientNo != nClientId) {
-        pClient = pClient->pNext;
+        pClient = pClient->pServerNext;
         if (!pClient) {
-          Server::Unlock(pGame);
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
           return;
         }
       }
 
       dwNowTick = GetTickCount();
-      pClient->tQServerExt.dwPingSamples[pClient->tQServerExt.nHeartbeatSampleCount & 0xf] = dwNowTick - dwSendTick - dwClientTick;
-      pClient->tQServerExt.nHeartbeatSampleCount++;
       nSamplesToAvg = pClient->tQServerExt.nHeartbeatSampleCount;
-      nSampleCount = 0;
-      dwPingAccumHi = 0;
-      if (nSamplesToAvg > 0x10) {
-        nSamplesToAvg = 0x10;
-      }
-      if ((int)nSamplesToAvg > 0) {
-        pQSExt = &pClient->tQServerExt;
-        nRemaining = nSamplesToAvg;
-        do {
-          bCarry = (uint32_t)((uint32_t)nSampleCount + (uint32_t)pQSExt->dwPingSamples[0]) < (uint32_t)nSampleCount;
-          nSampleCount += pQSExt->dwPingSamples[0];
-          dwPingAccumHi += bCarry;
-          pQSExt = (D2QServerClientStrcExt*)(pQSExt->dwPingSamples + 1);
-          nRemaining--;
-        } while (nRemaining);
+      if (nSamplesToAvg < 10) {
+        qwPingAccum = (int64_t)nSamplesToAvg * (int64_t)pClient->tQServerExt.qwAveragePingTicks;
+        qwPingAccum += (int)(dwNowTick - dwSendTick - dwClientTick);
+        pClient->tQServerExt.nHeartbeatSampleCount = nSamplesToAvg + 1;
+        qwNewAvgPing = qwPingAccum / (nSamplesToAvg + 1);
+        pClient->tQServerExt.qwAveragePingTicks = qwNewAvgPing;
       }
 
-      qwNewAvgPing = _aulldiv(nSampleCount, dwPingAccumHi, nSamplesToAvg, (int)nSamplesToAvg >> 0x1f);
-      pClient->tQServerExt.qwAveragePingTicks = qwNewAvgPing;
       SCmd::NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(pClient);
+      pClient->tQServerExt.nHeartbeatSampleCount++;
       pClient->dwTimeOut = dwNowTick;
     }
 
-    Server::Unlock(pGame);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
+    return;
 }
 
 BOOL __fastcall NET_D2GS_SERVER_GetPlayerNameByClientId(int32_t nClientId, char * szPlayerName) {

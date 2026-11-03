@@ -2720,7 +2720,11 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
 
     eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pItem);
     if (eItemType == ITEMTYPE_PlayerBodyPart) {
-      if (!pItemGenCtx->bFromCustomData) {
+      if (pItemGenCtx->bFromCustomData) {
+        D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pItem, pItemGenCtx->szCustomName);
+        D2Common::ITEMS::Items::ITEM_SetItemData_nEarLevel(pItem, pItemGenCtx->bGrade);
+        bHasFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pItemGenCtx->neD2ItemFlag, ITEMFLAG_HARDCORE);
+      } else {
         pUnit = pItemGenCtx->pUnit;
         if (!pUnit || pUnit->eUnitType != UNIT_PLAYER || (pPlayerData = D2Common::Units::GetPlayerData(pUnit) , !pPlayerData)) {
           UNIT::SUnit::FreeServerUnit(pGame, pItem);
@@ -2736,10 +2740,6 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
         }
 
         bHasFlag = GAME::Clients::CLIENT_TestFileFlags(pClient, 4);
-      } else {
-        D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pItem, pItemGenCtx->szCustomName);
-        D2Common::ITEMS::Items::ITEM_SetItemData_nEarLevel(pItem, pItemGenCtx->bGrade);
-        bHasFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pItemGenCtx->neD2ItemFlag, ITEMFLAG_HARDCORE);
       }
 
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_HARDCORE, bHasFlag);

@@ -805,7 +805,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
       pszSrc++;
     } while (cByte != '\0');
 
-    if (pBytes[0xe] == '\0') {
+    if ((uint8_t)pBytes[0xe] <= '\0') {
       return 1;
     }
 

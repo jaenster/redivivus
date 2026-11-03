@@ -1433,37 +1433,38 @@ void __fastcall ROSTER_AllocOrUpdatePlayer(int nPlayerGUID, int nCharType, char 
     }
 
     D2RosterStrc* pNewRoster = GetRosterByGuidOrName(szPlayerName, nPlayerGUID);
-    if (!pNewRoster) {
-      for (; pNewRoster = 0 , pDVar1 && (pNewRoster = pDVar1 , pDVar1->nRosterGUID != nPlayerGUID); pDVar1 = pDVar1->pNext) {
-        pPrev = pDVar1;
-      }
-
-      if (pNewRoster) {
-        if (pPrev) {
-          pPrev->pNext = pNewRoster->pNext;
-          pNewRoster->pNext = 0;
-        } else {
-          gpRosterOther = pNewRoster->pNext;
-          pNewRoster->pNext = 0;
-        }
-      } else {
-        pNewRoster = D2_NEW_AT(D2RosterStrc, ".\\GAME\\Roster.cpp", 0xd8);
-        memset(pNewRoster, 0, 0x84);
-      }
-
-      pPlayerList = UNIT::PlayerList::AllocPlayerList();
-      pNewRoster->pPlayerList = pPlayerList;
+    if (pNewRoster) {
       ROSTER_InitializeFields(pNewRoster, szPlayerName, szGuildTag, nPlayerGUID, nCharType, nUnitLevel, nPartyId, bInParty, nGuildFlags, szGuildName);
-      pNewRoster->pNext = gpRosterPlayers;
-      gpRosterPlayers = pNewRoster;
       ROSTER_RebuildPlayerParty();
       UI::Party::ResetPartyUi();
       return;
     }
 
+    for (; pNewRoster = 0 , pDVar1 && (pNewRoster = pDVar1 , pDVar1->nRosterGUID != nPlayerGUID); pDVar1 = pDVar1->pNext) {
+      pPrev = pDVar1;
+    }
+
+    if (pNewRoster) {
+      if (pPrev) {
+        pPrev->pNext = pNewRoster->pNext;
+        pNewRoster->pNext = 0;
+      } else {
+        gpRosterOther = pNewRoster->pNext;
+        pNewRoster->pNext = 0;
+      }
+    } else {
+      pNewRoster = D2_NEW_AT(D2RosterStrc, ".\\GAME\\Roster.cpp", 0xd8);
+      memset(pNewRoster, 0, 0x84);
+    }
+
+    pPlayerList = UNIT::PlayerList::AllocPlayerList();
+    pNewRoster->pPlayerList = pPlayerList;
     ROSTER_InitializeFields(pNewRoster, szPlayerName, szGuildTag, nPlayerGUID, nCharType, nUnitLevel, nPartyId, bInParty, nGuildFlags, szGuildName);
+    pNewRoster->pNext = gpRosterPlayers;
+    gpRosterPlayers = pNewRoster;
     ROSTER_RebuildPlayerParty();
     UI::Party::ResetPartyUi();
+    return;
 }
 
 void __fastcall ROSTER_UpdatePlayerPartyInfo(int32_t nUnitGuid, int16_t nPartyId, int16_t nUnitLevel, uint32_t nRelationship, BOOL bInParty) {

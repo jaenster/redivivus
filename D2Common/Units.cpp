@@ -783,7 +783,7 @@ static void AddWalkVelocityStatIfExistToPlayer(D2UnitStrc * pUnit, int32_t ePlay
       return;
     }
 
-    Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_velocitypercent, (int)((uint64_t)((uint32_t)(uint8_t)pCharStatsTxt->RunVelocity * 100) / (uint64_t)(int64_t)(int)(uint32_t)pCharStatsTxt->WalkVelocity) - 100, 0);
+    Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_velocitypercent, (int)((int)((uint32_t)(uint8_t)pCharStatsTxt->RunVelocity * 100) / (int)(uint32_t)pCharStatsTxt->WalkVelocity) - 100, 0);
     Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatEx, 1);
 }
 
@@ -1534,28 +1534,29 @@ void __stdcall StoreOwnerInfo(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t
 }
 
 void __stdcall StoreOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
-    if (!pOwner) {
-      D2StatListExStrc* pStatList;
-      if (!pUnit) {
-        return;
-      }
-
-      pUnit->eOwnerType = UNIT_PLAYER;
-      pUnit->nOwnerGUID = 0;
-      if (pUnit->pStatsEx) {
-        DATATBLS::ItemStats::SetState(pUnit, STATE_sourceunit, 0);
-        pStatList = Stats::StatsEx::GetStatsByState(pUnit, STATE_sourceunit);
-        if (pStatList) {
-          Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
-          Stats::StatsEx::FreeStatList(&pStatList->sStatList);
-        }
-      }
-
-      pUnit->eUnitFlagsEx &= ~UNITFLAGEX_STOREOWNERINFO;
+    if (pOwner) {
+      StoreOwnerTypeAndGUID(pUnit, pOwner->eUnitType, pOwner->nUnitGUID);
       return;
     }
 
-    StoreOwnerTypeAndGUID(pUnit, pOwner->eUnitType, pOwner->nUnitGUID);
+    D2StatListExStrc* pStatList;
+    if (!pUnit) {
+      return;
+    }
+
+    pUnit->eOwnerType = UNIT_PLAYER;
+    pUnit->nOwnerGUID = 0;
+    if (pUnit->pStatsEx) {
+      DATATBLS::ItemStats::SetState(pUnit, STATE_sourceunit, 0);
+      pStatList = Stats::StatsEx::GetStatsByState(pUnit, STATE_sourceunit);
+      if (pStatList) {
+        Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
+        Stats::StatsEx::FreeStatList(&pStatList->sStatList);
+      }
+    }
+
+    pUnit->eUnitFlagsEx &= ~UNITFLAGEX_STOREOWNERINFO;
+    return;
 }
 
 void __stdcall StoreLastAttacker(D2UnitStrc * pUnit, D2UnitStrc * pKiller) {
@@ -3790,6 +3791,20 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
           }
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(int32_t)Fog::Src::ErrorManager::GetInstructionPointer(), 0x98a);
         exit(-1);
+        case UNIT_ITEM:
+          if (pUnitArg == (D2UnitStrc*)0x3) {
+            pUnit_00->nAnimSpeed = 0;
+            pUnit_00->nFrameCount = 0x1100;
+            pUnit_00->nGfxCurrentFrame = 0x1000;
+            return;
+          }
+        if (pUnitArg == (D2UnitStrc*)0x5) {
+          pUnit_00->nAnimSpeed = 0x100;
+          pUnit_00->nFrameCount = 0x1100;
+          return;
+        }
+
+        break;
         case UNIT_MISSILE:
           pMissileTxt = D2Client::GetMissleById(pUnit_00->nClassId);
         if (!pMissileTxt) {
@@ -3812,18 +3827,6 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         pUnit_00->nAnimSpeed = wAnimSpeed;
         pUnit_00->nFrameCount = (uint32_t)(uint8_t)pMissileTxt->AnimLen << 8;
         break;
-        case UNIT_ITEM:
-          if (pUnitArg == (D2UnitStrc*)0x3) {
-            pUnit_00->nAnimSpeed = 0;
-            pUnit_00->nFrameCount = 0x1100;
-            pUnit_00->nGfxCurrentFrame = 0x1000;
-            return;
-          }
-        if (pUnitArg == (D2UnitStrc*)0x5) {
-          pUnit_00->nAnimSpeed = 0x100;
-          pUnit_00->nFrameCount = 0x1100;
-          return;
-        }
       }
 
       return;

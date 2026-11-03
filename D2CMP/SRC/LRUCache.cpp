@@ -40,7 +40,7 @@ void __fastcall LRUCACHE_Init(D2LRUCacheStrc * pCache, D2PoolManagerStrc * pMemo
     pCache->pNodeBuffer = pEntryArray;
     memset(pEntryArray, 0, nMaxCount * 0x14);
     uint32_t nEntryIdx = 0;
-    if (pCache->nMaxCount) {
+    if ((uint32_t)pCache->nMaxCount > 0) {
       uint32_t* pNodeFields;
       nEntryIndex = 0;
       do {
@@ -48,7 +48,7 @@ void __fastcall LRUCACHE_Init(D2LRUCacheStrc * pCache, D2PoolManagerStrc * pMemo
         if (nEntryIdx < pCache->nMaxCount - 1U) {
           pNodeFields[3] = (uint32_t)(uintptr_t)(pNodeFields + 5);
         }
-        if (nEntryIdx) {
+        if (nEntryIdx > 0) {
           pNodeFields[4] = (uintptr_t)&pCache->pNodeBuffer[-1].pBuf + nEntryIndex;
         }
 

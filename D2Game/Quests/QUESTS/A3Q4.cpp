@@ -613,38 +613,38 @@ void __fastcall Q21_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
       pGoldenBirdItem->bCanDropBird = '\0';
       return;
     }
-    if (!pPlayerData) {
-      if (!pJadeItem) {
-        return;
-      }
-
+    if (pPlayerData) {
       pGoldenBirdItem->bCanDropBird = '\0';
       pGoldenBirdItem->bBirdDropEnabled = false;
-      /* GetQuestState Step0x02(2) -- holds Jade: stateFlag=1 if !given-to-Meshif, =2
-                         if given */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Step0x02);
+      /* GetQuestState Step0x04(4) -- holds Golden Bird: prev=3 if !shown-to-Meshif,
+                         =4 if shown */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Step0x04);
       if (bQuestState) {
-        pQuestData->nStateFlag = 2;
-        pQuestData->nStateFlagPrev = 2;
+        pQuestData->nStateFlag = 3;
+        pQuestData->nStateFlagPrev = 4;
         return;
       }
 
-      pQuestData->nStateFlag = 1;
-      pQuestData->nStateFlagPrev = 1;
+      pQuestData->nStateFlag = 3;
+      pQuestData->nStateFlagPrev = 3;
+      return;
+    }
+    if (!pJadeItem) {
       return;
     }
 
     pGoldenBirdItem->bCanDropBird = '\0';
     pGoldenBirdItem->bBirdDropEnabled = false;
-    /* GetQuestState Step0x04(4) -- holds Golden Bird: prev=3 if !shown-to-Meshif,
-                         =4 if shown */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Step0x04);
-    if (!bQuestState) {
-      pQuestData->nStateFlag = 3;
-      pQuestData->nStateFlagPrev = 3;
+    /* GetQuestState Step0x02(2) -- holds Jade: stateFlag=1 if !given-to-Meshif, =2
+                         if given */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Step0x02);
+    if (bQuestState) {
+      pQuestData->nStateFlag = 2;
+      pQuestData->nStateFlagPrev = 2;
       return;
     }
 
-    pQuestData->nStateFlag = 3;
-    pQuestData->nStateFlagPrev = 4;
+    pQuestData->nStateFlag = 1;
+    pQuestData->nStateFlagPrev = 1;
+    return;
 }
 
 // JMP thunk

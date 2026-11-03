@@ -761,19 +761,36 @@ void __fastcall Q20_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
     }
 
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
-    if (bQuestState) {
-      pQuestSpecificData->nQuestStage = 2;
-      return;
-    }
-    if (pQuestItemUnit) {
-      pQuestData->nStateFlagPrev = 4;
-      pQuestData->nStateFlag = 4;
-      UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerUpdateBladeState);
-      return;
-    }
+    if (!bQuestState) {
+      if (pQuestItemUnit) {
+        pQuestData->nStateFlagPrev = 4;
+        pQuestData->nStateFlag = 4;
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerUpdateBladeState);
+        return;
+      }
 
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
-    if (bQuestState != 1) {
+      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
+      if (bQuestState == 1) {
+        pQuestSpecificData->nQuestStage = 2;
+        pQuestData->nStateFlag = 5;
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
+        if (!bQuestState) {
+          pQuestData->nStateFlagPrev = 5;
+          return;
+        }
+
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
+        if (!bQuestState) {
+          pQuestData->nStateFlagPrev = 6;
+          return;
+        }
+
+        /* SetQuestState Completed(0): on reload, Step0x06+0x07+0x08 all set -> mark
+                         done & clear bIsNotIntroduction */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
+        pQuestData->bIsNotIntroduction = '\0';
+        return;
+      }
+
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x05);
       if (bQuestState == 1) {
         pQuestData->nStateFlag = 3;
@@ -801,22 +818,7 @@ void __fastcall Q20_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
     }
 
     pQuestSpecificData->nQuestStage = 2;
-    pQuestData->nStateFlag = 5;
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
-    if (!bQuestState) {
-      pQuestData->nStateFlagPrev = 5;
-      return;
-    }
-
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
-    if (bQuestState) {
-      /* SetQuestState Completed(0): on reload, Step0x06+0x07+0x08 all set -> mark
-                         done & clear bIsNotIntroduction */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
-      pQuestData->bIsNotIntroduction = '\0';
-      return;
-    }
-
-    pQuestData->nStateFlagPrev = 6;
+    return;
 }
 
 // A3Q3 "Khalim's Will" — quest init. Zeroes the state-handler table, points pNpcMessages at the
@@ -955,25 +957,27 @@ uint8_t __fastcall Q20_QuestUpdate(::SGAMEDATA * pGame, D2QuestDataStrc * pQuest
 // hasn't happened, spawns the unique serpent now.
 void __fastcall Objects_InitFn25_Gidbinn(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_BladeOfTheOldReligion);
-    if (!pQuestData) {
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
-      return;
-    }
-    if (pQuestData->bIsNotIntroduction != '\0') {
-      D2QuestDataA3Q3Strc* pA3Q3Data;
-      pA3Q3Data = pQuestData->pQuestSpecificData.pA3Q3;
-      pA3Q3Data->bSerpentLocationValid = true;
-      pA3Q3Data->nSerpentKillerGUID = pInitArg->nX;
-      pA3Q3Data->nSerpentSpawnX = pInitArg->nY;
-      if (!(pA3Q3Data->bSerpentArrived && !pA3Q3Data->bCanDropBlade)) {
+    if (pQuestData) {
+      if (pQuestData->bIsNotIntroduction != '\0') {
+        D2QuestDataA3Q3Strc* pA3Q3Data;
+        pA3Q3Data = pQuestData->pQuestSpecificData.pA3Q3;
+        pA3Q3Data->bSerpentLocationValid = true;
+        pA3Q3Data->nSerpentKillerGUID = pInitArg->nX;
+        pA3Q3Data->nSerpentSpawnX = pInitArg->nY;
+        if (!(pA3Q3Data->bSerpentArrived && !pA3Q3Data->bCanDropBlade)) {
+          return;
+        }
+
+        Q20_SpawnUniqueSerpent(pInitArg->pGame, pInitArg->pRoom, pA3Q3Data);
         return;
       }
 
-      Q20_SpawnUniqueSerpent(pInitArg->pGame, pInitArg->pRoom, pA3Q3Data);
+      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
       return;
     }
 
     D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    return;
 }
 
 // A3Q3 "Khalim's Will" — object OPERATE fn (the Compelling-Orb / quest object trigger; name says

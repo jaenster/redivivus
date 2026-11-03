@@ -663,28 +663,29 @@ static void CreateObjectPresetsForMap(D2DrlgMapStrc * pMapStrc, D2PoolManagerStr
     DrlgGrid::FillExternalCellFlags(&floorGrid, (D2DrlgMapStrc*)pMapStrc->pDrlgFile->pFloorLayer[0], &mapCoords, mapCoords.nWidth + 1, floorFlagsBuf);
     mapCoords.nPosX = pMapStrc->nRealOffsetX;
     mapCoords.nPosY = pMapStrc->nRealOffsetY;
-    if (pMapStrc->pTxtLevelPrest->Def != 0x1b) {
-      uint32_t cellFlags;
-      if (mapCoords.nWidth > 0) {
-        do {
-          cellFlags = DrlgGrid::GetGridFlags(&floorGrid, xIndex, 0);
-          if (((uint8_t)(cellFlags >> 0x14) & 0x3f) == 2 && (char)(cellFlags >> 8) == '\x18') {
-            CreateObjectPresets(xIndex + 1 + mapCoords.nPosX, mapCoords.nPosY, pMapStrc, pMemory);
-            CreateObjectPresets2(xIndex, &floorGrid, pMemory, pMapStrc);
-            xIndex += 4;
-          }
-
-          xIndex++;
-        } while ((int)xIndex < mapCoords.nWidth);
-      }
-
+    if (pMapStrc->pTxtLevelPrest->Def == 0x1b) {
+      CreateObjectPresets(mapCoords.nPosX, mapCoords.nPosY, pMapStrc, pMemory);
+      CreateObjectPresets2(-1, &floorGrid, pMemory, pMapStrc);
       DrlgGrid::ResetGrid(&floorGrid);
       return;
     }
 
-    CreateObjectPresets(mapCoords.nPosX, mapCoords.nPosY, pMapStrc, pMemory);
-    CreateObjectPresets2(-1, &floorGrid, pMemory, pMapStrc);
+    uint32_t cellFlags;
+    if (mapCoords.nWidth > 0) {
+      do {
+        cellFlags = DrlgGrid::GetGridFlags(&floorGrid, xIndex, 0);
+        if (((uint8_t)(cellFlags >> 0x14) & 0x3f) == 2 && (char)(cellFlags >> 8) == '\x18') {
+          CreateObjectPresets(xIndex + 1 + mapCoords.nPosX, mapCoords.nPosY, pMapStrc, pMemory);
+          CreateObjectPresets2(xIndex, &floorGrid, pMemory, pMapStrc);
+          xIndex += 4;
+        }
+
+        xIndex++;
+      } while ((int)xIndex < mapCoords.nWidth);
+    }
+
     DrlgGrid::ResetGrid(&floorGrid);
+    return;
 }
 
 static void __stdcall CreateMonsterPreset(D2PoolManagerStrc * pMemory, D2DrlgMapStrc * pDrlgMap) {
@@ -1180,7 +1181,7 @@ D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(D2DrlgLevelStrc * pLevel, int
     uint32_t nNumFiles;
     int nSizeY;
     uint32_t nFileSelector;
-    int64_t seedProduct;
+    uint32_t seedProduct;
     D2SeedStrc newSeed;
     D2DrlgMapStrc* pDrlgMap = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgMapStrc, ".\\DRLG\\Preset.cpp", 0x9ad);
     memset(pDrlgMap, 0, 0x58);

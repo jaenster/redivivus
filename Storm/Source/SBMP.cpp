@@ -516,7 +516,7 @@ static void __stdcall SBMP_FlushPacket(D2GifLzwEncoderStrc * pState, uint8_t * *
 // @blizzard Output (SBMP.CPP)
 static void __fastcall SBMP_Output(int value, uint8_t * * ppOutput, D2GifLzwEncoderStrc * pState) {
     int iVar1;
-    pState->nBitAccum |= value << ((uint8_t)pState->nBitCount & 0x1f);
+    pState->nBitAccum |= value << (pState->nBitCount & 0x1f);
     iVar1 = pState->nCodeSize + pState->nBitCount;
     pState->nBitCount = iVar1;
     while (iVar1 >= 8) {
@@ -541,7 +541,7 @@ static void __fastcall SBMP_Output(int value, uint8_t * * ppOutput, D2GifLzwEnco
       return;
     }
 
-    pState->nMaxCode = (1 << ((uint8_t)pState->nCodeSize & 0x1f)) - 1;
+    pState->nMaxCode = (1 << (pState->nCodeSize & 0x1f)) - 1;
 }
 
 // @blizzard CompressPcxRow (SBMP.CPP)
@@ -824,7 +824,7 @@ static char * __stdcall SBMP_FindExtension(char * path) {
 }
 
 // @blizzard DetermineImageType (SBMP.CPP)
-static int __stdcall SBMP_DetermineImageType(short magic) {
+static int __stdcall SBMP_DetermineImageType(uint16_t magic) {
     if (magic != 0x50a) {
       return magic != 0x4d42 ? 0x3U : 0x1U;
     }
@@ -1005,7 +1005,7 @@ static void __stdcall SBMP_ClearBlock(D2GifLzwEncoderStrc * pState, uint8_t * * 
     pState->nNextCode = pState->nClearCode + 2;
     SBMP_Output(pState->nClearCode, pDstBuf, pState);
     pState->nCodeSize = pState->nInitCodeSize;
-    pState->nMaxCode = (1 << ((uint8_t)pState->nInitCodeSize & 0x1f)) - 1;
+    pState->nMaxCode = (1 << (pState->nInitCodeSize & 0x1f)) - 1;
 }
 
 // @blizzard CompressGifByte (SBMP.CPP)
@@ -1296,7 +1296,7 @@ int __stdcall SBmpDecodeImage(int nFormat, void * pData, uint32_t nDataSize, voi
     } else {
       int iResult;
       if (!nFormat && nDataSize >= 2) {
-        nFormat = SBMP_DetermineImageType(*(short int*)pData);
+        nFormat = SBMP_DetermineImageType(*(uint16_t*)pData);
       }
 
       switch (nFormat) {
@@ -1355,7 +1355,7 @@ uint32_t __stdcall SBmpLoadImage(char * pszPath, void * pPalette, void * pPixels
         nDetectedFormat = SFile::SFileReadFile((D2MPQFileStrc*)pszPath, &nFlags, 2, nullptr, 0);
         if (nDetectedFormat) {
           SFile::SFileSetFilePointer((D2MPQFileStrc*)pszPath, -2, nullptr, 1);
-          nFormat = SBMP_DetermineImageType((short int)nFlags);
+          nFormat = SBMP_DetermineImageType((uint16_t)nFlags);
         }
 
         nDetectedFormat = 0;

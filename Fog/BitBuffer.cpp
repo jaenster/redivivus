@@ -246,7 +246,7 @@ void __stdcall WriteValueToBitBuffer(D2BitBufferStrc * pBitBuffer, int32_t nValu
         nBitsThisStep = nSizeInBits;
       }
 
-      *pBitBuffer->pBuffer |= ((uint8_t)gdwBitBufferSeed[nBitsThisStep] & (uint8_t)nValue) << ((uint8_t)pBitBuffer->nBitsAtPos & 0x1f);
+      *pBitBuffer->pBuffer |= ((uint8_t)gdwBitBufferSeed[nBitsThisStep] & (uint8_t)nValue) << (pBitBuffer->nBitsAtPos & 0x1f);
       pBitBuffer->nBitsAtPos += nBitsThisStep;
       if (pBitBuffer->nBitsAtPos != 8) {
         break;
@@ -259,7 +259,7 @@ void __stdcall WriteValueToBitBuffer(D2BitBufferStrc * pBitBuffer, int32_t nValu
         *pBitBuffer->pBuffer = 0;
       }
 
-      nValue >>= (uint8_t)nBitsThisStep & 0x1f;
+      nValue >>= nBitsThisStep & 0x1f;
       nSizeInBits -= nBitsThisStep;
     }
 }
@@ -297,7 +297,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
         byMask = *(uint8_t*)((int)gbGameSaveFileMarker + nBitsAtPos);
         dwBitMask = gdwBitBufferSeed[nBitsThisStep];
         pBuf->nBitsAtPos = nBitsAtPos + nBitsThisStep;
-        nSize += ((uint8_t)((byMask & byCurrent) >> ((uint8_t)nBitsAtPos & 0x1f)) & dwBitMask) << ((uint8_t)(uintptr_t)pBitBuffer & 0x1f);
+        nSize += ((uint8_t)((byMask & byCurrent) >> (nBitsAtPos & 0x1f)) & dwBitMask) << ((uintptr_t)pBitBuffer & 0x1f);
         nBitsRemaining -= nBitsThisStep;
         if (nBitsAtPos + nBitsThisStep == 8) {
           pBuf->nCurrentPos++;
@@ -321,8 +321,8 @@ uint32_t __stdcall ReadUnsigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
 
 int32_t __stdcall ReadSigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     uint32_t dwValue = Read(pBitBuffer, nSize);
-    if (nSize < 0x20 && dwValue & 1 << ((uint8_t)nSize - 1 & 0x1f)) {
-      dwValue |= ~((1 << ((uint8_t)nSize & 0x1f)) - 1U);
+    if (nSize < 0x20 && dwValue & 1 << (nSize - 1 & 0x1f)) {
+      dwValue |= ~((1 << (nSize & 0x1f)) - 1U);
     }
 
     return dwValue;
@@ -354,7 +354,7 @@ int32_t __stdcall BITBUFFER_ReadHuffmanValue(D2BitBufferStrc * pBitBuffer, int32
     while (true) {
       int iVar1;
       nBitsAtPos = pBitBuffer->nBitsAtPos;
-      nBit = (gadwBitMasks[nBitsAtPos] & (uint32_t)*pBitBuffer->pBuffer) >> ((uint8_t)nBitsAtPos & 0x1f);
+      nBit = (gadwBitMasks[nBitsAtPos] & (uint32_t)*pBitBuffer->pBuffer) >> (nBitsAtPos & 0x1f);
       pBitBuffer->nBitsAtPos = nBitsAtPos + 1;
       if (nBitsAtPos + 1 == 8) {
         pBitBuffer->nCurrentPos++;

@@ -290,12 +290,13 @@ void __fastcall UNITS_InsertUnitIntoHashTable(D2UnitStrc * pUnit, ::SGAMEDATA * 
     }
 
     pUnit->pListNext = pNextUnit;
-    if (!pInsertAfter) {
-      *ppHashSlot = pUnit;
+    if (pInsertAfter) {
+      pInsertAfter->pListNext = pUnit;
       return;
     }
 
-    pInsertAfter->pListNext = pUnit;
+    *ppHashSlot = pUnit;
+    return;
 }
 
 // Removes pUnit from the game's per-type unit hash table (same slot logic as InsertUnitIntoHashTable). Walks the singly-linked bucket list to find the unit and unlinks it; no-ops silently if the unit is not found. Despite the name, contains no client-notification logic — it is purely a hash-table unlink.
@@ -1433,7 +1434,7 @@ void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc
 
     uint32_t nOldClientIdx;
     nOldClientIdx = 0;
-    if (nCurrentClientsCount) {
+    if (nCurrentClientsCount > 0) {
       D2UnitStrc* pOwnerUnit;
       do {
         if (nNewClientIdx >= nTargetClientsCount) {
@@ -1664,11 +1665,6 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
       D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
       break;
-      case UNIT_MISSILE:
-        D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
-      pUnit->pPath.pStaticPath = 0;
-      D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
-      break;
       case UNIT_ITEM:
         if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
           D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
@@ -1677,6 +1673,11 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           iVar1 = ITEMS::Items::Drop::ITEM_CalculateDespawnTimer(pGame, pUnit);
           pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = iVar1;
         }
+      break;
+      case UNIT_MISSILE:
+        D2Common::PATH::Path::STRUCT_FreePath(pGame->pMemoryPool, pUnit->pPath.pStaticPath);
+      pUnit->pPath.pStaticPath = 0;
+      D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
       break;
       case UNIT_WARP:
         D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);

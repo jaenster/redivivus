@@ -95,12 +95,18 @@ int32_t __fastcall GetSkilParam3(eD2Skills eSkill) {
 }
 
 int32_t __fastcall GetSkillParam4(int32_t nSkillId, int32_t nSkillLevel) {
-    if (!(nSkillId >= 0 && nSkillId < sgptDataTable->nTxtSkillsCount)) {
+    if (nSkillId < 0) {
+      return 0;
+    }
+    if (!(nSkillId < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
     D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + nSkillId;
-    if (!(pSkillsTxt && nSkillLevel > 0)) {
+    if (!pSkillsTxt) {
+      return 0;
+    }
+    if (nSkillLevel <= 0) {
       return 0;
     }
 
@@ -1305,7 +1311,10 @@ uint32_t __fastcall SKILLSCLT_CalcChargeSkillDuration(D2UnitStrc * pMonUnit, int
     }
 
     int nSkillSlot = pMonUnit->nClassId;
-    if (!(nSkillSlot >= 0 && nSkillSlot < sgptDataTable->nTxtMonStatsSize)) {
+    if (nSkillSlot < 0) {
+      return 0;
+    }
+    if (!(nSkillSlot < sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }
 

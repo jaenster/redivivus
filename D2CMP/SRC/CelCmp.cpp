@@ -1281,7 +1281,7 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
       nTotalFrames = pOldFile[4] * pOldFile[5];
       pFrameOffsets = (int*)(nTotalFrames * 4 + 0x18);
       pSerializedEnd = pFrameOffsets;
-      if (nTotalFrames) {
+      if ((uint32_t)nTotalFrames > 0) {
         pFrameSlot = pOldFile + 0xd;
         pFrameEntry = nTotalFrames;
         pOldFile = pFrameOffsets;

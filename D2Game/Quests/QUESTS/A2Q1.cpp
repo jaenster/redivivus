@@ -185,20 +185,7 @@ void __fastcall Q09_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       }
 
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
-      if (!bQuestState) {
-        if (pA2Q1Data->field_0x10 != '\0') {
-          pSeqQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
-          if (pSeqQuestData) {
-            /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-            if (bQuestState) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10d);
-              exit(-1);
-            }
-
-            pSeqQuestData->fpSequenceFilter(pSeqQuestData);
-          }
-        }
-      } else {
+      if (bQuestState) {
         if (pQuestData->nStateFlag != 5) {
           pQuestData->nQuestPacketFlags = '\0';
           QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q09_NotifyRadamentComplete, true);
@@ -215,6 +202,19 @@ void __fastcall Q09_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         if (pQuestData->bIsNotIntroduction == '\0') {
           /* SetQuestRecordState JustCompleted: finalize quest on Atma reward turn-in
                          (non-intro path) */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_RadamentsLair, QUESTSTATE_JustCompleted);
+        }
+      } else {
+        if (pA2Q1Data->field_0x10 != '\0') {
+          pSeqQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
+          if (pSeqQuestData) {
+            /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
+            if (bQuestState) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10d);
+              exit(-1);
+            }
+
+            pSeqQuestData->fpSequenceFilter(pSeqQuestData);
+          }
         }
       }
 

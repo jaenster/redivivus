@@ -478,11 +478,11 @@ BOOL __stdcall CheckSpeachVersusInteractedUnit() {
       }
     } while (nSpeechIdx < D2NPCSpeechCount);
 
-    if (!bFound) {
-      return 0;
+    if (bFound) {
+      return nSpeechIdx;
     }
 
-    return nSpeechIdx;
+    return 0;
 }
 
 int __stdcall NPCMENU_EmptyDialogDrawHandler() {
@@ -2238,85 +2238,86 @@ void DRAW_UI_NPC_INTERACTION() {
       Dialog::DIALOG_DrawBackground(Dialog::gpNpcActionConfirmDialog);
       return;
     }
-    if (!Dialog::gpNpcInteractionDialog) {
-      DWORD dwNow;
-      if (Dialog::gpNpcTradeErrorDialog) {
-        Dialog::DIALOG_DrawBackground(Dialog::gpNpcTradeErrorDialog);
-        return;
-      }
-      if (Dialog::gpNpcTransactionWaitDialog) {
-        pNpcUnit = GetInteractedUnit();
-        if (pNpcUnit) {
-          pNpcUnit = GetInteractedUnit();
-          if (pNpcUnit && pNpcUnit->nClassId == 0x202 && !gnNpcMenuDialogX) {
-            if (!gnNpcMenuDialogY) {
-              gnNpcMenuDialogY = 1;
-              pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-              bDead = Archive::RANDOM_RandomNumberSelector(&pNpcUnit->sSeed, 0x1e);
-              dwNow = GetTickCount();
-              gnNpcMenuDialogWidth = dwNow + (bDead + 0x78) * 1000;
-            }
+    if (Dialog::gpNpcInteractionDialog) {
+      GAME::Game::UI_ResetInputState();
+      Dialog::DIALOG_DrawBackground(Dialog::gpNpcInteractionDialog);
+      return;
+    }
 
+    DWORD dwNow;
+    if (Dialog::gpNpcTradeErrorDialog) {
+      Dialog::DIALOG_DrawBackground(Dialog::gpNpcTradeErrorDialog);
+      return;
+    }
+    if (Dialog::gpNpcTransactionWaitDialog) {
+      pNpcUnit = GetInteractedUnit();
+      if (pNpcUnit) {
+        pNpcUnit = GetInteractedUnit();
+        if (pNpcUnit && pNpcUnit->nClassId == 0x202 && !gnNpcMenuDialogX) {
+          if (!gnNpcMenuDialogY) {
+            gnNpcMenuDialogY = 1;
+            pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
+            bDead = Archive::RANDOM_RandomNumberSelector(&pNpcUnit->sSeed, 0x1e);
             dwNow = GetTickCount();
-            if (gnNpcMenuDialogWidth > dwNow) {
-              gnNpcMenuDialogX = 1;
-              Sound::SOUND_PlaySound(0x11d0, nullptr, 0, 0, 0);
-            }
+            gnNpcMenuDialogWidth = dwNow + (bDead + 0x78) * 1000;
+          }
+
+          dwNow = GetTickCount();
+          if (gnNpcMenuDialogWidth > dwNow) {
+            gnNpcMenuDialogX = 1;
+            Sound::SOUND_PlaySound(0x11d0, nullptr, 0, 0, 0);
           }
         }
+      }
 
-        eD2GameType = GAME::Game::CLIENT_GetD2GSGameType();
-        if (eD2GameType != GAMETYPE_SINGLEPLAYER && gnNpcMenuCurrentNpcGUID) {
-          dwNow = GetTickCount();
-          if (gnNpcMenuCurrentNpcGUID < dwNow) {
-            NPCMENU_CancelShopTransaction();
+      eD2GameType = GAME::Game::CLIENT_GetD2GSGameType();
+      if (eD2GameType != GAMETYPE_SINGLEPLAYER && gnNpcMenuCurrentNpcGUID) {
+        dwNow = GetTickCount();
+        if (gnNpcMenuCurrentNpcGUID < dwNow) {
+          NPCMENU_CancelShopTransaction();
+          return;
+        }
+      }
+
+      dwNow = GetTickCount();
+      if (gnNpcMenuCurrentNpcClassId < dwNow) {
+        GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
+        ClientModeInGame::D2CLIENT_SetExitVar1(0);
+        GAME::Game::D2CLIENT_SetExitVar2(1);
+        GAME::Game::D2CLIENT_SetExitVar3ToTrue();
+        return;
+      }
+    } else {
+      if (Dialog::gpNpcTransactionConfirmDialog) {
+        pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
+        pNpcUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pNpcUnit->pInventory);
+        if (!pNpcUnit) {
+          pNpcUnit = ui::GetCursorItem();
+          if (!pNpcUnit) {
+            Dialog::DIALOG_DrawBackground(Dialog::gpNpcTransactionConfirmDialog);
             return;
           }
         }
 
-        dwNow = GetTickCount();
-        if (gnNpcMenuCurrentNpcClassId < dwNow) {
-          GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
-          ClientModeInGame::D2CLIENT_SetExitVar1(0);
-          GAME::Game::D2CLIENT_SetExitVar2(1);
-          GAME::Game::D2CLIENT_SetExitVar3ToTrue();
-          return;
-        }
-      } else {
-        if (Dialog::gpNpcTransactionConfirmDialog) {
-          pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-          pNpcUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pNpcUnit->pInventory);
-          if (!pNpcUnit) {
-            pNpcUnit = ui::GetCursorItem();
-            if (!pNpcUnit) {
-              Dialog::DIALOG_DrawBackground(Dialog::gpNpcTransactionConfirmDialog);
-              return;
-            }
-          }
-
-          _Interaction::geNpcUiState = NPCUI_SHOP;
-          Inv::INV_HandleGambleMessage();
-          gbNpcMenuShopTransactionActive = GetTickCount();
-          gnNpcMenuShopTransactionCost++;
-          Dialog::FreeDialogStrc(Dialog::gpNpcTransactionConfirmDialog);
-          Dialog::gpNpcTransactionConfirmDialog = 0;
-          return;
-        }
-        if (Dialog::gpNpcMercListDialog) {
-          Dialog::DIALOG_DrawBackground(Dialog::gpNpcMercListDialog);
-          return;
-        }
-        if (Dialog::gpNpcMainMenuDialog) {
-          Dialog::DIALOG_DrawBackground(Dialog::gpNpcMainMenuDialog);
-          return;
-        }
+        _Interaction::geNpcUiState = NPCUI_SHOP;
+        Inv::INV_HandleGambleMessage();
+        gbNpcMenuShopTransactionActive = GetTickCount();
+        gnNpcMenuShopTransactionCost++;
+        Dialog::FreeDialogStrc(Dialog::gpNpcTransactionConfirmDialog);
+        Dialog::gpNpcTransactionConfirmDialog = 0;
+        return;
       }
-
-      return;
+      if (Dialog::gpNpcMercListDialog) {
+        Dialog::DIALOG_DrawBackground(Dialog::gpNpcMercListDialog);
+        return;
+      }
+      if (Dialog::gpNpcMainMenuDialog) {
+        Dialog::DIALOG_DrawBackground(Dialog::gpNpcMainMenuDialog);
+        return;
+      }
     }
 
-    GAME::Game::UI_ResetInputState();
-    Dialog::DIALOG_DrawBackground(Dialog::gpNpcInteractionDialog);
+    return;
 }
 
 int __stdcall NPCMENU_GambleDrawCallback() {

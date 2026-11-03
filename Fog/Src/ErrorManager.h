@@ -69,7 +69,7 @@ void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szStri
 DWORD __fastcall GetParentProcessId(int32_t nProcessId);
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize);
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.
-void __fastcall WriteCrashReportProcessInfo(::Report * pReport);
+bool __fastcall WriteCrashReportProcessInfo(::Report * pReport);
 void __stdcall InitializeSystemInfo();
 // Registered with atexit. Tears down the Fog error/log subsystem and deletes the two critical sections at 0074c830 and 0074d848. Takes no arguments: the earlier EAX/ESI "parameters" were a callee-save PUSH ESI / POP ESI pair misread as inputs.
 void EXIT_AtExit();

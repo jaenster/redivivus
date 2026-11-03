@@ -1344,11 +1344,11 @@ D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint3
       pEntry += 0x22;
     } while (nRatioIdx < nTxtItemRatioSize);
 
-    if (nBestMatchIdx < 0) {
-      return nullptr;
+    if (nBestMatchIdx >= 0) {
+      return pTxtItemRatio + nBestMatchIdx;
     }
 
-    return pTxtItemRatio + nBestMatchIdx;
+    return nullptr;
 }
 
 int SORT_ItemDescPriority(LPCVOID pEntry1, LPCVOID pEntry2) {
@@ -1444,7 +1444,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
       sgtDataTable.nChargedSkillLevelBits = 6;
     }
 
-    sgtDataTable.dwChargedSkillLevelMask = (1 << ((uint8_t)sgtDataTable.nChargedSkillLevelBits & 0x1f)) - 1;
+    sgtDataTable.dwChargedSkillLevelMask = (1 << (sgtDataTable.nChargedSkillLevelBits & 0x1f)) - 1;
     int nStatCount;
     nStatCount = 0;
     if (sgtDataTable.nTxtItemStatCostSize > 0) {
@@ -1475,7 +1475,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
       nStatByteOffset = 4;
       do {
         pDVar1 = sgtDataTable.pTxtItemStatCost;
-        if (!*pOp || *pOp >= 0xe) {
+        if (*pOp <= 0 || *pOp >= 0xe) {
           *pOp = 0;
           nStatCount = sgtDataTable.nTxtItemStatCostSize;
         } else {

@@ -190,10 +190,7 @@ int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize) {
     }
 
     /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ dwAttributes = GetModuleFileNameA((HMODULE)0x0, lpFilename, nSize);
-    if (!dwAttributes) {
-      return 0;
-    }
-    if (dwAttributes == nSize) {
+    if (!dwAttributes || dwAttributes == nSize) {
       return 0;
     }
 
@@ -372,7 +369,7 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
     char cChar;
     *pBuffer = '\0';
     int32_t bRead;
-    bRead = Storm::Source::SReg::SRegLoadString("Diablo II", "%s%s.d2s", 1, pBuffer, nSize);
+    bRead = Storm::Source::SReg::SRegLoadString("Diablo II", "NewSavePath", 1, pBuffer, nSize);
     if (!bRead) {
       bool bGotSavePath;
       dwAttributes = GetLastError();
@@ -399,7 +396,7 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
                   szNewSavePath[nLen + 1] = '\0';
                 }
 
-                Storm::Source::SReg::SRegSaveString("Diablo II", "%s%s.d2s", 1, szNewSavePath);
+                Storm::Source::SReg::SRegSaveString("Diablo II", "NewSavePath", 1, szNewSavePath);
                 pcLen = szNewSavePath;
               }
 
@@ -423,7 +420,7 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
         }
       }
 
-      Storm::Source::SReg::SRegSaveString("Diablo II", "%s%s.d2s", 1, pBuffer);
+      Storm::Source::SReg::SRegSaveString("Diablo II", "NewSavePath", 1, pBuffer);
     } else if (*pBuffer == '\0') {
       goto use_default_save_path;
     }

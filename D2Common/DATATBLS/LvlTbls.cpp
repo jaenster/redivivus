@@ -1855,12 +1855,12 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
         gpaAutoMapRelated[nIndex].nCount = nAutoMapRow;
       } while (nAutoMapRow < nTxtAutomapSize);
     }
-    if (!(nAutoMapRow <= nTxtAutomapSize)) {
+    if (nAutoMapRow <= nTxtAutomapSize) {
+      return;
+    } else {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x528);
       exit(-1);
     }
-
-    return;
 }
 
 int32_t __fastcall GetRandomCellNo(int32_t nLevelType, int32_t nOrientation, int32_t nIndex, int32_t nSubIndex) {

@@ -284,37 +284,38 @@ void __fastcall Q03_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestState;
     ::SGAMEDATA* pGame;
-    if (pQuestData->bIsNotIntroduction != '\0') {
-      D2BitBufferStrc* pBitBuffer;
-      if (!(pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x1 && pQuestData->nStateFlag == 2)) {
-        return;
-      }
-
-      pGame = pQuestArgs->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-      /* GetQuestState(nQuestIdReal, Completed=0) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-      /* GetQuestState(nQuestIdReal, RewardAwaits=1) — proceed only if not done & no
-                         reward pending */ if (bQuestState == 1) {
-        return;
-      }
-
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-      if (bQuestState == 1) {
-        return;
-      }
-      if (pQuestData->nStateFlagPrev != 1) {
-        pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, true);
-      }
-
-      QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q3.cpp", 0x189);
-      UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q03_SyncQuestProgress);
+    if (pQuestData->bIsNotIntroduction == '\0') {
       pQuestData->sStateFunctions.fpQuestStateHandler[3] = (QUESTCALLBACKFN)0x0;
       return;
     }
 
+    D2BitBufferStrc* pBitBuffer;
+    if (!(pQuestArgs->sQuestArgs.sNpcActivate.pTextControl == (D2GSPacketSrv0x27_TextStrc*)0x1 && pQuestData->nStateFlag == 2)) {
+      return;
+    }
+
+    pGame = pQuestArgs->pGame;
+    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    /* GetQuestState(nQuestIdReal, Completed=0) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
+    /* GetQuestState(nQuestIdReal, RewardAwaits=1) — proceed only if not done & no
+                         reward pending */ if (bQuestState == 1) {
+      return;
+    }
+
+    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
+    if (bQuestState == 1) {
+      return;
+    }
+    if (pQuestData->nStateFlagPrev != 1) {
+      pQuestData->nQuestPacketFlags = '\0';
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q03_NpcGossipHandler, true);
+    }
+
+    QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q3.cpp", 0x189);
+    UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q03_SyncQuestProgress);
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = (QUESTCALLBACKFN)0x0;
+    return;
 }
 
 // MallusHandler (A1Q3) — invoked when the Malus item count drops to 0 (see Q03_Callback_06). If the Malus had been taken: advance nStateFlag to 3, set eFlags, broadcast state 1 (RewardAwaits/intro), clear bMalusTaken-area flag, then locate the dropped Malus unit (FindUnitFromTable, classId 0x6c = the Malus object) and flag it for update; if not found, clear bMalusTaken. No quest-record bit writes (state via broadcast).

@@ -636,7 +636,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn56_FeralRageMaul(::SGAMEDATA * pGame, D2UnitSt
     memset(&sDamage, 0, 0x70);
     sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
-      if (pSkillTxt->EType != ELEMENTAL_NONE) {
+      if ((uint8_t)pSkillTxt->EType > ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[3], eSkill, nSkillLvl);
         if (sDamage.dwConvPct > 0) {
           sDamage.nConvType = pSkillTxt->EType;
@@ -778,7 +778,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn57_Rabies(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-    if (pSkillTxt->EType != ELEMENTAL_NONE) {
+    if ((uint8_t)pSkillTxt->EType > ELEMENTAL_NONE) {
       D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[3], eSkill, nSkillLvl);
     }
 
@@ -1374,7 +1374,7 @@ BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2Un
     if ((short int)sgptDataTable->nAllStatesDataTblFlag0x10Size > 0) {
       eD2States eStateType;
       do {
-        eState = (eD2States)sgptDataTable->pAllStatesDataTblFlag0x10[nStateIdx].nStateId;
+        eState = (eD2States)(short int)sgptDataTable->pAllStatesDataTblFlag0x10[nStateIdx];
         eStateType = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
         if (eStateType != STATE_none && (int)eState >= 0 && (int)eState < sgptDataTable->nTxtStatesSize && sgptDataTable->pTxtStates + eState) {
           pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);

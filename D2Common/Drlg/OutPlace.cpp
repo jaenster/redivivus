@@ -1237,32 +1237,34 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                 do {
                   nConnFlags = *pRowPtr;
                   uVar4 = (int)nConnFlags % 16;
-                  if (!uVar4) {
+                  if (uVar4) {
+                    if ((int)nConnFlags >= 0x10) {
+                      if (nConnFlags & 0x10) {
+                        uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x66];
+                      }
+                      if (nConnFlags & 0x20) {
+                        uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x67];
+                      }
+                      if (nConnFlags & 0x40) {
+                        uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x68];
+                      }
+                      if ((char)nConnFlags < '\0') {
+                        uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x69];
+                      }
+                      if (!uVar4) {
+                        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x78c);
+                        exit(-1);
+                      }
+                    } else {
+                      uVar4 += 0x211;
+                    }
+                  } else {
                     if ((int)nConnFlags >= 0x10) {
                       uVar4 = gaWildernessLevelSeedOffsets[((int)nConnFlags >> 4) + 0x59];
                       if (!uVar4) {
                         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x799);
                         exit(-1);
                       }
-                    }
-                  } else if ((int)nConnFlags < 0x10) {
-                    uVar4 += 0x211;
-                  } else {
-                    if (nConnFlags & 0x10) {
-                      uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x66];
-                    }
-                    if (nConnFlags & 0x20) {
-                      uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x67];
-                    }
-                    if (nConnFlags & 0x40) {
-                      uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x68];
-                    }
-                    if ((char)nConnFlags < '\0') {
-                      uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x69];
-                    }
-                    if (!uVar4) {
-                      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x78c);
-                      exit(-1);
                     }
                   }
 

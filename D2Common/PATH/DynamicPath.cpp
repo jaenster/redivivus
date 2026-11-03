@@ -919,10 +919,7 @@ static uint32_t PATH_BuildDirectPathToTarget(D2DynamicPathStrc * pDynamicPath) {
     if (nTargetYPos < 0) {
       nTargetYPos = -nTargetYPos;
     }
-    if (nTargetYPos >= 100) {
-      return 0;
-    }
-    if (!pDynamicPath->nTargetX) {
+    if (nTargetYPos >= 100 || !pDynamicPath->nTargetX) {
       return 0;
     }
     if (!pDynamicPath->nTargetY) {
@@ -1636,16 +1633,17 @@ void __stdcall PATH_RestoreMonsterCollision(D2UnitStrc * pUnit, int32_t bSkip) {
 
     restore_collision:
     pRoom = Units::UNITS_GetRoom(pUnit);
-    if (!pRoom) {
+    if (pRoom) {
+      PATH_RemoveUnitCollision(pUnit, 1);
       pUnit->pPath.pDynamicPath->nUnitWidth = nMonStatId;
       PATH_ChangeCollisionType(pDynamicPath, 0x100);
+      PATH_AddUnitCollision(pUnit);
       return;
     }
 
-    PATH_RemoveUnitCollision(pUnit, 1);
     pUnit->pPath.pDynamicPath->nUnitWidth = nMonStatId;
     PATH_ChangeCollisionType(pDynamicPath, 0x100);
-    PATH_AddUnitCollision(pUnit);
+    return;
 }
 
 void __stdcall thunk_PATH_AddUnitCollision(D2UnitStrc * pUnit) {

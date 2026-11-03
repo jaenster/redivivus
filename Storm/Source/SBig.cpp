@@ -1859,7 +1859,7 @@ static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
       pResult->nCount = nChunkSize;
     }
 
-    pResult->pData[pResult->nStartWord + nIndex] = 1 << ((uint8_t)nBitPos & 0x1f);
+    pResult->pData[pResult->nStartWord + nIndex] = 1 << (nBitPos & 0x1f);
     nIndex = pResult->nStartWord + 1 + nIndex;
     if (nIndex > pResult->nCount && nIndex > pResult->nCapacity) {
       nNeededCount = pResult->nGrowStep;
@@ -3601,7 +3601,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
     uint32_t dwWordB;
     uint32_t iInner;
     uint32_t* pAccData;
-    uint64_t uProduct64;
+    uint32_t uProduct64;
     BigBuffer* pnAcc = pnResult;
     if (pnResult == pnInput) {
       uNewCapacity = pStack->nUsed;
@@ -3642,7 +3642,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
           }
 
           uBitIter = SBIG_BigBuffer_GetWord(pnInput, iOuter);
-          uProduct64 = (uint64_t)dwWordB;
+          uProduct64 = dwWordB;
           dwWordB = iInner + uNewCapacity;
           uNewCapacity = pnAcc->nStartWord + dwWordB;
           if (uNewCapacity >= pnAcc->nCount) {
@@ -3680,7 +3680,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
 
           uNewCapacity = pnAcc->pData[pnAcc->nStartWord + dwWordB];
           if (iInner < iOuter) {
-            carry128 = uBitIter * uProduct64 + carry128;
+            carry128 = uBitIter * (uint64_t)uProduct64 + carry128;
           }
 
           uNeededCount = pnAcc->nStartWord + dwWordB;
@@ -3718,7 +3718,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
 
           pAccData = pnAcc->pData;
           nArenaTop = pnAcc->nStartWord + dwWordB;
-          uBitIter = SBIG_Accumulator_AddWithCarry(uBitIter * uProduct64 + (uint64_t)uNewCapacity, (uint32_t*)&carry128);
+          uBitIter = SBIG_Accumulator_AddWithCarry(uBitIter * (uint64_t)uProduct64 + (uint64_t)uNewCapacity, (uint32_t*)&carry128);
           pAccData[nArenaTop] = uBitIter;
           iInner++;
         } while (iInner <= iOuter);

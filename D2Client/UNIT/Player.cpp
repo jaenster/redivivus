@@ -365,7 +365,7 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
       break;
       case UNITSTAT_item_charged_skill:
         if (pUnit->eUnitType == UNIT_PLAYER) {
-          nSkillIdOrLevel = (int)(uint16_t)dwStatIdAndSubIndex >> ((uint8_t)sgptDataTable->nChargedSkillLevelBits & 0x1f);
+          nSkillIdOrLevel = (int)(uint16_t)dwStatIdAndSubIndex >> (sgptDataTable->nChargedSkillLevelBits & 0x1f);
           nChargeMax = (uint16_t)(sgptDataTable->dwChargedSkillLevelMask & dwStatIdAndSubIndex);
           if (pItem) {
             nItemGUID = pItem->nUnitGUID;
@@ -2710,6 +2710,8 @@ uint32_t __fastcall CheckFlagWithMask(D2UnitStrc * pUnit, uint32_t dwMask) {
 }
 
 D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
+    uint32_t nRoomIdx;
+    D2RoomStrc* pTestRoom;
     if (!pRoom) {
       return nullptr;
     }
@@ -2722,19 +2724,13 @@ D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(D2RoomStrc * pRoom, int32_
     D2RoomStrc** ppRoomList = 0;
     DWORD nRoomCount = 0;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, (int*)&nRoomCount);
-    uint32_t nRoomIdx = 0;
-    if (nRoomCount) {
-      D2RoomStrc* pTestRoom;
-      do {
-        if (ppRoomList[nRoomIdx]) {
-          pTestRoom = ppRoomList[nRoomIdx];
-          if (nX >= pTestRoom->sCoords.dwXStart && nX < pTestRoom->sCoords.dwXSize + pTestRoom->sCoords.dwXStart && nY >= pTestRoom->sCoords.dwYStart && nY < pTestRoom->sCoords.dwYSize + pTestRoom->sCoords.dwYStart) {
-            return pTestRoom;
-          }
+    for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx++) {
+      if (ppRoomList[nRoomIdx]) {
+        pTestRoom = ppRoomList[nRoomIdx];
+        if (nX >= pTestRoom->sCoords.dwXStart && nX < pTestRoom->sCoords.dwXSize + pTestRoom->sCoords.dwXStart && nY >= pTestRoom->sCoords.dwYStart && nY < pTestRoom->sCoords.dwYSize + pTestRoom->sCoords.dwYStart) {
+          return pTestRoom;
         }
-
-        nRoomIdx++;
-      } while (nRoomIdx < nRoomCount);
+      }
     }
 
     pRoom = 0;

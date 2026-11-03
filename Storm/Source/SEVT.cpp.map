@@ -36,8 +36,10 @@
         "SMemCopy"
       ],
       "usedTypes": [
-        "uint32_t",
-        "uint32_t *"
+        "D2SevtHandlerNodeStrc",
+        "D2SevtHandlerNodeStrc *",
+        "D2SevtHandlerTableStrc",
+        "uint32_t"
       ]
     },
     {
@@ -55,8 +57,10 @@
         "SMemFree"
       ],
       "usedTypes": [
-        "uint32_t",
-        "void *"
+        "D2SevtHandlerNodeStrc",
+        "D2SevtHandlerNodeStrc *",
+        "D2SevtHandlerTableStrc",
+        "uint32_t"
       ]
     },
     {
@@ -90,6 +94,10 @@
         "SEvtDestroy",
         "SEVT_DeleteIdHashTable",
         "SMemFree"
+      ],
+      "usedTypes": [
+        "D2SevtHandlerTableStrc",
+        "uint32_t"
       ]
     },
     {
@@ -108,8 +116,8 @@
         "SEVT_CopyIdHashTable"
       ],
       "usedTypes": [
-        "uint32_t",
-        "uint32_t *"
+        "D2SevtHandlerTableStrc",
+        "uint32_t"
       ]
     },
     {
@@ -170,8 +178,8 @@
         "MISC_OperatorDeleteShim"
       ],
       "usedTypes": [
-        "uint32_t",
-        "void *"
+        "D2SevtHandlerTableStrc",
+        "uint32_t"
       ]
     },
     {
@@ -239,6 +247,9 @@
         "SEvtPopState",
         "SEvtUnregisterType",
         "SEVT_DeleteIdHashTable"
+      ],
+      "usedTypes": [
+        "D2SevtHandlerTableStrc"
       ]
     },
     {

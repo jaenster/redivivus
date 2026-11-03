@@ -393,12 +393,13 @@ void __stdcall FreeD2QSSocket(D2QSSocketStrc * pSocket) {
     D2_FREE_AT(pSocket, ".\\Src\\D2QSSocket.cpp", 0x27c);
 }
 
-void __stdcall QSSOCKET_WaitForEvent(D2QSSocketStrc * pQSSocket, DWORD dwTimeout) {
+DWORD __stdcall QSSOCKET_WaitForEvent(D2QSSocketStrc * pQSSocket, DWORD dwTimeout) {
     if (!pQSSocket) {
-      return;
+      return 0;
     }
 
-    /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(pQSSocket->pEvent, dwTimeout);
+    DWORD DVar1 = WaitForSingleObject(pQSSocket->pEvent, dwTimeout);
+    return DVar1;
 }
 
 D2NetDataStrc * __stdcall NET_D2QSocket_GetSafesock(D2QSSocketStrc * pQSSocket) {

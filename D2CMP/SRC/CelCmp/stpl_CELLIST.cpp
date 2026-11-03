@@ -769,7 +769,7 @@ template<> void TSGrowableArray<CELLIST>::ReallocData(uint32_t nAlloc) {
     if (nNewCapacityValue < this->m_count) {
       nAlloc = nNewCapacityValue;
     }
-    if (nAlloc) {
+    if (nAlloc > 0) {
       int nNewNodeBase;
       pFreeListSlot = &pOldBlock->m_frames.m_terminator;
       do {

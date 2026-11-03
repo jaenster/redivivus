@@ -107,7 +107,7 @@ BOOL __fastcall SKILLPAL_SrvStFn29_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * p
       int32_t nConvPct;
       nConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
       sDamage.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 1, nullptr, 0, 0, nConvPct, 0, pSkillsTxt->SrcDam);
-      if (pSkillsTxt->EType != ELEMENTAL_NONE) {
+      if ((uint8_t)pSkillsTxt->EType > ELEMENTAL_NONE) {
         sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
         if (sDamage.dwConvPct > 0) {
           sDamage.nConvType = pSkillsTxt->EType;
@@ -241,7 +241,7 @@ BOOL __fastcall Skills_SrvDoFunc_150_Smite(::SGAMEDATA * pGame, D2UnitStrc * pUn
       nSkillValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
       DStack_8c.dwPhysDamage = UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage(pUnit, 0, pDStack_1c, nMinDamage, nMaxDamage, nSkillValue, 0, 0x80);
       nSkillValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
-      if (pSkillsTxt->EType != ELEMENTAL_NONE) {
+      if ((uint8_t)pSkillsTxt->EType > ELEMENTAL_NONE) {
         DStack_8c.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[3], eSkill, nSkillLvl);
         if (DStack_8c.dwConvPct > 0) {
           DStack_8c.nConvType = pSkillsTxt->EType;
@@ -943,7 +943,7 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[0], eSkill, nSkillLvl);
-    if (pDVar1->EType != ELEMENTAL_NONE) {
+    if ((uint8_t)pDVar1->EType > ELEMENTAL_NONE) {
       sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[3], eSkill, nSkillLvl);
       if (sDamage.dwConvPct > 0) {
         sDamage.nConvType = pDVar1->EType;
@@ -1664,12 +1664,18 @@ uint32_t __fastcall SKILLSOR_IsValidBlizzardTargetType(D2SkillCallbackContextStr
     eD2Skills eSkill = *pSkillCallbackArgs;
     D2UnitStrc* pCasterUnit = pContext->pUnit;
     int32_t nSkillLvl = pSkillCallbackArgs[1];
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
+    if ((int)eSkill < 0) {
+      return 0;
+    }
+    if (!((int)eSkill < sgptDataTable->nTxtSkillsCount)) {
       return 0;
     }
 
     D2SkillsTxt* pSkillRecord = sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillRecord && pUnit)) {
+    if (!pSkillRecord) {
+      return 0;
+    }
+    if (!pUnit) {
       return 0;
     }
 

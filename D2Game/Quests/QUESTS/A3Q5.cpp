@@ -635,12 +635,13 @@ void __fastcall Q22_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
     bLamEsenDone = pLamEsenResult->bLamEsenComplete;
     pQuestData->nStateFlagPrev = 3;
-    if (!bLamEsenDone) {
-      pQuestData->nStateFlag = 5;
+    if (bLamEsenDone) {
+      pQuestData->nStateFlag = 4;
       return;
     }
 
-    pQuestData->nStateFlag = 4;
+    pQuestData->nStateFlag = 5;
+    return;
 }
 
 // Q22_TrackCouncilKill (BLACKENED TEMPLE) — records a Travincal Council member kill. Looks up the live quest data; marks council-tracking active (byte[5]@0x18), and if fewer than 6 distinct killer GUIDs are logged, appends the killer's GUID (dedup) and bumps the count (offset 0x30/0x34). On first qualifying kill (state transition gates on nStateFlag/nStateFlagPrev) broadcasts live state 1 or 3 via Q22_PlayerNotifyCompleted, then advances nStateFlag to 4 or 5 (by Lam Esen's Tome completion) and re-syncs all player quest logs.
