@@ -97,8 +97,11 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/Engine.h"
+#include "D2Client/GAME/Game/Game.data.h"
 #include "D2Client/GAME/Server.h"
+#include "D2Client/Source/ClientEngine.data.h"
 #include "D2Client/UI/Inv.h"
+#include "D2Launch/CharSel.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Multi/OOGUtilities.h"
 
@@ -127,6 +130,137 @@ typedef void (__stdcall *fTownAutoMap)(eD2LevelId eD2LevelId, int FileIndex, int
 #define RECON_FPTD_pfnFaultError
 typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpression);
 #endif
+
+char string_IpAddressTcpIp[24] = {
+    '2',
+    '0',
+    '7',
+    '.',
+    '8',
+    '2',
+    '.',
+    '8',
+    '7',
+    '.',
+    '2',
+    '4',
+    '3',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(string_IpAddressTcpIp, "string_IpAddressTcpIp");
+char string_IpaddressGameserverBattlenet[24] = {
+    '2',
+    '0',
+    '7',
+    '.',
+    '8',
+    '2',
+    '.',
+    '8',
+    '7',
+    '.',
+    '1',
+    '3',
+    '9',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_GLOBAL_GUARD(string_IpaddressGameserverBattlenet, "string_IpaddressGameserverBattlenet");
+static uint32_t gnPrimaryClickState = 0x10; D2_STATIC_GUARD(gnPrimaryClickState, "gnPrimaryClickState");
+static int gnMouseButtonEventState = 0x10; D2_STATIC_GUARD(gnMouseButtonEventState, "gnMouseButtonEventState");
+static int gnActTransitionFadeFrames = 0x1; D2_STATIC_GUARD(gnActTransitionFadeFrames, "gnActTransitionFadeFrames");
+static D2UIFlagInitStrc g_UIFlagInitGameDataPanel1 = {
+    /* .eEventType = */ 0x0,
+    /* .nMessageOrKeyCode = */ 0x20a,
+    /* .pfHandler = */ &D2Client::GAME::Game::INPUT_HandleMouseWheel
+}; D2_STATIC_GUARD(g_UIFlagInitGameDataPanel1, "g_UIFlagInitGameDataPanel1");
+static D2UIFlagInitStrc g_UIFlagInitGameDataPanel2[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x208,
+        /* .pfHandler = */ &D2Client::GAME::Game::INPUT_HandleScrollDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x207,
+        /* .pfHandler = */ &D2Client::GAME::Game::INPUT_HandleScrollUp
+    }
+}; D2_STATIC_GUARD(g_UIFlagInitGameDataPanel2, "g_UIFlagInitGameDataPanel2");
+static D2UIFlagInitStrc g_UIFlagInitGameDataPanel3[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x20b,
+        /* .pfHandler = */ &D2Client::GAME::Game::INPUT_HandlePageUpDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x20c,
+        /* .pfHandler = */ &D2Client::GAME::Game::INPUT_HandleScrollToEnd
+    }
+}; D2_STATIC_GUARD(g_UIFlagInitGameDataPanel3, "g_UIFlagInitGameDataPanel3");
+D2ClientGameDataStrc gClientGameData = {}; D2_GLOBAL_GUARD(gClientGameData, "gClientGameData");
+char RealmName[32] = {}; D2_GLOBAL_GUARD(RealmName, "RealmName");
+static short gnTcpIpJoinId = 0; D2_STATIC_GUARD(gnTcpIpJoinId, "gnTcpIpJoinId");
+eD2PlayerClassID nD2PlayerClassID = 0; D2_GLOBAL_GUARD(nD2PlayerClassID, "nD2PlayerClassID");
+int gConnectLongTimeoutStartTick = 0; D2_GLOBAL_GUARD(gConnectLongTimeoutStartTick, "gConnectLongTimeoutStartTick");
+static HANDLE HostGameThread = 0; D2_STATIC_GUARD(HostGameThread, "HostGameThread");
+static uint32_t gnTcpIpComInt = 0; D2_STATIC_GUARD(gnTcpIpComInt, "gnTcpIpComInt");
+namespace D2Game::Save {
+// also labelled: lpBuffer_007a05c4
+char szSaveCharacterName[16] = {}; D2_GLOBAL_GUARD(szSaveCharacterName, "D2Game::Save::szSaveCharacterName");
+} // namespace D2Game::Save
+static uint32_t gnConnectionRefusedReason = 0; D2_STATIC_GUARD(gnConnectionRefusedReason, "gnConnectionRefusedReason");
+static char CLIENT_GameName[20] = {}; D2_STATIC_GUARD(CLIENT_GameName, "CLIENT_GameName");
+static D2BNetClientCallbacksStrc * gpBNetClientCallbacks = 0; D2_STATIC_GUARD(gpBNetClientCallbacks, "gpBNetClientCallbacks");
+static int gConnectShortTimeoutStartTick = 0; D2_STATIC_GUARD(gConnectShortTimeoutStartTick, "gConnectShortTimeoutStartTick");
+static uint32_t gbBloodFlag = 0; D2_STATIC_GUARD(gbBloodFlag, "gbBloodFlag");
+D2EndGameUiState gEndGameUiState = {}; D2_GLOBAL_GUARD(gEndGameUiState, "gEndGameUiState");
+static D2EndGameUiState gShowEndGameCutscene = {}; D2_STATIC_GUARD(gShowEndGameCutscene, "gShowEndGameCutscene");
+static D2EndGameUiState gCongratzOkClicked = {}; D2_STATIC_GUARD(gCongratzOkClicked, "gCongratzOkClicked");
+static uint8_t CLIENT_nDifficulty = 0; D2_STATIC_GUARD(CLIENT_nDifficulty, "CLIENT_nDifficulty");
+uint8_t gBetaScreenIndex = 0; D2_GLOBAL_GUARD(gBetaScreenIndex, "gBetaScreenIndex");
+static uint8_t gbActInitExpansionFlag = 0; D2_STATIC_GUARD(gbActInitExpansionFlag, "gbActInitExpansionFlag");
+eD2GSGameType eD2GSGameType_007a0610 = 0; D2_GLOBAL_GUARD(eD2GSGameType_007a0610, "eD2GSGameType_007a0610");
+int D2GS_Connected = 0; D2_GLOBAL_GUARD(D2GS_Connected, "D2GS_Connected");
+int ServerLoadingComplete = 0; D2_GLOBAL_GUARD(ServerLoadingComplete, "ServerLoadingComplete");
+BOOL D2CLIENT_ExitVar3 = 0; D2_GLOBAL_GUARD(D2CLIENT_ExitVar3, "D2CLIENT_ExitVar3");
+BOOL gLevelLoadInProgress = 0; D2_GLOBAL_GUARD(gLevelLoadInProgress, "gLevelLoadInProgress");
+static D2ExitCutsceneState gExitCutsceneState = {}; D2_STATIC_GUARD(gExitCutsceneState, "gExitCutsceneState");
+static D2ExitCutsceneState gExitCutscenePlayed = {}; D2_STATIC_GUARD(gExitCutscenePlayed, "gExitCutscenePlayed");
+uint32_t ExitingGame = 0; D2_GLOBAL_GUARD(ExitingGame, "ExitingGame");
+uint32_t EnteringGame = 0; D2_GLOBAL_GUARD(EnteringGame, "EnteringGame");
+static uint32_t gQueuedPrimaryClick = 0; D2_STATIC_GUARD(gQueuedPrimaryClick, "gQueuedPrimaryClick");
+static int gQueuedSecondaryClick = 0; D2_STATIC_GUARD(gQueuedSecondaryClick, "gQueuedSecondaryClick");
+static uint32_t gbMouseButtonEventPending = 0; D2_STATIC_GUARD(gbMouseButtonEventPending, "gbMouseButtonEventPending");
+static BOOL gRunKeyDown = 0; D2_STATIC_GUARD(gRunKeyDown, "gRunKeyDown");
+namespace D2Game::GameData {
+uint32_t gnAlwaysRun = 0; D2_GLOBAL_GUARD(gnAlwaysRun, "D2Game::GameData::gnAlwaysRun");
+} // namespace D2Game::GameData
+static int gClickModifierDown = 0; D2_STATIC_GUARD(gClickModifierDown, "gClickModifierDown");
+static uint32_t gnQueuedPrimaryClickX = 0; D2_STATIC_GUARD(gnQueuedPrimaryClickX, "gnQueuedPrimaryClickX");
+static uint32_t gnQueuedSecondaryClickX = 0; D2_STATIC_GUARD(gnQueuedSecondaryClickX, "gnQueuedSecondaryClickX");
+static BOOL D2CLIENT_ExitVar2 = 0; D2_STATIC_GUARD(D2CLIENT_ExitVar2, "D2CLIENT_ExitVar2");
+uint32_t gnCameraWorldDeltaX = 0; D2_GLOBAL_GUARD(gnCameraWorldDeltaX, "gnCameraWorldDeltaX");
+uint32_t gnCameraWorldDeltaY = 0; D2_GLOBAL_GUARD(gnCameraWorldDeltaY, "gnCameraWorldDeltaY");
+static uint32_t gbMinimapClickValid = 0; D2_STATIC_GUARD(gbMinimapClickValid, "gbMinimapClickValid");
+static D2ClientTimerStrc gLoadTimerDurationMs = {}; D2_STATIC_GUARD(gLoadTimerDurationMs, "gLoadTimerDurationMs");
 
 namespace D2Client::GAME::Game {
 

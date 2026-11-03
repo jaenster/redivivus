@@ -4,6 +4,7 @@
 #include "Bnclient/Bnclient.h"
 #include "Storm/D2Srp.h"
 #include "globals/globals.h"
+#include "Bnclient/net_sid.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

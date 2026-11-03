@@ -76,6 +76,7 @@
 #include "D2Common/Unit.h"
 #include "D2Game/D2Game.h"
 #include "D2Game/SKILLS/SkillSor.h"
+#include "D2Game/SKILLS/SkillsServer.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

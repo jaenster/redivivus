@@ -80,6 +80,7 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/UNIT/Monster.data.h"
 #include "D2Common/Drlg/Path.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -94,6 +95,24 @@
 #define RECON_FPTD_fnRoomUnitScanCallback
 typedef int32_t (__fastcall *fnRoomUnitScanCallback)(D2UnitStrc * pSourceUnit, D2UnitStrc * pCandidate, D2UnitStrc * * ppBestUnit, int32_t * pnBestValue);
 #endif
+
+char * gaLanguageNames_007251e0[15] = {
+    s_English_006cc81c,
+    s_Spanish_006cc814,
+    s_German_006cc80c,
+    s_French_006cc804,
+    s_Portuguese_006cc7f8,
+    s_Italian_006cc7f0,
+    s_Japanese_006cc7e4,
+    s_Korean_006cc7dc,
+    s_Simplified_Chinese_006cc7c8,
+    s_Traditional_Chinese_006cc7b4,
+    s_Polish_006cc7ac,
+    s_Russian_006cc7a4,
+    s_English_with_Korean_Chat_006cc788,
+    s_Unknown_006cc780,
+    (char*)0x006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_007251e0, "gaLanguageNames_007251e0");
 
 namespace D2Client::UNIT::Monster {
 

@@ -22,6 +22,7 @@
 #include "D2Client/Engine.h"
 #include "support/d2_trace.h"
 #include "D2Client/UI/Panel.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

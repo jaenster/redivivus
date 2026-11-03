@@ -57,6 +57,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
 #include "globals/globals.h"
+#include "D2Client/Source/ClientEngine.data.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -73,6 +74,12 @@ typedef int32_t (__fastcall *fnRoomUnitScanCallback)(D2UnitStrc * pSourceUnit, D
 static int gnDenOfEvilLightTimerTick = -0x1; D2_STATIC_GUARD(gnDenOfEvilLightTimerTick, "gnDenOfEvilLightTimerTick");
 static int gnDiabloSpawnLightTimer = -0x1; D2_STATIC_GUARD(gnDiabloSpawnLightTimer, "gnDiabloSpawnLightTimer");
 static uint32_t gnQuestMonsterUnitId = -0x1; D2_STATIC_GUARD(gnQuestMonsterUnitId, "gnQuestMonsterUnitId");
+BOOL DenOfEvilLight = 0; D2_GLOBAL_GUARD(DenOfEvilLight, "DenOfEvilLight");
+static uint32_t gnDiabloSpawnLightActive = 0; D2_STATIC_GUARD(gnDiabloSpawnLightActive, "gnDiabloSpawnLightActive");
+// also labelled: SecondsUntilGameEnds
+static int32_t gnGameEndTime = 0; D2_STATIC_GUARD(gnGameEndTime, "gnGameEndTime");
+static uint32_t gbWorldstoneShouldShake = 0; D2_STATIC_GUARD(gbWorldstoneShouldShake, "gbWorldstoneShouldShake");
+static D2UnitStrc * gaActiveUnitSlots[8] = {}; D2_STATIC_GUARD(gaActiveUnitSlots, "gaActiveUnitSlots");
 
 namespace D2Client::Source::ClientEngine {
 

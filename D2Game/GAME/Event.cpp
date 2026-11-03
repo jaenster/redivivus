@@ -21,6 +21,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Memory.h"
 #include "globals/globals.h"
+#include "D2Game/GAME/Event.data.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -46,6 +47,10 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TimerQueueStrc) == 0xa20, "D2_NEW
 #define RECON_FPTD_fpTimerFunctionUnit
 typedef void (__fastcall *fpTimerFunctionUnit)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2);
 #endif
+
+namespace D2Game::GAME::Event::Dispatch {
+int aTimerIndexUnitTypeLookupTable[6] = { 0x0, 0x1, 0x3, 0x2, 0x4, -0x1 }; D2_GLOBAL_GUARD(aTimerIndexUnitTypeLookupTable, "D2Game::GAME::Event::Dispatch::aTimerIndexUnitTypeLookupTable");
+} // namespace D2Game::GAME::Event::Dispatch
 
 namespace D2Game::GAME::Event {
 

@@ -104,6 +104,20 @@ static int gaWaypointRowLayout[55] = {
     0x11,
     0x15d
 }; D2_STATIC_GUARD(gaWaypointRowLayout, "gaWaypointRowLayout");
+static D2WaypointListEntryStrc gaWaypointListEntries[9] = {}; D2_STATIC_GUARD(gaWaypointListEntries, "gaWaypointListEntries");
+uint8_t gbWaypointButtonPressed = 0; D2_GLOBAL_GUARD(gbWaypointButtonPressed, "gbWaypointButtonPressed");
+uint32_t ClickingDownOnWaypointEntry = 0; D2_GLOBAL_GUARD(ClickingDownOnWaypointEntry, "ClickingDownOnWaypointEntry");
+static DC6 * WaypointWayGateBackGround = 0; D2_STATIC_GUARD(WaypointWayGateBackGround, "WaypointWayGateBackGround");
+static DC6 * WaypointWayGateTabs = 0; D2_STATIC_GUARD(WaypointWayGateTabs, "WaypointWayGateTabs");
+static DC6 * WaypointWaygateIcons = 0; D2_STATIC_GUARD(WaypointWaygateIcons, "WaypointWaygateIcons");
+namespace D2Client::Waypoint {
+int32_t nWaypointSignature = 0; D2_GLOBAL_GUARD(nWaypointSignature, "D2Client::Waypoint::nWaypointSignature");
+D2WaypointStrc * pWaypoint = 0; D2_GLOBAL_GUARD(pWaypoint, "D2Client::Waypoint::pWaypoint");
+bool bNeedAllocation = 0; D2_GLOBAL_GUARD(bNeedAllocation, "D2Client::Waypoint::bNeedAllocation");
+} // namespace D2Client::Waypoint
+static uint32_t WaypointCurrentSelectedAct = 0; D2_STATIC_GUARD(WaypointCurrentSelectedAct, "WaypointCurrentSelectedAct");
+static int MaximumAmountOfWaypointInSelectedAct = 0; D2_STATIC_GUARD(MaximumAmountOfWaypointInSelectedAct, "MaximumAmountOfWaypointInSelectedAct");
+static uint32_t NoOtherWaypointAvailableBool = 0; D2_STATIC_GUARD(NoOtherWaypointAvailableBool, "NoOtherWaypointAvailableBool");
 
 namespace D2Client::UI::Waypoint {
 

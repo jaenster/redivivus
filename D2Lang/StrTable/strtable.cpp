@@ -11,10 +11,13 @@
 #include "Storm/D2ArchiveStrc.h"
 #include "globals/globals.h"
 #include "support/d2_trace.h"
+#include "Fog/Memory.data.h"
 #define POOLPROBE(tag) D2TraceFmt("poolprobe %-22s nPoolId=%d", tag, \
     (int)Fog::Memory::pGlobalPoolSystem.pManagers[0].nPoolId)
 
+#include "D2Lang/StrTable/strtable.data.h"
 #include "Fog/Engine/Application.h"
+#include "Fog/File.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -27,6 +30,18 @@
 #endif
 
 
+char gaLangAbbreviation_ChineseTraditional[4] = { 'R', 'U', 'S', '\x00' }; D2_GLOBAL_GUARD(gaLangAbbreviation_ChineseTraditional, "gaLangAbbreviation_ChineseTraditional");
+char gaLangAbbreviation_Japanese[4] = { 'P', 'O', 'L', '\x00' }; D2_GLOBAL_GUARD(gaLangAbbreviation_Japanese, "gaLangAbbreviation_Japanese");
+char s_SIN_006e0264[4] = { 'S', 'I', 'N', '\x00' }; D2_GLOBAL_GUARD(s_SIN_006e0264, "s_SIN_006e0264");
+char s_HAN_006e0268[4] = { 'H', 'A', 'N', '\x00' }; D2_GLOBAL_GUARD(s_HAN_006e0268, "s_HAN_006e0268");
+char gaLangAbbreviation_Korean[4] = { 'K', 'O', 'R', '\x00' }; D2_GLOBAL_GUARD(gaLangAbbreviation_Korean, "gaLangAbbreviation_Korean");
+char gaLangAbbreviation_Cyrillic[4] = { 'J', 'P', 'N', '\x00' }; D2_GLOBAL_GUARD(gaLangAbbreviation_Cyrillic, "gaLangAbbreviation_Cyrillic");
+char s_ITA_006e0274[4] = { 'I', 'T', 'A', '\x00' }; D2_GLOBAL_GUARD(s_ITA_006e0274, "s_ITA_006e0274");
+char s_BRA_006e0278[4] = { 'B', 'R', 'A', '\x00' }; D2_GLOBAL_GUARD(s_BRA_006e0278, "s_BRA_006e0278");
+char s_POR_006e027c[4] = { 'P', 'O', 'R', '\x00' }; D2_GLOBAL_GUARD(s_POR_006e027c, "s_POR_006e027c");
+char s_FRA_006e0280[4] = { 'F', 'R', 'A', '\x00' }; D2_GLOBAL_GUARD(s_FRA_006e0280, "s_FRA_006e0280");
+char s_DEU_006e0284[4] = { 'D', 'E', 'U', '\x00' }; D2_GLOBAL_GUARD(s_DEU_006e0284, "s_DEU_006e0284");
+char gaLangNameFormat_Nominative[4] = { 'U', 'S', 'A', '\x00' }; D2_GLOBAL_GUARD(gaLangNameFormat_Nominative, "gaLangNameFormat_Nominative");
 static uint16_t gwStrTableDefaultEncoding[256] = {
     0x0,
     0x1021,

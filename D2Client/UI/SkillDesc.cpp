@@ -60,6 +60,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Client/UI/SkillDesc.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/Items.h"
 #include "D2Game/SKILLS/SkillAss.h"
@@ -75,6 +77,146 @@ typedef void (__fastcall *pfnSkillDescWeaponDmgCalc)(D2UnitStrc * pUnit, int * p
 
 static eD2States gaeSetBonusStates[6] = { STATE_itemset1, STATE_itemset2, STATE_itemset3, STATE_itemset4, STATE_itemset5, STATE_itemset6 }; D2_STATIC_GUARD(gaeSetBonusStates, "gaeSetBonusStates");
 static char gnMonsterGroupSizeThreshold[4] = { '+', '%', 'd', '\x00' }; D2_STATIC_GUARD(gnMonsterGroupSizeThreshold, "gnMonsterGroupSizeThreshold");
+static D2SkillChargeDescStrc gaSkillChargeDescTable[6] = {
+    {
+        /* .nFileIndex = */ 0x0,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdaa,
+        /* .wDescStrNeg = */ 0xdaa,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x1,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdac,
+        /* .wDescStrNeg = */ 0xdac,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x2,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdab,
+        /* .wDescStrNeg = */ 0xdab,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x3,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdad,
+        /* .wDescStrNeg = */ 0xdad,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x9,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdae,
+        /* .wDescStrNeg = */ 0xdae,
+        /* .nDescVal = */ 0x2
+    },
+    {
+        /* .nFileIndex = */ 0x7,
+        /* .nDescFunc = */ 0x1,
+        /* .wDescStrPos = */ 0xdaf,
+        /* .wDescStrNeg = */ 0xdaf,
+        /* .nDescVal = */ 0x2
+    }
+}; D2_STATIC_GUARD(gaSkillChargeDescTable, "gaSkillChargeDescTable");
+D2SkillDescDamageFunc gapSkillDamageDescFuncTable[36] = {
+    nullptr,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgType1,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgBasic,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgAuraElem,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgDualWield,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgElem2H,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgElemental,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgWithElem,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgPoisonRange,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgBow,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgThrow,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgKick,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgFist,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgSimple,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgTrap,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgConversion,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgSummon,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgProgressive,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgProgElem,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgType3,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgType2,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgAura,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgComplex,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgRanged,
+    &D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgElem2HAlt,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
+}; D2_GLOBAL_GUARD(gapSkillDamageDescFuncTable, "gapSkillDamageDescFuncTable");
+static D2SkillDescAttackFunc gpSkillDescAttackFuncTable[18] = {
+    nullptr,
+    &D2Client::UI::SkillDesc::SKILLDESC_CalcEquippedAttackRate,
+    &D2Client::UI::SkillDesc::SKILLDESC_CalcDualWieldWithAR,
+    &D2Client::UI::SkillDesc::SKILLDESC_CalcDualWieldWithARState,
+    &D2Client::UI::SkillDesc::SKILLDESC_CalcDualWieldSimple,
+    &D2Client::UI::SkillDesc::SKILLDESC_CalcCompareAttackRate,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
+}; D2_STATIC_GUARD(gpSkillDescAttackFuncTable, "gpSkillDescAttackFuncTable");
+static int32_t gaSkillDescLayoutPositions[36] = {
+    0xa2,
+    0x5d,
+    0x102,
+    0xa2,
+    0x65,
+    0x102,
+    0x107,
+    0x62,
+    0x133,
+    0xa2,
+    0xa0,
+    0x10e,
+    0xa2,
+    0xa3,
+    0x10e,
+    0x10e,
+    0xa0,
+    0x136,
+    0xa2,
+    0x75,
+    0x102,
+    0xa2,
+    0x7d,
+    0x102,
+    0x107,
+    0x7a,
+    0x133,
+    0xa2,
+    0xb8,
+    0x10e,
+    0xa2,
+    0xbb,
+    0x10e,
+    0x10e,
+    0xb8,
+    0x136
+}; D2_STATIC_GUARD(gaSkillDescLayoutPositions, "gaSkillDescLayoutPositions");
 
 namespace D2Client::UI::SkillDesc {
 

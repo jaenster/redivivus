@@ -15,6 +15,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Common/DUNGEON/Dungeon.h"
+#include "D2Common/Drlg/OutDesr.data.h"
 #include "D2Common/Drlg/Preset.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

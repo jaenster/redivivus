@@ -39,12 +39,58 @@
 #include "Fog/Src/DataArrays.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/Draw/Weather.data.h"
+#include "D2Client/GAME/Game/Game.data.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/Panel.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
 static uint32_t gnBlizzardSoundPlayed = 0x1; D2_STATIC_GUARD(gnBlizzardSoundPlayed, "gnBlizzardSoundPlayed");
+static int DC6_UncompOverlays_bubble_FrameCount[4] = {}; D2_STATIC_GUARD(DC6_UncompOverlays_bubble_FrameCount, "DC6_UncompOverlays_bubble_FrameCount");
+static DC6 * DC6_UncompOverlays_bubble[4] = {}; D2_STATIC_GUARD(DC6_UncompOverlays_bubble, "DC6_UncompOverlays_bubble");
+static char gWeatherPaletteRain1Colors[12] = {}; D2_STATIC_GUARD(gWeatherPaletteRain1Colors, "gWeatherPaletteRain1Colors");
+static int gnWeatherRainTimingMin[4] = {}; D2_STATIC_GUARD(gnWeatherRainTimingMin, "gnWeatherRainTimingMin");
+static int gnWeatherTransitionCountdown = 0; D2_STATIC_GUARD(gnWeatherTransitionCountdown, "gnWeatherTransitionCountdown");
+static int gnWeatherTransitionState = 0; D2_STATIC_GUARD(gnWeatherTransitionState, "gnWeatherTransitionState");
+static int gnWeatherRainParticleTimingMs[2] = {}; D2_STATIC_GUARD(gnWeatherRainParticleTimingMs, "gnWeatherRainParticleTimingMs");
+static char gWeatherPaletteDayColors[12] = {}; D2_STATIC_GUARD(gWeatherPaletteDayColors, "gWeatherPaletteDayColors");
+static char gWeatherPaletteLightingNightColors[12] = {}; D2_STATIC_GUARD(gWeatherPaletteLightingNightColors, "gWeatherPaletteLightingNightColors");
+namespace D2Client::Draw::Weather {
+int gnWeatherRngRangeMax = 0; D2_GLOBAL_GUARD(gnWeatherRngRangeMax, "D2Client::Draw::Weather::gnWeatherRngRangeMax");
+int gnWeatherRngRangeMaxAct5 = 0; D2_GLOBAL_GUARD(gnWeatherRngRangeMaxAct5, "D2Client::Draw::Weather::gnWeatherRngRangeMaxAct5");
+} // namespace D2Client::Draw::Weather
+static float gnWeatherTransitionInitialized = 0; D2_STATIC_GUARD(gnWeatherTransitionInitialized, "gnWeatherTransitionInitialized");
+static char gWeatherPaletteMudDuskColors[12] = {}; D2_STATIC_GUARD(gWeatherPaletteMudDuskColors, "gWeatherPaletteMudDuskColors");
+static DC6 * DC6_UncompOverlays_Rain[4] = {}; D2_STATIC_GUARD(DC6_UncompOverlays_Rain, "DC6_UncompOverlays_Rain");
+static DC6 * DC6_UncompOverlays_Rain2[4] = { 0 }; D2_STATIC_GUARD(DC6_UncompOverlays_Rain2, "DC6_UncompOverlays_Rain2");
+namespace D2Client::Draw::Weather {
+int gnWeatherOffsetXModulo = 0; D2_GLOBAL_GUARD(gnWeatherOffsetXModulo, "D2Client::Draw::Weather::gnWeatherOffsetXModulo");
+int gnWeatherParticleOffsetYModulo = 0; D2_GLOBAL_GUARD(gnWeatherParticleOffsetYModulo, "D2Client::Draw::Weather::gnWeatherParticleOffsetYModulo");
+} // namespace D2Client::Draw::Weather
+static int DC6_UncompOverlays_Rain_FrameCount[4] = {}; D2_STATIC_GUARD(DC6_UncompOverlays_Rain_FrameCount, "DC6_UncompOverlays_Rain_FrameCount");
+namespace D2Client::Draw::Weather {
+int gnWeatherRngRangeMin = 0; D2_GLOBAL_GUARD(gnWeatherRngRangeMin, "D2Client::Draw::Weather::gnWeatherRngRangeMin");
+int gnWeatherRngRangeMinAct5 = 0; D2_GLOBAL_GUARD(gnWeatherRngRangeMinAct5, "D2Client::Draw::Weather::gnWeatherRngRangeMinAct5");
+} // namespace D2Client::Draw::Weather
+static int gnWeatherParticleState = 0; D2_STATIC_GUARD(gnWeatherParticleState, "gnWeatherParticleState");
+static int gnWeatherRngCountdown = 0; D2_STATIC_GUARD(gnWeatherRngCountdown, "gnWeatherRngCountdown");
+static uint32_t gbWeatherTransitionTriggered = 0; D2_STATIC_GUARD(gbWeatherTransitionTriggered, "gbWeatherTransitionTriggered");
+static char gWeatherPaletteLightingSoftwareColors[12] = {}; D2_STATIC_GUARD(gWeatherPaletteLightingSoftwareColors, "gWeatherPaletteLightingSoftwareColors");
+static int gnWeatherRngParam = 0; D2_STATIC_GUARD(gnWeatherRngParam, "gnWeatherRngParam");
+namespace D2Client::Draw::Weather {
+D2DataArrayStrc * pEnvironmentSplashes = 0; D2_GLOBAL_GUARD(pEnvironmentSplashes, "D2Client::Draw::Weather::pEnvironmentSplashes");
+D2DataArrayStrc * pEnvironmentBubbles = 0; D2_GLOBAL_GUARD(pEnvironmentBubbles, "D2Client::Draw::Weather::pEnvironmentBubbles");
+D2DataArrayStrc * pEnvironmentParticles = 0; D2_GLOBAL_GUARD(pEnvironmentParticles, "D2Client::Draw::Weather::pEnvironmentParticles");
+} // namespace D2Client::Draw::Weather
+static int gnWeatherTransitionProgress = 0; D2_STATIC_GUARD(gnWeatherTransitionProgress, "gnWeatherTransitionProgress");
+static int gnWeatherFrameIndex = 0; D2_STATIC_GUARD(gnWeatherFrameIndex, "gnWeatherFrameIndex");
+static int nWeatherParticleCountAct5 = 0; D2_STATIC_GUARD(nWeatherParticleCountAct5, "nWeatherParticleCountAct5");
+static int gnWeatherAct5ParticleCount = 0; D2_STATIC_GUARD(gnWeatherAct5ParticleCount, "gnWeatherAct5ParticleCount");
+static int gnWeatherStateAct5 = 0; D2_STATIC_GUARD(gnWeatherStateAct5, "gnWeatherStateAct5");
+static int gnWeatherTransitionLock = 0; D2_STATIC_GUARD(gnWeatherTransitionLock, "gnWeatherTransitionLock");
+static int gnWeatherCurrentTransitionState = 0; D2_STATIC_GUARD(gnWeatherCurrentTransitionState, "gnWeatherCurrentTransitionState");
 
 namespace D2Client::Draw::Weather {
 

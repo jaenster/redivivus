@@ -54,6 +54,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Game/Game.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Launch/MainMenus.h"

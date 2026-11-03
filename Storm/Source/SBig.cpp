@@ -10,6 +10,7 @@
 #include "globals/globals.h"
 #include "D2Client/BNGatewayAccess.h"
 #include "D2Client/WindowHandle.h"
+#include "Fog/Engine/Application.data.h"
 #include "Storm/Source/SSystem.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

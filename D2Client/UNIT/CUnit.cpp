@@ -104,6 +104,7 @@
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Client/Draw/LightMap.h"
+#include "D2Client/GAME/Game/Game.data.h"
 #include "D2Common/Drlg/Path.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/SKILLS/SkillAss.h"

@@ -20,9 +20,33 @@
 #include "Fog/Src/Excel.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
+#include "D2Common/DATATBLS/ObjectTbls.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+unsigned int gszTxtColName_S8 = 0x3853; D2_GLOBAL_GUARD(gszTxtColName_S8, "gszTxtColName_S8");
+unsigned int gszTxtColName_S7 = 0x3753; D2_GLOBAL_GUARD(gszTxtColName_S7, "gszTxtColName_S7");
+unsigned int gszObjMonCompToken_S6 = 0x3653; D2_GLOBAL_GUARD(gszObjMonCompToken_S6, "gszObjMonCompToken_S6");
+unsigned int gszObjMonCompToken_S5 = 0x3553; D2_GLOBAL_GUARD(gszObjMonCompToken_S5, "gszObjMonCompToken_S5");
+unsigned int gszObjMonCompToken_S4 = 0x3453; D2_GLOBAL_GUARD(gszObjMonCompToken_S4, "gszObjMonCompToken_S4");
+unsigned int gszObjMonCompToken_S3 = 0x3353; D2_GLOBAL_GUARD(gszObjMonCompToken_S3, "gszObjMonCompToken_S3");
+unsigned int gszObjMonCompToken_S2 = 0x3253; D2_GLOBAL_GUARD(gszObjMonCompToken_S2, "gszObjMonCompToken_S2");
+unsigned int gszObjMonCompToken_S1 = 0x3153; D2_GLOBAL_GUARD(gszObjMonCompToken_S1, "gszObjMonCompToken_S1");
+unsigned int gszObjMonCompToken_SH = 0x4853; D2_GLOBAL_GUARD(gszObjMonCompToken_SH, "gszObjMonCompToken_SH");
+unsigned int gszObjMonCompToken_LH = 0x484c; D2_GLOBAL_GUARD(gszObjMonCompToken_LH, "gszObjMonCompToken_LH");
+unsigned int gszObjMonCompToken_RH = 0x4852; D2_GLOBAL_GUARD(gszObjMonCompToken_RH, "gszObjMonCompToken_RH");
+unsigned int gszObjMonCompToken_LA = 0x414c; D2_GLOBAL_GUARD(gszObjMonCompToken_LA, "gszObjMonCompToken_LA");
+unsigned int gszObjMonCompToken_RA = 0x4152; D2_GLOBAL_GUARD(gszObjMonCompToken_RA, "gszObjMonCompToken_RA");
+unsigned int gszObjMonCompToken_LG = 0x474c; D2_GLOBAL_GUARD(gszObjMonCompToken_LG, "gszObjMonCompToken_LG");
+unsigned int gszObjMonCompToken_TR = 0x5254; D2_GLOBAL_GUARD(gszObjMonCompToken_TR, "gszObjMonCompToken_TR");
+unsigned int gszObjMonCompToken_HD = 0x4448; D2_GLOBAL_GUARD(gszObjMonCompToken_HD, "gszObjMonCompToken_HD");
+static D2ShrinesTxt * pTxtShrines = 0; D2_STATIC_GUARD(pTxtShrines, "pTxtShrines");
+static int nTxtShrinesSize = 0; D2_STATIC_GUARD(nTxtShrinesSize, "nTxtShrinesSize");
+D2ObjectsTxt * sgpTxtObjects = 0; D2_GLOBAL_GUARD(sgpTxtObjects, "sgpTxtObjects");
+int nTxtObjectsSize = 0; D2_GLOBAL_GUARD(nTxtObjectsSize, "nTxtObjectsSize");
+static D2ObjGroupTxt * pTxtObjGroup = 0; D2_STATIC_GUARD(pTxtObjGroup, "pTxtObjGroup");
+static int nTxtObjGroupSize = 0; D2_STATIC_GUARD(nTxtObjGroupSize, "nTxtObjGroupSize");
 
 namespace D2Common::DATATBLS::ObjectTbls {
 

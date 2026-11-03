@@ -35,6 +35,8 @@
 #include "Fog/Src/Excel.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/UI/npcmenu.data.h"
+#include "D2Common/DATATBLS/MonsterTbls.data.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
@@ -53,6 +55,11 @@
 #endif
 
 
+static unsigned int gDelim_A_Act = 0x4341; D2_STATIC_GUARD(gDelim_A_Act, "gDelim_A_Act");
+static char gDelim_n_NpcClass[4] = { 'n', 'p', 'c', '\x00' }; D2_STATIC_GUARD(gDelim_n_NpcClass, "gDelim_n_NpcClass");
+uint32_t gszHirelingFieldName_act = 0x746361; D2_GLOBAL_GUARD(gszHirelingFieldName_act, "gszHirelingFieldName_act");
+char s_A_006ed5ac[2] = { 'A', '\x00' }; D2_GLOBAL_GUARD(s_A_006ed5ac, "s_A_006ed5ac");
+char s_B_006ed5b0[2] = { 'B', '\x00' }; D2_GLOBAL_GUARD(s_B_006ed5b0, "s_B_006ed5b0");
 static unsigned int gnTreasureClassArraySize = {}; D2_STATIC_GUARD(gnTreasureClassArraySize, "gnTreasureClassArraySize");
 static D2MonItemPercentTxt * pMonItemPercentTxt = 0; D2_STATIC_GUARD(pMonItemPercentTxt, "pMonItemPercentTxt");
 static D2UniqueNameTablesStrc gsTxtUniqueNameTables = {}; D2_STATIC_GUARD(gsTxtUniqueNameTables, "gsTxtUniqueNameTables");

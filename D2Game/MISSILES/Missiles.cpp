@@ -52,6 +52,7 @@
 #include "Fog/Save.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Game/MISSILES/MissilesMode.data.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

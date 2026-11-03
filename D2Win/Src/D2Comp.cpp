@@ -34,6 +34,7 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "globals/globals.h"
+#include "D2Win/Src/D2Comp.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -59,6 +60,1560 @@
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2CharSelCompStrc) == 0x234, "D2_NEW_AT(D2CharSelCompStrc): the 32-bit layout must be the 0x234 bytes 1.14d allocates");
 
+
+uint32_t gnStringTruncateConstant = 0x2e2e2e; D2_GLOBAL_GUARD(gnStringTruncateConstant, "gnStringTruncateConstant");
+uint32_t gnPaletteLoadBufferSize = 0x7461642e; D2_GLOBAL_GUARD(gnPaletteLoadBufferSize, "gnPaletteLoadBufferSize");
+uint8_t gaPaletteLoadData = 0x0; D2_GLOBAL_GUARD(gaPaletteLoadData, "gaPaletteLoadData");
+static uint32_t gaCompCharClassTokens[25] = {
+    0x20204d41,
+    0x20204f53,
+    0x2020454e,
+    0x20204150,
+    0x20204142,
+    0x20205a44,
+    0x20204941,
+    0x20204f52,
+    0x20204852,
+    0x20204852,
+    0x2020314f,
+    0x2020324f,
+    0x2020334f,
+    0x2020344f,
+    0x2020444d,
+    0x2020394f,
+    0x2020594f,
+    0x2020594f,
+    0x2020354f,
+    0x2020374f,
+    0x2020384f,
+    0x2020364f,
+    0x2020304f,
+    0x20204354,
+    0x20204f52
+}; D2_STATIC_GUARD(gaCompCharClassTokens, "gaCompCharClassTokens");
+static uint32_t gnD2CompCOFLayerCount = 0x14; D2_STATIC_GUARD(gnD2CompCOFLayerCount, "gnD2CompCOFLayerCount");
+static uint32_t gaCompAnimModeTokens[20] = {
+    0x20205444,
+    0x2020554e,
+    0x20204c57,
+    0x20204e52,
+    0x20204847,
+    0x20204e54,
+    0x20205754,
+    0x20203141,
+    0x20203241,
+    0x20204c42,
+    0x20204353,
+    0x20204854,
+    0x20204b4b,
+    0x20203153,
+    0x20203253,
+    0x20203353,
+    0x20203453,
+    0x20204444,
+    0x20204847,
+    0x20204847
+}; D2_STATIC_GUARD(gaCompAnimModeTokens, "gaCompAnimModeTokens");
+uint32_t gaCompWeaponClassTokens[15] = {
+    0x0,
+    0x20687468,
+    0x20746831,
+    0x20746832,
+    0x20736831,
+    0x20736832,
+    0x20776f62,
+    0x20776278,
+    0x20667473,
+    0x20736a31,
+    0x20746a31,
+    0x20737331,
+    0x20747331,
+    0x20317468,
+    0x20327468
+}; D2_GLOBAL_GUARD(gaCompWeaponClassTokens, "gaCompWeaponClassTokens");
+static D2CompCharacterCompositeItemStrc gaCompDefaultCompositeItems[283] = {
+    {
+        /* .nItemCode = */ 0x0,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x1
+    },
+    {
+        /* .nItemCode = */ 0x2074696c,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x1
+    },
+    {
+        /* .nItemCode = */ 0x2064656d,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x1
+    },
+    {
+        /* .nItemCode = */ 0x20797668,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x1
+    },
+    {
+        /* .nItemCode = */ 0x20706163,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x20706b73,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206d6c68,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206c6866,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206d6867,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206e7263,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206b736d,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x20657063,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206b6c63,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20626f72,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20697571,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x2061656c,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20616c68,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20757473,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20676e72,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206c6373,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206e6863,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20737262,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206c7073,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20746c70,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20646c66,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20687467,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206c7566,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20637562,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x2067726c,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x2074696b,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20776f74,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x206c676c,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x206c676d,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x206c6768,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x2074626c,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x2074626d,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x20746268,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x206c626c,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x206c626d,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x206c6268,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x206d6862,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x20687362,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x206b7073,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20646e77,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x19
+    },
+    {
+        /* .nItemCode = */ 0x206e7779,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x19
+    },
+    {
+        /* .nItemCode = */ 0x206e7762,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x19
+    },
+    {
+        /* .nItemCode = */ 0x20626c63,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1d
+    },
+    {
+        /* .nItemCode = */ 0x20786168,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x2b
+    },
+    {
+        /* .nItemCode = */ 0x20647373,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x206d6373,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x2063616d,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20657861,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20636c66,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x2064736c,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20616c66,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x206d6468,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1f
+    },
+    {
+        /* .nItemCode = */ 0x206d6877,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1f
+    },
+    {
+        /* .nItemCode = */ 0x20737263,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20736c66,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x206c7067,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x26
+    },
+    {
+        /* .nItemCode = */ 0x20737067,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x26
+    },
+    {
+        /* .nItemCode = */ 0x206c706f,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x26
+    },
+    {
+        /* .nItemCode = */ 0x2073706f,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x26
+    },
+    {
+        /* .nItemCode = */ 0x20726764,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20333364,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20333367,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20726964,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x2076616a,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20766c67,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x206c6970,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x206d6c63,
+        /* .nWeaponClass = */ 0x5,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20647367,
+        /* .nWeaponClass = */ 0x5,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20727073,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20697274,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x206b6970,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20727073,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20776273,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x2077626c,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20626273,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x2062626c,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20747373,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x2074736c,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20747363,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20747362,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x2078616c,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20796373,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20786967,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20787462,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x206c6168,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x2075616d,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1f
+    },
+    {
+        /* .nItemCode = */ 0x20786170,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x206c6168,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20627868,
+        /* .nWeaponClass = */ 0x7,
+        /* .nItemTypeIndex = */ 0x23
+    },
+    {
+        /* .nItemCode = */ 0x2062786c,
+        /* .nWeaponClass = */ 0x7,
+        /* .nItemTypeIndex = */ 0x23
+    },
+    {
+        /* .nItemCode = */ 0x20786174,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x2b
+    },
+    {
+        /* .nItemCode = */ 0x20637073,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1d
+    },
+    {
+        /* .nItemCode = */ 0x20726273,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x2074736d,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20706373,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x18
+    },
+    {
+        /* .nItemCode = */ 0x206d7067,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x26
+    },
+    {
+        /* .nItemCode = */ 0x206d706f,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x26
+    },
+    {
+        /* .nItemCode = */ 0x20666b74,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x2a
+    },
+    {
+        /* .nItemCode = */ 0x20646c62,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20647362,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20777362,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20736832,
+        /* .nWeaponClass = */ 0x5,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x206e7262,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20776268,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20776263,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20627773,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x2062776c,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20747377,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20786162,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20726162,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20786167,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20627872,
+        /* .nWeaponClass = */ 0x7,
+        /* .nItemTypeIndex = */ 0x23
+    },
+    {
+        /* .nItemCode = */ 0x2062786d,
+        /* .nWeaponClass = */ 0x7,
+        /* .nItemTypeIndex = */ 0x23
+    },
+    {
+        /* .nItemCode = */ 0x2074627a,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x1
+    },
+    {
+        /* .nItemCode = */ 0x20726161,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x2070746c,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206c6d73,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20737467,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20767161,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x28
+    },
+    {
+        /* .nItemCode = */ 0x20767163,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x28
+    },
+    {
+        /* .nItemCode = */ 0x206c6276,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x206c6274,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x206c6776,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x206c6774,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x20746276,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x20746274,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x20626c66,
+        /* .nWeaponClass = */ 0x5,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x2069706d,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x206c6162,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x2b
+    },
+    {
+        /* .nItemCode = */ 0x2067656c,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1d
+    },
+    {
+        /* .nItemCode = */ 0x20746c71,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20786132,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20786177,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x206e7767,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20616d67,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20647377,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20736967,
+        /* .nWeaponClass = */ 0x5,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20646c62,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20666b62,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20707373,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20707374,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20657073,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20756f76,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20637377,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x2069726b,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20747073,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20637367,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x18
+    },
+    {
+        /* .nItemCode = */ 0x20707377,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x18
+    },
+    {
+        /* .nItemCode = */ 0x20747368,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x2066736d,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20686668,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20616839,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20786139,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20613239,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20706d39,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20617739,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20616c39,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20616239,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20746239,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20616739,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x20696739,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1c
+    },
+    {
+        /* .nItemCode = */ 0x206e7739,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x19
+    },
+    {
+        /* .nItemCode = */ 0x20777939,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x19
+    },
+    {
+        /* .nItemCode = */ 0x20776239,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x19
+    },
+    {
+        /* .nItemCode = */ 0x20776739,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x19
+    },
+    {
+        /* .nItemCode = */ 0x206c6339,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20637339,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x18
+    },
+    {
+        /* .nItemCode = */ 0x20737139,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x18
+    },
+    {
+        /* .nItemCode = */ 0x20737739,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x18
+    },
+    {
+        /* .nItemCode = */ 0x20707339,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20616d39,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20746d39,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x206c6639,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20687739,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20396d39,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x206d6739,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20737339,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x206d7339,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20627339,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20636639,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20726339,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20736239,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20736c39,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20647739,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20683239,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x206d6339,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20736739,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20396239,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20626639,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20646739,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x1e
+    },
+    {
+        /* .nItemCode = */ 0x20676439,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20696439,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x20726b39,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x206c6239,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x20
+    },
+    {
+        /* .nItemCode = */ 0x206b7439,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x2a
+    },
+    {
+        /* .nItemCode = */ 0x20617439,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x2b
+    },
+    {
+        /* .nItemCode = */ 0x206b6239,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x2a
+    },
+    {
+        /* .nItemCode = */ 0x20386239,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x2b
+    },
+    {
+        /* .nItemCode = */ 0x20616a39,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20697039,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20397339,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x206c6739,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20737439,
+        /* .nWeaponClass = */ 0x2,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20727339,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20727439,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20726239,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20747339,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20397039,
+        /* .nWeaponClass = */ 0x3,
+        /* .nItemTypeIndex = */ 0x21
+    },
+    {
+        /* .nItemCode = */ 0x20376239,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x206f7639,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20387339,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20617039,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20396839,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20637739,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x22
+    },
+    {
+        /* .nItemCode = */ 0x20737338,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20736c38,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20736338,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20736238,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20737738,
+        /* .nWeaponClass = */ 0x8,
+        /* .nItemTypeIndex = */ 0x1a
+    },
+    {
+        /* .nItemCode = */ 0x20627338,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20626838,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20626c38,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20626338,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20387338,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20386c38,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20777338,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20776c38,
+        /* .nWeaponClass = */ 0x6,
+        /* .nItemTypeIndex = */ 0x1b
+    },
+    {
+        /* .nItemCode = */ 0x20786c38,
+        /* .nWeaponClass = */ 0x7,
+        /* .nItemTypeIndex = */ 0x23
+    },
+    {
+        /* .nItemCode = */ 0x20786d38,
+        /* .nWeaponClass = */ 0x7,
+        /* .nItemTypeIndex = */ 0x23
+    },
+    {
+        /* .nItemCode = */ 0x20786838,
+        /* .nWeaponClass = */ 0x7,
+        /* .nItemTypeIndex = */ 0x23
+    },
+    {
+        /* .nItemCode = */ 0x20787238,
+        /* .nWeaponClass = */ 0x7,
+        /* .nItemTypeIndex = */ 0x23
+    },
+    {
+        /* .nItemCode = */ 0x20706178,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x20706b78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206d6c78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206c6878,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206d6878,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206e7278,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x206b7378,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x20697578,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20616578,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20616c78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20757478,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20676e78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206c6378,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206e6878,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20737278,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206c7078,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20746c78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20646c78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20687478,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x206c7578,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20726178,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20707478,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x3
+    },
+    {
+        /* .nItemCode = */ 0x20637578,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x206c6d78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20677278,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20746978,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20776f78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20737478,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20676c78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x20677678,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x20676d78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x20677478,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x20676878,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x10
+    },
+    {
+        /* .nItemCode = */ 0x20626c78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x20627678,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x20626d78,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x20627478,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x20626878,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0xf
+    },
+    {
+        /* .nItemCode = */ 0x20626c7a,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x2062767a,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x20626d7a,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x2062747a,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x2062687a,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x13
+    },
+    {
+        /* .nItemCode = */ 0x20396878,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x25
+    },
+    {
+        /* .nItemCode = */ 0x20687378,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x206b7078,
+        /* .nWeaponClass = */ 0x0,
+        /* .nItemTypeIndex = */ 0x2
+    },
+    {
+        /* .nItemCode = */ 0x20316671,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    },
+    {
+        /* .nItemCode = */ 0x20326671,
+        /* .nWeaponClass = */ 0x4,
+        /* .nItemTypeIndex = */ 0x24
+    }
+}; D2_STATIC_GUARD(gaCompDefaultCompositeItems, "gaCompDefaultCompositeItems");
+// also labelled: gaItemTypeColorByQuality
+static int gaCompWeaponClassByCodeIndex[14] = {
+    0x1,
+    0x6,
+    0x4,
+    0x2,
+    0x8,
+    0x5,
+    0x3,
+    0x7,
+    0x9,
+    0xa,
+    0xb,
+    0xc,
+    0xd,
+    0xe
+}; D2_STATIC_GUARD(gaCompWeaponClassByCodeIndex, "gaCompWeaponClassByCodeIndex");
+// also labelled: gaD2CompItemColorMappingKeys
+static int gaCompWeaponClassCodeMap[26] = {
+    0x20776f62,
+    0x1,
+    0x20736831,
+    0x2,
+    0x20746831,
+    0x3,
+    0x20667473,
+    0x4,
+    0x20736832,
+    0x5,
+    0x20746832,
+    0x6,
+    0x20776278,
+    0x7,
+    0x20736a31,
+    0x8,
+    0x20746a31,
+    0x9,
+    0x20737331,
+    0xa,
+    0x20747331,
+    0xb,
+    0x20317468,
+    0xc,
+    0x20327468,
+    0xd
+}; D2_STATIC_GUARD(gaCompWeaponClassCodeMap, "gaCompWeaponClassCodeMap");
+// also labelled: gnD2CompItemColorMappingCount
+static unsigned int gnCompWeaponClassCodeMapCount = 0xd; D2_STATIC_GUARD(gnCompWeaponClassCodeMapCount, "gnCompWeaponClassCodeMapCount");
+int nD2CompItemsSize = 0; D2_GLOBAL_GUARD(nD2CompItemsSize, "nD2CompItemsSize");
+void * pD2CompItems = 0; D2_GLOBAL_GUARD(pD2CompItems, "pD2CompItems");
+uint8_t gaItemPaletteTransformData[241920] = {}; D2_GLOBAL_GUARD(gaItemPaletteTransformData, "gaItemPaletteTransformData");
+static uint8_t gaGlideEmblemPrimaryColorTableEntries[12] = {}; D2_STATIC_GUARD(gaGlideEmblemPrimaryColorTableEntries, "gaGlideEmblemPrimaryColorTableEntries");
+static D2TxtLinkStrc * gnItemTypesCacheHandle = 0; D2_STATIC_GUARD(gnItemTypesCacheHandle, "gnItemTypesCacheHandle");
+static void * gpItemTypesTxt = 0; D2_STATIC_GUARD(gpItemTypesTxt, "gpItemTypesTxt");
+static size_t gnD2CompCompressionBufferSize = 0; D2_STATIC_GUARD(gnD2CompCompressionBufferSize, "gnD2CompCompressionBufferSize");
+static int gnMaxCharacters = 0; D2_STATIC_GUARD(gnMaxCharacters, "gnMaxCharacters");
+static D2CompCharacterCompositeItemStrc gaCompCharacterCompositeItems[255] = {}; D2_STATIC_GUARD(gaCompCharacterCompositeItems, "gaCompCharacterCompositeItems");
+// also labelled: gpItemTypeHierarchy
+static int gaCompTwoHandedWeaponClass[255] = {}; D2_STATIC_GUARD(gaCompTwoHandedWeaponClass, "gaCompTwoHandedWeaponClass");
+static uint8_t gaGlideEmblemSecondaryColorTableEntries[12] = {}; D2_STATIC_GUARD(gaGlideEmblemSecondaryColorTableEntries, "gaGlideEmblemSecondaryColorTableEntries");
+static D2CharSelCompStrc * gpCompositeUnitListHead = 0; D2_STATIC_GUARD(gpCompositeUnitListHead, "gpCompositeUnitListHead");
+static void * gpCOFCacheHead = 0; D2_STATIC_GUARD(gpCOFCacheHead, "gpCOFCacheHead");
+static DC6 * gpUniqueCursorDC6 = 0; D2_STATIC_GUARD(gpUniqueCursorDC6, "gpUniqueCursorDC6");
+static int gnUniqueCursorMaxFrames = 0; D2_STATIC_GUARD(gnUniqueCursorMaxFrames, "gnUniqueCursorMaxFrames");
+static DC6 * gpPentaSpinCursorDC6 = 0; D2_STATIC_GUARD(gpPentaSpinCursorDC6, "gpPentaSpinCursorDC6");
+static int gnPentaSpinCursorMaxFrames = 0; D2_STATIC_GUARD(gnPentaSpinCursorMaxFrames, "gnPentaSpinCursorMaxFrames");
 
 namespace D2Win::Src::D2Comp {
 

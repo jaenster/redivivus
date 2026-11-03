@@ -150,6 +150,23 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA2Q4Strc) == 0x48, "D2_N
 typedef uint8_t (__fastcall *QUESTUPDATE)(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData);
 #endif
 
+static int nQuestDataExtendedSize = 0x25; D2_STATIC_GUARD(nQuestDataExtendedSize, "nQuestDataExtendedSize");
+static int NPCINTRO_ListAct1[6] = { 0x94, 0x9a, 0x96, 0x93, 0x9b, 0x109 }; D2_STATIC_GUARD(NPCINTRO_ListAct1, "NPCINTRO_ListAct1");
+static int NPCINTRO_ListAct2[11] = {
+    0xaf,
+    0xb0,
+    0xb1,
+    0xb2,
+    0xca,
+    0xc8,
+    0xd2,
+    0xc9,
+    0xc6,
+    0xc7,
+    0xf4
+}; D2_STATIC_GUARD(NPCINTRO_ListAct2, "NPCINTRO_ListAct2");
+static int NPCINTRO_ListAct3[7] = { 0xf5, 0xfc, 0xfd, 0xfe, 0xff, 0x108, 0x129 }; D2_STATIC_GUARD(NPCINTRO_ListAct3, "NPCINTRO_ListAct3");
+static int NPCINTRO_ListAct5[7] = { 0x208, 0x209, 0x1ff, 0x200, 0x201, 0x202, 0x203 }; D2_STATIC_GUARD(NPCINTRO_ListAct5, "NPCINTRO_ListAct5");
 static BOOL DEBUGPRINT = 0; D2_STATIC_GUARD(DEBUGPRINT, "DEBUGPRINT");
 
 namespace D2Game::Quests::QUESTS {

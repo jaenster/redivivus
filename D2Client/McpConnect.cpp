@@ -2,6 +2,7 @@
 
 #include "D2Client/McpConnect.h"
 #include "globals/globals.h"
+#include "D2MCPClient/McpConnect.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

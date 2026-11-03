@@ -20,6 +20,7 @@
 #include "globals/globals.h"
 #include "D2Client/GAME/Game/Game.h"
 #include "Fog/Debug.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

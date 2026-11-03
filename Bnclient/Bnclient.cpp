@@ -10,6 +10,7 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "Bnclient/BnDownload.h"
+#include "Bnclient/BnSend.data.h"
 #include "Bnclient/BnSend.h"
 #include "Bnclient/Bnet.h"
 #include "Bnclient/Cache.h"

@@ -70,10 +70,12 @@
 #include "D2Client/D2Client.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UI/MiniPanel.h"
+#include "D2Client/UI/npcmenu.data.h"
 #include "D2Common/Collision.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Launch/MainMenus.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -99,6 +101,3278 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 typedef void (*fpListBoxItemActivated)();
 #endif
 
+namespace D2Client::UI::npcmenu {
+short nMercNameId = -0x1; D2_GLOBAL_GUARD(nMercNameId, "D2Client::UI::npcmenu::nMercNameId");
+} // namespace D2Client::UI::npcmenu
+D2SpeechBankStrc gaNpcSpeechData_725498[12] = {
+    {
+        /* .wStringId = */ 0x18,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x19,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0x1a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0x1b,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheSearchForCain,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1c,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1e,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_ToolsOfTheTrade,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1f,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x20,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x21,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x22,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x23,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpeechData_725498, "gaNpcSpeechData_725498");
+static int D2NPCSpeechCount = 0x2e; D2_STATIC_GUARD(D2NPCSpeechCount, "D2NPCSpeechCount");
+// also labelled: gaWaypointActEntryTable
+D2SpeechBankStrc gaNpcSpeechBank_725550[11] = {
+    {
+        /* .wStringId = */ 0x0,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x3
+    },
+    {
+        /* .wStringId = */ 0x2,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x3
+    },
+    {
+        /* .wStringId = */ 0x3,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_TheSearchForCain,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x6,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x7,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x9,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_SistersToTheSlaughter,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xa,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheSearchForCain,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpeechBank_725550, "gaNpcSpeechBank_725550");
+D2SpeechBankStrc gaNpcDialogOptionData_7255f8[9] = {
+    {
+        /* .wStringId = */ 0x2d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x2e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x2
+    },
+    {
+        /* .wStringId = */ 0x2f,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x2
+    },
+    {
+        /* .wStringId = */ 0x30,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheSearchForCain,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x31,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x32,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x33,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x34,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_SistersToTheSlaughter,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x35,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_7255f8, "gaNpcDialogOptionData_7255f8");
+D2SpeechBankStrc gaNpcDialogOptionData_725680[7] = {
+    {
+        /* .wStringId = */ 0x36,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x36,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x36,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x37,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x38,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x39,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x3a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725680, "gaNpcDialogOptionData_725680");
+D2SpeechBankStrc gaNpcDialogOptionData_7256f0[7] = {
+    {
+        /* .wStringId = */ 0x129,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x129,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x129,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x12a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x12b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x12c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x12d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_7256f0, "gaNpcDialogOptionData_7256f0");
+D2SpeechBankStrc gaNpcDialogOptionData_725760[8] = {
+    {
+        /* .wStringId = */ 0x1ca,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1ca,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1cb,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1cc,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1cd,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1ce,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1cf,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1d0,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725760, "gaNpcDialogOptionData_725760");
+D2SpeechBankStrc gaNpcDialogOptionData_7257d8[9] = {
+    {
+        /* .wStringId = */ 0x24,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x25,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x4
+    },
+    {
+        /* .wStringId = */ 0x26,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x4
+    },
+    {
+        /* .wStringId = */ 0x27,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_TheSearchForCain,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x28,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x29,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x2a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x2b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x2c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_7257d8, "gaNpcDialogOptionData_7257d8");
+D2SpeechBankStrc gaNpcDialogOptionData_725860[13] = {
+    {
+        /* .wStringId = */ 0xb,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x1
+    },
+    {
+        /* .wStringId = */ 0xd,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x1
+    },
+    {
+        /* .wStringId = */ 0xe,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xf,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x10,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x11,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x12,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x13,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x14,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x15,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x16,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct2,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x17,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_SistersToTheSlaughter,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725860, "gaNpcDialogOptionData_725860");
+D2SpeechBankStrc gaNpcDialogOptionData_725928[10] = {
+    {
+        /* .wStringId = */ 0xdd,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xdd,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xde,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xdf,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xe0,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xe1,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xe2,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xe3,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xe4,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xe5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725928, "gaNpcDialogOptionData_725928");
+D2SpeechBankStrc gaNpcDialogOptionData_7259c0[12] = {
+    {
+        /* .wStringId = */ 0x11d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x11e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x1
+    },
+    {
+        /* .wStringId = */ 0x11f,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x1
+    },
+    {
+        /* .wStringId = */ 0x120,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x121,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x122,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheSummoner,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x123,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x124,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x125,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x126,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheSevenTombs,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x127,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x128,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_7259c0, "gaNpcDialogOptionData_7259c0");
+namespace D2Client::NPC {
+int D2NpcMenuOptionsCount = 0x30; D2_GLOBAL_GUARD(D2NpcMenuOptionsCount, "D2Client::NPC::D2NpcMenuOptionsCount");
+} // namespace D2Client::NPC
+D2SpeechBankStrc gaNpcDialogOptionData_725a78[14] = {
+    {
+        /* .wStringId = */ 0xbe,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xbe,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xbf,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc0,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc1,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc2,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc3,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc4,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc6,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc7,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheSevenTombs,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xc9,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xca,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725a78, "gaNpcDialogOptionData_725a78");
+D2SpeechBankStrc gaNpcDialogOptionData_725b50[12] = {
+    {
+        /* .wStringId = */ 0xcb,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xcc,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x2
+    },
+    {
+        /* .wStringId = */ 0xcd,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x2
+    },
+    {
+        /* .wStringId = */ 0xce,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xcf,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd0,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd1,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_RadamentsLair,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd2,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd3,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd4,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd6,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725b50, "gaNpcDialogOptionData_725b50");
+D2SpeechBankStrc gaNpcDialogOptionData_725c08[11] = {
+    {
+        /* .wStringId = */ 0xe6,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xe7,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x4
+    },
+    {
+        /* .wStringId = */ 0xe8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x4
+    },
+    {
+        /* .wStringId = */ 0xe9,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xea,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xeb,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xec,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xed,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xee,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xef,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xf0,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725c08, "gaNpcDialogOptionData_725c08");
+// also labelled: gaNpcDialogOptionData_725cb0
+D2SpeechBankStrc gaNpcSpeechBank_725cb0[10] = {
+    {
+        /* .wStringId = */ 0xfd,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xfd,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xff,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_RadamentsLair,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x100,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_RadamentsLair,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x101,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x102,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x103,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x104,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x105,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheSevenTombs,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x106,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpeechBank_725cb0, "gaNpcSpeechBank_725cb0");
+D2SpeechBankStrc gaNpcSpriteFrameData_725d48[12] = {
+    {
+        /* .wStringId = */ 0x112,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x112,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x113,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x114,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x115,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x116,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x117,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x118,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x119,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x11a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x11b,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x11c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpriteFrameData_725d48, "gaNpcSpriteFrameData_725d48");
+D2SpeechBankStrc gaNpcSpriteFrameData_725e00[11] = {
+    {
+        /* .wStringId = */ 0x107,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x108,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x3
+    },
+    {
+        /* .wStringId = */ 0x109,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x3
+    },
+    {
+        /* .wStringId = */ 0x10a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x10b,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x10c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x10d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x10e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x10f,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x110,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x111,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpriteFrameData_725e00, "gaNpcSpriteFrameData_725e00");
+D2SpeechBankStrc gaNpcDialogOptionData_725ea8[12] = {
+    {
+        /* .wStringId = */ 0xf1,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xf2,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0xf3,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0xf4,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xf5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xf6,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheSevenTombs,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xf7,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xf8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xf9,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xfa,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xfb,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xfc,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725ea8, "gaNpcDialogOptionData_725ea8");
+D2SpeechBankStrc gaNpcDialogOptionData_725f60[7] = {
+    {
+        /* .wStringId = */ 0xd7,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xd9,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xda,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheTaintedSun,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xdb,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0xdc,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct3,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725f60, "gaNpcDialogOptionData_725f60");
+D2SpeechBankStrc gaNpcDialogOptionData_725fd0[11] = {
+    {
+        /* .wStringId = */ 0x1de,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1df,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x4
+    },
+    {
+        /* .wStringId = */ 0x1e0,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x4
+    },
+    {
+        /* .wStringId = */ 0x1e1,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1e2,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1e3,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1e4,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1e5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1e6,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1e7,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1e8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcDialogOptionData_725fd0, "gaNpcDialogOptionData_725fd0");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_00726078[12] = {
+    {
+        /* .wStringId = */ 0x1d1,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1d2,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x1
+    },
+    {
+        /* .wStringId = */ 0x1d3,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x1
+    },
+    {
+        /* .wStringId = */ 0x1d4,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheGuardian,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1d5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1d6,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1d7,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1d8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1d9,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1da,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1db,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1dc,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_UnknownDuplicate1,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_00726078, "D2SpeechBankStrc_ARRAY_00726078");
+// also labelled: gaNpcSpriteFrameData_726165
+D2SpeechBankStrc gaNpcSpeechBank_726130[9] = {
+    {
+        /* .wStringId = */ 0x1ea,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1eb,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0x1ec,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0x1ed,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1ee,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1ef,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1f0,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1f1,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1f2,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpeechBank_726130, "gaNpcSpeechBank_726130");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_007261b8[11] = {
+    {
+        /* .wStringId = */ 0x1f5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1f6,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x2
+    },
+    {
+        /* .wStringId = */ 0x1f7,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x2
+    },
+    {
+        /* .wStringId = */ 0x1f8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1f9,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1fa,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1fc,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1fd,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1fe,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1ff,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x200,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_007261b8, "D2SpeechBankStrc_ARRAY_007261b8");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_00726260[12] = {
+    {
+        /* .wStringId = */ 0x202,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x203,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x3
+    },
+    {
+        /* .wStringId = */ 0x204,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x3
+    },
+    {
+        /* .wStringId = */ 0x206,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x207,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x208,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x209,
+        /* .bQuestCondition = */ '\x01',
+        /* .nQuestCompleted = */ 0x0,
+        /* .eQuest = */ QUEST_TheGuardian,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x20a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x20b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x20c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x20d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x20e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_00726260, "D2SpeechBankStrc_ARRAY_00726260");
+D2SpeechBankStrc gaNpcSpriteFrameData_726314[3] = {
+    {
+        /* .wStringId = */ 0x298,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x298,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x299,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpriteFrameData_726314, "gaNpcSpriteFrameData_726314");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_00726344[3] = {
+    {
+        /* .wStringId = */ 0x29a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x29a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x29b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_00726344, "D2SpeechBankStrc_ARRAY_00726344");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_00726378[6] = {
+    {
+        /* .wStringId = */ 0x1c5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1c5,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1c6,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1c7,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1c8,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x1c9,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct4,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_00726378, "D2SpeechBankStrc_ARRAY_00726378");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_007263d8[12] = {
+    {
+        /* .wStringId = */ 0x4e23,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e23,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e24,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e25,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e26,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e27,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e28,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e29,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e2a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e2b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e2c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e2d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_007263d8, "D2SpeechBankStrc_ARRAY_007263d8");
+D2SpeechBankStrc gaNpcSpriteFrameData_726490[12] = {
+    {
+        /* .wStringId = */ 0x4e2e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e2e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e2f,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e30,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e31,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e32,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e33,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e34,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e35,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e36,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e37,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e38,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpriteFrameData_726490, "gaNpcSpriteFrameData_726490");
+// also labelled: gbyCharClassNameTableStart
+D2SpeechBankStrc gaNpcSpeechBank_726548[12] = {
+    {
+        /* .wStringId = */ 0x4e39,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e3a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0x4e3b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0x4e3c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x0
+    },
+    {
+        /* .wStringId = */ 0x4e3d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e3e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e3f,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e40,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e41,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e42,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e43,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e44,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    }
+}; D2_GLOBAL_GUARD(gaNpcSpeechBank_726548, "gaNpcSpeechBank_726548");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_00726600[16] = {
+    {
+        /* .wStringId = */ 0x4e45,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e46,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x1
+    },
+    {
+        /* .wStringId = */ 0x4e48,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x1
+    },
+    {
+        /* .wStringId = */ 0x4e49,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x4
+    },
+    {
+        /* .wStringId = */ 0x4e4a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e4b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e4c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e4d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e4e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e4f,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e50,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e51,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e52,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e53,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e54,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e47,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x4
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_00726600, "D2SpeechBankStrc_ARRAY_00726600");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_007266f0[12] = {
+    {
+        /* .wStringId = */ 0x4e55,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e56,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x6
+    },
+    {
+        /* .wStringId = */ 0x4e58,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x6
+    },
+    {
+        /* .wStringId = */ 0x4e59,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x2
+    },
+    {
+        /* .wStringId = */ 0x4e5a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e5b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e5c,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e5d,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e5e,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e5f,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e60,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e57,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x2
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_007266f0, "D2SpeechBankStrc_ARRAY_007266f0");
+D2SpeechBankStrc D2SpeechBankStrc_ARRAY_007267a8[11] = {
+    {
+        /* .wStringId = */ 0x4e61,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e63,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x5
+    },
+    {
+        /* .wStringId = */ 0x4e64,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x3
+    },
+    {
+        /* .wStringId = */ 0x4e65,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x5
+    },
+    {
+        /* .wStringId = */ 0x4e66,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e67,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e68,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e69,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e6a,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e6b,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x7
+    },
+    {
+        /* .wStringId = */ 0x4e62,
+        /* .bQuestCondition = */ '\x00',
+        /* .nQuestCompleted = */ 0x1,
+        /* .eQuest = */ QUEST_AbleGoToAct5,
+        /* .nPlayerClass = */ 0x3
+    }
+}; D2_GLOBAL_GUARD(D2SpeechBankStrc_ARRAY_007267a8, "D2SpeechBankStrc_ARRAY_007267a8");
+D2NPCSpeechStrc D2NPCSpeech[46] = {
+    {
+        /* .nNpcID = */ 0x94,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcDialogOptionData_725860,
+        /* .nCount = */ 0xd,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x9a,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcDialogOptionData_7257d8,
+        /* .nCount = */ 0x9,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x92,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcDialogOptionData_725680,
+        /* .nCount = */ 0x7,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ true,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x93,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcDialogOptionData_7255f8,
+        /* .nCount = */ 0x9,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x96,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcSpeechData_725498,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x9b,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcSpeechBank_725550,
+        /* .nCount = */ 0xb,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ true,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x14b,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcSpeechBank_725550,
+        /* .nCount = */ 0x0,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x10a,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcSpeechBank_725550,
+        /* .nCount = */ 0x0,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x198,
+        /* .nAct = */ 0x3,
+        /* .pBank = */ gaNpcSpeechBank_725550,
+        /* .nCount = */ 0x0,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xaf,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcDialogOptionData_725f60,
+        /* .nCount = */ 0x7,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ true,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xb0,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcDialogOptionData_725928,
+        /* .nCount = */ 0xa,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ true,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xb1,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcDialogOptionData_7259c0,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xc7,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcDialogOptionData_725b50,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xc8,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcDialogOptionData_725c08,
+        /* .nCount = */ 0xb,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xc6,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcDialogOptionData_725a78,
+        /* .nCount = */ 0xe,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xc9,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcSpeechBank_725cb0,
+        /* .nCount = */ 0xa,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xca,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcSpriteFrameData_725d48,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xb2,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcSpriteFrameData_725e00,
+        /* .nCount = */ 0xb,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xd2,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcDialogOptionData_725ea8,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ true,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x109,
+        /* .nAct = */ 0x0,
+        /* .pBank = */ gaNpcDialogOptionData_725680,
+        /* .nCount = */ 0x7,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ true,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xf4,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcDialogOptionData_7256f0,
+        /* .nCount = */ 0x7,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ true,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xf5,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ gaNpcDialogOptionData_725760,
+        /* .nCount = */ 0x8,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xf6,
+        /* .nAct = */ 0x3,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_00726344,
+        /* .nCount = */ 0x3,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xfb,
+        /* .nAct = */ 0x1,
+        /* .pBank = */ gaNpcSpriteFrameData_726314,
+        /* .nCount = */ 0x3,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xfc,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ gaNpcSpeechBank_726130,
+        /* .nCount = */ 0x9,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xfd,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_00726078,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xfe,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_007261b8,
+        /* .nCount = */ 0xb,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0xff,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_00726260,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x196,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ gaNpcSpriteFrameData_725e00,
+        /* .nCount = */ 0xb,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x101,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ gaNpcSpriteFrameData_725e00,
+        /* .nCount = */ 0xb,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x108,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ gaNpcDialogOptionData_725fd0,
+        /* .nCount = */ 0xb,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x129,
+        /* .nAct = */ 0x2,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_00726378,
+        /* .nCount = */ 0x6,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x16f,
+        /* .nAct = */ 0x3,
+        /* .pBank = */ gaNpcSpriteFrameData_726314,
+        /* .nCount = */ 0x3,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ true,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x195,
+        /* .nAct = */ 0x3,
+        /* .pBank = */ gaNpcSpriteFrameData_726314,
+        /* .nCount = */ 0x3,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x101,
+        /* .nAct = */ 0x3,
+        /* .pBank = */ gaNpcSpriteFrameData_726314,
+        /* .nCount = */ 0x3,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x1ff,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ gaNpcSpeechBank_726548,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x200,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ gaNpcSpriteFrameData_726490,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x201,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_00726600,
+        /* .nCount = */ 0x10,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x202,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_007266f0,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x203,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_007267a8,
+        /* .nCount = */ 0xb,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x209,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ gaNpcSpriteFrameData_726314,
+        /* .nCount = */ 0x3,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ true,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x208,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ D2SpeechBankStrc_ARRAY_007263d8,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x20f,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ gaNpcSpriteFrameData_726490,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x219,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ gaNpcSpriteFrameData_726490,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x21a,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ gaNpcSpriteFrameData_726490,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    },
+    {
+        /* .nNpcID = */ 0x21b,
+        /* .nAct = */ 0x4,
+        /* .pBank = */ gaNpcSpriteFrameData_726490,
+        /* .nCount = */ 0xc,
+        /* .nGossip = */ 0x0,
+        /* .field5_0x11 = */ false,
+        /* .bUpdated = */ '\x00',
+        /* .bActPortal = */ false,
+        /* .bNoIntro = */ false,
+        /* .bGreeting = */ '\x01'
+    }
+}; D2_GLOBAL_GUARD(D2NPCSpeech, "D2NPCSpeech");
+namespace D2Client::NPC {
+struct D2NpcMenuOptions D2NpcMenuOptions[48] = {
+    {
+        /* .nNpcId = */ 0x94,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xb0,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x92,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x0
+    },
+    {
+        /* .nNpcId = */ 0x9a,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd06, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xb1,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xc7,
+        /* .nOptionsCount = */ 0x4,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0xd46, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, &D2Client::UI::npcmenu::NPCMENU_OpenNpcShop, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xc8,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x93,
+        /* .nOptionsCount = */ 0x4,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0xd46, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, &D2Client::UI::npcmenu::NPCMENU_OpenNpcShop, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xc6,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd45, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_BuildMercHireMenu, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xc9,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xca,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x96,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xb2,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd06, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x9b,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xaf,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd37, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_WarrivGoWestOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xd2,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xf4,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xfb4, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_CainIdentifyOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x109,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xfb4, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_CainIdentifyOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xf5,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xfb4, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_CainIdentifyOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xf6,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xfb4, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_CainIdentifyOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xfb,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x0
+    },
+    {
+        /* .nNpcId = */ 0x16f,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x101,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd06, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x195,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd44, 0xd46, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, &D2Client::UI::npcmenu::NPCMENU_OpenNpcShop, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xfc,
+        /* .nOptionsCount = */ 0x4,
+        /* .nOptionStringId = */ { 0xd35, 0xd45, 0xd44, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_BuildMercHireMenu, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xfd,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd06, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xfe,
+        /* .nOptionsCount = */ 0x4,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0xd46, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, &D2Client::UI::npcmenu::NPCMENU_OpenNpcShop, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0xff,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x196,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x101,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x108,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd39, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_MeshifSailWestOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x129,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x10a,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x14b,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x198,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x17a,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x179,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x209,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x208,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xfb4, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_CainIdentifyOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x1ff,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd06, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x201,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x200,
+        /* .nOptionsCount = */ 0x4,
+        /* .nOptionStringId = */ { 0xd35, 0xd44, 0xd46, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_TradeOptionCallback, &D2Client::UI::npcmenu::NPCMENU_OpenNpcShop, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x202,
+        /* .nOptionsCount = */ 0x3,
+        /* .nOptionStringId = */ { 0xd35, 0xd46, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, &D2Client::UI::npcmenu::NPCMENU_OpenNpcShop, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x203,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x1
+    },
+    {
+        /* .nNpcId = */ 0x20f,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x0
+    },
+    {
+        /* .nNpcId = */ 0x219,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x0
+    },
+    {
+        /* .nNpcId = */ 0x21a,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x0
+    },
+    {
+        /* .nNpcId = */ 0x21b,
+        /* .nOptionsCount = */ 0x2,
+        /* .nOptionStringId = */ { 0xd35, 0x0, 0x0, 0x0, 0x0 },
+        /* .nOptionCallback = */ { &D2Client::UI::npcmenu::NPCMENU_TalkOptionCallback, nullptr, nullptr, nullptr, nullptr },
+        /* .bEnabled = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(D2NpcMenuOptions, "D2Client::NPC::D2NpcMenuOptions");
+} // namespace D2Client::NPC
 static short gnNpcMenuQuestIdTable[256] = {
     0x0,
     0x1,
@@ -357,6 +3631,70 @@ static short gnNpcMenuQuestIdTable[256] = {
     0xde,
     0x9f
 }; D2_STATIC_GUARD(gnNpcMenuQuestIdTable, "gnNpcMenuQuestIdTable");
+static uint8_t gbNpcMenuRandomDialogSeed = 0; D2_STATIC_GUARD(gbNpcMenuRandomDialogSeed, "gbNpcMenuRandomDialogSeed");
+namespace D2Client::_Interaction {
+// also labelled: nUnknownUiRelatedMaybe
+eD2NpcUiState geNpcUiState = 0; D2_GLOBAL_GUARD(geNpcUiState, "D2Client::_Interaction::geNpcUiState");
+} // namespace D2Client::_Interaction
+static int PLAYER_CurrentGold = 0; D2_STATIC_GUARD(PLAYER_CurrentGold, "PLAYER_CurrentGold");
+uint16_t gnNpcMenuRepairCostGold = 0; D2_GLOBAL_GUARD(gnNpcMenuRepairCostGold, "gnNpcMenuRepairCostGold");
+int16_t gnNpcMenuTradeActionGold = 0; D2_GLOBAL_GUARD(gnNpcMenuTradeActionGold, "gnNpcMenuTradeActionGold");
+static uint16_t gnNpcMenuScrollCompleteMode = 0; D2_STATIC_GUARD(gnNpcMenuScrollCompleteMode, "gnNpcMenuScrollCompleteMode");
+// also labelled: g_nNpcTradeMenuState
+static D2NPCSpeechStrc * gpNpcCurrentSpeech = 0; D2_STATIC_GUARD(gpNpcCurrentSpeech, "gpNpcCurrentSpeech");
+static uint32_t gnNpcMenuCainIdentifyGUID = 0; D2_STATIC_GUARD(gnNpcMenuCainIdentifyGUID, "gnNpcMenuCainIdentifyGUID");
+namespace D2Client::Merc {
+struct D2MercForHire D2MercForHire[10] = {}; D2_GLOBAL_GUARD(D2MercForHire, "D2Client::Merc::D2MercForHire");
+} // namespace D2Client::Merc
+namespace D2Client::_Interaction {
+int nCurrentInteractedNpcGUID = 0; D2_GLOBAL_GUARD(nCurrentInteractedNpcGUID, "D2Client::_Interaction::nCurrentInteractedNpcGUID");
+BOOL bInteractingWithNpc = 0; D2_GLOBAL_GUARD(bInteractingWithNpc, "D2Client::_Interaction::bInteractingWithNpc");
+int nCurrentInteractedNpcClassId = 0; D2_GLOBAL_GUARD(nCurrentInteractedNpcClassId, "D2Client::_Interaction::nCurrentInteractedNpcClassId");
+} // namespace D2Client::_Interaction
+uint32_t gnNpcMenuTransactionType = 0; D2_GLOBAL_GUARD(gnNpcMenuTransactionType, "gnNpcMenuTransactionType");
+static uint32_t gnNpcMenuPreviousGold = 0; D2_STATIC_GUARD(gnNpcMenuPreviousGold, "gnNpcMenuPreviousGold");
+D2BitBufferStrc * gpNpcMenuBitBuffer = 0; D2_GLOBAL_GUARD(gpNpcMenuBitBuffer, "gpNpcMenuBitBuffer");
+D2BitBufferStrc * gpNpcMenuDialogOptions = 0; D2_GLOBAL_GUARD(gpNpcMenuDialogOptions, "gpNpcMenuDialogOptions");
+static uint32_t gnNpcMenuCurrentNpcClassId = 0; D2_STATIC_GUARD(gnNpcMenuCurrentNpcClassId, "gnNpcMenuCurrentNpcClassId");
+static uint32_t gnNpcMenuCurrentNpcGUID = 0; D2_STATIC_GUARD(gnNpcMenuCurrentNpcGUID, "gnNpcMenuCurrentNpcGUID");
+static uint32_t gnNpcMenuLastTransactionGold = 0; D2_STATIC_GUARD(gnNpcMenuLastTransactionGold, "gnNpcMenuLastTransactionGold");
+namespace D2Client::UI::Dialog {
+D2DialogStrc * gpNpcTransactionConfirmDialog = 0; D2_GLOBAL_GUARD(gpNpcTransactionConfirmDialog, "D2Client::UI::Dialog::gpNpcTransactionConfirmDialog");
+D2DialogStrc * gpNpcTradeErrorDialog = 0; D2_GLOBAL_GUARD(gpNpcTradeErrorDialog, "D2Client::UI::Dialog::gpNpcTradeErrorDialog");
+// also labelled: gpNpcHireMercDialog
+D2DialogStrc * gpNpcTransactionWaitDialog = 0; D2_GLOBAL_GUARD(gpNpcTransactionWaitDialog, "D2Client::UI::Dialog::gpNpcTransactionWaitDialog");
+D2DialogStrc * gpNpcInteractionDialog = 0; D2_GLOBAL_GUARD(gpNpcInteractionDialog, "D2Client::UI::Dialog::gpNpcInteractionDialog");
+D2DialogStrc * gpNpcGossipDialog = 0; D2_GLOBAL_GUARD(gpNpcGossipDialog, "D2Client::UI::Dialog::gpNpcGossipDialog");
+// also labelled: gpNpcRepairDialog
+D2DialogStrc * gpNpcActionConfirmDialog = 0; D2_GLOBAL_GUARD(gpNpcActionConfirmDialog, "D2Client::UI::Dialog::gpNpcActionConfirmDialog");
+D2DialogStrc * gpNpcMercListDialog = 0; D2_GLOBAL_GUARD(gpNpcMercListDialog, "D2Client::UI::Dialog::gpNpcMercListDialog");
+D2DialogStrc * gpNpcMainMenuDialog = 0; D2_GLOBAL_GUARD(gpNpcMainMenuDialog, "D2Client::UI::Dialog::gpNpcMainMenuDialog");
+} // namespace D2Client::UI::Dialog
+static uint32_t nTransactionCost = 0; D2_STATIC_GUARD(nTransactionCost, "nTransactionCost");
+ListBoxWrapper * gpNpcMenuMercListBox = 0; D2_GLOBAL_GUARD(gpNpcMenuMercListBox, "gpNpcMenuMercListBox");
+static D2GSPacketSrv0x2A D2GSPacketSrv0x2A_007c0d87 = {}; D2_STATIC_GUARD(D2GSPacketSrv0x2A_007c0d87, "D2GSPacketSrv0x2A_007c0d87");
+static uint32_t gnNpcMenuActiveContainer = 0; D2_STATIC_GUARD(gnNpcMenuActiveContainer, "gnNpcMenuActiveContainer");
+static short gaNpcMenuHandledMessageIds[9] = {}; D2_STATIC_GUARD(gaNpcMenuHandledMessageIds, "gaNpcMenuHandledMessageIds");
+uint16_t gnNpcMenuScrollMessageHead = 0; D2_GLOBAL_GUARD(gnNpcMenuScrollMessageHead, "gnNpcMenuScrollMessageHead");
+uint32_t gnNpcMenuShopMode = 0; D2_GLOBAL_GUARD(gnNpcMenuShopMode, "gnNpcMenuShopMode");
+static uint32_t gnNpcMenuNpcSoundIndex = 0; D2_STATIC_GUARD(gnNpcMenuNpcSoundIndex, "gnNpcMenuNpcSoundIndex");
+static uint32_t gnNpcMenuNpcClassId = 0; D2_STATIC_GUARD(gnNpcMenuNpcClassId, "gnNpcMenuNpcClassId");
+static uint32_t gnNpcMenuDialogX = 0; D2_STATIC_GUARD(gnNpcMenuDialogX, "gnNpcMenuDialogX");
+static uint32_t gnNpcMenuDialogY = 0; D2_STATIC_GUARD(gnNpcMenuDialogY, "gnNpcMenuDialogY");
+DC6 * gpNpcMenuShopInventoryDC6 = 0; D2_GLOBAL_GUARD(gpNpcMenuShopInventoryDC6, "gpNpcMenuShopInventoryDC6");
+static DC6 * gpNpcMenuShopInventoryBuffer = 0; D2_STATIC_GUARD(gpNpcMenuShopInventoryBuffer, "gpNpcMenuShopInventoryBuffer");
+namespace D2Client::Merc {
+int nMercReviveCost = 0; D2_GLOBAL_GUARD(nMercReviveCost, "D2Client::Merc::nMercReviveCost");
+} // namespace D2Client::Merc
+static D2UnitStrc * gpNpcShopOwnerUnit = 0; D2_STATIC_GUARD(gpNpcShopOwnerUnit, "gpNpcShopOwnerUnit");
+static short gbNpcMenuShopOpened = 0; D2_STATIC_GUARD(gbNpcMenuShopOpened, "gbNpcMenuShopOpened");
+uint8_t gbNpcMenuTransactionPending = 0; D2_GLOBAL_GUARD(gbNpcMenuTransactionPending, "gbNpcMenuTransactionPending");
+static BOOL gbNpcMenuTransactionConfirmed = 0; D2_STATIC_GUARD(gbNpcMenuTransactionConfirmed, "gbNpcMenuTransactionConfirmed");
+uint32_t gnNpcMenuTransactionItemGUID = 0; D2_GLOBAL_GUARD(gnNpcMenuTransactionItemGUID, "gnNpcMenuTransactionItemGUID");
+static unsigned int gbNpcMenuShopTransactionActive = {}; D2_STATIC_GUARD(gbNpcMenuShopTransactionActive, "gbNpcMenuShopTransactionActive");
+static uint32_t gnNpcMenuShopTransactionCost = 0; D2_STATIC_GUARD(gnNpcMenuShopTransactionCost, "gnNpcMenuShopTransactionCost");
+static unsigned int gdwNpcMenuLastClickTimestamp = {}; D2_STATIC_GUARD(gdwNpcMenuLastClickTimestamp, "gdwNpcMenuLastClickTimestamp");
+static uint16_t gNpcMenuConfirmDialogStrings[40] = {}; D2_STATIC_GUARD(gNpcMenuConfirmDialogStrings, "gNpcMenuConfirmDialogStrings");
 
 namespace D2Client::UI::npcmenu {
 

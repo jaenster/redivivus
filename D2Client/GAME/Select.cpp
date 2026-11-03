@@ -53,6 +53,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
+#include "D2Client/GAME/Select.data.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/D2DynamicPathStrc.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -72,6 +73,22 @@ typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pCon
 
 static uint32_t gnSelectConstant13_X = 0x13; D2_STATIC_GUARD(gnSelectConstant13_X, "gnSelectConstant13_X");
 static uint32_t gnSelectConstant13_Y = 0x13; D2_STATIC_GUARD(gnSelectConstant13_Y, "gnSelectConstant13_Y");
+namespace D2Client::_Selection {
+int nSelectedUnitGUID = 0; D2_GLOBAL_GUARD(nSelectedUnitGUID, "D2Client::_Selection::nSelectedUnitGUID");
+} // namespace D2Client::_Selection
+static int gnSelectExclusionRectLeft = 0; D2_STATIC_GUARD(gnSelectExclusionRectLeft, "gnSelectExclusionRectLeft");
+static int gnSelectExclusionRectTop = 0; D2_STATIC_GUARD(gnSelectExclusionRectTop, "gnSelectExclusionRectTop");
+static int gnSelectExclusionRectRight = 0; D2_STATIC_GUARD(gnSelectExclusionRectRight, "gnSelectExclusionRectRight");
+static int gnSelectExclusionRectBottom = 0; D2_STATIC_GUARD(gnSelectExclusionRectBottom, "gnSelectExclusionRectBottom");
+namespace D2Client::_Selection {
+eD2UnitType eSelectedUnitType = 0; D2_GLOBAL_GUARD(eSelectedUnitType, "D2Client::_Selection::eSelectedUnitType");
+} // namespace D2Client::_Selection
+uint32_t gbSuppressItemSelection = 0; D2_GLOBAL_GUARD(gbSuppressItemSelection, "gbSuppressItemSelection");
+namespace D2Client::_Selection {
+BOOL bHasSelectedUnit = 0; D2_GLOBAL_GUARD(bHasSelectedUnit, "D2Client::_Selection::bHasSelectedUnit");
+BOOL bCanSelectUnit = 0; D2_GLOBAL_GUARD(bCanSelectUnit, "D2Client::_Selection::bCanSelectUnit");
+} // namespace D2Client::_Selection
+static uint32_t gbSelectExclusionActive = 0; D2_STATIC_GUARD(gbSelectExclusionActive, "gbSelectExclusionActive");
 
 namespace D2Client::GAME::Select {
 

@@ -17,6 +17,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "support/d2_trace.h"
+#include "D2Launch/MainMenus.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

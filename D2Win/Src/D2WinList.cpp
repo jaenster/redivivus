@@ -18,6 +18,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Win/D2WinList.h"
+#include "D2Win/Src/D2WinList.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -50,6 +51,8 @@ typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 #define RECON_FPTD_Draw
 typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 #endif
+
+DC6 * gpPentSpinCursorDC6 = 0; D2_GLOBAL_GUARD(gpPentSpinCursorDC6, "gpPentSpinCursorDC6");
 
 namespace D2Win::Src::D2WinList {
 

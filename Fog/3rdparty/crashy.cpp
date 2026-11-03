@@ -8,6 +8,8 @@
 #include "globals/globals.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "Fog/3rdparty/crashy/Report.h"
+#include "Fog/Debug.data.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

@@ -47,6 +47,8 @@
 #include "D2Win/D2WinProgressBar.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/D2WinTimer.h"
+#include "D2Win/Src/D2WinMain.data.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -75,6 +77,210 @@ typedef void (__stdcall *fpD2WinAnimImageNotify)(void * pNotify);
 #define RECON_FPTD_pfnFramePump
 typedef int (__stdcall *pfnFramePump)(int nFrameIndex);
 #endif
+
+static uint32_t gbCursorVisible = 0x1; D2_STATIC_GUARD(gbCursorVisible, "gbCursorVisible");
+static uint32_t gbWindowIsActive = 0x1; D2_STATIC_GUARD(gbWindowIsActive, "gbWindowIsActive");
+D2WinWndHandlerStrc gaUIWindowHandlers[33] = {
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x200,
+        /* .pfnCallback = */ (D2WinWndHandlerFn)&D2Win::Src::D2WinMain::MOUSE_CaptureMousePosition
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0xa0,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_HandleCursorHide
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x2a3,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_HandleMouseLeave
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x201,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormMouseHandler
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x202,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormMouseHandler
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x204,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormMouseHandler
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x205,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormMouseHandler
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x102,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x8,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x25,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x27,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x24,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x23,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x2e,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x26,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x28,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x21,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x22,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0xd,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x52,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x4e,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x48,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x1b,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormTabKey
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x9,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x20,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x11,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormActivate
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x70,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormKeyUpHandler
+    },
+    {
+        /* .nType = */ 0x3,
+        /* .nMessage = */ 0x4d,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_ToggleMusicOptions
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x1c,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_HandleActivation
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x112,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_HandleSystemCommand
+    },
+    {
+        /* .nType = */ 0x2,
+        /* .nMessage = */ 0x2c,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::D2WIN_TakeScreenshotMsgHandler
+    },
+    {
+        /* .nType = */ 0x2,
+        /* .nMessage = */ 0x11,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormDeactivate
+    },
+    {
+        /* .nType = */ 0x0,
+        /* .nMessage = */ 0x20a,
+        /* .pfnCallback = */ &D2Win::Src::D2WinMain::INPUT_FormMouseWheel
+    }
+}; D2_GLOBAL_GUARD(gaUIWindowHandlers, "gaUIWindowHandlers");
+static uint32_t gbMessageLoopActive = 0x1; D2_STATIC_GUARD(gbMessageLoopActive, "gbMessageLoopActive");
+eD2RendererMode D2GFX_eRendererMode = 0; D2_GLOBAL_GUARD(D2GFX_eRendererMode, "D2GFX_eRendererMode");
+static DC6 * gpCursorDC6 = 0; D2_STATIC_GUARD(gpCursorDC6, "gpCursorDC6");
+uint32_t gnCursorDC6FrameNumber = 0; D2_GLOBAL_GUARD(gnCursorDC6FrameNumber, "gnCursorDC6FrameNumber");
+namespace D2Client::Mouse {
+int nPosX = 0; D2_GLOBAL_GUARD(nPosX, "D2Client::Mouse::nPosX");
+int nPosY = 0; D2_GLOBAL_GUARD(nPosY, "D2Client::Mouse::nPosY");
+} // namespace D2Client::Mouse
+HWND ghwndD2GFX_CachedWindow = 0; D2_GLOBAL_GUARD(ghwndD2GFX_CachedWindow, "ghwndD2GFX_CachedWindow");
+uint32_t gnWindowInitState = 0; D2_GLOBAL_GUARD(gnWindowInitState, "gnWindowInitState");
+BOOL gbWindowed = 0; D2_GLOBAL_GUARD(gbWindowed, "gbWindowed");
+int gnResolutionMode = 0; D2_GLOBAL_GUARD(gnResolutionMode, "gnResolutionMode");
+namespace D2Client::Forms {
+D2ControlStrc * pFormsList = 0; D2_GLOBAL_GUARD(pFormsList, "D2Client::Forms::pFormsList");
+D2ControlStrc * pFormUnknown = 0; D2_GLOBAL_GUARD(pFormUnknown, "D2Client::Forms::pFormUnknown");
+} // namespace D2Client::Forms
+int gnFormControlCount = 0; D2_GLOBAL_GUARD(gnFormControlCount, "gnFormControlCount");
+namespace D2Client::Forms {
+D2ControlStrc * pFormSecond = 0; D2_GLOBAL_GUARD(pFormSecond, "D2Client::Forms::pFormSecond");
+D2WinEditBox * pFormTextAndEditBox = 0; D2_GLOBAL_GUARD(pFormTextAndEditBox, "D2Client::Forms::pFormTextAndEditBox");
+D2ControlStrc * pFormFourth = 0; D2_GLOBAL_GUARD(pFormFourth, "D2Client::Forms::pFormFourth");
+D2ControlStrc * pFormImage = 0; D2_GLOBAL_GUARD(pFormImage, "D2Client::Forms::pFormImage");
+} // namespace D2Client::Forms
+namespace D2Client::GAME::Record {
+WndProcB pWndProcB = (::WndProcB)0; D2_GLOBAL_GUARD(pWndProcB, "D2Client::GAME::Record::pWndProcB");
+} // namespace D2Client::GAME::Record
+uint32_t gbGfxWindowCreated = 0; D2_GLOBAL_GUARD(gbGfxWindowCreated, "gbGfxWindowCreated");
+static uint32_t gnWinMainState = 0; D2_STATIC_GUARD(gnWinMainState, "gnWinMainState");
+static uint32_t gbFormActivated = 0; D2_STATIC_GUARD(gbFormActivated, "gbFormActivated");
+uint32_t gnInitialFormState = 0; D2_GLOBAL_GUARD(gnInitialFormState, "gnInitialFormState");
+pfnVoidNoArgCallback gpfnExitCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(gpfnExitCallback, "gpfnExitCallback");
+static uint32_t gbMouseInWindow = 0; D2_STATIC_GUARD(gbMouseInWindow, "gbMouseInWindow");
+static uint32_t ghwndMsgHook = 0; D2_STATIC_GUARD(ghwndMsgHook, "ghwndMsgHook");
+static unsigned int gdwLastScreenshotTick = {}; D2_STATIC_GUARD(gdwLastScreenshotTick, "gdwLastScreenshotTick");
 
 namespace D2Win::Src::D2WinMain {
 

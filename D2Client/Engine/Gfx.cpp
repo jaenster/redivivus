@@ -72,6 +72,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/PATH/DynamicPath.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -124,6 +125,14 @@ static uint32_t gaMonsterModePrecacheEntries[15] = {
     0xb
 }; D2_STATIC_GUARD(gaMonsterModePrecacheEntries, "gaMonsterModePrecacheEntries");
 static uint32_t gnMonsterModePrecacheCount = 0xf; D2_STATIC_GUARD(gnMonsterModePrecacheCount, "gnMonsterModePrecacheCount");
+static D2ClientSpriteLoadStatusStrc gaSpriteLoadStatusTable[7] = {}; D2_STATIC_GUARD(gaSpriteLoadStatusTable, "gaSpriteLoadStatusTable");
+static D2CofCacheStrc gMonsterCofCache = {}; D2_STATIC_GUARD(gMonsterCofCache, "gMonsterCofCache");
+D2MonsterCofStatusEntryStrc * g_pMonsterSpriteCofStatusTable = 0; D2_GLOBAL_GUARD(g_pMonsterSpriteCofStatusTable, "g_pMonsterSpriteCofStatusTable");
+static D2CofCacheStrc gPlayerCofCache = {}; D2_STATIC_GUARD(gPlayerCofCache, "gPlayerCofCache");
+static int gnGfxThrottleUpdateFrame = 0; D2_STATIC_GUARD(gnGfxThrottleUpdateFrame, "gnGfxThrottleUpdateFrame");
+static uint32_t gbCofCacheLRUEnabled = 0; D2_STATIC_GUARD(gbCofCacheLRUEnabled, "gbCofCacheLRUEnabled");
+static int gnGfxSystemFlags = 0; D2_STATIC_GUARD(gnGfxSystemFlags, "gnGfxSystemFlags");
+static int gnGfxThrottleUpdateFrameCountDynamic = 0; D2_STATIC_GUARD(gnGfxThrottleUpdateFrameCountDynamic, "gnGfxThrottleUpdateFrameCountDynamic");
 
 namespace D2Client::Engine::Gfx {
 

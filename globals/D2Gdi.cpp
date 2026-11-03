@@ -16,10 +16,6 @@ namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
 
-namespace Fog::Src::Excel {
-
-} // namespace Fog::Src::Excel
-
 namespace D2Client::Warden::NWardenClient {
 
 } // namespace D2Client::Warden::NWardenClient
@@ -56,10 +52,6 @@ namespace D2Client::UI::Spinner::SpinnerWrapper {
 
 } // namespace D2Client::UI::Spinner::SpinnerWrapper
 
-namespace D2Client::UNIT::Object {
-
-} // namespace D2Client::UNIT::Object
-
 namespace D2Client::UI::ListBox::ListBoxWrapper {
 
 } // namespace D2Client::UI::ListBox::ListBoxWrapper
@@ -67,10 +59,6 @@ namespace D2Client::UI::ListBox::ListBoxWrapper {
 namespace D2Client::UI::ListBox::ListBoxImplementation {
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation
-
-namespace D2Win::_FONT {
-
-} // namespace D2Win::_FONT
 
 namespace D2Game::GAME::Event::Dispatch {
 
@@ -135,30 +123,6 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
-
-namespace D2Client::UI::Automap {
-
-} // namespace D2Client::UI::Automap
-
-namespace D2Game::GAME::Rendering {
-
-} // namespace D2Game::GAME::Rendering
-
-namespace D2Client::UI::Help {
-
-} // namespace D2Client::UI::Help
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::NPC {
-
-} // namespace D2Client::NPC
-
-namespace D2Client::UNIT::UnitSnd {
-
-} // namespace D2Client::UNIT::UnitSnd
 
 namespace D2Client::UI::ui {
 
@@ -268,10 +232,6 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
-namespace D2Common::Monsters::MONSTERS::Umod {
-
-} // namespace D2Common::Monsters::MONSTERS::Umod
-
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -324,110 +284,14 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
-namespace D2Client::Waypoint {
-
-} // namespace D2Client::Waypoint
-
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
-
-namespace Fog::Memory {
-
-} // namespace Fog::Memory
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace D2Client::MCP {
-
-} // namespace D2Client::MCP
-
-namespace D2Client::Bnet {
-
-} // namespace D2Client::Bnet
-
-namespace D2Game::Save {
-
-} // namespace D2Game::Save
-
-namespace D2Game::GameData {
-
-} // namespace D2Game::GameData
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
 
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::_Selection {
-
-} // namespace D2Client::_Selection
-
-namespace D2Client::Cursor {
-
-} // namespace D2Client::Cursor
-
-namespace D2Client::Draw::Weather {
-
-} // namespace D2Client::Draw::Weather
-
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
-
-namespace D2Client::GAME::View {
-
-} // namespace D2Client::GAME::View
-
-namespace D2Client::GAME::RosterPets {
-
-} // namespace D2Client::GAME::RosterPets
-
-namespace D2Client::GAME::Roster {
-
-} // namespace D2Client::GAME::Roster
-
-namespace D2Client::UI::Inv {
-
-} // namespace D2Client::UI::Inv
-
-namespace D2Client::UI::Hireables {
-
-} // namespace D2Client::UI::Hireables
-
-namespace D2Client::UI::Panel {
-
-} // namespace D2Client::UI::Panel
-
-namespace D2Client::UI::Party {
-
-} // namespace D2Client::UI::Party
-
-namespace D2Client::_Interaction {
-
-} // namespace D2Client::_Interaction
-
-namespace D2Client::Merc {
-
-} // namespace D2Client::Merc
-
-namespace D2Client::Mouse {
-
-} // namespace D2Client::Mouse
-
-namespace D2Client::Forms {
-
-} // namespace D2Client::Forms
-
-namespace D2Client::_CdKey {
-
-} // namespace D2Client::_CdKey
-
-namespace D2Direct3D::Renderer {
-
-} // namespace D2Direct3D::Renderer

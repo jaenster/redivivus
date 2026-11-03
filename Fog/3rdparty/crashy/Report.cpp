@@ -5,6 +5,7 @@
 #include "Fog/Engine/Application.h"
 #include "Fog/File.h"
 #include "globals/globals.h"
+#include "Fog/Debug.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

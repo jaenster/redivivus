@@ -40,7 +40,11 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Multi/ChatDlg.data.h"
+#include "D2Multi/ComCallback.data.h"
+#include "D2Multi/Launcher.data.h"
 #include "D2Multi/OOG.h"
+#include "D2Multi/OOGUtilities.data.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
@@ -105,6 +109,8 @@ static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e980 = {
 static char gszOogLevelRestrictionText[4] = { '4', '\x00', '\x00', '\x00' }; D2_STATIC_GUARD(gszOogLevelRestrictionText, "gszOogLevelRestrictionText");
 static char gszOogMaxPlayersText[4] = { '4', '\x00', '\x00', '\x00' }; D2_STATIC_GUARD(gszOogMaxPlayersText, "gszOogMaxPlayersText");
 static int32_t gnPendingGameInfoCharIndex = -0x1; D2_STATIC_GUARD(gnPendingGameInfoCharIndex, "gnPendingGameInfoCharIndex");
+char gszOogChatInputBuffer[512] = {}; D2_GLOBAL_GUARD(gszOogChatInputBuffer, "gszOogChatInputBuffer");
+char gszOogReplyCommandBuffer[256] = {}; D2_GLOBAL_GUARD(gszOogReplyCommandBuffer, "gszOogReplyCommandBuffer");
 static uint16_t gwLastGameInfoRequestId = 0; D2_STATIC_GUARD(gwLastGameInfoRequestId, "gwLastGameInfoRequestId");
 
 namespace D2Multi::OOGUtilities {

@@ -14,6 +14,7 @@
 #include "D2Client/UI/Spinner/SpinnerImplementation.h"
 #include "D2Client/UI/UIWidget.h"
 #include "Fog/Debug.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

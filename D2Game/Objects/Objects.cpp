@@ -59,6 +59,7 @@
 #include "D2Client/UNIT/CUnit.h"
 #include "D2Common/Chat.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2Game/Objects/Objects.data.h"
 #include "D2Game/Quests/QUESTS.h"
 #include "D2Game/Quests/QUESTS/A1Q4.h"
 #include "D2Game/Quests/QUESTS/A1Q5.h"
@@ -102,6 +103,123 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TimerArgStrc) == 0x8, "D2_NEW_AT(
 #define RECON_FPTD_pfnObjectPlaceTestCallback
 typedef uint32_t (__fastcall *pfnObjectPlaceTestCallback)(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY);
 #endif
+
+static int gnDirectionXOffsets[8] = { -0x1, 0x0, 0x1, -0x1, 0x1, -0x1, 0x0, 0x1 }; D2_STATIC_GUARD(gnDirectionXOffsets, "gnDirectionXOffsets");
+static int gnDirectionYOffsets[8] = { -0x1, -0x1, -0x1, 0x0, 0x0, 0x1, 0x1, 0x1 }; D2_STATIC_GUARD(gnDirectionYOffsets, "gnDirectionYOffsets");
+static D2ObjectPopulateFnFunc OBJECTSPOPULATEFN[10] = {
+    nullptr,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn1,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn2_WaypointShrine,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn3,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn4,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn5_Crate,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn6_Corpse,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn7_CorpseOnStick,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn8,
+    (D2ObjectPopulateFnFunc)&D2Game::Objects::Objects_PopulateFn9_TrappedSoul
+}; D2_STATIC_GUARD(OBJECTSPOPULATEFN, "OBJECTSPOPULATEFN");
+static int gaObjectSpawnChanceTbl[5] = { 0x4, 0x9, 0x34, 0x5e, 0x5f }; D2_STATIC_GUARD(gaObjectSpawnChanceTbl, "gaObjectSpawnChanceTbl");
+static uint32_t gnObjectClassIdLight = 0x5; D2_STATIC_GUARD(gnObjectClassIdLight, "gnObjectClassIdLight");
+int gaObjectSpawnOffsetGroup0[50] = {
+    -0x4,
+    0x0,
+    0x0,
+    0x0,
+    0x4,
+    0x0,
+    0x8,
+    0x0,
+    0x0,
+    0x4,
+    0x0,
+    -0x4,
+    0x6,
+    -0x8,
+    0x0,
+    -0x4,
+    0x0,
+    0x0,
+    0x0,
+    0x4,
+    0x0,
+    0x8,
+    0x0,
+    0x5,
+    0x0,
+    -0x8,
+    0x0,
+    -0x4,
+    0x0,
+    0x0,
+    0x0,
+    0x4,
+    0x0,
+    0x8,
+    0x5,
+    -0x7,
+    -0x5,
+    -0x5,
+    -0x3,
+    -0x3,
+    -0x1,
+    0x0,
+    0x0,
+    0x3,
+    -0x1,
+    0x5,
+    -0x3,
+    0x7,
+    -0x5,
+    0x7
+}; D2_GLOBAL_GUARD(gaObjectSpawnOffsetGroup0, "gaObjectSpawnOffsetGroup0");
+D2ObjectPopulateEntryStrc gaObjectPopulateTable[7] = {
+    {
+        /* .nEnabled = */ 0x0,
+        /* .pfnPopulate = */ nullptr
+    },
+    {
+        /* .nEnabled = */ 0x1,
+        /* .pfnPopulate = */ &D2Game::Objects::OBJECT_AlwaysReturnOne
+    },
+    {
+        /* .nEnabled = */ 0x1,
+        /* .pfnPopulate = */ &D2Game::Objects::OBJECT_PopulateGridObjects
+    },
+    {
+        /* .nEnabled = */ 0x0,
+        /* .pfnPopulate = */ nullptr
+    },
+    {
+        /* .nEnabled = */ 0x1,
+        /* .pfnPopulate = */ &D2Game::Objects::OBJECT_PopulateGridItems
+    },
+    {
+        /* .nEnabled = */ 0x1,
+        /* .pfnPopulate = */ &D2Game::Objects::RollArmorStand
+    },
+    {
+        /* .nEnabled = */ 0x1,
+        /* .pfnPopulate = */ &D2Game::Objects::RollWeaponRack
+    }
+}; D2_GLOBAL_GUARD(gaObjectPopulateTable, "gaObjectPopulateTable");
+static D2ObjectSpawnOffsetGroupStrc gaObjectSpawnOffsetTables[4] = {
+    {
+        /* .pOffsets = */ gaObjectSpawnOffsetGroup0,
+        /* .nCount = */ 0x0
+    },
+    {
+        /* .pOffsets = */ (int*)&gaObjectSpawnOffsetGroup0[13],
+        /* .nCount = */ 0x0
+    },
+    {
+        /* .pOffsets = */ (int*)&gaObjectSpawnOffsetGroup0[24],
+        /* .nCount = */ 0x0
+    },
+    {
+        /* .pOffsets = */ (int*)&gaObjectSpawnOffsetGroup0[35],
+        /* .nCount = */ 0x0
+    }
+}; D2_STATIC_GUARD(gaObjectSpawnOffsetTables, "gaObjectSpawnOffsetTables");
 
 namespace D2Game::Objects {
 

@@ -38,6 +38,8 @@
 #include "globals/globals.h"
 #include "Bnclient/net_sid.h"
 #include "D2Client/UI/EscMenu.h"
+#include "D2Launch/CharSel.data.h"
+#include "D2Launch/MainMenus.data.h"
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/D2WinTimer.h"
@@ -67,6 +69,54 @@ typedef void (__stdcall *fpD2WinScrollbarOnChange)(D2UIMouseMsgStrc * pUnderMous
 static int gnCharSelLoadMoreEntryIndex = -0x3e7; D2_STATIC_GUARD(gnCharSelLoadMoreEntryIndex, "gnCharSelLoadMoreEntryIndex");
 static int gnCharSelLoadingEntryIndex = -0x3e7; D2_STATIC_GUARD(gnCharSelLoadingEntryIndex, "gnCharSelLoadingEntryIndex");
 static int gnCharSelScreenSlotCount = 0x5; D2_STATIC_GUARD(gnCharSelScreenSlotCount, "gnCharSelScreenSlotCount");
+static D2ControlStrc * gpCtlRealmSelectionPanel = 0; D2_STATIC_GUARD(gpCtlRealmSelectionPanel, "gpCtlRealmSelectionPanel");
+static D2WinTextBox * gpCharSelDeleteButton = 0; D2_STATIC_GUARD(gpCharSelDeleteButton, "gpCharSelDeleteButton");
+static D2WinButton * gpCtlCharSelDownArrow = 0; D2_STATIC_GUARD(gpCtlCharSelDownArrow, "gpCtlCharSelDownArrow");
+static D2ControlStrc * gpCharSelExitButton = 0; D2_STATIC_GUARD(gpCharSelExitButton, "gpCharSelExitButton");
+static int gnCharSlotYPositions[8] = {}; D2_STATIC_GUARD(gnCharSlotYPositions, "gnCharSlotYPositions");
+static D2WinButton * gpCtlCharSelOKButton = 0; D2_STATIC_GUARD(gpCtlCharSelOKButton, "gpCtlCharSelOKButton");
+static D2WinTextBox * gaCharSelScreenSlotControls[8] = {}; D2_STATIC_GUARD(gaCharSelScreenSlotControls, "gaCharSelScreenSlotControls");
+char PreferredClosedRealm[256] = {}; D2_GLOBAL_GUARD(PreferredClosedRealm, "PreferredClosedRealm");
+static D2ControlStrc * gaCharSelExpansionIconControls[8] = {}; D2_STATIC_GUARD(gaCharSelExpansionIconControls, "gaCharSelExpansionIconControls");
+static D2WinTextBox * gpaCharSelectDisplay = 0; D2_STATIC_GUARD(gpaCharSelectDisplay, "gpaCharSelectDisplay");
+static D2ControlStrc * gpCtlCharSelectGameTypeBtn = 0; D2_STATIC_GUARD(gpCtlCharSelectGameTypeBtn, "gpCtlCharSelectGameTypeBtn");
+static D2ControlStrc * gpCtlCharSelDeleteButton = 0; D2_STATIC_GUARD(gpCtlCharSelDeleteButton, "gpCtlCharSelDeleteButton");
+uint32_t gnCharSelSelectedIndex = 0; D2_GLOBAL_GUARD(gnCharSelSelectedIndex, "gnCharSelSelectedIndex");
+static D2WinTextBox * gpCharSelExpansionToggle = 0; D2_STATIC_GUARD(gpCharSelExpansionToggle, "gpCharSelExpansionToggle");
+static D2ControlStrc * gnCharSelImageOffset = 0; D2_STATIC_GUARD(gnCharSelImageOffset, "gnCharSelImageOffset");
+static D2WinImage * gpControlCharSelImage = 0; D2_STATIC_GUARD(gpControlCharSelImage, "gpControlCharSelImage");
+static D2WinTextBox * gpCtlRealmSelectionLabel = 0; D2_STATIC_GUARD(gpCtlRealmSelectionLabel, "gpCtlRealmSelectionLabel");
+D2WinButton * gpCharSelScreenControl = 0; D2_GLOBAL_GUARD(gpCharSelScreenControl, "gpCharSelScreenControl");
+static D2WinTextBox * gpCtlCharSelScrollbar = 0; D2_STATIC_GUARD(gpCtlCharSelScrollbar, "gpCtlCharSelScrollbar");
+char PreferedClosedRealm2[256] = {}; D2_GLOBAL_GUARD(PreferedClosedRealm2, "PreferedClosedRealm2");
+static D2ControlStrc * gnRealmSelectionOffset = 0; D2_STATIC_GUARD(gnRealmSelectionOffset, "gnRealmSelectionOffset");
+static D2WinTextBox * gpControlCharSelList = 0; D2_STATIC_GUARD(gpControlCharSelList, "gpControlCharSelList");
+static D2ControlStrc * gpControlCharSelArrows = 0; D2_STATIC_GUARD(gpControlCharSelArrows, "gpControlCharSelArrows");
+static D2WinImage * gpaCharSelCharacterList = 0; D2_STATIC_GUARD(gpaCharSelCharacterList, "gpaCharSelCharacterList");
+static D2ControlStrc * gpControlRealmSelectDropdown = 0; D2_STATIC_GUARD(gpControlRealmSelectDropdown, "gpControlRealmSelectDropdown");
+static D2WinTextBox * gpControlRealmSelect = 0; D2_STATIC_GUARD(gpControlRealmSelect, "gpControlRealmSelect");
+uint32_t gbCharSelectInProgress = 0; D2_GLOBAL_GUARD(gbCharSelectInProgress, "gbCharSelectInProgress");
+int nCharacterSelectionIndex = 0; D2_GLOBAL_GUARD(nCharacterSelectionIndex, "nCharacterSelectionIndex");
+static uint32_t gnCharSelBNetLoadState = 0; D2_STATIC_GUARD(gnCharSelBNetLoadState, "gnCharSelBNetLoadState");
+// also labelled: gpPendingRealmArchive
+static char * gszPendingRealmName = 0; D2_STATIC_GUARD(gszPendingRealmName, "gszPendingRealmName");
+static uint32_t gbCharSelScreenWaitTimeout = 0; D2_STATIC_GUARD(gbCharSelScreenWaitTimeout, "gbCharSelScreenWaitTimeout");
+static uint32_t gbCharSelArrowsHidden = 0; D2_STATIC_GUARD(gbCharSelArrowsHidden, "gbCharSelArrowsHidden");
+namespace D2Client::CharScreen {
+D2CharSelStrc * D2CharSelStrcFirst = 0; D2_GLOBAL_GUARD(D2CharSelStrcFirst, "D2Client::CharScreen::D2CharSelStrcFirst");
+} // namespace D2Client::CharScreen
+static D2CharSelStrc * gpCharSelPendingEntry = 0; D2_STATIC_GUARD(gpCharSelPendingEntry, "gpCharSelPendingEntry");
+namespace D2Client::CharScreen {
+int TotalCurrentChars = 0; D2_GLOBAL_GUARD(TotalCurrentChars, "D2Client::CharScreen::TotalCurrentChars");
+} // namespace D2Client::CharScreen
+static int32_t g_nCharSelNavigationIndex = 0; D2_STATIC_GUARD(g_nCharSelNavigationIndex, "g_nCharSelNavigationIndex");
+static uint32_t gpCharSelScrollbar = 0; D2_STATIC_GUARD(gpCharSelScrollbar, "gpCharSelScrollbar");
+static D2WinTextBox * gpCharSelStatusTextBox = 0; D2_STATIC_GUARD(gpCharSelStatusTextBox, "gpCharSelStatusTextBox");
+static D2WinTextBox * gnCharSelScrollOffset = 0; D2_STATIC_GUARD(gnCharSelScrollOffset, "gnCharSelScrollOffset");
+uint32_t gnCharSelLoadedCharCount = 0; D2_GLOBAL_GUARD(gnCharSelLoadedCharCount, "gnCharSelLoadedCharCount");
+uint32_t gnCharSelCreateNewButtonClickCount = 0; D2_GLOBAL_GUARD(gnCharSelCreateNewButtonClickCount, "gnCharSelCreateNewButtonClickCount");
+static D2RealmCharListCacheEntryStrc * gpRealmCharListCache = 0; D2_STATIC_GUARD(gpRealmCharListCache, "gpRealmCharListCache");
+static uint16_t pBetaRealmNames[7][256] = {}; D2_STATIC_GUARD(pBetaRealmNames, "pBetaRealmNames");
 
 namespace D2Launch::CharSel {
 

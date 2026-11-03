@@ -42,6 +42,8 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/D2IniConfigStrc.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Client/UI/Party.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -65,6 +67,18 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UiPartyStrc) == 0xd1, "D2_NEW_AT(
 typedef void (__fastcall *fnSendChatCommand)(uint8_t * pbCmd);
 #endif
 
+namespace D2Client::UI::Party {
+D2UiPartyStrc * pUiParty = 0; D2_GLOBAL_GUARD(pUiParty, "D2Client::UI::Party::pUiParty");
+DC6 * pMenu_party = 0; D2_GLOBAL_GUARD(pMenu_party, "D2Client::UI::Party::pMenu_party");
+DC6 * pMenu_partybuttons = 0; D2_GLOBAL_GUARD(pMenu_partybuttons, "D2Client::UI::Party::pMenu_partybuttons");
+DC6 * pMenu_partyboxes = 0; D2_GLOBAL_GUARD(pMenu_partyboxes, "D2Client::UI::Party::pMenu_partyboxes");
+DC6 * pPanel_inv_goldbtn = 0; D2_GLOBAL_GUARD(pPanel_inv_goldbtn, "D2Client::UI::Party::pPanel_inv_goldbtn");
+DC6 * pMenu_partybar = 0; D2_GLOBAL_GUARD(pMenu_partybar, "D2Client::UI::Party::pMenu_partybar");
+} // namespace D2Client::UI::Party
+static int gpPartyAcceptButton = 0; D2_STATIC_GUARD(gpPartyAcceptButton, "gpPartyAcceptButton");
+namespace D2Client::UI::Party {
+uint8_t cRed = 0; D2_GLOBAL_GUARD(cRed, "D2Client::UI::Party::cRed");
+} // namespace D2Client::UI::Party
 static int32_t gpWaypointButtonHover = 0; D2_STATIC_GUARD(gpWaypointButtonHover, "gpWaypointButtonHover");
 
 namespace D2Client::UI::Party {

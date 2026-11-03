@@ -49,6 +49,7 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
+#include "D2Client/Engine.data.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -56,6 +57,58 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+D2UIFlagInitStrc gsUIEngineFlagInit[4] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenOkDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenOkUp
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenOkCancel
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenOkForce
+    }
+}; D2_GLOBAL_GUARD(gsUIEngineFlagInit, "gsUIEngineFlagInit");
+D2UIFlagInitStrc gsUIEngineFlagInit2[4] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenDualButtonDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenDualButtonUp
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenDualButtonCancel
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::Engine::INPUT_CharScreenDualButtonForce
+    }
+}; D2_GLOBAL_GUARD(gsUIEngineFlagInit2, "gsUIEngineFlagInit2");
+static uint32_t gbConnectionLost = 0; D2_STATIC_GUARD(gbConnectionLost, "gbConnectionLost");
+D2ArchiveStrc * IMG_popupok_DiscPrompt = 0; D2_GLOBAL_GUARD(IMG_popupok_DiscPrompt, "IMG_popupok_DiscPrompt");
+D2ArchiveStrc * IMG_okcancelbtn = 0; D2_GLOBAL_GUARD(IMG_okcancelbtn, "IMG_okcancelbtn");
+D2ArchiveStrc * IMG_popupok_ConnLost = 0; D2_GLOBAL_GUARD(IMG_popupok_ConnLost, "IMG_popupok_ConnLost");
+static uint32_t gnCharScreenInputState = 0; D2_STATIC_GUARD(gnCharScreenInputState, "gnCharScreenInputState");
+static uint32_t gnCharScreenOkButtonPressed = 0; D2_STATIC_GUARD(gnCharScreenOkButtonPressed, "gnCharScreenOkButtonPressed");
+static uint32_t gnConnectionLostScreenState = 0; D2_STATIC_GUARD(gnConnectionLostScreenState, "gnConnectionLostScreenState");
 
 namespace D2Client::Engine {
 

@@ -20,6 +20,8 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "support/d2_trace.h"
+#include "Fog/Engine/Application.data.h"
+#include "Storm/Source/SFile.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -75,6 +77,31 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 
 static char cSFileVerifyOpcode2[3] = { '\\', '\\', '\x00' }; D2_STATIC_GUARD(cSFileVerifyOpcode2, "cSFileVerifyOpcode2");
 static char cSFileVerifyOpcode[3] = { ':', '\\', '\x00' }; D2_STATIC_GUARD(cSFileVerifyOpcode, "cSFileVerifyOpcode");
+static IDirectSound * g_pDirectSound = 0; D2_STATIC_GUARD(g_pDirectSound, "g_pDirectSound");
+static uint32_t gbAsyncIOWorkerShutdown = 0; D2_STATIC_GUARD(gbAsyncIOWorkerShutdown, "gbAsyncIOWorkerShutdown");
+static char szSFileBasePath[260] = {}; D2_STATIC_GUARD(szSFileBasePath, "szSFileBasePath");
+static D2StormAsyncOpStrc * gpCurrentAsyncIORequest = 0; D2_STATIC_GUARD(gpCurrentAsyncIORequest, "gpCurrentAsyncIORequest");
+static pfnSFileReadError pfnSFileReadErrorHandler = (pfnSFileReadError)0; D2_STATIC_GUARD(pfnSFileReadErrorHandler, "pfnSFileReadErrorHandler");
+static HANDLE ghAsyncIOThread = 0; D2_STATIC_GUARD(ghAsyncIOThread, "ghAsyncIOThread");
+static uint32_t gnSFileWaveStreamBufferSize = 0; D2_STATIC_GUARD(gnSFileWaveStreamBufferSize, "gnSFileWaveStreamBufferSize");
+static void * gpSFileExplodeWorkBuffer = 0; D2_STATIC_GUARD(gpSFileExplodeWorkBuffer, "gpSFileExplodeWorkBuffer");
+static uint32_t gbSFileAsyncIOShutdown = 0; D2_STATIC_GUARD(gbSFileAsyncIOShutdown, "gbSFileAsyncIOShutdown");
+static void * g_pStormMpqCryptTable = 0; D2_STATIC_GUARD(g_pStormMpqCryptTable, "g_pStormMpqCryptTable");
+static uint32_t gnSFileAsyncBudgetBytesPerSec = 0; D2_STATIC_GUARD(gnSFileAsyncBudgetBytesPerSec, "gnSFileAsyncBudgetBytesPerSec");
+static void * ghAsyncIOCompletionPort = 0; D2_STATIC_GUARD(ghAsyncIOCompletionPort, "ghAsyncIOCompletionPort");
+static HANDLE ghAsyncIOEvent = 0; D2_STATIC_GUARD(ghAsyncIOEvent, "ghAsyncIOEvent");
+static uint32_t gnSFileDirectAccessFlags = 0; D2_STATIC_GUARD(gnSFileDirectAccessFlags, "gnSFileDirectAccessFlags");
+static uint16_t gnSFileSearchLocale = 0; D2_STATIC_GUARD(gnSFileSearchLocale, "gnSFileSearchLocale");
+static uint8_t gnSFileSearchHashOffset = 0; D2_STATIC_GUARD(gnSFileSearchHashOffset, "gnSFileSearchHashOffset");
+static pfnSFileOpenCallback fpSFileOpenCallback = (pfnSFileOpenCallback)0; D2_STATIC_GUARD(fpSFileOpenCallback, "fpSFileOpenCallback");
+static void * gpSFileOpenCallbackParam = 0; D2_STATIC_GUARD(gpSFileOpenCallbackParam, "gpSFileOpenCallbackParam");
+static _RTL_CRITICAL_SECTION lpCriticalSection_00779068 = {}; D2_STATIC_GUARD(lpCriticalSection_00779068, "lpCriticalSection_00779068");
+static _RTL_CRITICAL_SECTION lpCriticalSection_00779080 = {}; D2_STATIC_GUARD(lpCriticalSection_00779080, "lpCriticalSection_00779080");
+uint32_t gnSSystemOption3 = 0; D2_GLOBAL_GUARD(gnSSystemOption3, "gnSSystemOption3");
+uint32_t gnSSystemOption1 = 0; D2_GLOBAL_GUARD(gnSSystemOption1, "gnSSystemOption1");
+uint32_t gnSSystemWaveBufferSize = 0; D2_GLOBAL_GUARD(gnSSystemWaveBufferSize, "gnSSystemWaveBufferSize");
+uint32_t gnSSystemAsyncReadSize = 0; D2_GLOBAL_GUARD(gnSSystemAsyncReadSize, "gnSSystemAsyncReadSize");
+uint32_t gbCompressionDebugOutput = 0; D2_GLOBAL_GUARD(gbCompressionDebugOutput, "gbCompressionDebugOutput");
 
 namespace Storm::Source::SFile {
 

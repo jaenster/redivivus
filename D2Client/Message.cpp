@@ -10,6 +10,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/WindowHandle.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Game/Game.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

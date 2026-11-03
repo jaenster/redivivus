@@ -6,10 +6,13 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "Storm/Source/SFile.data.h"
+#include "Storm/Source/SLog.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+char param_2_006cff28[3] = { "%c" }; D2_GLOBAL_GUARD(param_2_006cff28, "param_2_006cff28");
 static CRITICAL_SECTION gaSLogCritSect[4] = {}; D2_STATIC_GUARD(gaSLogCritSect, "gaSLogCritSect");
 static D2SLogStrc * gaSLogHead[4] = {}; D2_STATIC_GUARD(gaSLogHead, "gaSLogHead");
 

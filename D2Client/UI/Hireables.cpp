@@ -50,6 +50,8 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Client/UI/Hireables.data.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Launch/MainMenus.h"
@@ -64,6 +66,23 @@
 #define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
 #endif
 
+
+namespace D2Client::UI::Hireables {
+DC6 * ClassIcons[7] = {}; D2_GLOBAL_GUARD(ClassIcons, "D2Client::UI::Hireables::ClassIcons");
+} // namespace D2Client::UI::Hireables
+static uint32_t gnHireDisplayMode = 0; D2_STATIC_GUARD(gnHireDisplayMode, "gnHireDisplayMode");
+namespace D2Client::UI::Hireables {
+uint8_t HealthBarGreen = 0; D2_GLOBAL_GUARD(HealthBarGreen, "D2Client::UI::Hireables::HealthBarGreen");
+uint8_t HealthBarYellowish = 0; D2_GLOBAL_GUARD(HealthBarYellowish, "D2Client::UI::Hireables::HealthBarYellowish");
+uint8_t HealthBarRed = 0; D2_GLOBAL_GUARD(HealthBarRed, "D2Client::UI::Hireables::HealthBarRed");
+bool HealthBarColorsInitialized = 0; D2_GLOBAL_GUARD(HealthBarColorsInitialized, "D2Client::UI::Hireables::HealthBarColorsInitialized");
+} // namespace D2Client::UI::Hireables
+static int gpHireHoverUnit = 0; D2_STATIC_GUARD(gpHireHoverUnit, "gpHireHoverUnit");
+static uint32_t gnHireIconDrawX = 0; D2_STATIC_GUARD(gnHireIconDrawX, "gnHireIconDrawX");
+static uint32_t gnHireIconHoverX = 0; D2_STATIC_GUARD(gnHireIconHoverX, "gnHireIconHoverX");
+static uint32_t gnHireIconHoverY = 0; D2_STATIC_GUARD(gnHireIconHoverY, "gnHireIconHoverY");
+static uint8_t gbHireIconsVisible = 0; D2_STATIC_GUARD(gbHireIconsVisible, "gbHireIconsVisible");
+static uint32_t gnHireIconHoverIndex = 0; D2_STATIC_GUARD(gnHireIconHoverIndex, "gnHireIconHoverIndex");
 
 namespace D2Client::UI::Hireables {
 

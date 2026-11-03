@@ -81,6 +81,8 @@
 #include "D2Common/D2BitBufferStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Units/Missile.h"
+#include "D2Game/D2Game.h"
+#include "D2Game/Monster/Monsters.data.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
 #include "D2Game/SKILLS/SkillAss.h"
 #include "D2Game/SKILLS/SkillSor.h"
@@ -97,6 +99,401 @@ typedef void (__fastcall *pfnMinionForEachCallback)(D2UnitStrc * pMinion, void *
 #define RECON_FPTD_fnSkillUnitProc
 typedef void (__fastcall *fnSkillUnitProc)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, int nDuration);
 #endif
+
+static int gaMissileOffsets_LightningUniqueY[4] = { -0x1, 0x0, 0x1, 0x0 }; D2_STATIC_GUARD(gaMissileOffsets_LightningUniqueY, "gaMissileOffsets_LightningUniqueY");
+namespace D2Common::Monsters::MONSTERS::Umod {
+fpUmodInit aUmodInitTable[43] = {
+    nullptr,
+    &D2Game::Monsters::Umod::MONUMOD_RollNameSeed,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyHpBonus,
+    nullptr,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyChampionLevelBonus,
+    &D2Game::Monsters::Umod::ExtraStrong,
+    &D2Game::Monsters::Umod::ExtraFast,
+    nullptr,
+    &D2Game::Monsters::Umod::MagicResist,
+    &D2Game::Monsters::Umod::FireEnchanted,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyChampionStats,
+    &D2Game::Monsters::Umod::LightningEnchanted,
+    &D2Game::Monsters::Umod::ColdEnchanted,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    &D2Game::Monsters::Umod::PoisonEnchanted,
+    nullptr,
+    &D2Game::Monsters::Umod::ManaBurn,
+    &D2Game::Monsters::Umod::TeleHeal,
+    &D2Game::Monsters::Umod::MagicResist,
+    &D2Game::Monsters::Umod::MagicResist,
+    nullptr,
+    &D2Game::Monsters::Umod::AuraEnchanted,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyColdEnchant,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyBerserker,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyPossessed,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyFanatic,
+    nullptr,
+    &D2Game::Monsters::Umod::MONUMOD_SetEventTimer,
+    nullptr
+}; D2_GLOBAL_GUARD(aUmodInitTable, "D2Common::Monsters::MONSTERS::Umod::aUmodInitTable");
+} // namespace D2Common::Monsters::MONSTERS::Umod
+static D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ &D2Game::Monsters::MONSTER_OnDeathAmplifyDamageAura,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_OnDeathScheduleDelayed,
+        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_CorpseExplode,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_DeathPoisonCloud,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ (fpMonsterUModHandler)&D2Game::Monsters::UMOD_SetLevelAndAttackRating,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_OnDeathKillOwnerAndMinions,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_ScheduleEventIfRunning,
+        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_LightningUniqueDeathBolts,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ &D2Game::Monsters::MONSTER_LightningDeathIfNotRunning,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_DeathMissileRing,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ (fpMonsterUModHandler)&D2Game::Monsters::UMOD_AddBaseDamageBonus,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScaleMissileDamageByOwner
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ &D2Game::MONSTER_ScheduleDeathIfRunningOrDead,
+        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_BugLightningDeathBolts,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_HandleMinionDeath,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_DispatchSpecialDeath,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_QueenPoisonCloudDeath,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ &D2Game::Monsters::MONSTER_StealPotionFromBelt,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ &D2Game::Monsters::UMOD_SetRandomElementalDamage,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ &D2Game::Monsters::UMOD_SetRandomElementalForMissile
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_MissileSplitOnHit
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_CorpseExplodeFixed,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_AoEPhysicalDamage,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_HandleModeTransition,
+        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_SuicideExplosion,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_OnDeathTryScheduleRevive,
+        /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_SelfResurrect,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_ShatterOnDeath,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_SpawnWormOnDeath,
+        /* .pfnHandler2 = */ nullptr,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ nullptr,
+        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_PeriodicMageThink,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    },
+    {
+        /* .pfnHandler0 = */ nullptr,
+        /* .pfnHandler1 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_ScheduleDeathEvent,
+        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_ShadowDeathNova,
+        /* .pfnHandler3 = */ nullptr,
+        /* .pfnHandler4 = */ nullptr,
+        /* .pfnHandlerInit = */ nullptr
+    }
+}; D2_STATIC_GUARD(g_MonsterUModHandlerTable, "g_MonsterUModHandlerTable");
 
 namespace D2Game::Monsters {
 

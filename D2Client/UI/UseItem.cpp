@@ -38,6 +38,7 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
+#include "D2Client/UI/UseItem.data.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -46,6 +47,38 @@
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
+
+// also labelled: gaNpcCashTabs_nTooltipStringId_col
+D2NpcCashTabStrc gaNpcCashTabs[2] = {
+    {
+        /* .nTooltipStringId = */ 0xfb1,
+        /* .nTooltipX = */ 0x7a,
+        /* .nTooltipY = */ 0x100,
+        /* .nDrawX = */ 0x7a,
+        /* .nDrawY = */ 0x100,
+        /* .nHitBoxX1 = */ 0x7a,
+        /* .nHitBoxX2 = */ 0x9a,
+        /* .nHitBoxY1 = */ 0xe0,
+        /* .nHitBoxY2 = */ 0x100,
+        /* .nBaseCelFrame = */ 0x10,
+        /* .nHitTestState = */ 0x0,
+        /* .bVisible = */ 0x0
+    },
+    {
+        /* .nTooltipStringId = */ 0x102f,
+        /* .nTooltipX = */ 0xb1,
+        /* .nTooltipY = */ 0x100,
+        /* .nDrawX = */ 0xb1,
+        /* .nDrawY = */ 0x100,
+        /* .nHitBoxX1 = */ 0xb1,
+        /* .nHitBoxX2 = */ 0xd1,
+        /* .nHitBoxY1 = */ 0xe0,
+        /* .nHitBoxY2 = */ 0x100,
+        /* .nBaseCelFrame = */ 0xa,
+        /* .nHitTestState = */ 0x0,
+        /* .bVisible = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(gaNpcCashTabs, "gaNpcCashTabs");
 
 namespace D2Client::UI::UseItem {
 

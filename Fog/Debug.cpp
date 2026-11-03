@@ -18,6 +18,8 @@
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Game/Objects/ObjectsRgn.h"
+#include "Fog/Debug.data.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -177,7 +179,53 @@ typedef BOOL (__stdcall *pfnStackWalk)(DWORD MachineType, HANDLE hProcess, HANDL
 typedef DWORD (__stdcall *pfnUnDecorateSymbolName)(char * DecoratedName, char * UnDecoratedName, DWORD UndecoratedLength, DWORD Flags);
 #endif
 
+char gaHexCharsLookupTable[4] = { '%', 's', '\x0a', '\x00' }; D2_GLOBAL_GUARD(gaHexCharsLookupTable, "gaHexCharsLookupTable");
+uint16_t gnSymbolSearchPathSeparator = 0x3b; D2_GLOBAL_GUARD(gnSymbolSearchPathSeparator, "gnSymbolSearchPathSeparator");
+char gDebugSpaceString = ' '; D2_GLOBAL_GUARD(gDebugSpaceString, "gDebugSpaceString");
 static HANDLE ghCurrentProcessHandle = INVALID_HANDLE_VALUE; D2_STATIC_GUARD(ghCurrentProcessHandle, "ghCurrentProcessHandle");
+static _RTL_CRITICAL_SECTION lpCriticalSection_0075cfbc = {}; D2_STATIC_GUARD(lpCriticalSection_0075cfbc, "lpCriticalSection_0075cfbc");
+static uint32_t gnDbgSymInitRefcount = 0; D2_STATIC_GUARD(gnDbgSymInitRefcount, "gnDbgSymInitRefcount");
+namespace Fog::Debug {
+HMODULE pDbgHelpOrImageHlp = 0; D2_GLOBAL_GUARD(pDbgHelpOrImageHlp, "Fog::Debug::pDbgHelpOrImageHlp");
+pfnSymCleanup pSymCleanup = (pfnSymCleanup)0; D2_GLOBAL_GUARD(pSymCleanup, "Fog::Debug::pSymCleanup");
+pfnSymFunctionTableAccess pSymFunctionTableAccess = (pfnSymFunctionTableAccess)0; D2_GLOBAL_GUARD(pSymFunctionTableAccess, "Fog::Debug::pSymFunctionTableAccess");
+pfnSymGetLineFromAddr pSymGetLineFromAddr = (pfnSymGetLineFromAddr)0; D2_GLOBAL_GUARD(pSymGetLineFromAddr, "Fog::Debug::pSymGetLineFromAddr");
+pfnSymGetModuleBase pSymGetModuleBase = (pfnSymGetModuleBase)0; D2_GLOBAL_GUARD(pSymGetModuleBase, "Fog::Debug::pSymGetModuleBase");
+pfnSymGetModuleInfo pSymGetModuleInfo = (pfnSymGetModuleInfo)0; D2_GLOBAL_GUARD(pSymGetModuleInfo, "Fog::Debug::pSymGetModuleInfo");
+pfnSymGetOptions pSymGetOptions = (pfnSymGetOptions)0; D2_GLOBAL_GUARD(pSymGetOptions, "Fog::Debug::pSymGetOptions");
+pfnSymGetSymFromAddr pSymGetSymFromAddr = (pfnSymGetSymFromAddr)0; D2_GLOBAL_GUARD(pSymGetSymFromAddr, "Fog::Debug::pSymGetSymFromAddr");
+pfnSymInitialize pSymInitialize = (pfnSymInitialize)0; D2_GLOBAL_GUARD(pSymInitialize, "Fog::Debug::pSymInitialize");
+pfnSymLoadModule pSymLoadModule = (pfnSymLoadModule)0; D2_GLOBAL_GUARD(pSymLoadModule, "Fog::Debug::pSymLoadModule");
+pfnSymSetOptions pSymSetOptions = (pfnSymSetOptions)0; D2_GLOBAL_GUARD(pSymSetOptions, "Fog::Debug::pSymSetOptions");
+pfnStackWalk pStackWalk = (pfnStackWalk)0; D2_GLOBAL_GUARD(pStackWalk, "Fog::Debug::pStackWalk");
+BOOL bBetterStackCrawls = 0; D2_GLOBAL_GUARD(bBetterStackCrawls, "Fog::Debug::bBetterStackCrawls");
+} // namespace Fog::Debug
+static HMODULE hDbgHelpDll = 0; D2_STATIC_GUARD(hDbgHelpDll, "hDbgHelpDll");
+static pfnSymGetModuleInfo64 pSymGetModuleInfo64 = (pfnSymGetModuleInfo64)0; D2_STATIC_GUARD(pSymGetModuleInfo64, "pSymGetModuleInfo64");
+static pfnSymGetSymFromAddr64 pSymGetSymFromAddr64 = (pfnSymGetSymFromAddr64)0; D2_STATIC_GUARD(pSymGetSymFromAddr64, "pSymGetSymFromAddr64");
+static pfnSymSetSearchPath pSymSetSearchPath = (pfnSymSetSearchPath)0; D2_STATIC_GUARD(pSymSetSearchPath, "pSymSetSearchPath");
+static pfnSymUnloadModule64 pSymUnloadModule64 = (pfnSymUnloadModule64)0; D2_STATIC_GUARD(pSymUnloadModule64, "pSymUnloadModule64");
+static pfnSymFunctionTableAccess64 pSymFunctionTableAccess64 = (pfnSymFunctionTableAccess64)0; D2_STATIC_GUARD(pSymFunctionTableAccess64, "pSymFunctionTableAccess64");
+static pfnSymGetModuleBase64 pSymGetModuleBase64 = (pfnSymGetModuleBase64)0; D2_STATIC_GUARD(pSymGetModuleBase64, "pSymGetModuleBase64");
+static pfnStackWalk64 pStackWalk64 = (pfnStackWalk64)0; D2_STATIC_GUARD(pStackWalk64, "pStackWalk64");
+static pfnEnumerateLoadedModules64 pEnumerateLoadedModules64 = (pfnEnumerateLoadedModules64)0; D2_STATIC_GUARD(pEnumerateLoadedModules64, "pEnumerateLoadedModules64");
+static pfnSymInitialize pSymInitializeApi = (pfnSymInitialize)0; D2_STATIC_GUARD(pSymInitializeApi, "pSymInitializeApi");
+static pfnSymGetOptions pSymGetOptionsApi = (pfnSymGetOptions)0; D2_STATIC_GUARD(pSymGetOptionsApi, "pSymGetOptionsApi");
+static uint8_t bDebugSymbolsInitialized = 0; D2_STATIC_GUARD(bDebugSymbolsInitialized, "bDebugSymbolsInitialized");
+static uint8_t bEnableCrashDumps = 0; D2_STATIC_GUARD(bEnableCrashDumps, "bEnableCrashDumps");
+static pfnSymSetOptions pSymSetOptionsApi = (pfnSymSetOptions)0; D2_STATIC_GUARD(pSymSetOptionsApi, "pSymSetOptionsApi");
+static pfnSymCleanup pSymCleanupApi = (pfnSymCleanup)0; D2_STATIC_GUARD(pSymCleanupApi, "pSymCleanupApi");
+static HANDLE hCrashDumpCompleteEvent = 0; D2_STATIC_GUARD(hCrashDumpCompleteEvent, "hCrashDumpCompleteEvent");
+static HANDLE hCrashDumpRequestEvent = 0; D2_STATIC_GUARD(hCrashDumpRequestEvent, "hCrashDumpRequestEvent");
+static _RTL_CRITICAL_SECTION lpCriticalSection_0098a6c4 = {}; D2_STATIC_GUARD(lpCriticalSection_0098a6c4, "lpCriticalSection_0098a6c4");
+static pfnSymLoadModule64 pSymLoadModule64 = (pfnSymLoadModule64)0; D2_STATIC_GUARD(pSymLoadModule64, "pSymLoadModule64");
+static pfnMiniDumpWriteDump pMiniDumpWriteDumpApi = (pfnMiniDumpWriteDump)0; D2_STATIC_GUARD(pMiniDumpWriteDumpApi, "pMiniDumpWriteDumpApi");
+static void * pCrashDumpInfo = 0; D2_STATIC_GUARD(pCrashDumpInfo, "pCrashDumpInfo");
+static pfnSymGetLineFromAddr64 pSymGetLineFromAddr64 = (pfnSymGetLineFromAddr64)0; D2_STATIC_GUARD(pSymGetLineFromAddr64, "pSymGetLineFromAddr64");
+static pfnSymFindFileInPath pSymFindFileInPath = (pfnSymFindFileInPath)0; D2_STATIC_GUARD(pSymFindFileInPath, "pSymFindFileInPath");
+_RTL_CRITICAL_SECTION lpCriticalSection_0098a6f0 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0098a6f0, "lpCriticalSection_0098a6f0");
+char szCustomSymbolSearchPath[32768] = {}; D2_GLOBAL_GUARD(szCustomSymbolSearchPath, "szCustomSymbolSearchPath");
+char gszCrashLogTempDir[1024] = {}; D2_GLOBAL_GUARD(gszCrashLogTempDir, "gszCrashLogTempDir");
 
 namespace Fog::Debug {
 

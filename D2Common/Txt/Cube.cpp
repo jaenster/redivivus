@@ -44,6 +44,8 @@ static uint8_t gaCubeRecipeItemTypeFlags_11 = 0x6c; D2_STATIC_GUARD(gaCubeRecipe
 static uint8_t gaCubeRecipeItemTypeFlags_10 = 0x71; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_10, "gaCubeRecipeItemTypeFlags_10");
 static char gaCubeRecipeItemTypeFlags_9[3] = { '=', ',', '\x00' }; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_9, "gaCubeRecipeItemTypeFlags_9");
 static char gaCubeRecipeItemTypeFlags_7[2] = { ',', '\x00' }; D2_STATIC_GUARD(gaCubeRecipeItemTypeFlags_7, "gaCubeRecipeItemTypeFlags_7");
+D2CubeMainTxt * pTxtCubeMain = 0; D2_GLOBAL_GUARD(pTxtCubeMain, "pTxtCubeMain");
+int nTxtCubeMainSize = 0; D2_GLOBAL_GUARD(nTxtCubeMainSize, "nTxtCubeMainSize");
 
 namespace D2Common::Txt::Cube {
 

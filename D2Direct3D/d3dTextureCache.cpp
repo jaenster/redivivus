@@ -7,6 +7,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2DDraw/Renderer/DirectDraw.h"
+#include "D2Direct3D/Renderer/Direct3D.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

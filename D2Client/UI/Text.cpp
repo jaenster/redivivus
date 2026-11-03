@@ -81,8 +81,11 @@
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Client/UI/Text.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Launch/MainMenus.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -160,6 +163,53 @@ static D2UIFlagInitStrc gsUITextFlagInit[7] = {
         /* .pfHandler = */ &D2Client::UI::Text::INPUT_TextKeyFilter
     }
 }; D2_STATIC_GUARD(gsUITextFlagInit, "gsUITextFlagInit");
+static uint16_t gnQuestScrollLine[6] = {}; D2_STATIC_GUARD(gnQuestScrollLine, "gnQuestScrollLine");
+static D2TextBoxStrc * gpTextScrollingBox = 0; D2_STATIC_GUARD(gpTextScrollingBox, "gpTextScrollingBox");
+static RECT gnTextBoxExclusionLeft[16] = {}; D2_STATIC_GUARD(gnTextBoxExclusionLeft, "gnTextBoxExclusionLeft");
+static RECT gnTextBoxExclusionTop[16] = { 0 }; D2_STATIC_GUARD(gnTextBoxExclusionTop, "gnTextBoxExclusionTop");
+static RECT gnTextBoxExclusionRight[16] = { 0 }; D2_STATIC_GUARD(gnTextBoxExclusionRight, "gnTextBoxExclusionRight");
+static RECT gnTextBoxExclusionBottom[16] = { 0 }; D2_STATIC_GUARD(gnTextBoxExclusionBottom, "gnTextBoxExclusionBottom");
+static D2TextBoxStrc * gpStaticTextPopup = 0; D2_STATIC_GUARD(gpStaticTextPopup, "gpStaticTextPopup");
+static uint32_t gdwTextPopupExpireTime = 0; D2_STATIC_GUARD(gdwTextPopupExpireTime, "gdwTextPopupExpireTime");
+namespace D2Client::UI::Dialog {
+D2DialogStrc * DialogHandle = 0; D2_GLOBAL_GUARD(DialogHandle, "D2Client::UI::Dialog::DialogHandle");
+} // namespace D2Client::UI::Dialog
+static ListBoxWrapper * gpTextMessageLogHead = 0; D2_STATIC_GUARD(gpTextMessageLogHead, "gpTextMessageLogHead");
+static uint32_t gbTextScrollBoxAnimating = 0; D2_STATIC_GUARD(gbTextScrollBoxAnimating, "gbTextScrollBoxAnimating");
+static uint32_t gbTextScrollBoxActive = 0; D2_STATIC_GUARD(gbTextScrollBoxActive, "gbTextScrollBoxActive");
+static uint32_t gbTextStaticPopupActive = 0; D2_STATIC_GUARD(gbTextStaticPopupActive, "gbTextStaticPopupActive");
+static uint32_t gpTextStaticPopupBox = 0; D2_STATIC_GUARD(gpTextStaticPopupBox, "gpTextStaticPopupBox");
+static int gaTextStaticPopupRect = 0; D2_STATIC_GUARD(gaTextStaticPopupRect, "gaTextStaticPopupRect");
+static D2ScreenMessageListStrc ScreenMessagesMaybe = {}; D2_STATIC_GUARD(ScreenMessagesMaybe, "ScreenMessagesMaybe");
+static D2ScreenMessageListStrc ScreenPartyMessages = {}; D2_STATIC_GUARD(ScreenPartyMessages, "ScreenPartyMessages");
+static D2ScreenMessageListStrc AllMessagesMaybe = {}; D2_STATIC_GUARD(AllMessagesMaybe, "AllMessagesMaybe");
+static uint32_t gnTextDisplayMode = 0; D2_STATIC_GUARD(gnTextDisplayMode, "gnTextDisplayMode");
+static uint32_t gbTextScrollBoxVisible = 0; D2_STATIC_GUARD(gbTextScrollBoxVisible, "gbTextScrollBoxVisible");
+static uint32_t gnTextNpcGuid = 0; D2_STATIC_GUARD(gnTextNpcGuid, "gnTextNpcGuid");
+static uint32_t gpOverHeadUnitGUID = 0; D2_STATIC_GUARD(gpOverHeadUnitGUID, "gpOverHeadUnitGUID");
+static uint32_t gnTextNpcInteractGuid = 0; D2_STATIC_GUARD(gnTextNpcInteractGuid, "gnTextNpcInteractGuid");
+uint32_t gnTextOverheadCounter = 0; D2_GLOBAL_GUARD(gnTextOverheadCounter, "gnTextOverheadCounter");
+static uint16_t gnTextScrollBoxWidth = 0; D2_STATIC_GUARD(gnTextScrollBoxWidth, "gnTextScrollBoxWidth");
+static RECT lprcTextOverheadRect = {}; D2_STATIC_GUARD(lprcTextOverheadRect, "lprcTextOverheadRect");
+static uint32_t gbTextOverheadActive = 0; D2_STATIC_GUARD(gbTextOverheadActive, "gbTextOverheadActive");
+static void * gpQuestScrollTextBlock = 0; D2_STATIC_GUARD(gpQuestScrollTextBlock, "gpQuestScrollTextBlock");
+static unsigned int gbTextNpcMenuActive = {}; D2_STATIC_GUARD(gbTextNpcMenuActive, "gbTextNpcMenuActive");
+static uint32_t gpTextScrollBoxImage = 0; D2_STATIC_GUARD(gpTextScrollBoxImage, "gpTextScrollBoxImage");
+static uint32_t gnTextScrollBoxHeight = 0; D2_STATIC_GUARD(gnTextScrollBoxHeight, "gnTextScrollBoxHeight");
+static uint8_t gbTextNpcMenuSelection = 0; D2_STATIC_GUARD(gbTextNpcMenuSelection, "gbTextNpcMenuSelection");
+static uint32_t gnTextNpcMenuIndex = 0; D2_STATIC_GUARD(gnTextNpcMenuIndex, "gnTextNpcMenuIndex");
+static uint32_t gpTextDismissCallback = 0; D2_STATIC_GUARD(gpTextDismissCallback, "gpTextDismissCallback");
+static uint32_t gpTextScrollBoxBuffer = 0; D2_STATIC_GUARD(gpTextScrollBoxBuffer, "gpTextScrollBoxBuffer");
+static D2GSPacketSrv0x27_TextStrc * gpOverHeadStrc = 0; D2_STATIC_GUARD(gpOverHeadStrc, "gpOverHeadStrc");
+static uint32_t gpQuestScrollUI = 0; D2_STATIC_GUARD(gpQuestScrollUI, "gpQuestScrollUI");
+static pfnTextScrollComplete gpTextScrollCompleteCallback = (pfnTextScrollComplete)0; D2_STATIC_GUARD(gpTextScrollCompleteCallback, "gpTextScrollCompleteCallback");
+static void * gpTextScrollCompleteParam = 0; D2_STATIC_GUARD(gpTextScrollCompleteParam, "gpTextScrollCompleteParam");
+static uint32_t gpTextScrollBoxDC6 = 0; D2_STATIC_GUARD(gpTextScrollBoxDC6, "gpTextScrollBoxDC6");
+static DC6 * gpQuestScrollImageTop = 0; D2_STATIC_GUARD(gpQuestScrollImageTop, "gpQuestScrollImageTop");
+static DC6 * gpQuestScrollImageBottom = 0; D2_STATIC_GUARD(gpQuestScrollImageBottom, "gpQuestScrollImageBottom");
+static DC6 * gpQuestScrollImageBg = 0; D2_STATIC_GUARD(gpQuestScrollImageBg, "gpQuestScrollImageBg");
+static uint32_t gnTextBoxExclusionX = 0; D2_STATIC_GUARD(gnTextBoxExclusionX, "gnTextBoxExclusionX");
+static uint32_t gbTextEventHandlersRegistered = 0; D2_STATIC_GUARD(gbTextEventHandlersRegistered, "gbTextEventHandlersRegistered");
 
 namespace D2Client::UI::Text {
 

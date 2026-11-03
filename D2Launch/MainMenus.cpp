@@ -52,11 +52,16 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Launch/CharSel.data.h"
 #include "D2Launch/D2Launch.h"
+#include "D2Launch/Launcher.data.h"
+#include "D2Launch/MainMenus.data.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImageEx.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/D2WinTimer.h"
+#include "D2Win/Src/D2WinMain.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -87,6 +92,4155 @@ typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 #define RECON_FPTD_fpRequiredUserAction
 typedef BOOL (*fpRequiredUserAction)();
 #endif
+
+static char dwIntroFrameRate_24_36[8] = { "640x146" }; D2_STATIC_GUARD(dwIntroFrameRate_24_36, "dwIntroFrameRate_24_36");
+char gpCutscenesBlackBarTexture[8] = { "640x292" }; D2_GLOBAL_GUARD(gpCutscenesBlackBarTexture, "gpCutscenesBlackBarTexture");
+static char dwIntroFrameRate_29_32[8] = { "640x292" }; D2_STATIC_GUARD(dwIntroFrameRate_29_32, "dwIntroFrameRate_29_32");
+static uint8_t gaNewCharDefaultEquipTemplate[16] = {
+    0x1,
+    0x1,
+    0x1,
+    0x1,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0
+}; D2_STATIC_GUARD(gaNewCharDefaultEquipTemplate, "gaNewCharDefaultEquipTemplate");
+int32_t gaMenuFormFontParamsFont1[2] = { 0x1, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont1, "gaMenuFormFontParamsFont1");
+int32_t gaMenuFormFontParamsFont0Ex4[2] = { 0x0, 0x4 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont0Ex4, "gaMenuFormFontParamsFont0Ex4");
+int32_t gaMenuFormFontParamsFont4Ex1[2] = { 0x4, 0x1 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont4Ex1, "gaMenuFormFontParamsFont4Ex1");
+int32_t gaMenuFormFontParamsFont5[2] = { 0x5, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont5, "gaMenuFormFontParamsFont5");
+int32_t gaMenuFormFontParamsFont4[2] = { 0x4, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont4, "gaMenuFormFontParamsFont4");
+int32_t gaMenuFormFontParamsFont8[2] = { 0x8, 0x0 }; D2_GLOBAL_GUARD(gaMenuFormFontParamsFont8, "gaMenuFormFontParamsFont8");
+int32_t gaMenuTextBoxScrollbarGeom0[3] = { 0x30, 0x1f5, 0x13f }; D2_GLOBAL_GUARD(gaMenuTextBoxScrollbarGeom0, "gaMenuTextBoxScrollbarGeom0");
+FORMS_AnimFrameStrc gaCharSelectAnimFramesAssassin[5] = {
+    {
+        /* .ppBaseImage = */ (void*)gaDC6CharCreateAssassin,
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x3
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAssassin[1],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x3
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAssassin[2],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAssassin[3],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAssassin[4],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaCharSelectAnimFramesAssassin, "gaCharSelectAnimFramesAssassin");
+FORMS_AnimFrameStrc gaCharSelectAnimFramesDruid[5] = {
+    {
+        /* .ppBaseImage = */ (void*)gaDC6CharCreateDruid,
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateDruid[1],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateDruid[2],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateDruid[3],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateDruid[4],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaCharSelectAnimFramesDruid, "gaCharSelectAnimFramesDruid");
+FORMS_AnimFrameStrc gaCharSelectAnimFramesAmazon[5] = {
+    {
+        /* .ppBaseImage = */ (void*)gaDC6CharCreateAmazon,
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x3
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAmazon[1],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x3
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAmazon[2],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAmazon[3],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateAmazon[4],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaCharSelectAnimFramesAmazon, "gaCharSelectAnimFramesAmazon");
+FORMS_AnimFrameStrc gaCharSelectAnimFramesNecromancer[5] = {
+    {
+        /* .ppBaseImage = */ (void*)gaDC6CharCreateNecromancer,
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x3
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateNecromancer[1],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x3
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateNecromancer[2],
+        /* .ppOverlayImage = */ (void*)gaDC6CharCreateNecromancerSel,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateNecromancer[3],
+        /* .ppOverlayImage = */ (void*)&gaDC6CharCreateNecromancerSel[1],
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateNecromancer[4],
+        /* .ppOverlayImage = */ (void*)&gaDC6CharCreateNecromancerSel[2],
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaCharSelectAnimFramesNecromancer, "gaCharSelectAnimFramesNecromancer");
+FORMS_AnimFrameStrc gaCharSelectAnimFramesBarbarian[5] = {
+    {
+        /* .ppBaseImage = */ (void*)gaDC6CharCreateBarbarian,
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateBarbarian[1],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateBarbarian[2],
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_barbarian_bafws,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateBarbarian[3],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateBarbarian[4],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaCharSelectAnimFramesBarbarian, "gaCharSelectAnimFramesBarbarian");
+FORMS_AnimFrameStrc gaCharSelectAnimFramesSorceress[5] = {
+    {
+        /* .ppBaseImage = */ (void*)gaDC6CharCreateSorceress,
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateSorceress[1],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateSorceress[2],
+        /* .ppOverlayImage = */ (void*)gaDC6CharCreateSorceressSel,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateSorceress[3],
+        /* .ppOverlayImage = */ (void*)&gaDC6CharCreateSorceressSel[1],
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreateSorceress[4],
+        /* .ppOverlayImage = */ (void*)&gaDC6CharCreateSorceressSel[2],
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaCharSelectAnimFramesSorceress, "gaCharSelectAnimFramesSorceress");
+FORMS_AnimFrameStrc gaCharSelectAnimFramesPaladin[5] = {
+    {
+        /* .ppBaseImage = */ (void*)gaDC6CharCreatePaladin,
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreatePaladin[1],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreatePaladin[2],
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_paladin_pafws,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreatePaladin[3],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x2
+    },
+    {
+        /* .ppBaseImage = */ (void*)&gaDC6CharCreatePaladin[4],
+        /* .ppOverlayImage = */ nullptr,
+        /* .nDrawMode = */ 0x5,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaCharSelectAnimFramesPaladin, "gaCharSelectAnimFramesPaladin");
+FORMS_AnimFrameStrc gaMainMenuLogoLeftAnimFrames[5] = {
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackLeft,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireLeft,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaMainMenuLogoLeftAnimFrames, "gaMainMenuLogoLeftAnimFrames");
+FORMS_AnimFrameStrc gaMainMenuLogoRightAnimFrames[5] = {
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ (void*)&DC6_FrontEnd_D2logoBlackRight,
+        /* .ppOverlayImage = */ (void*)&DC6_FrontEnd_D2logoFireRight,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaMainMenuLogoRightAnimFrames, "gaMainMenuLogoRightAnimFrames");
+int32_t gaMenuTextBoxScrollbarGeom1[3] = { 0x33, 0x1c8, 0x10e }; D2_GLOBAL_GUARD(gaMenuTextBoxScrollbarGeom1, "gaMenuTextBoxScrollbarGeom1");
+int32_t gaMenuTextBoxScrollbarGeom2[3] = { 0x2a9, 0x1d3, 0x143 }; D2_GLOBAL_GUARD(gaMenuTextBoxScrollbarGeom2, "gaMenuTextBoxScrollbarGeom2");
+int32_t gaMenuTextBoxScrollbarGeom3[3] = { 0x225, 0x1eb, 0x9a }; D2_GLOBAL_GUARD(gaMenuTextBoxScrollbarGeom3, "gaMenuTextBoxScrollbarGeom3");
+int32_t gaMenuTextBoxScrollbarGeom4[3] = { 0x1b7, 0x187, 0x9a }; D2_GLOBAL_GUARD(gaMenuTextBoxScrollbarGeom4, "gaMenuTextBoxScrollbarGeom4");
+int32_t gaMenuTextBoxScrollbarGeom5[3] = { 0x249, 0x1c9, 0x16b }; D2_GLOBAL_GUARD(gaMenuTextBoxScrollbarGeom5, "gaMenuTextBoxScrollbarGeom5");
+// also labelled: gnClassDescriptionTooltipUnitId
+static uint32_t gnClassDescriptionTooltipClassId = -0x1; D2_STATIC_GUARD(gnClassDescriptionTooltipClassId, "gnClassDescriptionTooltipClassId");
+static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x0, 0x1df, 0x280, 0x1e0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_blizno,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::UIMENU_PlayIntroAndReturnToMainScreen,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Timer,
+        /* .aParams = */ { 0x8, 0x0, 0x0, 0x0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::UIMENU_PlayIntroAndReturnToMainScreen,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x0, 0x257, 0x320, 0x258 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_trademark,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::thunk_UIMENU_MainMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::thunk_UIMENU_MainMenu,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Timer,
+        /* .aParams = */ { 0x9, 0x0, 0x0, 0x0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::thunk_UIMENU_MainMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x64, 0x244, 0x258, 0x50 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xf0, 0x78, 0x140, 0x97 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_Diablo2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x190, 0x78, 0xb5, 0xaa },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)gaMainMenuLogoLeftAnimFrames,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x190, 0x78, 0xbc, 0xb1 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)gaMainMenuLogoRightAnimFrames,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x0, 0x257, 0x320, 0x258 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_TitleScreen_or_gameselectscreenEXP,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0xe0, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f2,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressSinglePlayer,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x10a, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f3,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank02,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressSelectBattleNet,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x123, 0x110, 0x19 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_NarrowButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressShowGatewaySelect,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x14d, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f4,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::Test,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x210, 0x87, 0x19 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f6,
+        /* .pDC6 = */ &DC6_CharSelect_ShortButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_InitCreditsScreen,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x192, 0x210, 0x87, 0x19 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f7,
+        /* .pDC6 = */ &DC6_CharSelect_ShortButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_ShowCinematicsMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x238, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13f5,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_CleanupSoundAndClearMessageLoop,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x144, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f2,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressSinglePlayer,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x16e, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f3,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank02,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressSelectBattleNet,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x187, 0x110, 0x19 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_NarrowButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressShowGatewaySelect,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x1b1, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f4,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::Test,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x96, 0x12c, 0x1f4, 0x64 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .nFlagsOrType = */ 0x22
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x13f, 0x15b, 0xa9, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_textbox2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x13f, 0x191, 0xa9, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_textbox2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x13f, 0x1c7, 0xa9, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_textbox2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x13f, 0x1c7, 0xa9, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_textbox2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x13f, 0x1fd, 0xa9, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_textbox2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x141, 0x154, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x141, 0x18a, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x141, 0x1c0, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x141, 0x1c0, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x141, 0x1f6, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x104, 0x320, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xc8, 0x15e, 0x190, 0x64 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x136, 0x320, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x156, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_Unused13,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x18c, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_Unused13,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x21
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x23c, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x1465,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::UIMENU_AndOneMorePleaseWait,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x210, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b64,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressSaveAccountNameAndShowDisconnected,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x1e4, 0x110, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x14a8,
+        /* .pDC6 = */ &DC6_FrontEnd_3WideButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::MAINMENU_Unused13,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ed,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x24e, 0x221, 0xcd, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x0, 0x257, 0x320, 0x258 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_CharSelect_creditsbckg,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x242, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ed,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x230, 0x267, 0xfa, 0x262 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4Ex1,
+        /* .nFlagsOrType = */ 0x90
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x23a, 0x267, 0xfa, 0x262 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4Ex1,
+        /* .nFlagsOrType = */ 0x80
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1b8, 0x267, 0xfa, 0x262 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4Ex1,
+        /* .nFlagsOrType = */ 0x82
+    },
+    {
+        /* .neD2FormType = */ FORM_Timer,
+        /* .aParams = */ { 0x32, 0x0, 0x0, 0x0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressCreditsEndCheck,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x190, 0x267, 0xfa, 0x262 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4Ex1,
+        /* .nFlagsOrType = */ 0x90
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x19a, 0x267, 0xfa, 0x262 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4Ex1,
+        /* .nFlagsOrType = */ 0x80
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x118, 0x267, 0xfa, 0x262 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4Ex1,
+        /* .nFlagsOrType = */ 0x82
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xed, 0x22b, 0x146, 0x155 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_CinematicsSelection,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x106, 0x11b, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x13c, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x1029,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayIntroCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x167, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x102a,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayAct2StartCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x192, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x102b,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayAct3StartCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x1bd, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x102c,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayAct4StartCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x1e8, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13f9,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayAct4EndCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x14e, 0x21a, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressReloadMediaMpqAndReturnToMainMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x119, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_ShowCinematicsMenuAndSetFlag,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1a5, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENUS_OnPressSetInsertPlayCd_ForCinematicDisc,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressSetInsertPlayCd,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xed, 0x1f9, 0x146, 0x1ab },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_CinematicsSelectionEXP,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x106, 0x99, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0xb5, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x5525,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayIntroCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0xe0, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x5526,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayAct2StartCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x10c, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x5527,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayAct3StartCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x136, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x5528,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayAct4StartCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x161, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x5529,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayAct4EndCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x18c, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x552a,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayExpansionIntroCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x106, 0x1b7, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x552b,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressPlayExpansionOutroCinematic,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x14e, 0x1e8, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressReloadMediaMpqAndReturnToMainMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xed, 0x22b, 0x154, 0x154 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_GWListBox,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xed, 0x10e, 0x154, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x101, 0x159, 0x140, 0x54 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont0Ex4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x101, 0x1f4, 0x124, 0xa0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_joingamescrollbars,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressRealmList,
+        /* .pTypeArg1 = */ (void*)gaMenuTextBoxScrollbarGeom3,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0xd
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x119, 0x21a, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::StorePreferedRealmAgain,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1b4, 0x21a, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressDestroyListsAndReturnToMainMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x67, 0x20e, 0x251, 0x1c3 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_TermsofUseBckg,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x78, 0x1d3, 0x230, 0x13e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_joingamescrollbars,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)gaMenuTextBoxScrollbarGeom2,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x4
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x20d, 0x201, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x143d,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressCreateBattleNetAccount,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x85, 0x201, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x143e,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressReturnToMainMenuAgain,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x67, 0xad, 0x23a, 0x45 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x384, 0x384, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x26,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_ScrollListExUp,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x6
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x384, 0x384, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x28,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_ScrollListExDown,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x6
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x156, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_OnSubmitCreateBattleNetAccount,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x18c, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_OnSubmitCreateBattleNetAccount,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x21
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x1c2, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_OnSubmitCreateBattleNetAccount,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x21
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x273, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::MAINMENU_OnSubmitCreateBattleNetAccount,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ed,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressReturnToMainMenuAgain,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x156, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_HandlePasswordChange,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x18c, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_HandlePasswordChange,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x21
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x1c2, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_HandlePasswordChange,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x21
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x142, 0x1f8, 0xa2, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_HandlePasswordChange,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x21
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x273, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::MAINMENU_HandlePasswordChange,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ed,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressShowDisconnectedFromBattleNet2,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x67, 0xad, 0x23a, 0x45 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x6e, 0x1e0, 0x23a, 0x13e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x6e, 0x262, 0x23a, 0x13e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x6e, 0x2bc, 0x23a, 0x13e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x20d, 0x201, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_Unused14,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x85, 0x201, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x201, 0x50, 0x110, 0x49 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_CurRealm_or_Realmselect,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x22f, 0x21, 0xb7, 0x12 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x201, 0x69, 0x110, 0x19 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b31,
+        /* .pDC6 = */ &DC6_FrontEnd_NarrowButtonBlank02_or_RealmSelectbuttonthin,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_OpenRealmChangeDialog,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x210, 0x60, 0xf6, 0x2f },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x261, 0x53, 0xb6, 0x47 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_CurRealm_or_Realmselect,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x275, 0x2c, 0x91, 0x15 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x261, 0x71, 0xb6, 0x1e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b31,
+        /* .pDC6 = */ &DC6_FrontEnd_NarrowButtonBlank02_or_RealmSelectbuttonthin,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_OpenRealmChangeDialog,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x272, 0x64, 0x97, 0x2c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x1c3, 0x1c7, 0x154, 0x154 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_GWListBox,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1c3, 0xad, 0x154, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1cd, 0xe6, 0x140, 0x46 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont0Ex4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1d7, 0x190, 0x124, 0xa0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_joingamescrollbars,
+        /* .fpOnPressCallback = */ &D2Launch::Launcher::CHARSEL_HandleRealmChange,
+        /* .pTypeArg1 = */ (void*)gaMenuTextBoxScrollbarGeom4,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0xd
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1ef, 0x1b6, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::ChangeClosedRealmChoice,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x28a, 0x1b6, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::Launcher::CHARSEL_OnPressLoadCharListForPreferredRealm,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x7f, 0x1c7, 0x154, 0x154 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_GWListBox,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x7f, 0xad, 0x154, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x89, 0xe6, 0x140, 0x46 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont0Ex4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x93, 0x190, 0x124, 0xa0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_joingamescrollbars,
+        /* .fpOnPressCallback = */ &D2Launch::Launcher::CHARSEL_HandleRealmChange,
+        /* .pTypeArg1 = */ (void*)gaMenuTextBoxScrollbarGeom4,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0xd
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0xab, 0x1b6, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::ChangeClosedRealmChoice,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x146, 0x1b6, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::Launcher::CHARSEL_OnPressLoadCharListForPreferredRealm,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x21, 0x212, 0x1c0, 0x78 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Timer,
+        /* .aParams = */ { 0x32, 0x0, 0x0, 0x0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_OnPressPumpRealmCharListLoad,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x202, 0x23c, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x1499,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::thunk_UIMENU_CreateHeroSinglePlayer,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ed,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::UIMENU_DisconnectAndReturnToMainMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0xc1, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x1498,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_OnPressConfirmDeleteCharacter,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x161, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::SelectCharHandler,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x202, 0x99, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x5,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x202, 0xf6, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x5,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x202, 0x153, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x5,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x202, 0x1b0, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x5,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x202, 0x20d, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x5,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x25, 0xb2, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x135, 0xb2, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x25, 0x10f, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x135, 0x10f, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x25, 0x16c, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x135, 0x16c, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x25, 0x1c9, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x135, 0x1c9, 0xc8, 0x5c },
+        /* .nExtraParam = */ 0x4c,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xed, 0xb2, 0x48, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1fd, 0xb2, 0x48, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xed, 0x10f, 0x48, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1fd, 0x10f, 0x48, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xed, 0x16c, 0x48, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1fd, 0x16c, 0x48, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xed, 0x1c9, 0x48, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1fd, 0x1c9, 0x48, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_HandleCharListClick,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x20
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x2d, 0x13e, 0x213, 0x8c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x25, 0xb2, 0x223, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x202, 0x3e8, 0x110, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_CharSelect_charselectbox,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Launch::CharSel::CHARSEL_HandleKeyNavClassic,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x202, 0x3e8, 0x110, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_CharSelect_charselectboxgrey,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Launch::CharSel::CHARSEL_HandleKeyNavClassic,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x202, 0x181, 0x110, 0x5d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x27a, 0x32, 0x1d, 0x14 },
+        /* .nExtraParam = */ 0x69,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_CharSelect_selectchararrows,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_OnPressScrollCharListUp,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x8
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x27a, 0x22b, 0x1d, 0x14 },
+        /* .nExtraParam = */ 0x63,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_CharSelect_selectchararrows,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_OnPressScrollCharListDown,
+        /* .pTypeArg1 = */ (void *)0x00000002,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x10
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x46, 0x67, 0x1c2, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .nFlagsOrType = */ 0x22
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x55, 0x4e, 0x1d2, 0x2a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .nFlagsOrType = */ 0x22
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x56, 0x8f, 0x190, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x56, 0xb2, 0x190, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x200, 0x96, 0x54, 0x56 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_CharSelect_CreateNewCharImage,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Launch::CharSel::CHARSEL_HandleKeyNavClassic,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x56, 0x12c, 0x190, 0xc8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont8,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x0, 0x257, 0x320, 0x258 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_CharSelect__characterselectscreenEXP,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x273, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::SelectCharHandler,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ed,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::UIMENU_DisconnectAndReturnToMainMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x210, 0xa8, 0x3c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2a50,
+        /* .pDC6 = */ &DC6_CharSelect_TallButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::thunk_UIMENU_CreateHeroSinglePlayer,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x40
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0xe9, 0x210, 0xa8, 0x3c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x58cc,
+        /* .pDC6 = */ &DC6_CharSelect_TallButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::MAINMENU_OnPressShowExpansionCreditsPage,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x40
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1b1, 0x210, 0xa8, 0x3c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x1498,
+        /* .pDC6 = */ &DC6_CharSelect_TallButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_OnPressConfirmDeleteCharacter,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x40
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x234, 0x1c9, 0x22, 0x173 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_joingamescrollbars,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::CharSel::MAINMENU_CharSelScrollbarCallback,
+        /* .pTypeArg1 = */ (void*)gaMenuTextBoxScrollbarGeom5,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x5
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x129, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x52,
+        /* .nLabelAsLocaleStringId = */ 0x2722,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::UIMENU_Callback_NormalButtonSingleplayerTcpIp,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x154, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x4e,
+        /* .nLabelAsLocaleStringId = */ 0x2721,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::UIMENU_Callback_NightmareButtonSingleplayerTcpIp,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x17f, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x48,
+        /* .nLabelAsLocaleStringId = */ 0x2720,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::UIMENU_Callback_HellButtonSingleplayerTcpIp,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x108, 0x104, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xed, 0x190, 0x146, 0xc8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_CharSelect_DifficultyLevels,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x384, 0x384, 0xa, 0xa },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressDestroyFormList,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x50, 0x320, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ed,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumSelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressGotoCharacterSelect,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x273, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumSelButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::MAINMENU_OnPressCreateCharacterOk,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x0, 0x257, 0x320, 0x258 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_CharacterCreate_or_charactercreationscreenEXP,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x159, 0x1d6, 0x6e, 0x7f },
+        /* .nExtraParam = */ 0x1,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ &DC6_FrontEnd_fire,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x159, 0x1c6, 0x6e, 0x7f },
+        /* .nExtraParam = */ 0x1,
+        /* .nLabelAsLocaleStringId = */ 0x3,
+        /* .pDC6 = */ &DC6_FrontEnd_fire,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0xc3, 0x155, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesAmazon,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetAmazonDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x12d, 0x14d, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesNecromancer,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetNecromancerDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x190, 0x14a, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesBarbarian,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetBarbarianDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x209, 0x158, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesSorceress,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetSorceressDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x262, 0x167, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesPaladin,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetPaladinDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0xd9, 0x168, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesNecromancer,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetNecromancerDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x272, 0x161, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesSorceress,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetSorceressDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x209, 0x153, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesPaladin,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetPaladinDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x64, 0x151, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesAmazon,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetAmazonDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x153, 0x245, 0x64, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x13f, 0x230, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_clickbox,
+        /* .fpOnPressCallback = */ &D2Launch::UIMENU_ToggleHardcoreMode,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x153, 0x231, 0xc8, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x13f, 0x21c, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_clickbox,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressToggleLadderFlag,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x153, 0x245, 0xc8, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x13f, 0x230, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_clickbox,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressToggleLadderFlag,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x153, 0x259, 0xc8, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x13f, 0x244, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_clickbox,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressToggleLadderFlag,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0xb4, 0x320, 0x64 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfa, 0xd2, 0x12c, 0x64 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xd2, 0x262, 0x1ae, 0x78 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont0Ex4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x13f, 0x207, 0xa9, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_textbox,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x141, 0x200, 0xc8, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x153, 0x231, 0x64, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x13f, 0x21c, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_clickbox,
+        /* .fpOnPressCallback = */ &D2Launch::UIMENU_ToggleHardcoreMode,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x13e, 0x1fe, 0x9d, 0x10 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_OnPressCreateCharacterOk,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x10c, 0x15e, 0x108, 0xb0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpOKCancel,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x119, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_OkCancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressCreateHeroSinglePlayer,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1a5, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_OkCancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressCommitNewCharacterAndStartGame,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x10c, 0x140, 0x108, 0x78 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0xe8, 0x16c, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesAssassin,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetAssassinDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x2d0, 0x172, 0x58, 0xb8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::ClickOnClassCreate,
+        /* .pTypeArg1 = */ (void*)gaCharSelectAnimFramesDruid,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_SetDruidDescription,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x153, 0x231, 0xc8, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x13f, 0x21c, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_clickbox,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressToggleExpansionFlag,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x13f, 0x21c, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_joingameclickboxgrey,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x10c, 0x15e, 0x108, 0xb0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpOKCancel2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x119, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x142f,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::CHARSEL_OnPressDestroyFormList,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1a5, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x142e,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::Launcher::LAUNCHER_StartGameWithSelectedCharacter,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x10c, 0x140, 0x108, 0x78 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x10c, 0x15e, 0x108, 0xb0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpOKCancel2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x119, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x142f,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::CharSel::MAINMENU_OnPressDestroyFormListIfExpansion,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1a5, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x142e,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::Launcher::HandleUpdateToExpansion,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x10c, 0x136, 0x108, 0x78 },
+        /* .nExtraParam = */ 0x9,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont0Ex4,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x10c, 0x15e, 0x108, 0xb0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpOK,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressInvokeCurrentMenuInstance,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x10c, 0x12c, 0x108, 0x64 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressInvokeCurrentMenuInstance,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xde, 0x1aa, 0x154, 0xe0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUp_340x224,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x14a, 0x1a0, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressInvokeCurrentMenuInstance,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xde, 0x118, 0x154, 0x3c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xde, 0x168, 0x154, 0x46 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xde, 0x172, 0x154, 0x14 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xc3, 0x1a6, 0x19a, 0xf5 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x14f, 0x19c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressInvokeCurrentMenuInstance,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xc3, 0xed, 0x19a, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xc7, 0x179, 0x192, 0x8c },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x9e, 0x1cc, 0x1e5, 0x122 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpLargest,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x14f, 0x1c2, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressInvokeCurrentMenuInstance,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x9e, 0xdc, 0x1e5, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xa2, 0x1a4, 0x1dd, 0xc8 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xa2, 0x140, 0x1dd, 0x64 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xa2, 0x1a4, 0x1dd, 0x64 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x9e, 0x1cc, 0x1e5, 0x122 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpLargest,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x14f, 0x1c2, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressInvokeCurrentMenuInstance,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x9e, 0xdc, 0x1e5, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xa2, 0x10e, 0x1dd, 0x32 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x9e, 0x136, 0x1e5, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xa2, 0x1a4, 0x1dd, 0x64 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x10c, 0x15e, 0x108, 0xb0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpOK2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_OkCancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressInvokeCurrentMenuInstance,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x10c, 0x140, 0x108, 0x78 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_OkCancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressInvokeCurrentMenuInstance,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Timer,
+        /* .aParams = */ { 0x28, 0x0, 0x0, 0x0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressShowBnetConnectFailedPopup,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressCancelTermsOfServiceDownload,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressCancelTermsOfServiceDownload,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x10c, 0x151, 0x108, 0x78 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x136, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13fb,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_Unused10,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x15e, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13fc,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressTcpIpOptions,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x238, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressReturnToMainMenu,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x0, 0x257, 0x320, 0x258 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_tcpipbckg_or_tcpipscreen,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x64, 0x4c, 0x258, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont3,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x10e, 0x9c, 0x110, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x109, 0xab, 0x110, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x109, 0xce, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13fe,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MAINMENU_ConnectViaTCPIPAndSelectChar,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_DisableControlIfDataNonZero,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x109, 0x108, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13ff,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::UIMENU_TCPIPAddressInput,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Launch::MainMenus::MAINMENU_DisableControlIfDataNonZero2,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x109, 0x208, 0x110, 0xd2 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont8,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x109, 0x208, 0x110, 0xd2 },
+        /* .nExtraParam = */ 0x2,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont8,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x27, 0x23b, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::Test,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Timer,
+        /* .aParams = */ { 0x1388, 0x0, 0x0, 0x0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressUpdateIpAddressDisplay,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x12c, 0xfa, 0xc8, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x12c, 0x10c, 0xd5, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::UIMENU_ConnectToServerCallback,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x123, 0x10e, 0xda, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_IPAddressBox,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x10c, 0x15e, 0x108, 0xb0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_PopUpOKCancel2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x119, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressStartTcpIpTimer,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1a5, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &DC6_FrontEnd_CancelButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::UIMENU_ConnectToServerCallback,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x60, 0x320, 0x1e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x143, 0x86, 0x12c, 0x1e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x10
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x15f, 0x86, 0x1a9, 0x1e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x257, 0xc8, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x0, 0x257, 0x320, 0x258 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_downloadpatchbckg,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x190, 0x12c, 0xcf, 0xac },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_downloadpatchball2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x150, 0x21c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressCancelTermsOfServiceDownload,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_ImageEx,
+        /* .aParams = */ { 0xc3, 0x1a6, 0x19a, 0xf5 },
+        /* .nExtraParam = */ 0x4,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ &DC6_FrontEnd_TileableDialog,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x14f, 0x19c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x19f, 0x19c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0xff, 0x19c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xc3, 0xed, 0x19a, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xc7, 0x179, 0x192, 0x8c },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xc7, 0x179, 0x192, 0xb4 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xfa, 0x15b, 0x12c, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_EditTextBoxWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xfa, 0x191, 0x12c, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_EditTextBoxWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xc8, 0x15e, 0x190, 0x64 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xc8, 0x203, 0x190, 0x64 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfc, 0x154, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfc, 0x18a, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0xfd, 0x156, 0x125, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0xfd, 0x18c, 0x125, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x109, 0x20f, 0x110, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x2b59,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressSubmitEmailAddress,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x109, 0x23c, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b5a,
+        /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressConfirmSkipEmailPopup,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressAcceptEmailAddress,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x136, 0x320, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x273, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b36,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::MAINMENU_OnSubmitResetPassword,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressShowDisconnectedFromBattleNet2Alt2,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x9e, 0x1f4, 0x1e0, 0xdc },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xf8, 0x1ab, 0x12c, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_EditTextBoxWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfa, 0x1a4, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0xfb, 0x1a6, 0x125, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_OnSubmitResetPassword,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xf8, 0x1dd, 0x12c, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_EditTextBoxWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfa, 0x1d6, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0xfb, 0x1d8, 0x125, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_OnSubmitResetPassword,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x11d, 0x320, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x12c, 0x320, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x181, 0x320, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x1d6, 0x320, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x14f, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b2a,
+        /* .pDC6 = */ &DC6_FrontEnd_3WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressChangePassword,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x1a4, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b69,
+        /* .pDC6 = */ &DC6_FrontEnd_3WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressShowDisconnectedFromBattleNet,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x108, 0x1f9, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b6b,
+        /* .pDC6 = */ &DC6_FrontEnd_3WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::thunk_UIMENU_YouWereDisconnectedFromBattleNet3,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressReturnToMainMenuAgain_ForBnetDisconnected2,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x0, 0x136, 0x320, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x9e, 0x1f4, 0x1e0, 0xdc },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xf8, 0x192, 0x12c, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_EditTextBoxWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfa, 0x18b, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0xfb, 0x18d, 0x125, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_HandleEmailChange,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xf8, 0x1c4, 0x12c, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_EditTextBoxWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfa, 0x1bd, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0xfb, 0x1bf, 0x125, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_HandleEmailChange,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xf8, 0x1f6, 0x12c, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_EditTextBoxWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfa, 0x1ef, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0xfb, 0x1f1, 0x125, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_HandleEmailChange,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0xf8, 0x228, 0x12c, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DC6_FrontEnd_EditTextBoxWide,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xfa, 0x221, 0x12c, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0xfb, 0x223, 0x125, 0x13 },
+        /* .nExtraParam = */ 0x8,
+        /* .nLabelAsLocaleStringId = */ 0x4,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Launch::MainMenus::MAINMENU_HandleEmailChange,
+        /* .pTypeArg2 = */ (void*)gaMenuFormFontParamsFont5,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x273, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x2b36,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Launch::MainMenus::MAINMENU_HandleEmailChange,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x21, 0x23c, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x1b,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &DC6_FrontEnd_MediumButtonBlank,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressShowDisconnectedFromBattleNet2_ForBnetDisconnected3,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    }
+}; D2_STATIC_GUARD(gaPredefinedForms, "gaPredefinedForms");
+static int gnClassDescriptionTooltipState = -0x1; D2_STATIC_GUARD(gnClassDescriptionTooltipState, "gnClassDescriptionTooltipState");
+static uint32_t gbTermsOfServiceCancelled = 0; D2_STATIC_GUARD(gbTermsOfServiceCancelled, "gbTermsOfServiceCancelled");
+static D2ControlStrc * bCharacterCreationInProgress = 0; D2_STATIC_GUARD(bCharacterCreationInProgress, "bCharacterCreationInProgress");
+// also labelled: gbPasswordChangeInProgress
+static D2WinEditBox * gpBnetPasswordEditBox = 0; D2_STATIC_GUARD(gpBnetPasswordEditBox, "gpBnetPasswordEditBox");
+static D2WinTextBox * gpCtlTcpIpConnectAddressLabel = 0; D2_STATIC_GUARD(gpCtlTcpIpConnectAddressLabel, "gpCtlTcpIpConnectAddressLabel");
+static D2WinTextBox * gpCtlCharCreateBNetRealmTextBox = 0; D2_STATIC_GUARD(gpCtlCharCreateBNetRealmTextBox, "gpCtlCharCreateBNetRealmTextBox");
+static D2WinEditBox * gpCtlChangePasswordInput = 0; D2_STATIC_GUARD(gpCtlChangePasswordInput, "gpCtlChangePasswordInput");
+static D2WinTimer * gpMainMenuTcpIpTimerControl = 0; D2_STATIC_GUARD(gpMainMenuTcpIpTimerControl, "gpMainMenuTcpIpTimerControl");
+// also labelled: gpBNetCharNameInputControl
+static D2WinButton * gpCtlCreateCharLadderCheckbox = 0; D2_STATIC_GUARD(gpCtlCreateCharLadderCheckbox, "gpCtlCreateCharLadderCheckbox");
+static D2WinEditBox * gpaCharNameBuffers = 0; D2_STATIC_GUARD(gpaCharNameBuffers, "gpaCharNameBuffers");
+static D2ControlStrc * FORMS_pListExEx[64] = {}; D2_STATIC_GUARD(FORMS_pListExEx, "FORMS_pListExEx");
+static D2ControlStrc * FORMS_pList[64] = {}; D2_STATIC_GUARD(FORMS_pList, "FORMS_pList");
+char gszPasswordChangeNewPasswordMB[24] = {}; D2_GLOBAL_GUARD(gszPasswordChangeNewPasswordMB, "gszPasswordChangeNewPasswordMB");
+static D2WinTextBox * gpCtlCreateCharExpClassPanel = 0; D2_STATIC_GUARD(gpCtlCreateCharExpClassPanel, "gpCtlCreateCharExpClassPanel");
+static D2ControlStrc * gaAnimImgCharCreateByClass[7] = {}; D2_STATIC_GUARD(gaAnimImgCharCreateByClass, "gaAnimImgCharCreateByClass");
+static D2WinTextBox * gpCtlTcpIpLocalIpTextBox = 0; D2_STATIC_GUARD(gpCtlTcpIpLocalIpTextBox, "gpCtlTcpIpLocalIpTextBox");
+// also labelled: LastKnownIp
+static D2WinEditBox * gpBnetAccountEditBox = 0; D2_STATIC_GUARD(gpBnetAccountEditBox, "gpBnetAccountEditBox");
+// also labelled: gnMainMenuUnused8Counter
+static D2WinTextBox * gpMainMenuGatewayListTextBox = 0; D2_STATIC_GUARD(gpMainMenuGatewayListTextBox, "gpMainMenuGatewayListTextBox");
+static D2ControlStrc * gpCtlBNetPasswordChangeButton = 0; D2_STATIC_GUARD(gpCtlBNetPasswordChangeButton, "gpCtlBNetPasswordChangeButton");
+static D2ControlStrc * gpCtlCreateCharCancelButton = 0; D2_STATIC_GUARD(gpCtlCreateCharCancelButton, "gpCtlCreateCharCancelButton");
+static uint32_t gnTcpIpConnectionSuccessFlag = 0; D2_STATIC_GUARD(gnTcpIpConnectionSuccessFlag, "gnTcpIpConnectionSuccessFlag");
+static D2ControlStrc * gpCtlTcpIpAddressButton = 0; D2_STATIC_GUARD(gpCtlTcpIpAddressButton, "gpCtlTcpIpAddressButton");
+static D2ControlStrc * gpCtlTcpIpConnectButton = 0; D2_STATIC_GUARD(gpCtlTcpIpConnectButton, "gpCtlTcpIpConnectButton");
+// also labelled: gnMainMenuPasswordChangeBuffer
+static D2WinEditBox * gpBnetPasswordConfirmEditBox = 0; D2_STATIC_GUARD(gpBnetPasswordConfirmEditBox, "gpBnetPasswordConfirmEditBox");
+static D2WinButton * gpCtlRealmNameButton = 0; D2_STATIC_GUARD(gpCtlRealmNameButton, "gpCtlRealmNameButton");
+// also labelled: pSingleplayerCharacterListTextbox
+static D2WinTextBox * gpCtlCreateCharHardcoreLabel = 0; D2_STATIC_GUARD(gpCtlCreateCharHardcoreLabel, "gpCtlCreateCharHardcoreLabel");
+// also labelled: gpCtlCreateCharExpClassButton
+static D2ControlStrc * gpCtlCreateCharExpansionCheckboxImage = 0; D2_STATIC_GUARD(gpCtlCreateCharExpansionCheckboxImage, "gpCtlCreateCharExpansionCheckboxImage");
+// also labelled: gpBNetRealmQueryControl
+static D2WinTextBox * gpCtlCreateCharLadderLabel = 0; D2_STATIC_GUARD(gpCtlCreateCharLadderLabel, "gpCtlCreateCharLadderLabel");
+static pfnUIMenuInstance gpCurrentUIMenuInstance = (pfnUIMenuInstance)0; D2_STATIC_GUARD(gpCurrentUIMenuInstance, "gpCurrentUIMenuInstance");
+// also labelled: gpSingleplayerCharSelControl
+static D2ControlStrc * gpCtlCreateCharHardcoreCheckbox = 0; D2_STATIC_GUARD(gpCtlCreateCharHardcoreCheckbox, "gpCtlCreateCharHardcoreCheckbox");
+// also labelled: gnClassCreateClassIndex
+static D2WinButton * gpCtlCreateCharExpansionCheckbox = 0; D2_STATIC_GUARD(gpCtlCreateCharExpansionCheckbox, "gpCtlCreateCharExpansionCheckbox");
+static D2WinTextBox * gpCtlCreateCharOKButton = 0; D2_STATIC_GUARD(gpCtlCreateCharOKButton, "gpCtlCreateCharOKButton");
+D2IniConfigStrc * D2IniData_launcher = 0; D2_GLOBAL_GUARD(D2IniData_launcher, "D2IniData_launcher");
+static D2WinTextBox * gpCtlClassDescriptionTooltipPrimary = 0; D2_STATIC_GUARD(gpCtlClassDescriptionTooltipPrimary, "gpCtlClassDescriptionTooltipPrimary");
+static D2WinTextBox * gpCtlClassDescriptionTooltipSecondary = 0; D2_STATIC_GUARD(gpCtlClassDescriptionTooltipSecondary, "gpCtlClassDescriptionTooltipSecondary");
+static D2WinTextBox * gpCtlTcpIpAddress = 0; D2_STATIC_GUARD(gpCtlTcpIpAddress, "gpCtlTcpIpAddress");
+static D2WinTextBox * gpCtlTcpIpPort = 0; D2_STATIC_GUARD(gpCtlTcpIpPort, "gpCtlTcpIpPort");
+static uint32_t gnSelectedCharGameState = 0; D2_STATIC_GUARD(gnSelectedCharGameState, "gnSelectedCharGameState");
+eOogCurrentCharSelectionMode OogCurrentCharSelectionMode = 0; D2_GLOBAL_GUARD(OogCurrentCharSelectionMode, "OogCurrentCharSelectionMode");
+static uint32_t gnIsFecharPalette = 0; D2_STATIC_GUARD(gnIsFecharPalette, "gnIsFecharPalette");
+uint32_t gnBNetBusyFlag = 0; D2_GLOBAL_GUARD(gnBNetBusyFlag, "gnBNetBusyFlag");
+static char gszLastTcpIpAddress[256] = {}; D2_STATIC_GUARD(gszLastTcpIpAddress, "gszLastTcpIpAddress");
+DC6 * DC6_FrontEnd_blizno = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_blizno, "DC6_FrontEnd_blizno");
+DC6 * DC6_FrontEnd_trademark = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_trademark, "DC6_FrontEnd_trademark");
+DC6 * DC6_FrontEnd_Diablo2 = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_Diablo2, "DC6_FrontEnd_Diablo2");
+DC6 * DC6_FrontEnd_D2logoBlackLeft = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_D2logoBlackLeft, "DC6_FrontEnd_D2logoBlackLeft");
+DC6 * DC6_FrontEnd_D2logoFireLeft = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_D2logoFireLeft, "DC6_FrontEnd_D2logoFireLeft");
+DC6 * DC6_FrontEnd_D2logoBlackRight = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_D2logoBlackRight, "DC6_FrontEnd_D2logoBlackRight");
+DC6 * DC6_FrontEnd_D2logoFireRight = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_D2logoFireRight, "DC6_FrontEnd_D2logoFireRight");
+DC6 * DC6_FrontEnd_TitleScreen_or_gameselectscreenEXP = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_TitleScreen_or_gameselectscreenEXP, "DC6_FrontEnd_TitleScreen_or_gameselectscreenEXP");
+static DC6 * DC6_CURSOR_ohand = 0; D2_STATIC_GUARD(DC6_CURSOR_ohand, "DC6_CURSOR_ohand");
+DC6 * DC6_CharSelect_creditsbckg = 0; D2_GLOBAL_GUARD(DC6_CharSelect_creditsbckg, "DC6_CharSelect_creditsbckg");
+DC6 * DC6_FrontEnd_CharacterCreate_or_charactercreationscreenEXP = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_CharacterCreate_or_charactercreationscreenEXP, "DC6_FrontEnd_CharacterCreate_or_charactercreationscreenEXP");
+DC6 * DC6_FrontEnd_fire = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_fire, "DC6_FrontEnd_fire");
+static DC6 * DC6_CharSelect_Realmselectbutton = 0; D2_STATIC_GUARD(DC6_CharSelect_Realmselectbutton, "DC6_CharSelect_Realmselectbutton");
+DC6 * DC6_CharSelect_TallButtonBlank = 0; D2_GLOBAL_GUARD(DC6_CharSelect_TallButtonBlank, "DC6_CharSelect_TallButtonBlank");
+DC6 * DC6_CharSelect__characterselectscreenEXP = 0; D2_GLOBAL_GUARD(DC6_CharSelect__characterselectscreenEXP, "DC6_CharSelect__characterselectscreenEXP");
+DC6 * DC6_FrontEnd_WideButtonBlank = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_WideButtonBlank, "DC6_FrontEnd_WideButtonBlank");
+DC6 * DC6_FrontEnd_MediumButtonBlank = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_MediumButtonBlank, "DC6_FrontEnd_MediumButtonBlank");
+DC6 * DC6_CharSelect_ShortButtonBlank = 0; D2_GLOBAL_GUARD(DC6_CharSelect_ShortButtonBlank, "DC6_CharSelect_ShortButtonBlank");
+DC6 * DC6_FrontEnd_MediumSelButtonBlank = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_MediumSelButtonBlank, "DC6_FrontEnd_MediumSelButtonBlank");
+DC6 * DC6_FrontEnd_textbox2 = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_textbox2, "DC6_FrontEnd_textbox2");
+DC6 * DC6_FrontEnd_3WideButtonBlank = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_3WideButtonBlank, "DC6_FrontEnd_3WideButtonBlank");
+DC6 * DC6_FrontEnd_EditTextBoxWide = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_EditTextBoxWide, "DC6_FrontEnd_EditTextBoxWide");
+DC6 * DC6_FrontEnd_WideButtonBlank02 = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_WideButtonBlank02, "DC6_FrontEnd_WideButtonBlank02");
+DC6 * DC6_FrontEnd_NarrowButtonBlank = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_NarrowButtonBlank, "DC6_FrontEnd_NarrowButtonBlank");
+DC6 * DC6_FrontEnd_GWListBox = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_GWListBox, "DC6_FrontEnd_GWListBox");
+DC6 * DC6_FrontEnd_TermsofUseBckg = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_TermsofUseBckg, "DC6_FrontEnd_TermsofUseBckg");
+DC6 * DC6_CharSelect_charselectbckg = 0; D2_GLOBAL_GUARD(DC6_CharSelect_charselectbckg, "DC6_CharSelect_charselectbckg");
+DC6 * DC6_CharSelect_DifficultyLevels = 0; D2_GLOBAL_GUARD(DC6_CharSelect_DifficultyLevels, "DC6_CharSelect_DifficultyLevels");
+DC6 * DC6_FrontEnd_CinematicsSelection = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_CinematicsSelection, "DC6_FrontEnd_CinematicsSelection");
+DC6 * DC6_FrontEnd_CinematicsSelectionEXP = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_CinematicsSelectionEXP, "DC6_FrontEnd_CinematicsSelectionEXP");
+DC6 * DC6_CharSelect_charselectbox = 0; D2_GLOBAL_GUARD(DC6_CharSelect_charselectbox, "DC6_CharSelect_charselectbox");
+DC6 * DC6_CharSelect_charselectboxgrey = 0; D2_GLOBAL_GUARD(DC6_CharSelect_charselectboxgrey, "DC6_CharSelect_charselectboxgrey");
+DC6 * DC6_FrontEnd_PopUpOKCancel = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_PopUpOKCancel, "DC6_FrontEnd_PopUpOKCancel");
+DC6 * DC6_FrontEnd_PopUpOKCancel2 = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_PopUpOKCancel2, "DC6_FrontEnd_PopUpOKCancel2");
+DC6 * DC6_CharSelect_selectchararrows = 0; D2_GLOBAL_GUARD(DC6_CharSelect_selectchararrows, "DC6_CharSelect_selectchararrows");
+DC6 * DC6_FrontEnd_CurRealm_or_Realmselect = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_CurRealm_or_Realmselect, "DC6_FrontEnd_CurRealm_or_Realmselect");
+DC6 * DC6_FrontEnd_NarrowButtonBlank02_or_RealmSelectbuttonthin = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_NarrowButtonBlank02_or_RealmSelectbuttonthin, "DC6_FrontEnd_NarrowButtonBlank02_or_RealmSelectbuttonthin");
+DC6 * DC6_CharSelect_CreateNewCharImage = 0; D2_GLOBAL_GUARD(DC6_CharSelect_CreateNewCharImage, "DC6_CharSelect_CreateNewCharImage");
+DC6 * DC6_FrontEnd_PopUpOK = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_PopUpOK, "DC6_FrontEnd_PopUpOK");
+DC6 * DC6_FrontEnd_PopUp_340x224 = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_PopUp_340x224, "DC6_FrontEnd_PopUp_340x224");
+DC6 * DC6_FrontEnd_PopUpWide = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_PopUpWide, "DC6_FrontEnd_PopUpWide");
+DC6 * DC6_FrontEnd_PopUpLargest = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_PopUpLargest, "DC6_FrontEnd_PopUpLargest");
+DC6 * DC6_FrontEnd_TileableDialog = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_TileableDialog, "DC6_FrontEnd_TileableDialog");
+DC6 * DC6_FrontEnd_PopUpOK2 = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_PopUpOK2, "DC6_FrontEnd_PopUpOK2");
+DC6 * DC6_FrontEnd_OkCancelButtonBlank = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_OkCancelButtonBlank, "DC6_FrontEnd_OkCancelButtonBlank");
+DC6 * DC6_FrontEnd_CancelButtonBlank = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_CancelButtonBlank, "DC6_FrontEnd_CancelButtonBlank");
+static DC6 * DC6_CharSelect_password = 0; D2_STATIC_GUARD(DC6_CharSelect_password, "DC6_CharSelect_password");
+DC6 * DC6_FrontEnd_textbox = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_textbox, "DC6_FrontEnd_textbox");
+DC6 * DC6_FrontEnd_clickbox = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_clickbox, "DC6_FrontEnd_clickbox");
+DC6 * DC6_FrontEnd_joingameclickboxgrey = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_joingameclickboxgrey, "DC6_FrontEnd_joingameclickboxgrey");
+static DC6 * DC6_FrontEnd_realmbckg = 0; D2_STATIC_GUARD(DC6_FrontEnd_realmbckg, "DC6_FrontEnd_realmbckg");
+DC6 * DC6_FrontEnd_joingamescrollbars = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_joingamescrollbars, "DC6_FrontEnd_joingamescrollbars");
+DC6 * DC6_FrontEnd_tcpipbckg_or_tcpipscreen = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_tcpipbckg_or_tcpipscreen, "DC6_FrontEnd_tcpipbckg_or_tcpipscreen");
+DC6 * DC6_FrontEnd_IPAddressBox = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_IPAddressBox, "DC6_FrontEnd_IPAddressBox");
+DC6 * DC6_FrontEnd_downloadpatchbckg = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_downloadpatchbckg, "DC6_FrontEnd_downloadpatchbckg");
+DC6 * DC6_FrontEnd_downloadpatchball2 = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_downloadpatchball2, "DC6_FrontEnd_downloadpatchball2");
+DC6 * gaDC6CharCreateAssassin[5] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateAssassin, "gaDC6CharCreateAssassin");
+DC6 * gaDC6CharCreateDruid[5] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateDruid, "gaDC6CharCreateDruid");
+DC6 * gaDC6CharCreateAmazon[5] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateAmazon, "gaDC6CharCreateAmazon");
+DC6 * gaDC6CharCreateNecromancer[5] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateNecromancer, "gaDC6CharCreateNecromancer");
+DC6 * gaDC6CharCreateBarbarian[5] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateBarbarian, "gaDC6CharCreateBarbarian");
+DC6 * gaDC6CharCreateSorceress[5] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateSorceress, "gaDC6CharCreateSorceress");
+DC6 * gaDC6CharCreatePaladin[5] = {}; D2_GLOBAL_GUARD(gaDC6CharCreatePaladin, "gaDC6CharCreatePaladin");
+DC6 * gaDC6CharCreateNecromancerSel[3] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateNecromancerSel, "gaDC6CharCreateNecromancerSel");
+DC6 * gaDC6CharCreateSorceressSel[3] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateSorceressSel, "gaDC6CharCreateSorceressSel");
+DC6 * DC6_FrontEnd_barbarian_bafws = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_barbarian_bafws, "DC6_FrontEnd_barbarian_bafws");
+DC6 * DC6_FrontEnd_paladin_pafws = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_paladin_pafws, "DC6_FrontEnd_paladin_pafws");
+uint32_t gbCinematicsMenuShown = 0; D2_GLOBAL_GUARD(gbCinematicsMenuShown, "gbCinematicsMenuShown");
+uint32_t fpInsertPlayCd = 0; D2_GLOBAL_GUARD(fpInsertPlayCd, "fpInsertPlayCd");
+static int fpLoadAllMediaMpqCallback = 0; D2_STATIC_GUARD(fpLoadAllMediaMpqCallback, "fpLoadAllMediaMpqCallback");
+uint32_t gbCdCheckPassed[25] = {}; D2_GLOBAL_GUARD(gbCdCheckPassed, "gbCdCheckPassed");
+static int FORMS_nListExExCount = 0; D2_STATIC_GUARD(FORMS_nListExExCount, "FORMS_nListExExCount");
+static int FORMS_nListCount = 0; D2_STATIC_GUARD(FORMS_nListCount, "FORMS_nListCount");
+static uint32_t gbMainMenuUIActive = 0; D2_STATIC_GUARD(gbMainMenuUIActive, "gbMainMenuUIActive");
+static D2WinEditBox * gpMainMenuFormPtrs = 0; D2_STATIC_GUARD(gpMainMenuFormPtrs, "gpMainMenuFormPtrs");
+// also labelled: gnMainMenuCreditsLineHeights
+static D2WinTextBox * gpMainMenuCreditsPairLeftTextBox = 0; D2_STATIC_GUARD(gpMainMenuCreditsPairLeftTextBox, "gpMainMenuCreditsPairLeftTextBox");
+// also labelled: gMainMenuCreditScrollOffset
+static D2WinTextBox * gpMainMenuCreditsPairRightTextBox = 0; D2_STATIC_GUARD(gpMainMenuCreditsPairRightTextBox, "gpMainMenuCreditsPairRightTextBox");
+// also labelled: gnMainMenuCreditsLinePositions
+static D2WinTextBox * gpMainMenuCreditsLineTextBox = 0; D2_STATIC_GUARD(gpMainMenuCreditsLineTextBox, "gpMainMenuCreditsLineTextBox");
+static int gnMainMenuCreditsFrameIndex = 0; D2_STATIC_GUARD(gnMainMenuCreditsFrameIndex, "gnMainMenuCreditsFrameIndex");
+static uint32_t gnPaletteLoadedFlag = 0; D2_STATIC_GUARD(gnPaletteLoadedFlag, "gnPaletteLoadedFlag");
+static uint32_t gnMainMenuConnectFlag = 0; D2_STATIC_GUARD(gnMainMenuConnectFlag, "gnMainMenuConnectFlag");
+// also labelled: gnPatchProgressValue
+static D2WinTextBox * gpPatchProgressTextBox = 0; D2_STATIC_GUARD(gpPatchProgressTextBox, "gpPatchProgressTextBox");
+static D2WinImage * gpCtlPatchProgressAnimImage = 0; D2_STATIC_GUARD(gpCtlPatchProgressAnimImage, "gpCtlPatchProgressAnimImage");
+static uint32_t gbMainMenuShowBNetRealmPanel = 0; D2_STATIC_GUARD(gbMainMenuShowBNetRealmPanel, "gbMainMenuShowBNetRealmPanel");
+static D2BNetRealmEntryStrc * * g_pBNetRealmList = 0; D2_STATIC_GUARD(g_pBNetRealmList, "g_pBNetRealmList");
+static int gnRealmListCount = 0; D2_STATIC_GUARD(gnRealmListCount, "gnRealmListCount");
+static uint32_t gnMCPConnectThreadHandle = 0; D2_STATIC_GUARD(gnMCPConnectThreadHandle, "gnMCPConnectThreadHandle");
+static D2ControlStrc * gpCtlBnetProgressBar2 = 0; D2_STATIC_GUARD(gpCtlBnetProgressBar2, "gpCtlBnetProgressBar2");
+static D2WinTextBox * gpCtlBnetProgressBar = 0; D2_STATIC_GUARD(gpCtlBnetProgressBar, "gpCtlBnetProgressBar");
+static D2WinTextBox * gbBnetConnectionTimerActive = 0; D2_STATIC_GUARD(gbBnetConnectionTimerActive, "gbBnetConnectionTimerActive");
+static int gbBnetProgressActive = 0; D2_STATIC_GUARD(gbBnetProgressActive, "gbBnetProgressActive");
+static HANDLE ghBnetConnectHandle = 0; D2_STATIC_GUARD(ghBnetConnectHandle, "ghBnetConnectHandle");
+static unsigned int gbBNetConnectionProgressFlag = {}; D2_STATIC_GUARD(gbBNetConnectionProgressFlag, "gbBNetConnectionProgressFlag");
+static D2WinEditBox * gpCharSelAccountNameInputControl = 0; D2_STATIC_GUARD(gpCharSelAccountNameInputControl, "gpCharSelAccountNameInputControl");
+static D2WinEditBox * gpCtlDisconnectMessage1 = 0; D2_STATIC_GUARD(gpCtlDisconnectMessage1, "gpCtlDisconnectMessage1");
+static D2WinEditBox * gpCtlDisconnectMessage2 = 0; D2_STATIC_GUARD(gpCtlDisconnectMessage2, "gpCtlDisconnectMessage2");
+static D2WinEditBox * gpCtlDisconnectMessage3 = 0; D2_STATIC_GUARD(gpCtlDisconnectMessage3, "gpCtlDisconnectMessage3");
+static D2WinEditBox * gpnEmailBuffer = 0; D2_STATIC_GUARD(gpnEmailBuffer, "gpnEmailBuffer");
+static D2WinEditBox * gpCtlEnterEmailInput = 0; D2_STATIC_GUARD(gpCtlEnterEmailInput, "gpCtlEnterEmailInput");
+static D2ControlStrc * gpCtlEmailConfirmButton = 0; D2_STATIC_GUARD(gpCtlEmailConfirmButton, "gpCtlEmailConfirmButton");
+static uint32_t gbEmailAddressScreenReady = 0; D2_STATIC_GUARD(gbEmailAddressScreenReady, "gbEmailAddressScreenReady");
+static D2WinEditBox * gpCharSelPasswordInputControl = 0; D2_STATIC_GUARD(gpCharSelPasswordInputControl, "gpCharSelPasswordInputControl");
+static D2WinEditBox * gpCtlDisconnectDialog = 0; D2_STATIC_GUARD(gpCtlDisconnectDialog, "gpCtlDisconnectDialog");
+static D2ControlStrc * gpCtlBnetPasswordOkButton = 0; D2_STATIC_GUARD(gpCtlBnetPasswordOkButton, "gpCtlBnetPasswordOkButton");
 
 namespace D2Launch::MainMenus {
 

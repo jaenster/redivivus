@@ -8,9 +8,12 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "Bnclient/SRP.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+char s_ColonSeparator[2] = { ':', '\x00' }; D2_GLOBAL_GUARD(s_ColonSeparator, "s_ColonSeparator");
 
 namespace Bnclient::SRP {
 

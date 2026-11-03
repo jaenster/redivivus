@@ -30,6 +30,8 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
+#include "D2Client/UI/Chat.data.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Launch/MainMenus.h"
 
@@ -44,6 +46,8 @@
 #endif
 
 
+int cChatCmdExclaim = 0x21; D2_GLOBAL_GUARD(cChatCmdExclaim, "cChatCmdExclaim");
+char cChatCmdSlash[2] = { '/', '\x00' }; D2_GLOBAL_GUARD(cChatCmdSlash, "cChatCmdSlash");
 static int gnChatHistoryReadIndex = 0x7; D2_STATIC_GUARD(gnChatHistoryReadIndex, "gnChatHistoryReadIndex");
 static uint32_t gnChatHistoryWriteIndex = 0x7; D2_STATIC_GUARD(gnChatHistoryWriteIndex, "gnChatHistoryWriteIndex");
 static D2UIFlagInitStrc gUIFlagChatInit[4] = {
@@ -105,6 +109,21 @@ static D2UIFlagInitStrc g_UIFlagInitChatPanel[7] = {
         /* .pfHandler = */ &D2Client::UI::Chat::CHAT_ResetIMEState
     }
 }; D2_STATIC_GUARD(g_UIFlagInitChatPanel, "g_UIFlagInitChatPanel");
+static uint32_t gnChatHistoryScrollIndex = 0; D2_STATIC_GUARD(gnChatHistoryScrollIndex, "gnChatHistoryScrollIndex");
+int gaIMECompositionBuffer = 0; D2_GLOBAL_GUARD(gaIMECompositionBuffer, "gaIMECompositionBuffer");
+char gaChatInputBuffer = 0; D2_GLOBAL_GUARD(gaChatInputBuffer, "gaChatInputBuffer");
+static uint8_t gbChatInputEnabled = 0; D2_STATIC_GUARD(gbChatInputEnabled, "gbChatInputEnabled");
+static uint16_t gnChatHistoryFillCount = 0; D2_STATIC_GUARD(gnChatHistoryFillCount, "gnChatHistoryFillCount");
+uint32_t gnChatInputTextCursorPosition = 0; D2_GLOBAL_GUARD(gnChatInputTextCursorPosition, "gnChatInputTextCursorPosition");
+int gnChatInputTextLength = 0; D2_GLOBAL_GUARD(gnChatInputTextLength, "gnChatInputTextLength");
+uint32_t gnIMEInputMode = 0; D2_GLOBAL_GUARD(gnIMEInputMode, "gnIMEInputMode");
+static LPCANDIDATELIST gpIMECandidateList = nullptr; D2_STATIC_GUARD(gpIMECandidateList, "gpIMECandidateList");
+uint16_t gwcImeCompositionBuffer[32] = {}; D2_GLOBAL_GUARD(gwcImeCompositionBuffer, "gwcImeCompositionBuffer");
+// also labelled: ChatValue
+uint16_t gwszChatInputText[257] = {}; D2_GLOBAL_GUARD(gwszChatInputText, "gwszChatInputText");
+static uint8_t gaChatHistoryBuffer[4112] = {}; D2_STATIC_GUARD(gaChatHistoryBuffer, "gaChatHistoryBuffer");
+// also labelled: gpIMECompositionString
+uint16_t gwcIMECompositionString[32] = {}; D2_GLOBAL_GUARD(gwcIMECompositionString, "gwcIMECompositionString");
 
 namespace D2Client::UI::Chat {
 

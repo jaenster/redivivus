@@ -15,6 +15,8 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "globals/globals.h"
+#include "D2Sound/Sound.data.h"
+#include "D2Sound/Src/D2SoundSmp.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -33,7 +35,61 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2SoundSmpStrc) == 0x60, "D2_NEW_AT(D2SoundSmpStrc): the 32-bit layout must be the 0x60 bytes 1.14d allocates");
 
 
+static uint8_t gEAXPropertyGuid_Obstruction[16] = {
+    0xa7,
+    0xa6,
+    0x6,
+    0x3,
+    0x24,
+    0xb2,
+    0xd2,
+    0x11,
+    0x99,
+    0xe5,
+    0x0,
+    0x0,
+    0xe8,
+    0xd8,
+    0xc7,
+    0x22
+}; D2_STATIC_GUARD(gEAXPropertyGuid_Obstruction, "gEAXPropertyGuid_Obstruction");
+uint8_t gEAXPropertyGuid_Reserved1[16] = {
+    0xc1,
+    0x6f,
+    0x4e,
+    0x4a,
+    0x41,
+    0xc3,
+    0xd1,
+    0x11,
+    0xb7,
+    0x3a,
+    0x44,
+    0x45,
+    0x53,
+    0x54,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gEAXPropertyGuid_Reserved1, "gEAXPropertyGuid_Reserved1");
+static uint8_t gaEAXPropertyGuid_ObstructionParams[9] = {
+    0xc0,
+    0x6f,
+    0x4e,
+    0x4a,
+    0x41,
+    0xc3,
+    0xd1,
+    0x11,
+    0xb7
+}; D2_STATIC_GUARD(gaEAXPropertyGuid_ObstructionParams, "gaEAXPropertyGuid_ObstructionParams");
+static float gnSoundFrequency_22kHz = 2; D2_STATIC_GUARD(gnSoundFrequency_22kHz, "gnSoundFrequency_22kHz");
+static float gnSoundQuality_Low = 100; D2_STATIC_GUARD(gnSoundQuality_Low, "gnSoundQuality_Low");
+static double gnSoundAttenuation_Max = 0.0000999999974737875; D2_STATIC_GUARD(gnSoundAttenuation_Max, "gnSoundAttenuation_Max");
 static uint32_t gnSoundGlobalVolume = 0xff; D2_STATIC_GUARD(gnSoundGlobalVolume, "gnSoundGlobalVolume");
+static uint32_t g_nSoundSampleParam = 0; D2_STATIC_GUARD(g_nSoundSampleParam, "g_nSoundSampleParam");
+static int * gpSoundSampleList = 0; D2_STATIC_GUARD(gpSoundSampleList, "gpSoundSampleList");
+HANDLE ghSoundThreadStopEvent = 0; D2_GLOBAL_GUARD(ghSoundThreadStopEvent, "ghSoundThreadStopEvent");
+HANDLE ghSoundThread = 0; D2_GLOBAL_GUARD(ghSoundThread, "ghSoundThread");
 
 namespace D2Sound::Src::D2SoundSmp {
 

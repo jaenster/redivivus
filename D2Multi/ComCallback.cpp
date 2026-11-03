@@ -28,8 +28,13 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Game/D2QuestGUIDStrc.h"
+#include "D2Multi/ChatDlg.data.h"
+#include "D2Multi/ComCallback.data.h"
+#include "D2Multi/Launcher.data.h"
 #include "D2Multi/OOG.h"
+#include "D2Multi/OOGUtilities.data.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/Src/D2WinButton.h"
 
@@ -335,6 +340,15 @@ static pfnComCallback gaComCallbackDispatch[24] = {
     (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AppendErrorMessage,
     &D2Multi::ComCallback::COMCALLBACK_ProcessWhisperCommand
 }; D2_STATIC_GUARD(gaComCallbackDispatch, "gaComCallbackDispatch");
+// also labelled: gszChannelUserCountFormat
+char gszCurrentChannelName[256] = {}; D2_GLOBAL_GUARD(gszCurrentChannelName, "gszCurrentChannelName");
+static D2ChannelUserStrc * gpChannelUserListHead = 0; D2_STATIC_GUARD(gpChannelUserListHead, "gpChannelUserListHead");
+static void * gpChannelUserLinkedListHead = 0; D2_STATIC_GUARD(gpChannelUserLinkedListHead, "gpChannelUserLinkedListHead");
+static int gnChannelUserTotalCount = 0; D2_STATIC_GUARD(gnChannelUserTotalCount, "gnChannelUserTotalCount");
+static int gnChannelUserCount = 0; D2_STATIC_GUARD(gnChannelUserCount, "gnChannelUserCount");
+static int gnChannelUserListScrollOffset = 0; D2_STATIC_GUARD(gnChannelUserListScrollOffset, "gnChannelUserListScrollOffset");
+void * gpCurrentChatRoomContext = 0; D2_GLOBAL_GUARD(gpCurrentChatRoomContext, "gpCurrentChatRoomContext");
+uint32_t gdwLastChatSendTick = 0; D2_GLOBAL_GUARD(gdwLastChatSendTick, "gdwLastChatSendTick");
 
 namespace D2Multi::ComCallback {
 

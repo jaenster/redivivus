@@ -9,6 +9,7 @@
 #include "globals/globals.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "support/d2_trace.h"
+#include "Fog/File.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -25,6 +26,11 @@ typedef void (__fastcall *fnCrashOutputLine)(::Report * pReport, char * szString
 #define RECON_FPTD_pfnFogExceptionFilter
 typedef int (__fastcall *pfnFogExceptionFilter)(D2CrashReportStrc * pExceptionReport, void * pUserContext);
 #endif
+
+char gdwFileReadPosition[3] = { '\x0a', '\x0a', '\x00' }; D2_GLOBAL_GUARD(gdwFileReadPosition, "gdwFileReadPosition");
+char gszCrashDumpRegisterFormatString[4] = { 'E', 'S', 'P', '\x00' }; D2_GLOBAL_GUARD(gszCrashDumpRegisterFormatString, "gszCrashDumpRegisterFormatString");
+pfnFogExceptionFilter gpCurrentExceptionFilter = (pfnFogExceptionFilter)0; D2_GLOBAL_GUARD(gpCurrentExceptionFilter, "gpCurrentExceptionFilter");
+void * gpCurrentExceptionContext = 0; D2_GLOBAL_GUARD(gpCurrentExceptionContext, "gpCurrentExceptionContext");
 
 namespace Fog::File {
 

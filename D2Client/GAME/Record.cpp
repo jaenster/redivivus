@@ -14,6 +14,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/WindowHandle.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Record.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -42,6 +43,17 @@ typedef void (__stdcall *pfnFaultError)(LPCSTR szFile, int nLine, LPCSTR szExpre
 #endif
 
 static D2GameRecordStrc * gpCurrentGameRecord = (D2GameRecordStrc *)&gsGameRecordContext; D2_STATIC_GUARD(gpCurrentGameRecord, "gpCurrentGameRecord");
+D2GameRecordStrc gsGameRecordContext = {}; D2_GLOBAL_GUARD(gsGameRecordContext, "gsGameRecordContext");
+namespace D2Client::GAME::Record {
+RecordCleanupFn CleanUpFn = (RecordCleanupFn)0; D2_GLOBAL_GUARD(CleanUpFn, "D2Client::GAME::Record::CleanUpFn");
+} // namespace D2Client::GAME::Record
+static D2GameRecordFileHeaderStrc lpBuffer_007a2768 = {}; D2_STATIC_GUARD(lpBuffer_007a2768, "lpBuffer_007a2768");
+namespace D2Client::GAME::Record {
+uint32_t NotRecording = 0; D2_GLOBAL_GUARD(NotRecording, "D2Client::GAME::Record::NotRecording");
+BOOL SettedUp = 0; D2_GLOBAL_GUARD(SettedUp, "D2Client::GAME::Record::SettedUp");
+BOOL gbIsRecording = 0; D2_GLOBAL_GUARD(gbIsRecording, "D2Client::GAME::Record::gbIsRecording");
+BOOL gbIsPlaybackActive = 0; D2_GLOBAL_GUARD(gbIsPlaybackActive, "D2Client::GAME::Record::gbIsPlaybackActive");
+} // namespace D2Client::GAME::Record
 
 namespace D2Client::GAME::Record {
 

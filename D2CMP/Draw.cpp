@@ -7,6 +7,7 @@
 #include "Storm/Source/SBMP.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2CMP/Draw.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -16,6 +17,14 @@
 typedef uint8_t (__stdcall *pfnRGBToPaletteIndex)(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 #endif
 
+// also labelled: gWpnClass_w_WeaponClass5
+static double gdConst360 = 360; D2_STATIC_GUARD(gdConst360, "gdConst360");
+// also labelled: gWpnClass_w_WeaponClass4
+static double gdConst60 = 60; D2_STATIC_GUARD(gdConst60, "gdConst60");
+// also labelled: gdDrlgHueConst181
+double gdConst180 = 180; D2_GLOBAL_GUARD(gdConst180, "gdConst180");
+// also labelled: gMercenary_t_TownEnumValue2
+static double gdConst0_2 = 0.200000002980232; D2_STATIC_GUARD(gdConst0_2, "gdConst0_2");
 static uint32_t gbTransparentColorEnabled = 0; D2_STATIC_GUARD(gbTransparentColorEnabled, "gbTransparentColorEnabled");
 static uint32_t gnPaletteMaxIndex = 0; D2_STATIC_GUARD(gnPaletteMaxIndex, "gnPaletteMaxIndex");
 static uint32_t gaColorDistanceLookupTable[512] = {}; D2_STATIC_GUARD(gaColorDistanceLookupTable, "gaColorDistanceLookupTable");

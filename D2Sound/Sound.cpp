@@ -16,9 +16,27 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "globals/globals.h"
+#include "D2Sound/Sound.data.h"
+#include "D2Sound/Src/D2SoundSmp.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+static BOOL gbSoundInBackground = 0; D2_STATIC_GUARD(gbSoundInBackground, "gbSoundInBackground");
+static IDirectSound3DBuffer * gpEAXInterface1 = 0; D2_STATIC_GUARD(gpEAXInterface1, "gpEAXInterface1");
+static IDirectSoundBuffer * gpEAXInterface2 = 0; D2_STATIC_GUARD(gpEAXInterface2, "gpEAXInterface2");
+static IDirectSoundBuffer * gpDSoundPrimaryBuffer = 0; D2_STATIC_GUARD(gpDSoundPrimaryBuffer, "gpDSoundPrimaryBuffer");
+// also labelled: lpCriticalSection_SoundPlay, lpCriticalSection_0088174c
+_RTL_CRITICAL_SECTION gSoundSmpCs = {}; D2_GLOBAL_GUARD(gSoundSmpCs, "gSoundSmpCs");
+static uint32_t gnDirectSoundInitialized = 0; D2_STATIC_GUARD(gnDirectSoundInitialized, "gnDirectSoundInitialized");
+IDirectSound * gnDirectSoundInitStatus = 0; D2_GLOBAL_GUARD(gnDirectSoundInitStatus, "gnDirectSoundInitStatus");
+uint32_t gnDSoundPrimaryBufferDelay = 0; D2_GLOBAL_GUARD(gnDSoundPrimaryBufferDelay, "gnDSoundPrimaryBufferDelay");
+uint32_t gnSound3DLoudness = 0; D2_GLOBAL_GUARD(gnSound3DLoudness, "gnSound3DLoudness");
+int gnSoundQualityMode = 0; D2_GLOBAL_GUARD(gnSoundQualityMode, "gnSoundQualityMode");
+uint32_t g_bEAXEnabled = 0; D2_GLOBAL_GUARD(g_bEAXEnabled, "g_bEAXEnabled");
+static uint32_t gbDirectSoundCritSecInitialized = 0; D2_STATIC_GUARD(gbDirectSoundCritSecInitialized, "gbDirectSoundCritSecInitialized");
+uint32_t g_bSoundDriverScanComplete = 0; D2_GLOBAL_GUARD(g_bSoundDriverScanComplete, "g_bSoundDriverScanComplete");
+static uint32_t gbDirectSoundDelayWorkaround = 0; D2_STATIC_GUARD(gbDirectSoundDelayWorkaround, "gbDirectSoundDelayWorkaround");
 
 namespace D2Sound::Sound {
 

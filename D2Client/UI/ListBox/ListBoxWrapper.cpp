@@ -8,9 +8,11 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/D2Client.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/ListBox.h"
 #include "D2Client/UI/ListBox/ListBoxImplementation.h"
 #include "Fog/Debug.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

@@ -35,11 +35,25 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "globals/globals.h"
+#include "D2Client/Sound/Sound.data.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+float FLOAT_006da690 = 0.5; D2_GLOBAL_GUARD(FLOAT_006da690, "FLOAT_006da690");
+D2SoundChannelNodeStrc * gpActiveSoundChannelsHead = 0; D2_GLOBAL_GUARD(gpActiveSoundChannelsHead, "gpActiveSoundChannelsHead");
+static uint32_t gnSoundChannelCount = 0; D2_STATIC_GUARD(gnSoundChannelCount, "gnSoundChannelCount");
+static uint32_t gpSoundChannelsArray = 0; D2_STATIC_GUARD(gpSoundChannelsArray, "gpSoundChannelsArray");
+static uint32_t gbSoundChaosEnabled = 0; D2_STATIC_GUARD(gbSoundChaosEnabled, "gbSoundChaosEnabled");
+static LONG * lpAddend_007c8a74 = 0; D2_STATIC_GUARD(lpAddend_007c8a74, "lpAddend_007c8a74");
+static void * pAudioDeviceContext = 0; D2_STATIC_GUARD(pAudioDeviceContext, "pAudioDeviceContext");
+static uint32_t gnSoundChannelIndex = 0; D2_STATIC_GUARD(gnSoundChannelIndex, "gnSoundChannelIndex");
+static uint32_t gnSoundChannelPlaybackState = 0; D2_STATIC_GUARD(gnSoundChannelPlaybackState, "gnSoundChannelPlaybackState");
+static int32_t int32_t_007c8c90 = 0; D2_STATIC_GUARD(int32_t_007c8c90, "int32_t_007c8c90");
+static unsigned int UINT_007c8c94 = {}; D2_STATIC_GUARD(UINT_007c8c94, "UINT_007c8c94");
+static int32_t int32_t_007c8c98 = 0; D2_STATIC_GUARD(int32_t_007c8c98, "int32_t_007c8c98");
 
 namespace D2Client::Sound {
 

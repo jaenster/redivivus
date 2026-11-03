@@ -25,6 +25,8 @@
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSignature.h"
 #include "globals/globals.h"
+#include "Bnclient/BnSend.data.h"
+#include "Bnclient/net_sid.data.h"
 #include "D2Client/UI/Chat.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Net/in_addr.h"
@@ -81,6 +83,29 @@ static char s___AUItem_NewsTable___0072ff8c[24] = {
     '\x00',
     '\x00'
 }; D2_STATIC_GUARD(s___AUItem_NewsTable___0072ff8c, "s___AUItem_NewsTable___0072ff8c");
+static uint32_t g_nBNetServerToken = 0; D2_STATIC_GUARD(g_nBNetServerToken, "g_nBNetServerToken");
+static uint32_t g_nBNetClientToken = 0; D2_STATIC_GUARD(g_nBNetClientToken, "g_nBNetClientToken");
+static void * g_pBNetChannelListData = 0; D2_STATIC_GUARD(g_pBNetChannelListData, "g_pBNetChannelListData");
+static void * gpRealmQueryData = 0; D2_STATIC_GUARD(gpRealmQueryData, "gpRealmQueryData");
+void * g_pBNetGameListData = 0; D2_GLOBAL_GUARD(g_pBNetGameListData, "g_pBNetGameListData");
+void * gpBNetWriteUserData = 0; D2_GLOBAL_GUARD(gpBNetWriteUserData, "gpBNetWriteUserData");
+static void * g_pBNetReadUserData = 0; D2_STATIC_GUARD(g_pBNetReadUserData, "g_pBNetReadUserData");
+static void * g_pBNetCDKeyHashData = 0; D2_STATIC_GUARD(g_pBNetCDKeyHashData, "g_pBNetCDKeyHashData");
+static uint32_t g_nBNetConnectionState = 0; D2_STATIC_GUARD(g_nBNetConnectionState, "g_nBNetConnectionState");
+static LONG * g_pBNetSocketData = 0; D2_STATIC_GUARD(g_pBNetSocketData, "g_pBNetSocketData");
+// also labelled: lpAddend_00881bf4
+static LONG * Destination_00881bf4 = 0; D2_STATIC_GUARD(Destination_00881bf4, "Destination_00881bf4");
+static uint32_t gbBNetSocketConnected = 0; D2_STATIC_GUARD(gbBNetSocketConnected, "gbBNetSocketConnected");
+static long Target_00881bfc = 0; D2_STATIC_GUARD(Target_00881bfc, "Target_00881bfc");
+// also labelled: lpAddend_00881c00
+static LONG * Destination_00881c00 = 0; D2_STATIC_GUARD(Destination_00881c00, "Destination_00881c00");
+static uint32_t g_nBNetThreadInitFlag = 0; D2_STATIC_GUARD(g_nBNetThreadInitFlag, "g_nBNetThreadInitFlag");
+static uint32_t g_pfnNewsChannelCallback = 0; D2_STATIC_GUARD(g_pfnNewsChannelCallback, "g_pfnNewsChannelCallback");
+static pfnNewsEntryCallback g_pfnMotdCallback = (pfnNewsEntryCallback)0; D2_STATIC_GUARD(g_pfnMotdCallback, "g_pfnMotdCallback");
+static pfnVoidNoArgCallback g_pfnNewsCallback = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(g_pfnNewsCallback, "g_pfnNewsCallback");
+static D2BnNewsTableStrc g_nNewsMaxCacheSize = {}; D2_STATIC_GUARD(g_nNewsMaxCacheSize, "g_nNewsMaxCacheSize");
+static uint32_t g_nFirstUnreadNewsIndex = 0; D2_STATIC_GUARD(g_nFirstUnreadNewsIndex, "g_nFirstUnreadNewsIndex");
+static uint32_t g_dwNewsTimestamp = 0; D2_STATIC_GUARD(g_dwNewsTimestamp, "g_dwNewsTimestamp");
 
 namespace Bnclient::BnSend {
 

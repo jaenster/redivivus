@@ -1,0 +1,21 @@
+/**
+ * Data defined in D2Lang/StrTable/strtable.cpp that other translation units name.
+ * Binary: Game.exe
+ */
+
+#pragma once
+
+#include "d2_platform.h"
+
+extern char gaLangAbbreviation_ChineseTraditional[4];
+extern char gaLangAbbreviation_Japanese[4];
+extern char s_SIN_006e0264[4];
+extern char s_HAN_006e0268[4];
+extern char gaLangAbbreviation_Korean[4];
+extern char gaLangAbbreviation_Cyrillic[4];
+extern char s_ITA_006e0274[4];
+extern char s_BRA_006e0278[4];
+extern char s_POR_006e027c[4];
+extern char s_FRA_006e0280[4];
+extern char s_DEU_006e0284[4];
+extern char gaLangNameFormat_Nominative[4];

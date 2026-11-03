@@ -26,6 +26,7 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/Cursor.data.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -114,6 +115,17 @@ static D2CursorDataStrc CursorData[7] = {
     }
 }; D2_STATIC_GUARD(CursorData, "CursorData");
 static int gnCursorDataCount = 0x7; D2_STATIC_GUARD(gnCursorDataCount, "gnCursorDataCount");
+static int MouseY = 0; D2_STATIC_GUARD(MouseY, "MouseY");
+int MouseX = 0; D2_GLOBAL_GUARD(MouseX, "MouseX");
+static uint32_t gnCursorType = 0; D2_STATIC_GUARD(gnCursorType, "gnCursorType");
+static D2UnitStrc * pCursorItem = 0; D2_STATIC_GUARD(pCursorItem, "pCursorItem");
+namespace D2Client::Cursor {
+DC6 * pCursorsDC6[7] = {}; D2_GLOBAL_GUARD(pCursorsDC6, "D2Client::Cursor::pCursorsDC6");
+int nCursorDataIndex = 0; D2_GLOBAL_GUARD(nCursorDataIndex, "D2Client::Cursor::nCursorDataIndex");
+} // namespace D2Client::Cursor
+static int32_t gCursorAnimationFrame = 0; D2_STATIC_GUARD(gCursorAnimationFrame, "gCursorAnimationFrame");
+static uint32_t gnCursorAnimStartTick = 0; D2_STATIC_GUARD(gnCursorAnimStartTick, "gnCursorAnimStartTick");
+int ItemTypeOnHand = 0; D2_GLOBAL_GUARD(ItemTypeOnHand, "ItemTypeOnHand");
 static int gnCursorInitialized = 0; D2_STATIC_GUARD(gnCursorInitialized, "gnCursorInitialized");
 
 namespace D2Client::Cursor {

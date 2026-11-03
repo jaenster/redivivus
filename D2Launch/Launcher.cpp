@@ -27,6 +27,9 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/D2BNetGatewayAccessStr.h"
+#include "D2Launch/CharSel.data.h"
+#include "D2Launch/Launcher.data.h"
+#include "D2Launch/MainMenus.data.h"
 #include "D2Win/D2WinScrollbar.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -55,6 +58,9 @@ static uint8_t gaNewCharDefaultAppearance[16] = {
     0xff,
     0xff
 }; D2_STATIC_GUARD(gaNewCharDefaultAppearance, "gaNewCharDefaultAppearance");
+uint32_t gnBusyFlag = 0; D2_GLOBAL_GUARD(gnBusyFlag, "gnBusyFlag");
+static uint32_t gbLauncherBnetConnectInProgress = 0; D2_STATIC_GUARD(gbLauncherBnetConnectInProgress, "gbLauncherBnetConnectInProgress");
+static D2SaveFileHeaderStrc SAVEFILE = {}; D2_STATIC_GUARD(SAVEFILE, "SAVEFILE");
 
 namespace D2Launch::Launcher {
 

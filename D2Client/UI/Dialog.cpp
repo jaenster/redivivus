@@ -26,6 +26,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Dialog.data.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -129,6 +131,14 @@ static D2UIFlagInitStrc gsUIDialogFlagInit[14] = {
         /* .pfHandler = */ &D2Client::UI::Dialog::INPUT_DialogClickHandler
     }
 }; D2_STATIC_GUARD(gsUIDialogFlagInit, "gsUIDialogFlagInit");
+namespace D2Client::UI::Dialog {
+int32_t gnDialogCounter = 0; D2_GLOBAL_GUARD(gnDialogCounter, "D2Client::UI::Dialog::gnDialogCounter");
+D2DialogStrc * gpDialogActual = 0; D2_GLOBAL_GUARD(gpDialogActual, "D2Client::UI::Dialog::gpDialogActual");
+} // namespace D2Client::UI::Dialog
+int32_t gnDialogStructAllocCount = 0; D2_GLOBAL_GUARD(gnDialogStructAllocCount, "gnDialogStructAllocCount");
+namespace D2Client::UI::Dialog {
+uint32_t gnDialogCounter_b = 0; D2_GLOBAL_GUARD(gnDialogCounter_b, "D2Client::UI::Dialog::gnDialogCounter_b");
+} // namespace D2Client::UI::Dialog
 
 namespace D2Client::UI::Dialog {
 

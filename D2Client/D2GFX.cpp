@@ -3,9 +3,13 @@
 #include "D2Client/D2GFX.h"
 #include "D2Client/Message.h"
 #include "globals/globals.h"
+#include "D2Client/D2GFX.data.h"
+#include "D2Win/Src/D2WinMain.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+int32_t gaYBufferRowOffsets[732] = {}; D2_GLOBAL_GUARD(gaYBufferRowOffsets, "gaYBufferRowOffsets");
 
 namespace D2Client::D2GFX {
 

@@ -17,6 +17,8 @@
 #include "Storm/Source/SSystem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "D2gfx/D2GFX.data.h"
+#include "Storm/Source/SCMD.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -45,6 +47,34 @@ static char gszSCMD_Delim_1[9] = {
     '\x1a',
     '\x00'
 }; D2_STATIC_GUARD(gszSCMD_Delim_1, "gszSCMD_Delim_1");
+static char s___AUCMDDEF___0074c47c[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'C',
+    'M',
+    'D',
+    'D',
+    'E',
+    'F',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_STATIC_GUARD(s___AUCMDDEF___0074c47c, "s___AUCMDDEF___0074c47c");
+D2StormListHead gStormCmdListHeadBackslash = {
+    /* .nLinkOffset = */ 0x0,
+    /* .pPrevLink = */ (StormLinkStrc*)&gStormCmdListHeadBackslash.pPrevLink,
+    /* .pNext = */ 0x0
+}; D2_GLOBAL_GUARD(gStormCmdListHeadBackslash, "gStormCmdListHeadBackslash");
+D2StormListHead gStormCmdListHeadSlash = {
+    /* .nLinkOffset = */ 0x0,
+    /* .pPrevLink = */ (StormLinkStrc*)&gStormCmdListHeadSlash.pPrevLink,
+    /* .pNext = */ 0x0
+}; D2_GLOBAL_GUARD(gStormCmdListHeadSlash, "gStormCmdListHeadSlash");
 static uint32_t gbScmdHasPriorityCommand = 0; D2_STATIC_GUARD(gbScmdHasPriorityCommand, "gbScmdHasPriorityCommand");
 
 namespace Storm::Source {

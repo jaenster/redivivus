@@ -58,6 +58,7 @@
 #include "globals/globals.h"
 #include "D2Common/D2TileLibraryEntryStrc.h"
 #include "D2Common/Drlg/D2DrlgTileDataStrc.h"
+#include "D2Common/Drlg/Preset.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -96,6 +97,507 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2PresetUnitStrc) == 0x20, "D2_NEW_
 #define RECON_FPTD_fTownAutoMap
 typedef void (__stdcall *fTownAutoMap)(eD2LevelId eD2LevelId, int FileIndex, int nCenterX, int nCenterY);
 #endif
+
+D2DrlgPresetTypeTablesStrc gPresetTypeTables = {
+    /* .aIndex = */ {
+        {
+            /* .nLevelId = */ 0x1c,
+            /* .nFirstIndex = */ 0x0,
+            /* .nLastIndex = */ 0x3
+        },
+        {
+            /* .nLevelId = */ 0x1d,
+            /* .nFirstIndex = */ 0x0,
+            /* .nLastIndex = */ 0x3
+        },
+        {
+            /* .nLevelId = */ 0x1e,
+            /* .nFirstIndex = */ 0x0,
+            /* .nLastIndex = */ 0x3
+        },
+        {
+            /* .nLevelId = */ 0x1f,
+            /* .nFirstIndex = */ 0x0,
+            /* .nLastIndex = */ 0x3
+        },
+        {
+            /* .nLevelId = */ 0x1a,
+            /* .nFirstIndex = */ 0x4,
+            /* .nLastIndex = */ 0x6
+        },
+        {
+            /* .nLevelId = */ 0x1b,
+            /* .nFirstIndex = */ 0x4,
+            /* .nLastIndex = */ 0x6
+        },
+        {
+            /* .nLevelId = */ 0x20,
+            /* .nFirstIndex = */ 0x5,
+            /* .nLastIndex = */ 0x9
+        },
+        {
+            /* .nLevelId = */ 0x21,
+            /* .nFirstIndex = */ 0x5,
+            /* .nLastIndex = */ 0x9
+        },
+        {
+            /* .nLevelId = */ 0x22,
+            /* .nFirstIndex = */ 0xa,
+            /* .nLastIndex = */ 0xb
+        },
+        {
+            /* .nLevelId = */ 0x23,
+            /* .nFirstIndex = */ 0xa,
+            /* .nLastIndex = */ 0xb
+        },
+        {
+            /* .nLevelId = */ 0x24,
+            /* .nFirstIndex = */ 0xa,
+            /* .nLastIndex = */ 0xb
+        },
+        {
+            /* .nLevelId = */ 0x25,
+            /* .nFirstIndex = */ 0xa,
+            /* .nLastIndex = */ 0xc
+        },
+        {
+            /* .nLevelId = */ 0x33,
+            /* .nFirstIndex = */ 0xd,
+            /* .nLastIndex = */ 0xe
+        },
+        {
+            /* .nLevelId = */ 0x34,
+            /* .nFirstIndex = */ 0xf,
+            /* .nLastIndex = */ 0x12
+        },
+        {
+            /* .nLevelId = */ 0x35,
+            /* .nFirstIndex = */ 0xf,
+            /* .nLastIndex = */ 0x12
+        },
+        {
+            /* .nLevelId = */ 0x36,
+            /* .nFirstIndex = */ 0xf,
+            /* .nLastIndex = */ 0x12
+        },
+        {
+            /* .nLevelId = */ 0x37,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x38,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x39,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x3a,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x3b,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x3c,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x3d,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x42,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x43,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x44,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x45,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x46,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x47,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x48,
+            /* .nFirstIndex = */ 0x13,
+            /* .nLastIndex = */ 0x14
+        },
+        {
+            /* .nLevelId = */ 0x3e,
+            /* .nFirstIndex = */ 0x15,
+            /* .nLastIndex = */ 0x16
+        },
+        {
+            /* .nLevelId = */ 0x3f,
+            /* .nFirstIndex = */ 0x15,
+            /* .nLastIndex = */ 0x16
+        },
+        {
+            /* .nLevelId = */ 0x40,
+            /* .nFirstIndex = */ 0x15,
+            /* .nLastIndex = */ 0x16
+        },
+        {
+            /* .nLevelId = */ 0x6d,
+            /* .nFirstIndex = */ 0x17,
+            /* .nLastIndex = */ 0x18
+        },
+        {
+            /* .nLevelId = */ 0x6f,
+            /* .nFirstIndex = */ 0x18,
+            /* .nLastIndex = */ 0x21
+        },
+        {
+            /* .nLevelId = */ 0x70,
+            /* .nFirstIndex = */ 0x18,
+            /* .nLastIndex = */ 0x21
+        },
+        {
+            /* .nLevelId = */ 0x75,
+            /* .nFirstIndex = */ 0x18,
+            /* .nLastIndex = */ 0x21
+        }
+    },
+    /* .nAlignPad = */ 0x0,
+    /* .aTypes = */ {
+        {
+            /* .nOrientation = */ 0x7,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0xe,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x5,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x7,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0xd,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x5
+        },
+        {
+            /* .nOrientation = */ 0x5,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x10,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x5,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0xf,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x6,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x1b,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x5,
+            /* .nOffsetY = */ -0x2
+        },
+        {
+            /* .nOrientation = */ 0x4,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x18,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x1,
+            /* .nOffsetY = */ 0x2
+        },
+        {
+            /* .nOrientation = */ 0x4,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x17,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x4,
+            /* .nType = */ 0x3,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x19,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x1,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x1,
+            /* .nType = */ 0x2,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x3e,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x3
+        },
+        {
+            /* .nOrientation = */ 0x1,
+            /* .nType = */ 0x2,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x3f,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x3,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x0,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x10,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x0,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x40,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x2f,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x5,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x0,
+            /* .nType = */ 0x1,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x123,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x2,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x0,
+            /* .nType = */ 0x1,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x122,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x2
+        },
+        {
+            /* .nOrientation = */ 0x5,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x125,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x2,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x4,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x124,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x2
+        },
+        {
+            /* .nOrientation = */ 0x0,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x127,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x2,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x0,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x126,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x2
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x4,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x5c,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x1,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x1,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x5b,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x2
+        },
+        {
+            /* .nOrientation = */ 0x0,
+            /* .nType = */ 0x1,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0xe5,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x0,
+            /* .nType = */ 0x1,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0xe6,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x3,
+            /* .nType = */ 0x3,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x1c1,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ -0x2,
+            /* .nOffsetY = */ 0x4
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x1,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x1b3,
+            /* .eUnitType = */ 0x1,
+            /* .nOffsetX = */ 0x1,
+            /* .nOffsetY = */ 0x2
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x1,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x1b3,
+            /* .eUnitType = */ 0x1,
+            /* .nOffsetX = */ 0x2,
+            /* .nOffsetY = */ 0x1
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x6,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x1b3,
+            /* .eUnitType = */ 0x1,
+            /* .nOffsetX = */ 0x1,
+            /* .nOffsetY = */ 0x1
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x2,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x1b1,
+            /* .eUnitType = */ 0x1,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x1
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x3,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x1b0,
+            /* .eUnitType = */ 0x1,
+            /* .nOffsetX = */ 0x1,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x1a,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x1b2,
+            /* .eUnitType = */ 0x1,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x1
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x4,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x20c,
+            /* .eUnitType = */ 0x1,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x2,
+            /* .nType = */ 0x4,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x20d,
+            /* .eUnitType = */ 0x1,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x1d,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x1,
+            /* .nUnitId = */ 0x3c,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x2,
+            /* .nOffsetY = */ 0x0
+        },
+        {
+            /* .nOrientation = */ 0x1d,
+            /* .nType = */ 0x0,
+            /* .nSubIndex = */ 0x0,
+            /* .nUnitId = */ 0x3c,
+            /* .eUnitType = */ 0x2,
+            /* .nOffsetX = */ 0x0,
+            /* .nOffsetY = */ 0x2
+        }
+    }
+}; D2_GLOBAL_GUARD(gPresetTypeTables, "gPresetTypeTables");
+D2DrlgFileCacheNodeStrc * gpDrlgFileCache = 0; D2_GLOBAL_GUARD(gpDrlgFileCache, "gpDrlgFileCache");
+static _RTL_CRITICAL_SECTION lpCriticalSection_0096d610 = {}; D2_STATIC_GUARD(lpCriticalSection_0096d610, "lpCriticalSection_0096d610");
 
 namespace D2Common::Drlg::Preset {
 

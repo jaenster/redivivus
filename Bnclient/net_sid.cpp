@@ -20,6 +20,7 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "Bnclient/net_sid.data.h"
 #include "D2Client/UI/Chat.h"
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Net/sockaddr.h"
@@ -29,6 +30,25 @@
 
 static uint32_t g_nRealmLogonResult = 0xff; D2_STATIC_GUARD(g_nRealmLogonResult, "g_nRealmLogonResult");
 static uint32_t g_dwProductId = 0x1; D2_STATIC_GUARD(g_dwProductId, "g_dwProductId");
+static char g_szCurrentChannelName[256] = {}; D2_STATIC_GUARD(g_szCurrentChannelName, "g_szCurrentChannelName");
+static BOOL NET_SID_INCOMING_CLIENT_PacketRequireAnswer[94] = {}; D2_STATIC_GUARD(NET_SID_INCOMING_CLIENT_PacketRequireAnswer, "NET_SID_INCOMING_CLIENT_PacketRequireAnswer");
+static uint32_t g_nSIDResponseCount1 = 0; D2_STATIC_GUARD(g_nSIDResponseCount1, "g_nSIDResponseCount1");
+static uint32_t g_nSIDResponseCount2 = 0; D2_STATIC_GUARD(g_nSIDResponseCount2, "g_nSIDResponseCount2");
+static uint32_t g_SIDPacketResponseFlags[94] = {}; D2_STATIC_GUARD(g_SIDPacketResponseFlags, "g_SIDPacketResponseFlags");
+static char gszCDKeyInUseByUsername[256] = {}; D2_STATIC_GUARD(gszCDKeyInUseByUsername, "gszCDKeyInUseByUsername");
+static uint32_t g_bSIDProtocolReady = 0; D2_STATIC_GUARD(g_bSIDProtocolReady, "g_bSIDProtocolReady");
+uint32_t g_dwLastAdId = 0; D2_GLOBAL_GUARD(g_dwLastAdId, "g_dwLastAdId");
+static uint32_t g_bSIDFlag2 = 0; D2_STATIC_GUARD(g_bSIDFlag2, "g_bSIDFlag2");
+static char g_szStoredUsername[256] = {}; D2_STATIC_GUARD(g_szStoredUsername, "g_szStoredUsername");
+static D2SrpSaltVerifierStrc g_srpSaltVerifier = {}; D2_STATIC_GUARD(g_srpSaltVerifier, "g_srpSaltVerifier");
+static D2SrpCredentialsStrc g_srpCredentials = {}; D2_STATIC_GUARD(g_srpCredentials, "g_srpCredentials");
+D2Srp * g_pSrpContext = 0; D2_GLOBAL_GUARD(g_pSrpContext, "g_pSrpContext");
+namespace D2Client::_CdKey {
+char * KeyClassic = 0; D2_GLOBAL_GUARD(KeyClassic, "D2Client::_CdKey::KeyClassic");
+char * KeyExpansion = 0; D2_GLOBAL_GUARD(KeyExpansion, "D2Client::_CdKey::KeyExpansion");
+char * KeyOwner = 0; D2_GLOBAL_GUARD(KeyOwner, "D2Client::_CdKey::KeyOwner");
+} // namespace D2Client::_CdKey
+static uint8_t g_SHA1Contexts[276] = {}; D2_STATIC_GUARD(g_SHA1Contexts, "g_SHA1Contexts");
 
 namespace Bnclient::_net_sid {
 

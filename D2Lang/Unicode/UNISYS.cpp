@@ -11,6 +11,7 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Lang/Unicode/UNISYS.data.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -20,6 +21,7 @@
 #endif
 
 
+uint16_t gaPossessiveNameData = 0x2073; D2_GLOBAL_GUARD(gaPossessiveNameData, "gaPossessiveNameData");
 static uint16_t gnUnicodeKamapEntryCount = 0; D2_STATIC_GUARD(gnUnicodeKamapEntryCount, "gnUnicodeKamapEntryCount");
 static uint8_t gnUnicodeKamapGroupCount = 0; D2_STATIC_GUARD(gnUnicodeKamapGroupCount, "gnUnicodeKamapGroupCount");
 static void * gpUnicodeKamapToCodeTable = 0; D2_STATIC_GUARD(gpUnicodeKamapToCodeTable, "gpUnicodeKamapToCodeTable");

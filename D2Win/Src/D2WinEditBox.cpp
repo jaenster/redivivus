@@ -18,6 +18,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Win/D2WinEditBox.h"
+#include "D2Win/Src/D2WinMain.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

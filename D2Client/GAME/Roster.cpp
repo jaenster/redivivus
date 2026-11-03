@@ -32,6 +32,7 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Roster.data.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -54,6 +55,12 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RosterLinkListStrc) == 0x8, "D2_N
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2RosterStrc) == 0x84, "D2_NEW_AT(D2RosterStrc): the 32-bit layout must be the 0x84 bytes 1.14d allocates");
 
+
+namespace D2Client::GAME::Roster {
+D2RosterStrc * gpRosterPlayers = 0; D2_GLOBAL_GUARD(gpRosterPlayers, "D2Client::GAME::Roster::gpRosterPlayers");
+D2RosterStrc * gpRosterOther = 0; D2_GLOBAL_GUARD(gpRosterOther, "D2Client::GAME::Roster::gpRosterOther");
+D2RosterPartyListStrc * pRosterPartyList = 0; D2_GLOBAL_GUARD(pRosterPartyList, "D2Client::GAME::Roster::pRosterPartyList");
+} // namespace D2Client::GAME::Roster
 
 namespace D2Client::GAME::Roster {
 

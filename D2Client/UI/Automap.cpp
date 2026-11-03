@@ -82,6 +82,9 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Game/Game.data.h"
+#include "D2Client/UI/Automap.data.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/MiniPanel.h"
 #include "D2Common/Drlg/D2DrlgCoordsStrc.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -159,6 +162,52 @@ static POINT gaAutomapXMarkerPolyline[13] = {
         /* .y = */ -0x1
     }
 }; D2_STATIC_GUARD(gaAutomapXMarkerPolyline, "gaAutomapXMarkerPolyline");
+int nAutoMapZoomDivisor = 0xa; D2_GLOBAL_GUARD(nAutoMapZoomDivisor, "nAutoMapZoomDivisor");
+namespace D2Client::UI::Automap {
+int nAutoMapCenters = 0x1; D2_GLOBAL_GUARD(nAutoMapCenters, "D2Client::UI::Automap::nAutoMapCenters");
+int nAutoMapParty = 0x1; D2_GLOBAL_GUARD(nAutoMapParty, "D2Client::UI::Automap::nAutoMapParty");
+uint32_t AutoMapPartyNames = 0x1; D2_GLOBAL_GUARD(AutoMapPartyNames, "D2Client::UI::Automap::AutoMapPartyNames");
+} // namespace D2Client::UI::Automap
+static uint32_t gnAutoMapCellPriority[2048] = {}; D2_STATIC_GUARD(gnAutoMapCellPriority, "gnAutoMapCellPriority");
+namespace D2Client::UI::Automap {
+uint32_t MiniMapType = 0; D2_GLOBAL_GUARD(MiniMapType, "D2Client::UI::Automap::MiniMapType");
+void * pClientAutomapCellActual = 0; D2_GLOBAL_GUARD(pClientAutomapCellActual, "D2Client::UI::Automap::pClientAutomapCellActual");
+size_t nAutomapCellListSize = 0; D2_GLOBAL_GUARD(nAutomapCellListSize, "D2Client::UI::Automap::nAutomapCellListSize");
+D2AutomapLayerStrc * sgpAutomapLayer = 0; D2_GLOBAL_GUARD(sgpAutomapLayer, "D2Client::UI::Automap::sgpAutomapLayer");
+D2AutomapLayerStrc * sgpAutomapLayerEx = 0; D2_GLOBAL_GUARD(sgpAutomapLayerEx, "D2Client::UI::Automap::sgpAutomapLayerEx");
+DC6 * pAutoMapDC6[4] = {}; D2_GLOBAL_GUARD(pAutoMapDC6, "D2Client::UI::Automap::pAutoMapDC6");
+int nAutoMapDC6FrameCount[4] = {}; D2_GLOBAL_GUARD(nAutoMapDC6FrameCount, "D2Client::UI::Automap::nAutoMapDC6FrameCount");
+int AutoMapMoveX = 0; D2_GLOBAL_GUARD(AutoMapMoveX, "D2Client::UI::Automap::AutoMapMoveX");
+int AutoMapMoveY = 0; D2_GLOBAL_GUARD(AutoMapMoveY, "D2Client::UI::Automap::AutoMapMoveY");
+} // namespace D2Client::UI::Automap
+int nAutoMapScrollX = 0; D2_GLOBAL_GUARD(nAutoMapScrollX, "nAutoMapScrollX");
+int nAutoMapScrollY = 0; D2_GLOBAL_GUARD(nAutoMapScrollY, "nAutoMapScrollY");
+static uint32_t bAutoMapRevealAll = 0; D2_STATIC_GUARD(bAutoMapRevealAll, "bAutoMapRevealAll");
+static uint32_t nAutoMapRevealDelay = 0; D2_STATIC_GUARD(nAutoMapRevealDelay, "nAutoMapRevealDelay");
+namespace D2Client::UI::Automap {
+int nAutoMapFade = 0; D2_GLOBAL_GUARD(nAutoMapFade, "D2Client::UI::Automap::nAutoMapFade");
+BOOL bAutoMapFade = 0; D2_GLOBAL_GUARD(bAutoMapFade, "D2Client::UI::Automap::bAutoMapFade");
+} // namespace D2Client::UI::Automap
+static uint8_t nAutoMapColorSelf = 0; D2_STATIC_GUARD(nAutoMapColorSelf, "nAutoMapColorSelf");
+static uint8_t nAutoMapColorHostile = 0; D2_STATIC_GUARD(nAutoMapColorHostile, "nAutoMapColorHostile");
+static uint8_t nAutoMapColorCorpse = 0; D2_STATIC_GUARD(nAutoMapColorCorpse, "nAutoMapColorCorpse");
+static uint8_t nAutoMapColorParty = 0; D2_STATIC_GUARD(nAutoMapColorParty, "nAutoMapColorParty");
+static uint8_t nAutoMapColorMerc = 0; D2_STATIC_GUARD(nAutoMapColorMerc, "nAutoMapColorMerc");
+static uint8_t nAutoMapColorPartyPet = 0; D2_STATIC_GUARD(nAutoMapColorPartyPet, "nAutoMapColorPartyPet");
+static uint8_t nAutoMapColorNPC = 0; D2_STATIC_GUARD(nAutoMapColorNPC, "nAutoMapColorNPC");
+static uint8_t nAutoMapColorShrine = 0; D2_STATIC_GUARD(nAutoMapColorShrine, "nAutoMapColorShrine");
+namespace D2Client::UI::Automap {
+int AUTOMAP_TextHeightOffset = 0; D2_GLOBAL_GUARD(AUTOMAP_TextHeightOffset, "D2Client::UI::Automap::AUTOMAP_TextHeightOffset");
+int gnAutomapClipLeft = 0; D2_GLOBAL_GUARD(gnAutomapClipLeft, "D2Client::UI::Automap::gnAutomapClipLeft");
+int gnAutomapClipTop = 0; D2_GLOBAL_GUARD(gnAutomapClipTop, "D2Client::UI::Automap::gnAutomapClipTop");
+int gnAutomapClipRight = 0; D2_GLOBAL_GUARD(gnAutomapClipRight, "D2Client::UI::Automap::gnAutomapClipRight");
+int gnAutomapClipBottom = 0; D2_GLOBAL_GUARD(gnAutomapClipBottom, "D2Client::UI::Automap::gnAutomapClipBottom");
+int nAutomapCenterY = 0; D2_GLOBAL_GUARD(nAutomapCenterY, "D2Client::UI::Automap::nAutomapCenterY");
+int gnAutomapCenterX = 0; D2_GLOBAL_GUARD(gnAutomapCenterX, "D2Client::UI::Automap::gnAutomapCenterX");
+int AutoMapLeft = 0; D2_GLOBAL_GUARD(AutoMapLeft, "D2Client::UI::Automap::AutoMapLeft");
+uint32_t AutoMapLeft2 = 0; D2_GLOBAL_GUARD(AutoMapLeft2, "D2Client::UI::Automap::AutoMapLeft2");
+uint32_t AutoMapLeft3 = 0; D2_GLOBAL_GUARD(AutoMapLeft3, "D2Client::UI::Automap::AutoMapLeft3");
+} // namespace D2Client::UI::Automap
 
 namespace D2Client::UI::Automap {
 

@@ -26,8 +26,11 @@
 #include "Storm/Source/SReg.h"
 #include "globals/globals.h"
 #include "D2Client/D2GfxHelperStrc.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/Panel.h"
 #include "D2Win/Src/D2WinFont.h"
+#include "D2Win/Src/D2WinMain.data.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -36,6 +39,52 @@
 #define RECON_FPTD_fnBinkFrameCallback
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
+
+D2GfxSettingsStrc D2GFXRenderedData = {
+    /* .bPerspectiveEnabled = */ 0x0,
+    /* .bPerspectiveCapable = */ 0x1,
+    /* .bLowQuality = */ 0x0,
+    /* .nGamma = */ 0x9b,
+    /* .bVSync = */ 0x1,
+    /* .bBlendedShadows = */ 0x1
+}; D2_GLOBAL_GUARD(D2GFXRenderedData, "D2GFXRenderedData");
+static D2GfxSettingsStrc dwD2GFX_Gamma = {}; D2_STATIC_GUARD(dwD2GFX_Gamma, "dwD2GFX_Gamma");
+static BOOL bAspect = 0x1; D2_STATIC_GUARD(bAspect, "bAspect");
+static uint32_t IsOSCursorVisible = 0x1; D2_STATIC_GUARD(IsOSCursorVisible, "IsOSCursorVisible");
+// also labelled: gnGFXUnknownA
+static char * gpszDiabloIIClassNameSource = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(gpszDiabloIIClassNameSource, "gpszDiabloIIClassNameSource");
+static uint32_t gnD2GFX_ActiveScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_ActiveScaleFactor, "gnD2GFX_ActiveScaleFactor");
+HINSTANCE hInstance = 0; D2_GLOBAL_GUARD(hInstance, "hInstance");
+eD2RendererMode eRendererMode = 0; D2_GLOBAL_GUARD(eRendererMode, "eRendererMode");
+static BOOL bD2GFX_Windowed = 0; D2_STATIC_GUARD(bD2GFX_Windowed, "bD2GFX_Windowed");
+uint32_t nResolutionMode = 0; D2_GLOBAL_GUARD(nResolutionMode, "nResolutionMode");
+static HWND hwndD2GFX_Window = 0; D2_STATIC_GUARD(hwndD2GFX_Window, "hwndD2GFX_Window");
+D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions = 0; D2_GLOBAL_GUARD(RENDERER_CurrentRenderedFunctions, "RENDERER_CurrentRenderedFunctions");
+uint32_t gnGfxOverlayMode = 0; D2_GLOBAL_GUARD(gnGfxOverlayMode, "gnGfxOverlayMode");
+uint8_t gaDirectDrawDitherPaletteRemap[1024] = {}; D2_GLOBAL_GUARD(gaDirectDrawDitherPaletteRemap, "gaDirectDrawDitherPaletteRemap");
+D2RenderStatisticsStrc gnTextureMemoryUsageBytes = {}; D2_GLOBAL_GUARD(gnTextureMemoryUsageBytes, "gnTextureMemoryUsageBytes");
+D2RendererCoreStrc * RENDERER_SelectedRendererCore = 0; D2_GLOBAL_GUARD(RENDERER_SelectedRendererCore, "RENDERER_SelectedRendererCore");
+int RENDERER_nWindowWidth = 0; D2_GLOBAL_GUARD(RENDERER_nWindowWidth, "RENDERER_nWindowWidth");
+int RENDERER_nWindowHeight = 0; D2_GLOBAL_GUARD(RENDERER_nWindowHeight, "RENDERER_nWindowHeight");
+int gnGlideWindowHandle = 0; D2_GLOBAL_GUARD(gnGlideWindowHandle, "gnGlideWindowHandle");
+int gnRenderState = 0; D2_GLOBAL_GUARD(gnRenderState, "gnRenderState");
+D2GfxSettingsStrc * pD2GFXRenderedDataStrc = 0; D2_GLOBAL_GUARD(pD2GFXRenderedDataStrc, "pD2GFXRenderedDataStrc");
+D2GfxHelperStrc * D2GfxRendereInitFunctionsStrc = 0; D2_GLOBAL_GUARD(D2GfxRendereInitFunctionsStrc, "D2GfxRendereInitFunctionsStrc");
+BYTE * * gpPaletteTable = 0; D2_GLOBAL_GUARD(gpPaletteTable, "gpPaletteTable");
+// also labelled: ppvBits_007c9154
+BYTE * gpRenderBackBufferBits = 0; D2_GLOBAL_GUARD(gpRenderBackBufferBits, "gpRenderBackBufferBits");
+static LPCSTR gpszWindowClassName = 0; D2_STATIC_GUARD(gpszWindowClassName, "gpszWindowClassName");
+// also labelled: ?rInitialWindowRect@@3UtagRECT@@A, Ordinal_24, lpRect_007c9160
+tagRECT rInitialWindowRect = {}; D2_GLOBAL_GUARD(rInitialWindowRect, "rInitialWindowRect");
+static int32_t nWindowSizeY = 0; D2_STATIC_GUARD(nWindowSizeY, "nWindowSizeY");
+static D2GFXWindowPlacementStrc gaD2GFXWindowPlacements[4] = {}; D2_STATIC_GUARD(gaD2GFXWindowPlacements, "gaD2GFXWindowPlacements");
+static uint32_t ghWndMain = 0; D2_STATIC_GUARD(ghWndMain, "ghWndMain");
+static uint32_t D2GFX_EndCutSceneCurrentState = 0; D2_STATIC_GUARD(D2GFX_EndCutSceneCurrentState, "D2GFX_EndCutSceneCurrentState");
+uint32_t D2GFX_EndCutScene = 0; D2_GLOBAL_GUARD(D2GFX_EndCutScene, "D2GFX_EndCutScene");
+static LPCSTR szWindowClassName = 0; D2_STATIC_GUARD(szWindowClassName, "szWindowClassName");
+static LPCSTR gpszWindowTitle = 0; D2_STATIC_GUARD(gpszWindowTitle, "gpszWindowTitle");
+static int nD2GFX_PerspectiveScaleY = 0; D2_STATIC_GUARD(nD2GFX_PerspectiveScaleY, "nD2GFX_PerspectiveScaleY");
+static int32_t nD2GFX_PerspectiveScaleX = 0; D2_STATIC_GUARD(nD2GFX_PerspectiveScaleX, "nD2GFX_PerspectiveScaleX");
 
 namespace D2gfx::D2GFX {
 

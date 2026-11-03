@@ -71,6 +71,8 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Game/GAME/Clients.data.h"
+#include "D2Game/GAME/Server.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/PLAYER/PlayerModes.h"
 
@@ -90,6 +92,13 @@
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2ClientStrc) == 0x518, "D2_NEW_AT(D2ClientStrc): the 32-bit layout must be the 0x518 bytes 1.14d allocates");
 
+
+static D2ClientStrc * QServerClientBucketByName[256] = {}; D2_STATIC_GUARD(QServerClientBucketByName, "QServerClientBucketByName");
+D2ClientStrc * QServerClientBucketById[256] = {}; D2_GLOBAL_GUARD(QServerClientBucketById, "QServerClientBucketById");
+// also labelled: lpCriticalSection_008846a8
+CRITICAL_SECTION gQServerClientByIdCs = {}; D2_GLOBAL_GUARD(gQServerClientByIdCs, "gQServerClientByIdCs");
+// also labelled: lpCriticalSection_008846c0
+static CRITICAL_SECTION gQServerClientByNameCs = {}; D2_STATIC_GUARD(gQServerClientByNameCs, "gQServerClientByNameCs");
 
 namespace D2Game::GAME::Clients {
 

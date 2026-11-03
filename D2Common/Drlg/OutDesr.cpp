@@ -17,9 +17,95 @@
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
 #include "D2Common/DUNGEON/Dungeon.h"
+#include "D2Common/Drlg/OutDesr.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+D2TombCanyonPresetRegionStrc gaTombCanyonPresetOffsets = {
+    /* .aTombEntries = */ {
+        {
+            /* .nPresetId = */ 0x180,
+            /* .nVariant = */ 0x0,
+            /* .nX = */ 0x8,
+            /* .nY = */ 0x0
+        },
+        {
+            /* .nPresetId = */ 0x17f,
+            /* .nVariant = */ 0x2,
+            /* .nX = */ 0x6,
+            /* .nY = */ 0x0
+        },
+        {
+            /* .nPresetId = */ 0x17f,
+            /* .nVariant = */ 0x1,
+            /* .nX = */ 0x4,
+            /* .nY = */ 0x0
+        },
+        {
+            /* .nPresetId = */ 0x17f,
+            /* .nVariant = */ 0x0,
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x0
+        },
+        {
+            /* .nPresetId = */ 0x183,
+            /* .nVariant = */ 0x0,
+            /* .nX = */ 0x0,
+            /* .nY = */ 0x0
+        },
+        {
+            /* .nPresetId = */ 0x181,
+            /* .nVariant = */ 0x0,
+            /* .nX = */ 0x0,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nPresetId = */ 0x181,
+            /* .nVariant = */ 0x1,
+            /* .nX = */ 0x0,
+            /* .nY = */ 0x4
+        },
+        {
+            /* .nPresetId = */ 0x181,
+            /* .nVariant = */ 0x2,
+            /* .nX = */ 0x0,
+            /* .nY = */ 0x6
+        },
+        {
+            /* .nPresetId = */ 0x182,
+            /* .nVariant = */ 0x0,
+            /* .nX = */ 0x0,
+            /* .nY = */ 0x8
+        }
+    },
+    /* .aPresetVariants = */ {
+        0x2,
+        0x2,
+        0x0,
+        0x3,
+        0x1,
+        0x1,
+        0x3,
+        0x0,
+        0x0,
+        0x2,
+        0x0,
+        0x1,
+        0x1,
+        0x0,
+        0x2,
+        0x0,
+        0x2,
+        0x3,
+        0x1,
+        0x3,
+        0x3,
+        0x1,
+        0x3,
+        0x2
+    }
+}; D2_GLOBAL_GUARD(gaTombCanyonPresetOffsets, "gaTombCanyonPresetOffsets");
 
 namespace D2Common::Drlg::OutDesr {
 

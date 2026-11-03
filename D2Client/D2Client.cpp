@@ -97,13 +97,21 @@
 #include "Storm/Source/SFile.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "D2Client/Engine.data.h"
+#include "D2Client/GAME/Game/Game.data.h"
+#include "D2Client/GAME/Sound.data.h"
+#include "D2Client/Sound/SoundHdr.data.h"
+#include "D2Client/UI/Chat.data.h"
 #include "D2Client/UI/Chat.h"
 #include "D2Client/UI/MiniPanel.h"
+#include "D2Client/UI/UseItem.data.h"
+#include "D2Client/UI/npcmenu.data.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/GAME/Arena.h"
 #include "D2Game/Monster/AI/AI.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

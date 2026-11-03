@@ -25,10 +25,12 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Sound.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+uint32_t gnDialogDataInitialized = 0x1; D2_GLOBAL_GUARD(gnDialogDataInitialized, "gnDialogDataInitialized");
 static uint32_t BackgroundSoundsActive = 0; D2_STATIC_GUARD(BackgroundSoundsActive, "BackgroundSoundsActive");
 static D2ClientSoundChannelStrc gaSoundChannels[16] = {}; D2_STATIC_GUARD(gaSoundChannels, "gaSoundChannels");
 

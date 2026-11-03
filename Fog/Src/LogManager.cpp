@@ -13,6 +13,9 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Launch/CharSel.h"
+#include "Fog/Engine/Application.data.h"
+#include "Fog/Src/ErrorManager.data.h"
+#include "Fog/Src/LogManager.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -34,6 +37,7 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 typedef BOOL (__stdcall *pfnGetDiskFreeSpaceEx)(LPCSTR lpDirectoryName, void * lpFreeBytesAvailableToCaller, void * lpTotalNumberOfBytes, void * lpTotalNumberOfFreeBytes);
 #endif
 
+char cLogFileReadMode[2] = { 'r', '\x00' }; D2_GLOBAL_GUARD(cLogFileReadMode, "cLogFileReadMode");
 static char gszLogFilePath[260] = {
     'D',
     '2',

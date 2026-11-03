@@ -91,8 +91,12 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Client/UI/Inv.data.h"
 #include "D2Client/UI/MiniPanel.h"
+#include "D2Client/UI/Panel.data.h"
 #include "D2Client/UI/QuestLog.h"
+#include "D2Client/UI/npcmenu.data.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Launch/MainMenus.h"
@@ -104,6 +108,176 @@
 #define RECON_FPTD_fnUnitIterCallback
 typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 #endif
+
+static uint32_t gnInventoryActiveUnitId = 0x1; D2_STATIC_GUARD(gnInventoryActiveUnitId, "gnInventoryActiveUnitId");
+static int gnItemDescTitleMaxWidth = 0x1; D2_STATIC_GUARD(gnItemDescTitleMaxWidth, "gnItemDescTitleMaxWidth");
+static int gaInventoryItemSlots = -0x1; D2_STATIC_GUARD(gaInventoryItemSlots, "gaInventoryItemSlots");
+static int gaInventoryState = -0x1; D2_STATIC_GUARD(gaInventoryState, "gaInventoryState");
+static int nInventoryContextMode = -0x1; D2_STATIC_GUARD(nInventoryContextMode, "nInventoryContextMode");
+static int32_t pInventoryContextUi = -0x1; D2_STATIC_GUARD(pInventoryContextUi, "pInventoryContextUi");
+int32_t gpInventoryContextUi = -0x1; D2_GLOBAL_GUARD(gpInventoryContextUi, "gpInventoryContextUi");
+static int gaInventorySelectState = -0x1; D2_STATIC_GUARD(gaInventorySelectState, "gaInventorySelectState");
+static uint32_t gnStashNpcGuid = -0x1; D2_STATIC_GUARD(gnStashNpcGuid, "gnStashNpcGuid");
+static uint32_t gnHirelingLArmSlotImageOffsetY = 0x2; D2_STATIC_GUARD(gnHirelingLArmSlotImageOffsetY, "gnHirelingLArmSlotImageOffsetY");
+static uint32_t gnHirelingLArmSlotImageOffsetX = -0x2; D2_STATIC_GUARD(gnHirelingLArmSlotImageOffsetX, "gnHirelingLArmSlotImageOffsetX");
+static uint32_t gnHirelingHeadSlotImageOffsetY = 0x0; D2_STATIC_GUARD(gnHirelingHeadSlotImageOffsetY, "gnHirelingHeadSlotImageOffsetY");
+static uint32_t gnInvMercWeaponSlot2ImageOffsetY = -0x1; D2_STATIC_GUARD(gnInvMercWeaponSlot2ImageOffsetY, "gnInvMercWeaponSlot2ImageOffsetY");
+static uint32_t gnHirelingRArmSlotImageOffsetX = 0x0; D2_STATIC_GUARD(gnHirelingRArmSlotImageOffsetX, "gnHirelingRArmSlotImageOffsetX");
+static uint32_t gnHirelingRArmSlotImageOffsetY = -0x2; D2_STATIC_GUARD(gnHirelingRArmSlotImageOffsetY, "gnHirelingRArmSlotImageOffsetY");
+static uint32_t gnInvLArmSlotImageOffsetX = 0x0; D2_STATIC_GUARD(gnInvLArmSlotImageOffsetX, "gnInvLArmSlotImageOffsetX");
+static uint32_t gnInvLArmSlotImageOffsetY = -0x2; D2_STATIC_GUARD(gnInvLArmSlotImageOffsetY, "gnInvLArmSlotImageOffsetY");
+static D2NpcShopTabStrc gaNpcShopTabs[4] = {
+    {
+        /* .nTextX = */ 0x2a,
+        /* .nTextY = */ 0x14,
+        /* .nStringId = */ 0xfc4,
+        /* .nSelected = */ 0x0,
+        /* .nHasItems = */ 0x0
+    },
+    {
+        /* .nTextX = */ 0x79,
+        /* .nTextY = */ 0x14,
+        /* .nStringId = */ 0xfc5,
+        /* .nSelected = */ 0x0,
+        /* .nHasItems = */ 0x0
+    },
+    {
+        /* .nTextX = */ 0xc9,
+        /* .nTextY = */ 0x14,
+        /* .nStringId = */ 0xfc5,
+        /* .nSelected = */ 0x0,
+        /* .nHasItems = */ 0x0
+    },
+    {
+        /* .nTextX = */ 0x119,
+        /* .nTextY = */ 0x14,
+        /* .nStringId = */ 0xfc7,
+        /* .nSelected = */ 0x0,
+        /* .nHasItems = */ 0x0
+    }
+}; D2_STATIC_GUARD(gaNpcShopTabs, "gaNpcShopTabs");
+static int AmountOfNPCTabs = 0x4; D2_STATIC_GUARD(AmountOfNPCTabs, "AmountOfNPCTabs");
+static uint32_t CurrentNpcButtonSelection = 0x3; D2_STATIC_GUARD(CurrentNpcButtonSelection, "CurrentNpcButtonSelection");
+static int gaNpcShopButtonTable[2] = { 0x4, -0x1 }; D2_STATIC_GUARD(gaNpcShopButtonTable, "gaNpcShopButtonTable");
+static int NPCButtonArray[16] = {
+    0x111,
+    0x0,
+    0x0,
+    0x0,
+    0xa9,
+    0x111,
+    0x0,
+    0x0,
+    0xa9,
+    0xdd,
+    0x111,
+    0x0,
+    0x74,
+    0xa9,
+    0xdd,
+    0x111
+}; D2_STATIC_GUARD(NPCButtonArray, "NPCButtonArray");
+static D2NpcShopButtonStrc gaNpcShopButtons[4] = {}; D2_STATIC_GUARD(gaNpcShopButtons, "gaNpcShopButtons");
+static D2NpcShopButtonStrc DRAW_UI_NPC_BUTTONS[4] = { {} }; D2_STATIC_GUARD(DRAW_UI_NPC_BUTTONS, "DRAW_UI_NPC_BUTTONS");
+static D2NpcShopButtonStrc gaNpcShopButtonStringIds[4] = { {} }; D2_STATIC_GUARD(gaNpcShopButtonStringIds, "gaNpcShopButtonStringIds");
+static D2NpcShopButtonStrc gnNpcShopButtonActionType[4] = { {} }; D2_STATIC_GUARD(gnNpcShopButtonActionType, "gnNpcShopButtonActionType");
+static D2NpcShopButtonStrc gnCurrentNpcButtonSelection[4] = { {} }; D2_STATIC_GUARD(gnCurrentNpcButtonSelection, "gnCurrentNpcButtonSelection");
+static D2NpcShopButtonStrc gnNpcShopButtonActionType_b[4] = { {} }; D2_STATIC_GUARD(gnNpcShopButtonActionType_b, "gnNpcShopButtonActionType_b");
+static D2NpcShopButtonStrc gnSomeUIOffset1[4] = { {} }; D2_STATIC_GUARD(gnSomeUIOffset1, "gnSomeUIOffset1");
+static D2NpcShopButtonStrc gnCurrentShopNpcButtonState[4] = { {} }; D2_STATIC_GUARD(gnCurrentShopNpcButtonState, "gnCurrentShopNpcButtonState");
+static D2NpcShopButtonStrc NpcButtonFirst[4] = { {} }; D2_STATIC_GUARD(NpcButtonFirst, "NpcButtonFirst");
+static D2NpcShopButtonStrc NpcButtonThird[4] = { {} }; D2_STATIC_GUARD(NpcButtonThird, "NpcButtonThird");
+static D2NpcShopButtonStrc gwInvNpcButton1TextId[4] = { {} }; D2_STATIC_GUARD(gwInvNpcButton1TextId, "gwInvNpcButton1TextId");
+static D2NpcShopButtonStrc gbInvNpcButtonState[4] = { {} }; D2_STATIC_GUARD(gbInvNpcButtonState, "gbInvNpcButtonState");
+static D2NpcShopButtonStrc gwInvNpcButton4TextId[4] = { {} }; D2_STATIC_GUARD(gwInvNpcButton4TextId, "gwInvNpcButton4TextId");
+namespace D2Client::UI::Inv {
+D2GridScreenCoordinates pTradePage2GridScreenCoordinates = {}; D2_GLOBAL_GUARD(pTradePage2GridScreenCoordinates, "D2Client::UI::Inv::pTradePage2GridScreenCoordinates");
+} // namespace D2Client::UI::Inv
+static D2GridScreenCoordinates gnTradePage2ScreenTop = {}; D2_STATIC_GUARD(gnTradePage2ScreenTop, "gnTradePage2ScreenTop");
+static D2GridScreenCoordinates gnTradePage2ScreenBottom = {}; D2_STATIC_GUARD(gnTradePage2ScreenBottom, "gnTradePage2ScreenBottom");
+static D2GridScreenCoordinates gnTradePage2ScreenLeft = {}; D2_STATIC_GUARD(gnTradePage2ScreenLeft, "gnTradePage2ScreenLeft");
+static D2GridScreenCoordinates gnTradePage2ScreenRight = {}; D2_STATIC_GUARD(gnTradePage2ScreenRight, "gnTradePage2ScreenRight");
+static unsigned int gdwInvLastActionTickCount = {}; D2_STATIC_GUARD(gdwInvLastActionTickCount, "gdwInvLastActionTickCount");
+static int gnInvMouseX = 0; D2_STATIC_GUARD(gnInvMouseX, "gnInvMouseX");
+namespace D2Client::UI::Inv {
+D2GridScreenCoordinates pBigBankPageGridScreenCoordinates = {}; D2_GLOBAL_GUARD(pBigBankPageGridScreenCoordinates, "D2Client::UI::Inv::pBigBankPageGridScreenCoordinates");
+uint8_t gaInvHighlightColors[5] = {}; D2_GLOBAL_GUARD(gaInvHighlightColors, "D2Client::UI::Inv::gaInvHighlightColors");
+} // namespace D2Client::UI::Inv
+static BOOL gbInvOverlayFlag = 0; D2_STATIC_GUARD(gbInvOverlayFlag, "gbInvOverlayFlag");
+static DC6 * gpInvShopTabImage = 0; D2_STATIC_GUARD(gpInvShopTabImage, "gpInvShopTabImage");
+namespace D2Client::UI::Inv {
+D2GridScreenCoordinates pTradePage1GridScreenCoordinates = {}; D2_GLOBAL_GUARD(pTradePage1GridScreenCoordinates, "D2Client::UI::Inv::pTradePage1GridScreenCoordinates");
+D2GridScreenCoordinates pBankPageGridScreenCoordinates = {}; D2_GLOBAL_GUARD(pBankPageGridScreenCoordinates, "D2Client::UI::Inv::pBankPageGridScreenCoordinates");
+D2GridScreenCoordinates pNpcInventoryGridScreenCoordinates = {}; D2_GLOBAL_GUARD(pNpcInventoryGridScreenCoordinates, "D2Client::UI::Inv::pNpcInventoryGridScreenCoordinates");
+D2GridScreenCoordinates pTransmogrifyBoxGridScreenCoordinates = {}; D2_GLOBAL_GUARD(pTransmogrifyBoxGridScreenCoordinates, "D2Client::UI::Inv::pTransmogrifyBoxGridScreenCoordinates");
+D2GridScreenCoordinates pInventoryGridScreenCoordinated = {}; D2_GLOBAL_GUARD(pInventoryGridScreenCoordinated, "D2Client::UI::Inv::pInventoryGridScreenCoordinated");
+D2GridScreenCoordinates pHirelingGridScreenCoordinates = {}; D2_GLOBAL_GUARD(pHirelingGridScreenCoordinates, "D2Client::UI::Inv::pHirelingGridScreenCoordinates");
+} // namespace D2Client::UI::Inv
+static int gpInvCursorItem = 0; D2_STATIC_GUARD(gpInvCursorItem, "gpInvCursorItem");
+static int gbInvNpcScreenCoordsInitialized = 0; D2_STATIC_GUARD(gbInvNpcScreenCoordsInitialized, "gbInvNpcScreenCoordsInitialized");
+static uint32_t gpInvItemUnderCursor = 0; D2_STATIC_GUARD(gpInvItemUnderCursor, "gpInvItemUnderCursor");
+uint32_t gbInvBodySlotUnderCursorExists = 0; D2_GLOBAL_GUARD(gbInvBodySlotUnderCursorExists, "gbInvBodySlotUnderCursorExists");
+static BOOL DrawShopRelated = 0; D2_STATIC_GUARD(DrawShopRelated, "DrawShopRelated");
+int g_nCurrentInventoryPage = 0; D2_GLOBAL_GUARD(g_nCurrentInventoryPage, "g_nCurrentInventoryPage");
+D2UnitStrc * pItemToDescribe = 0; D2_GLOBAL_GUARD(pItemToDescribe, "pItemToDescribe");
+static D2UnitStrc * gpInvHoveredItem = 0; D2_STATIC_GUARD(gpInvHoveredItem, "gpInvHoveredItem");
+static uint8_t CurrentInventoryPage = 0; D2_STATIC_GUARD(CurrentInventoryPage, "CurrentInventoryPage");
+static uint8_t TypeOfShopMaybe = 0; D2_STATIC_GUARD(TypeOfShopMaybe, "TypeOfShopMaybe");
+uint8_t gbInvImageLoadToggle = 0; D2_GLOBAL_GUARD(gbInvImageLoadToggle, "gbInvImageLoadToggle");
+static uint32_t gnInvShopPage = 0; D2_STATIC_GUARD(gnInvShopPage, "gnInvShopPage");
+static uint32_t gbInvNeedsRefresh = 0; D2_STATIC_GUARD(gbInvNeedsRefresh, "gbInvNeedsRefresh");
+static uint32_t gpInvCubeImage1 = 0; D2_STATIC_GUARD(gpInvCubeImage1, "gpInvCubeImage1");
+static uint32_t gpInvCubeImage2 = 0; D2_STATIC_GUARD(gpInvCubeImage2, "gpInvCubeImage2");
+static uint32_t gpInvCubeImage3 = 0; D2_STATIC_GUARD(gpInvCubeImage3, "gpInvCubeImage3");
+static DC6 * gpInvCubeImage4 = 0; D2_STATIC_GUARD(gpInvCubeImage4, "gpInvCubeImage4");
+static uint32_t gnInvBodySlotUnderCursor = 0; D2_STATIC_GUARD(gnInvBodySlotUnderCursor, "gnInvBodySlotUnderCursor");
+static DC6 * UI_GFX = 0; D2_STATIC_GUARD(UI_GFX, "UI_GFX");
+static DC6 * gpInvShopTab1Image = 0; D2_STATIC_GUARD(gpInvShopTab1Image, "gpInvShopTab1Image");
+static DC6 * gpInvStashImage1 = 0; D2_STATIC_GUARD(gpInvStashImage1, "gpInvStashImage1");
+static DC6 * gpInvCubeBgImage = 0; D2_STATIC_GUARD(gpInvCubeBgImage, "gpInvCubeBgImage");
+static DC6 * gpInvGoldCoinImage = 0; D2_STATIC_GUARD(gpInvGoldCoinImage, "gpInvGoldCoinImage");
+static DC6 * gpInvShopTab2Image = 0; D2_STATIC_GUARD(gpInvShopTab2Image, "gpInvShopTab2Image");
+static DC6 * gpInvStashImage2 = 0; D2_STATIC_GUARD(gpInvStashImage2, "gpInvStashImage2");
+static int gnInvShopButton = 0; D2_STATIC_GUARD(gnInvShopButton, "gnInvShopButton");
+static uint32_t gnInvShopButton2 = 0; D2_STATIC_GUARD(gnInvShopButton2, "gnInvShopButton2");
+static uint32_t gbInvGambleMode = 0; D2_STATIC_GUARD(gbInvGambleMode, "gbInvGambleMode");
+uint32_t gbInvExpansionTabVisible = 0; D2_GLOBAL_GUARD(gbInvExpansionTabVisible, "gbInvExpansionTabVisible");
+static uint32_t gnInvCubeCloseClickState = 0; D2_STATIC_GUARD(gnInvCubeCloseClickState, "gnInvCubeCloseClickState");
+static uint32_t gnInvCubeTransmuteClickState = 0; D2_STATIC_GUARD(gnInvCubeTransmuteClickState, "gnInvCubeTransmuteClickState");
+static D2InventoryEntryStrc gaPlayerBodySlotScreenCoords[11] = {}; D2_STATIC_GUARD(gaPlayerBodySlotScreenCoords, "gaPlayerBodySlotScreenCoords");
+static uint32_t gbInvTradeWindowOpen = 0; D2_STATIC_GUARD(gbInvTradeWindowOpen, "gbInvTradeWindowOpen");
+static D2InventoryEntryStrc gaHirelingBodySlotScreenCoords[11] = {}; D2_STATIC_GUARD(gaHirelingBodySlotScreenCoords, "gaHirelingBodySlotScreenCoords");
+static uint32_t gbInvTradeWindowOpen2 = 0; D2_STATIC_GUARD(gbInvTradeWindowOpen2, "gbInvTradeWindowOpen2");
+uint32_t gbTradeConfirmationPending = 0; D2_GLOBAL_GUARD(gbTradeConfirmationPending, "gbTradeConfirmationPending");
+static uint32_t gbInvTradeAcceptClicked = 0; D2_STATIC_GUARD(gbInvTradeAcceptClicked, "gbInvTradeAcceptClicked");
+static uint32_t gbInventoryDragInProgress = 0; D2_STATIC_GUARD(gbInventoryDragInProgress, "gbInventoryDragInProgress");
+static uint32_t gbInvTradeCancelClicked = 0; D2_STATIC_GUARD(gbInvTradeCancelClicked, "gbInvTradeCancelClicked");
+uint32_t gpInvItemDescPending = 0; D2_GLOBAL_GUARD(gpInvItemDescPending, "gpInvItemDescPending");
+static uint32_t gbInvGoldDialogOpen = 0; D2_STATIC_GUARD(gbInvGoldDialogOpen, "gbInvGoldDialogOpen");
+static uint32_t gnInvInventoryGold = 0; D2_STATIC_GUARD(gnInvInventoryGold, "gnInvInventoryGold");
+static uint32_t gnInvStashGold = 0; D2_STATIC_GUARD(gnInvStashGold, "gnInvStashGold");
+static uint32_t gbInvStashPageOpen = 0; D2_STATIC_GUARD(gbInvStashPageOpen, "gbInvStashPageOpen");
+static uint32_t gbInvStashDepositClicked = 0; D2_STATIC_GUARD(gbInvStashDepositClicked, "gbInvStashDepositClicked");
+static uint32_t gbInvCubePageOpen = 0; D2_STATIC_GUARD(gbInvCubePageOpen, "gbInvCubePageOpen");
+static uint32_t gbInvCubeTransmuteClicked = 0; D2_STATIC_GUARD(gbInvCubeTransmuteClicked, "gbInvCubeTransmuteClicked");
+static uint32_t gbInvCubePageOpen2 = 0; D2_STATIC_GUARD(gbInvCubePageOpen2, "gbInvCubePageOpen2");
+static uint32_t gbInvCubeWithdrawClicked = 0; D2_STATIC_GUARD(gbInvCubeWithdrawClicked, "gbInvCubeWithdrawClicked");
+static DC6 * gpInvMercHelmetSlotImage = 0; D2_STATIC_GUARD(gpInvMercHelmetSlotImage, "gpInvMercHelmetSlotImage");
+static DC6 * gpInvMercArmorSlotImage = 0; D2_STATIC_GUARD(gpInvMercArmorSlotImage, "gpInvMercArmorSlotImage");
+static DC6 * gpInvMercWeaponSlotImage1 = 0; D2_STATIC_GUARD(gpInvMercWeaponSlotImage1, "gpInvMercWeaponSlotImage1");
+static DC6 * gpInvMercWeaponSlotImage2 = 0; D2_STATIC_GUARD(gpInvMercWeaponSlotImage2, "gpInvMercWeaponSlotImage2");
+static DC6 * gpInvBodySlotImage1 = 0; D2_STATIC_GUARD(gpInvBodySlotImage1, "gpInvBodySlotImage1");
+static DC6 * gpInvBodySlotImage2 = 0; D2_STATIC_GUARD(gpInvBodySlotImage2, "gpInvBodySlotImage2");
+static DC6 * gpInvBodySlotImage3 = 0; D2_STATIC_GUARD(gpInvBodySlotImage3, "gpInvBodySlotImage3");
+static DC6 * gpInvBodySlotImage4 = 0; D2_STATIC_GUARD(gpInvBodySlotImage4, "gpInvBodySlotImage4");
+static DC6 * gpInvMercBodyImage = 0; D2_STATIC_GUARD(gpInvMercBodyImage, "gpInvMercBodyImage");
+static DC6 * gpInvCubeRecipeScrollImage = 0; D2_STATIC_GUARD(gpInvCubeRecipeScrollImage, "gpInvCubeRecipeScrollImage");
+static uint32_t gbInvPanelButtonPressed = 0; D2_STATIC_GUARD(gbInvPanelButtonPressed, "gbInvPanelButtonPressed");
+static int gnInvMouseY = 0; D2_STATIC_GUARD(gnInvMouseY, "gnInvMouseY");
+static uint32_t gShopTradeUIState = 0; D2_STATIC_GUARD(gShopTradeUIState, "gShopTradeUIState");
+static uint32_t gnInvMercBodySlot2 = 0; D2_STATIC_GUARD(gnInvMercBodySlot2, "gnInvMercBodySlot2");
+static uint32_t gbInvRecipeScrollOpen = 0; D2_STATIC_GUARD(gbInvRecipeScrollOpen, "gbInvRecipeScrollOpen");
+static uint8_t gpInvRecipeScrollImage[8192] = {}; D2_STATIC_GUARD(gpInvRecipeScrollImage, "gpInvRecipeScrollImage");
 
 namespace D2Client::UI::Inv {
 

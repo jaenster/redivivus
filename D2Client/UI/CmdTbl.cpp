@@ -26,10 +26,16 @@
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "D2Client/D2Client.h"
+#include "D2Client/GAME/Game/Game.data.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UI/CmdTbl.data.h"
+#include "D2Client/UI/Hireables.h"
+#include "D2Client/UI/Panel.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 #include "D2Launch/MainMenus.h"
+#include "D2Win/Src/D2WinMain.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -48,6 +54,604 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2CmdTbl_Line0x50f) == 0x47a, "D2_NEW_AT(D2CmdTbl_Line0x50f): the 32-bit layout must be the 0x47a bytes 1.14d allocates");
 
 
+static int gaKeyBindingsDefault[285] = {
+    0x0,
+    0x10041,
+    0x0,
+    0x430000,
+    0x0,
+    0x1,
+    0x42,
+    0x10000,
+    0x490000,
+    0x1,
+    0x2,
+    0x10050,
+    0x20000,
+    -0x10000,
+    0x0,
+    0x3,
+    0x1004d,
+    0x30000,
+    -0x10000,
+    0x0,
+    0x4,
+    0x10051,
+    0x40000,
+    -0x10000,
+    0x0,
+    0x5,
+    0x1000d,
+    0x50000,
+    -0x10000,
+    0x0,
+    0x6,
+    0x10048,
+    0x60000,
+    -0x10000,
+    0x0,
+    0x7,
+    0x10009,
+    0x70000,
+    0x1000000,
+    0x0,
+    0x8,
+    0x10078,
+    0x80000,
+    -0x10000,
+    0x0,
+    0x9,
+    0x10079,
+    0x90000,
+    -0x10000,
+    0x0,
+    0xa,
+    0x1007a,
+    0xa0000,
+    -0x10000,
+    0x0,
+    0xb,
+    0x1007b,
+    0xb0000,
+    -0x10000,
+    0x0,
+    0xc,
+    0x10054,
+    0xc0000,
+    -0x10000,
+    0x0,
+    0xd,
+    0x10053,
+    0xd0000,
+    -0x10000,
+    0x0,
+    0xe,
+    0x10070,
+    0xe0000,
+    -0x10000,
+    0x0,
+    0xf,
+    0x10071,
+    0xf0000,
+    -0x10000,
+    0x0,
+    0x10,
+    0x10072,
+    0x100000,
+    -0x10000,
+    0x0,
+    0x11,
+    0x10073,
+    0x110000,
+    -0x10000,
+    0x0,
+    0x12,
+    0x10074,
+    0x120000,
+    -0x10000,
+    0x0,
+    0x13,
+    0x10075,
+    0x130000,
+    -0x10000,
+    0x0,
+    0x14,
+    0x10076,
+    0x140000,
+    -0x10000,
+    0x0,
+    0x16,
+    0x100c0,
+    0x160000,
+    -0x10000,
+    0x0,
+    0x17,
+    0x10031,
+    0x170000,
+    -0x10000,
+    0x0,
+    0x18,
+    0x10032,
+    0x180000,
+    -0x10000,
+    0x0,
+    0x19,
+    0x10033,
+    0x190000,
+    -0x10000,
+    0x0,
+    0x1a,
+    0x10034,
+    0x1a0000,
+    -0x10000,
+    0x0,
+    0x1b,
+    0x10060,
+    0x1b0000,
+    -0x10000,
+    0x0,
+    0x1c,
+    0x10061,
+    0x1c0000,
+    -0x10000,
+    0x0,
+    0x1d,
+    0x10062,
+    0x1d0000,
+    -0x10000,
+    0x0,
+    0x1e,
+    0x10063,
+    0x1e0000,
+    -0x10000,
+    0x0,
+    0x1f,
+    0x10064,
+    0x1f0000,
+    -0x10000,
+    0x0,
+    0x20,
+    0x10065,
+    0x200000,
+    -0x10000,
+    0x0,
+    0x21,
+    0x10066,
+    0x210000,
+    -0x10000,
+    0x0,
+    0x22,
+    0x10011,
+    0x220000,
+    -0x10000,
+    0x0,
+    0x23,
+    0x10052,
+    0x230000,
+    0x1020000,
+    0x0,
+    0x24,
+    0x10010,
+    0x240000,
+    -0x10000,
+    0x0,
+    0x25,
+    0x10012,
+    0x250000,
+    0x1010000,
+    0x0,
+    0x26,
+    0x10020,
+    0x260000,
+    -0x10000,
+    0x0,
+    0x27,
+    0x10103,
+    0x270000,
+    -0x10000,
+    0x0,
+    0x28,
+    0x10104,
+    0x280000,
+    -0x10000,
+    0x0,
+    0x29,
+    0x1004e,
+    0x290000,
+    -0x10000,
+    0x0,
+    0x2a,
+    0x1002c,
+    0x2a0000,
+    -0x10000,
+    0x0,
+    0x2b,
+    0x1005a,
+    0x2b0000,
+    -0x10000,
+    0x0,
+    0x2c,
+    0x10057,
+    0x2c0000,
+    -0x10000,
+    0x0,
+    0x2d,
+    0x10056,
+    0x2d0000,
+    -0x10000,
+    0x0,
+    0x15,
+    0x10077,
+    0x150000,
+    -0x10000,
+    0x0,
+    0x2e,
+    0x1ffff,
+    0x2e0000,
+    -0x10000,
+    0x0,
+    0x2f,
+    0x1ffff,
+    0x2f0000,
+    -0x10000,
+    0x0,
+    0x30,
+    0x1ffff,
+    0x300000,
+    -0x10000,
+    0x0,
+    0x31,
+    0x1ffff,
+    0x310000,
+    -0x10000,
+    0x0,
+    0x32,
+    0x1ffff,
+    0x320000,
+    -0x10000,
+    0x0,
+    0x33,
+    0x1ffff,
+    0x330000,
+    -0x10000,
+    0x0,
+    0x34,
+    0x1ffff,
+    0x340000,
+    -0x10000,
+    0x0,
+    0x35,
+    0x1ffff,
+    0x350000,
+    -0x10000,
+    0x0,
+    0x36,
+    0x1004f,
+    0x360000,
+    -0x10000,
+    0x0,
+    0x37,
+    0x10067,
+    0x370000,
+    -0x10000,
+    0x0,
+    0x38,
+    0x1001b,
+    0x380000,
+    -0x10000,
+    0x0
+}; D2_STATIC_GUARD(gaKeyBindingsDefault, "gaKeyBindingsDefault");
+D2CmdBindingStrc gaCmdBindings[57] = {
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ToggleCharScreen,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ToggleInventory,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_TogglePartyScreen,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ToggleMsgLog,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ToggleQuestLog,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ToggleChatBox,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::ui::UI_ToggleHelpScreen,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ToggleAutomap,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_AutomapCenterOnPlayer,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_AutomapCycleFade,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_AutomapToggleParty,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_AutomapTogglePartyNames,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ToggleSkillTree,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ToggleSkillSelect,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F1,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F2,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F3,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F4,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F5,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F6,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F7,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F8,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::ui::UI_ToggleBeltRows,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::Panel::thunk_CMD_UseBeltSlot1,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::Panel::thunk_CMD_UseBeltSlot2,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::Panel::thunk_CMD_UseBeltSlot3,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::Panel::thunk_CMD_UseBeltSlot4,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::thunk_NET_D2GS_CLIENT_Send_SHORT_Walk,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::GAME::Msg::NET_SendPacket0x3f_0x1a,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::thunk_NET_D2GS_CLIENT_Send_SHORT_WalkToEntity,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::thunk_NET_D2GS_CLIENT_Send_SHORT_Run,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::thunk_NET_D2GS_CLIENT_Send_SHORT_RunToEntity,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnLoc,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnEntity,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::CmdTbl::CMD_ToggleRunMode,
+        /* .pfnAltHandler = */ &D2Client::CMD_StopRun,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::CmdTbl::CMD_ToggleAlwaysRun,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::CmdTbl::CMD_SetClickModifier,
+        /* .pfnAltHandler = */ &D2Client::CMD_ClearClickModifier,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_SetHoldAlt,
+        /* .pfnAltHandler = */ &D2Client::CMD_ReleaseHoldAltAndClearSelection,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::GAME::Game::thunk_GAMEDATA_CheckAutomapCenterOnLoad,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::CmdTbl::CMD_CyclePrevSkill,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::CmdTbl::CMD_CycleNextSkill,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::Text::thunk_TEXT_ClearChatMessages,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ nullptr,
+        /* .pfnAltHandler = */ &D2Win::Src::D2WinMain::TakeScreenshot,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::Hireables::UI_ToggleHirelingIconsVisibility,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::CmdTbl::CMD_SwapWeaponSet,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_AutomapToggleLeft,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F9,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F10,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F11,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F12,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F13,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F14,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F15,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::CMD_ActivateSkillSlot_F16,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::CmdTbl::CMD_ToggleMercInventory,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    },
+    {
+        /* .pfnHandler = */ &D2Client::thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnLocEx,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x1
+    },
+    {
+        /* .pfnHandler = */ &D2Client::UI::CmdTbl::CMD_ShowEscMenu,
+        /* .pfnAltHandler = */ nullptr,
+        /* .nHasParam = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(gaCmdBindings, "gaCmdBindings");
+static D2CmdBindingStrc gaCmdHandlerTable[57] = { {} }; D2_STATIC_GUARD(gaCmdHandlerTable, "gaCmdHandlerTable");
+static D2CmdBindingStrc gnCmdTableMax[57] = { {} }; D2_STATIC_GUARD(gnCmdTableMax, "gnCmdTableMax");
+static D2UIFlagInitStrc gsUICmdTblFlagInit[4] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x100,
+        /* .pfHandler = */ &D2Client::UI::CmdTbl::WindowsKeyPressedEvent
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x104,
+        /* .pfHandler = */ &D2Client::UI::CmdTbl::WindowsKeyPressedEvent
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x101,
+        /* .pfHandler = */ &D2Client::UI::CmdTbl::INPUT_DispatchKeyCommand
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x105,
+        /* .pfHandler = */ &D2Client::UI::CmdTbl::INPUT_DispatchKeyCommand
+    }
+}; D2_STATIC_GUARD(gsUICmdTblFlagInit, "gsUICmdTblFlagInit");
 static pfnVoidNoArgCallback gpfnMouseLeftButtonHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnMouseLeftButtonHandler, "gpfnMouseLeftButtonHandler");
 static pfnVoidNoArgCallback gpfnMouseRightButtonHandler = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(gpfnMouseRightButtonHandler, "gpfnMouseRightButtonHandler");
 static D2KeyBindStrc gaKeyBindingsBackup[114] = {}; D2_STATIC_GUARD(gaKeyBindingsBackup, "gaKeyBindingsBackup");

@@ -41,6 +41,7 @@
 #include "Storm/Source/SFile.h"
 #include "Storm/Source/SReg.h"
 #include "globals/globals.h"
+#include "D2Client/Sound/SoundHdr.data.h"
 #include "D2Client/UNIT/UnitSnd.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -55,6 +56,78 @@
 
 
 static float FLOAT_006d9108 = 400; D2_STATIC_GUARD(FLOAT_006d9108, "FLOAT_006d9108");
+D2CutsceneDescStrc gdwSoundHeaderCacheIndex[8] = {
+    {
+        /* .nCutsceneId = */ 0x0,
+        /* .pszVideoPath = */ s_d2_promo_bik_006d91ac,
+        /* .bHasAltSoundPath = */ 0x0,
+        /* .bCharacterAnimationPlayed = */ 0x0,
+        /* .pad = */ {}
+    },
+    {
+        /* .nCutsceneId = */ 0x1,
+        /* .pszVideoPath = */ s_d2intro_s_bik_006d919c,
+        /* .bHasAltSoundPath = */ 0x1,
+        /* .bCharacterAnimationPlayed = */ 0x1,
+        /* .pad = */ {}
+    },
+    {
+        /* .nCutsceneId = */ 0x2,
+        /* .pszVideoPath = */ s_ACT02START_s_BIK_006d9188,
+        /* .bHasAltSoundPath = */ 0x1,
+        /* .bCharacterAnimationPlayed = */ 0x1,
+        /* .pad = */ {}
+    },
+    {
+        /* .nCutsceneId = */ 0x3,
+        /* .pszVideoPath = */ s_ACT03START_s_BIK_006d9174,
+        /* .bHasAltSoundPath = */ 0x1,
+        /* .bCharacterAnimationPlayed = */ 0x1,
+        /* .pad = */ {}
+    },
+    {
+        /* .nCutsceneId = */ 0x4,
+        /* .pszVideoPath = */ s_ACT04START_s_BIK_006d9160,
+        /* .bHasAltSoundPath = */ 0x1,
+        /* .bCharacterAnimationPlayed = */ 0x1,
+        /* .pad = */ {}
+    },
+    {
+        /* .nCutsceneId = */ 0x5,
+        /* .pszVideoPath = */ s_ACT04END_s_BIK_006d9150,
+        /* .bHasAltSoundPath = */ 0x1,
+        /* .bCharacterAnimationPlayed = */ 0x1,
+        /* .pad = */ {}
+    },
+    {
+        /* .nCutsceneId = */ 0x6,
+        /* .pszVideoPath = */ s_D2X_INTRO__s_BIK_006d913c,
+        /* .bHasAltSoundPath = */ 0x1,
+        /* .bCharacterAnimationPlayed = */ 0x1,
+        /* .pad = */ {}
+    },
+    {
+        /* .nCutsceneId = */ 0x7,
+        /* .pszVideoPath = */ s_D2X_OUT__s_BIK_006d912c,
+        /* .bHasAltSoundPath = */ 0x1,
+        /* .bCharacterAnimationPlayed = */ 0x1,
+        /* .pad = */ {}
+    }
+}; D2_GLOBAL_GUARD(gdwSoundHeaderCacheIndex, "gdwSoundHeaderCacheIndex");
+static void * pSoundChannelDataArray = 0; D2_STATIC_GUARD(pSoundChannelDataArray, "pSoundChannelDataArray");
+static D2SoundsTxt * pTxtSounds = 0; D2_STATIC_GUARD(pTxtSounds, "pTxtSounds");
+static int nTxtSoundsSize = 0; D2_STATIC_GUARD(nTxtSoundsSize, "nTxtSoundsSize");
+static D2SoundEnvironTxt * pTxtSoundEnviron = 0; D2_STATIC_GUARD(pTxtSoundEnviron, "pTxtSoundEnviron");
+static int nTxtSoundEnvironSize = 0; D2_STATIC_GUARD(nTxtSoundEnvironSize, "nTxtSoundEnvironSize");
+static int gpSoundHdrGlobal = 0; D2_STATIC_GUARD(gpSoundHdrGlobal, "gpSoundHdrGlobal");
+static int gnSoundIdRangeMax = 0; D2_STATIC_GUARD(gnSoundIdRangeMax, "gnSoundIdRangeMax");
+void * gpSoundLRUListHead = 0; D2_GLOBAL_GUARD(gpSoundLRUListHead, "gpSoundLRUListHead");
+static uint32_t gnCurrentGameAudioVolume = 0; D2_STATIC_GUARD(gnCurrentGameAudioVolume, "gnCurrentGameAudioVolume");
+static unsigned int gdwLastSoundAsyncLoadTick = {}; D2_STATIC_GUARD(gdwLastSoundAsyncLoadTick, "gdwLastSoundAsyncLoadTick");
+static int gnSoundEvictedAudioVolume = 0; D2_STATIC_GUARD(gnSoundEvictedAudioVolume, "gnSoundEvictedAudioVolume");
+static uint32_t gnSoundAsyncLoadCount = 0; D2_STATIC_GUARD(gnSoundAsyncLoadCount, "gnSoundAsyncLoadCount");
+static uint32_t gnSoundBufferMaxBytes = 0; D2_STATIC_GUARD(gnSoundBufferMaxBytes, "gnSoundBufferMaxBytes");
+static uint32_t gnSoundBufferBytesLoaded = 0; D2_STATIC_GUARD(gnSoundBufferBytesLoaded, "gnSoundBufferBytesLoaded");
 
 namespace D2Client::Sound::SoundHdr {
 

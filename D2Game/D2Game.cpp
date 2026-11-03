@@ -40,6 +40,8 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/DATATBLS/ItemStats.h"
+#include "D2Game/GAME/Clients.data.h"
+#include "D2Game/GAME/Task.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/Quests/QUESTS/A1Q2.h"
 

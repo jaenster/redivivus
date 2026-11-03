@@ -19,7 +19,9 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/Panel.h"
+#include "D2Win/Src/D2WinFont.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -38,10 +40,41 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2TextLineStrc) == 0x8, "D2_NEW_AT(D2TextLineStrc): the 32-bit layout must be the 0x8 bytes 1.14d allocates");
 
 
+namespace D2Win::_FONT {
+void * aFontNames[14] = {
+    (void *)s_Font8_006dc978,
+    (void *)s_Font16_006dc970,
+    (void *)s_Font30_006dc968,
+    (void *)s_Font42_006dc960,
+    (void *)s_FontFormal10_006dc950,
+    (void *)s_FontFormal12_006dc940,
+    (void *)s_Font6_006dc938,
+    (void *)s_Font24_006dc930,
+    (void *)s_FontFormal11_006dc920,
+    (void *)s_FontExocet10_006dc910,
+    (void *)s_FontRidiculous_006dc900,
+    (void *)s_FontExocet8_006dc8f4,
+    (void *)s_ReallyTheLastSucker_006dc8e0,
+    (void *)s_FontInGameChat_006dc8d0
+}; D2_GLOBAL_GUARD(aFontNames, "D2Win::_FONT::aFontNames");
+char szKOR[4] = { 'K', 'O', 'R', '\\' }; D2_GLOBAL_GUARD(szKOR, "D2Win::_FONT::szKOR");
+} // namespace D2Win::_FONT
 static int32_t gnLastUsedFontId = 0x1; D2_STATIC_GUARD(gnLastUsedFontId, "gnLastUsedFontId");
 static uint32_t gnFontIdSmall = 0x10; D2_STATIC_GUARD(gnFontIdSmall, "gnFontIdSmall");
 static uint32_t gnFontIdLarge = 0x11; D2_STATIC_GUARD(gnFontIdLarge, "gnFontIdLarge");
 static uint32_t gnFontIdBody = 0x3; D2_STATIC_GUARD(gnFontIdBody, "gnFontIdBody");
+static DC6 * * gppDC6FontCache = 0; D2_STATIC_GUARD(gppDC6FontCache, "gppDC6FontCache");
+namespace D2Win::_FONT {
+char sLanguageCode[8] = {}; D2_GLOBAL_GUARD(sLanguageCode, "D2Win::_FONT::sLanguageCode");
+} // namespace D2Win::_FONT
+static pfnFontGetGlyphEntry gpfnFontGetCharWidth = (pfnFontGetGlyphEntry)0; D2_STATIC_GUARD(gpfnFontGetCharWidth, "gpfnFontGetCharWidth");
+static DC6 * gpMonsterIndicatorDC6 = 0; D2_STATIC_GUARD(gpMonsterIndicatorDC6, "gpMonsterIndicatorDC6");
+static D2FontCacheEntryStrc gaFontCache[14] = {}; D2_STATIC_GUARD(gaFontCache, "gaFontCache");
+static uint8_t gcTooltipBarColor = 0; D2_STATIC_GUARD(gcTooltipBarColor, "gcTooltipBarColor");
+static uint8_t gbFontIsKoreanChatMode = 0; D2_STATIC_GUARD(gbFontIsKoreanChatMode, "gbFontIsKoreanChatMode");
+D2TooltipTextStrc DisplayedTooltip = {}; D2_GLOBAL_GUARD(DisplayedTooltip, "DisplayedTooltip");
+static uint16_t gnFontTableCharWidthCache[2] = {}; D2_STATIC_GUARD(gnFontTableCharWidthCache, "gnFontTableCharWidthCache");
+static uint16_t gwFontHeightDefault[2] = {}; D2_STATIC_GUARD(gwFontHeightDefault, "gwFontHeightDefault");
 
 namespace D2Win::Src::D2WinFont {
 

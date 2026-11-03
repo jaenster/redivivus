@@ -6,6 +6,7 @@
 #include "D2Client/D2GfxSettingsStrc.h"
 #include "D2gfx/D2GFX.h"
 #include "globals/globals.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

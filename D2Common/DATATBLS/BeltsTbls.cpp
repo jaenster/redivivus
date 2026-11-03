@@ -11,6 +11,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+D2BeltsTxt * pTxtBelts = 0; D2_GLOBAL_GUARD(pTxtBelts, "pTxtBelts");
+
 namespace D2Common::DATATBLS::BeltsTbls {
 
 // Builds the D2BinFieldInputStrc schema for belts.txt and compiles it via DataTbls::CompileTxt into the pTxtBelts table. Schema: numboxes plus 16 belt box screen rectangles (boxN left/right/top/bottom) defining the in-belt potion slot layout per belt type. Record stride 0x108. Asserts the produced record count divided by 2 equals 7 (NUM_BELT_STATS across the resolution variants), else fatal Fog error. Called once during data-table init; allocates from the passed D2PoolManagerStrc.

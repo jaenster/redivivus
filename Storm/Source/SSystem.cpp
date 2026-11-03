@@ -7,6 +7,8 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "Storm/Source/SErr.data.h"
+#include "Storm/Source/SFile.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

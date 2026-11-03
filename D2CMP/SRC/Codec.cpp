@@ -17,6 +17,7 @@
 #include "Storm/D2MPQFileStrc.h"
 #include "Storm/Source/SFile.h"
 #include "globals/globals.h"
+#include "D2CMP/SRC/Codec.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -144,6 +145,8 @@ static uint32_t gdwD2CMPCodecTab1[32] = {
     0xc0000000,
     0x80000000
 }; D2_STATIC_GUARD(gdwD2CMPCodecTab1, "gdwD2CMPCodecTab1");
+uint8_t gaCodecFrameWorkBuffer2[262144] = {}; D2_GLOBAL_GUARD(gaCodecFrameWorkBuffer2, "gaCodecFrameWorkBuffer2");
+D2CodecPixelBufferEntryStrc gaCodecFrameDecodeBuffer[5625] = {}; D2_GLOBAL_GUARD(gaCodecFrameDecodeBuffer, "gaCodecFrameDecodeBuffer");
 
 namespace D2CMP::SRC::Codec {
 

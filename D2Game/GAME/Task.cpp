@@ -23,6 +23,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/LogManager.h"
 #include "globals/globals.h"
+#include "D2Game/GAME/Task.data.h"
 #include "Fog/Fog.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -45,6 +46,16 @@
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2TaskQueueSlotStrc) == 0x18, "D2_NEW_AT(D2TaskQueueSlotStrc): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
+
+// also labelled: gpTaskQueueListHead, gppTaskQueueHead
+static D2LinkNodeStrc gsTaskQueueListHead = {}; D2_STATIC_GUARD(gsTaskQueueListHead, "gsTaskQueueListHead");
+// also labelled: lpFrequency_0088c790
+LARGE_INTEGER gnPerformanceFrequency = {}; D2_GLOBAL_GUARD(gnPerformanceFrequency, "gnPerformanceFrequency");
+static uint32_t gnTaskQueueSlotCounter = 0; D2_STATIC_GUARD(gnTaskQueueSlotCounter, "gnTaskQueueSlotCounter");
+static uint32_t gnTaskQueueTailIndex = 0; D2_STATIC_GUARD(gnTaskQueueTailIndex, "gnTaskQueueTailIndex");
+uint32_t gbPerformanceCounterAvailable = 0; D2_GLOBAL_GUARD(gbPerformanceCounterAvailable, "gbPerformanceCounterAvailable");
+CRITICAL_SECTION aTaskQueueCriticalSections[32] = {}; D2_GLOBAL_GUARD(aTaskQueueCriticalSections, "aTaskQueueCriticalSections");
+static _RTL_CRITICAL_SECTION lpCriticalSection_0088caa8 = {}; D2_STATIC_GUARD(lpCriticalSection_0088caa8, "lpCriticalSection_0088caa8");
 
 namespace D2Game::GAME::Task {
 

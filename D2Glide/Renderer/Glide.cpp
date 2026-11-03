@@ -31,6 +31,10 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2CMP/tagPALETTEENTRY.h"
+#include "D2Client/Renderer/Glide.data.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Glide/Renderer/Glide.data.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -54,6 +58,334 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NE
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 
+static uint8_t gnFontKerningTracking = 0x0; D2_STATIC_GUARD(gnFontKerningTracking, "gnFontKerningTracking");
+uint64_t gaEnvironmentConstantData1 = 0x4060000000000000; D2_GLOBAL_GUARD(gaEnvironmentConstantData1, "gaEnvironmentConstantData1");
+static uint32_t gnGlideTextureMode = -0x1; D2_STATIC_GUARD(gnGlideTextureMode, "gnGlideTextureMode");
+int gaPerspectiveImageSizeTable[14] = {
+    0x20,
+    0x100,
+    0x40,
+    0x100,
+    0x80,
+    0x100,
+    0x100,
+    0x100,
+    0x100,
+    0x80,
+    0x100,
+    0x40,
+    0x100,
+    0x20
+}; D2_GLOBAL_GUARD(gaPerspectiveImageSizeTable, "gaPerspectiveImageSizeTable");
+static GrTexInfo gTexInfoDebugFontGlide = {
+    /* .smallLodLog2 = */ 0x4,
+    /* .largeLodLog2 = */ 0x4,
+    /* .aspectRatioLog2 = */ (GrAspectRatio_t)-0x1,
+    /* .format = */ 0x5,
+    /* .data = */ nullptr
+}; D2_STATIC_GUARD(gTexInfoDebugFontGlide, "gTexInfoDebugFontGlide");
+static void * gapGlideStripVertexPtrsA[10] = {
+    (void*)gaGlidePerspectiveVertices,
+    (void*)&gaGlidePerspectiveVertices[1].fX,
+    (void*)&gaGlidePerspectiveVertices[3].fX,
+    (void*)&gaGlidePerspectiveVertices[4].fX,
+    (void*)&gaGlidePerspectiveVertices[6].fX,
+    (void*)&gaGlidePerspectiveVertices[7].fX,
+    (void*)&gaGlidePerspectiveVertices[9].fX,
+    (void*)&gaGlidePerspectiveVertices[10].fX,
+    (void*)&gaGlidePerspectiveVertices[12].fX,
+    (void*)&gaGlidePerspectiveVertices[13].fX
+}; D2_STATIC_GUARD(gapGlideStripVertexPtrsA, "gapGlideStripVertexPtrsA");
+static void * gapGlideStripVertexPtrsB[10] = {
+    (void*)&gaGlidePerspectiveVertices[1].fX,
+    (void*)&gaGlidePerspectiveVertices[2].fX,
+    (void*)&gaGlidePerspectiveVertices[4].fX,
+    (void*)&gaGlidePerspectiveVertices[5].fX,
+    (void*)&gaGlidePerspectiveVertices[7].fX,
+    (void*)&gaGlidePerspectiveVertices[8].fX,
+    (void*)&gaGlidePerspectiveVertices[10].fX,
+    (void*)&gaGlidePerspectiveVertices[11].fX,
+    (void*)&gaGlidePerspectiveVertices[13].fX,
+    (void*)&gaGlidePerspectiveVertices[14].fX
+}; D2_STATIC_GUARD(gapGlideStripVertexPtrsB, "gapGlideStripVertexPtrsB");
+static D2GlideWallCornerStrc gaGlideWallCornerTable[60] = {
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x3,
+        /* .nZ = */ -0x38
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x1,
+        /* .nZ = */ -0x48
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ -0x1,
+        /* .nZ = */ -0x58
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ -0x3,
+        /* .nZ = */ -0x68
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ -0x5,
+        /* .nZ = */ -0x78
+    },
+    {
+        /* .nX = */ -0x5,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x78
+    },
+    {
+        /* .nX = */ -0x3,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x68
+    },
+    {
+        /* .nX = */ -0x1,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x58
+    },
+    {
+        /* .nX = */ 0x1,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x48
+    },
+    {
+        /* .nX = */ 0x3,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x38
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x3,
+        /* .nZ = */ -0x38
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x1,
+        /* .nZ = */ -0x48
+    },
+    {
+        /* .nX = */ 0x1,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x48
+    },
+    {
+        /* .nX = */ 0x3,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x38
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ -0x5,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x78
+    },
+    {
+        /* .nX = */ -0x3,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x68
+    },
+    {
+        /* .nX = */ -0x1,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x58
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ -0x1,
+        /* .nZ = */ -0x58
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ -0x3,
+        /* .nZ = */ -0x68
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ -0x5,
+        /* .nZ = */ -0x78
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x3,
+        /* .nZ = */ -0x38
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x1,
+        /* .nZ = */ -0x48
+    },
+    {
+        /* .nX = */ 0x1,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x48
+    },
+    {
+        /* .nX = */ 0x3,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x38
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0xa,
+        /* .nZ = */ 0x28
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x8,
+        /* .nZ = */ 0x18
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x6,
+        /* .nZ = */ 0x8
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x4,
+        /* .nZ = */ -0x8
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x2,
+        /* .nZ = */ -0x18
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x2,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x18
+    },
+    {
+        /* .nX = */ 0x4,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x8
+    },
+    {
+        /* .nX = */ 0x6,
+        /* .nY = */ 0x5,
+        /* .nZ = */ 0x8
+    },
+    {
+        /* .nX = */ 0x8,
+        /* .nY = */ 0x5,
+        /* .nZ = */ 0x18
+    },
+    {
+        /* .nX = */ 0xa,
+        /* .nY = */ 0x5,
+        /* .nZ = */ 0x28
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x2,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x18
+    },
+    {
+        /* .nX = */ 0x4,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x8
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x4,
+        /* .nZ = */ -0x8
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x2,
+        /* .nZ = */ -0x18
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x0,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x28
+    },
+    {
+        /* .nX = */ 0x2,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x18
+    },
+    {
+        /* .nX = */ 0x4,
+        /* .nY = */ 0x5,
+        /* .nZ = */ -0x8
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x4,
+        /* .nZ = */ -0x8
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x2,
+        /* .nZ = */ -0x18
+    },
+    {
+        /* .nX = */ 0x5,
+        /* .nY = */ 0x0,
+        /* .nZ = */ -0x28
+    }
+}; D2_STATIC_GUARD(gaGlideWallCornerTable, "gaGlideWallCornerTable");
 static GrTexInfo gTexInfoBlocks0Glide = {
     /* .smallLodLog2 = */ 0x8,
     /* .largeLodLog2 = */ 0x8,
@@ -68,6 +400,32 @@ static GrTexInfo gTexInfoBlocks1Glide = {
     /* .format = */ 0xa,
     /* .data = */ nullptr
 }; D2_STATIC_GUARD(gTexInfoBlocks1Glide, "gTexInfoBlocks1Glide");
+static uint32_t ghGlideSstWindow = 0; D2_STATIC_GUARD(ghGlideSstWindow, "ghGlideSstWindow");
+grTexSource GLIDEDLL_grTexSource_16 = (grTexSource)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexSource_16, "GLIDEDLL_grTexSource_16");
+grVertexLayout GLIDEDLL_grVertexLayout_12 = (grVertexLayout)0; D2_GLOBAL_GUARD(GLIDEDLL_grVertexLayout_12, "GLIDEDLL_grVertexLayout_12");
+uint32_t gGlidePaletteEntry0[256] = {}; D2_GLOBAL_GUARD(gGlidePaletteEntry0, "gGlidePaletteEntry0");
+grConstantColorValue GLIDEDLL_grConstantColorValue_4 = (grConstantColorValue)0; D2_GLOBAL_GUARD(GLIDEDLL_grConstantColorValue_4, "GLIDEDLL_grConstantColorValue_4");
+grSstWinClose _GLIDEDLL_grSstWinClose_4 = (grSstWinClose)0; D2_GLOBAL_GUARD(_GLIDEDLL_grSstWinClose_4, "_GLIDEDLL_grSstWinClose_4");
+HMODULE lpGLIDE3x_dll = 0; D2_GLOBAL_GUARD(lpGLIDE3x_dll, "lpGLIDE3x_dll");
+static int gnGlideTextureMemoryUsed = 0; D2_STATIC_GUARD(gnGlideTextureMemoryUsed, "gnGlideTextureMemoryUsed");
+uint32_t gbGlideIsDebugBuild = 0; D2_GLOBAL_GUARD(gbGlideIsDebugBuild, "gbGlideIsDebugBuild");
+static FxI32 gnGlideTextureMemoryMask = 0; D2_STATIC_GUARD(gnGlideTextureMemoryMask, "gnGlideTextureMemoryMask");
+int gnGlideSecondaryTMUCount[2] = {}; D2_GLOBAL_GUARD(gnGlideSecondaryTMUCount, "gnGlideSecondaryTMUCount");
+uint32_t ghGlideWindow = 0; D2_GLOBAL_GUARD(ghGlideWindow, "ghGlideWindow");
+uint32_t gbGlideInitialized = 0; D2_GLOBAL_GUARD(gbGlideInitialized, "gbGlideInitialized");
+uint32_t gbPlayingCutScene = 0; D2_GLOBAL_GUARD(gbPlayingCutScene, "gbPlayingCutScene");
+int gbWINDOWED = 0; D2_GLOBAL_GUARD(gbWINDOWED, "gbWINDOWED");
+uint32_t gnGlideColorCombineMode = 0; D2_GLOBAL_GUARD(gnGlideColorCombineMode, "gnGlideColorCombineMode");
+uint32_t gnGlideAlphaBlendMode = 0; D2_GLOBAL_GUARD(gnGlideAlphaBlendMode, "gnGlideAlphaBlendMode");
+uint32_t gnGlideTextureFilteringMode = 0; D2_GLOBAL_GUARD(gnGlideTextureFilteringMode, "gnGlideTextureFilteringMode");
+uint32_t gbGlideInScene = 0; D2_GLOBAL_GUARD(gbGlideInScene, "gbGlideInScene");
+static uint32_t gbGlidePerspectiveMode = 0; D2_STATIC_GUARD(gbGlidePerspectiveMode, "gbGlidePerspectiveMode");
+static uint32_t gnGlideSpriteSecondaryTMUEnabled = 0; D2_STATIC_GUARD(gnGlideSpriteSecondaryTMUEnabled, "gnGlideSpriteSecondaryTMUEnabled");
+static uint32_t gnGlideTMUIndex = 0; D2_STATIC_GUARD(gnGlideTMUIndex, "gnGlideTMUIndex");
+D2GlideVertexTexCacheBlockStrc gGlideVertex0 = {}; D2_GLOBAL_GUARD(gGlideVertex0, "gGlideVertex0");
+static void * gpGlideSpriteBuffer = 0; D2_STATIC_GUARD(gpGlideSpriteBuffer, "gpGlideSpriteBuffer");
+static void * gpGlideSpritePixelBuffer = 0; D2_STATIC_GUARD(gpGlideSpritePixelBuffer, "gpGlideSpritePixelBuffer");
+uint32_t gaGlideColorDebugGradientIndices[1024] = {}; D2_GLOBAL_GUARD(gaGlideColorDebugGradientIndices, "gaGlideColorDebugGradientIndices");
 
 namespace D2Glide::Renderer::Glide {
 

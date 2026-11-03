@@ -7,6 +7,8 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "Storm/Source/SFile.data.h"
+#include "Storm/Source/SMem.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -15,6 +17,19 @@
 #define RECON_FPTD_pfnSMemDumpCallback
 typedef void (__stdcall *pfnSMemDumpCallback)(uint32_t dwUserArg, char * szLine);
 #endif
+
+static void * g_SMemHeapBuckets[256] = {}; D2_STATIC_GUARD(g_SMemHeapBuckets, "g_SMemHeapBuckets");
+static uint32_t g_SMemPageSize = 0; D2_STATIC_GUARD(g_SMemPageSize, "g_SMemPageSize");
+static uint32_t ProtectMemory = 0; D2_STATIC_GUARD(ProtectMemory, "ProtectMemory");
+static CRITICAL_SECTION DebugMemoryCriticalSection[256] = {}; D2_STATIC_GUARD(DebugMemoryCriticalSection, "DebugMemoryCriticalSection");
+CRITICAL_SECTION gUICtrlSkillColumnState[256] = {}; D2_GLOBAL_GUARD(gUICtrlSkillColumnState, "gUICtrlSkillColumnState");
+CRITICAL_SECTION gUICtrlPanelArrowState[256] = {}; D2_GLOBAL_GUARD(gUICtrlPanelArrowState, "gUICtrlPanelArrowState");
+static uint32_t g_SMemUnknownFlag = 0; D2_STATIC_GUARD(g_SMemUnknownFlag, "g_SMemUnknownFlag");
+static uint32_t DebugMemory = 0; D2_STATIC_GUARD(DebugMemory, "DebugMemory");
+static int g_SMemHeapCleanupFlags[256] = {}; D2_STATIC_GUARD(g_SMemHeapCleanupFlags, "g_SMemHeapCleanupFlags");
+static void * g_SMemPendingCleanupHeap = 0; D2_STATIC_GUARD(g_SMemPendingCleanupHeap, "g_SMemPendingCleanupHeap");
+static uint32_t g_SMemDebugFillEnabled = 0; D2_STATIC_GUARD(g_SMemDebugFillEnabled, "g_SMemDebugFillEnabled");
+static uint32_t g_SMemInitialized = 0; D2_STATIC_GUARD(g_SMemInitialized, "g_SMemInitialized");
 
 namespace Storm::Source::SMem {
 

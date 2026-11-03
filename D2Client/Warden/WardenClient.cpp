@@ -15,6 +15,7 @@
 #include "Storm/Source/SSTR.h"
 #include "Storm/Source/SSignature.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Sound.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

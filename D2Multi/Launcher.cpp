@@ -21,6 +21,8 @@
 #include "Fog/Fog.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Multi/ChatDlg.data.h"
+#include "D2Multi/Launcher.data.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinScrollbar.h"
 #include "D2Win/Src/D2WinButton.h"
@@ -33,6 +35,63 @@
 #define RECON_FPTD_fnAppModeRun
 typedef int32_t (__fastcall *fnAppModeRun)(D2IniConfigStrc * pD2IniConfig);
 #endif
+
+DC6 * gpDC6PopUpLargest2 = 0; D2_GLOBAL_GUARD(gpDC6PopUpLargest2, "gpDC6PopUpLargest2");
+DC6 * gpDC6MediumButtonBlank2 = 0; D2_GLOBAL_GUARD(gpDC6MediumButtonBlank2, "gpDC6MediumButtonBlank2");
+DC6 * gpDC6CursorOpenHand = 0; D2_GLOBAL_GUARD(gpDC6CursorOpenHand, "gpDC6CursorOpenHand");
+DC6 * gpDC6CursorLRotate = 0; D2_GLOBAL_GUARD(gpDC6CursorLRotate, "gpDC6CursorLRotate");
+DC6 * gpDC6ChatScrollbar = 0; D2_GLOBAL_GUARD(gpDC6ChatScrollbar, "gpDC6ChatScrollbar");
+DC6 * gpDC6JoinGameScrollbar = 0; D2_GLOBAL_GUARD(gpDC6JoinGameScrollbar, "gpDC6JoinGameScrollbar");
+DC6 * gpDC6ChatLeftButtons1 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons1, "gpDC6ChatLeftButtons1");
+DC6 * gpDC6ChatLeftButtons2 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons2, "gpDC6ChatLeftButtons2");
+DC6 * gpDC6ChatLeftButtons3 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons3, "gpDC6ChatLeftButtons3");
+DC6 * gpDC6ChatRightTopButtonsAlt = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtonsAlt, "gpDC6ChatRightTopButtonsAlt");
+DC6 * gpDC6ChatRightTopButtons = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtons, "gpDC6ChatRightTopButtons");
+DC6 * gpDC6ChatArrows = 0; D2_GLOBAL_GUARD(gpDC6ChatArrows, "gpDC6ChatArrows");
+D2WinTextBox * gpCtlConfirmDialog = 0; D2_GLOBAL_GUARD(gpCtlConfirmDialog, "gpCtlConfirmDialog");
+// also labelled: gpCtlLobbyChannelListBtn
+D2ControlStrc * gpCtlLobbyAccountList = 0; D2_GLOBAL_GUARD(gpCtlLobbyAccountList, "gpCtlLobbyAccountList");
+D2WinButton * gpCtlLobbyLadderNewsToggle = 0; D2_GLOBAL_GUARD(gpCtlLobbyLadderNewsToggle, "gpCtlLobbyLadderNewsToggle");
+D2WinTextBox * pGameListCache = 0; D2_GLOBAL_GUARD(pGameListCache, "pGameListCache");
+DC6 * DCC_JoinGame = 0; D2_GLOBAL_GUARD(DCC_JoinGame, "DCC_JoinGame");
+DC6 * gpDC6BlankBckg2 = 0; D2_GLOBAL_GUARD(gpDC6BlankBckg2, "gpDC6BlankBckg2");
+DC6 * gpDC6GemButton = 0; D2_GLOBAL_GUARD(gpDC6GemButton, "gpDC6GemButton");
+DC6 * gpDC6GameButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6GameButtonBlank, "gpDC6GameButtonBlank");
+DC6 * gpDC6JoinGameClickBox = 0; D2_GLOBAL_GUARD(gpDC6JoinGameClickBox, "gpDC6JoinGameClickBox");
+DC6 * gpDC6GreyLevelBox = 0; D2_GLOBAL_GUARD(gpDC6GreyLevelBox, "gpDC6GreyLevelBox");
+DC6 * gpDC6RadioButton = 0; D2_GLOBAL_GUARD(gpDC6RadioButton, "gpDC6RadioButton");
+DC6 * gpDC6RadioButtonGrey = 0; D2_GLOBAL_GUARD(gpDC6RadioButtonGrey, "gpDC6RadioButtonGrey");
+DC6 * gpDC6PopUpOk = 0; D2_GLOBAL_GUARD(gpDC6PopUpOk, "gpDC6PopUpOk");
+DC6 * gpDC6CancelButtonBlankAlt = 0; D2_GLOBAL_GUARD(gpDC6CancelButtonBlankAlt, "gpDC6CancelButtonBlankAlt");
+DC6 * gpDC6OverallTab = 0; D2_GLOBAL_GUARD(gpDC6OverallTab, "gpDC6OverallTab");
+DC6 * gpDC6AmazonTab = 0; D2_GLOBAL_GUARD(gpDC6AmazonTab, "gpDC6AmazonTab");
+DC6 * gpDC6SorceressTab = 0; D2_GLOBAL_GUARD(gpDC6SorceressTab, "gpDC6SorceressTab");
+DC6 * gpDC6NecromancerTab = 0; D2_GLOBAL_GUARD(gpDC6NecromancerTab, "gpDC6NecromancerTab");
+DC6 * gpDC6PaladinTab = 0; D2_GLOBAL_GUARD(gpDC6PaladinTab, "gpDC6PaladinTab");
+DC6 * gpDC6BarbarianTab = 0; D2_GLOBAL_GUARD(gpDC6BarbarianTab, "gpDC6BarbarianTab");
+DC6 * gpDC6DruidTab = 0; D2_GLOBAL_GUARD(gpDC6DruidTab, "gpDC6DruidTab");
+DC6 * gpDC6AssassinTab = 0; D2_GLOBAL_GUARD(gpDC6AssassinTab, "gpDC6AssassinTab");
+static DC6 * gpDC6SquelchAura = 0; D2_STATIC_GUARD(gpDC6SquelchAura, "gpDC6SquelchAura");
+static DC6 * gpDC6SelectAura = 0; D2_STATIC_GUARD(gpDC6SelectAura, "gpDC6SelectAura");
+DC6 * gpDC6NumberArrows1 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows1, "gpDC6NumberArrows1");
+DC6 * gpDC6NumberArrows2 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows2, "gpDC6NumberArrows2");
+DC6 * gpDC6NumberArrows3 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows3, "gpDC6NumberArrows3");
+DC6 * gpDC6NumberArrows4 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows4, "gpDC6NumberArrows4");
+DC6 * gpDC6NumberGreyArrows = 0; D2_GLOBAL_GUARD(gpDC6NumberGreyArrows, "gpDC6NumberGreyArrows");
+DC6 * gpDC6CreateJoinBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateJoinBckg, "gpDC6CreateJoinBckg");
+static DC6 * gpDC6OkayButton = 0; D2_STATIC_GUARD(gpDC6OkayButton, "gpDC6OkayButton");
+DC6 * gpDC6CreateGameBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateGameBckg, "gpDC6CreateGameBckg");
+static DC6 * gpDC6CreateGameButton = 0; D2_STATIC_GUARD(gpDC6CreateGameButton, "gpDC6CreateGameButton");
+DC6 * gpDC6WideButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6WideButtonBlank, "gpDC6WideButtonBlank");
+DC6 * gpLauncherImageResource2 = 0; D2_GLOBAL_GUARD(gpLauncherImageResource2, "gpLauncherImageResource2");
+DC6 * gpDC6YesNoButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6YesNoButtonBlank, "gpDC6YesNoButtonBlank");
+DC6 * gpDC6LadderChoiceEXP = 0; D2_GLOBAL_GUARD(gpDC6LadderChoiceEXP, "gpDC6LadderChoiceEXP");
+DC6 * gpDC6HardcoreLadderBckg = 0; D2_GLOBAL_GUARD(gpDC6HardcoreLadderBckg, "gpDC6HardcoreLadderBckg");
+DC6 * gpDC6PlayerProfileBckg = 0; D2_GLOBAL_GUARD(gpDC6PlayerProfileBckg, "gpDC6PlayerProfileBckg");
+DC6 * gpDC6PlayerProfileBckg2 = 0; D2_GLOBAL_GUARD(gpDC6PlayerProfileBckg2, "gpDC6PlayerProfileBckg2");
+DC6 * gpDC6HelpBckg = 0; D2_GLOBAL_GUARD(gpDC6HelpBckg, "gpDC6HelpBckg");
+DC6 * gpDC6D2LogoBlackBnet = 0; D2_GLOBAL_GUARD(gpDC6D2LogoBlackBnet, "gpDC6D2LogoBlackBnet");
+DC6 * gpDC6D2LogoBnet = 0; D2_GLOBAL_GUARD(gpDC6D2LogoBnet, "gpDC6D2LogoBnet");
 
 namespace D2Multi::Launcher {
 

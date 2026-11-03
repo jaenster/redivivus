@@ -8,6 +8,7 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "Storm/Source/SEVT.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -16,6 +17,35 @@
 #define RECON_FPTD_pfnSEvtHandler
 typedef void (__stdcall *pfnSEvtHandler)(void * pData);
 #endif
+
+static char s___AUBREAKCMD___007088d8[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'B',
+    'R',
+    'E',
+    'A',
+    'K',
+    'C',
+    'M',
+    'D',
+    '@',
+    '@',
+    '\x00',
+    '\x00'
+}; D2_STATIC_GUARD(s___AUBREAKCMD___007088d8, "s___AUBREAKCMD___007088d8");
+D2StormListHead gpSevtBreakCmdListHead = {
+    /* .nLinkOffset = */ 0x0,
+    /* .pPrevLink = */ (StormLinkStrc*)&gpSevtBreakCmdListHead.pPrevLink,
+    /* .pNext = */ 0x0
+}; D2_GLOBAL_GUARD(gpSevtBreakCmdListHead, "gpSevtBreakCmdListHead");
+static uint32_t gnSevtSnapshotActive = 0; D2_STATIC_GUARD(gnSevtSnapshotActive, "gnSevtSnapshotActive");
+void * gpEventHashBuckets = 0; D2_GLOBAL_GUARD(gpEventHashBuckets, "gpEventHashBuckets");
+static uint32_t gaEventRegistryHead = 0; D2_STATIC_GUARD(gaEventRegistryHead, "gaEventRegistryHead");
+static uint32_t gnSevtRegisteredEventCount = 0; D2_STATIC_GUARD(gnSevtRegisteredEventCount, "gnSevtRegisteredEventCount");
+static _RTL_CRITICAL_SECTION lpCriticalSection_0077930c = {}; D2_STATIC_GUARD(lpCriticalSection_0077930c, "lpCriticalSection_0077930c");
 
 namespace Storm::Source::SEVT {
 

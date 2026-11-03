@@ -29,6 +29,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2CMP/D2CMP.h"
+#include "D2CMP/SRC/SpriteCache.data.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -57,9 +58,66 @@ typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
 typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
 #endif
 
+char gszExtDc6[5] = { '.', 'd', 'c', '6', '\x00' }; D2_GLOBAL_GUARD(gszExtDc6, "gszExtDc6");
+char gszExtDcc[5] = { '.', 'd', 'c', 'c', '\x00' }; D2_GLOBAL_GUARD(gszExtDcc, "gszExtDcc");
+char gszDirObjects[20] = {
+    'D',
+    'A',
+    'T',
+    'A',
+    '\\',
+    'G',
+    'L',
+    'O',
+    'B',
+    'A',
+    'L',
+    '\\',
+    'O',
+    'B',
+    'J',
+    'E',
+    'C',
+    'T',
+    'S',
+    '\x00'
+}; D2_GLOBAL_GUARD(gszDirObjects, "gszDirObjects");
+static char gszSrcFileSpriteCache[22] = {
+    '.',
+    '\\',
+    'S',
+    'R',
+    'C',
+    '\\',
+    'S',
+    'p',
+    'r',
+    'i',
+    't',
+    'e',
+    'C',
+    'a',
+    'c',
+    'h',
+    'e',
+    '.',
+    'c',
+    'p',
+    'p',
+    '\x00'
+}; D2_STATIC_GUARD(gszSrcFileSpriteCache, "gszSrcFileSpriteCache");
 static uint32_t bUseCompressedData = 0x1; D2_STATIC_GUARD(bUseCompressedData, "bUseCompressedData");
 static void* gpszExtDcc = (void*)&gszExtDcc; D2_STATIC_GUARD(gpszExtDcc, "gpszExtDcc");
 static void* gpszExtDc6 = (void*)&gszExtDc6; D2_STATIC_GUARD(gpszExtDc6, "gpszExtDc6");
+static D2LRUCacheStrc gSpriteCacheLru = {}; D2_STATIC_GUARD(gSpriteCacheLru, "gSpriteCacheLru");
+static int gbSpriteCacheLruInitialized = 0; D2_STATIC_GUARD(gbSpriteCacheLruInitialized, "gbSpriteCacheLruInitialized");
+static void * gpSpriteCachePoolManager = 0; D2_STATIC_GUARD(gpSpriteCachePoolManager, "gpSpriteCachePoolManager");
+pfnLruFreeEntry gpfnSpriteCacheFreeEntry = (pfnLruFreeEntry)0; D2_GLOBAL_GUARD(gpfnSpriteCacheFreeEntry, "gpfnSpriteCacheFreeEntry");
+BYTE gaCelDataHashTable[4096] = {}; D2_GLOBAL_GUARD(gaCelDataHashTable, "gaCelDataHashTable");
+D2LRUCacheStrc gCelDataCacheLru = {}; D2_GLOBAL_GUARD(gCelDataCacheLru, "gCelDataCacheLru");
+static BYTE gaGfxHashTable[65536] = {}; D2_STATIC_GUARD(gaGfxHashTable, "gaGfxHashTable");
+static uint32_t gbSpriteCacheConversionEnabled = 0; D2_STATIC_GUARD(gbSpriteCacheConversionEnabled, "gbSpriteCacheConversionEnabled");
+static D2GfxMemoryStrc D2GfxMemoryStrc_0089db60 = {}; D2_STATIC_GUARD(D2GfxMemoryStrc_0089db60, "D2GfxMemoryStrc_0089db60");
 
 namespace D2CMP::SRC::SpriteCache {
 

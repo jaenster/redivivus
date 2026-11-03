@@ -25,6 +25,8 @@
 #include "D2Game/Objects/ObjectsRgn.h"
 #include "D2Launch/D2Launch.h"
 #include "D2Multi/Launcher.h"
+#include "D2gfx/D2GFX.data.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -54,7 +56,631 @@ typedef DWORD (__stdcall *pfnGetModuleBaseNameW)(HANDLE hProcess, void * hModule
 typedef HRESULT (__stdcall *pfnSHGetKnownFolderPath)(GUID * rfid, DWORD dwFlags, HANDLE hToken, LPWSTR * ppszPath);
 #endif
 
+char * gaLanguageNames_00705000[15] = {
+    s_English_006cc81c,
+    s_Spanish_006cc814,
+    s_German_006cc80c,
+    s_French_006cc804,
+    s_Portuguese_006cc7f8,
+    s_Italian_006cc7f0,
+    s_Japanese_006cc7e4,
+    s_Korean_006cc7dc,
+    s_Simplified_Chinese_006cc7c8,
+    s_Traditional_Chinese_006cc7b4,
+    s_Polish_006cc7ac,
+    s_Russian_006cc7a4,
+    s_English_with_Korean_Chat_006cc788,
+    s_Unknown_006cc780,
+    (char*)0x006cc77c
+}; D2_GLOBAL_GUARD(gaLanguageNames_00705000, "gaLanguageNames_00705000");
+static D2IniConfigValuesStrc D2IniConfigValues[58] = {
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "CRASHAPP",
+        /* .szCmdLineArg = */ "crash",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x4,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "WINDOW",
+        /* .szCmdLineArg = */ "w",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x8,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "WINDOW",
+        /* .szCmdLineArg = */ "window",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x8,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "WINDOW",
+        /* .szCmdLineArg = */ "windowed",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x8,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "ASPECT",
+        /* .szCmdLineArg = */ "nofixaspect",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x9,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "3DFX",
+        /* .szCmdLineArg = */ "3dfx",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0xa,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "OPENGL",
+        /* .szCmdLineArg = */ "opengl",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0xb,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "D3D",
+        /* .szCmdLineArg = */ "d3d",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0xd,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "RAVE",
+        /* .szCmdLineArg = */ "rave",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0xc,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "PERSPECTIVE",
+        /* .szCmdLineArg = */ "per",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0xe,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "QUALITY",
+        /* .szCmdLineArg = */ "lq",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0xf,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "GAMMA",
+        /* .szCmdLineArg = */ "gamma",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x10,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "VSYNC",
+        /* .szCmdLineArg = */ "vsync",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x14,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "VIDEO",
+        /* .szKeyName = */ "FRAMERATE",
+        /* .szCmdLineArg = */ "fr",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x15,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "SERVERIP",
+        /* .szCmdLineArg = */ "s",
+        /* .nType = */ 0x2,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x37,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "GAMETYPE",
+        /* .szCmdLineArg = */ "gametype",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x19,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "ARENA",
+        /* .szCmdLineArg = */ "arena",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x207,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "JOINID",
+        /* .szCmdLineArg = */ "joinid",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1d,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "GAMENAME",
+        /* .szCmdLineArg = */ "gamename",
+        /* .nType = */ 0x2,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1f,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "BATTLENETIP",
+        /* .szCmdLineArg = */ "bn",
+        /* .nType = */ 0x2,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x4f,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "MCPIP",
+        /* .szCmdLineArg = */ "mcpip",
+        /* .nType = */ 0x2,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x67,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "AMAZON",
+        /* .szCmdLineArg = */ "ama",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x85,
+        /* .nDefaultValue = */ 0x1
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "PALADIN",
+        /* .szCmdLineArg = */ "pal",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x86,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "SORCERESS",
+        /* .szCmdLineArg = */ "sor",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x87,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "NECROMANCER",
+        /* .szCmdLineArg = */ "nec",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x88,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "BARBARIAN",
+        /* .szCmdLineArg = */ "bar",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x89,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "INVINCIBLE",
+        /* .szCmdLineArg = */ "i",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x8c,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "NAME",
+        /* .szCmdLineArg = */ "name",
+        /* .nType = */ 0x2,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0xbd,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "REALM",
+        /* .szCmdLineArg = */ "realm",
+        /* .nType = */ 0x2,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0xd5,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "CHARACTER",
+        /* .szKeyName = */ "CTEMP",
+        /* .szCmdLineArg = */ "ctemp",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1ed,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "MONSTER",
+        /* .szKeyName = */ "NOMONSTERS",
+        /* .szCmdLineArg = */ "nm",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1f1,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "MONSTER",
+        /* .szKeyName = */ "MONSTERCLASS",
+        /* .szCmdLineArg = */ "m",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1f2,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "MONSTER",
+        /* .szKeyName = */ "MONSTERINFO",
+        /* .szCmdLineArg = */ "minfo",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1f6,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "MONSTER",
+        /* .szKeyName = */ "MONSTERDEBUG",
+        /* .szCmdLineArg = */ "md",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1f7,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "ITEM",
+        /* .szKeyName = */ "RARE",
+        /* .szCmdLineArg = */ "rare",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1fb,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "ITEM",
+        /* .szKeyName = */ "UNIQUE",
+        /* .szCmdLineArg = */ "unique",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1fc,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "INTERFACE",
+        /* .szKeyName = */ "ACT",
+        /* .szCmdLineArg = */ "act",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x1ff,
+        /* .nDefaultValue = */ 0x1
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "LOG",
+        /* .szCmdLineArg = */ "log",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x216,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "MSGLOG",
+        /* .szCmdLineArg = */ "msglog",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x217,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "SAFEMODE",
+        /* .szCmdLineArg = */ "safe",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x218,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "NOSAVE",
+        /* .szCmdLineArg = */ "nosave",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x219,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "SEED",
+        /* .szCmdLineArg = */ "seed",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x21a,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "NOPK",
+        /* .szCmdLineArg = */ "nopk",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x83,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "CHEATS",
+        /* .szCmdLineArg = */ "cheats",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x21e,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "TEEN",
+        /* .szCmdLineArg = */ "teen",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x21f,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "NOSOUND",
+        /* .szCmdLineArg = */ "ns",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x220,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "FILEIO",
+        /* .szKeyName = */ "NOPREDLOAD",
+        /* .szCmdLineArg = */ "npl",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x203,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "FILEIO",
+        /* .szKeyName = */ "DIRECT",
+        /* .szCmdLineArg = */ "direct",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x204,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "FILEIO",
+        /* .szKeyName = */ "LOWEND",
+        /* .szCmdLineArg = */ "lem",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x205,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "QuEsTs",
+        /* .szCmdLineArg = */ "questall",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x221,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "COMINT",
+        /* .szCmdLineArg = */ "comint",
+        /* .nType = */ 0x1,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x225,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "SKIPTOBNET",
+        /* .szCmdLineArg = */ "skiptobnet",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x35d,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "NETWORK",
+        /* .szKeyName = */ "OPENC",
+        /* .szCmdLineArg = */ "openc",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x84,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "FILEIO",
+        /* .szKeyName = */ "NOCOMPRESS",
+        /* .szCmdLineArg = */ "nocompress",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x206,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "TXT",
+        /* .szKeyName = */ "TXT",
+        /* .szCmdLineArg = */ "txt",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x215,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "BUILD",
+        /* .szKeyName = */ "BUILD",
+        /* .szCmdLineArg = */ "build",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x223,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "NOSOUND",
+        /* .szCmdLineArg = */ "nosound",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x220,
+        /* .nDefaultValue = */ 0x0
+    },
+    {
+        /* .szAppName = */ "DEBUG",
+        /* .szKeyName = */ "SOUNDBKG",
+        /* .szCmdLineArg = */ "sndbkg",
+        /* .nType = */ 0x0,
+        /* .field4_0x52 = */ 0x0,
+        /* .field5_0x53 = */ 0x0,
+        /* .nOffset = */ 0x224,
+        /* .nDefaultValue = */ 0x0
+    }
+}; D2_STATIC_GUARD(D2IniConfigValues, "D2IniConfigValues");
 static HINSTANCE WinMain_hInstance = (HINSTANCE)0x00000000; D2_STATIC_GUARD(WinMain_hInstance, "WinMain_hInstance");
+uint32_t gaEnumProcessModuleHandles[1028] = {}; D2_GLOBAL_GUARD(gaEnumProcessModuleHandles, "gaEnumProcessModuleHandles");
+uint8_t IMAGE_RESOURCE_DIRECTORY_00995000[16] = {}; D2_GLOBAL_GUARD(IMAGE_RESOURCE_DIRECTORY_00995000, "IMAGE_RESOURCE_DIRECTORY_00995000");
+uint8_t Rsrc_Icon_1_409[744] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_1_409, "Rsrc_Icon_1_409");
+uint8_t Rsrc_Icon_2_409[296] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_2_409, "Rsrc_Icon_2_409");
+uint8_t Rsrc_Icon_3_409[744] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_3_409, "Rsrc_Icon_3_409");
+uint8_t Rsrc_Icon_4_409[296] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_4_409, "Rsrc_Icon_4_409");
+uint8_t Rsrc_Icon_5_409[2216] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_5_409, "Rsrc_Icon_5_409");
+uint8_t Rsrc_Icon_6_409[296] = {}; D2_GLOBAL_GUARD(Rsrc_Icon_6_409, "Rsrc_Icon_6_409");
+uint8_t Rsrc_GroupIcon_65_409[34] = {}; D2_GLOBAL_GUARD(Rsrc_GroupIcon_65_409, "Rsrc_GroupIcon_65_409");
+uint8_t Rsrc_GroupIcon_66_409[34] = {}; D2_GLOBAL_GUARD(Rsrc_GroupIcon_66_409, "Rsrc_GroupIcon_66_409");
+uint8_t Rsrc_GroupIcon_67_409[34] = {}; D2_GLOBAL_GUARD(Rsrc_GroupIcon_67_409, "Rsrc_GroupIcon_67_409");
+uint8_t Rsrc_Version_1_409[92] = {}; D2_GLOBAL_GUARD(Rsrc_Version_1_409, "Rsrc_Version_1_409");
+char Rsrc_Manifest_1_409[1745] = { "<assembly xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\">\r\n</assembly>PAPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGXXPADDINGPADDINGX" }; D2_GLOBAL_GUARD(Rsrc_Manifest_1_409, "Rsrc_Manifest_1_409");
+void * ExceptionList = (void *)0x00000000; D2_GLOBAL_GUARD(ExceptionList, "ExceptionList");
+void * SubSystemTib = (void *)0x00000000; D2_GLOBAL_GUARD(SubSystemTib, "SubSystemTib");
+void * FiberData = (void *)0x00000000; D2_GLOBAL_GUARD(FiberData, "FiberData");
+void * ArbitraryUserPointer = (void *)0x00000000; D2_GLOBAL_GUARD(ArbitraryUserPointer, "ArbitraryUserPointer");
+void * Self = (void *)0xffdff000; D2_GLOBAL_GUARD(Self, "Self");
+void * EnvironmentPointer = (void *)0x00000000; D2_GLOBAL_GUARD(EnvironmentPointer, "EnvironmentPointer");
+CLIENT_ID ClientId = {
+    /* .UniqueProcess = */ nullptr,
+    /* .UniqueThread = */ nullptr
+}; D2_GLOBAL_GUARD(ClientId, "ClientId");
+void * ActiveRpcHandle = (void *)0x00000000; D2_GLOBAL_GUARD(ActiveRpcHandle, "ActiveRpcHandle");
+void * ThreadLocalStoragePointer = (void *)0x00000000; D2_GLOBAL_GUARD(ThreadLocalStoragePointer, "ThreadLocalStoragePointer");
 
 namespace Fog::Engine::Application {
 

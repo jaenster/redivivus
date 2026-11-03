@@ -32,6 +32,10 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SReg.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/View.data.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2DDraw/Renderer/DirectDraw.data.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -57,8 +61,30 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2ddDebugFont) == 0x3000, "D2_NEW_A
 typedef void (__stdcall *fnBinkFrameCallback)();
 #endif
 
+int gnDirectDrawPaletteSize = 0x64; D2_GLOBAL_GUARD(gnDirectDrawPaletteSize, "gnDirectDrawPaletteSize");
+uint32_t gnDirectDrawGamma = 0x64; D2_GLOBAL_GUARD(gnDirectDrawGamma, "gnDirectDrawGamma");
+PALETTEENTRY gaPaletteEntries[256] = {}; D2_GLOBAL_GUARD(gaPaletteEntries, "gaPaletteEntries");
+uint32_t gdwDDrawInitFlags = 0; D2_GLOBAL_GUARD(gdwDDrawInitFlags, "gdwDDrawInitFlags");
+GUID gGlideOpenWindowConfig = {}; D2_GLOBAL_GUARD(gGlideOpenWindowConfig, "gGlideOpenWindowConfig");
 static uint32_t gnDDrawSurfaceWidth = 0; D2_STATIC_GUARD(gnDDrawSurfaceWidth, "gnDDrawSurfaceWidth");
 static uint32_t gnDDrawDisplayModeIndex = 0; D2_STATIC_GUARD(gnDDrawDisplayModeIndex, "gnDDrawDisplayModeIndex");
+uint32_t gnDDrawSurfaceHeight = 0; D2_GLOBAL_GUARD(gnDDrawSurfaceHeight, "gnDDrawSurfaceHeight");
+static uint32_t gbDDrawWindowInitialized = 0; D2_STATIC_GUARD(gbDDrawWindowInitialized, "gbDDrawWindowInitialized");
+static BOOL gbDDrawPaletteSet = 0; D2_STATIC_GUARD(gbDDrawPaletteSet, "gbDDrawPaletteSet");
+uint32_t gnCutSceneActiveFlag = 0; D2_GLOBAL_GUARD(gnCutSceneActiveFlag, "gnCutSceneActiveFlag");
+IDirectDraw1 * pWindowHandleBuffer = 0; D2_GLOBAL_GUARD(pWindowHandleBuffer, "pWindowHandleBuffer");
+IDirectDrawSurface1 * gpDDrawBackBuffer = 0; D2_GLOBAL_GUARD(gpDDrawBackBuffer, "gpDDrawBackBuffer");
+IDirectDrawSurface1 * pDirectDrawSurface = 0; D2_GLOBAL_GUARD(pDirectDrawSurface, "pDirectDrawSurface");
+IDirectDrawPalette * pDirectDrawPalette = 0; D2_GLOBAL_GUARD(pDirectDrawPalette, "pDirectDrawPalette");
+uint32_t gnDDrawFlipState = 0; D2_GLOBAL_GUARD(gnDDrawFlipState, "gnDDrawFlipState");
+uint32_t gnDDrawPaletteSize = 0; D2_GLOBAL_GUARD(gnDDrawPaletteSize, "gnDDrawPaletteSize");
+uint32_t gnDDrawSurfaceXMin = 0; D2_GLOBAL_GUARD(gnDDrawSurfaceXMin, "gnDDrawSurfaceXMin");
+uint32_t gnDDrawRenderWidth = 0; D2_GLOBAL_GUARD(gnDDrawRenderWidth, "gnDDrawRenderWidth");
+static uint32_t gaD2ddDebugFontCharOffsets[96] = {}; D2_STATIC_GUARD(gaD2ddDebugFontCharOffsets, "gaD2ddDebugFontCharOffsets");
+static void * lpBuffer_00881428[96] = {}; D2_STATIC_GUARD(lpBuffer_00881428, "lpBuffer_00881428");
+static D2ddDebugFont * gpD2ddDebugFont = 0; D2_STATIC_GUARD(gpD2ddDebugFont, "gpD2ddDebugFont");
+uint8_t gaSmackerPaletteRemap[260] = {}; D2_GLOBAL_GUARD(gaSmackerPaletteRemap, "gaSmackerPaletteRemap");
+uint32_t gbSmackerPaletteDirty = 0; D2_GLOBAL_GUARD(gbSmackerPaletteDirty, "gbSmackerPaletteDirty");
 
 namespace D2DDraw::Renderer::DirectDraw {
 

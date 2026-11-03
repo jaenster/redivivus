@@ -11,6 +11,8 @@
 #include "Storm/Storm.h"
 #include "Storm/WindowHandle.h"
 #include "globals/globals.h"
+#include "Storm/Source/SErr.data.h"
+#include "Storm/Source/SFile.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -23,6 +25,15 @@ typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, ch
 #define RECON_FPTD_pfnSErrDisplayCallback
 typedef BOOL (__stdcall *pfnSErrDisplayCallback)(uint32_t dwErrorCode, char * szErrorText, void * pStackTrace, int32_t nTraceFlags, char * szCustomMsg);
 #endif
+
+char gdwSystemMemoryMax[2] = { ")" }; D2_GLOBAL_GUARD(gdwSystemMemoryMax, "gdwSystemMemoryMax");
+static SErrAppFatalContextStrc gpSSystemThreadContextCallback = {}; D2_STATIC_GUARD(gpSSystemThreadContextCallback, "gpSSystemThreadContextCallback");
+static _RTL_CRITICAL_SECTION lpCriticalSection_007790cc = {}; D2_STATIC_GUARD(lpCriticalSection_007790cc, "lpCriticalSection_007790cc");
+static void * gpErrorModuleList = 0; D2_STATIC_GUARD(gpErrorModuleList, "gpErrorModuleList");
+static uint32_t gbFormatErrorModulesInitialized = 0; D2_STATIC_GUARD(gbFormatErrorModulesInitialized, "gbFormatErrorModulesInitialized");
+uint32_t gbSSystemShutdownInProgress = 0; D2_GLOBAL_GUARD(gbSSystemShutdownInProgress, "gbSSystemShutdownInProgress");
+static uint32_t dwLastErrorCode = 0; D2_STATIC_GUARD(dwLastErrorCode, "dwLastErrorCode");
+static pfnBlizzardError pfnBlizzardErrorCallback = (pfnBlizzardError)0; D2_STATIC_GUARD(pfnBlizzardErrorCallback, "pfnBlizzardErrorCallback");
 
 namespace Storm::Source::SErr {
 

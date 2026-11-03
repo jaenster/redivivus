@@ -14,6 +14,7 @@
 #include "Storm/Source/SMem.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "Fog/Src/Excel.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -49,6 +50,36 @@ typedef void (__fastcall *PFN_TxtFieldLinker)(char * szText, void * pRecord, int
 typedef uint16_t (__fastcall *PFN_TxtKeyToWord)(char * szKey);
 #endif
 
+namespace Fog::Src::Excel {
+uint8_t TXT_ParseFieldTypeCaseIndex[26] = {
+    0x0,
+    0x1,
+    0x1,
+    0x1,
+    0x1,
+    0x1,
+    0x0,
+    0x1,
+    0x2,
+    0x3,
+    0x4,
+    0x3,
+    0x4,
+    0x3,
+    0x4,
+    0x3,
+    0x3,
+    0x3,
+    0x5,
+    0x5,
+    0x5,
+    0x6,
+    0x7,
+    0x7,
+    0x7,
+    0x1
+}; D2_GLOBAL_GUARD(TXT_ParseFieldTypeCaseIndex, "Fog::Src::Excel::TXT_ParseFieldTypeCaseIndex");
+} // namespace Fog::Src::Excel
 static char * gnExcelRecordFieldNotFound = (char *)0x006ccb30; D2_STATIC_GUARD(gnExcelRecordFieldNotFound, "gnExcelRecordFieldNotFound");
 
 namespace Fog::Src::Excel {

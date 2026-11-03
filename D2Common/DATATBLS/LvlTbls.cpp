@@ -27,6 +27,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Excel.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/LvlTbls.data.h"
 #include "D2Common/DUNGEON/Dungeon.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -48,7 +49,47 @@
 #endif
 
 
+static char gaAutomapTileNames[20][8] = {
+    { 'f', 'l', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 'l', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 'r', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 't', 'l', 'r', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 't', 'l', 'l', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 't', 'r', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 'b', 'l', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 'b', 'r', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 'l', 'd', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 'r', 'd', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 'l', 'e', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'w', 'r', 'e', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'c', 'o', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 's', 'h', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 't', 'r', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'r', 'f', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'l', 'd', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'r', 'd', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'f', 'd', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' },
+    { 'f', 'i', '\x00', '\x00', '\x00', '\x00', '\x00', '\x00' }
+}; D2_STATIC_GUARD(gaAutomapTileNames, "gaAutomapTileNames");
+uint32_t gszTxtCol_Act = 0x746341; D2_GLOBAL_GUARD(gszTxtCol_Act, "gszTxtCol_Act");
+unsigned int gszTxtCol_Red = 0x646552; D2_GLOBAL_GUARD(gszTxtCol_Red, "gszTxtCol_Red");
 static D2SeedStrc * psDataTableSeed = (D2SeedStrc *)&gsAutoMapSeed; D2_STATIC_GUARD(psDataTableSeed, "psDataTableSeed");
+static D2AutomapRelatedTxt gpaAutoMapRelated[36] = {}; D2_STATIC_GUARD(gpaAutoMapRelated, "gpaAutoMapRelated");
+D2LvlTypesTxt * pTxtLvlTypes = 0; D2_GLOBAL_GUARD(pTxtLvlTypes, "pTxtLvlTypes");
+static void * gpPortalLevelArray = 0; D2_STATIC_GUARD(gpPortalLevelArray, "gpPortalLevelArray");
+static unsigned int nPortalLevelCount = {}; D2_STATIC_GUARD(nPortalLevelCount, "nPortalLevelCount");
+int nTxtLvlTypesSize = 0; D2_GLOBAL_GUARD(nTxtLvlTypesSize, "nTxtLvlTypesSize");
+D2LvlWarpTxt * pTxtLvlWarp = 0; D2_GLOBAL_GUARD(pTxtLvlWarp, "pTxtLvlWarp");
+int nTxtLvlWarpSize = 0; D2_GLOBAL_GUARD(nTxtLvlWarpSize, "nTxtLvlWarpSize");
+D2LvlMazeTxt * sgpTxtLvlMaze = 0; D2_GLOBAL_GUARD(sgpTxtLvlMaze, "sgpTxtLvlMaze");
+int nTxtLvlMazeSize = 0; D2_GLOBAL_GUARD(nTxtLvlMazeSize, "nTxtLvlMazeSize");
+D2LvlSubTxt * sgpTxtLvlSub = 0; D2_GLOBAL_GUARD(sgpTxtLvlSub, "sgpTxtLvlSub");
+int nTxtLvlSubSize = 0; D2_GLOBAL_GUARD(nTxtLvlSubSize, "nTxtLvlSubSize");
+static int * gpnLvlSubTypeToIndex = 0; D2_STATIC_GUARD(gpnLvlSubTypeToIndex, "gpnLvlSubTypeToIndex");
+static D2ExpansionLvlTblsTxt * pExpansionLvlTbls = 0; D2_STATIC_GUARD(pExpansionLvlTbls, "pExpansionLvlTbls");
+static D2DrlgFileStrc * * pTxtLvlTbls = 0; D2_STATIC_GUARD(pTxtLvlTbls, "pTxtLvlTbls");
+static void * gpaDrlgLvlSubPresetFiles = 0; D2_STATIC_GUARD(gpaDrlgLvlSubPresetFiles, "gpaDrlgLvlSubPresetFiles");
+static D2AutoMapLvlTbls * pAutoMapLvlTbls = 0; D2_STATIC_GUARD(pAutoMapLvlTbls, "pAutoMapLvlTbls");
 
 namespace D2Common::DATATBLS::LvlTbls {
 

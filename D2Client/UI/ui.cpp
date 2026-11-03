@@ -120,12 +120,21 @@
 #include "Storm/Source/SSTR.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
+#include "D2Client/Engine.data.h"
+#include "D2Client/GAME/Game/Game.data.h"
 #include "D2Client/UI/Button/ButtonWrapper.h"
+#include "D2Client/UI/Draw.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Client/UI/Panel.data.h"
+#include "D2Client/UI/UseItem.data.h"
+#include "D2Client/UI/npcmenu.data.h"
+#include "D2Client/UI/ui.data.h"
 #include "D2Client/UNIT/UnitSnd.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Launch/MainMenus.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -155,6 +164,2840 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, void * pDismissCallback);
 #endif
 
+static D2UIFlagInitStrc gUIFlagDrawConsoleInit[4] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Inv::ClickItemHandler
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleInventoryRightClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Inv::INPUT_InventoryRightClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleMouseMove
+    }
+}; D2_STATIC_GUARD(gUIFlagDrawConsoleInit, "gUIFlagDrawConsoleInit");
+static D2UIFlagInitStrc gUIFlagDrawTownInit[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::SpellSel::INPUT_SkillTreeLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::SpellSel::ClickOnScreenSkillWindow
+    }
+}; D2_STATIC_GUARD(gUIFlagDrawTownInit, "gUIFlagDrawTownInit");
+static D2UIFlagInitStrc gUIFlagDrawMercInit = {
+    /* .eEventType = */ 0x0,
+    /* .nMessageOrKeyCode = */ 0x201,
+    /* .pfHandler = */ &D2Client::UI::SpellSel::INPUT_SpellSelectClick
+}; D2_STATIC_GUARD(gUIFlagDrawMercInit, "gUIFlagDrawMercInit");
+static D2UIFlagInitStrc gUIFlagDrawSkillInit[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_StatScreenMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_StatScreenMouseUp
+    }
+}; D2_STATIC_GUARD(gUIFlagDrawSkillInit, "gUIFlagDrawSkillInit");
+static D2UIFlagInitStrc gUIFlagDrawAreaInit[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_StatScreenButtonDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_StatScreenButtonUp
+    }
+}; D2_STATIC_GUARD(gUIFlagDrawAreaInit, "gUIFlagDrawAreaInit");
+static D2UIFlagInitStrc gUIFlagDrawExperienceInit = {
+    /* .eEventType = */ 0x3,
+    /* .nMessageOrKeyCode = */ 0x7a,
+    /* .pfHandler = */ &D2Client::UI::Hireables::INPUT_HireableInteract
+}; D2_STATIC_GUARD(gUIFlagDrawExperienceInit, "gUIFlagDrawExperienceInit");
+static D2UIFlagInitStrc gUIFlagDrawHealthInit[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_SkillTreeButtonDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_SkillTreeButtonUp
+    }
+}; D2_STATIC_GUARD(gUIFlagDrawHealthInit, "gUIFlagDrawHealthInit");
+static D2UIFlagInitStrc gUIFlagDrawPanelInit = {
+    /* .eEventType = */ 0x0,
+    /* .nMessageOrKeyCode = */ 0x20a,
+    /* .pfHandler = */ &D2Client::UI::ui::INPUT_SkillTreeScroll
+}; D2_STATIC_GUARD(gUIFlagDrawPanelInit, "gUIFlagDrawPanelInit");
+static D2UIFlagInitStrc gUIFlagDrawManufactureInit[7] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::EscMenu::INPUT_EscMenuMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::EscMenu::INPUT_EscMenuMouseUp
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x28,
+        /* .pfHandler = */ &D2Client::UI::EscMenu::INPUT_EscMenuNavigateNext
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x26,
+        /* .pfHandler = */ &D2Client::UI::EscMenu::INPUT_EscMenuNavigatePrev
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x25,
+        /* .pfHandler = */ &D2Client::UI::EscMenu::INPUT_EscMenuOptionDecrease
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x27,
+        /* .pfHandler = */ &D2Client::UI::EscMenu::INPUT_EscMenuOptionIncrease
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::UI::EscMenu::INPUT_EscMenuExecuteSelection
+    }
+}; D2_STATIC_GUARD(gUIFlagDrawManufactureInit, "gUIFlagDrawManufactureInit");
+static D2UIFlagInitStrc gaUIFlagInitTable[22] = {
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x26,
+        /* .pfHandler = */ &D2Client::UI::Automap::MoveY16Minus
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x28,
+        /* .pfHandler = */ &D2Client::UI::Automap::MoveY16Plus
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x27,
+        /* .pfHandler = */ &D2Client::UI::Automap::MoveX16Minus
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x25,
+        /* .pfHandler = */ &D2Client::UI::Automap::MoveX16Plus
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x23,
+        /* .pfHandler = */ &D2Client::UI::Automap::AUTOMAP_OnKeyDownEnd_NoOp
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::ui::InitConfigUiFlags
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::ui::InitConfigUiFlags
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigMouseDown
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x28,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_SkillTreeNavigateDown
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x26,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_SkillTreeNavigateUp
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x25,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigToggleLeft
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x27,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigToggleRight
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigConfirmEntry
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x2e,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigAcceptBinding
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x8,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigAcceptBinding
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigCancel
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigCancel
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnQuestLogMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnButtonMouseUp
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnQuestLogMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnButtonMouseUp
+    }
+}; D2_STATIC_GUARD(gaUIFlagInitTable, "gaUIFlagInitTable");
+static D2UIFlagInitStrc gaUIFlagInitQuestScrollHandlers[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Text::TEXT_OnClickCloseQuestScroll
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Text::TEXT_OnClickCloseQuestScroll
+    }
+}; D2_STATIC_GUARD(gaUIFlagInitQuestScrollHandlers, "gaUIFlagInitQuestScrollHandlers");
+static D2UIFlagInitStrc gUIFlagDrawMapInit[5] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Waypoint::INPUT_WaypointMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Waypoint::INPUT_WaypointMouseUp
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Waypoint::INPUT_WaypointMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::Waypoint::INPUT_WaypointMouseUp
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x102,
+        /* .pfHandler = */ &D2Client::UI::Waypoint::INPUT_WaypointTravel
+    }
+}; D2_STATIC_GUARD(gUIFlagDrawMapInit, "gUIFlagDrawMapInit");
+D2UIFlagInitStrc g_UIFlagInitDrawUnknown[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::MiniPanel::INPUT_MiniPanelMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::MiniPanel::INPUT_MiniPanelMouseUp
+    }
+}; D2_GLOBAL_GUARD(g_UIFlagInitDrawUnknown, "g_UIFlagInitDrawUnknown");
+static D2UIFlagInitStrc gUIFlagDrawLevelInit[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Party::INPUT_PartyScreenLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Party::INPUT_PartyScreenMouseUp
+    }
+}; D2_STATIC_GUARD(gUIFlagDrawLevelInit, "gUIFlagDrawLevelInit");
+D2UIFlagInitStrc gsUIDrawFlagInit0[5] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Help::INPUT_HelpCloseButtonDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Help::INPUT_HelpCloseButtonUp
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Help::HELP_OnEscapeOrSpace
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Help::HELP_OnEscapeOrSpace
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x102,
+        /* .pfHandler = */ &D2Client::UI::Help::HELP_MiniPanelKeyNoOp
+    }
+}; D2_GLOBAL_GUARD(gsUIDrawFlagInit0, "gsUIDrawFlagInit0");
+D2UIFlagInitStrc gsUIDrawFlagInit1[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Help::INPUT_HelpScrollButtonDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Help::INPUT_HelpScrollButtonUp
+    }
+}; D2_GLOBAL_GUARD(gsUIDrawFlagInit1, "gsUIDrawFlagInit1");
+static D2UIFlagInitStrc g_UIFlagInitDrawPanel2[3] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Hireables::INPUT_HireableHireClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Hireables::UI_HandleHirelingTooltipHoverTimer
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Hireables::INPUT_HireableLongPress
+    }
+}; D2_STATIC_GUARD(g_UIFlagInitDrawPanel2, "g_UIFlagInitDrawPanel2");
+static D2UIFlagInitStrc g_UIFlagInitDrawPanel3[3] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleMercInvLeftDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleMercInvLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleMercInvMouseMove
+    }
+}; D2_STATIC_GUARD(g_UIFlagInitDrawPanel3, "g_UIFlagInitDrawPanel3");
+static D2UIFlagInitStrc g_UIFlagInitDrawPanel4[2] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleRecipeScrollClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_PanelKeyNoOp
+    }
+}; D2_STATIC_GUARD(g_UIFlagInitDrawPanel4, "g_UIFlagInitDrawPanel4");
+static int nHealthBarScreenX = -0x1; D2_STATIC_GUARD(nHealthBarScreenX, "nHealthBarScreenX");
+static int gnMercenaryHealthBarScreenY = -0x1; D2_STATIC_GUARD(gnMercenaryHealthBarScreenY, "gnMercenaryHealthBarScreenY");
+D2UIFlagInitStrc gaUIFlagInitNpcShopHandlers[8] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleRightClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Inv::INPUT_InventoryLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleShopLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleShopMouseMove
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleShopEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleShopEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleShopEnterKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x57,
+        /* .pfHandler = */ &D2Client::UI::Inv::INPUT_WeaponSwap
+    }
+}; D2_GLOBAL_GUARD(gaUIFlagInitNpcShopHandlers, "gaUIFlagInitNpcShopHandlers");
+D2UIFlagInitStrc gUIFlagDrawGoldInit[7] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnMouseUp
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnMouseDown
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnMouseUp
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnCloseClick
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnCloseClick
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::QuestLog::QUESTLOG_OnCloseClick
+    }
+}; D2_GLOBAL_GUARD(gUIFlagDrawGoldInit, "gUIFlagDrawGoldInit");
+D2UIFlagInitStrc gUIFlagDrawInventoryInit[13] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_ConsumeInputEvent
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x205,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_ConsumeInputEvent
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Inv::INPUT_TradeScreenLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleTradeLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleTradeMouseMove
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleTradeEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleTradeEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xc0,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleStashRightClick
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleShopEnterKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleTradeEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xc0,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleStashRightClick
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x4e,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ClearChatMessages
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x57,
+        /* .pfHandler = */ &D2Client::UI::Inv::INPUT_WeaponSwap
+    }
+}; D2_GLOBAL_GUARD(gUIFlagDrawInventoryInit, "gUIFlagDrawInventoryInit");
+int gnUIFlagCount = 0x26; D2_GLOBAL_GUARD(gnUIFlagCount, "gnUIFlagCount");
+D2UIFlagInitStrc gUIFlagDrawInfoInit[8] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleRightClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Inv::INPUT_StashLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleStashLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleStashMouseMove
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleStashEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleStashEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleShopEnterKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x57,
+        /* .pfHandler = */ &D2Client::UI::Inv::INPUT_WeaponSwap
+    }
+}; D2_GLOBAL_GUARD(gUIFlagDrawInfoInit, "gUIFlagDrawInfoInit");
+D2UIFlagInitStrc gaUIFlagInitCubeHandlers[7] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleRightClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::Inv::INPUT_CubeLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x202,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleCubeLeftClick
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x200,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleCubeMouseMove
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x1b,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleCubeEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleCubeEscapeKey
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0xd,
+        /* .pfHandler = */ &D2Client::UI::Inv::INV_HandleShopEnterKey
+    }
+}; D2_GLOBAL_GUARD(gaUIFlagInitCubeHandlers, "gaUIFlagInitCubeHandlers");
+D2UIFlagInitStrc g_UIFlagInitDrawPanel1[2] = {
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Draw::DRAW_PfHandlerCallback_CloseActivePanels
+    },
+    {
+        /* .eEventType = */ 0x3,
+        /* .nMessageOrKeyCode = */ 0x20,
+        /* .pfHandler = */ &D2Client::UI::Draw::DRAW_PfHandlerCallback_CloseActivePanels
+    }
+}; D2_GLOBAL_GUARD(g_UIFlagInitDrawPanel1, "g_UIFlagInitDrawPanel1");
+static uint32_t gbCursorAnimationPending = 0x1; D2_STATIC_GUARD(gbCursorAnimationPending, "gbCursorAnimationPending");
+D2UIFlagDescStrc gaUIFlagDescs[38] = {
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x3,
+            0x3,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x2,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x1,
+            0x1,
+            0x2,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x2,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x1,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x2,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x2,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x0,
+            0x3,
+            0x2,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x3,
+            0x0,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x2
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x3,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x3,
+            0x2,
+            0x2,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x3,
+            0x3,
+            0x1,
+            0x2,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x2,
+            0x0,
+            0x0,
+            0x3,
+            0x0,
+            0x0,
+            0x2,
+            0x0,
+            0x0,
+            0x3,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x4,
+            0x2,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x2,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x4,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x3,
+            0x1,
+            0x2,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x3,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x3,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x0,
+            0x4,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x0,
+            0x0,
+            0x3,
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x3,
+            0x2,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x3,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x3,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x3,
+            0x0,
+            0x3,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x3,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x1,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x1,
+            0x2,
+            0x2,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x1,
+            0x2,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x2,
+            0x1,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x2,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x3,
+            0x0,
+            0x3,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x2,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x3,
+            0x0,
+            0x3,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x2,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x3,
+            0x0,
+            0x3,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x3,
+            0x0,
+            0x3,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x2
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x2,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x2,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x0,
+            0x3,
+            0x1,
+            0x2,
+            0x2,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x1,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x3,
+            0x1,
+            0x2,
+            0x2,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x1,
+            0x1,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x3,
+            0x1,
+            0x2,
+            0x2,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x1,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x3,
+            0x1,
+            0x2,
+            0x2,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x0,
+            0x1,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x3,
+            0x1,
+            0x2,
+            0x2,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x1,
+            0x1,
+            0x2,
+            0x2,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x2,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x3,
+            0x0,
+            0x0,
+            0x3,
+            0x3,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x0,
+            0x0,
+            0x3,
+            0x1,
+            0x2,
+            0x2,
+            0x3,
+            0x0,
+            0x3,
+            0x2,
+            0x2,
+            0x0,
+            0x1,
+            0x0,
+            0x2,
+            0x0,
+            0x2,
+            0x3,
+            0x2,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x3,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x1,
+            0x2,
+            0x2,
+            0x2,
+            0x1,
+            0x2,
+            0x1,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x2,
+            0x1,
+            0x0,
+            0x2,
+            0x1,
+            0x2,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x2,
+            0x0,
+            0x0,
+            0x0
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x2,
+            0x1
+        }
+    },
+    {
+        /* .anDismissMode = */ {
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x1,
+            0x0,
+            0x1,
+            0x0,
+            0x0,
+            0x0,
+            0x1,
+            0x2
+        }
+    }
+}; D2_GLOBAL_GUARD(gaUIFlagDescs, "gaUIFlagDescs");
+D2UIFlagDescStrc * gUIFlagDismissModeTable[38] = {
+    gaUIFlagDescsClient,
+    gaUIFlagDescs,
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[1].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[2].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[3].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[4].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[5].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[6].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[7].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[18].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[8].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[9].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[10].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[11].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[12].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[13].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[14].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[15].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[16].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescsClient[1].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[17].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[22].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[23].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[24].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[25].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[26].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[27].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[28].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[29].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[30].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[31].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[32].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[33].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[34].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[35].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescsClient[2].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[36].anDismissMode[0],
+    (D2UIFlagDescStrc*)&gaUIFlagDescs[37].anDismissMode[0]
+}; D2_GLOBAL_GUARD(gUIFlagDismissModeTable, "gUIFlagDismissModeTable");
+static D2ConfigControlDescStrc * gpStatDescriptorTable = (D2ConfigControlDescStrc *)&gaConfigControlBindings; D2_STATIC_GUARD(gpStatDescriptorTable, "gpStatDescriptorTable");
+D2ConfigControlDescStrc gaConfigControlBindings[51] = {
+    {
+        /* .nCmdIndex = */ 0x0,
+        /* .wStrId = */ 0xf54,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x1,
+        /* .wStrId = */ 0xf55,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x2,
+        /* .wStrId = */ 0xf56,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x3,
+        /* .wStrId = */ 0xf57,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x4,
+        /* .wStrId = */ 0xf58,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x6,
+        /* .wStrId = */ 0xf5d,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x39,
+        /* .wStrId = */ 0x0,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0xc,
+        /* .wStrId = */ 0xf5e,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0xd,
+        /* .wStrId = */ 0x2a51,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0xe,
+        /* .wStrId = */ 0xf60,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0xf,
+        /* .wStrId = */ 0xf61,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x10,
+        /* .wStrId = */ 0xf62,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x11,
+        /* .wStrId = */ 0xf63,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x12,
+        /* .wStrId = */ 0xf64,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x13,
+        /* .wStrId = */ 0xf65,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x14,
+        /* .wStrId = */ 0xf66,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x15,
+        /* .wStrId = */ 0xf67,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x27,
+        /* .wStrId = */ 0xf68,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x28,
+        /* .wStrId = */ 0xf69,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x39,
+        /* .wStrId = */ 0x0,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x16,
+        /* .wStrId = */ 0xf6a,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x17,
+        /* .wStrId = */ 0xf6b,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x18,
+        /* .wStrId = */ 0xf6c,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x19,
+        /* .wStrId = */ 0xf6d,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x1a,
+        /* .wStrId = */ 0xf6e,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x39,
+        /* .wStrId = */ 0x0,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x5,
+        /* .wStrId = */ 0xf59,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x22,
+        /* .wStrId = */ 0xf7e,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x23,
+        /* .wStrId = */ 0xf7f,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x24,
+        /* .wStrId = */ 0xf80,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x25,
+        /* .wStrId = */ 0xf81,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x2b,
+        /* .wStrId = */ 0xf8e,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x39,
+        /* .wStrId = */ 0x0,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x7,
+        /* .wStrId = */ 0xf5a,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x8,
+        /* .wStrId = */ 0xf5b,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x9,
+        /* .wStrId = */ 0xf8f,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0xa,
+        /* .wStrId = */ 0xf91,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0xb,
+        /* .wStrId = */ 0xf90,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x39,
+        /* .wStrId = */ 0x0,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x1b,
+        /* .wStrId = */ 0xf77,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x1c,
+        /* .wStrId = */ 0xf78,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x1d,
+        /* .wStrId = */ 0xf79,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x1e,
+        /* .wStrId = */ 0xf7a,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x1f,
+        /* .wStrId = */ 0xf7b,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x20,
+        /* .wStrId = */ 0xf7c,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x21,
+        /* .wStrId = */ 0xf7d,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x37,
+        /* .wStrId = */ 0x2b4b,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x39,
+        /* .wStrId = */ 0x0,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x2a,
+        /* .wStrId = */ 0xf83,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x26,
+        /* .wStrId = */ 0xf82,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    },
+    {
+        /* .nCmdIndex = */ 0x29,
+        /* .wStrId = */ 0xf8d,
+        /* ._pad = */ { '\x00', '\x00', '\x00', '\x00' }
+    }
+}; D2_GLOBAL_GUARD(gaConfigControlBindings, "gaConfigControlBindings");
+static int nConfigControlSelected = 0x1; D2_STATIC_GUARD(nConfigControlSelected, "nConfigControlSelected");
+static D2UIConfigTabEntryStrc g_UIConfigTabTable[3] = {
+    {
+        /* .nLabelStringId = */ 0xf86,
+        /* .pfnAction = */ &D2Client::UI::ui::CONTROLCONFIG_RevertAndClose,
+        /* .nTabId = */ 0x1,
+        /* .aBounds = */ {
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00'
+        }
+    },
+    {
+        /* .nLabelStringId = */ 0xf84,
+        /* .pfnAction = */ (pfnUIConfigTabAction)&D2Client::UI::ui::UIAction_ResetKeyBindingsToDefaults,
+        /* .nTabId = */ 0x3,
+        /* .aBounds = */ {
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00'
+        }
+    },
+    {
+        /* .nLabelStringId = */ 0xf85,
+        /* .pfnAction = */ &D2Client::UI::ui::CONTROLCONFIG_SaveAndCancel,
+        /* .nTabId = */ 0x2,
+        /* .aBounds = */ {
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00',
+            '\x00'
+        }
+    }
+}; D2_STATIC_GUARD(g_UIConfigTabTable, "g_UIConfigTabTable");
+static uint32_t gnConfigBindingFirstClick = 0x1; D2_STATIC_GUARD(gnConfigBindingFirstClick, "gnConfigBindingFirstClick");
+static D2UIFlagInitStrc gsUIFlagInit1 = {
+    /* .eEventType = */ 0x0,
+    /* .nMessageOrKeyCode = */ 0x207,
+    /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigMouseClick
+}; D2_STATIC_GUARD(gsUIFlagInit1, "gsUIFlagInit1");
+static D2UIFlagInitStrc gsUIFlagInit0[6] = {
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x201,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigScreenOpen
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x204,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigScreenOpen
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x100,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigKeyBind
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x104,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigKeyBind
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x101,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigKeyBindAlternate
+    },
+    {
+        /* .eEventType = */ 0x0,
+        /* .nMessageOrKeyCode = */ 0x105,
+        /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigKeyBindAlternate
+    }
+}; D2_STATIC_GUARD(gsUIFlagInit0, "gsUIFlagInit0");
+static D2UIFlagInitStrc gsUIFlagInit2 = {
+    /* .eEventType = */ 0x0,
+    /* .nMessageOrKeyCode = */ 0x20b,
+    /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigMouseButtonHandler
+}; D2_STATIC_GUARD(gsUIFlagInit2, "gsUIFlagInit2");
+static D2UIFlagInitStrc gsUIFlagInit3 = {
+    /* .eEventType = */ 0x0,
+    /* .nMessageOrKeyCode = */ 0x20a,
+    /* .pfHandler = */ &D2Client::UI::ui::INPUT_ConfigMouseWheelScroll
+}; D2_STATIC_GUARD(gsUIFlagInit3, "gsUIFlagInit3");
+static D2StatDescRowStrc gaStatDescRows[15] = {
+    {
+        /* .nX1 = */ 0xb,
+        /* .nY = */ 0x2c,
+        /* .nX2 = */ 0x34,
+        /* .nStringId = */ 0xfd9,
+        /* .nTextWidth = */ 0x6
+    },
+    {
+        /* .nX1 = */ 0x41,
+        /* .nY = */ 0x2c,
+        /* .nX2 = */ 0xb4,
+        /* .nStringId = */ 0xfda,
+        /* .nTextWidth = */ 0xb
+    },
+    {
+        /* .nX1 = */ 0xc1,
+        /* .nY = */ 0x2c,
+        /* .nX2 = */ 0x134,
+        /* .nStringId = */ 0xfdb,
+        /* .nTextWidth = */ 0xb
+    },
+    {
+        /* .nX1 = */ 0xa,
+        /* .nY = */ 0x61,
+        /* .nX2 = */ 0x49,
+        /* .nStringId = */ 0xfdc,
+        /* .nTextWidth = */ 0x9
+    },
+    {
+        /* .nX1 = */ 0xa,
+        /* .nY = */ 0xa0,
+        /* .nX2 = */ 0x49,
+        /* .nStringId = */ 0xfde,
+        /* .nTextWidth = */ 0xa
+    },
+    {
+        /* .nX1 = */ 0xae,
+        /* .nY = */ 0xcf,
+        /* .nX2 = */ 0x10c,
+        /* .nStringId = */ 0xfe0,
+        /* .nTextWidth = */ 0x8
+    },
+    {
+        /* .nX1 = */ 0xa,
+        /* .nY = */ 0xf5,
+        /* .nX2 = */ 0x49,
+        /* .nStringId = */ 0xfe2,
+        /* .nTextWidth = */ 0x9
+    },
+    {
+        /* .nX1 = */ 0xae,
+        /* .nY = */ 0xf5,
+        /* .nX2 = */ 0xe4,
+        /* .nStringId = */ 0xfe3,
+        /* .nTextWidth = */ 0x8
+    },
+    {
+        /* .nX1 = */ 0xae,
+        /* .nY = */ 0x10d,
+        /* .nX2 = */ 0xe4,
+        /* .nStringId = */ 0xfe4,
+        /* .nTextWidth = */ 0x5
+    },
+    {
+        /* .nX1 = */ 0xa,
+        /* .nY = */ 0x133,
+        /* .nX2 = */ 0x49,
+        /* .nStringId = */ 0xfe5,
+        /* .nTextWidth = */ 0x7
+    },
+    {
+        /* .nX1 = */ 0xae,
+        /* .nY = */ 0x133,
+        /* .nX2 = */ 0xe4,
+        /* .nStringId = */ 0xfe6,
+        /* .nTextWidth = */ 0x5
+    },
+    {
+        /* .nX1 = */ 0xbe,
+        /* .nY = */ 0x15a,
+        /* .nX2 = */ 0x10c,
+        /* .nStringId = */ 0xfe7,
+        /* .nTextWidth = */ 0x5
+    },
+    {
+        /* .nX1 = */ 0xbe,
+        /* .nY = */ 0x172,
+        /* .nX2 = */ 0x10c,
+        /* .nStringId = */ 0xfe8,
+        /* .nTextWidth = */ 0x5
+    },
+    {
+        /* .nX1 = */ 0xbe,
+        /* .nY = */ 0x18b,
+        /* .nX2 = */ 0x10c,
+        /* .nStringId = */ 0xfe9,
+        /* .nTextWidth = */ 0xa
+    },
+    {
+        /* .nX1 = */ 0xbe,
+        /* .nY = */ 0x1a3,
+        /* .nX2 = */ 0x10c,
+        /* .nStringId = */ 0xfea,
+        /* .nTextWidth = */ 0x7
+    }
+}; D2_STATIC_GUARD(gaStatDescRows, "gaStatDescRows");
+static D2StatScreenButtonStrc gaStatScreenButtons[4] = {
+    {
+        /* .nX = */ 0x75,
+        /* .nY = */ 0x69,
+        /* .bHitTest = */ 0x0,
+        /* .nStatId = */ 0x0
+    },
+    {
+        /* .nX = */ 0x75,
+        /* .nY = */ 0xa7,
+        /* .bHitTest = */ 0x0,
+        /* .nStatId = */ 0x2
+    },
+    {
+        /* .nX = */ 0x75,
+        /* .nY = */ 0xfd,
+        /* .bHitTest = */ 0x0,
+        /* .nStatId = */ 0x3
+    },
+    {
+        /* .nX = */ 0x75,
+        /* .nY = */ 0x13b,
+        /* .bHitTest = */ 0x0,
+        /* .nStatId = */ 0x1
+    }
+}; D2_STATIC_GUARD(gaStatScreenButtons, "gaStatScreenButtons");
+static char * gaLanguageNames_00724a80[15] = {
+    s_English_006cc81c,
+    s_Spanish_006cc814,
+    s_German_006cc80c,
+    s_French_006cc804,
+    s_Portuguese_006cc7f8,
+    s_Italian_006cc7f0,
+    s_Japanese_006cc7e4,
+    s_Korean_006cc7dc,
+    s_Simplified_Chinese_006cc7c8,
+    s_Traditional_Chinese_006cc7b4,
+    s_Polish_006cc7ac,
+    s_Russian_006cc7a4,
+    s_English_with_Korean_Chat_006cc788,
+    s_Unknown_006cc780,
+    (char*)0x006cc77c
+}; D2_STATIC_GUARD(gaLanguageNames_00724a80, "gaLanguageNames_00724a80");
+static uint32_t gdwQuestResurrectDismissThrottle = 0; D2_STATIC_GUARD(gdwQuestResurrectDismissThrottle, "gdwQuestResurrectDismissThrottle");
+DC6 * DC6_EnteredAreaName = 0; D2_GLOBAL_GUARD(DC6_EnteredAreaName, "DC6_EnteredAreaName");
+DC6 * pDC6_Frame = 0; D2_GLOBAL_GUARD(pDC6_Frame, "pDC6_Frame");
+int gnGoldDialogTransactionType = 0; D2_GLOBAL_GUARD(gnGoldDialogTransactionType, "gnGoldDialogTransactionType");
+static BOOL gbAutomapPanelOpened = 0; D2_STATIC_GUARD(gbAutomapPanelOpened, "gbAutomapPanelOpened");
+uint32_t gnLastOpenPanelId = 0; D2_GLOBAL_GUARD(gnLastOpenPanelId, "gnLastOpenPanelId");
+DC6 * gpUiCursorFocus16DC6 = 0; D2_GLOBAL_GUARD(gpUiCursorFocus16DC6, "gpUiCursorFocus16DC6");
+DC6 * pUi_Panel_buysellbtn = 0; D2_GLOBAL_GUARD(pUi_Panel_buysellbtn, "pUi_Panel_buysellbtn");
+namespace D2Client::UI::ui {
+DC6 * gpDC6CursorIcon = 0; D2_GLOBAL_GUARD(gpDC6CursorIcon, "D2Client::UI::ui::gpDC6CursorIcon");
+} // namespace D2Client::UI::ui
+DC6 * gnLoadedActIndex = 0; D2_GLOBAL_GUARD(gnLoadedActIndex, "gnLoadedActIndex");
+static int nLoadedActNo = 0; D2_STATIC_GUARD(nLoadedActNo, "nLoadedActNo");
+static DC6 * gpDC6YouDiedHardcoreImage = 0; D2_STATIC_GUARD(gpDC6YouDiedHardcoreImage, "gpDC6YouDiedHardcoreImage");
+static DC6 * gpDC6DeathInstructionImage = 0; D2_STATIC_GUARD(gpDC6DeathInstructionImage, "gpDC6DeathInstructionImage");
+uint32_t gnGoldDialogTransactionMode = 0; D2_GLOBAL_GUARD(gnGoldDialogTransactionMode, "gnGoldDialogTransactionMode");
+static uint32_t gnImmunityText2Color = 0; D2_STATIC_GUARD(gnImmunityText2Color, "gnImmunityText2Color");
+static uint16_t UNICODE_007a2c80[80] = {}; D2_STATIC_GUARD(UNICODE_007a2c80, "UNICODE_007a2c80");
+static uint32_t gnTooltipScreenX = 0; D2_STATIC_GUARD(gnTooltipScreenX, "gnTooltipScreenX");
+static uint32_t gnTooltipScreenY = 0; D2_STATIC_GUARD(gnTooltipScreenY, "gnTooltipScreenY");
+static int gnTooltipHpBarValue = 0; D2_STATIC_GUARD(gnTooltipHpBarValue, "gnTooltipHpBarValue");
+uint16_t gU16ImmunityStringBuffer1[256] = {}; D2_GLOBAL_GUARD(gU16ImmunityStringBuffer1, "gU16ImmunityStringBuffer1");
+static uint32_t gnImmunityText1Color = 0; D2_STATIC_GUARD(gnImmunityText1Color, "gnImmunityText1Color");
+static uint16_t gnMonsterHealthBarValue[256] = {}; D2_STATIC_GUARD(gnMonsterHealthBarValue, "gnMonsterHealthBarValue");
+static int gnUICtrlConfigTotalRows = 0; D2_STATIC_GUARD(gnUICtrlConfigTotalRows, "gnUICtrlConfigTotalRows");
+static int gnUICtrlConfigScrollMaxLines = 0; D2_STATIC_GUARD(gnUICtrlConfigScrollMaxLines, "gnUICtrlConfigScrollMaxLines");
+static int gnUICtrlConfigColumnWidth = 0; D2_STATIC_GUARD(gnUICtrlConfigColumnWidth, "gnUICtrlConfigColumnWidth");
+static uint32_t gnUICtrlConfigMouseButtonState = 0; D2_STATIC_GUARD(gnUICtrlConfigMouseButtonState, "gnUICtrlConfigMouseButtonState");
+static uint32_t gnUICtrlConfigButton3State = 0; D2_STATIC_GUARD(gnUICtrlConfigButton3State, "gnUICtrlConfigButton3State");
+static int gaControlConfigRegionMouseState[7] = {}; D2_STATIC_GUARD(gaControlConfigRegionMouseState, "gaControlConfigRegionMouseState");
+static int gnUICtrlConfigScrollOffset = 0; D2_STATIC_GUARD(gnUICtrlConfigScrollOffset, "gnUICtrlConfigScrollOffset");
+static int g_ControlConfigUIState = 0; D2_STATIC_GUARD(g_ControlConfigUIState, "g_ControlConfigUIState");
+static int gnUICtrlConfigActiveButton = 0; D2_STATIC_GUARD(gnUICtrlConfigActiveButton, "gnUICtrlConfigActiveButton");
+static BOOL gbUICtrlConfigKeyBindMode = 0; D2_STATIC_GUARD(gbUICtrlConfigKeyBindMode, "gbUICtrlConfigKeyBindMode");
+static DC6 * gpUICtrlConfigScrollbarDC6 = 0; D2_STATIC_GUARD(gpUICtrlConfigScrollbarDC6, "gpUICtrlConfigScrollbarDC6");
+static int gnUICtrlConfigPendingKeyStrId = 0; D2_STATIC_GUARD(gnUICtrlConfigPendingKeyStrId, "gnUICtrlConfigPendingKeyStrId");
+static unsigned int gdwUICtrlConfigKeyBindTimestamp = {}; D2_STATIC_GUARD(gdwUICtrlConfigKeyBindTimestamp, "gdwUICtrlConfigKeyBindTimestamp");
+static int gnUICtrlConfigScrollPosition = 0; D2_STATIC_GUARD(gnUICtrlConfigScrollPosition, "gnUICtrlConfigScrollPosition");
+DC6 * gpUIStatLevelUpPanelImages = 0; D2_GLOBAL_GUARD(gpUIStatLevelUpPanelImages, "gpUIStatLevelUpPanelImages");
+DC6 * gpUIStatLevelUpButtonImages = 0; D2_GLOBAL_GUARD(gpUIStatLevelUpButtonImages, "gpUIStatLevelUpButtonImages");
+static BOOL gbUIStatButtonHovered = 0; D2_STATIC_GUARD(gbUIStatButtonHovered, "gbUIStatButtonHovered");
+static BOOL gbUISkillButtonHovered = 0; D2_STATIC_GUARD(gbUISkillButtonHovered, "gbUISkillButtonHovered");
+static uint64_t gbUIGoldStashMode = 0; D2_STATIC_GUARD(gbUIGoldStashMode, "gbUIGoldStashMode");
+static BOOL gbUIStatScreenMouseDown = 0; D2_STATIC_GUARD(gbUIStatScreenMouseDown, "gbUIStatScreenMouseDown");
+static uint64_t gbUIStatWindowDrawFlag = 0; D2_STATIC_GUARD(gbUIStatWindowDrawFlag, "gbUIStatWindowDrawFlag");
 static uint8_t gbTradeWindowOpen = 0; D2_STATIC_GUARD(gbTradeWindowOpen, "gbTradeWindowOpen");
 
 namespace D2Client::UI::ui {

@@ -30,9 +30,25 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "Fog/Src/Excel.h"
 #include "globals/globals.h"
+#include "D2Common/DATATBLS/OverlayTbls.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+uint32_t gaOverlayVariantCodes2[12] = {
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x2074696c,
+    0x20736564,
+    0x20797668,
+    0x20776273
+}; D2_GLOBAL_GUARD(gaOverlayVariantCodes2, "gaOverlayVariantCodes2");
 
 namespace D2Common::DATATBLS::OverlayTbls {
 

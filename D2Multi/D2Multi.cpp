@@ -11,6 +11,7 @@
 #include "D2Win/Src/D2WinButton.h"
 #include "D2Win/Src/D2WinMain.h"
 #include "globals/globals.h"
+#include "D2Multi/ChatDlg.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

@@ -10,6 +10,8 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Storm/Source/SFile.h"
 #include "globals/globals.h"
+#include "D2Direct3D/Renderer/Direct3D.data.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

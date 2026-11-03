@@ -33,9 +33,14 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/ClientModeInGame.data.h"
+#include "D2Client/D2Client.h"
 #include "D2Client/Engine.h"
+#include "D2Client/GAME/Game/Game.data.h"
 #include "D2Client/GAME/Game/SGAMEDATA.h"
+#include "D2MCPClient/McpConnect.data.h"
 #include "Fog/D2QServerStrc.h"
+#include "Fog/Src/LogManager.data.h"
 #include "Storm/H/CCritSect.h"
 #include "Storm/H/stpl.h"
 
@@ -63,6 +68,69 @@ typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t para
 typedef uint32_t (__stdcall *fpGameLoopFunction)(uint32_t param_1);
 #endif
 
+char * gpszCmdLineHelpText = s_Available_command_line_options____006d5b20; D2_GLOBAL_GUARD(gpszCmdLineHelpText, "gpszCmdLineHelpText");
+static ARGLIST gaClientCmdLineArgs[8] = {
+    {
+        /* .dwFlags = */ 0x0,
+        /* .dwId = */ 0xffffffff,
+        /* .szName = */ gszCmdLineSwitchQuestionMark,
+        /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
+    },
+    {
+        /* .dwFlags = */ 0x0,
+        /* .dwId = */ 0xffffffff,
+        /* .szName = */ gszCmdLineSwitchH,
+        /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
+    },
+    {
+        /* .dwFlags = */ 0x0,
+        /* .dwId = */ 0xffffffff,
+        /* .szName = */ gszCmdLineSwitchHelp,
+        /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_ShowHelpIfNotDeveloper
+    },
+    {
+        /* .dwFlags = */ 0x20000,
+        /* .dwId = */ 0xffffffff,
+        /* .szName = */ (char *)&gpCubeRecipeItemTypeFlags_7,
+        /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_SaveDefaultCommandLine
+    },
+    {
+        /* .dwFlags = */ 0x20000,
+        /* .dwId = */ 0xffffffff,
+        /* .szName = */ s_mode_006d5bc4,
+        /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_SetAppMode
+    },
+    {
+        /* .dwFlags = */ 0x0,
+        /* .dwId = */ 0xffffffff,
+        /* .szName = */ gszCmdLineSwitchC,
+        /* .pfnCallback = */ &D2Client::WINMAIN_TestMemoryAccess
+    },
+    {
+        /* .dwFlags = */ 0x0,
+        /* .dwId = */ 0xffffffff,
+        /* .szName = */ cLogFileReadMode,
+        /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_StopRecordingSetFlags
+    },
+    {
+        /* .dwFlags = */ 0x0,
+        /* .dwId = */ 0xffffffff,
+        /* .szName = */ gszCmdLineSwitchP,
+        /* .pfnCallback = */ &D2Client::ClientModeInGame::CmdLine_EnableRecording
+    }
+}; D2_STATIC_GUARD(gaClientCmdLineArgs, "gaClientCmdLineArgs");
+eD2ClientAppMode gdwAppMode = APPMODE_SAVE; D2_GLOBAL_GUARD(gdwAppMode, "gdwAppMode");
+static char * gpszDiabloIICaption = s_Diablo_II_006cc8b8; D2_STATIC_GUARD(gpszDiabloIICaption, "gpszDiabloIICaption");
+static BOOL gbQuitGame = 0x1; D2_STATIC_GUARD(gbQuitGame, "gbQuitGame");
+static eD2ClientAppMode gClientAppModeQueue[5] = {}; D2_STATIC_GUARD(gClientAppModeQueue, "gClientAppModeQueue");
+D2IniConfigStrc * D2IniData_client = 0; D2_GLOBAL_GUARD(D2IniData_client, "D2IniData_client");
+static uint32_t gnClientAppModeQueueState = 0; D2_STATIC_GUARD(gnClientAppModeQueueState, "gnClientAppModeQueueState");
+static int gClientAppModeQueueCounter = 0; D2_STATIC_GUARD(gClientAppModeQueueCounter, "gClientAppModeQueueCounter");
+static LPCSTR gpszCmdLineCaptionStr = 0; D2_STATIC_GUARD(gpszCmdLineCaptionStr, "gpszCmdLineCaptionStr");
+static uint32_t gbQServerRunning = 0; D2_STATIC_GUARD(gbQServerRunning, "gbQServerRunning");
+static unsigned int gdwLastPacketActivityTick = {}; D2_STATIC_GUARD(gdwLastPacketActivityTick, "gdwLastPacketActivityTick");
+static uint32_t gnClientModeInitValue = 0; D2_STATIC_GUARD(gnClientModeInitValue, "gnClientModeInitValue");
+static unsigned int gdwQServerStartTime = {}; D2_STATIC_GUARD(gdwQServerStartTime, "gdwQServerStartTime");
 static TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> gQServerGameState; D2_STATIC_GUARD(gQServerGameState, "gQServerGameState");
 
 namespace D2Client::ClientModeInGame {

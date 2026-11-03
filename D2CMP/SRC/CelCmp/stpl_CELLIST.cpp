@@ -20,6 +20,7 @@
 #include "globals/globals.h"
 #include "D2CMP/SRC/CelCmp.h"
 #include "Fog/Debug.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

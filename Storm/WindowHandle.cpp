@@ -10,6 +10,7 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Launch/MainMenus.h"
+#include "Storm/WindowHandle.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -23,6 +24,29 @@ typedef int (__stdcall *pfnStormMsgIdleCallback)(int nIdleIteration);
 typedef void (__stdcall *pfnSEvtHandler)(void * pData);
 #endif
 
+static char s___AUWNDREC___00708850[16] = {
+    '.',
+    '?',
+    'A',
+    'U',
+    'W',
+    'N',
+    'D',
+    'R',
+    'E',
+    'C',
+    '@',
+    '@',
+    '\x00',
+    '\x00',
+    '\x00',
+    '\x00'
+}; D2_STATIC_GUARD(s___AUWNDREC___00708850, "s___AUWNDREC___00708850");
+D2StormListHead gpWndTrackingListHead = {
+    /* .nLinkOffset = */ 0x0,
+    /* .pPrevLink = */ (StormLinkStrc*)&gpWndTrackingListHead.pPrevLink,
+    /* .pNext = */ 0x0
+}; D2_GLOBAL_GUARD(gpWndTrackingListHead, "gpWndTrackingListHead");
 static uint32_t gpActiveWindow = 0; D2_STATIC_GUARD(gpActiveWindow, "gpActiveWindow");
 
 namespace Storm::WindowHandle {

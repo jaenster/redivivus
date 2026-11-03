@@ -20,6 +20,7 @@
 #include "globals/globals.h"
 #include "D2Client/Net/MCP.h"
 #include "D2Launch/MainMenus.h"
+#include "D2MCPClient/McpConnect.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -31,6 +32,45 @@
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
+
+static uint32_t g_nMCPGameDifficulty = 0; D2_STATIC_GUARD(g_nMCPGameDifficulty, "g_nMCPGameDifficulty");
+static uint32_t g_bMCPCharCreateSuccess = 0; D2_STATIC_GUARD(g_bMCPCharCreateSuccess, "g_bMCPCharCreateSuccess");
+static char g_szMCPGamePassword[28] = {}; D2_STATIC_GUARD(g_szMCPGamePassword, "g_szMCPGamePassword");
+static uint32_t IsMcpGameJoinSuccesful = 0; D2_STATIC_GUARD(IsMcpGameJoinSuccesful, "IsMcpGameJoinSuccesful");
+namespace D2Client::MCP {
+uint16_t D2GSRequestId = 0; D2_GLOBAL_GUARD(D2GSRequestId, "D2Client::MCP::D2GSRequestId");
+} // namespace D2Client::MCP
+namespace D2Client::Bnet {
+uint32_t D2GSGameHash = 0; D2_GLOBAL_GUARD(D2GSGameHash, "D2Client::Bnet::D2GSGameHash");
+} // namespace D2Client::Bnet
+static uint16_t nMcpPacketSequence = 0; D2_STATIC_GUARD(nMcpPacketSequence, "nMcpPacketSequence");
+namespace D2Client::MCP {
+uint32_t D2GSGameToken = 0; D2_GLOBAL_GUARD(D2GSGameToken, "D2Client::MCP::D2GSGameToken");
+D2QSSocketStrc * MCPD2QSSocket = 0; D2_GLOBAL_GUARD(MCPD2QSSocket, "D2Client::MCP::MCPD2QSSocket");
+} // namespace D2Client::MCP
+static uint8_t gMCPConnectionState[328] = {}; D2_STATIC_GUARD(gMCPConnectionState, "gMCPConnectionState");
+static uint32_t g_nMCPJoinTimestamp = 0; D2_STATIC_GUARD(g_nMCPJoinTimestamp, "g_nMCPJoinTimestamp");
+D2McpGameInfoStrc g_CharSelectBuffer = {}; D2_GLOBAL_GUARD(g_CharSelectBuffer, "g_CharSelectBuffer");
+static char g_szMCPGameName[4] = {}; D2_STATIC_GUARD(g_szMCPGameName, "g_szMCPGameName");
+static uint32_t g_bMCPJoinGameSuccess = 0; D2_STATIC_GUARD(g_bMCPJoinGameSuccess, "g_bMCPJoinGameSuccess");
+namespace D2Client::MCP {
+uint32_t D2GSJoinResult = 0; D2_GLOBAL_GUARD(D2GSJoinResult, "D2Client::MCP::D2GSJoinResult");
+} // namespace D2Client::MCP
+HANDLE MCPThread = 0; D2_GLOBAL_GUARD(MCPThread, "MCPThread");
+namespace D2Client::MCP {
+char D2GSConnectIp[18] = {}; D2_GLOBAL_GUARD(D2GSConnectIp, "D2Client::MCP::D2GSConnectIp");
+} // namespace D2Client::MCP
+static uint32_t g_bMCPCharLogonSuccess = 0; D2_STATIC_GUARD(g_bMCPCharLogonSuccess, "g_bMCPCharLogonSuccess");
+static uint32_t g_bMCPConnectionEstablished = 0; D2_STATIC_GUARD(g_bMCPConnectionEstablished, "g_bMCPConnectionEstablished");
+static HANDLE pMCPEventHandle = 0; D2_STATIC_GUARD(pMCPEventHandle, "pMCPEventHandle");
+static uint32_t g_bMCPCreateGameSuccess = 0; D2_STATIC_GUARD(g_bMCPCreateGameSuccess, "g_bMCPCreateGameSuccess");
+namespace D2Client::MCP {
+void * CharListPacket = 0; D2_GLOBAL_GUARD(CharListPacket, "D2Client::MCP::CharListPacket");
+} // namespace D2Client::MCP
+pfnMCPGameListEntry g_pfnMCPGameListCallback = (pfnMCPGameListEntry)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCallback, "g_pfnMCPGameListCallback");
+pfnVoidNoArgCallback g_pfnMCPGameListCompleteCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(g_pfnMCPGameListCompleteCallback, "g_pfnMCPGameListCompleteCallback");
+pfnMCPMessage g_pfnMCPMessageCallback = (pfnMCPMessage)0; D2_GLOBAL_GUARD(g_pfnMCPMessageCallback, "g_pfnMCPMessageCallback");
+uint8_t gMCPGameListBuffer[28680] = {}; D2_GLOBAL_GUARD(gMCPGameListBuffer, "gMCPGameListBuffer");
 
 namespace D2MCPClient::McpConnect {
 

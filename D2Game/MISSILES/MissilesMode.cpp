@@ -83,11 +83,158 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
+#include "D2Game/MISSILES/MissilesMode.data.h"
 #include "D2Game/SKILLS/SkillEMonst.h"
 #include "Fog/Src/Safesock.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+D2MissileSrvDoFuncData gaMissileSrvDoFuncTable[9] = {
+    {
+        /* .pFunction = */ nullptr,
+        /* .nFlags = */ 0x0
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_PlayerOrAllyMonster,
+        /* .nFlags = */ 0x84
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_MonsterOnly,
+        /* .nFlags = */ 0x104
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_PlayerOrMonster,
+        /* .nFlags = */ 0x184
+    },
+    {
+        /* .pFunction = */ nullptr,
+        /* .nFlags = */ 0x0
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_MonsterOnly,
+        /* .nFlags = */ 0x104
+    },
+    {
+        /* .pFunction = */ nullptr,
+        /* .nFlags = */ 0x4
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_MissileFlagCheck,
+        /* .nFlags = */ 0x40
+    },
+    {
+        /* .pFunction = */ (fpMissileSrvDoFuncData)&D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_PlayerOrMonster,
+        /* .nFlags = */ 0x185
+    }
+}; D2_GLOBAL_GUARD(gaMissileSrvDoFuncTable, "gaMissileSrvDoFuncTable");
+static int MISSILESSRVHITFUNCS_SIZE = 0x47; D2_STATIC_GUARD(MISSILESSRVHITFUNCS_SIZE, "MISSILESSRVHITFUNCS_SIZE");
+static D2MissileSrvHitFunc MISSILESSRVHITFUNCS[71] = {
+    nullptr,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaElementalDamageExplosion,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnRadialSubMissiles,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_WallHitDelegateToAreaDamage,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnHitSubMissilesAndHit,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnSpreadSubMissiles,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnMonsterAtHit,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_HealTarget,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_BlockSelfHitByState,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaDamageWithSpawnPattern,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_PierceOrExplodeOnWall,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnHitSubMissiles,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ChainPierceWithBounce,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaDamageWithDurationMod,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaDamageAndRadialBurst,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnStationarySubMissile,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ApplyAuraStateToTarget,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ApplyTerrorToMonster,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ApplyWarCryBuff,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ApplyTimedAuraState,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnSubMissileAtFrameInArea,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnSubMissileInvertFrameInArea,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_DispatchSrvDoFunc,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaPhysicalDamageExplosion,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnDirectionalSubMissiles,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_NoOp,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ApplyTerrorNearMinion,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnSpreadSubMissilesOnFirstFrame,
+    nullptr,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_LeechHpToOwner,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnPortalOnWallHit,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SetRoomPortalFlag,
+    nullptr,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ActivateObjectOnWallHit,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnSubMissileAtWallHit,
+    (D2MissileSrvHitFunc)&D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AlwaysPierce,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnMissileStarPattern,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnRandomMonsterAtHit,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_CastScatterMissiles,
+    nullptr,
+    nullptr,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_HealTargetRandom,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaSplashDamage,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnFixedMissileStar,
+    nullptr,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnSubMissileAtDirectionPoint,
+    nullptr,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_BlockHitUntilFrame,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnUpToThreeSubMissiles,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnEightDirectionSubMissiles,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_ApplyDruidAuraWithMissile,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnMonsterFromSkillParam,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_DrainTargetManaPercent,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaDamageAndSpawnSubMissile,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnTyraelAndOpenPortal,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnRandomOffsetSubMissile,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnDualRadialSubMissiles,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
+}; D2_STATIC_GUARD(MISSILESSRVHITFUNCS, "MISSILESSRVHITFUNCS");
+static D2MissileSrvDmgFunc MISSILESSRVDMGFUNCS[31] = {
+    nullptr,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_PhysToElementalByCalc1,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_FreezeLengthFromColdLengthPct,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_RollChanceFlagBlessedAim,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_ConvertColdLengthToFreezeLength,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_ElementalBonusVsUndeadDemon,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_SetTargetNotControlled,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_SetStunLengthFromParam1,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_ApplyProgOverlayToTarget,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_SetStunLengthFromSkillParam,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_CopyColdLengthToFreezeLength,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_SynergyCappedPoisonLength,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_RecalcElementalWithClear,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_ScaleByDamagePctThenElemBonus,
+    &D2Game::MISSILES::MissilesMode::Missiles_SrvDmgFunc_RollMonsterSizeKnockbackChance,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr
+}; D2_STATIC_GUARD(MISSILESSRVDMGFUNCS, "MISSILESSRVDMGFUNCS");
 
 namespace D2Game::MISSILES::MissilesMode {
 

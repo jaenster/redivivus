@@ -50,6 +50,7 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
+#include "D2Common/Logging/ProfCore.data.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

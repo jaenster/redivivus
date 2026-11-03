@@ -55,6 +55,7 @@
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Client/UNIT/Missile.h"
+#include "D2Client/UNIT/Object.data.h"
 #include "D2Common/D2SeedStrc.h"
 #include "D2Game/Monster/AI/AI.h"
 
@@ -74,6 +75,216 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitDataObjectStrc) == 0x38, "D2_
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
+
+namespace D2Client::UNIT::Object {
+D2ShrineDispatchEntryStrc aShrineDispatchTable[23] = {
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0x0
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa71
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa71
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa70
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa6a
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa6a
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x3b,
+        /* .nOverlayIdInactive = */ 0x39,
+        /* .nSoundId = */ 0xa68
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x3c,
+        /* .nOverlayIdInactive = */ 0x39,
+        /* .nSoundId = */ 0xa69
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x3e,
+        /* .nOverlayIdInactive = */ 0x39,
+        /* .nSoundId = */ 0xa73
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x3f,
+        /* .nOverlayIdInactive = */ 0x3a,
+        /* .nSoundId = */ 0xa72
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x3d,
+        /* .nOverlayIdInactive = */ 0x3a,
+        /* .nSoundId = */ 0xa74
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x40,
+        /* .nOverlayIdInactive = */ 0x3a,
+        /* .nSoundId = */ 0xa75
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x41,
+        /* .nOverlayIdInactive = */ 0x39,
+        /* .nSoundId = */ 0xa77
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x42,
+        /* .nOverlayIdInactive = */ 0x3a,
+        /* .nSoundId = */ 0xa70
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x43,
+        /* .nOverlayIdInactive = */ 0x3a,
+        /* .nSoundId = */ 0xa70
+    },
+    {
+        /* .fpClientOverlayUpdate = */ &D2Client::UNIT::Object::OBJECT_UpdateShrineOverlay,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ 0x44,
+        /* .nOverlayIdInactive = */ 0x39,
+        /* .nSoundId = */ 0xa6b
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ &D2Client::UNIT::Object::OBJECT_ShrineGloaming_ReversePlayerName,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa76
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa6f
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa6d
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ &D2Client::UNIT::Object::OBJECT_SpawnFireballGrid,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa78
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ nullptr,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa6f
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ &D2Client::UNIT::Object::OBJECT_SpawnExplosivePotionGrid,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa6c
+    },
+    {
+        /* .fpClientOverlayUpdate = */ nullptr,
+        /* .fpServerActivate = */ &D2Client::UNIT::Object::OBJECT_SpawnChokingGasGrid,
+        /* .nOverlayIdActive = */ -0x1,
+        /* .nOverlayIdInactive = */ -0x1,
+        /* .nSoundId = */ 0xa6e
+    }
+}; D2_GLOBAL_GUARD(aShrineDispatchTable, "D2Client::UNIT::Object::aShrineDispatchTable");
+} // namespace D2Client::UNIT::Object
+static char cObjectDataPeriod[18] = {
+    '.',
+    '\\',
+    'U',
+    'N',
+    'I',
+    'T',
+    '\\',
+    'O',
+    'b',
+    'j',
+    'e',
+    'c',
+    't',
+    '.',
+    'c',
+    'p',
+    'p',
+    '\x00'
+}; D2_STATIC_GUARD(cObjectDataPeriod, "cObjectDataPeriod");
+namespace D2Client::UNIT::Object {
+int nShrineDispatchTableSize = 0x17; D2_GLOBAL_GUARD(nShrineDispatchTableSize, "D2Client::UNIT::Object::nShrineDispatchTableSize");
+} // namespace D2Client::UNIT::Object
+static fnObjectClientFn gpObjectClientFunctionDispatchTable[19] = {
+    nullptr,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_Nop_01,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_PeriodicOperate,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_PeriodicOperateWithSound,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_TimedSpecial1_7to12s,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_TimedSpecial1Or2_23to33s,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_TimedSpecial1_20to30s,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_OperateCycle_10s,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_PlayLevelUpCinematic,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_RemoveWhenPlayerFar,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_OperateCycle_3s,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_Nop_0B,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_PlayActBossCinematic,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_RiteOfPassageAncients,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_AutoLightPulse,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_NeutralModeOverlay,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_OperateToOpened,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_Zoo,
+    &D2Client::UNIT::Object::OBJECT_ClientFn_ZooKeeper
+}; D2_STATIC_GUARD(gpObjectClientFunctionDispatchTable, "gpObjectClientFunctionDispatchTable");
 
 namespace D2Client::UNIT::Object {
 

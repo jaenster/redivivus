@@ -10,10 +10,19 @@
 #include "Fog/Fog.h"
 #include "Fog/SMem.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Rendering.data.h"
 #include "D2Client/UI/Panel.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+namespace D2Game::GAME::Rendering {
+int CurrentRendingEngine = 0x3; D2_GLOBAL_GUARD(CurrentRendingEngine, "D2Game::GAME::Rendering::CurrentRendingEngine");
+} // namespace D2Game::GAME::Rendering
+uint32_t fps = 0; D2_GLOBAL_GUARD(fps, "fps");
+static uint32_t gbFPSStatsEnabled = 0; D2_STATIC_GUARD(gbFPSStatsEnabled, "gbFPSStatsEnabled");
+uint32_t gnCurrentEngineFlags = 0; D2_GLOBAL_GUARD(gnCurrentEngineFlags, "gnCurrentEngineFlags");
+static uint32_t gbHideExtendedFPSStats = 0; D2_STATIC_GUARD(gbHideExtendedFPSStats, "gbHideExtendedFPSStats");
 
 namespace D2Client::GAME::Rendering {
 

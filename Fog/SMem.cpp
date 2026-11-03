@@ -2,9 +2,13 @@
 
 #include "Fog/SMem.h"
 #include "globals/globals.h"
+#include "Fog/SMem.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+SMemHeapStatsStrc gaSMemHeapStats[4096] = {}; D2_GLOBAL_GUARD(gaSMemHeapStats, "gaSMemHeapStats");
+static int g_SMemLastTickCount = 0; D2_STATIC_GUARD(g_SMemLastTickCount, "g_SMemLastTickCount");
 
 namespace Fog::SMem {
 

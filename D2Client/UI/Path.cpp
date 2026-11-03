@@ -40,6 +40,11 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+uint32_t MouseYOffset = 0; D2_GLOBAL_GUARD(MouseYOffset, "MouseYOffset");
+uint32_t MouseXOffset = 0; D2_GLOBAL_GUARD(MouseXOffset, "MouseXOffset");
+static uint32_t gnBorderType = 0; D2_STATIC_GUARD(gnBorderType, "gnBorderType");
+static uint32_t MouseYRelatedB = 0; D2_STATIC_GUARD(MouseYRelatedB, "MouseYRelatedB");
+
 namespace D2Client::UI::Path {
 
 uint32_t __stdcall DRAW_GetTypeOfBorder() {

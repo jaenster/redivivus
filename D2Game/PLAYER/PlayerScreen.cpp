@@ -31,6 +31,7 @@
 #include "Fog/Save.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Game/PLAYER/PlayerMsg.h"
 #include "D2Game/Quests/QUESTS/A1Q2.h"

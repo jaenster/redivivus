@@ -69,6 +69,7 @@
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Chat.h"
 #include "D2Common/D2SeedStrc.h"
+#include "D2Game/Monster/Monster.data.h"
 #include "D2Game/Quests/QUESTS/Quest40.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -78,6 +79,29 @@
 #define RECON_FPTD_fpStatListExChangeCb
 typedef void (__fastcall *fpStatListExChangeCb)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItemOwner, eD2Skills eSkill, int32_t nOldValue, int32_t nNewValue);
 #endif
+
+uint32_t PlayerMultiplyer[9] = {
+    0x0,
+    0x0,
+    0x32,
+    0x64,
+    0x96,
+    0xc8,
+    0xfa,
+    0x12c,
+    0x15e
+}; D2_GLOBAL_GUARD(PlayerMultiplyer, "PlayerMultiplyer");
+static uint32_t PlayerMultiplyer2[9] = {
+    0x0,
+    0x0,
+    0x32,
+    0x64,
+    0x96,
+    0xc8,
+    0xfa,
+    0x12c,
+    0x15e
+}; D2_STATIC_GUARD(PlayerMultiplyer2, "PlayerMultiplyer2");
 
 namespace D2Game::Monster {
 

@@ -7,6 +7,7 @@
 #include "Storm/Source/SBig.h"
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

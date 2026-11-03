@@ -19,10 +19,12 @@
 #include "Storm/Source/SMem.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Button.h"
+#include "D2Client/UI/Button/ButtonImplementation.data.h"
 #include "D2Client/UI/Dialog.h"
 #include "D2Client/UI/UIWidget.h"
 #include "D2Launch/MainMenus.h"
 #include "Fog/Debug.h"
+#include "Fog/Engine/Application.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -35,6 +37,8 @@ typedef int (*fpButtonOnActivate)();
 #define RECON_FPTD_pfnEHHandlerRoutine
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
+
+uint16_t gaButtonDescriptors[4] = { 0x10, 0xd49, 0xa, 0x102e }; D2_GLOBAL_GUARD(gaButtonDescriptors, "gaButtonDescriptors");
 
 namespace D2Client::UI::Button::ButtonImplementation {
 

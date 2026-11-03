@@ -33,6 +33,7 @@
 #include "globals/globals.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DUNGEON/Dungeon.h"
+#include "D2Common/Drlg/Outdoors.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -57,6 +58,62 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgLevelDataWildernessLevel) == 
 #define RECON_FPTD_fpDrlgOutdoorValidateBorderCell
 typedef BOOL (__fastcall *fpDrlgOutdoorValidateBorderCell)(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY, int32_t nExpectedPreset, int32_t nUnused, uint32_t nGridFlags);
 #endif
+
+int gnOutdoorsGridWidthByLevel[53] = {
+    0x1000,
+    0x2000,
+    0x4000,
+    0x8000,
+    0x0,
+    0x0,
+    0x4,
+    0x16c,
+    0x31f,
+    0x10,
+    0x5,
+    0x16d,
+    0x320,
+    0x11,
+    0x6,
+    0x16e,
+    0x321,
+    0x0,
+    0x7,
+    0x16f,
+    0x322,
+    0x12,
+    0x8,
+    0x170,
+    0x323,
+    0x13,
+    0x9,
+    0x171,
+    0x324,
+    0x16,
+    0xa,
+    0x172,
+    0x325,
+    0x0,
+    0xb,
+    0x173,
+    0x326,
+    0x0,
+    0xc,
+    0x174,
+    0x327,
+    0x17,
+    0xd,
+    0x175,
+    0x328,
+    0x0,
+    0xe,
+    0x176,
+    0x329,
+    0x0,
+    0xf,
+    0x177,
+    0x32a
+}; D2_GLOBAL_GUARD(gnOutdoorsGridWidthByLevel, "gnOutdoorsGridWidthByLevel");
 
 namespace D2Common::Drlg::Outdoors {
 

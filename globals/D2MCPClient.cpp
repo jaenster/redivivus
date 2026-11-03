@@ -8,41 +8,13 @@
 
 
 // =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char g_szMCPGamePassword[28] = {}; D2_GLOBAL_GUARD(g_szMCPGamePassword, "g_szMCPGamePassword");
-
-uint8_t gMCPConnectionState[328] = {}; D2_GLOBAL_GUARD(gMCPConnectionState, "gMCPConnectionState");
-
-D2McpGameInfoStrc g_CharSelectBuffer = {}; D2_GLOBAL_GUARD(g_CharSelectBuffer, "g_CharSelectBuffer");
-
-char g_szMCPGameName[4] = {}; D2_GLOBAL_GUARD(g_szMCPGameName, "g_szMCPGameName");
-
-uint8_t gMCPGameListBuffer[28680] = {}; D2_GLOBAL_GUARD(gMCPGameListBuffer, "gMCPGameListBuffer");
-
-// =============================================================================
 // Initialized scalars
 // =============================================================================
 
-uint32_t g_nMCPGameDifficulty = 0; D2_GLOBAL_GUARD(g_nMCPGameDifficulty, "g_nMCPGameDifficulty");
-uint32_t g_bMCPCharCreateSuccess = 0; D2_GLOBAL_GUARD(g_bMCPCharCreateSuccess, "g_bMCPCharCreateSuccess");
-uint32_t IsMcpGameJoinSuccesful = 0; D2_GLOBAL_GUARD(IsMcpGameJoinSuccesful, "IsMcpGameJoinSuccesful");
-uint16_t nMcpPacketSequence = 0; D2_GLOBAL_GUARD(nMcpPacketSequence, "nMcpPacketSequence");
-uint32_t g_nMCPJoinTimestamp = 0; D2_GLOBAL_GUARD(g_nMCPJoinTimestamp, "g_nMCPJoinTimestamp");
-uint32_t g_bMCPJoinGameSuccess = 0; D2_GLOBAL_GUARD(g_bMCPJoinGameSuccess, "g_bMCPJoinGameSuccess");
-uint32_t g_bMCPCharLogonSuccess = 0; D2_GLOBAL_GUARD(g_bMCPCharLogonSuccess, "g_bMCPCharLogonSuccess");
-uint32_t g_bMCPConnectionEstablished = 0; D2_GLOBAL_GUARD(g_bMCPConnectionEstablished, "g_bMCPConnectionEstablished");
-HANDLE pMCPEventHandle = 0; D2_GLOBAL_GUARD(pMCPEventHandle, "pMCPEventHandle");
-uint32_t g_bMCPCreateGameSuccess = 0; D2_GLOBAL_GUARD(g_bMCPCreateGameSuccess, "g_bMCPCreateGameSuccess");
 
 namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
-
-namespace Fog::Src::Excel {
-
-} // namespace Fog::Src::Excel
 
 namespace D2Client::Warden::NWardenClient {
 
@@ -80,10 +52,6 @@ namespace D2Client::UI::Spinner::SpinnerWrapper {
 
 } // namespace D2Client::UI::Spinner::SpinnerWrapper
 
-namespace D2Client::UNIT::Object {
-
-} // namespace D2Client::UNIT::Object
-
 namespace D2Client::UI::ListBox::ListBoxWrapper {
 
 } // namespace D2Client::UI::ListBox::ListBoxWrapper
@@ -91,10 +59,6 @@ namespace D2Client::UI::ListBox::ListBoxWrapper {
 namespace D2Client::UI::ListBox::ListBoxImplementation {
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation
-
-namespace D2Win::_FONT {
-
-} // namespace D2Win::_FONT
 
 namespace D2Game::GAME::Event::Dispatch {
 
@@ -159,30 +123,6 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
-
-namespace D2Client::UI::Automap {
-
-} // namespace D2Client::UI::Automap
-
-namespace D2Game::GAME::Rendering {
-
-} // namespace D2Game::GAME::Rendering
-
-namespace D2Client::UI::Help {
-
-} // namespace D2Client::UI::Help
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::NPC {
-
-} // namespace D2Client::NPC
-
-namespace D2Client::UNIT::UnitSnd {
-
-} // namespace D2Client::UNIT::UnitSnd
 
 namespace D2Client::UI::ui {
 
@@ -292,10 +232,6 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
-namespace D2Common::Monsters::MONSTERS::Umod {
-
-} // namespace D2Common::Monsters::MONSTERS::Umod
-
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -348,132 +284,14 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
-namespace D2Client::Waypoint {
-
-} // namespace D2Client::Waypoint
-
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
-
-namespace Fog::Memory {
-
-} // namespace Fog::Memory
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace D2Client::MCP {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-char D2GSConnectIp[18] = {}; D2_GLOBAL_GUARD(D2GSConnectIp, "D2Client::MCP::D2GSConnectIp");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-uint16_t D2GSRequestId = 0; D2_GLOBAL_GUARD(D2GSRequestId, "D2Client::MCP::D2GSRequestId");
-uint32_t D2GSGameToken = 0; D2_GLOBAL_GUARD(D2GSGameToken, "D2Client::MCP::D2GSGameToken");
-D2QSSocketStrc * MCPD2QSSocket = 0; D2_GLOBAL_GUARD(MCPD2QSSocket, "D2Client::MCP::MCPD2QSSocket");
-uint32_t D2GSJoinResult = 0; D2_GLOBAL_GUARD(D2GSJoinResult, "D2Client::MCP::D2GSJoinResult");
-void * CharListPacket = 0; D2_GLOBAL_GUARD(CharListPacket, "D2Client::MCP::CharListPacket");
-
-} // namespace D2Client::MCP
-
-namespace D2Client::Bnet {
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-uint32_t D2GSGameHash = 0; D2_GLOBAL_GUARD(D2GSGameHash, "D2Client::Bnet::D2GSGameHash");
-
-} // namespace D2Client::Bnet
-
-namespace D2Game::Save {
-
-} // namespace D2Game::Save
-
-namespace D2Game::GameData {
-
-} // namespace D2Game::GameData
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
 
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::_Selection {
-
-} // namespace D2Client::_Selection
-
-namespace D2Client::Cursor {
-
-} // namespace D2Client::Cursor
-
-namespace D2Client::Draw::Weather {
-
-} // namespace D2Client::Draw::Weather
-
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
-
-namespace D2Client::GAME::View {
-
-} // namespace D2Client::GAME::View
-
-namespace D2Client::GAME::RosterPets {
-
-} // namespace D2Client::GAME::RosterPets
-
-namespace D2Client::GAME::Roster {
-
-} // namespace D2Client::GAME::Roster
-
-namespace D2Client::UI::Inv {
-
-} // namespace D2Client::UI::Inv
-
-namespace D2Client::UI::Hireables {
-
-} // namespace D2Client::UI::Hireables
-
-namespace D2Client::UI::Panel {
-
-} // namespace D2Client::UI::Panel
-
-namespace D2Client::UI::Party {
-
-} // namespace D2Client::UI::Party
-
-namespace D2Client::_Interaction {
-
-} // namespace D2Client::_Interaction
-
-namespace D2Client::Merc {
-
-} // namespace D2Client::Merc
-
-namespace D2Client::Mouse {
-
-} // namespace D2Client::Mouse
-
-namespace D2Client::Forms {
-
-} // namespace D2Client::Forms
-
-namespace D2Client::_CdKey {
-
-} // namespace D2Client::_CdKey
-
-namespace D2Direct3D::Renderer {
-
-} // namespace D2Direct3D::Renderer

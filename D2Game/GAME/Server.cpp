@@ -75,10 +75,13 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Game/D2Game.h"
+#include "D2Game/GAME/Server.data.h"
 #include "D2Game/Monster/AI/AI.h"
 #include "D2Launch/CharSel.h"
+#include "D2Net/Game/Server.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -119,6 +122,21 @@ typedef void (__fastcall *fnEnterGame)(uint16_t wGameId, char * lpCharName, uint
 #define RECON_FPTD_fpForEachClientFn
 typedef void (__fastcall *fpForEachClientFn)(D2ClientStrc * pClient, void * pContext);
 #endif
+
+static unsigned short QServerNextToken = 0x1; D2_STATIC_GUARD(QServerNextToken, "QServerNextToken");
+uint32_t GameSeed = -0x1; D2_GLOBAL_GUARD(GameSeed, "GameSeed");
+static int32_t Frames_PerSecond = 0x19; D2_STATIC_GUARD(Frames_PerSecond, "Frames_PerSecond");
+static D2UnitIdToNameFunc PFN_UnitTypeCallbackTable[5] = { &D2Game::GAME::Server::SERVER_GetPlayerClassName, &D2Game::GAME::Server::MonsterIdToName, &D2Game::GAME::Server::ObjectIdToName, &D2Game::GAME::Server::ItemIdToName, &D2Game::GAME::Server::MissileIdToname }; D2_STATIC_GUARD(PFN_UnitTypeCallbackTable, "PFN_UnitTypeCallbackTable");
+// also labelled: lpCritical_GenerateToken, lpCriticalSection_00882d18
+static _RTL_CRITICAL_SECTION gQServerGameListCs = {}; D2_STATIC_GUARD(gQServerGameListCs, "gQServerGameListCs");
+static SGAMEDATA * gaQServerGameByToken[1025] = {}; D2_STATIC_GUARD(gaQServerGameByToken, "gaQServerGameByToken");
+static TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> * gpQServerGameState = 0; D2_STATIC_GUARD(gpQServerGameState, "gpQServerGameState");
+static int StartingAct = 0; D2_STATIC_GUARD(StartingAct, "StartingAct");
+static uint32_t maxMemoryUsage = 0; D2_STATIC_GUARD(maxMemoryUsage, "maxMemoryUsage");
+static int gbQServerSendPlayerPos = 0; D2_STATIC_GUARD(gbQServerSendPlayerPos, "gbQServerSendPlayerPos");
+D2BattleNetEventCallbackTable * BattleNetServerService = 0; D2_GLOBAL_GUARD(BattleNetServerService, "BattleNetServerService");
+BOOL IsBattleNetServer = 0; D2_GLOBAL_GUARD(IsBattleNetServer, "IsBattleNetServer");
+static uint32_t Frames_TimeBetweenFrames = 0; D2_STATIC_GUARD(Frames_TimeBetweenFrames, "Frames_TimeBetweenFrames");
 
 namespace D2Game::GAME::Server {
 

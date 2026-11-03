@@ -33,6 +33,9 @@
 #include "globals/globals.h"
 #include "D2Common/D2UnitStrc.h"
 #include "D2Common/DUNGEON/Dungeon.h"
+#include "D2Common/Drlg/Drlg.data.h"
+#include "D2Common/Drlg/OutPlace.data.h"
+#include "D2Common/Drlg/Outdoors.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -53,6 +56,785 @@ typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknow
 #define RECON_FPTD_fpLevelDataFn2
 typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int param_1_00);
 #endif
+
+static int gRoadPresetIdLookupTable[24] = {
+    0x371,
+    0x3bd,
+    0x372,
+    0x3be,
+    0x373,
+    0x3bf,
+    0x374,
+    0x3c0,
+    0x375,
+    0x3c1,
+    0x376,
+    0x3c2,
+    0x377,
+    0x3c3,
+    0x378,
+    0x3c4,
+    0x379,
+    0x3c5,
+    0x37a,
+    0x3c6,
+    0x37b,
+    0x3c7,
+    0x37c,
+    0x3c8
+}; D2_STATIC_GUARD(gRoadPresetIdLookupTable, "gRoadPresetIdLookupTable");
+D2DrlgLevelDataList ACT1_D2DrlgLevelData1 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_StonyField,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE2,
+            /* .neD2LevelId = */ LEVEL_ColdPlains,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE3,
+            /* .neD2LevelId = */ LEVEL_BloodMoor,
+            /* .nNodeLevelEntryIdPrev = */ 0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE4,
+            /* .neD2LevelId = */ LEVEL_RogueEncampment,
+            /* .nNodeLevelEntryIdPrev = */ 0x2,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE2,
+            /* .neD2LevelId = */ LEVEL_BurialGrounds,
+            /* .nNodeLevelEntryIdPrev = */ 0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_GLOBAL_GUARD(ACT1_D2DrlgLevelData1, "ACT1_D2DrlgLevelData1");
+D2DrlgLevelDataList ACT1_D2DrlgLevelData2 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_MooMooFarm,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_MonasteryGate,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE5,
+            /* .neD2LevelId = */ LEVEL_TamoeHighland,
+            /* .nNodeLevelEntryIdPrev = */ 0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE2,
+            /* .neD2LevelId = */ LEVEL_BlackMarsh,
+            /* .nNodeLevelEntryIdPrev = */ 0x2,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE2,
+            /* .neD2LevelId = */ LEVEL_DarkWood,
+            /* .nNodeLevelEntryIdPrev = */ 0x3,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_GLOBAL_GUARD(ACT1_D2DrlgLevelData2, "ACT1_D2DrlgLevelData2");
+D2DrlgLevelDataList ACT2_D2DrlgLevelData1 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_LutGholein,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_Adjacent2DirRandom,
+            /* .neD2LevelId = */ LEVEL_RockyWaste,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLevelDataEntry,
+            /* .neD2LevelId = */ LEVEL_DryHills,
+            /* .nNodeLevelEntryIdPrev = */ 0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLevelDataEntry,
+            /* .neD2LevelId = */ LEVEL_FarOasis,
+            /* .nNodeLevelEntryIdPrev = */ 0x2,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLevelDataEntry,
+            /* .neD2LevelId = */ LEVEL_LostCity,
+            /* .nNodeLevelEntryIdPrev = */ 0x3,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_Adjacent8DirAligned,
+            /* .neD2LevelId = */ LEVEL_ValleyOfSnakes,
+            /* .nNodeLevelEntryIdPrev = */ 0x4,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_GLOBAL_GUARD(ACT2_D2DrlgLevelData1, "ACT2_D2DrlgLevelData1");
+D2DrlgLevelDataList ACT2_D2DrlgLevelData2 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_CanyonOfTheMagi,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_GLOBAL_GUARD(ACT2_D2DrlgLevelData2, "ACT2_D2DrlgLevelData2");
+D2DrlgLevelDataList ACT5_D2DrlgLevelData3 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_FogottenSands,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_UberTristram,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_GLOBAL_GUARD(ACT5_D2DrlgLevelData3, "ACT5_D2DrlgLevelData3");
+D2DrlgLevelDataList ACT4_D2DrlgLevelData1 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_ThePandemoniumFortress,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::DRLGPLACE_Adjacent4DirMirrored,
+            /* .neD2LevelId = */ LEVEL_OuterSteppes,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE2,
+            /* .neD2LevelId = */ LEVEL_PlainsOfDespair,
+            /* .nNodeLevelEntryIdPrev = */ 0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE2,
+            /* .neD2LevelId = */ LEVEL_CityOfTheDamned,
+            /* .nNodeLevelEntryIdPrev = */ 0x2,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_GLOBAL_GUARD(ACT4_D2DrlgLevelData1, "ACT4_D2DrlgLevelData1");
+D2DrlgLevelDataList ACT4_D2DrlgLevelData2 = {
+    /* .aEntry = */ {
+        {
+            /* .nfpLevelDataEntry = */ &D2Common::Drlg::fpLDE1,
+            /* .neD2LevelId = */ LEVEL_ChaosSanctuary,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ -0x1,
+            /* .nNodeLevelEntryIdNext = */ -0x1
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        },
+        {
+            /* .nfpLevelDataEntry = */ nullptr,
+            /* .neD2LevelId = */ LEVEL_None,
+            /* .nNodeLevelEntryIdPrev = */ 0x0,
+            /* .nNodeLevelEntryIdNext = */ 0x0
+        }
+    }
+}; D2_GLOBAL_GUARD(ACT4_D2DrlgLevelData2, "ACT4_D2DrlgLevelData2");
+int gaRoadPresetDirectionLookup[9] = {
+    -0x1,
+    0x1,
+    -0x1,
+    0x0,
+    -0x1,
+    0x2,
+    -0x1,
+    0x3,
+    -0x1
+}; D2_GLOBAL_GUARD(gaRoadPresetDirectionLookup, "gaRoadPresetDirectionLookup");
+int gaOutPlaceAdjacentRoadIndex[81] = {
+    0x1,
+    0x9,
+    0x9,
+    -0x1,
+    -0x1,
+    0x1,
+    0x8,
+    -0x1,
+    -0x1,
+    0xc,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    0xc,
+    0x4,
+    -0x1,
+    -0x1,
+    0x5,
+    0x2,
+    0x2,
+    0xa,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    0xa,
+    0x1,
+    0x9,
+    0x9,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    0xb,
+    0xb,
+    0x3,
+    0xc,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    0xc,
+    0x4,
+    0x4,
+    0x7,
+    -0x1,
+    -0x1,
+    0x2,
+    0xa,
+    -0x1,
+    -0x1,
+    -0x1,
+    -0x1,
+    0xa,
+    -0x1,
+    -0x1,
+    0x6,
+    0x3,
+    -0x1,
+    -0x1,
+    0xb,
+    0xb,
+    0x3
+}; D2_GLOBAL_GUARD(gaOutPlaceAdjacentRoadIndex, "gaOutPlaceAdjacentRoadIndex");
 
 namespace D2Common::Drlg::OutPlace {
 

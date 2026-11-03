@@ -31,6 +31,7 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/Draw/LightMap.data.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Common/Unit.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -51,6 +52,22 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2LightMapStrc) == 0x34, "D2_NEW_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
+
+static uint32_t gnLightmapInterpDirY = 0; D2_STATIC_GUARD(gnLightmapInterpDirY, "gnLightmapInterpDirY");
+static uint32_t gnLightmapInterpSubdivRatio = 0; D2_STATIC_GUARD(gnLightmapInterpSubdivRatio, "gnLightmapInterpSubdivRatio");
+uint32_t gLightMapBuffer[4096] = {}; D2_GLOBAL_GUARD(gLightMapBuffer, "gLightMapBuffer");
+static uint32_t gaLightmapInterpBuffer[4096] = {}; D2_STATIC_GUARD(gaLightmapInterpBuffer, "gaLightmapInterpBuffer");
+static unsigned int gnLightmapInterpDirX = {}; D2_STATIC_GUARD(gnLightmapInterpDirX, "gnLightmapInterpDirX");
+int gnLightmapWorldRefreshFlag = 0; D2_GLOBAL_GUARD(gnLightmapWorldRefreshFlag, "gnLightmapWorldRefreshFlag");
+int gnLightmapBufferState = 0; D2_GLOBAL_GUARD(gnLightmapBufferState, "gnLightmapBufferState");
+static int gnLightmapWorldMaxX = 0; D2_STATIC_GUARD(gnLightmapWorldMaxX, "gnLightmapWorldMaxX");
+static int gnLightmapWorldMaxY = 0; D2_STATIC_GUARD(gnLightmapWorldMaxY, "gnLightmapWorldMaxY");
+uint32_t gnLightmapInterpolationState[257] = {}; D2_GLOBAL_GUARD(gnLightmapInterpolationState, "gnLightmapInterpolationState");
+D2LightMapCellStrc gaLightMapCells[2304] = {}; D2_GLOBAL_GUARD(gaLightMapCells, "gaLightMapCells");
+D2LightMapCellStrc gLightmapCellData[2304] = {}; D2_GLOBAL_GUARD(gLightmapCellData, "gLightmapCellData");
+D2LightMapCellStrc gLightmapCellDataRed[2304] = {}; D2_GLOBAL_GUARD(gLightmapCellDataRed, "gLightmapCellDataRed");
+D2LightMapCellStrc gLightmapCellDataGreen[2304] = {}; D2_GLOBAL_GUARD(gLightmapCellDataGreen, "gLightmapCellDataGreen");
+D2LightMapCellStrc gLightmapCellDataBlue[2304] = {}; D2_GLOBAL_GUARD(gLightmapCellDataBlue, "gLightmapCellDataBlue");
 
 namespace D2Client::Draw::LightMap {
 

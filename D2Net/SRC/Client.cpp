@@ -12,6 +12,7 @@
 #include "Fog/Src/ErrorManager.h"
 #include "Fog/Src/Safesock.h"
 #include "globals/globals.h"
+#include "D2Net/SRC/Client.data.h"
 #include "Fog/D2QServerStrc.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -32,6 +33,14 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2PacketsClientStrc) == 0x7bc, "D2_
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2OnePacketClientStrc) == 0x210, "D2_NEW_AT(D2OnePacketClientStrc): the 32-bit layout must be the 0x210 bytes 1.14d allocates");
 
+
+static D2PacketsClientStrc * pD2PacketsClientBuffer = 0; D2_STATIC_GUARD(pD2PacketsClientBuffer, "pD2PacketsClientBuffer");
+HANDLE hClientConnectionThread = 0; D2_GLOBAL_GUARD(hClientConnectionThread, "hClientConnectionThread");
+static D2OnePacketClientStrc * pD2PacketClient_from_0xAF = 0; D2_STATIC_GUARD(pD2PacketClient_from_0xAF, "pD2PacketClient_from_0xAF");
+HANDLE SERVER_THREAD = 0; D2_GLOBAL_GUARD(SERVER_THREAD, "SERVER_THREAD");
+static D2OnePacketClientStrc * pD2PacketClient_to_0xAE = 0; D2_STATIC_GUARD(pD2PacketClient_to_0xAE, "pD2PacketClient_to_0xAE");
+_RTL_CRITICAL_SECTION lpCriticalSection_00882ce8 = {}; D2_GLOBAL_GUARD(lpCriticalSection_00882ce8, "lpCriticalSection_00882ce8");
+static uint32_t gbClientConnectionShutdown = 0; D2_STATIC_GUARD(gbClientConnectionShutdown, "gbClientConnectionShutdown");
 
 namespace D2Net::SRC::Client {
 

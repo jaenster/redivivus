@@ -30,6 +30,8 @@
 #include "globals/globals.h"
 #include "Bnclient/BNGatewayAccess.h"
 #include "D2Common/D2Common.h"
+#include "D2Common/DATATBLS/ItemTbls.data.h"
+#include "D2Common/Logging/ProfCore.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -50,6 +52,25 @@
 #define RECON_FPTD_CalcGetLinkerIndex_t
 typedef int (__fastcall *CalcGetLinkerIndex_t)(char * szText, int * pOutHasResolvedToConstant, int nAST, int nKeywordNumber);
 #endif
+
+static unsigned int gItemCommon_i_ItemTypeId = 0x646461; D2_STATIC_GUARD(gItemCommon_i_ItemTypeId, "gItemCommon_i_ItemTypeId");
+unsigned int gszTxtColName_lvl = 0x6c766c; D2_GLOBAL_GUARD(gszTxtColName_lvl, "gszTxtColName_lvl");
+static D2ItemsTableStrc gsItemsTable = {}; D2_STATIC_GUARD(gsItemsTable, "gsItemsTable");
+static D2ItemsTableStrc sgpTxtItems = {}; D2_STATIC_GUARD(sgpTxtItems, "sgpTxtItems");
+static short * pTxtItemsVersion = 0; D2_STATIC_GUARD(pTxtItemsVersion, "pTxtItemsVersion");
+D2MagicAffixTableStrc gsMagicAffixTable = {}; D2_GLOBAL_GUARD(gsMagicAffixTable, "gsMagicAffixTable");
+D2MagicAffixTableStrc pTxtMagicAffixes = {}; D2_GLOBAL_GUARD(pTxtMagicAffixes, "pTxtMagicAffixes");
+D2GemsTableStrc nTxtGemsSize = {}; D2_GLOBAL_GUARD(nTxtGemsSize, "nTxtGemsSize");
+D2RunesTxtTableStrc nTxtRunesSize = {}; D2_GLOBAL_GUARD(nTxtRunesSize, "nTxtRunesSize");
+static D2RareAffixTableStrc gsRareAffixTable = {}; D2_STATIC_GUARD(gsRareAffixTable, "gsRareAffixTable");
+static D2RareAffixTableStrc pTxtRareAffixes = {}; D2_STATIC_GUARD(pTxtRareAffixes, "pTxtRareAffixes");
+static D2GambleTableStrc nTxtGambleSize = {}; D2_STATIC_GUARD(nTxtGambleSize, "nTxtGambleSize");
+static int nTxtItemRatioSize = 0; D2_STATIC_GUARD(nTxtItemRatioSize, "nTxtItemRatioSize");
+static D2ItemRatioTxt * pTxtItemRatio = 0; D2_STATIC_GUARD(pTxtItemRatio, "pTxtItemRatio");
+static D2QualityItemsTableStrc nTxtQualityItemsSize = {}; D2_STATIC_GUARD(nTxtQualityItemsSize, "nTxtQualityItemsSize");
+static D2LowQualityItemsTableStrc nTxtLowQualityItemsSize = {}; D2_STATIC_GUARD(nTxtLowQualityItemsSize, "nTxtLowQualityItemsSize");
+static D2BooksTableStrc gsBooksTable = {}; D2_STATIC_GUARD(gsBooksTable, "gsBooksTable");
+static D2BooksTableStrc pTxtBooks = {}; D2_STATIC_GUARD(pTxtBooks, "pTxtBooks");
 
 namespace D2Common::DATATBLS::ItemTbls {
 

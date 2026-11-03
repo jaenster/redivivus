@@ -33,6 +33,10 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Multi/ChatDlg.data.h"
+#include "D2Multi/ComCallback.data.h"
+#include "D2Multi/Launcher.data.h"
 #include "D2Multi/OOG/ChatDlg.h"
 #include "D2Win/D2WinEditBox.h"
 #include "D2Win/D2WinImageEx.h"
@@ -73,8 +77,37 @@ typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);
 #endif
 
+static char * gaszChatDlgProfileKeys[3] = { s_profile_sex_006d4ee0, s_profile_location_006d4ecc, s_profile_description_006d4eb8 }; D2_STATIC_GUARD(gaszChatDlgProfileKeys, "gaszChatDlgProfileKeys");
+unsigned short CreateJoinGameRequestId = 0x1; D2_GLOBAL_GUARD(CreateJoinGameRequestId, "CreateJoinGameRequestId");
+static uint8_t g_nLadderFilterMode = 0xff; D2_STATIC_GUARD(g_nLadderFilterMode, "g_nLadderFilterMode");
+static uint8_t gnLadderCurrentFilterMode = 0xff; D2_STATIC_GUARD(gnLadderCurrentFilterMode, "gnLadderCurrentFilterMode");
+static uint32_t gnChatRoomListSelectedBase = -0x1; D2_STATIC_GUARD(gnChatRoomListSelectedBase, "gnChatRoomListSelectedBase");
+static uint32_t gbLadderFilterPending = 0x1; D2_STATIC_GUARD(gbLadderFilterPending, "gbLadderFilterPending");
+static uint32_t gbLadderExpansionEnabled = 0x1; D2_STATIC_GUARD(gbLadderExpansionEnabled, "gbLadderExpansionEnabled");
+int gnChatTabCompletionIndex = -0x1; D2_GLOBAL_GUARD(gnChatTabCompletionIndex, "gnChatTabCompletionIndex");
+static int gnLadderBoardSelectedRank = -0x1; D2_STATIC_GUARD(gnLadderBoardSelectedRank, "gnLadderBoardSelectedRank");
+static uint32_t gnLadderRequestedCharIndex = -0x1; D2_STATIC_GUARD(gnLadderRequestedCharIndex, "gnLadderRequestedCharIndex");
+// also labelled: gnChatRoomListScrollStartPos
+static int32_t gnLadderEntryTotal = 0; D2_STATIC_GUARD(gnLadderEntryTotal, "gnLadderEntryTotal");
+// also labelled: gnChatRoomListScrollPos
+static int32_t gnLadderListRowCount = 0; D2_STATIC_GUARD(gnLadderListRowCount, "gnLadderListRowCount");
+D2WinButton * gaChatUserListButtonArray[11] = {}; D2_GLOBAL_GUARD(gaChatUserListButtonArray, "gaChatUserListButtonArray");
+uint32_t gbChatOptionButtonState = 0; D2_GLOBAL_GUARD(gbChatOptionButtonState, "gbChatOptionButtonState");
+static D2ControlStrc * FORMS_pListEx[32] = {}; D2_STATIC_GUARD(FORMS_pListEx, "FORMS_pListEx");
+static char gszLadderCharNameFilter[16] = {}; D2_STATIC_GUARD(gszLadderCharNameFilter, "gszLadderCharNameFilter");
+D2ControlStrc * gpCtlLobbyChat[2] = {}; D2_GLOBAL_GUARD(gpCtlLobbyChat, "gpCtlLobbyChat");
+D2LobbyControlsStrc gpLobbyForm0 = {}; D2_GLOBAL_GUARD(gpLobbyForm0, "gpLobbyForm0");
+D2BNetClientCallbacksStrc * pNetworkUnknown = 0; D2_GLOBAL_GUARD(pNetworkUnknown, "pNetworkUnknown");
+static int gnLadderScrollPageSize = 0; D2_STATIC_GUARD(gnLadderScrollPageSize, "gnLadderScrollPageSize");
+uint32_t ghBannerAdProcess = 0; D2_GLOBAL_GUARD(ghBannerAdProcess, "ghBannerAdProcess");
+// also labelled: gbOogOptionButtonActive
+static char * gapszProfileReadBuffers[3] = {}; D2_STATIC_GUARD(gapszProfileReadBuffers, "gapszProfileReadBuffers");
 static char gaChatDlgHistoryBuffer[10][256] = {}; D2_STATIC_GUARD(gaChatDlgHistoryBuffer, "gaChatDlgHistoryBuffer");
 static char gaChatDlgHistoryBuffer_1__0_[10][256] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; D2_STATIC_GUARD(gaChatDlgHistoryBuffer_1__0_, "gaChatDlgHistoryBuffer_1__0_");
+static int FORMS_nListExCount = 0; D2_STATIC_GUARD(FORMS_nListExCount, "FORMS_nListExCount");
+uint32_t gbLadderNewsExpanded = 0; D2_GLOBAL_GUARD(gbLadderNewsExpanded, "gbLadderNewsExpanded");
+uint32_t gdwGameJoinRequestTick = 0; D2_GLOBAL_GUARD(gdwGameJoinRequestTick, "gdwGameJoinRequestTick");
+static uint32_t gnLadderScrollPos = 0; D2_STATIC_GUARD(gnLadderScrollPos, "gnLadderScrollPos");
 static D2WinButton * gpCtlLadderBtnOverall = 0; D2_STATIC_GUARD(gpCtlLadderBtnOverall, "gpCtlLadderBtnOverall");
 static D2WinButton * gpCtlLadderBtnAmazon = 0; D2_STATIC_GUARD(gpCtlLadderBtnAmazon, "gpCtlLadderBtnAmazon");
 static D2WinButton * gpCtlLadderBtnSorceress = 0; D2_STATIC_GUARD(gpCtlLadderBtnSorceress, "gpCtlLadderBtnSorceress");
@@ -84,6 +117,16 @@ static D2WinButton * gpCtlLadderBtnBarbarian = 0; D2_STATIC_GUARD(gpCtlLadderBtn
 static D2WinButton * gpCtlLadderBtnDruid = 0; D2_STATIC_GUARD(gpCtlLadderBtnDruid, "gpCtlLadderBtnDruid");
 static D2WinButton * gpCtlLadderBtnAssassin = 0; D2_STATIC_GUARD(gpCtlLadderBtnAssassin, "gpCtlLadderBtnAssassin");
 static D2WinTextBox * g_pLadderBoardTextBox = 0; D2_STATIC_GUARD(g_pLadderBoardTextBox, "g_pLadderBoardTextBox");
+static int gnChatHistoryEntryCount = 0; D2_STATIC_GUARD(gnChatHistoryEntryCount, "gnChatHistoryEntryCount");
+uint32_t gnNotifyEnabled = 0; D2_GLOBAL_GUARD(gnNotifyEnabled, "gnNotifyEnabled");
+uint32_t gbIsChannelScreen = 0; D2_GLOBAL_GUARD(gbIsChannelScreen, "gbIsChannelScreen");
+static uint32_t gdwLadderRankRequestTimeout = 0; D2_STATIC_GUARD(gdwLadderRankRequestTimeout, "gdwLadderRankRequestTimeout");
+uint32_t gnMCPConnectionRestoreResult = 0; D2_GLOBAL_GUARD(gnMCPConnectionRestoreResult, "gnMCPConnectionRestoreResult");
+int gaFormList30InitialItems[4] = {}; D2_GLOBAL_GUARD(gaFormList30InitialItems, "gaFormList30InitialItems");
+int gaFormList32InitialItems[4] = {}; D2_GLOBAL_GUARD(gaFormList32InitialItems, "gaFormList32InitialItems");
+int32_t gaChatTextBoxFontParams[2] = {}; D2_GLOBAL_GUARD(gaChatTextBoxFontParams, "gaChatTextBoxFontParams");
+// also labelled: gpnChatMessages
+D2WinTextBox * gpChatMessagesTextBox = 0; D2_GLOBAL_GUARD(gpChatMessagesTextBox, "gpChatMessagesTextBox");
 static void * gpChatMessageQueueHead = 0; D2_STATIC_GUARD(gpChatMessageQueueHead, "gpChatMessageQueueHead");
 static void * gpChatMessageQueueTail = 0; D2_STATIC_GUARD(gpChatMessageQueueTail, "gpChatMessageQueueTail");
 static void * gpChatPlayerNameListHead = 0; D2_STATIC_GUARD(gpChatPlayerNameListHead, "gpChatPlayerNameListHead");

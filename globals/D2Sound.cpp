@@ -43,58 +43,6 @@ uint8_t gEAXPropertyGuid_Reserved2[16] = {
     0x22
 }; D2_GLOBAL_GUARD(gEAXPropertyGuid_Reserved2, "gEAXPropertyGuid_Reserved2");
 
-uint8_t gEAXPropertyGuid_Obstruction[16] = {
-    0xa7,
-    0xa6,
-    0x6,
-    0x3,
-    0x24,
-    0xb2,
-    0xd2,
-    0x11,
-    0x99,
-    0xe5,
-    0x0,
-    0x0,
-    0xe8,
-    0xd8,
-    0xc7,
-    0x22
-}; D2_GLOBAL_GUARD(gEAXPropertyGuid_Obstruction, "gEAXPropertyGuid_Obstruction");
-
-uint8_t gEAXPropertyGuid_Reserved1[16] = {
-    0xc1,
-    0x6f,
-    0x4e,
-    0x4a,
-    0x41,
-    0xc3,
-    0xd1,
-    0x11,
-    0xb7,
-    0x3a,
-    0x44,
-    0x45,
-    0x53,
-    0x54,
-    0x0,
-    0x0
-}; D2_GLOBAL_GUARD(gEAXPropertyGuid_Reserved1, "gEAXPropertyGuid_Reserved1");
-
-uint8_t gaEAXPropertyGuid_ObstructionParams[9] = {
-    0xc0,
-    0x6f,
-    0x4e,
-    0x4a,
-    0x41,
-    0xc3,
-    0xd1,
-    0x11,
-    0xb7
-}; D2_GLOBAL_GUARD(gaEAXPropertyGuid_ObstructionParams, "gaEAXPropertyGuid_ObstructionParams");
-
-double gnSoundAttenuation_Max = 0.0000999999974737875; D2_GLOBAL_GUARD(gnSoundAttenuation_Max, "gnSoundAttenuation_Max");
-
 int gAmbientSoundTable[16] = {
     (int)(uintptr_t)s_data_global_music_common_options__006dea54,
     0x0,
@@ -133,49 +81,23 @@ int gaAmbientSoundEntryTable[16] = {
     0x0
 }; D2_GLOBAL_GUARD(gaAmbientSoundEntryTable, "gaAmbientSoundEntryTable");
 
-// also labelled: lpCriticalSection_SoundPlay, lpCriticalSection_0088174c
-_RTL_CRITICAL_SECTION gSoundSmpCs = {}; D2_GLOBAL_GUARD(gSoundSmpCs, "gSoundSmpCs");
-
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-float gnSoundFrequency_22kHz = 2; D2_GLOBAL_GUARD(gnSoundFrequency_22kHz, "gnSoundFrequency_22kHz");
-float gnSoundQuality_Low = 100; D2_GLOBAL_GUARD(gnSoundQuality_Low, "gnSoundQuality_Low");
 int gaAmbientSoundFlags = 0x8; D2_GLOBAL_GUARD(gaAmbientSoundFlags, "gaAmbientSoundFlags");
 uint32_t gnAmbientSoundCount = 0x8; D2_GLOBAL_GUARD(gnAmbientSoundCount, "gnAmbientSoundCount");
 IKsPropertySet * gpDirectSoundEAXInterface = 0; D2_GLOBAL_GUARD(gpDirectSoundEAXInterface, "gpDirectSoundEAXInterface");
-BOOL gbSoundInBackground = 0; D2_GLOBAL_GUARD(gbSoundInBackground, "gbSoundInBackground");
-IDirectSound3DBuffer * gpEAXInterface1 = 0; D2_GLOBAL_GUARD(gpEAXInterface1, "gpEAXInterface1");
-IDirectSoundBuffer * gpEAXInterface2 = 0; D2_GLOBAL_GUARD(gpEAXInterface2, "gpEAXInterface2");
-IDirectSoundBuffer * gpDSoundPrimaryBuffer = 0; D2_GLOBAL_GUARD(gpDSoundPrimaryBuffer, "gpDSoundPrimaryBuffer");
-uint32_t gnDirectSoundInitialized = 0; D2_GLOBAL_GUARD(gnDirectSoundInitialized, "gnDirectSoundInitialized");
-IDirectSound * gnDirectSoundInitStatus = 0; D2_GLOBAL_GUARD(gnDirectSoundInitStatus, "gnDirectSoundInitStatus");
-uint32_t gnDSoundPrimaryBufferDelay = 0; D2_GLOBAL_GUARD(gnDSoundPrimaryBufferDelay, "gnDSoundPrimaryBufferDelay");
-uint32_t gnSound3DLoudness = 0; D2_GLOBAL_GUARD(gnSound3DLoudness, "gnSound3DLoudness");
-int gnSoundQualityMode = 0; D2_GLOBAL_GUARD(gnSoundQualityMode, "gnSoundQualityMode");
-uint32_t g_bEAXEnabled = 0; D2_GLOBAL_GUARD(g_bEAXEnabled, "g_bEAXEnabled");
-uint32_t gbDirectSoundCritSecInitialized = 0; D2_GLOBAL_GUARD(gbDirectSoundCritSecInitialized, "gbDirectSoundCritSecInitialized");
-uint32_t g_bSoundDriverScanComplete = 0; D2_GLOBAL_GUARD(g_bSoundDriverScanComplete, "g_bSoundDriverScanComplete");
-uint32_t gbDirectSoundDelayWorkaround = 0; D2_GLOBAL_GUARD(gbDirectSoundDelayWorkaround, "gbDirectSoundDelayWorkaround");
 uint32_t gbHasLegacyEMU10K1Driver = 0; D2_GLOBAL_GUARD(gbHasLegacyEMU10K1Driver, "gbHasLegacyEMU10K1Driver");
 uint32_t gbHasLegacySoundDriverCrlds3d = 0; D2_GLOBAL_GUARD(gbHasLegacySoundDriverCrlds3d, "gbHasLegacySoundDriverCrlds3d");
 uint32_t LanguageCode = 0; D2_GLOBAL_GUARD(LanguageCode, "LanguageCode");
 D2SoundSmpStrc * gpMusicStreamBuffer = 0; D2_GLOBAL_GUARD(gpMusicStreamBuffer, "gpMusicStreamBuffer");
 uint32_t gnAmbientSoundLanguageCode = 0; D2_GLOBAL_GUARD(gnAmbientSoundLanguageCode, "gnAmbientSoundLanguageCode");
 uint32_t gbAmbientSoundLangInitialized = 0; D2_GLOBAL_GUARD(gbAmbientSoundLangInitialized, "gbAmbientSoundLangInitialized");
-uint32_t g_nSoundSampleParam = 0; D2_GLOBAL_GUARD(g_nSoundSampleParam, "g_nSoundSampleParam");
-int * gpSoundSampleList = 0; D2_GLOBAL_GUARD(gpSoundSampleList, "gpSoundSampleList");
-HANDLE ghSoundThreadStopEvent = 0; D2_GLOBAL_GUARD(ghSoundThreadStopEvent, "ghSoundThreadStopEvent");
-HANDLE ghSoundThread = 0; D2_GLOBAL_GUARD(ghSoundThread, "ghSoundThread");
 
 namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
-
-namespace Fog::Src::Excel {
-
-} // namespace Fog::Src::Excel
 
 namespace D2Client::Warden::NWardenClient {
 
@@ -213,10 +135,6 @@ namespace D2Client::UI::Spinner::SpinnerWrapper {
 
 } // namespace D2Client::UI::Spinner::SpinnerWrapper
 
-namespace D2Client::UNIT::Object {
-
-} // namespace D2Client::UNIT::Object
-
 namespace D2Client::UI::ListBox::ListBoxWrapper {
 
 } // namespace D2Client::UI::ListBox::ListBoxWrapper
@@ -224,10 +142,6 @@ namespace D2Client::UI::ListBox::ListBoxWrapper {
 namespace D2Client::UI::ListBox::ListBoxImplementation {
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation
-
-namespace D2Win::_FONT {
-
-} // namespace D2Win::_FONT
 
 namespace D2Game::GAME::Event::Dispatch {
 
@@ -292,30 +206,6 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
-
-namespace D2Client::UI::Automap {
-
-} // namespace D2Client::UI::Automap
-
-namespace D2Game::GAME::Rendering {
-
-} // namespace D2Game::GAME::Rendering
-
-namespace D2Client::UI::Help {
-
-} // namespace D2Client::UI::Help
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::NPC {
-
-} // namespace D2Client::NPC
-
-namespace D2Client::UNIT::UnitSnd {
-
-} // namespace D2Client::UNIT::UnitSnd
 
 namespace D2Client::UI::ui {
 
@@ -425,10 +315,6 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
-namespace D2Common::Monsters::MONSTERS::Umod {
-
-} // namespace D2Common::Monsters::MONSTERS::Umod
-
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -481,110 +367,14 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
-namespace D2Client::Waypoint {
-
-} // namespace D2Client::Waypoint
-
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
-
-namespace Fog::Memory {
-
-} // namespace Fog::Memory
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace D2Client::MCP {
-
-} // namespace D2Client::MCP
-
-namespace D2Client::Bnet {
-
-} // namespace D2Client::Bnet
-
-namespace D2Game::Save {
-
-} // namespace D2Game::Save
-
-namespace D2Game::GameData {
-
-} // namespace D2Game::GameData
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
 
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::_Selection {
-
-} // namespace D2Client::_Selection
-
-namespace D2Client::Cursor {
-
-} // namespace D2Client::Cursor
-
-namespace D2Client::Draw::Weather {
-
-} // namespace D2Client::Draw::Weather
-
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
-
-namespace D2Client::GAME::View {
-
-} // namespace D2Client::GAME::View
-
-namespace D2Client::GAME::RosterPets {
-
-} // namespace D2Client::GAME::RosterPets
-
-namespace D2Client::GAME::Roster {
-
-} // namespace D2Client::GAME::Roster
-
-namespace D2Client::UI::Inv {
-
-} // namespace D2Client::UI::Inv
-
-namespace D2Client::UI::Hireables {
-
-} // namespace D2Client::UI::Hireables
-
-namespace D2Client::UI::Panel {
-
-} // namespace D2Client::UI::Panel
-
-namespace D2Client::UI::Party {
-
-} // namespace D2Client::UI::Party
-
-namespace D2Client::_Interaction {
-
-} // namespace D2Client::_Interaction
-
-namespace D2Client::Merc {
-
-} // namespace D2Client::Merc
-
-namespace D2Client::Mouse {
-
-} // namespace D2Client::Mouse
-
-namespace D2Client::Forms {
-
-} // namespace D2Client::Forms
-
-namespace D2Client::_CdKey {
-
-} // namespace D2Client::_CdKey
-
-namespace D2Direct3D::Renderer {
-
-} // namespace D2Direct3D::Renderer

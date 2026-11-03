@@ -65,6 +65,7 @@
 #include "Storm/Storm.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UI/Panel.data.h"
 #include "D2Common/ITEMS/ItemMods.h"
 #include "D2Common/Unit.h"
 #include "D2Game/ITEMS/ItemMode.h"
@@ -80,6 +81,51 @@ static int32_t gnBeltSlotUnderCursor = -0x1; D2_STATIC_GUARD(gnBeltSlotUnderCurs
 static int gnBeltTooltipX = -0x1; D2_STATIC_GUARD(gnBeltTooltipX, "gnBeltTooltipX");
 static int gnBeltTooltipY = -0x1; D2_STATIC_GUARD(gnBeltTooltipY, "gnBeltTooltipY");
 static uint32_t gaaBeltSlotHotkeyCommands[4] = { 0x17, 0x18, 0x19, 0x1a }; D2_STATIC_GUARD(gaaBeltSlotHotkeyCommands, "gaaBeltSlotHotkeyCommands");
+namespace D2Client::UI::Panel {
+DC6 * runbutton = 0; D2_GLOBAL_GUARD(runbutton, "D2Client::UI::Panel::runbutton");
+DC6 * ctrlpnl_popbelt = 0; D2_GLOBAL_GUARD(ctrlpnl_popbelt, "D2Client::UI::Panel::ctrlpnl_popbelt");
+DC6 * GemSocket = 0; D2_GLOBAL_GUARD(GemSocket, "D2Client::UI::Panel::GemSocket");
+DC6 * _00BorderFrame = 0; D2_GLOBAL_GUARD(_00BorderFrame, "D2Client::UI::Panel::_00BorderFrame");
+DC6 * CtrlPnl7 = 0; D2_GLOBAL_GUARD(CtrlPnl7, "D2Client::UI::Panel::CtrlPnl7");
+DC6 * skillpoints = 0; D2_GLOBAL_GUARD(skillpoints, "D2Client::UI::Panel::skillpoints");
+DC6 * Invwarn = 0; D2_GLOBAL_GUARD(Invwarn, "D2Client::UI::Panel::Invwarn");
+DC6 * hostilepic = 0; D2_GLOBAL_GUARD(hostilepic, "D2Client::UI::Panel::hostilepic");
+DC6 * menupanel = 0; D2_GLOBAL_GUARD(menupanel, "D2Client::UI::Panel::menupanel");
+} // namespace D2Client::UI::Panel
+static int gaPanelImageLoadFlags[12] = {}; D2_STATIC_GUARD(gaPanelImageLoadFlags, "gaPanelImageLoadFlags");
+namespace D2Client::UI::Panel {
+DC6 * DuroIcon = 0; D2_GLOBAL_GUARD(DuroIcon, "D2Client::UI::Panel::DuroIcon");
+DC6 * InvChar = 0; D2_GLOBAL_GUARD(InvChar, "D2Client::UI::Panel::InvChar");
+DC6 * Hlthmana = 0; D2_GLOBAL_GUARD(Hlthmana, "D2Client::UI::Panel::Hlthmana");
+} // namespace D2Client::UI::Panel
+static uint8_t gaPanelBeltColors[4] = {}; D2_STATIC_GUARD(gaPanelBeltColors, "gaPanelBeltColors");
+namespace D2Client::UI::Panel {
+DC6 * menubutton = 0; D2_GLOBAL_GUARD(menubutton, "D2Client::UI::Panel::menubutton");
+DC6 * _00CtrlPnl7 = 0; D2_GLOBAL_GUARD(_00CtrlPnl7, "D2Client::UI::Panel::_00CtrlPnl7");
+DC6 * Arrow = 0; D2_GLOBAL_GUARD(Arrow, "D2Client::UI::Panel::Arrow");
+DC6 * btn = 0; D2_GLOBAL_GUARD(btn, "D2Client::UI::Panel::btn");
+DC6 * overlap = 0; D2_GLOBAL_GUARD(overlap, "D2Client::UI::Panel::overlap");
+} // namespace D2Client::UI::Panel
+static BOOL gbPanelLeftBeltArrowClicked = 0; D2_STATIC_GUARD(gbPanelLeftBeltArrowClicked, "gbPanelLeftBeltArrowClicked");
+static uint8_t gbPanelRightBeltArrowClicked[12] = {}; D2_STATIC_GUARD(gbPanelRightBeltArrowClicked, "gbPanelRightBeltArrowClicked");
+static uint32_t gpPanelBeltSlot = 0; D2_STATIC_GUARD(gpPanelBeltSlot, "gpPanelBeltSlot");
+static uint32_t gnPanelBeltRowsExpanded = 0; D2_STATIC_GUARD(gnPanelBeltRowsExpanded, "gnPanelBeltRowsExpanded");
+static uint32_t gbPanelBeltAnimating = 0; D2_STATIC_GUARD(gbPanelBeltAnimating, "gbPanelBeltAnimating");
+static uint32_t gbPanelBeltSlotHovered = 0; D2_STATIC_GUARD(gbPanelBeltSlotHovered, "gbPanelBeltSlotHovered");
+static uint32_t gpPanelClickedButton = 0; D2_STATIC_GUARD(gpPanelClickedButton, "gpPanelClickedButton");
+static D2UnitStrc * gpPanelBeltHoverItem = 0; D2_STATIC_GUARD(gpPanelBeltHoverItem, "gpPanelBeltHoverItem");
+static D2UnitStrc * gpPanelBeltLastHoverItem = 0; D2_STATIC_GUARD(gpPanelBeltLastHoverItem, "gpPanelBeltLastHoverItem");
+static uint8_t gaPanelStatColors[4] = {}; D2_STATIC_GUARD(gaPanelStatColors, "gaPanelStatColors");
+static uint8_t gaPanelBeltArrowsNeeded[6] = {}; D2_STATIC_GUARD(gaPanelBeltArrowsNeeded, "gaPanelBeltArrowsNeeded");
+static uint8_t gbPanelStaminaColorBlue = 0; D2_STATIC_GUARD(gbPanelStaminaColorBlue, "gbPanelStaminaColorBlue");
+static uint8_t gbPanelGoldColorGreen = 0; D2_STATIC_GUARD(gbPanelGoldColorGreen, "gbPanelGoldColorGreen");
+static uint32_t gpPanelMenuButton = 0; D2_STATIC_GUARD(gpPanelMenuButton, "gpPanelMenuButton");
+static uint32_t gpPanelRunButton = 0; D2_STATIC_GUARD(gpPanelRunButton, "gpPanelRunButton");
+namespace D2Client::UI::Panel {
+BOOL bShowHpText = 0; D2_GLOBAL_GUARD(bShowHpText, "D2Client::UI::Panel::bShowHpText");
+BOOL bShowmpText = 0; D2_GLOBAL_GUARD(bShowmpText, "D2Client::UI::Panel::bShowmpText");
+} // namespace D2Client::UI::Panel
+static uint8_t gbPanelStaminaColorRed = 0; D2_STATIC_GUARD(gbPanelStaminaColorRed, "gbPanelStaminaColorRed");
 
 namespace D2Client::UI::Panel {
 

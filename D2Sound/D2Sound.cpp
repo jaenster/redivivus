@@ -4,6 +4,8 @@
 #include "D2Client/Sound/Sound.h"
 #include "D2Sound/Src/D2SoundSmp.h"
 #include "globals/globals.h"
+#include "D2Sound/Sound.data.h"
+#include "D2Sound/Src/D2SoundSmp.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

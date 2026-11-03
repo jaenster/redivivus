@@ -13,330 +13,9 @@
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-GrTexInfo gTexInfoDebugFontGlide = {
-    /* .smallLodLog2 = */ 0x4,
-    /* .largeLodLog2 = */ 0x4,
-    /* .aspectRatioLog2 = */ (GrAspectRatio_t)-0x1,
-    /* .format = */ 0x5,
-    /* .data = */ nullptr
-}; D2_GLOBAL_GUARD(gTexInfoDebugFontGlide, "gTexInfoDebugFontGlide");
-
-void * gapGlideStripVertexPtrsA[10] = {
-    (void*)gaGlidePerspectiveVertices,
-    (void*)&gaGlidePerspectiveVertices[1].fX,
-    (void*)&gaGlidePerspectiveVertices[3].fX,
-    (void*)&gaGlidePerspectiveVertices[4].fX,
-    (void*)&gaGlidePerspectiveVertices[6].fX,
-    (void*)&gaGlidePerspectiveVertices[7].fX,
-    (void*)&gaGlidePerspectiveVertices[9].fX,
-    (void*)&gaGlidePerspectiveVertices[10].fX,
-    (void*)&gaGlidePerspectiveVertices[12].fX,
-    (void*)&gaGlidePerspectiveVertices[13].fX
-}; D2_GLOBAL_GUARD(gapGlideStripVertexPtrsA, "gapGlideStripVertexPtrsA");
-
-void * gapGlideStripVertexPtrsB[10] = {
-    (void*)&gaGlidePerspectiveVertices[1].fX,
-    (void*)&gaGlidePerspectiveVertices[2].fX,
-    (void*)&gaGlidePerspectiveVertices[4].fX,
-    (void*)&gaGlidePerspectiveVertices[5].fX,
-    (void*)&gaGlidePerspectiveVertices[7].fX,
-    (void*)&gaGlidePerspectiveVertices[8].fX,
-    (void*)&gaGlidePerspectiveVertices[10].fX,
-    (void*)&gaGlidePerspectiveVertices[11].fX,
-    (void*)&gaGlidePerspectiveVertices[13].fX,
-    (void*)&gaGlidePerspectiveVertices[14].fX
-}; D2_GLOBAL_GUARD(gapGlideStripVertexPtrsB, "gapGlideStripVertexPtrsB");
-
-D2GlideWallCornerStrc gaGlideWallCornerTable[60] = {
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x3,
-        /* .nZ = */ -0x38
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x1,
-        /* .nZ = */ -0x48
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ -0x1,
-        /* .nZ = */ -0x58
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ -0x3,
-        /* .nZ = */ -0x68
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ -0x5,
-        /* .nZ = */ -0x78
-    },
-    {
-        /* .nX = */ -0x5,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x78
-    },
-    {
-        /* .nX = */ -0x3,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x68
-    },
-    {
-        /* .nX = */ -0x1,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x58
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x48
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x38
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x3,
-        /* .nZ = */ -0x38
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x1,
-        /* .nZ = */ -0x48
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x48
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x38
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ -0x5,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x78
-    },
-    {
-        /* .nX = */ -0x3,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x68
-    },
-    {
-        /* .nX = */ -0x1,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x58
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ -0x1,
-        /* .nZ = */ -0x58
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ -0x3,
-        /* .nZ = */ -0x68
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ -0x5,
-        /* .nZ = */ -0x78
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x3,
-        /* .nZ = */ -0x38
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x1,
-        /* .nZ = */ -0x48
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x48
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x38
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0xa,
-        /* .nZ = */ 0x28
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x8,
-        /* .nZ = */ 0x18
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x6,
-        /* .nZ = */ 0x8
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x4,
-        /* .nZ = */ -0x8
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x2,
-        /* .nZ = */ -0x18
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x18
-    },
-    {
-        /* .nX = */ 0x4,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x8
-    },
-    {
-        /* .nX = */ 0x6,
-        /* .nY = */ 0x5,
-        /* .nZ = */ 0x8
-    },
-    {
-        /* .nX = */ 0x8,
-        /* .nY = */ 0x5,
-        /* .nZ = */ 0x18
-    },
-    {
-        /* .nX = */ 0xa,
-        /* .nY = */ 0x5,
-        /* .nZ = */ 0x28
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x18
-    },
-    {
-        /* .nX = */ 0x4,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x8
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x4,
-        /* .nZ = */ -0x8
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x2,
-        /* .nZ = */ -0x18
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x0,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x28
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x18
-    },
-    {
-        /* .nX = */ 0x4,
-        /* .nY = */ 0x5,
-        /* .nZ = */ -0x8
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x4,
-        /* .nZ = */ -0x8
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x2,
-        /* .nZ = */ -0x18
-    },
-    {
-        /* .nX = */ 0x5,
-        /* .nY = */ 0x0,
-        /* .nZ = */ -0x28
-    }
-}; D2_GLOBAL_GUARD(gaGlideWallCornerTable, "gaGlideWallCornerTable");
-
 GlSubtileCacheStrc gGlideSubtileTextureCache = {}; D2_GLOBAL_GUARD(gGlideSubtileTextureCache, "gGlideSubtileTextureCache");
 
 GlFloorCacheStrc gGlideFloorTextureCache = {}; D2_GLOBAL_GUARD(gGlideFloorTextureCache, "gGlideFloorTextureCache");
-
-uint32_t gGlidePaletteEntry0[256] = {}; D2_GLOBAL_GUARD(gGlidePaletteEntry0, "gGlidePaletteEntry0");
-
-int gnGlideSecondaryTMUCount[2] = {}; D2_GLOBAL_GUARD(gnGlideSecondaryTMUCount, "gnGlideSecondaryTMUCount");
-
-D2GlideVertexTexCacheBlockStrc gGlideVertex0 = {}; D2_GLOBAL_GUARD(gGlideVertex0, "gGlideVertex0");
-
-uint32_t gaGlideColorDebugGradientIndices[1024] = {}; D2_GLOBAL_GUARD(gaGlideColorDebugGradientIndices, "gaGlideColorDebugGradientIndices");
 
 uint32_t gaGlideDebugFontTexStartAddrs[96] = {}; D2_GLOBAL_GUARD(gaGlideDebugFontTexStartAddrs, "gaGlideDebugFontTexStartAddrs");
 
@@ -356,24 +35,6 @@ D2GlideVertexStrc gaGlideSmackerVertices[4] = {}; D2_GLOBAL_GUARD(gaGlideSmacker
 // Initialized scalars
 // =============================================================================
 
-uint8_t gnFontKerningTracking = 0x0; D2_GLOBAL_GUARD(gnFontKerningTracking, "gnFontKerningTracking");
-uint32_t gnGlideTextureMode = -0x1; D2_GLOBAL_GUARD(gnGlideTextureMode, "gnGlideTextureMode");
-uint32_t ghGlideSstWindow = 0; D2_GLOBAL_GUARD(ghGlideSstWindow, "ghGlideSstWindow");
-int gnGlideTextureMemoryUsed = 0; D2_GLOBAL_GUARD(gnGlideTextureMemoryUsed, "gnGlideTextureMemoryUsed");
-uint32_t gbGlideIsDebugBuild = 0; D2_GLOBAL_GUARD(gbGlideIsDebugBuild, "gbGlideIsDebugBuild");
-FxI32 gnGlideTextureMemoryMask = 0; D2_GLOBAL_GUARD(gnGlideTextureMemoryMask, "gnGlideTextureMemoryMask");
-uint32_t ghGlideWindow = 0; D2_GLOBAL_GUARD(ghGlideWindow, "ghGlideWindow");
-uint32_t gbGlideInitialized = 0; D2_GLOBAL_GUARD(gbGlideInitialized, "gbGlideInitialized");
-int gbWINDOWED = 0; D2_GLOBAL_GUARD(gbWINDOWED, "gbWINDOWED");
-uint32_t gnGlideColorCombineMode = 0; D2_GLOBAL_GUARD(gnGlideColorCombineMode, "gnGlideColorCombineMode");
-uint32_t gnGlideAlphaBlendMode = 0; D2_GLOBAL_GUARD(gnGlideAlphaBlendMode, "gnGlideAlphaBlendMode");
-uint32_t gnGlideTextureFilteringMode = 0; D2_GLOBAL_GUARD(gnGlideTextureFilteringMode, "gnGlideTextureFilteringMode");
-uint32_t gbGlideInScene = 0; D2_GLOBAL_GUARD(gbGlideInScene, "gbGlideInScene");
-uint32_t gbGlidePerspectiveMode = 0; D2_GLOBAL_GUARD(gbGlidePerspectiveMode, "gbGlidePerspectiveMode");
-uint32_t gnGlideSpriteSecondaryTMUEnabled = 0; D2_GLOBAL_GUARD(gnGlideSpriteSecondaryTMUEnabled, "gnGlideSpriteSecondaryTMUEnabled");
-uint32_t gnGlideTMUIndex = 0; D2_GLOBAL_GUARD(gnGlideTMUIndex, "gnGlideTMUIndex");
-void * gpGlideSpriteBuffer = 0; D2_GLOBAL_GUARD(gpGlideSpriteBuffer, "gpGlideSpriteBuffer");
-void * gpGlideSpritePixelBuffer = 0; D2_GLOBAL_GUARD(gpGlideSpritePixelBuffer, "gpGlideSpritePixelBuffer");
 float gfGlideDebugFontVertex0X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex0X, "gfGlideDebugFontVertex0X");
 float gfGlideDebugFontVertex0Y = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex0Y, "gfGlideDebugFontVertex0Y");
 float gfGlideDebugFontVertex1X = 0; D2_GLOBAL_GUARD(gfGlideDebugFontVertex1X, "gfGlideDebugFontVertex1X");
@@ -405,10 +66,6 @@ uint32_t gnGlideTMUHandle = 0; D2_GLOBAL_GUARD(gnGlideTMUHandle, "gnGlideTMUHand
 namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
-
-namespace Fog::Src::Excel {
-
-} // namespace Fog::Src::Excel
 
 namespace D2Client::Warden::NWardenClient {
 
@@ -446,10 +103,6 @@ namespace D2Client::UI::Spinner::SpinnerWrapper {
 
 } // namespace D2Client::UI::Spinner::SpinnerWrapper
 
-namespace D2Client::UNIT::Object {
-
-} // namespace D2Client::UNIT::Object
-
 namespace D2Client::UI::ListBox::ListBoxWrapper {
 
 } // namespace D2Client::UI::ListBox::ListBoxWrapper
@@ -457,10 +110,6 @@ namespace D2Client::UI::ListBox::ListBoxWrapper {
 namespace D2Client::UI::ListBox::ListBoxImplementation {
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation
-
-namespace D2Win::_FONT {
-
-} // namespace D2Win::_FONT
 
 namespace D2Game::GAME::Event::Dispatch {
 
@@ -525,30 +174,6 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
-
-namespace D2Client::UI::Automap {
-
-} // namespace D2Client::UI::Automap
-
-namespace D2Game::GAME::Rendering {
-
-} // namespace D2Game::GAME::Rendering
-
-namespace D2Client::UI::Help {
-
-} // namespace D2Client::UI::Help
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::NPC {
-
-} // namespace D2Client::NPC
-
-namespace D2Client::UNIT::UnitSnd {
-
-} // namespace D2Client::UNIT::UnitSnd
 
 namespace D2Client::UI::ui {
 
@@ -658,10 +283,6 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
-namespace D2Common::Monsters::MONSTERS::Umod {
-
-} // namespace D2Common::Monsters::MONSTERS::Umod
-
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -714,110 +335,14 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
-namespace D2Client::Waypoint {
-
-} // namespace D2Client::Waypoint
-
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
-
-namespace Fog::Memory {
-
-} // namespace Fog::Memory
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace D2Client::MCP {
-
-} // namespace D2Client::MCP
-
-namespace D2Client::Bnet {
-
-} // namespace D2Client::Bnet
-
-namespace D2Game::Save {
-
-} // namespace D2Game::Save
-
-namespace D2Game::GameData {
-
-} // namespace D2Game::GameData
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
 
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::_Selection {
-
-} // namespace D2Client::_Selection
-
-namespace D2Client::Cursor {
-
-} // namespace D2Client::Cursor
-
-namespace D2Client::Draw::Weather {
-
-} // namespace D2Client::Draw::Weather
-
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
-
-namespace D2Client::GAME::View {
-
-} // namespace D2Client::GAME::View
-
-namespace D2Client::GAME::RosterPets {
-
-} // namespace D2Client::GAME::RosterPets
-
-namespace D2Client::GAME::Roster {
-
-} // namespace D2Client::GAME::Roster
-
-namespace D2Client::UI::Inv {
-
-} // namespace D2Client::UI::Inv
-
-namespace D2Client::UI::Hireables {
-
-} // namespace D2Client::UI::Hireables
-
-namespace D2Client::UI::Panel {
-
-} // namespace D2Client::UI::Panel
-
-namespace D2Client::UI::Party {
-
-} // namespace D2Client::UI::Party
-
-namespace D2Client::_Interaction {
-
-} // namespace D2Client::_Interaction
-
-namespace D2Client::Merc {
-
-} // namespace D2Client::Merc
-
-namespace D2Client::Mouse {
-
-} // namespace D2Client::Mouse
-
-namespace D2Client::Forms {
-
-} // namespace D2Client::Forms
-
-namespace D2Client::_CdKey {
-
-} // namespace D2Client::_CdKey
-
-namespace D2Direct3D::Renderer {
-
-} // namespace D2Direct3D::Renderer

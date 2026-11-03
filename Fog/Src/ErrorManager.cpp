@@ -21,6 +21,8 @@
 #include "support/d2_trace.h"
 #include "globals/globals.h"
 #include "D2Game/Objects/ObjectsRgn.h"
+#include "Fog/Engine/Application.data.h"
+#include "Fog/Src/ErrorManager.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -44,6 +46,32 @@ static char * gaErrorTypeNames[12] = {
     s_Deadlock_006ccb34,
     (char*)0x006ccb30
 }; D2_STATIC_GUARD(gaErrorTypeNames, "gaErrorTypeNames");
+static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {
+    /* .DebugInfo = */ nullptr,
+    /* .LockCount = */ 0x0,
+    /* .RecursionCount = */ 0x0,
+    /* .OwningThread = */ nullptr,
+    /* .LockSemaphore = */ nullptr,
+    /* .SpinCount = */ 0x0
+}; D2_STATIC_GUARD(lpCriticalSection_0074c830, "lpCriticalSection_0074c830");
+static _RTL_CRITICAL_SECTION lpCriticalSection_0074d848 = {}; D2_STATIC_GUARD(lpCriticalSection_0074d848, "lpCriticalSection_0074d848");
+static uint32_t g_nProjectId = 0; D2_STATIC_GUARD(g_nProjectId, "g_nProjectId");
+static char * szProduct = 0; D2_STATIC_GUARD(szProduct, "szProduct");
+static char * g_szApplicationName = 0; D2_STATIC_GUARD(g_szApplicationName, "g_szApplicationName");
+static char * g_szModuleName = 0; D2_STATIC_GUARD(g_szModuleName, "g_szModuleName");
+static char * g_szMilestone = 0; D2_STATIC_GUARD(g_szMilestone, "g_szMilestone");
+static char * g_szBuildNumber = 0; D2_STATIC_GUARD(g_szBuildNumber, "g_szBuildNumber");
+static char * g_szPlatform = 0; D2_STATIC_GUARD(g_szPlatform, "g_szPlatform");
+static char * g_szPrimaryAssignment = 0; D2_STATIC_GUARD(g_szPrimaryAssignment, "g_szPrimaryAssignment");
+static char * g_szAssignments = 0; D2_STATIC_GUARD(g_szAssignments, "g_szAssignments");
+int gbSystemInfoInitialized = 0; D2_GLOBAL_GUARD(gbSystemInfoInitialized, "gbSystemInfoInitialized");
+uint32_t g_eOSType = 0; D2_GLOBAL_GUARD(g_eOSType, "g_eOSType");
+float fGameVersion = 0; D2_GLOBAL_GUARD(fGameVersion, "fGameVersion");
+uint32_t g_dwTotalPhysicalMemory = 0; D2_GLOBAL_GUARD(g_dwTotalPhysicalMemory, "g_dwTotalPhysicalMemory");
+_SYSTEM_INFO gSystemInfo = {}; D2_GLOBAL_GUARD(gSystemInfo, "gSystemInfo");
+static char gszCrashReportProcessPath[2048] = {}; D2_STATIC_GUARD(gszCrashReportProcessPath, "gszCrashReportProcessPath");
+static uint32_t g_dwErrorState = 0; D2_STATIC_GUARD(g_dwErrorState, "g_dwErrorState");
+static uint32_t gbFogErrorManagerInitialized = 0; D2_STATIC_GUARD(gbFogErrorManagerInitialized, "gbFogErrorManagerInitialized");
 
 namespace Fog::Src::ErrorManager {
 

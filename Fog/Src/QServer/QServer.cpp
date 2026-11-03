@@ -23,7 +23,9 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/MiniPanel.h"
+#include "D2Net/Game/Server.data.h"
 #include "Fog/Debug.h"
+#include "Fog/Engine/Application.data.h"
 #include "Fog/Fog.h"
 #include "Fog/QServer.h"
 
@@ -74,6 +76,12 @@ typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(D2QServerStrc * pQ
 #define RECON_FPTD_pfnEHHandlerRoutine
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
 #endif
+
+static uint32_t nTokenBucketMask = 0xf; D2_STATIC_GUARD(nTokenBucketMask, "nTokenBucketMask");
+static uint32_t gnQServerIpConnCountModulo = 0x11; D2_STATIC_GUARD(gnQServerIpConnCountModulo, "gnQServerIpConnCountModulo");
+static uint32_t gnQServerHacklistBucketCount = 0x1; D2_STATIC_GUARD(gnQServerHacklistBucketCount, "gnQServerHacklistBucketCount");
+static uint32_t gbQServerUseDedicatedIoWorkers = 0; D2_STATIC_GUARD(gbQServerUseDedicatedIoWorkers, "gbQServerUseDedicatedIoWorkers");
+static unsigned int gdwHacklistLastLogTime = {}; D2_STATIC_GUARD(gdwHacklistLastLogTime, "gdwHacklistLastLogTime");
 
 namespace Fog::Src {
 

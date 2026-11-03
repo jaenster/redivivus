@@ -87,9 +87,11 @@
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Client/UI/QuestLog.h"
 #include "D2Common/D2UnitDataItemStrc.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Game/PLAYER/PlayerMsg.data.h"
 #include "D2Game/SKILLS/SkillAss.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -104,6 +106,420 @@ typedef void (__fastcall *pfnPlayerModeNetMsg)(::SGAMEDATA * pGame, D2UnitStrc *
 typedef void (__fastcall *fpForEachClientFn)(D2ClientStrc * pClient, void * pContext);
 #endif
 
+D2NET_SERVER_D2GS_ClientToServer NET_D2GS_SERVER_INCOMING[103] = {
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x01_WalkToLocation,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x02_WalkToEntity,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x03_RunToLocation,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x04_RunToEntity,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x05_LeftSkillOnLocation,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x06_LeftSkillOnEntity,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x07_LeftSkillOnEntityEx,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x08_LeftSkillOnLocationEx,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x0A_LeftSkillOnEntityEx3,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x0B_Keepalive,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x0C_RightSkillOnLocation,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x0D_RightSkillOnEntity,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x0E_RightSkillOnEntityEx,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x0F_RightSkillOnLocationEx,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x11_RightSkillOnEntityEx3,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x12_CancelChanneledSkill,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x13_InteractWithEntity,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x14_OverheadMessage,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x15_ChatMessage,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x16_InteractWithEntityEx,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x17_DropItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x18_ItemToInventory,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x19_PickUpToCursor,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x1A_EquipItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x1B_EquipToSwapSlot,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x1C_UnequipToInventory,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x1D_SwapBodyItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x1E_EquipToWeaponSwap,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x1F_UseItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x20_UseItemAtLocation,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x21_MergeStackables,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x22_RemoveStackItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x23_ItemToBelt,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x24_ItemFromBelt,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x25_SwapBeltItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x26_UseItemAtPlayerCoords,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x27_UseItemOnItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x28_SocketItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x29_ScrollIntoBook,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x2A_ItemToCube,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x2C_ReturnBadParams,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x2D_ReturnBadParams,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x2E_ReturnOk,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x2F_NpcInteract,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x30_NpcCancelDialog,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x31_NpcGossip,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x32_NpcBuyConfirm,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x33_NpcSell,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x34_CainIdentify,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x35_NpcGamble,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x36_HireMerc,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x37_GambleConfirm,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x38_NpcMenuSelect,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x39_ReturnBadParams,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x3A_AllocStatPoint,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x3B_AllocSkillPoint,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x3C_SelectSkill,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x3D_ActivateObject,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x3E_QuestItemPickup,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x3F_PlayEmote,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x40_RefreshQuestData,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x41_Resurrect,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ &D2Game::PLAYER::PlayerMsg::SCMD_0x42_StaffInOrifice1,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ &D2Game::PLAYER::PlayerMsg::SCMD_0x43_StaffInOrifice2,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x44_StaffInOrifice,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ &D2Game::PLAYER::PlayerMsg::SCMD_0x45_Unused,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x46_NpcInteractMerc,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x47_CommandMercenary,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x48_CutsceneOver,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x49_TakeWaypoint,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x4B_ForceUnitUpdate,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x4C_TransmogrifyItem2,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x4D_ResetNpcIntroFlag,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x4F_GoToTownFolk,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x50_DropGold,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x51_SetHotkey,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x52_Unused,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x53_GamepadInput,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x54_StopRunning,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x58_MarkQuestDone,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x59_CommandNPC,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x5D_CubeRecipeCheck,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x5E_CubeApply,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ &D2Game::PLAYER::PlayerMsg::SCMD_0x5F_SyncPosition,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x60_WeaponSwap,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x61_MercEquipItem,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x62_NpcSellExpansion,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::SCMD_0x63_ItemToBeltAuto,
+        /* .field1_0x4 = */ 0x1
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ nullptr,
+        /* .field1_0x4 = */ 0x0
+    },
+    {
+        /* .fpHandler = */ (D2NET_SERVER_CLTtoD2GS)&D2Game::PLAYER::PlayerMsg::PLRMSG_Cmd0x66_WardenResponse_ReturnOk,
+        /* .field1_0x4 = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(NET_D2GS_SERVER_INCOMING, "NET_D2GS_SERVER_INCOMING");
 static D2PlayerModeNetMsgStrc gaPlayerModeNetMsgTable[20] = {
     {
         /* .pfnSend = */ &D2Game::PLAYER::PlayerMsg::SendPlayerStopAndAtributeUpdate,

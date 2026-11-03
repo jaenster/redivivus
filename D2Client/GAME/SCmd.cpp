@@ -110,7 +110,10 @@
 #include "Storm/MessageStrc.h"
 #include "Storm/Source/SSTR.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Game/Game.data.h"
+#include "D2Client/GAME/SCmd.data.h"
 #include "D2Client/UI/Automap.h"
+#include "D2Client/UI/Help.data.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Common/DATATBLS/ItemStats.h"
 #include "D2Common/ITEMS/ItemMods.h"
@@ -1018,6 +1021,11 @@ static D2NET_CLIENT_D2GS_ServerToClient NET_D2GS_CLIENT_INCOMING[175] = {
         /* .fpIncomingHandlerUnit = */ nullptr
     }
 }; D2_STATIC_GUARD(NET_D2GS_CLIENT_INCOMING, "NET_D2GS_CLIENT_INCOMING");
+namespace D2Game::Save {
+uint8_t * pRawSaveBuffer = 0; D2_GLOBAL_GUARD(pRawSaveBuffer, "D2Game::Save::pRawSaveBuffer");
+uint32_t nRawSaveBufferSize = 0; D2_GLOBAL_GUARD(nRawSaveBufferSize, "D2Game::Save::nRawSaveBufferSize");
+} // namespace D2Game::Save
+static size_t nD2PacketsClientBufferSize = 0; D2_STATIC_GUARD(nD2PacketsClientBufferSize, "nD2PacketsClientBufferSize");
 
 namespace D2Client::GAME::SCmd {
 

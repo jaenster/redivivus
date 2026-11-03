@@ -29,6 +29,7 @@
 #include "D2Win/DC6.h"
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
+#include "D2Client/UI/npcmenu.data.h"
 #include "D2Game/Monster/AI/AI.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

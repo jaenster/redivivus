@@ -10,6 +10,7 @@
 #include "D2Client/UI/EscMenu.h"
 #include "D2Client/UI/Party.h"
 #include "D2Client/UI/ui.h"
+#include "D2Gdi/Renderer/Windowed.h"
 #include "D2Lang/StrTable/strtable.h"
 #include "D2Lang/Unicode/UNISYS.h"
 #include "D2Win/DC6.h"
@@ -19,11 +20,26 @@
 #include "Storm/Source/SReg.h"
 #include "Storm/Storm.h"
 #include "globals/globals.h"
-#include "D2Gdi/Renderer/Windowed.h"
+#include "D2Client/UI/Help.data.h"
+#include "D2Client/UI/ui.data.h"
 #include "D2Launch/MainMenus.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+namespace D2Client::UI::Help {
+BOOL bSeenHelpMenu = -0x1; D2_GLOBAL_GUARD(bSeenHelpMenu, "D2Client::UI::Help::bSeenHelpMenu");
+DC6 * pHelpBorder = 0; D2_GLOBAL_GUARD(pHelpBorder, "D2Client::UI::Help::pHelpBorder");
+DC6 * HelpWhiteBullet = 0; D2_GLOBAL_GUARD(HelpWhiteBullet, "D2Client::UI::Help::HelpWhiteBullet");
+DC6 * HelpYellowBullet = 0; D2_GLOBAL_GUARD(HelpYellowBullet, "D2Client::UI::Help::HelpYellowBullet");
+} // namespace D2Client::UI::Help
+RGBQUAD nColor = RGBQUAD(); D2_GLOBAL_GUARD(nColor, "nColor");
+static uint32_t gpHelpCloseButton = 0; D2_STATIC_GUARD(gpHelpCloseButton, "gpHelpCloseButton");
+namespace D2Client::UI::Help {
+int32_t gbMiniPanel = 0; D2_GLOBAL_GUARD(gbMiniPanel, "D2Client::UI::Help::gbMiniPanel");
+} // namespace D2Client::UI::Help
+static uint32_t gpHelpScrollButtonDown = 0; D2_STATIC_GUARD(gpHelpScrollButtonDown, "gpHelpScrollButtonDown");
+static uint32_t gpHelpScrollButtonUp = 0; D2_STATIC_GUARD(gpHelpScrollButtonUp, "gpHelpScrollButtonUp");
 
 namespace D2Client::UI::Help {
 

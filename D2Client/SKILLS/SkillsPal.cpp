@@ -53,6 +53,7 @@
 #include "Fog/D2PoolManagerStrc.h"
 #include "globals/globals.h"
 #include "D2Client/GAME/PalShift.h"
+#include "D2Client/SKILLS/SkillsPal.data.h"
 #include "D2Client/UI/Automap.h"
 #include "D2Common/Units/Missile.h"
 #include "D2Game/Monster/AI/AI.h"
@@ -61,6 +62,8 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+int gnPaladinSkillIndexTable[8] = { 0x0, -0x1, -0x2, -0x1, 0x0, 0x1, 0x2, 0x1 }; D2_GLOBAL_GUARD(gnPaladinSkillIndexTable, "gnPaladinSkillIndexTable");
 
 namespace D2Client::SKILLS::SkillsPal {
 

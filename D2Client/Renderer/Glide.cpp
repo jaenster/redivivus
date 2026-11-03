@@ -3,6 +3,10 @@
 #include "D2Client/Renderer/Glide.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/View.data.h"
+#include "D2Client/Renderer/Glide.data.h"
+#include "D2Glide/Renderer/Glide.data.h"
+#include "D2gfx/D2GFX.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -187,6 +191,16 @@ typedef void (__stdcall *grGlideInit)();
 #define RECON_FPTD_grGlideShutdown
 typedef void (__stdcall *grGlideShutdown)();
 #endif
+
+grDrawVertexArrayContiguous GLIDEDLL_grDrawVertexArrayContiguous_16 = (grDrawVertexArrayContiguous)0; D2_GLOBAL_GUARD(GLIDEDLL_grDrawVertexArrayContiguous_16, "GLIDEDLL_grDrawVertexArrayContiguous_16");
+grAlphaBlendFunction GLIDEDLL_grAlphaBlendFunction_16 = (grAlphaBlendFunction)0; D2_GLOBAL_GUARD(GLIDEDLL_grAlphaBlendFunction_16, "GLIDEDLL_grAlphaBlendFunction_16");
+grTexCombine GLIDEDLL_grTexCombine_28 = (grTexCombine)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexCombine_28, "GLIDEDLL_grTexCombine_28");
+grTexFilterMode GLIDEDLL_grTexFilterMode_12 = (grTexFilterMode)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexFilterMode_12, "GLIDEDLL_grTexFilterMode_12");
+grGlideInit GLIDEDLL_grGlideInit_0 = (grGlideInit)0; D2_GLOBAL_GUARD(GLIDEDLL_grGlideInit_0, "GLIDEDLL_grGlideInit_0");
+grFinish GLIDEDLL_grFinish_0 = (grFinish)0; D2_GLOBAL_GUARD(GLIDEDLL_grFinish_0, "GLIDEDLL_grFinish_0");
+pfnGlideDrawVertexArray GLIDEDLL_grDrawVertexArray_12 = (pfnGlideDrawVertexArray)0; D2_GLOBAL_GUARD(GLIDEDLL_grDrawVertexArray_12, "GLIDEDLL_grDrawVertexArray_12");
+grGet GLIDEDLL_grGet_12 = (grGet)0; D2_GLOBAL_GUARD(GLIDEDLL_grGet_12, "GLIDEDLL_grGet_12");
+grTexMinAddress GLIDEDLL_grTexMinAddress_4 = (grTexMinAddress)0; D2_GLOBAL_GUARD(GLIDEDLL_grTexMinAddress_4, "GLIDEDLL_grTexMinAddress_4");
 
 namespace D2Client::Renderer::Glide {
 

@@ -4,6 +4,8 @@
  */
 
 #include "globals/globals.h"
+#include "D2Multi/ChatDlg.data.h"
+#include "D2Multi/Launcher.data.h"
 #include "D2Launch/MainMenus.h"
 #include "D2Multi/ChatDlg.h"
 #include "D2Multi/ComCallback.h"
@@ -14,8 +16,6 @@
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
-
-char * gaszChatDlgProfileKeys[3] = { s_profile_sex_006d4ee0, s_profile_location_006d4ecc, s_profile_description_006d4eb8 }; D2_GLOBAL_GUARD(gaszChatDlgProfileKeys, "gaszChatDlgProfileKeys");
 
 FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
     {
@@ -1439,24 +1439,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
     }
 }; D2_GLOBAL_GUARD(gaPredefinedForms_b, "gaPredefinedForms_b");
 
-D2WinButton * gaChatUserListButtonArray[11] = {}; D2_GLOBAL_GUARD(gaChatUserListButtonArray, "gaChatUserListButtonArray");
-
-D2ControlStrc * FORMS_pListEx[32] = {}; D2_GLOBAL_GUARD(FORMS_pListEx, "FORMS_pListEx");
-
 _RTL_CRITICAL_SECTION lpCriticalSection_0077ae28 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077ae28, "lpCriticalSection_0077ae28");
-
-char gszOogChatInputBuffer[512] = {}; D2_GLOBAL_GUARD(gszOogChatInputBuffer, "gszOogChatInputBuffer");
-
-char gszLadderCharNameFilter[16] = {}; D2_GLOBAL_GUARD(gszLadderCharNameFilter, "gszLadderCharNameFilter");
-
-D2ControlStrc * gpCtlLobbyChat[2] = {}; D2_GLOBAL_GUARD(gpCtlLobbyChat, "gpCtlLobbyChat");
-
-D2LobbyControlsStrc gpLobbyForm0 = {}; D2_GLOBAL_GUARD(gpLobbyForm0, "gpLobbyForm0");
-
-// also labelled: gbOogOptionButtonActive
-char * gapszProfileReadBuffers[3] = {}; D2_GLOBAL_GUARD(gapszProfileReadBuffers, "gapszProfileReadBuffers");
-
-char gszOogReplyCommandBuffer[256] = {}; D2_GLOBAL_GUARD(gszOogReplyCommandBuffer, "gszOogReplyCommandBuffer");
 
 D2GameListEntryStrc gbLanGameListEntryNamePadding2[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding2, "gbLanGameListEntryNamePadding2");
 
@@ -1467,85 +1450,17 @@ char gszOOGRequestedGameName[256] = {}; D2_GLOBAL_GUARD(gszOOGRequestedGameName,
 // also labelled: gszOOGJoinGamePassword
 char gszProfileCharacterName[16] = {}; D2_GLOBAL_GUARD(gszProfileCharacterName, "gszProfileCharacterName");
 
-// also labelled: gszChannelUserCountFormat
-char gszCurrentChannelName[256] = {}; D2_GLOBAL_GUARD(gszCurrentChannelName, "gszCurrentChannelName");
-
 // =============================================================================
 // Initialized scalars
 // =============================================================================
 
-unsigned short CreateJoinGameRequestId = 0x1; D2_GLOBAL_GUARD(CreateJoinGameRequestId, "CreateJoinGameRequestId");
-uint8_t g_nLadderFilterMode = 0xff; D2_GLOBAL_GUARD(g_nLadderFilterMode, "g_nLadderFilterMode");
-uint8_t gnLadderCurrentFilterMode = 0xff; D2_GLOBAL_GUARD(gnLadderCurrentFilterMode, "gnLadderCurrentFilterMode");
-uint32_t gnChatRoomListSelectedBase = -0x1; D2_GLOBAL_GUARD(gnChatRoomListSelectedBase, "gnChatRoomListSelectedBase");
-uint32_t gbLadderFilterPending = 0x1; D2_GLOBAL_GUARD(gbLadderFilterPending, "gbLadderFilterPending");
-uint32_t gbLadderExpansionEnabled = 0x1; D2_GLOBAL_GUARD(gbLadderExpansionEnabled, "gbLadderExpansionEnabled");
-int gnChatTabCompletionIndex = -0x1; D2_GLOBAL_GUARD(gnChatTabCompletionIndex, "gnChatTabCompletionIndex");
-int gnLadderBoardSelectedRank = -0x1; D2_GLOBAL_GUARD(gnLadderBoardSelectedRank, "gnLadderBoardSelectedRank");
-uint32_t gnLadderRequestedCharIndex = -0x1; D2_GLOBAL_GUARD(gnLadderRequestedCharIndex, "gnLadderRequestedCharIndex");
-// also labelled: gnChatRoomListScrollStartPos
-int32_t gnLadderEntryTotal = 0; D2_GLOBAL_GUARD(gnLadderEntryTotal, "gnLadderEntryTotal");
-// also labelled: gnChatRoomListScrollPos
-int32_t gnLadderListRowCount = 0; D2_GLOBAL_GUARD(gnLadderListRowCount, "gnLadderListRowCount");
-uint32_t gbChatOptionButtonState = 0; D2_GLOBAL_GUARD(gbChatOptionButtonState, "gbChatOptionButtonState");
-D2BNetClientCallbacksStrc * pNetworkUnknown = 0; D2_GLOBAL_GUARD(pNetworkUnknown, "pNetworkUnknown");
-int gnLadderScrollPageSize = 0; D2_GLOBAL_GUARD(gnLadderScrollPageSize, "gnLadderScrollPageSize");
-uint32_t ghBannerAdProcess = 0; D2_GLOBAL_GUARD(ghBannerAdProcess, "ghBannerAdProcess");
 D2IniConfigStrc * D2IniData_multiplayer = 0; D2_GLOBAL_GUARD(D2IniData_multiplayer, "D2IniData_multiplayer");
 uint16_t LastGameRequestId = 0; D2_GLOBAL_GUARD(LastGameRequestId, "LastGameRequestId");
 void * gpChatFormList = 0; D2_GLOBAL_GUARD(gpChatFormList, "gpChatFormList");
-int FORMS_nListExCount = 0; D2_GLOBAL_GUARD(FORMS_nListExCount, "FORMS_nListExCount");
-uint32_t gbLadderNewsExpanded = 0; D2_GLOBAL_GUARD(gbLadderNewsExpanded, "gbLadderNewsExpanded");
-uint32_t gdwGameJoinRequestTick = 0; D2_GLOBAL_GUARD(gdwGameJoinRequestTick, "gdwGameJoinRequestTick");
-uint32_t gnLadderScrollPos = 0; D2_GLOBAL_GUARD(gnLadderScrollPos, "gnLadderScrollPos");
 uint32_t gbLobbyInitialized = 0; D2_GLOBAL_GUARD(gbLobbyInitialized, "gbLobbyInitialized");
 D2CharSelCompStrc * gpChatDlgCharSelCompositeUnit = 0; D2_GLOBAL_GUARD(gpChatDlgCharSelCompositeUnit, "gpChatDlgCharSelCompositeUnit");
 DC6 * gpDC6BnetBackground = 0; D2_GLOBAL_GUARD(gpDC6BnetBackground, "gpDC6BnetBackground");
 DC6 * gpDC6WaitingRoomBackground = 0; D2_GLOBAL_GUARD(gpDC6WaitingRoomBackground, "gpDC6WaitingRoomBackground");
-DC6 * gpDC6PopUpLargest2 = 0; D2_GLOBAL_GUARD(gpDC6PopUpLargest2, "gpDC6PopUpLargest2");
-DC6 * gpDC6MediumButtonBlank2 = 0; D2_GLOBAL_GUARD(gpDC6MediumButtonBlank2, "gpDC6MediumButtonBlank2");
-DC6 * gpDC6CursorOpenHand = 0; D2_GLOBAL_GUARD(gpDC6CursorOpenHand, "gpDC6CursorOpenHand");
-DC6 * gpDC6CursorLRotate = 0; D2_GLOBAL_GUARD(gpDC6CursorLRotate, "gpDC6CursorLRotate");
-DC6 * gpDC6ChatScrollbar = 0; D2_GLOBAL_GUARD(gpDC6ChatScrollbar, "gpDC6ChatScrollbar");
-DC6 * gpDC6JoinGameScrollbar = 0; D2_GLOBAL_GUARD(gpDC6JoinGameScrollbar, "gpDC6JoinGameScrollbar");
-DC6 * gpDC6ChatLeftButtons1 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons1, "gpDC6ChatLeftButtons1");
-DC6 * gpDC6ChatLeftButtons2 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons2, "gpDC6ChatLeftButtons2");
-DC6 * gpDC6ChatLeftButtons3 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons3, "gpDC6ChatLeftButtons3");
-DC6 * gpDC6ChatRightTopButtonsAlt = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtonsAlt, "gpDC6ChatRightTopButtonsAlt");
-DC6 * gpDC6ChatRightTopButtons = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtons, "gpDC6ChatRightTopButtons");
-DC6 * gpDC6ChatArrows = 0; D2_GLOBAL_GUARD(gpDC6ChatArrows, "gpDC6ChatArrows");
-D2WinTextBox * gpCtlConfirmDialog = 0; D2_GLOBAL_GUARD(gpCtlConfirmDialog, "gpCtlConfirmDialog");
-// also labelled: gpCtlLobbyChannelListBtn
-D2ControlStrc * gpCtlLobbyAccountList = 0; D2_GLOBAL_GUARD(gpCtlLobbyAccountList, "gpCtlLobbyAccountList");
-D2WinButton * gpCtlLobbyLadderNewsToggle = 0; D2_GLOBAL_GUARD(gpCtlLobbyLadderNewsToggle, "gpCtlLobbyLadderNewsToggle");
-D2WinTextBox * pGameListCache = 0; D2_GLOBAL_GUARD(pGameListCache, "pGameListCache");
-DC6 * DCC_JoinGame = 0; D2_GLOBAL_GUARD(DCC_JoinGame, "DCC_JoinGame");
-DC6 * gpDC6BlankBckg2 = 0; D2_GLOBAL_GUARD(gpDC6BlankBckg2, "gpDC6BlankBckg2");
-DC6 * gpDC6GemButton = 0; D2_GLOBAL_GUARD(gpDC6GemButton, "gpDC6GemButton");
-DC6 * gpDC6GameButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6GameButtonBlank, "gpDC6GameButtonBlank");
-DC6 * gpDC6JoinGameClickBox = 0; D2_GLOBAL_GUARD(gpDC6JoinGameClickBox, "gpDC6JoinGameClickBox");
-DC6 * gpDC6GreyLevelBox = 0; D2_GLOBAL_GUARD(gpDC6GreyLevelBox, "gpDC6GreyLevelBox");
-DC6 * gpDC6RadioButton = 0; D2_GLOBAL_GUARD(gpDC6RadioButton, "gpDC6RadioButton");
-DC6 * gpDC6RadioButtonGrey = 0; D2_GLOBAL_GUARD(gpDC6RadioButtonGrey, "gpDC6RadioButtonGrey");
-DC6 * gpDC6PopUpOk = 0; D2_GLOBAL_GUARD(gpDC6PopUpOk, "gpDC6PopUpOk");
-DC6 * gpDC6CancelButtonBlankAlt = 0; D2_GLOBAL_GUARD(gpDC6CancelButtonBlankAlt, "gpDC6CancelButtonBlankAlt");
-DC6 * gpDC6OverallTab = 0; D2_GLOBAL_GUARD(gpDC6OverallTab, "gpDC6OverallTab");
-DC6 * gpDC6AmazonTab = 0; D2_GLOBAL_GUARD(gpDC6AmazonTab, "gpDC6AmazonTab");
-DC6 * gpDC6SorceressTab = 0; D2_GLOBAL_GUARD(gpDC6SorceressTab, "gpDC6SorceressTab");
-DC6 * gpDC6NecromancerTab = 0; D2_GLOBAL_GUARD(gpDC6NecromancerTab, "gpDC6NecromancerTab");
-DC6 * gpDC6PaladinTab = 0; D2_GLOBAL_GUARD(gpDC6PaladinTab, "gpDC6PaladinTab");
-DC6 * gpDC6BarbarianTab = 0; D2_GLOBAL_GUARD(gpDC6BarbarianTab, "gpDC6BarbarianTab");
-DC6 * gpDC6DruidTab = 0; D2_GLOBAL_GUARD(gpDC6DruidTab, "gpDC6DruidTab");
-DC6 * gpDC6AssassinTab = 0; D2_GLOBAL_GUARD(gpDC6AssassinTab, "gpDC6AssassinTab");
-DC6 * gpDC6SquelchAura = 0; D2_GLOBAL_GUARD(gpDC6SquelchAura, "gpDC6SquelchAura");
-DC6 * gpDC6SelectAura = 0; D2_GLOBAL_GUARD(gpDC6SelectAura, "gpDC6SelectAura");
-DC6 * gpDC6NumberArrows1 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows1, "gpDC6NumberArrows1");
-DC6 * gpDC6NumberArrows2 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows2, "gpDC6NumberArrows2");
-DC6 * gpDC6NumberArrows3 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows3, "gpDC6NumberArrows3");
-DC6 * gpDC6NumberArrows4 = 0; D2_GLOBAL_GUARD(gpDC6NumberArrows4, "gpDC6NumberArrows4");
-DC6 * gpDC6NumberGreyArrows = 0; D2_GLOBAL_GUARD(gpDC6NumberGreyArrows, "gpDC6NumberGreyArrows");
-DC6 * gpDC6CreateJoinBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateJoinBckg, "gpDC6CreateJoinBckg");
-DC6 * gpDC6OkayButton = 0; D2_GLOBAL_GUARD(gpDC6OkayButton, "gpDC6OkayButton");
 // also labelled: gpLauncherMainWindow
 D2ControlStrc * gpCtlChannelDlgBackground = 0; D2_GLOBAL_GUARD(gpCtlChannelDlgBackground, "gpCtlChannelDlgBackground");
 // also labelled: gpControlTcpIpGameListScroll
@@ -1561,25 +1476,6 @@ D2ControlStrc * gpCtlChannelDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlChannelDlg
 // also labelled: gpChatDlgSendButtonControl
 D2WinEditBox * gpCtlChannelNameEditBox = 0; D2_GLOBAL_GUARD(gpCtlChannelNameEditBox, "gpCtlChannelNameEditBox");
 D2ControlStrc * ghWndGameNameEditBox = 0; D2_GLOBAL_GUARD(ghWndGameNameEditBox, "ghWndGameNameEditBox");
-DC6 * gpDC6CreateGameBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateGameBckg, "gpDC6CreateGameBckg");
-DC6 * gpDC6CreateGameButton = 0; D2_GLOBAL_GUARD(gpDC6CreateGameButton, "gpDC6CreateGameButton");
-DC6 * gpDC6WideButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6WideButtonBlank, "gpDC6WideButtonBlank");
-DC6 * gpLauncherImageResource2 = 0; D2_GLOBAL_GUARD(gpLauncherImageResource2, "gpLauncherImageResource2");
-DC6 * gpDC6YesNoButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6YesNoButtonBlank, "gpDC6YesNoButtonBlank");
-DC6 * gpDC6LadderChoiceEXP = 0; D2_GLOBAL_GUARD(gpDC6LadderChoiceEXP, "gpDC6LadderChoiceEXP");
-DC6 * gpDC6HardcoreLadderBckg = 0; D2_GLOBAL_GUARD(gpDC6HardcoreLadderBckg, "gpDC6HardcoreLadderBckg");
-DC6 * gpDC6PlayerProfileBckg = 0; D2_GLOBAL_GUARD(gpDC6PlayerProfileBckg, "gpDC6PlayerProfileBckg");
-DC6 * gpDC6PlayerProfileBckg2 = 0; D2_GLOBAL_GUARD(gpDC6PlayerProfileBckg2, "gpDC6PlayerProfileBckg2");
-DC6 * gpDC6HelpBckg = 0; D2_GLOBAL_GUARD(gpDC6HelpBckg, "gpDC6HelpBckg");
-DC6 * gpDC6D2LogoBlackBnet = 0; D2_GLOBAL_GUARD(gpDC6D2LogoBlackBnet, "gpDC6D2LogoBlackBnet");
-DC6 * gpDC6D2LogoBnet = 0; D2_GLOBAL_GUARD(gpDC6D2LogoBnet, "gpDC6D2LogoBnet");
-int gnChatHistoryEntryCount = 0; D2_GLOBAL_GUARD(gnChatHistoryEntryCount, "gnChatHistoryEntryCount");
-uint32_t gnNotifyEnabled = 0; D2_GLOBAL_GUARD(gnNotifyEnabled, "gnNotifyEnabled");
-uint32_t gbIsChannelScreen = 0; D2_GLOBAL_GUARD(gbIsChannelScreen, "gbIsChannelScreen");
-uint32_t gdwLadderRankRequestTimeout = 0; D2_GLOBAL_GUARD(gdwLadderRankRequestTimeout, "gdwLadderRankRequestTimeout");
-uint32_t gnMCPConnectionRestoreResult = 0; D2_GLOBAL_GUARD(gnMCPConnectionRestoreResult, "gnMCPConnectionRestoreResult");
-// also labelled: gpnChatMessages
-D2WinTextBox * gpChatMessagesTextBox = 0; D2_GLOBAL_GUARD(gpChatMessagesTextBox, "gpChatMessagesTextBox");
 // also labelled: gnChatDlgTabCompletionList
 D2WinEditBox * gpChatDlgInputEditBox = 0; D2_GLOBAL_GUARD(gpChatDlgInputEditBox, "gpChatDlgInputEditBox");
 D2WinTextBox * BattleNetNews = 0; D2_GLOBAL_GUARD(BattleNetNews, "BattleNetNews");
@@ -1698,21 +1594,10 @@ uint32_t CreateGameDifflevel = 0; D2_GLOBAL_GUARD(CreateGameDifflevel, "CreateGa
 int gnProfileUserHardcoreFlag = 0; D2_GLOBAL_GUARD(gnProfileUserHardcoreFlag, "gnProfileUserHardcoreFlag");
 // also labelled: gdwPasswordControlsPadding1
 int gnProfileUserExpansionFlag = 0; D2_GLOBAL_GUARD(gnProfileUserExpansionFlag, "gnProfileUserExpansionFlag");
-D2ChannelUserStrc * gpChannelUserListHead = 0; D2_GLOBAL_GUARD(gpChannelUserListHead, "gpChannelUserListHead");
-void * gpChannelUserLinkedListHead = 0; D2_GLOBAL_GUARD(gpChannelUserLinkedListHead, "gpChannelUserLinkedListHead");
-int gnChannelUserTotalCount = 0; D2_GLOBAL_GUARD(gnChannelUserTotalCount, "gnChannelUserTotalCount");
-int gnChannelUserCount = 0; D2_GLOBAL_GUARD(gnChannelUserCount, "gnChannelUserCount");
-int gnChannelUserListScrollOffset = 0; D2_GLOBAL_GUARD(gnChannelUserListScrollOffset, "gnChannelUserListScrollOffset");
-void * gpCurrentChatRoomContext = 0; D2_GLOBAL_GUARD(gpCurrentChatRoomContext, "gpCurrentChatRoomContext");
-uint32_t gdwLastChatSendTick = 0; D2_GLOBAL_GUARD(gdwLastChatSendTick, "gdwLastChatSendTick");
 
 namespace D2Common::Drlg::Maze {
 
 } // namespace D2Common::Drlg::Maze
-
-namespace Fog::Src::Excel {
-
-} // namespace Fog::Src::Excel
 
 namespace D2Client::Warden::NWardenClient {
 
@@ -1750,10 +1635,6 @@ namespace D2Client::UI::Spinner::SpinnerWrapper {
 
 } // namespace D2Client::UI::Spinner::SpinnerWrapper
 
-namespace D2Client::UNIT::Object {
-
-} // namespace D2Client::UNIT::Object
-
 namespace D2Client::UI::ListBox::ListBoxWrapper {
 
 } // namespace D2Client::UI::ListBox::ListBoxWrapper
@@ -1761,10 +1642,6 @@ namespace D2Client::UI::ListBox::ListBoxWrapper {
 namespace D2Client::UI::ListBox::ListBoxImplementation {
 
 } // namespace D2Client::UI::ListBox::ListBoxImplementation
-
-namespace D2Win::_FONT {
-
-} // namespace D2Win::_FONT
 
 namespace D2Game::GAME::Event::Dispatch {
 
@@ -1829,30 +1706,6 @@ namespace Class::HANDLER {
 namespace D2Client::CharScreen {
 
 } // namespace D2Client::CharScreen
-
-namespace D2Client::UI::Automap {
-
-} // namespace D2Client::UI::Automap
-
-namespace D2Game::GAME::Rendering {
-
-} // namespace D2Game::GAME::Rendering
-
-namespace D2Client::UI::Help {
-
-} // namespace D2Client::UI::Help
-
-namespace D2Client::UI::npcmenu {
-
-} // namespace D2Client::UI::npcmenu
-
-namespace D2Client::NPC {
-
-} // namespace D2Client::NPC
-
-namespace D2Client::UNIT::UnitSnd {
-
-} // namespace D2Client::UNIT::UnitSnd
 
 namespace D2Client::UI::ui {
 
@@ -1962,10 +1815,6 @@ namespace D2Game::Quests::QUESTS::A2Q8 {
 
 } // namespace D2Game::Quests::QUESTS::A2Q8
 
-namespace D2Common::Monsters::MONSTERS::Umod {
-
-} // namespace D2Common::Monsters::MONSTERS::Umod
-
 namespace D2Game::Quests::QUESTS::A4Q0 {
 
 } // namespace D2Game::Quests::QUESTS::A4Q0
@@ -2018,110 +1867,14 @@ namespace D2Game::Quests::QUESTS::A3Q6 {
 
 } // namespace D2Game::Quests::QUESTS::A3Q6
 
-namespace D2Client::Waypoint {
-
-} // namespace D2Client::Waypoint
-
 namespace D2Common::Drlg::DrlgGrid {
 
 } // namespace D2Common::Drlg::DrlgGrid
-
-namespace Fog::Memory {
-
-} // namespace Fog::Memory
-
-namespace Fog::Debug {
-
-} // namespace Fog::Debug
-
-namespace D2Client::MCP {
-
-} // namespace D2Client::MCP
-
-namespace D2Client::Bnet {
-
-} // namespace D2Client::Bnet
-
-namespace D2Game::Save {
-
-} // namespace D2Game::Save
-
-namespace D2Game::GameData {
-
-} // namespace D2Game::GameData
-
-namespace D2Client::GAME::Record {
-
-} // namespace D2Client::GAME::Record
 
 namespace D2Client::UI::Dialog {
 
 } // namespace D2Client::UI::Dialog
 
-namespace D2Client::_Selection {
-
-} // namespace D2Client::_Selection
-
-namespace D2Client::Cursor {
-
-} // namespace D2Client::Cursor
-
-namespace D2Client::Draw::Weather {
-
-} // namespace D2Client::Draw::Weather
-
 namespace D2Client::Draw::LightMap {
 
 } // namespace D2Client::Draw::LightMap
-
-namespace D2Client::GAME::View {
-
-} // namespace D2Client::GAME::View
-
-namespace D2Client::GAME::RosterPets {
-
-} // namespace D2Client::GAME::RosterPets
-
-namespace D2Client::GAME::Roster {
-
-} // namespace D2Client::GAME::Roster
-
-namespace D2Client::UI::Inv {
-
-} // namespace D2Client::UI::Inv
-
-namespace D2Client::UI::Hireables {
-
-} // namespace D2Client::UI::Hireables
-
-namespace D2Client::UI::Panel {
-
-} // namespace D2Client::UI::Panel
-
-namespace D2Client::UI::Party {
-
-} // namespace D2Client::UI::Party
-
-namespace D2Client::_Interaction {
-
-} // namespace D2Client::_Interaction
-
-namespace D2Client::Merc {
-
-} // namespace D2Client::Merc
-
-namespace D2Client::Mouse {
-
-} // namespace D2Client::Mouse
-
-namespace D2Client::Forms {
-
-} // namespace D2Client::Forms
-
-namespace D2Client::_CdKey {
-
-} // namespace D2Client::_CdKey
-
-namespace D2Direct3D::Renderer {
-
-} // namespace D2Direct3D::Renderer

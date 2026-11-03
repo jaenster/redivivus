@@ -5,6 +5,7 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Glide/Renderer/Glide.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

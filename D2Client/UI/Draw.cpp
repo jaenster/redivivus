@@ -65,6 +65,8 @@
 #include "Fog/Src/LogManager.h"
 #include "Storm/Source/SReg.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/Game/Game.data.h"
+#include "D2Client/UI/ui.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

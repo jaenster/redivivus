@@ -30,6 +30,7 @@
 #include "Fog/Memory.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/GAME/RosterPets.data.h"
 #include "D2Common/D2SeedStrc.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -48,6 +49,10 @@
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2RosterPetStrc) == 0x34, "D2_NEW_AT(D2RosterPetStrc): the 32-bit layout must be the 0x34 bytes 1.14d allocates");
 
+
+namespace D2Client::GAME::RosterPets {
+D2RosterPetStrc * pRosterPet = 0; D2_GLOBAL_GUARD(pRosterPet, "D2Client::GAME::RosterPets::pRosterPet");
+} // namespace D2Client::GAME::RosterPets
 
 namespace D2Client::GAME::RosterPets {
 

@@ -43,6 +43,9 @@
 #include "Fog/SMem.h"
 #include "Fog/Src/ErrorManager.h"
 #include "globals/globals.h"
+#include "D2Client/Draw/LightMap.data.h"
+#include "D2Client/GAME/Game/Game.data.h"
+#include "D2Client/GAME/View.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -62,6 +65,37 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2GameViewStrc) == 0xeabc, "D2_NEW_
 
 
 static D2SeedStrc * gpArcaneStarsSeed = (D2SeedStrc *)&gaSpriteArcaneStarYOffset; D2_STATIC_GUARD(gpArcaneStarsSeed, "gpArcaneStarsSeed");
+static uint8_t gaArcaneStarColors[256] = {}; D2_STATIC_GUARD(gaArcaneStarColors, "gaArcaneStarColors");
+uint32_t gaSpriteArcaneStarYOffset = 0; D2_GLOBAL_GUARD(gaSpriteArcaneStarYOffset, "gaSpriteArcaneStarYOffset");
+uint32_t gaSpriteArcaneStarXOffset = 0; D2_GLOBAL_GUARD(gaSpriteArcaneStarXOffset, "gaSpriteArcaneStarXOffset");
+int nScaleFactor = 0; D2_GLOBAL_GUARD(nScaleFactor, "nScaleFactor");
+static int32_t gaArcaneStarYPos[256] = {}; D2_STATIC_GUARD(gaArcaneStarYPos, "gaArcaneStarYPos");
+static uint8_t gPaletteTransitionTable[12544] = {}; D2_STATIC_GUARD(gPaletteTransitionTable, "gPaletteTransitionTable");
+namespace D2Client::GAME::View {
+uint32_t SHAKE_StartTickcount = 0; D2_GLOBAL_GUARD(SHAKE_StartTickcount, "D2Client::GAME::View::SHAKE_StartTickcount");
+uint32_t SHAKE_Arg3 = 0; D2_GLOBAL_GUARD(SHAKE_Arg3, "D2Client::GAME::View::SHAKE_Arg3");
+uint32_t SHAKE_Arg1 = 0; D2_GLOBAL_GUARD(SHAKE_Arg1, "D2Client::GAME::View::SHAKE_Arg1");
+uint32_t SHAKE_Arg2 = 0; D2_GLOBAL_GUARD(SHAKE_Arg2, "D2Client::GAME::View::SHAKE_Arg2");
+uint32_t SHAKE_OFFSET_Y = 0; D2_GLOBAL_GUARD(SHAKE_OFFSET_Y, "D2Client::GAME::View::SHAKE_OFFSET_Y");
+} // namespace D2Client::GAME::View
+static uint8_t gaArcaneStarColorTable[8] = {}; D2_STATIC_GUARD(gaArcaneStarColorTable, "gaArcaneStarColorTable");
+namespace D2Client::GAME::View {
+int gnSoundShakeVolume = 0; D2_GLOBAL_GUARD(gnSoundShakeVolume, "D2Client::GAME::View::gnSoundShakeVolume");
+} // namespace D2Client::GAME::View
+static int32_t gaArcaneStarXPos[256] = {}; D2_STATIC_GUARD(gaArcaneStarXPos, "gaArcaneStarXPos");
+static int32_t gaArcaneStarXVelocity[256] = {}; D2_STATIC_GUARD(gaArcaneStarXVelocity, "gaArcaneStarXVelocity");
+uint32_t gnLastLightmapUpdateFrame = 0; D2_GLOBAL_GUARD(gnLastLightmapUpdateFrame, "gnLastLightmapUpdateFrame");
+namespace D2Client::GAME::View {
+uint32_t SHAKE_Amplitude = 0; D2_GLOBAL_GUARD(SHAKE_Amplitude, "D2Client::GAME::View::SHAKE_Amplitude");
+uint32_t SHAKE_OFFSET_X = 0; D2_GLOBAL_GUARD(SHAKE_OFFSET_X, "D2Client::GAME::View::SHAKE_OFFSET_X");
+uint8_t * * gpViewPalPointerTable32x8 = 0; D2_GLOBAL_GUARD(gpViewPalPointerTable32x8, "D2Client::GAME::View::gpViewPalPointerTable32x8");
+uint8_t * gpViewPalByteTable32x16 = 0; D2_GLOBAL_GUARD(gpViewPalByteTable32x16, "D2Client::GAME::View::gpViewPalByteTable32x16");
+uint8_t * gpViewPalByteTable16x32 = 0; D2_GLOBAL_GUARD(gpViewPalByteTable16x32, "D2Client::GAME::View::gpViewPalByteTable16x32");
+uint8_t * * gpViewPalPointerTable32x32 = 0; D2_GLOBAL_GUARD(gpViewPalPointerTable32x32, "D2Client::GAME::View::gpViewPalPointerTable32x32");
+uint8_t * gpViewPalByteTable32x40 = 0; D2_GLOBAL_GUARD(gpViewPalByteTable32x40, "D2Client::GAME::View::gpViewPalByteTable32x40");
+} // namespace D2Client::GAME::View
+static DC6 * gpAncientsBgDC6 = 0; D2_STATIC_GUARD(gpAncientsBgDC6, "gpAncientsBgDC6");
+static DC6 * gnDrawBackgroundRenderOffset = 0; D2_STATIC_GUARD(gnDrawBackgroundRenderOffset, "gnDrawBackgroundRenderOffset");
 
 namespace D2Client::GAME::View {
 

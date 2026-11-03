@@ -83,7 +83,9 @@
 #include "globals/globals.h"
 #include "D2Client/UNIT/Missile.h"
 #include "D2Common/ITEMS/ItemMods.h"
+#include "D2Game/Monster/Monster.data.h"
 #include "D2Game/SKILLS/SkillAss.h"
+#include "D2Game/SKILLS/SkillItem.data.h"
 #include "Fog/Src/Safesock.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -93,6 +95,195 @@
 #define RECON_FPTD_D2ItemStatCostItemEventFunc
 typedef BOOL (__fastcall *D2ItemStatCostItemEventFunc)(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pAttacker, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int nSkillLvl);
 #endif
+
+uint8_t gaSkillLevelCaps[60] = {
+    0x4,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x2,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x1,
+    0x0,
+    0x0,
+    0x0,
+    0x2,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0,
+    0x0
+}; D2_GLOBAL_GUARD(gaSkillLevelCaps, "gaSkillLevelCaps");
+static D2ItemSpellStrc ITEMSPELLFUNCS[31] = {
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ &D2Game::SKILLS::SkillItem::SKILLITEM_ItemSpellInit_UseStackable,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_IdentifyScrollSpell
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_TownPortalScrollSpell
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::ITEM_ApplyConsumableEffects
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::ITEM_ApplyConsumableEffectsSimple
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::ITEM_ApplyPercentRestoration
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::ITEM_RefreshBuffStates
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_PersonalizeItemSpell
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_ApplyRejuvenationPotionEffect
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::ITEM_ApplyTimedBuffStats
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::ITEM_CastFireballOnTarget
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_CastExplosivePotionSkill
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    },
+    {
+        /* .pSpellInit = */ nullptr,
+        /* .pSpellDestroy = */ nullptr
+    }
+}; D2_STATIC_GUARD(ITEMSPELLFUNCS, "ITEMSPELLFUNCS");
 
 namespace D2Game::SKILLS::SkillItem {
 
