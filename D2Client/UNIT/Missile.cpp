@@ -2869,38 +2869,39 @@ int32_t __fastcall MISSILE_CltHitFn25_LightningFury(D2UnitStrc * pUnit, D2UnitSt
       }
 
       pOwner = Player::MISSILE_GetOwnerUnit(pUnit);
-      if (pOwner) {
-        nPosX = Units::GetXPosFromDynamicPathUnit(pUnit);
-        nPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
-        nClassId = pMissileTxt->cHitPar1;
-        if (nClassId <= 0) {
-          nClassId = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->aurarangecalc, eSkill, nSkillLevel);
-          if (nClassId < 1) {
-            nClassId = 1;
-          }
-        }
-
-        nSubTargetLimit = pMissileTxt->cHitPar2;
-        if (nSubTargetLimit <= 0) {
-          nSubTargetLimit = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->calc[0], eSkill, nSkillLevel);
-          if (nSubTargetLimit < 1) {
-            nSubTargetLimit = 1;
-          }
-        }
-
-        nAuraFilter = pSkillTxt->aurafilter;
-        if (!nAuraFilter) {
-          nAuraFilter = 0xa783;
-        }
-
-        __frame0.pSubMissile = pMissileUnit;
-        nSubSkillLevel = nSkillLevel;
-        eSubSkillNo = eSkill;
-        nSubMissileTxtNo = (int)pMissileTxt->CltHitSubMissile1;
-        __frame0.sSkillFunc = pOwner;
-        SKILLS::Skills::SKILL_ForEachUnitInRadius(pOwner, nPosX, nPosY, nClassId, nAuraFilter, MISSILE_SkillFuncCreateAtTarget, &__frame0.sSkillFunc, 1);
+      if (!pOwner) {
+        return 1;
       }
 
+      nPosX = Units::GetXPosFromDynamicPathUnit(pUnit);
+      nPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
+      nClassId = pMissileTxt->cHitPar1;
+      if (nClassId <= 0) {
+        nClassId = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->aurarangecalc, eSkill, nSkillLevel);
+        if (nClassId < 1) {
+          nClassId = 1;
+        }
+      }
+
+      nSubTargetLimit = pMissileTxt->cHitPar2;
+      if (nSubTargetLimit <= 0) {
+        nSubTargetLimit = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->calc[0], eSkill, nSkillLevel);
+        if (nSubTargetLimit < 1) {
+          nSubTargetLimit = 1;
+        }
+      }
+
+      nAuraFilter = pSkillTxt->aurafilter;
+      if (!nAuraFilter) {
+        nAuraFilter = 0xa783;
+      }
+
+      __frame0.pSubMissile = pMissileUnit;
+      nSubSkillLevel = nSkillLevel;
+      eSubSkillNo = eSkill;
+      nSubMissileTxtNo = (int)pMissileTxt->CltHitSubMissile1;
+      __frame0.sSkillFunc = pOwner;
+      SKILLS::Skills::SKILL_ForEachUnitInRadius(pOwner, nPosX, nPosY, nClassId, nAuraFilter, MISSILE_SkillFuncCreateAtTarget, &__frame0.sSkillFunc, 1);
       return 1;
     }
 
@@ -3078,20 +3079,21 @@ int32_t __fastcall MISSILE_CltHitFn28_PantherPotGreen(D2UnitStrc * pUnit, D2Unit
       pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
       if (pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0) {
         pOwner = Player::MISSILE_GetOwnerUnit(pUnit);
-        if (pOwner) {
-          pHitTarget = pTarget;
-          if (!pTarget) {
-            pHitTarget = pUnit;
-          }
-
-          nClassId = pMissileTxt->cHitPar1;
-          if (nClassId < 1) {
-            nClassId = 1;
-          }
-
-          MISSILE_Create8DirectionalClient(pOwner, pHitTarget, (int)pMissileTxt->CltHitSubMissile1, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nClassId);
+        if (!pOwner) {
+          return 1;
         }
 
+        pHitTarget = pTarget;
+        if (!pTarget) {
+          pHitTarget = pUnit;
+        }
+
+        nClassId = pMissileTxt->cHitPar1;
+        if (nClassId < 1) {
+          nClassId = 1;
+        }
+
+        MISSILE_Create8DirectionalClient(pOwner, pHitTarget, (int)pMissileTxt->CltHitSubMissile1, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nClassId);
         return 1;
       }
     }
@@ -4074,18 +4076,20 @@ int32_t __fastcall MISSILE_CltHitFn56_RecyclerVine(D2UnitStrc * pUnit, D2UnitStr
       pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
       if (pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0) {
         pOwnerUnit = Player::MISSILE_GetOwnerUnit(pUnit);
-        if (pOwnerUnit) {
-          memset(&sSkillArg, 0, 0x5c);
-          sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltHitSubMissile1;
-          sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
-          sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-          sSkillArg.pOwner = pOwnerUnit;
-          sSkillArg.pMissile = pUnit;
-          pNewMissile = Missile::MakeMissile(&sSkillArg);
-          if (pNewMissile) {
-            nDirection = D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
-            D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pNewMissile->pPath.pDynamicPath, nDirection);
-          }
+        if (!pOwnerUnit) {
+          return 1;
+        }
+
+        memset(&sSkillArg, 0, 0x5c);
+        sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltHitSubMissile1;
+        sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
+        sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+        sSkillArg.pOwner = pOwnerUnit;
+        sSkillArg.pMissile = pUnit;
+        pNewMissile = Missile::MakeMissile(&sSkillArg);
+        if (pNewMissile) {
+          nDirection = D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
+          D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pNewMissile->pPath.pDynamicPath, nDirection);
         }
 
         return 1;

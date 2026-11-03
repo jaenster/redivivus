@@ -2053,11 +2053,13 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
     if (nUnitGUID != -1) {
       D2UnitStrc* pPetUnit;
       pPetUnit = UNITS_FindClientSideUnit(nUnitGUID, UNIT_MONSTER);
-      if (pPetUnit) {
-        pSeed = GAME::RosterPets::GetSeed(nUnitGUID);
-        if (pSeed->nState == 2) {
-          GAME::Select::SELECT_SetPetSeedTimestamp((int32_t)pUnderMouse->pPlayer, pPetUnit, 0);
-        }
+      if (!pPetUnit) {
+        return 0;
+      }
+
+      pSeed = GAME::RosterPets::GetSeed(nUnitGUID);
+      if (pSeed->nState == 2) {
+        GAME::Select::SELECT_SetPetSeedTimestamp((int32_t)pUnderMouse->pPlayer, pPetUnit, 0);
       }
 
       return 0;

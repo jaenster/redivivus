@@ -3485,15 +3485,16 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnDualRadialSubMissiles(::SGAMEDATA * pGa
       pMissileTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMissilesSize ? sgptDataTable->pTxtMissiles + nClassId : nullptr;
       if (pMissileTxt && pMissileTxt->HitSubMissile1 >= 0) {
         pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-        if (pOwner) {
-          nClassId = pMissileTxt->sHitPar1;
-          if (nClassId < 1) {
-            nClassId = 1;
-          }
-
-          MISSILES_SpawnRadialPattern(pGame, pOwner, pUnit, (int)pMissileTxt->HitSubMissile1, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nClassId, 2, 0);
+        if (!pOwner) {
+          return 1;
         }
 
+        nClassId = pMissileTxt->sHitPar1;
+        if (nClassId < 1) {
+          nClassId = 1;
+        }
+
+        MISSILES_SpawnRadialPattern(pGame, pOwner, pUnit, (int)pMissileTxt->HitSubMissile1, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nClassId, 2, 0);
         return 1;
       }
     }

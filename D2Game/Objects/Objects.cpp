@@ -2769,28 +2769,26 @@ void __fastcall OBJECT_PopulateFromObjGroup(::SGAMEDATA * pGame, D2RoomStrc * pR
       nProbAccum += (uint32_t)pObjGroupTxt->nProbability[nGroupEntryIdx];
       if ((int)(nSeedRoll + (int)(sNewSeed.nSeedLow / 100) * -100) < nProbAccum) {
         pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjClassId);
-        if (pObjectsTxt->PopulateFn < 10) {
-          if (!OBJECTSPOPULATEFN[pObjectsTxt->PopulateFn]) {
-            return;
-          }
-
-          /* FARPROC lpfn for IsBadCodePtr */ _bBadCodePtr = IsBadCodePtr((FARPROC)OBJECTSPOPULATEFN[pObjectsTxt->PopulateFn]);
-          if (!_bBadCodePtr) {
-            if (!(pObjGroupTxt->nDensity[nGroupEntryIdx] < 0x80)) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcac);
-              exit(-1);
-            }
-
-            (*OBJECTSPOPULATEFN[pObjectsTxt->PopulateFn])(pGame, pRoom, pObjGroupTxt->nDensity[nGroupEntryIdx], nObjClassId, 100);
-            return;
-          } else {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcab);
-            exit(-1);
-          }
-        } else {
+        if (pObjectsTxt->PopulateFn >= 10) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca8);
           exit(-1);
         }
+        if (!OBJECTSPOPULATEFN[pObjectsTxt->PopulateFn]) {
+          return;
+        }
+
+        /* FARPROC lpfn for IsBadCodePtr */ _bBadCodePtr = IsBadCodePtr((FARPROC)OBJECTSPOPULATEFN[pObjectsTxt->PopulateFn]);
+        if (_bBadCodePtr) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcab);
+          exit(-1);
+        }
+        if (!(pObjGroupTxt->nDensity[nGroupEntryIdx] < 0x80)) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcac);
+          exit(-1);
+        }
+
+        (*OBJECTSPOPULATEFN[pObjectsTxt->PopulateFn])(pGame, pRoom, pObjGroupTxt->nDensity[nGroupEntryIdx], nObjClassId, 100);
+        return;
       }
 
       nGroupEntryIdx++;

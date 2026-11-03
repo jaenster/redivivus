@@ -831,7 +831,6 @@ static void __stdcall DRLGROOMTILE_UpdateTileType(D2DrlgTileDataStrc * pTileData
     D2TileLibraryEntryStrc* nTileTypeMapping;
     int32_t nTileIndex;
     bool bNeedUpdate;
-    int* pFlags;
     int iVar1;
     iVar1 = gnRoomTileMappingByTypeAndLayer[nTileLayer];
     if (pTileData->nFlags & 1U) {
@@ -868,8 +867,7 @@ static void __stdcall DRLGROOMTILE_UpdateTileType(D2DrlgTileDataStrc * pTileData
     apply_tile_type:
     if (pTileData->nTileType == 3) {
       if (nTileLayer != 3) {
-        pFlags = &pTileData->pNext->nFlags;
-        *pFlags |= 8;
+        pTileData->pNext->nFlags |= 8;
         Collision::TileLibrary_UpdateCollision(pNeighborRoom->pRoom, pTileData->pNext, nullptr);
       }
     } else if (nTileLayer == 3) {

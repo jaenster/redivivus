@@ -2329,8 +2329,7 @@ void __stdcall STATLIST_FreeUnitChildStatLists(D2UnitStrc * pUnit) {
       return;
     }
 
-    int* pnUnitStatsFlags = &pUnit->pStatsEx->sStatList.nFlags;
-    *pnUnitStatsFlags &= -257;
+    pUnit->pStatsEx->sStatList.nFlags &= -257;
     pStatsEx = pUnit->pStatsEx;
     if (!(pStatsEx && pStatsEx->sStatList.nFlags & 0x80000000U)) {
       return;

@@ -3473,22 +3473,23 @@ BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
     if (cCharges != '\0') {
       ::SGAMEDATA* pGame;
       eHealedType = OBJMODE_ApplyWellHealing(pOperation->sArg.pGame, pTxtObjects, pOperation->pAttacker);
-      if (eHealedType != UNIT_PLAYER) {
-        byChargesLeft = cCharges - 1;
-        nDoubledSize = OBJECT_GetDoubledTxtSize(pTxtObjects);
-        if (byChargesLeft <= (uint8_t)nDoubledSize) {
-          bVar1 = OBJECT_GetDefaultSize();
-          if (!(int)(byChargesLeft % (int)((uint8_t)nDoubledSize / (int)(uint32_t)bVar1))) {
-            bVar1 = OBJECT_GetDefaultSize();
-            D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, (uint32_t)bVar1 - (int)(byChargesLeft / pTxtObjects->Parm[2]));
-          }
-        }
-
-        pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] = byChargesLeft;
-        pGame = pOperation->sArg.pGame;
-        GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 2, pGame->dwGameFrame + 1 + pTxtObjects->Parm[0], 0, 0);
+      if (eHealedType == UNIT_PLAYER) {
+        return 0;
       }
 
+      byChargesLeft = cCharges - 1;
+      nDoubledSize = OBJECT_GetDoubledTxtSize(pTxtObjects);
+      if (byChargesLeft <= (uint8_t)nDoubledSize) {
+        bVar1 = OBJECT_GetDefaultSize();
+        if (!(int)(byChargesLeft % (int)((uint8_t)nDoubledSize / (int)(uint32_t)bVar1))) {
+          bVar1 = OBJECT_GetDefaultSize();
+          D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, (uint32_t)bVar1 - (int)(byChargesLeft / pTxtObjects->Parm[2]));
+        }
+      }
+
+      pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] = byChargesLeft;
+      pGame = pOperation->sArg.pGame;
+      GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 2, pGame->dwGameFrame + 1 + pTxtObjects->Parm[0], 0, 0);
       return 0;
     }
 

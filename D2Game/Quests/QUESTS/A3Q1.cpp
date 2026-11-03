@@ -336,22 +336,26 @@ BOOL __fastcall CompleteQuestStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
       pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
       /* GetQuestState(LamEsensTome, state 0=Completed) — bail if player already
                          completed */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
-      if (!bQuestState) {
-        /* GetQuestState(LamEsensTome, state 1=RewardAwaits) — bail if reward already
+      if (bQuestState) {
+        return 0;
+      }
+
+      /* GetQuestState(LamEsensTome, state 1=RewardAwaits) — bail if reward already
                          pending */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
-        if (!bQuestState) {
-          eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-          ePlayerAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-          if (ePlayerAct == ACT_III) {
-            /* SetQuestState(LamEsensTome, state 0xd=JustCompleted) — mark fresh-this-game
+      if (bQuestState) {
+        return 0;
+      }
+
+      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      ePlayerAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+      if (ePlayerAct == ACT_III) {
+        /* SetQuestState(LamEsensTome, state 0xd=JustCompleted) — mark fresh-this-game
                          completion */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_JustCompleted);
-            /* SetQuestState(LamEsensTome, state 0=Completed) — mark quest permanently
+        /* SetQuestState(LamEsensTome, state 0=Completed) — mark quest permanently
                          done */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
-            /* SetQuestState(LamEsensTome, state 1=RewardAwaits) — arm the +5 stat-point
+        /* SetQuestState(LamEsensTome, state 1=RewardAwaits) — arm the +5 stat-point
                          reward for RewardStatPoints */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_RewardAwaits);
-            QUEST_SendQuestInfoToUnit(pGame, pUnit);
-          }
-        }
+        QUEST_SendQuestInfoToUnit(pGame, pUnit);
       }
 
       return 0;

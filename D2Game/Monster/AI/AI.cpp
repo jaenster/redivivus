@@ -12648,20 +12648,22 @@ uint32_t __fastcall AI_Baal_FindEnemyAndMinionCallback(::SGAMEDATA * pGame, D2Un
     }
 
     D2UnitStrc* pDVar1 = (D2UnitStrc*)GetDistanceBetween(pUnit, pOtherUnit);
-    if ((int)pDVar1 <= 0x400) {
-      pScan->nInRangeCount++;
-      if ((int)pDVar1 <= 0x64) {
-        pScan->nMaxScanRadius++;
-      }
-      if ((int)pDVar1 < (int)pScan->pLOSFlagOrSecondary) {
-        pScan->nBestDistance = (uint32_t)pOtherUnit;
-        pScan->pLOSFlagOrSecondary = pDVar1;
-      }
+    if ((int)pDVar1 > 0x400) {
+      return 0;
+    }
 
-      bCanAttack = MONSTERAI_IsValidResurrectionTarget(pUnit, pOtherUnit);
-      if (bCanAttack) {
-        pScan->pResurrectTarget = pOtherUnit;
-      }
+    pScan->nInRangeCount++;
+    if ((int)pDVar1 <= 0x64) {
+      pScan->nMaxScanRadius++;
+    }
+    if ((int)pDVar1 < (int)pScan->pLOSFlagOrSecondary) {
+      pScan->nBestDistance = (uint32_t)pOtherUnit;
+      pScan->pLOSFlagOrSecondary = pDVar1;
+    }
+
+    bCanAttack = MONSTERAI_IsValidResurrectionTarget(pUnit, pOtherUnit);
+    if (bCanAttack) {
+      pScan->pResurrectTarget = pOtherUnit;
     }
 
     return 0;
@@ -15052,7 +15054,6 @@ void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     int nFramesToNextWave;
     uint32_t nWave;
     D2UnitStrc* pTarget;
-    int* pWaveStateFlags;
     D2MonStatsTxt* pMonStat;
     pMonStat = pAiParam->pMonStats;
     if (pMonStat) {
@@ -15129,8 +15130,7 @@ void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 
         prepare_next_wave:
         SERVER_UNIT_CastSkill(pGame, pUnit, 10, SKILL_BaalCorpseExplode, pUnit, 0, 0);
-        pWaveStateFlags = &pAiParam->pMonsterAiGeneral->dwArg1;
-        *pWaveStateFlags |= 1;
+        pAiParam->pMonsterAiGeneral->dwArg1 |= 1;
         /* SetTimer for next wave */ pAiParam->pMonsterAiGeneral->dwArg2 = pGame->dwGameFrame + 0xfa;
         UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x10, nullptr);
         return;
@@ -15189,7 +15189,6 @@ void __fastcall AITHINK_Fn1_BaalToStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 void __fastcall AITHINK_Fn1_BaalTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     bool bTargetInNeutralMode;
     bool bTargetWasNeutral;
-    int* pArg0Count;
     D2UnitStrc* pTarget;
     pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats;
@@ -15205,8 +15204,7 @@ void __fastcall AITHINK_Fn1_BaalTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 
       bTargetWasNeutral = false;
       if (bTargetInNeutralMode) {
-        pArg0Count = &pAiParam->pMonsterAiGeneral->dwArg0;
-        (*pArg0Count)++;
+        pAiParam->pMonsterAiGeneral->dwArg0++;
         bTargetWasNeutral = true;
         if ((int)pMonStats->aip[1][pGame->nDifficulty] < pAiParam->pMonsterAiGeneral->dwArg0) {
           goto taunt_or_reset;

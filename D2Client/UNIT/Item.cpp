@@ -1522,13 +1522,13 @@ void __fastcall HandleItemOnGround(uint8_t * pBuffer) {
     }
 
     pItem = ITEM_CreateItemFromGroundPacket(StItemDetails.x, StItemDetails.y, 0, pBuffer, &StItemDetails);
-    if (pItem) {
-      ITEM_RemoveUninterruptableState(pItem);
-      return;
-    } else {
+    if (!pItem) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x405);
       exit(-1);
     }
+
+    ITEM_RemoveUninterruptableState(pItem);
+    return;
 }
 
 // Places pUnit (an item) into pUnit2's inventory at the given grid coords (nItemX, nYPos), then calls INVENTORY_PlaceItemAtCoords for the resolved inventory page. If the item belongs to the local player: plays a pickup sound (nParam==1) or refreshes cursor item (otherwise). Handles Horadric Cube quest trigger for scroll/tome items (nParam==3). Client-side only (calls D2Client functions).

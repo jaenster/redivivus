@@ -193,7 +193,6 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2ArenaTxt* pArenaTxt;
     D2UnitDataPlayerArenaStrc* pArenaData;
     D2ArenaControlStrc* pArenaCtrl;
-    eD2ArenaFlags* peArenaFlagsPtr;
     if (!pGame->pArenaCtrl) {
       return;
     }
@@ -246,8 +245,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
                   exit(-1);
                 }
 
-                peArenaFlagsPtr = &pGame->pArenaCtrl->eArenaFlags;
-                *peArenaFlagsPtr |= ARENAFLAG_ScoresDirty;
+                pGame->pArenaCtrl->eArenaFlags |= ARENAFLAG_ScoresDirty;
                 D2Common::Unit::ROOM_LinkUnitToUpdateList(pVictim);
                 if (pUnit->eUnitType != UNIT_PLAYER) {
                   Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
@@ -271,8 +269,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
                     exit(-1);
                   }
 
-                  peArenaFlagsPtr = &pGame->pArenaCtrl->eArenaFlags;
-                  *peArenaFlagsPtr |= ARENAFLAG_ScoresDirty;
+                  pGame->pArenaCtrl->eArenaFlags |= ARENAFLAG_ScoresDirty;
                   D2Common::Unit::ROOM_LinkUnitToUpdateList(pVictim);
                   if (pVictim->eUnitType != UNIT_PLAYER) {
                     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
@@ -290,8 +287,7 @@ void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit
                       exit(-1);
                     }
 
-                    peArenaFlagsPtr = &pGame->pArenaCtrl->eArenaFlags;
-                    *peArenaFlagsPtr |= ARENAFLAG_ScoresDirty;
+                    pGame->pArenaCtrl->eArenaFlags |= ARENAFLAG_ScoresDirty;
                     D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
                     if (pVictim->eUnitType != UNIT_PLAYER) {
                       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
