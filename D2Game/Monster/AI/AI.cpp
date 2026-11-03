@@ -17561,7 +17561,6 @@ void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     uint32_t nDistToCoords;
     D2StatListExStrc* pStatsEx;
     int nFrameOffset;
-    int aiStackY_2f8[38];
     uint32_t nFindFuncAddr;
     D2WispFindScratchUnion uFindScratch;
     eD2UnitType eUnitType;
@@ -17735,9 +17734,9 @@ void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       }
 
       nDistToTarget = D2Client::Units::GetXPosFromDynamicPathUnit(pTarget);
-      pMonStats = (D2MonStatsTxt*)(nDistToTarget + aiStackY_2f8[(pMonsterAiGeneral->dwArg2 + pMonsterAiGeneral->dwArg0 * 4) * 2]);
+      pMonStats = (D2MonStatsTxt*)(nDistToTarget + ((int*)aWispPattern)[(pMonsterAiGeneral->dwArg2 + pMonsterAiGeneral->dwArg0 * 4) * 2 - 50]);
       nDistToTarget = D2Client::Units::GetYPosFromDynamicPathUnit(pTarget);
-      pRoomScratch = (D2RoomStrc*)(nDistToTarget + aiStackY_2f8[(pMonsterAiGeneral->dwArg2 + pMonsterAiGeneral->dwArg0 * 4) * 2 + 1]);
+      pRoomScratch = (D2RoomStrc*)(nDistToTarget + ((int*)aWispPattern)[(pMonsterAiGeneral->dwArg2 + pMonsterAiGeneral->dwArg0 * 4) * 2 - 49]);
       nDistToCoords = MONSTERAI_GetDistanceToCoords(pUnit, (int32_t)pMonStats, (int32_t)pRoomScratch);
       if (nDistToCoords > 3) {
         move_to_pattern_point:

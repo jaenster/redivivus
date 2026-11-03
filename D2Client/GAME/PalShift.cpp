@@ -220,15 +220,15 @@ void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
     szMonsterCode[3] = '\0';
     szMonsterCode[2] = '\0';
     memcpy(szFilePath, "Data\\Global\\Monsters\\", 0x16);
+    szMonsterCode[1] = cCode1;
+    szMonsterCode[0] = cCode0;
     strcat(szFilePath, szMonsterCode);
-    char* pSrc = (char*)((uintptr_t)&iMonIdx + 3);
+    char* pSrc = (char*)((uintptr_t)&szFilePath - 1);
     do {
       pPathEnd2 = pSrc;
       pSrc = pPathEnd2 + 1;
     } while (pPathEnd2[1] != '\0');
 
-    szMonsterCode[1] = cCode1;
-    szMonsterCode[0] = cCode0;
     memcpy(pPathEnd2 + 1, "\\Cof\\palshift.dat", 0x12);
     BOOL bFileExists = D2Common::DATATBLS::DataTbls::CheckIfFileExists(nullptr, szFilePath, &pFileHandle, 1);
     if (!bFileExists) {

@@ -631,7 +631,7 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinField, pBinFieldInput, (char*)pDataTable, nTxtLineCount, nEndOffset);
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinField);
       strcpy(szTableNameBuf, szTableName);
-      szEffectiveName = (char*)((uintptr_t)&nSize + 3);
+      szEffectiveName = (char*)((uintptr_t)&szTableNameBuf - 1);
       do {
         pNameEnd = szEffectiveName;
         szEffectiveName = pNameEnd + 1;

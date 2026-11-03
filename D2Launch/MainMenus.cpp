@@ -3048,8 +3048,8 @@ BOOL __stdcall UIMENU_ShowTermsOfService() {
       cut_line:
       nSrcIndex = nLineWidth + nCharOffset;
       wszLineBuffer[nLineWidth] = L'\0';
-      if (nLineWidth && (&sStack554)[nLineWidth] == 0x20) {
-        (&sStack554)[nLineWidth] = 0;
+      if (nLineWidth && wszLineBuffer[nLineWidth - 1] == 0x20) {
+        wszLineBuffer[nLineWidth - 1] = 0;
       }
 
       add_line:
