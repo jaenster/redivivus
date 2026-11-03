@@ -132,11 +132,11 @@
     },
     {
       "name": "Q14_GetPortalCreatedFlag",
-      "address": "0059d852",
+      "address": "0059d850",
       "lines": [
         {
           "line": 1,
-          "address": "0059d852"
+          "address": "0059d850"
         }
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q7",
@@ -145,8 +145,8 @@
         "GetQuestDataByQuestNoInternal"
       ],
       "usedTypes": [
+        "D2QuestArgStrc",
         "D2QuestDataStrc",
-        "SGAMEDATA",
         "uint8_t"
       ]
     },

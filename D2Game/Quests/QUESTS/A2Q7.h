@@ -37,7 +37,7 @@ int __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame);
 // and then 0059d720. A wrapper that supplies the quest record.
 uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassIdForGame(::SGAMEDATA * pGame);
 // Q14 accessor: returns the "town/Duriel portal already created" flag from A2Q6 data (field_0x0B). Returns 1 (treat as created) if quest not introduced. Used to gate the stairs-to-tombs operate and portal creation.
-uint8_t __fastcall Q14_GetPortalCreatedFlag(::SGAMEDATA * pGame);
+uint8_t __fastcall Q14_GetPortalCreatedFlag(struct D2QuestArgStrc * pQuestArgs);
 // A2Q7 (The Tainted Sun) timer callback that creates the two warp portals after the Horadric Staff is placed. If the pending-create flag (offset +0xd) is set: waits for the orifice object to reach Death/open anim and fires its open event; spawns the red town-portal object (class 100) in a nearby room and toggles HasPortal flags on both rooms. On success sets portal-created flag (+0xb=1) and clears the pending flag. No quest-record state change.
 uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 // Q14 helper: scans the victim object's room for any UNIT_WARP and walks the operating player through it (SUnit::TakeStairs). Used by the tomb-stairs operate fn.
