@@ -10,10 +10,7 @@
 
 // Data types
 struct D2MonStatsTxtTC {
-    D2MonStatsTxtTC() = default;
-    D2MonStatsTxtTC(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2MonStatsTxtTC(short a0, short a1, short a2, short a3) : TreasureClass1(a0), TreasureClass2(a1), TreasureClass3(a2), TreasureClass4(a3) {}
 
     /* 0x00 */ short TreasureClass1;
     /* 0x02 */ short TreasureClass2;
@@ -21,8 +18,7 @@ struct D2MonStatsTxtTC {
     /* 0x06 */ short TreasureClass4;
 };
 
-#pragma pack(push, 1)
-struct D2MonStatsTxt {
+struct __attribute__((packed)) D2MonStatsTxt {
     /* 0x000 */ uint16_t Id;
     /* 0x002 */ short BaseId;
     /* 0x004 */ short NextInClass;
@@ -158,4 +154,3 @@ struct D2MonStatsTxt {
     /* 0x1A6 */ char SplEndGeneric;
     /* 0x1A7 */ char SplClientEnd;
 };
-#pragma pack(pop)

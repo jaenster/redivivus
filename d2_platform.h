@@ -503,6 +503,16 @@ static inline int32_t d2_load24s(const void* p) {
 }
 static inline void d2_store24(void* p, uint32_t v) { std::memcpy(p, &v, 3); }
 
+// TSLink<T>::NextLink, which VC8 inlined into every Storm unlink (see storm-next-link.ts).
+// The link is { prev link, next item }; a negative next is ~&terminator.
+struct D2StormLinkWords { D2StormLinkWords* m_prevlink; int m_next; };
+static inline int D2_StormNextLink(const void* pLink, int nLinkOffset) {
+  const D2StormLinkWords* pThis = (const D2StormLinkWords*)pLink;
+  if (pThis->m_next < 0) return ~pThis->m_next;
+  if (nLinkOffset < 0) nLinkOffset = (int)(intptr_t)pThis - pThis->m_prevlink->m_next;
+  return pThis->m_next + nLinkOffset;
+}
+
 // Diablo 2 PRNG — LCG with multiplier 0x6AC690C5
 #define D2_SEED_NEXT(seed) ((D2SeedStrc)((uint64_t)(uint32_t)(seed).nSeedLow * 0x6ac690c5u + (uint64_t)(uint32_t)(seed).nSeedHigh))
 #define D2_SEED_NEXT_VAL(sv) ((D2SeedStrc)((uint64_t)(uint32_t)(sv) * 0x6ac690c5u + ((uint64_t)(sv) >> 32)))

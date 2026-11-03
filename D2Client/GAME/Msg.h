@@ -144,8 +144,6 @@ void __fastcall LOADING_AnimateProgressBar(int32_t nCurrentChunk, int32_t nTotal
 // Sends the player's save file to the game server as a stream of 0x6C (ASCII 'l') packets. Reads the entire save buffer via MSG_ReadSaveFileToBuffer, then sends it in 255-byte chunks followed by a final tail packet. Optionally animates a loading progress bar (bAnimate != 0). Updates gnPacketSendCount_0x69 and the network sync flag after each chunk.
 // @sourcefile .\GAME\Msg.cpp
 void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate);
-// Client-side outbound D2GS packet sender. Asserts size < 0x200, copies up to 512 bytes to a stack buffer and forwards via NET_D2GS_CLIENT_SendPacketAfterChecks. Performs a duplicate-suppression throttle keyed on the packet opcode (*pBytes): movement-ish opcodes 5-0x11 are dropped if identical to the last sent packet within 0x32ms; other opcodes within 0xC8ms; opcode 0x3a always sends. On send, caches the packet in gpLastSentPacketBuffer + gdwLastPacketSendTick and bumps gnPacketSendCount_0x69 / network sync flag. Inputs: pBytes (raw packet), nSize (length).
-void __stdcall NET_D2GS_CLIENT_Send(uint8_t * pBytes, int32_t nSize);
 void __fastcall NET_D2GS_CLIENT_Send_CMD(uint8_t nOpcode);
 void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, short nArg1);
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT(uint8_t nPacketId, int16_t nTargetX, int16_t nTargetY);
@@ -160,6 +158,9 @@ void __fastcall NET_D2GS_CLIENT_Send_0x5E(int nActionType, int32_t nPlayerGUID);
 void __fastcall NET_D2GS_CLIENT_Send_Chat(struct D2ChatPacketBuildStrc * pChatPacket);
 void __fastcall NET_D2GS_CLIENT_Send_0x66(void * pData, uint32_t nLen);
 void __stdcall NET_D2GS_CLIENT_Send_0x66_HaltTail(int nLine);
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
+
+// Extern entries for hand-written callers (each forwards to the function of its name)
+void __stdcall NET_D2GS_CLIENT_Send_Extern(uint8_t * pBytes, int32_t nSize);
 
 } // namespace D2Client::GAME::Msg

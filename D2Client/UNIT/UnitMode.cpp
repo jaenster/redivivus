@@ -193,7 +193,7 @@ void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, D2Uni
 }
 
 // @sourcefile .\UNIT\UnitMode.cpp
-uint32_t UNITMODE_CanInterruptSkill(D2UnitStrc * pUnit) {
+static uint32_t UNITMODE_CanInterruptSkill(D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (pSkill) {
       eD2Skills eSkillId;
@@ -204,6 +204,11 @@ uint32_t UNITMODE_CanInterruptSkill(D2UnitStrc * pUnit) {
     }
 
     return 1;
+}
+
+// Extern entry for hand-written callers: UNITMODE_CanInterruptSkill itself keeps its unit's linkage.
+uint32_t UNITMODE_CanInterruptSkill_Extern(D2UnitStrc * pUnit) {
+    return ::D2Client::UNIT::UnitMode::UNITMODE_CanInterruptSkill(pUnit);
 }
 
 BOOL __fastcall HandleMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode) {

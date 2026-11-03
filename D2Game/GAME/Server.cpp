@@ -1746,7 +1746,7 @@ void __stdcall LeaveCriticalSectionLastGameServer() {
 
 void __stdcall GAME_SetFrameRate(int32_t nFrameRate) {
     Frames_PerSecond = nFrameRate;
-    Frames_TimeBetweenFrames = (int)(1000 / (int64_t)nFrameRate);
+    Frames_TimeBetweenFrames = (int)(1000 / nFrameRate);
 }
 
 void __stdcall SetupStartingAct(int nAct) {
@@ -2484,7 +2484,7 @@ void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, int32_t pStatRoot,
 int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32_t nCount, eD2UnitType * pUnitTypes, uint32_t * pClassIds, void * pOutBuffer) {
     uint16_t _nServerId;
     BOOL bBadCodePtr;
-    int nOutBufOffsetFromClassIds;
+    int nSearchIdx;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId];
     ::SGAMEDATA* nToken = 0;
@@ -2500,35 +2500,29 @@ int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32
       return 0;
     }
 
-    int nSearchIdx = 0;
-    if (nCount > 0) {
+    for (nSearchIdx = 0; nSearchIdx < nCount; nSearchIdx++) {
       D2UnitStrc* pUnit;
-      nOutBufOffsetFromClassIds = (int)pOutBuffer - (int)pClassIds;
-      do {
-        nUnitGUID = *(uint32_t*)(nOutBufOffsetFromClassIds + (int)pClassIds);
-        pUnit = UNIT::SUnit::FindUnitFromTable(pGame, *pClassIds, nUnitGUID);
-        if (pUnit) {
-          nUnitGUID = 0x52f34f;
-          UNIT::SUnit::GetTypeAndMode(pUnit, (D2QServerUnitRecordStrc*)pUnitTypes);
-          if (*pClassIds != UNIT_PLAYER) {
-            /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)PFN_UnitTypeCallbackTable[*pClassIds]);
-            if (bBadCodePtr) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1472);
-              exit(-1);
-            }
-
-            nUnitGUID = 0x52f378;
-            (*PFN_UnitTypeCallbackTable[*pClassIds])(((D2QServerUnitRecordStrc*)pUnitTypes)->szCharName, pUnit->nClassId);
+      nUnitGUID = ((uint32_t*)pOutBuffer)[nSearchIdx];
+      pUnit = UNIT::SUnit::FindUnitFromTable(pGame, pClassIds[nSearchIdx], nUnitGUID);
+      if (pUnit) {
+        nUnitGUID = 0x52f34f;
+        UNIT::SUnit::GetTypeAndMode(pUnit, (D2QServerUnitRecordStrc*)pUnitTypes);
+        if (pClassIds[nSearchIdx] != UNIT_PLAYER) {
+          /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)PFN_UnitTypeCallbackTable[pClassIds[nSearchIdx]]);
+          if (bBadCodePtr) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1472);
+            exit(-1);
           }
 
-          _nServerId++;
-          pUnitTypes = (eD2UnitType*)((int)pUnitTypes + 0x34);
+          nUnitGUID = 0x52f378;
+          (*PFN_UnitTypeCallbackTable[pClassIds[nSearchIdx]])(((D2QServerUnitRecordStrc*)pUnitTypes)->szCharName, pUnit->nClassId);
         }
 
-        nSearchIdx++;
-        pClassIds++;
-      } while (nSearchIdx < nCount);
+        _nServerId++;
+        pUnitTypes = (eD2UnitType*)((int)pUnitTypes + 0x34);
+      }
     }
+
     if (!pGame->lpCriticalSection) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
       exit(-1);
@@ -3594,7 +3588,7 @@ void __fastcall SetStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValu
 }
 
 void StaticInit_Frames_TimeBetweenFrames() {
-    Frames_TimeBetweenFrames = (int)(1000 / (int64_t)Frames_PerSecond);
+    Frames_TimeBetweenFrames = (int)(1000 / Frames_PerSecond);
 }
 
 } // namespace D2Game::GAME::Server

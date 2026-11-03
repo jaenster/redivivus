@@ -45,7 +45,7 @@ void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
       pcCursor = Storm::Source::SSTR::SStrLen(szSourceFileName);
       nCurGatewayIdx = pGatewayAccess->nCurGatewayIdx;
       szSourceFileName = szSourceFileName + pcCursor + 1;
-      *szSourceFileName = (char)(nCurGatewayIdx / 10) + (char)(nCurGatewayIdx >> 0x1f) - (char)((int64_t)nCurGatewayIdx * 0x66666667 >> 0x3f) + '0';
+      *szSourceFileName = (char)(nCurGatewayIdx / 10) + '0';
       szSourceFileName[1] = (char)(pGatewayAccess->nCurGatewayIdx % 10) + '0';
       szSourceFileName = "Override Battle.net gateways";
       if (!pGatewayAccess->bIsOverride) {

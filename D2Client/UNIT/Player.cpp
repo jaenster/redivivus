@@ -618,7 +618,7 @@ static void __stdcall CLIENT_PlayIndexedUnitSound(D2UnitStrc * pUnit, int32_t nS
     UnitSnd::UNITSND_PlayPlayerSound(pUnit, *(uint16_t*)(gwPlayerAnimationState + nSoundIndex));
 }
 
-uint32_t __stdcall PLAYER_CheckSkillUsability(int * pnUsabilityCode, D2UnitStrc * pUnit, D2SkillStrc * * ppSkill) {
+static uint32_t __stdcall PLAYER_CheckSkillUsability(int * pnUsabilityCode, D2UnitStrc * pUnit, D2SkillStrc * * ppSkill) {
     D2SkillsTxt* pSkillsTxt;
     D2SkillStrc* pSkill;
     D2UnitStrc* pPlayerUnit_lcl = GetPlayerUnit_UI();
@@ -652,8 +652,13 @@ uint32_t __stdcall PLAYER_CheckSkillUsability(int * pnUsabilityCode, D2UnitStrc 
     return 0;
 }
 
+// Extern entry for hand-written callers: PLAYER_CheckSkillUsability itself keeps its unit's linkage.
+uint32_t __stdcall PLAYER_CheckSkillUsability_Extern(int * pnUsabilityCode, D2UnitStrc * pUnit, D2SkillStrc * * ppSkill) {
+    return ::D2Client::UNIT::Player::PLAYER_CheckSkillUsability(pnUsabilityCode, pUnit, ppSkill);
+}
+
 // @sourcefile .\UNIT\Player.cpp
-uint32_t __stdcall PLAYER_ValidateSkillMessage(int * pnUsabilityCode, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pServerMessageHandle) {
+static uint32_t __stdcall PLAYER_ValidateSkillMessage(int * pnUsabilityCode, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pServerMessageHandle) {
     D2SkillStrc* pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, pServerMessageHandle->nSkillId, pServerMessageHandle->nItemId);
     if (!pSkill) {
       return 1;
@@ -672,6 +677,11 @@ uint32_t __stdcall PLAYER_ValidateSkillMessage(int * pnUsabilityCode, D2UnitStrc
     }
 
     return 1;
+}
+
+// Extern entry for hand-written callers: PLAYER_ValidateSkillMessage itself keeps its unit's linkage.
+uint32_t __stdcall PLAYER_ValidateSkillMessage_Extern(int * pnUsabilityCode, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pServerMessageHandle) {
+    return ::D2Client::UNIT::Player::PLAYER_ValidateSkillMessage(pnUsabilityCode, pUnit, pServerMessageHandle);
 }
 
 static void __stdcall PLAYER_ApplyCurrentSkillFlags(int32_t bIsLocalPlayer, D2UnitStrc * pUnit) {
@@ -965,7 +975,7 @@ static void __stdcall PLAYER_ExecuteModeBasedAction(int32_t nActionContext, D2Un
     }
 }
 
-BOOL __stdcall CLIENT_MovePlayerToPosition(D2UnitStrc * pUnit, int16_t nX, int16_t nY, int32_t nSkillActionMode) {
+static BOOL __stdcall CLIENT_MovePlayerToPosition(D2UnitStrc * pUnit, int16_t nX, int16_t nY, int32_t nSkillActionMode) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nX, nY);
     uint32_t bHasPath = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -977,6 +987,11 @@ BOOL __stdcall CLIENT_MovePlayerToPosition(D2UnitStrc * pUnit, int16_t nX, int16
     int nPY = D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath);
     UnitMode::UNITMODE_ExecuteSkillAction(nSkillActionMode, pUnit, nPX, nPY, 0);
     return 1;
+}
+
+// Extern entry for hand-written callers: CLIENT_MovePlayerToPosition itself keeps its unit's linkage.
+BOOL __stdcall CLIENT_MovePlayerToPosition_Extern(D2UnitStrc * pUnit, int16_t nX, int16_t nY, int32_t nSkillActionMode) {
+    return ::D2Client::UNIT::Player::CLIENT_MovePlayerToPosition(pUnit, nX, nY, nSkillActionMode);
 }
 
 // Client-side handler for a player attempting to interact with a world object (by unit ID nParam1). Looks up the object, checks the just_portaled curse state for waypoints (classId 0x3b). If within range and line-of-sight, executes UNITMODEACTION_ITEM_INTERACT; otherwise moves the player toward the object's tile position. Stores last skill hit via D2Client for the interaction. Returns without action if object not found.

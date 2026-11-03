@@ -1134,7 +1134,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
           wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x52f9);
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszOutputBuffer, wszLocaleStr, 0x19);
         } else {
-          iVar1 = (int)(0x9c4 / (int64_t)nGroupValue);
+          iVar1 = (int)(0x9c4 / nGroupValue);
           if (iVar1 <= 0x1e) {
             wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x52f9);
             D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszOutputBuffer, wszLocaleStr, 1);

@@ -14,10 +14,7 @@ struct tree_desc;
 
 // Data types
 struct ct_data {
-    ct_data() = default;
-    ct_data(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-    ct_data(uint16_t a0, uint16_t a1) : fc(a0), dl(a1) {}
 
     /* 0x00 */ uint16_t fc; // freq (tree building) / code (bit string)
     /* 0x02 */ uint16_t dl; // dad (tree building) / len (bit length)

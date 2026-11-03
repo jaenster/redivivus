@@ -38,59 +38,59 @@ namespace D2Common::Merc {
 static int32_t MERC_GetWeaponAnimIndex(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static D2MercWeaponAnimMapStrc gaMercWeaponAnimMap[14] = {
-    D2MercWeaponAnimMapStrc(),
-    D2MercWeaponAnimMapStrc(
+    {},
+    {
         /* .nAnimIndex = */ 0x1,
         /* .nWeaponClass = */ 0x3
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0x2,
         /* .nWeaponClass = */ 0x6
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0x3,
         /* .nWeaponClass = */ 0x2
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0x4,
         /* .nWeaponClass = */ 0x5
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0x5,
         /* .nWeaponClass = */ 0x1
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0x6,
         /* .nWeaponClass = */ 0x7
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0x7,
         /* .nWeaponClass = */ 0x4
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0x8,
         /* .nWeaponClass = */ 0x8
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0x9,
         /* .nWeaponClass = */ 0x9
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0xa,
         /* .nWeaponClass = */ 0xa
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0xb,
         /* .nWeaponClass = */ 0xb
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0xc,
         /* .nWeaponClass = */ 0xc
-    ),
-    D2MercWeaponAnimMapStrc(
+    },
+    {
         /* .nAnimIndex = */ 0xd,
         /* .nWeaponClass = */ 0xd
-    )
+    }
 }; D2_STATIC_GUARD(gaMercWeaponAnimMap, "D2Common::Merc::MERC_GetWeaponAnimIndex::gaMercWeaponAnimMap");
 
     int nWeaponClass;
@@ -271,19 +271,19 @@ uint32_t __fastcall MERC_GenerateStatsFromSeed(int32_t nSeed, D2MercRolledStatsS
     static int gnMercCountMax[4] = { 0x0, 0x3, 0x6, 0x0 }; D2_STATIC_GUARD(gnMercCountMax, "D2Common::Merc::MERC_GenerateStatsFromSeed::gnMercCountMax");
     static uint32_t gdwMercQuinaryTable[4] = { 0x3, 0x3, 0x6, 0x0 }; D2_STATIC_GUARD(gdwMercQuinaryTable, "D2Common::Merc::MERC_GenerateStatsFromSeed::gdwMercQuinaryTable");
     static D2MercBaseStrc gaMercBaseStats[4] = {
-    D2MercBaseStrc(
+    {
         /* .nBaseAttackRating = */ 0x96,
         /* .nBaseDefense = */ 0x3
-    ),
-    D2MercBaseStrc(
+    },
+    {
         /* .nBaseAttackRating = */ 0x12c,
         /* .nBaseDefense = */ 0x9
-    ),
-    D2MercBaseStrc(
+    },
+    {
         /* .nBaseAttackRating = */ 0x258,
         /* .nBaseDefense = */ 0xf
-    ),
-    D2MercBaseStrc()
+    },
+    {}
 }; D2_STATIC_GUARD(gaMercBaseStats, "D2Common::Merc::MERC_GenerateStatsFromSeed::gaMercBaseStats");
     static D2MercSecondaryStrc gaMercSecondaryTable[6] = {
     {

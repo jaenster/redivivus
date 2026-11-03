@@ -408,8 +408,7 @@ static void __stdcall D2WINFONT_DrawWideString(uint16_t * wszText, int32_t nX, i
           nPositionX = (nWidth - nLineWidth >> 1) + nX;
         }
 
-        iVar1 = (int)((uint64_t)((int64_t)(int)((uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight * gnFontIdSmall) * -0x66666667) >> 0x20);
-        nY += (iVar1 >> 2) - (iVar1 >> 0x1f);
+        nY += (int)((uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight * gnFontIdSmall) / -10;
       }
 
       iVar1 = nStrLen;

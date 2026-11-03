@@ -64,7 +64,7 @@ int32_t ReplaceRooms(D2DrlgLevelStrc * pLevel) {
 }; D2_STATIC_GUARD(gaDrlgRoomReplacementsB, "D2Common::Drlg::Maze::Act5::Temple::ReplaceRooms::gaDrlgRoomReplacementsB");
 
     D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    int32_t nRetValAfterA = (int32_t)((uint64_t)DVar1.nSeedLow * 0xaaaaaaab);
+    int32_t nRetValAfterA = (int32_t)(DVar1.nSeedLow * 0xaaaaaaab);
     pLevel->sSeed = DVar1;
     uint32_t nRollMod3 = DVar1.nSeedLow % 3;
     uint32_t nRoll = nRollMod3;

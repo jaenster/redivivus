@@ -2637,7 +2637,7 @@ uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnMinD
     } else if (nRangeRoll & nRangeRoll - 1) {
       nSeedStateGeneral = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
       *(uint64_t*)(pUnit + 0x20) = nSeedStateGeneral;
-      nRangeRoll = (uint32_t)((nSeedStateGeneral & 0xffffffff) % (uint64_t)nRangeRoll);
+      nRangeRoll = (uint32_t)((uint32_t)nSeedStateGeneral % nRangeRoll);
     } else {
       nSeedStatePow2 = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
       *(int64_t*)(pUnit + 0x20) = nSeedStatePow2;
@@ -2651,7 +2651,7 @@ uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(int32_t pUnit, uint32_t * pnMinD
     } else if (nRangeRoll & nRangeRoll - 1) {
       nSeedStateGeneral = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
       *(uint64_t*)(pUnit + 0x20) = nSeedStateGeneral;
-      nRangeRoll = (uint32_t)((nSeedStateGeneral & 0xffffffff) % (uint64_t)nRangeRoll);
+      nRangeRoll = (uint32_t)((uint32_t)nSeedStateGeneral % nRangeRoll);
     } else {
       nSeedStatePow2 = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
       *(int64_t*)(pUnit + 0x20) = nSeedStatePow2;

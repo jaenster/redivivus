@@ -44,10 +44,7 @@ struct D2TradeRecordStrc {
 };
 
 struct D2UnitDataPlayerArenaStrc {
-    D2UnitDataPlayerArenaStrc() = default;
-    D2UnitDataPlayerArenaStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2UnitDataPlayerArenaStrc(int a0, int a1) : nScore(a0), bScoreDirty(a1) {}
 
     /* 0x00 */ int nScore; // Arena score accumulator - modified by kills/deaths/suicides via D2ArenaTxt. Sent to clients as int16.
     /* 0x04 */ int bScoreDirty; // Set to 1 when score changes, triggers broadcast via ARENA_UpdatePlayerKillState

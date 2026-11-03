@@ -12,10 +12,7 @@
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
 struct __attribute__((packed)) tagPALETTEENTRY {
-    tagPALETTEENTRY() = default;
-    tagPALETTEENTRY(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-    tagPALETTEENTRY(BYTE a0, BYTE a1, BYTE a2, BYTE a3) : peRed(a0), peGreen(a1), peBlue(a2), peFlags(a3) {}
 
     /* 0x00 */ BYTE peRed;
     /* 0x01 */ BYTE peGreen;

@@ -65,13 +65,7 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<TSHashObjectChunk<::SGAME
       return;
     }
 
-    uint32_t encPrev = pThis->m_terminator.m_next;
-    if ((int)encPrev < 0) {
-      pPrevLink = (int*)~encPrev;
-    } else {
-      pPrevLink = (int*)((int)pTVar1 + (encPrev - pNext->m_next));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)pNext;
     pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
@@ -94,12 +88,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
       pLink = (int*)((int)pObject + 0xc);
       if (pNext) {
         encPrev = *(uint32_t*)((int)pObject + 0x10);
-        if ((int)encPrev < 0) {
-          pPrevLink = (int*)~encPrev;
-        } else {
-          pPrevLink = (int*)((int)pLink + (encPrev - *(int*)(pNext + 4)));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pLink, -1);
         *pPrevLink = pNext;
         *(uint32_t*)(*pLink + 4) = *(uint32_t*)((int)pObject + 0x10);
         *pLink = 0;
@@ -110,12 +99,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
       pLink = (int*)((int)pObject + 4);
       if (pNext) {
         encPrev = *(uint32_t*)((int)pObject + 8);
-        if ((int)encPrev < 0) {
-          pPrevLink = (int*)~encPrev;
-        } else {
-          pPrevLink = (int*)((int)pLink + (encPrev - *(int*)(pNext + 4)));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pLink, -1);
         *pPrevLink = pNext;
         *(uint32_t*)(*pLink + 4) = *(uint32_t*)((int)pObject + 8);
         *pLink = 0;
@@ -182,13 +166,7 @@ void __thiscall Destructor_Unreferenced2(TSExplicitList<::SGAMEDATA, -572662307>
       return;
     }
 
-    uint32_t encPrev = pThis->m_terminator.m_next;
-    if ((int)encPrev < 0) {
-      pPrevLink = (int*)~encPrev;
-    } else {
-      pPrevLink = (int*)((int)pTVar1 + (encPrev - pNext->m_next));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)pNext;
     pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
@@ -213,12 +191,7 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocD
         pNext = pTVar2->m_prevlink;
         if (pNext) {
           encPrev = pTVar2->m_next;
-          if ((int)encPrev < 0) {
-            pPrevLink = (int*)~encPrev;
-          } else {
-            pPrevLink = (int*)((int)pTVar2 + (encPrev - pNext->m_next));
-          }
-
+          pPrevLink = (int*)D2_StormNextLink(pTVar2, -1);
           *pPrevLink = (int)pNext;
           pTVar2->m_prevlink->m_next = pTVar2->m_next;
           pTVar2->m_prevlink = 0;
@@ -267,12 +240,7 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocD
         pTVar2 = pNext->m_prevlink;
         if (pTVar2) {
           encPrev = pNext->m_next;
-          if ((int)encPrev < 0) {
-            pPrevLink = (int*)~encPrev;
-          } else {
-            pPrevLink = (int*)((int)pNext + (encPrev - pTVar2->m_next));
-          }
-
+          pPrevLink = (int*)D2_StormNextLink(pNext, -1);
           *pPrevLink = (int)pTVar2;
           pNext->m_prevlink->m_next = pNext->m_next;
           pNext->m_prevlink = 0;
@@ -290,7 +258,6 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocD
 template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destructor() {
     TSExplicitList<::SGAMEDATA, -572662307>* pSlot;
     int* pPrevLink;
-    uint32_t encPrev;
     TSLink<::SGAMEDATA>* pNext;
     uint32_t nIndex = 0;
     if (this->m_count > 0) {
@@ -301,13 +268,7 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destruct
         pNext = pSlot->m_terminator.m_prevlink;
         pTVar1 = &pSlot->m_terminator;
         if (pNext) {
-          encPrev = pSlot->m_terminator.m_next;
-          if ((int)encPrev < 0) {
-            pPrevLink = (int*)~encPrev;
-          } else {
-            pPrevLink = (int*)((int)pTVar1 + (encPrev - pNext->m_next));
-          }
-
+          pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
           *pPrevLink = (int)pNext;
           pTVar1->m_prevlink->m_next = pSlot->m_terminator.m_next;
           pTVar1->m_prevlink = 0;
@@ -433,12 +394,7 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::SetCount
         pTVar1 = &pSlotI->m_terminator;
         if (pTVar3) {
           uVar2 = pSlotI->m_terminator.m_next;
-          if ((int)uVar2 < 0) {
-            pPrevLink = (int*)~uVar2;
-          } else {
-            pPrevLink = (int*)((int)pTVar1 + (uVar2 - pTVar3->m_next));
-          }
-
+          pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
           *pPrevLink = (int)pTVar3;
           pTVar1->m_prevlink->m_next = pSlotI->m_terminator.m_next;
           pTVar1->m_prevlink = 0;
@@ -501,12 +457,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::LinkNode(::SGAMEDATA * pN
     if (pAnchorLink) {
       int* pPrevLink;
       dwNext = pNodeLink->m_next;
-      if ((int)dwNext < 0) {
-        pPrevLink = (int*)~dwNext;
-      } else {
-        pPrevLink = (int*)((int)pNodeLink + (dwNext - pAnchorLink->m_next));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pNodeLink, -1);
       *pPrevLink = (int)pAnchorLink;
       pNodeLink->m_prevlink->m_next = pNodeLink->m_next;
       pNodeLink->m_prevlink = 0;
@@ -595,12 +546,7 @@ template<> ::SGAMEDATA * __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Intern
     if (pExisting) {
       char* ppPrevLink;
       dwNext = ppSlot->m_next;
-      if ((int)dwNext < 0) {
-        ppPrevLink = (char*)~dwNext;
-      } else {
-        ppPrevLink = (char*)((int)ppSlot + (dwNext - pExisting->m_next));
-      }
-
+      ppPrevLink = (char*)D2_StormNextLink(ppSlot, -1);
       *(TSLink<::SGAMEDATA>**)ppPrevLink = (TSLink<::SGAMEDATA>*)pExisting;
       ppSlot->m_prevlink->m_next = ppSlot->m_next;
       ppSlot->m_prevlink = 0;
@@ -684,12 +630,7 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
       pChunkSlot = (int*)((int)pChunk + 0x10);
       if (pEntries) {
         dwLinkOffset = *(uint32_t*)((int)pChunk + 0x14);
-        if ((int)dwLinkOffset < 0) {
-          pPrevLink = (int*)~dwLinkOffset;
-        } else {
-          pPrevLink = (int*)((int)pChunkSlot + (dwLinkOffset - *(int*)(pEntries + 4)));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pChunkSlot, -1);
         *pPrevLink = pEntries;
         *(uint32_t*)(*pChunkSlot + 4) = *(uint32_t*)((int)pChunk + 0x14);
         *pChunkSlot = 0;
@@ -893,12 +834,7 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
     if (ppTargetLink) {
       int* ppPrevLink;
       dwNext = ppNodeLink->m_next;
-      if ((int)dwNext < 0) {
-        ppPrevLink = (int*)~dwNext;
-      } else {
-        ppPrevLink = (int*)((int)ppNodeLink + (dwNext - ppTargetLink->m_next));
-      }
-
+      ppPrevLink = (int*)D2_StormNextLink(ppNodeLink, -1);
       *ppPrevLink = (int)ppTargetLink;
       ppNodeLink->m_prevlink->m_next = ppNodeLink->m_next;
       ppNodeLink->m_prevlink = 0;

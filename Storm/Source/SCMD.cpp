@@ -363,7 +363,6 @@ uint32_t __thiscall SCMD_GetHandler(::SCMD * pThis, int nNodeOffset) {
 
 void __fastcall SCMD_ClearList(D2StormListHead * nListPtr) {
     int* piPrevLink;
-    uint32_t nNextOffset;
     int* piNode;
     while (true) {
       int pListHead;
@@ -374,13 +373,7 @@ void __fastcall SCMD_ClearList(D2StormListHead * nListPtr) {
 
       pListHead = *piNode;
       if (pListHead) {
-        nNextOffset = piNode[1];
-        if ((int)nNextOffset < 0) {
-          piPrevLink = (int*)~nNextOffset;
-        } else {
-          piPrevLink = (int*)((int)piNode + (nNextOffset - *(int*)(pListHead + 4)));
-        }
-
+        piPrevLink = (int*)D2_StormNextLink(piNode, -1);
         *piPrevLink = pListHead;
         *(int*)(*piNode + 4) = piNode[1];
         *piNode = 0;
@@ -398,13 +391,7 @@ void __fastcall SCMD_ClearAll(D2StormListHead * nListPtr) {
       return;
     }
 
-    uint32_t nNextOffset = nListPtr->pNext;
-    if ((int)nNextOffset < 0) {
-      piPrevLink = (int*)~nNextOffset;
-    } else {
-      piPrevLink = (int*)((int)piNode + (nNextOffset - pListHead->pNext));
-    }
-
+    piPrevLink = (int*)D2_StormNextLink(piNode, -1);
     *piPrevLink = (int)pListHead;
     (*piNode)->pNext = nListPtr->pNext;
     *piNode = 0;
@@ -511,12 +498,7 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
       pListHead = pNewNode->pPrev;
       if (pListHead) {
         pPrevOffsetRaw = pNewNode->pNext;
-        if ((int)pPrevOffsetRaw < 0) {
-          pCmdDef = (int*)~(uint32_t)pPrevOffsetRaw;
-        } else {
-          pCmdDef = (int*)((int)pPrevOffsetRaw + ((int)pNewNode - (int)pListHead->pNext));
-        }
-
+        pCmdDef = (int*)D2_StormNextLink(pNewNode, -1);
         *pCmdDef = (int)pListHead;
         pNewNode->pPrev->pNext = pNewNode->pNext;
         pNewNode->pPrev = 0;
@@ -541,12 +523,7 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
       pListHead = ppBackslashCmdNode->pPrev;
       if (pListHead) {
         pPrevOffsetRaw = ppBackslashCmdNode->pNext;
-        if ((int)pPrevOffsetRaw < 0) {
-          pCmdDef = (int*)~(uint32_t)pPrevOffsetRaw;
-        } else {
-          pCmdDef = (int*)((int)pPrevOffsetRaw + ((int)ppBackslashCmdNode - (int)pListHead->pNext));
-        }
-
+        pCmdDef = (int*)D2_StormNextLink(ppBackslashCmdNode, -1);
         *pCmdDef = (int)pListHead;
         ppBackslashCmdNode->pPrev->pNext = ppBackslashCmdNode->pNext;
         ppBackslashCmdNode->pPrev = 0;
@@ -582,7 +559,6 @@ BOOL __stdcall SCmdRegisterArgument(uint32_t dwFlags, uint32_t dwId, char * szTe
 
 void __fastcall SCMD_FreeAllNodes(void * pListHead) {
     int* pBackLinkSlot;
-    uint32_t nPrevLinkField;
     int pNextNode;
     while (true) {
       int* pObject;
@@ -593,13 +569,7 @@ void __fastcall SCMD_FreeAllNodes(void * pListHead) {
 
       pNextNode = *pObject;
       if (pNextNode) {
-        nPrevLinkField = pObject[1];
-        if ((int)nPrevLinkField < 0) {
-          pBackLinkSlot = (int*)~nPrevLinkField;
-        } else {
-          pBackLinkSlot = (int*)((int)pObject + (nPrevLinkField - *(int*)(pNextNode + 4)));
-        }
-
+        pBackLinkSlot = (int*)D2_StormNextLink(pObject, -1);
         *pBackLinkSlot = pNextNode;
         *(int*)(*pObject + 4) = pObject[1];
         *pObject = 0;
@@ -1139,12 +1109,8 @@ void StaticFini_gStormCmdListBackslash() {
     if (!gStormCmdListHeadBackslash.pPrevLink) {
       return;
     }
-    if (gStormCmdListHeadBackslash.pNext < 0) {
-      pBackLink = (uint32_t*)~gStormCmdListHeadBackslash.pNext;
-    } else {
-      pBackLink = (uint32_t*)(gStormCmdListHeadBackslash.pNext + ((int)((char*)&gStormCmdListHeadBackslash + 4) - gStormCmdListHeadBackslash.pPrevLink->pNext));
-    }
 
+    pBackLink = (uint32_t*)D2_StormNextLink((char*)&gStormCmdListHeadBackslash + 4, -1);
     *pBackLink = (uint32_t)(uintptr_t)gStormCmdListHeadBackslash.pPrevLink;
     gStormCmdListHeadBackslash.pPrevLink->pNext = gStormCmdListHeadBackslash.pNext;
     gStormCmdListHeadBackslash.pPrevLink = 0;
@@ -1158,12 +1124,8 @@ void StaticFini_gStormCmdListSlash() {
     if (!gStormCmdListHeadSlash.pPrevLink) {
       return;
     }
-    if (gStormCmdListHeadSlash.pNext < 0) {
-      pBackLink = (uint32_t*)~gStormCmdListHeadSlash.pNext;
-    } else {
-      pBackLink = (uint32_t*)(gStormCmdListHeadSlash.pNext + ((int)((char*)&gStormCmdListHeadSlash + 4) - gStormCmdListHeadSlash.pPrevLink->pNext));
-    }
 
+    pBackLink = (uint32_t*)D2_StormNextLink((char*)&gStormCmdListHeadSlash + 4, -1);
     *pBackLink = (uint32_t)(uintptr_t)gStormCmdListHeadSlash.pPrevLink;
     gStormCmdListHeadSlash.pPrevLink->pNext = gStormCmdListHeadSlash.pNext;
     gStormCmdListHeadSlash.pPrevLink = 0;

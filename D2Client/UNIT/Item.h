@@ -284,10 +284,7 @@ struct D2ItemsTxt {
 };
 
 struct D2ItemTypeBaseIdEntryStrc {
-    D2ItemTypeBaseIdEntryStrc() = default;
-    D2ItemTypeBaseIdEntryStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2ItemTypeBaseIdEntryStrc(uint32_t a0, int a1) : nBaseTypeId(a0), nItemTypeEquiv(a1) {}
 
     /* 0x00 */ uint32_t nBaseTypeId;
     /* 0x04 */ int nItemTypeEquiv;
@@ -299,10 +296,7 @@ struct D2ItemTypeDefaultSlotStrc {
 };
 
 struct D2ItemWeaponClassCodeStrc {
-    D2ItemWeaponClassCodeStrc() = default;
-    D2ItemWeaponClassCodeStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2ItemWeaponClassCodeStrc(uint32_t a0, uint32_t a1) : dwCode(a0), nWeaponClass(a1) {}
 
     /* 0x00 */ uint32_t dwCode; // ItemsTxt wclass code, e.g. 'bow ', '1hs '
     /* 0x04 */ uint32_t nWeaponClass; // value ITEM_GetWeaponAnimClass returns for that code

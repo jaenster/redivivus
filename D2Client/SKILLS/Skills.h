@@ -83,9 +83,6 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsPetWithFlag(struct D2UnitStrc * pU
 BOOL __fastcall Skills_CltStFunc_AlwaysAllow(struct D2UnitStrc * pUnit, eD2Skills eD2Skill, int nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Bow_ShootArrow(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Bow_ThrowItem(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-// Client-side skill cast initiator for a unit. Validates the skill row, performs the line-of-sight check (mapping SkillsTxt.lineofsight 1-5 to the appropriate collision mask), and SKILL_CanTargetDeadMonster gating. Ensures the skill object exists on the unit (allocates/adds it, clamping to max level and applying a skill-level bonus for overflow) and sets it as the unit's current skill. Cancels casting in town for non-town-allowed skills (HandleMessage 7 + plays the no-cast sound). Sets the unit's anim mode (or attack animation for melee Attack), runs the per-skill client-start function (cltstfunc), plays start/cast/class sounds, adds the cast overlay, and assigns missile light. Returns the skill result code (SKILL_Attack signals abort/no-op). __fastcall (EAX=eSkill, ECX=pUnit).
-// @sourcefile .\SKILLS\Skills.cpp
-int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, struct D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel);
 int32_t __fastcall SKILLS_CastSkillClientArgsReversed(struct D2UnitStrc * pUnit, eD2Skills eSkill, short * nSkillLevel, int32_t nOwnerGUID);
 // Runs the client-side visual/audio presentation for a cast skill. Validates eSkill against Skills.txt and its cltdofunc index. If the skill has a cltmissile, spawns that client missile from the unit toward the target coords (resolved via GetCooordinates when bHasTarget, offset from the unit's path position) using either MakeMissile or MISSILE_CreateFromUnitWithOffset depending on skill flag bit1. Then invokes the skill's client DoFunc from the SKILLCLTDOFUNCS dispatch table (or ItemCltEffect override when targeted); both paths set the unit's SKSRVDOFUNC flag. Frees/swaps the skill light map. On success plays dosound on the caster and tgtsound/tgtoverlay on the confirmed target unit, and for the local player applies the skill's cast delay to the game data timer (clamped to 0xC, anim-mode guarded). Returns 1 if anything fired (missile/dofunc), else 0. Pure client effect, no gameplay state.
 uint32_t __fastcall SKILL_ExecuteClientDoFunc(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t bHasTarget);
@@ -127,6 +124,9 @@ int32_t __fastcall GetMeleeRangePlusFour(struct D2UnitStrc * pUnit);
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall SKILLS_CltAllocStatListForSkill(struct D2UnitStrc * pUnit, int32_t nAttackRate);
 struct D2CUnitEventStrc * __fastcall AttachClientStateHandler(struct D2UnitStrc * pUnit, struct D2UnitStrc * pEventUnit, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nEventType, int32_t nEventState);
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
+
+// Extern entries for hand-written callers (each forwards to the function of its name)
+int32_t __stdcall SKILLS_CastSkillClient_Extern(eD2Skills eSkill, struct D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel);
 
 } // namespace D2Client::SKILLS::Skills

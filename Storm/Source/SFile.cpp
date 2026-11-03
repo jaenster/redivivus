@@ -2164,12 +2164,7 @@ void __thiscall SFILE_InsertFileRecordIntoList2(D2StormListHead * ppListContaine
     if (pEntry) {
       int* pLink;
       uPrevLinkRaw = ppSlot->pNext;
-      if ((int)uPrevLinkRaw < 0) {
-        pLink = (int*)~uPrevLinkRaw;
-      } else {
-        pLink = (int*)((int)ppSlot + (uPrevLinkRaw - pEntry->pNext));
-      }
-
+      pLink = (int*)D2_StormNextLink(ppSlot, -1);
       *pLink = (int)pEntry;
       ppSlot->pPrevLink->pNext = ppSlot->pNext;
       ppSlot->pPrevLink = 0;
@@ -2370,13 +2365,7 @@ void __thiscall SFILE_RemoveFileRecordFromList1(int32_t pThis, int * pLink) {
       return;
     }
 
-    uint32_t nOffset = pLink[1];
-    if ((int)nOffset < 0) {
-      pTargetLink = (int*)~nOffset;
-    } else {
-      pTargetLink = (int*)((int)pLink + (nOffset - *(int*)(pNext + 4)));
-    }
-
+    pTargetLink = (int*)D2_StormNextLink(pLink, -1);
     *pTargetLink = pNext;
     *(int*)(*pLink + 4) = pLink[1];
     *pLink = 0;
@@ -2684,13 +2673,7 @@ void __thiscall SFILE_RemoveFileRecordFromList2(int32_t pThis, int * pLink) {
       return;
     }
 
-    uint32_t nOffset = pLink[1];
-    if ((int)nOffset < 0) {
-      pTargetLink = (int*)~nOffset;
-    } else {
-      pTargetLink = (int*)((int)pLink + (nOffset - *(int*)(pNext + 4)));
-    }
-
+    pTargetLink = (int*)D2_StormNextLink(pLink, -1);
     *pTargetLink = pNext;
     *(int*)(*pLink + 4) = pLink[1];
     *pLink = 0;
@@ -2716,13 +2699,7 @@ void __thiscall SFILE_RemoveFileRecordFromList3(int32_t pThis, int * pLink) {
       return;
     }
 
-    uint32_t nOffset = pLink[1];
-    if ((int)nOffset < 0) {
-      pTargetLink = (int*)~nOffset;
-    } else {
-      pTargetLink = (int*)((int)pLink + (nOffset - *(int*)(pNext + 4)));
-    }
-
+    pTargetLink = (int*)D2_StormNextLink(pLink, -1);
     *pTargetLink = pNext;
     *(int*)(*pLink + 4) = pLink[1];
     *pLink = 0;
@@ -2740,13 +2717,7 @@ void __thiscall SFILE_RemoveFileRecordFromList4(int32_t pThis, int * pLink) {
       return;
     }
 
-    uint32_t nOffset = pLink[1];
-    if ((int)nOffset < 0) {
-      pTargetLink = (int*)~nOffset;
-    } else {
-      pTargetLink = (int*)((int)pLink + (nOffset - *(int*)(pNext + 4)));
-    }
-
+    pTargetLink = (int*)D2_StormNextLink(pLink, -1);
     *pTargetLink = pNext;
     *(int*)(*pLink + 4) = pLink[1];
     *pLink = 0;
@@ -2780,13 +2751,7 @@ void __thiscall SFILE_RemoveFileRecordFromList5(int32_t pThis, int * pNode) {
       return;
     }
 
-    uint32_t nPrevLink = pNode[1];
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)pNode + (nPrevLink - *(int*)(pNextNode + 4)));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
     *ppPrevSlot = pNextNode;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -2795,7 +2760,6 @@ void __thiscall SFILE_RemoveFileRecordFromList5(int32_t pThis, int * pNode) {
 
 void __fastcall SFILE_CloseStreamHandle1(D2StormListHead * pThis) {
     int* ppPrevSlot;
-    uint32_t nPrevLink;
     int* pNode;
     while (true) {
       int pNextNode;
@@ -2806,13 +2770,7 @@ void __fastcall SFILE_CloseStreamHandle1(D2StormListHead * pThis) {
 
       pNextNode = *pNode;
       if (pNextNode) {
-        nPrevLink = pNode[1];
-        if ((int)nPrevLink < 0) {
-          ppPrevSlot = (int*)~nPrevLink;
-        } else {
-          ppPrevSlot = (int*)((int)pNode + (nPrevLink - *(int*)(pNextNode + 4)));
-        }
-
+        ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
         *ppPrevSlot = pNextNode;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -2823,7 +2781,6 @@ void __fastcall SFILE_CloseStreamHandle1(D2StormListHead * pThis) {
 
 void __fastcall SFILE_CloseStreamHandle2(D2StormListHead * pThis) {
     int* ppPrevSlot;
-    uint32_t nPrevLink;
     int* pNode;
     while (true) {
       int pNextNode;
@@ -2834,13 +2791,7 @@ void __fastcall SFILE_CloseStreamHandle2(D2StormListHead * pThis) {
 
       pNextNode = *pNode;
       if (pNextNode) {
-        nPrevLink = pNode[1];
-        if ((int)nPrevLink < 0) {
-          ppPrevSlot = (int*)~nPrevLink;
-        } else {
-          ppPrevSlot = (int*)((int)pNode + (nPrevLink - *(int*)(pNextNode + 4)));
-        }
-
+        ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
         *ppPrevSlot = pNextNode;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -2851,7 +2802,6 @@ void __fastcall SFILE_CloseStreamHandle2(D2StormListHead * pThis) {
 
 void __fastcall SFILE_CloseStreamHandle3(D2StormListHead * pThis) {
     int* ppPrevSlot;
-    uint32_t nPrevLink;
     int* pNode;
     while (true) {
       int pNextNode;
@@ -2862,13 +2812,7 @@ void __fastcall SFILE_CloseStreamHandle3(D2StormListHead * pThis) {
 
       pNextNode = *pNode;
       if (pNextNode) {
-        nPrevLink = pNode[1];
-        if ((int)nPrevLink < 0) {
-          ppPrevSlot = (int*)~nPrevLink;
-        } else {
-          ppPrevSlot = (int*)((int)pNode + (nPrevLink - *(int*)(pNextNode + 4)));
-        }
-
+        ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
         *ppPrevSlot = pNextNode;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -2879,7 +2823,6 @@ void __fastcall SFILE_CloseStreamHandle3(D2StormListHead * pThis) {
 
 void __fastcall SFILE_CloseStreamHandle4(D2StormListHead * pThis) {
     int* ppPrevSlot;
-    uint32_t nPrevLink;
     int* pNode;
     while (true) {
       int pNextNode;
@@ -2890,13 +2833,7 @@ void __fastcall SFILE_CloseStreamHandle4(D2StormListHead * pThis) {
 
       pNextNode = *pNode;
       if (pNextNode) {
-        nPrevLink = pNode[1];
-        if ((int)nPrevLink < 0) {
-          ppPrevSlot = (int*)~nPrevLink;
-        } else {
-          ppPrevSlot = (int*)((int)pNode + (nPrevLink - *(int*)(pNextNode + 4)));
-        }
-
+        ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
         *ppPrevSlot = pNextNode;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -2907,7 +2844,6 @@ void __fastcall SFILE_CloseStreamHandle4(D2StormListHead * pThis) {
 
 void __fastcall SFILE_CloseStreamHandle5(D2StormListHead * pThis) {
     int* ppPrevSlot;
-    uint32_t nPrevLink;
     int* pNode;
     while (true) {
       int pNextNode;
@@ -2918,13 +2854,7 @@ void __fastcall SFILE_CloseStreamHandle5(D2StormListHead * pThis) {
 
       pNextNode = *pNode;
       if (pNextNode) {
-        nPrevLink = pNode[1];
-        if ((int)nPrevLink < 0) {
-          ppPrevSlot = (int*)~nPrevLink;
-        } else {
-          ppPrevSlot = (int*)((int)pNode + (nPrevLink - *(int*)(pNextNode + 4)));
-        }
-
+        ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
         *ppPrevSlot = pNextNode;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -3005,13 +2935,7 @@ void __fastcall SFILE_CloseAllOpenFiles1(D2ArchiveStrc * pArchive) {
       return;
     }
 
-    D2ArchiveStrc* nPrevLink = pArchive->pNext;
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~(uint32_t)nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)nPrevLink + ((int)pArchive - (int)pNextNode->pNext));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pArchive, -1);
     *ppPrevSlot = (int)pNextNode;
     pArchive->pPrevLink->pNext = pArchive->pNext;
     pArchive->pPrevLink = 0;
@@ -3025,13 +2949,7 @@ void __fastcall SFILE_CloseAllOpenFiles2(D2ArchiveStrc * pArchive) {
       return;
     }
 
-    D2ArchiveStrc* nPrevLink = pArchive->pNext;
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~(uint32_t)nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)nPrevLink + ((int)pArchive - (int)pNextNode->pNext));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pArchive, -1);
     *ppPrevSlot = (int)pNextNode;
     pArchive->pPrevLink->pNext = pArchive->pNext;
     pArchive->pPrevLink = 0;
@@ -3047,13 +2965,7 @@ void __fastcall SFILE_CloseStream1(D2StormListHead * pListHead) {
       return;
     }
 
-    uint32_t nPrevLink = pListHead->pNext;
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)pNode + (nPrevLink - pNextNode->pNext));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
     *ppPrevSlot = (int)pNextNode;
     (*pNode)->pNext = pListHead->pNext;
     *pNode = 0;
@@ -3069,13 +2981,7 @@ void __fastcall SFILE_CloseStream2(D2StormListHead * pListHead) {
       return;
     }
 
-    uint32_t nPrevLink = pListHead->pNext;
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)pNode + (nPrevLink - pNextNode->pNext));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
     *ppPrevSlot = (int)pNextNode;
     (*pNode)->pNext = pListHead->pNext;
     *pNode = 0;
@@ -3091,13 +2997,7 @@ void __fastcall SFILE_CloseStream3(D2StormListHead * pListHead) {
       return;
     }
 
-    uint32_t nPrevLink = pListHead->pNext;
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)pNode + (nPrevLink - pNextNode->pNext));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
     *ppPrevSlot = (int)pNextNode;
     (*pNode)->pNext = pListHead->pNext;
     *pNode = 0;
@@ -3113,13 +3013,7 @@ void __fastcall SFILE_CloseStream4(D2StormListHead * pListHead) {
       return;
     }
 
-    uint32_t nPrevLink = pListHead->pNext;
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)pNode + (nPrevLink - pNextNode->pNext));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
     *ppPrevSlot = (int)pNextNode;
     (*pNode)->pNext = pListHead->pNext;
     *pNode = 0;
@@ -3135,13 +3029,7 @@ void __fastcall SFILE_CloseStream5(D2StormListHead * pListHead) {
       return;
     }
 
-    uint32_t nPrevLink = pListHead->pNext;
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)pNode + (nPrevLink - pNextNode->pNext));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pNode, -1);
     *ppPrevSlot = (int)pNextNode;
     (*pNode)->pNext = pListHead->pNext;
     *pNode = 0;
@@ -3240,17 +3128,10 @@ D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord2(int * * ppArchive, int32_t n
 }
 
 D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord2(D2ArchiveStrc * pArchive, uint8_t byFlags) {
-    D2ArchiveStrc* nPrevLink;
     D2ArchiveStrc* pNextNode = pArchive->pPrevLink;
     if (pNextNode) {
       int* ppPrevSlot;
-      nPrevLink = pArchive->pNext;
-      if ((int)nPrevLink < 0) {
-        ppPrevSlot = (int*)~(uint32_t)nPrevLink;
-      } else {
-        ppPrevSlot = (int*)((int)nPrevLink + ((int)pArchive - (int)pNextNode->pNext));
-      }
-
+      ppPrevSlot = (int*)D2_StormNextLink(pArchive, -1);
       *ppPrevSlot = (int)pNextNode;
       pArchive->pPrevLink->pNext = pArchive->pNext;
       pArchive->pPrevLink = 0;
@@ -3297,13 +3178,7 @@ void __fastcall SFILE_FreeFileRecord(D2MPQFileStrc * pMPQFile) {
       return;
     }
 
-    D2MPQFileStrc* nPrevLink = pMPQFile->pNext;
-    if ((int)nPrevLink < 0) {
-      ppPrevSlot = (int*)~(uint32_t)nPrevLink;
-    } else {
-      ppPrevSlot = (int*)((int)nPrevLink + ((int)pMPQFile - (int)pNextNode->pNext));
-    }
-
+    ppPrevSlot = (int*)D2_StormNextLink(pMPQFile, -1);
     *ppPrevSlot = (int)pNextNode;
     pMPQFile->pPrevLink->pNext = pMPQFile->pNext;
     pMPQFile->pPrevLink = 0;
@@ -3321,7 +3196,6 @@ D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord3(D2ArchiveStrc * pArchive, ui
 
 int __stdcall SFILE_EnumFilesInternal(D2ArchiveStrc * pArchive, char * szText, void * pFileRecord, int nParam, D2ArchiveStrc * * ppArchive) {
     StormLinkStrc** pInsertPos;
-    D2ArchiveStrc* pListPrev;
     uint32_t dwValidMask = -1;
     if (!ppArchive) {
       dwValidMask = 0;
@@ -3377,13 +3251,7 @@ int __stdcall SFILE_EnumFilesInternal(D2ArchiveStrc * pArchive, char * szText, v
     pNewArchive = pArchiveRecord->pPrevLink;
     if (pNewArchive) {
       int* pUnlinkSlot;
-      pListPrev = pArchiveRecord->pNext;
-      if ((int)pListPrev < 0) {
-        pUnlinkSlot = (int*)~(uint32_t)pListPrev;
-      } else {
-        pUnlinkSlot = (int*)((int)pListPrev + ((int)pArchiveRecord - (int)pNewArchive->pNext));
-      }
-
+      pUnlinkSlot = (int*)D2_StormNextLink(pArchiveRecord, -1);
       *pUnlinkSlot = (int)pNewArchive;
       pArchiveRecord->pPrevLink->pNext = pArchiveRecord->pNext;
       pArchiveRecord->pPrevLink = 0;
@@ -3551,14 +3419,7 @@ uint32_t __thiscall SFILE_RemoveAsyncRequestFromQueue(void * pListContext, int *
     uint32_t nRefCount = pPrevSlot[1];
     int pNext = *pNode;
     if (pNext) {
-      uint32_t nPrevOffset;
-      nPrevOffset = pNode[1];
-      if ((int)nPrevOffset < 0) {
-        pPrevSlot = (int*)~nPrevOffset;
-      } else {
-        pPrevSlot = (int*)((int)pNode + (nPrevOffset - *(int*)(pNext + 4)));
-      }
-
+      pPrevSlot = (int*)D2_StormNextLink(pNode, -1);
       *pPrevSlot = pNext;
       *(int*)(*pNode + 4) = pNode[1];
       *pNode = 0;
@@ -3589,7 +3450,6 @@ D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord4(int * * ppArchive, int32_t n
 // @blizzard IssueRequest (SFILE.CPP)
 static D2StormAsyncOpStrc * __stdcall SFILE_IssueRequest(uint32_t nFileOffset, uint32_t pChunkWritePtr, uint32_t pReadBufferBase, IDirectSoundBuffer * pStream, uint32_t pUserCtx2, D2StormAudioStreamRec * pParentStream, uint32_t nChunkSize, int32_t nTimeoutMs, uint32_t bUrgent, HANDLE hCompletionEvent, uint32_t bQueueImmediately, int32_t bIsLastChunk, D2StormAsyncCompletionStrc * pCompletion, D2MPQFileStrc * pMPQFile) {
     int bArgsValid;
-    D2StormAsyncOpStrc* pPrevBack;
     D2StormAsyncOpStrc* pRequest = 0;
     if (!pChunkWritePtr && !pStream) {
       bArgsValid = 0;
@@ -3614,13 +3474,7 @@ static D2StormAsyncOpStrc * __stdcall SFILE_IssueRequest(uint32_t nFileOffset, u
     D2StormAsyncOpStrc* pNextNode = (D2StormAsyncOpStrc*)pNewNode->pPrevLink;
     if (pNextNode) {
       uint32_t* pPrevSlot;
-      pPrevBack = pNewNode->pNext;
-      if ((int)pPrevBack < 0) {
-        pPrevSlot = (uint32_t*)~(uint32_t)pPrevBack;
-      } else {
-        pPrevSlot = (uint32_t*)((int)pPrevBack + ((int)pNewNode - (int)pNextNode->pNext));
-      }
-
+      pPrevSlot = (uint32_t*)D2_StormNextLink(pNewNode, -1);
       *pPrevSlot = (uint32_t)(uintptr_t)pNextNode;
       ((StormLinkStrc*)pNewNode->pPrevLink)->pNext = (int)pNewNode->pNext;
       pNewNode->pPrevLink = 0;
@@ -3665,7 +3519,6 @@ static D2StormAsyncOpStrc * __stdcall SFILE_IssueRequest(uint32_t nFileOffset, u
 
 // @blizzard SFileCloseFile (SFILE.CPP)
 int __stdcall SFileCloseFile(D2MPQFileStrc * pMPQFile) {
-    D2MPQFileStrc* pPrev;
     uint32_t* pRefCount;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     int nValid = SFILE_CheckFileHandle(pMPQFile, &pMPQFile);
@@ -3683,13 +3536,7 @@ int __stdcall SFileCloseFile(D2MPQFileStrc * pMPQFile) {
     D2MPQFileStrc* pNext = pNode->pPrevLink;
     if (pNext) {
       int* pPrevSlot;
-      pPrev = pNode->pNext;
-      if ((int)pPrev < 0) {
-        pPrevSlot = (int*)~(uint32_t)pPrev;
-      } else {
-        pPrevSlot = (int*)((int)pPrev + ((int)pNode - (int)pNext->pNext));
-      }
-
+      pPrevSlot = (int*)D2_StormNextLink(pNode, -1);
       *pPrevSlot = (int)pNext;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
@@ -3720,7 +3567,6 @@ int32_t __stdcall SFileOpenFile(char * szFilename, D2MPQFileStrc * * ppFile) {
 // Deleting destructor of the AUDIOSTREAM record.
 // Name from the PowerPC 1.13c Storm traceback table (AUDIOSTREAM::~AUDIOSTREAM @1001d280).
 void __fastcall AUDIOSTREAM_Destructor(D2StormAudioStreamRec * pAudioStream) {
-    D2StormAudioStreamRec* pListNext;
     uint32_t* pRefCount;
     pfnEHHandlerRoutine pExceptionHandler = __GSHandlerCheck_EH_6c9e98;
     void* local_10 = ExceptionList;
@@ -3744,13 +3590,7 @@ void __fastcall AUDIOSTREAM_Destructor(D2StormAudioStreamRec * pAudioStream) {
     D2StormAudioStreamRec* pLinkedFile = pAudioStream->pPrevLink;
     if (pLinkedFile) {
       int* pPrevSlot;
-      pListNext = pAudioStream->pNext;
-      if ((int)pListNext < 0) {
-        pPrevSlot = (int*)~(uint32_t)pListNext;
-      } else {
-        pPrevSlot = (int*)((int)pListNext + ((int)pAudioStream - (int)pLinkedFile->pNext));
-      }
-
+      pPrevSlot = (int*)D2_StormNextLink(pAudioStream, -1);
       *pPrevSlot = (int)pLinkedFile;
       pAudioStream->pPrevLink->pNext = pAudioStream->pNext;
       pAudioStream->pPrevLink = 0;
@@ -3810,14 +3650,7 @@ int __stdcall SFileCloseArchive(D2ArchiveStrc * pArchive) {
 
     pNext = pNode->pPrevLink;
     if (pNext) {
-      D2ArchiveStrc* pPrev;
-      pPrev = pNode->pNext;
-      if ((int)pPrev < 0) {
-        pRefCount = (int*)~(uint32_t)pPrev;
-      } else {
-        pRefCount = (int*)((int)pPrev + ((int)pNode - (int)pNext->pNext));
-      }
-
+      pRefCount = (int*)D2_StormNextLink(pNode, -1);
       *pRefCount = (int)pNext;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
@@ -4041,12 +3874,7 @@ BOOL __stdcall SFileDdaDestroy() {
         pListNext = pCurrentRequest->pPrevLink;
         pNextRequest = (D2StormAudioStreamRec*)((int)pListPrev <= 0 ? 0 : (uint32_t)pListPrev);
         if (pListNext) {
-          if ((int)pListPrev < 0) {
-            pPrevLink = (int*)~(uint32_t)pListPrev;
-          } else {
-            pPrevLink = (int*)((int)pListPrev + ((int)pCurrentRequest - (int)pListNext->pNext));
-          }
-
+          pPrevLink = (int*)D2_StormNextLink(pCurrentRequest, -1);
           *pPrevLink = (int)pListNext;
           pCurrentRequest->pPrevLink->pNext = pCurrentRequest->pNext;
           pCurrentRequest->pPrevLink = 0;
@@ -4073,7 +3901,6 @@ BOOL __stdcall SFileDdaDestroy() {
 // Takes a D2StormAsyncOpStrc: drops the request's references to its file record (+0xc) and parent audio stream (+0x30), freeing either at zero, then unlinks the request from its list. Provenance: 1.14d asm 0041a04a/0041a077.
 void __fastcall SFILE_ReleaseAsyncRequest(D2StormAsyncOpStrc * pAsyncOp) {
     uint32_t* pAudioRefCount;
-    D2StormAsyncOpStrc* pPrev;
     pfnEHHandlerRoutine pExceptionHandler = __GSHandlerCheck_EH_6c9ec8;
     void* local_10 = ExceptionList;
     ExceptionList = &local_10;
@@ -4101,13 +3928,7 @@ void __fastcall SFILE_ReleaseAsyncRequest(D2StormAsyncOpStrc * pAsyncOp) {
     int pLinkedRecord = pAsyncOp->pPrevLink;
     if (pLinkedRecord) {
       int* pPrevSlot;
-      pPrev = pAsyncOp->pNext;
-      if ((int)pPrev < 0) {
-        pPrevSlot = (int*)~(uint32_t)pPrev;
-      } else {
-        pPrevSlot = (int*)((int)pPrev + ((int)pAsyncOp - *(int*)(pLinkedRecord + 4)));
-      }
-
+      pPrevSlot = (int*)D2_StormNextLink(pAsyncOp, -1);
       *pPrevSlot = pLinkedRecord;
       *(D2StormAsyncOpStrc**)(pAsyncOp->pPrevLink + 4) = pAsyncOp->pNext;
       pAsyncOp->pPrevLink = 0;
@@ -4556,7 +4377,6 @@ int __stdcall SFILE_CancelAsyncRequestWithStatus(int32_t nRequestHandle) {
 BOOL __stdcall SFileDdaEnd(D2MPQFileStrc * hFile) {
     D2StormAudioStreamRec* pNextRequest;
     D2StormAudioStreamRec* pCurrentRequest;
-    D2StormAudioStreamRec* pNextRequest2;
     uint32_t* pRefCount;
     D2StormAudioStreamRec* pUnlinkNext;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
@@ -4579,13 +4399,7 @@ BOOL __stdcall SFileDdaEnd(D2MPQFileStrc * hFile) {
           SFILE_CancelRequest(0, (D2MPQFileStrc*)pCurrentRequest->pStream);
           pUnlinkNext = pCurrentRequest->pPrevLink;
           if (pUnlinkNext) {
-            pNextRequest2 = pCurrentRequest->pNext;
-            if ((int)pNextRequest2 < 0) {
-              pPrevLink = (int*)~(uint32_t)pNextRequest2;
-            } else {
-              pPrevLink = (int*)((int)pNextRequest2 + ((int)pCurrentRequest - (int)pUnlinkNext->pNext));
-            }
-
+            pPrevLink = (int*)D2_StormNextLink(pCurrentRequest, -1);
             *pPrevLink = (int)pUnlinkNext;
             pCurrentRequest->pPrevLink->pNext = pCurrentRequest->pNext;
             pCurrentRequest->pPrevLink = 0;
@@ -5209,7 +5023,6 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
     StormLinkStrc** pScanPos;
     int* pBlockOffset;
     uint32_t pArchiveNext;
-    D2ArchiveStrc* pListPrev;
     __frame0.pSavedArchive = ppArchive;
     void* pScanBuffer = SMem::SMemAlloc(0x1000, ".\\SOURCE\\SFILE.CPP", 0x10c2, 0);
     __frame0.pDecryptBuf = 0;
@@ -5294,13 +5107,7 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
 
     D2ArchiveStrc* pNextNode = pListNode->pPrevLink;
     if (pNextNode) {
-      pListPrev = pListNode->pNext;
-      if ((int)pListPrev < 0) {
-        pBlockOffset = (int*)~(uint32_t)pListPrev;
-      } else {
-        pBlockOffset = (int*)((int)pListPrev + ((int)pListNode - (int)pNextNode->pNext));
-      }
-
+      pBlockOffset = (int*)D2_StormNextLink(pListNode, -1);
       *pBlockOffset = (int)pNextNode;
       pListNode->pPrevLink->pNext = pListNode->pNext;
       pListNode->pPrevLink = 0;
@@ -7940,12 +7747,8 @@ void StaticFini_gMpqArchiveList() {
     if (!gMpqArchiveList.pPrevLink) {
       return;
     }
-    if (gMpqArchiveList.pNext < 0) {
-      pNextLink = (uint32_t*)~gMpqArchiveList.pNext;
-    } else {
-      pNextLink = (uint32_t*)(gMpqArchiveList.pNext + ((int)((char*)&gMpqArchiveList + 4) - gMpqArchiveList.pPrevLink->pNext));
-    }
 
+    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gMpqArchiveList + 4, -1);
     *pNextLink = (uint32_t)(uintptr_t)gMpqArchiveList.pPrevLink;
     gMpqArchiveList.pPrevLink->pNext = gMpqArchiveList.pNext;
     gMpqArchiveList.pPrevLink = 0;
@@ -7959,12 +7762,8 @@ void StaticFini_gSFileAsyncReqQueue() {
     if (!gSFileAsyncReqQueue.pPrevLink) {
       return;
     }
-    if (gSFileAsyncReqQueue.pNext < 0) {
-      pNextLink = (uint32_t*)~gSFileAsyncReqQueue.pNext;
-    } else {
-      pNextLink = (uint32_t*)(gSFileAsyncReqQueue.pNext + ((int)((char*)&gSFileAsyncReqQueue + 4) - gSFileAsyncReqQueue.pPrevLink->pNext));
-    }
 
+    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gSFileAsyncReqQueue + 4, -1);
     *pNextLink = (uint32_t)(uintptr_t)gSFileAsyncReqQueue.pPrevLink;
     gSFileAsyncReqQueue.pPrevLink->pNext = gSFileAsyncReqQueue.pNext;
     gSFileAsyncReqQueue.pPrevLink = 0;
@@ -7978,12 +7777,8 @@ void StaticFini_gSFileOpenFileList() {
     if (!gSFileOpenFileList.pPrevLink) {
       return;
     }
-    if (gSFileOpenFileList.pNext < 0) {
-      pNextLink = (uint32_t*)~gSFileOpenFileList.pNext;
-    } else {
-      pNextLink = (uint32_t*)(gSFileOpenFileList.pNext + ((int)((char*)&gSFileOpenFileList + 4) - gSFileOpenFileList.pPrevLink->pNext));
-    }
 
+    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gSFileOpenFileList + 4, -1);
     *pNextLink = (uint32_t)(uintptr_t)gSFileOpenFileList.pPrevLink;
     gSFileOpenFileList.pPrevLink->pNext = gSFileOpenFileList.pNext;
     gSFileOpenFileList.pPrevLink = 0;
@@ -7997,12 +7792,8 @@ void StaticFini_gSFileAudioStreamList() {
     if (!gSFileAudioStreamList.pPrevLink) {
       return;
     }
-    if (gSFileAudioStreamList.pNext < 0) {
-      pNextLink = (uint32_t*)~gSFileAudioStreamList.pNext;
-    } else {
-      pNextLink = (uint32_t*)(gSFileAudioStreamList.pNext + ((int)((char*)&gSFileAudioStreamList + 4) - gSFileAudioStreamList.pPrevLink->pNext));
-    }
 
+    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gSFileAudioStreamList + 4, -1);
     *pNextLink = (uint32_t)(uintptr_t)gSFileAudioStreamList.pPrevLink;
     gSFileAudioStreamList.pPrevLink->pNext = gSFileAudioStreamList.pNext;
     gSFileAudioStreamList.pPrevLink = 0;
@@ -8016,12 +7807,8 @@ void StaticFini_gSFileStreamRecordList() {
     if (!gSFileStreamRecordList.pPrevLink) {
       return;
     }
-    if (gSFileStreamRecordList.pNext < 0) {
-      pNextLink = (uint32_t*)~gSFileStreamRecordList.pNext;
-    } else {
-      pNextLink = (uint32_t*)(gSFileStreamRecordList.pNext + ((int)((char*)&gSFileStreamRecordList + 4) - gSFileStreamRecordList.pPrevLink->pNext));
-    }
 
+    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gSFileStreamRecordList + 4, -1);
     *pNextLink = (uint32_t)(uintptr_t)gSFileStreamRecordList.pPrevLink;
     gSFileStreamRecordList.pPrevLink->pNext = gSFileStreamRecordList.pNext;
     gSFileStreamRecordList.pPrevLink = 0;

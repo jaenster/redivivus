@@ -268,7 +268,6 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
     int* pPrevLink;
     uint32_t* pPrevSlot;
     StormLinkStrc** pNewCallback;
-    uint32_t nPrevLinkOffset;
     SERR_InternalEnterCriticalSection();
     StormLinkStrc** pNode = (StormLinkStrc**)SMem::SMemAlloc(0xc, gszSSystemListAllocTag, -2, 0x8000008);
     if (pNode) {
@@ -282,13 +281,7 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
 
     StormLinkStrc* pNextNode = *pNode;
     if (pNextNode) {
-      nPrevLinkOffset = (uint32_t)pNode[1];
-      if ((int)nPrevLinkOffset < 0) {
-        pPrevLink = (int*)~nPrevLinkOffset;
-      } else {
-        pPrevLink = (int*)((int)pNode + (nPrevLinkOffset - pNextNode->pNext));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
       *pPrevLink = (int)pNextNode;
       (*pNode)->pNext = (int)pNode[1];
       *pNode = 0;
@@ -324,14 +317,7 @@ uint32_t __thiscall SSYSTEM_ListRemoveAndFree(void * pList, int * pNode) {
     uint32_t nResultOffset = pPrevLink[1];
     int pNext = *pNode;
     if (pNext) {
-      uint32_t nOffset;
-      nOffset = pNode[1];
-      if ((int)nOffset < 0) {
-        pPrevLink = (int*)~nOffset;
-      } else {
-        pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
       *pPrevLink = pNext;
       *(int*)(*pNode + 4) = pNode[1];
       *pNode = 0;
@@ -682,12 +668,8 @@ void StaticFini_gStormErrorCallbackList() {
     if (!gnStormErrorCallbackCount.pPrevLink) {
       return;
     }
-    if (gnStormErrorCallbackCount.pNext < 0) {
-      pBackLink = (uint32_t*)~gnStormErrorCallbackCount.pNext;
-    } else {
-      pBackLink = (uint32_t*)(gnStormErrorCallbackCount.pNext + ((int)((char*)&gnStormErrorCallbackCount + 4) - gnStormErrorCallbackCount.pPrevLink->pNext));
-    }
 
+    pBackLink = (uint32_t*)D2_StormNextLink((char*)&gnStormErrorCallbackCount + 4, -1);
     *pBackLink = (uint32_t)(uintptr_t)gnStormErrorCallbackCount.pPrevLink;
     gnStormErrorCallbackCount.pPrevLink->pNext = gnStormErrorCallbackCount.pNext;
     gnStormErrorCallbackCount.pPrevLink = 0;

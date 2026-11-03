@@ -1799,2114 +1799,2114 @@ D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer() {
 uint16_t * __fastcall TEXT_LookupSoundStringIndex(uint16_t nSoundId) {
     // Static local variables (originally global data)
     static D2SoundStringKeyStrc gaSoundStringKeys[527] = {
-    D2SoundStringKeyStrc(
+    {
         /* .nSoundId = */ 0x40,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x41,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x42,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x43,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x44,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x45,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x46,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x47,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x48,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x49,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4a,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4b,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4c,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4d,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4f,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x50,
         /* .nStringKey = */ 0xe82
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x51,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x52,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x53,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x54,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x55,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x56,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x57,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x58,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x59,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x5a,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x5b,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x5c,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x5d,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x5e,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x5f,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x60,
         /* .nStringKey = */ 0xe83
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x61,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x62,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x63,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x64,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x65,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x66,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x67,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x68,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x69,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x6a,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x6b,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x6c,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x6d,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x6e,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x6f,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x70,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x71,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x72,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x73,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x74,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x75,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x76,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x77,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x78,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x79,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x7a,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x7b,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x7e,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x7c,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x7d,
         /* .nStringKey = */ 0xe85
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x7f,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x80,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x81,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x82,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x83,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x84,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x85,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x86,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x87,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x88,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x89,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x8a,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x8b,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x8c,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x8d,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x8e,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x8f,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x90,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x91,
         /* .nStringKey = */ 0xe86
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x92,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x93,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x94,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x95,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x96,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x97,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x98,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x99,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x9a,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x9b,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x9c,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x9d,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x9e,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x9f,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa0,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa1,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa2,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa3,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa4,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa5,
         /* .nStringKey = */ 0xe84
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa6,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa7,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa8,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xa9,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xaa,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xab,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xac,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xad,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xae,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xaf,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb0,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb1,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb2,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb3,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb4,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb5,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb6,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb7,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0xb8,
         /* .nStringKey = */ 0xe87
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x130,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x131,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x132,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x133,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x134,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x135,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x136,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x137,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x138,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x139,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x13a,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x13b,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x13c,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x13d,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x13e,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x13f,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x140,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x141,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x142,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x143,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x144,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x145,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x146,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x147,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x148,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x149,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x14a,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x14b,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x14c,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x14d,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x14e,
         /* .nStringKey = */ 0x39b
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x14f,
         /* .nStringKey = */ 0x39c
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x150,
         /* .nStringKey = */ 0x39c
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x151,
         /* .nStringKey = */ 0x39c
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x152,
         /* .nStringKey = */ 0x39c
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x153,
         /* .nStringKey = */ 0x39c
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x154,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x155,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x156,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x157,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x158,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x159,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x15a,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x15b,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x15c,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x15d,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x15e,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x15f,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x160,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x161,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x162,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x163,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x164,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x165,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x166,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x167,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x168,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x169,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x16a,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x16b,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x16c,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x16d,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x16e,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x16f,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x170,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x171,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x172,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x173,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x174,
         /* .nStringKey = */ 0x39d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x175,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x176,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x177,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x178,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x179,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x17a,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x17b,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x17c,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x17d,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x17e,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x17f,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x180,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x181,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x182,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x183,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x184,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x185,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x186,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x187,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x188,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x189,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x18a,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x18b,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x18d,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x18e,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x18f,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x190,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x191,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x192,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x193,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x194,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x195,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x196,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x197,
         /* .nStringKey = */ 0x39e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x198,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x199,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x19a,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x19b,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x19c,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x19d,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x19e,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x19f,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a0,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a1,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a2,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a3,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a4,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a5,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a6,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a7,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a8,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1a9,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1aa,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1ab,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1ac,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1ad,
         /* .nStringKey = */ 0x39f
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1ae,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b0,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b1,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b2,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b3,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1af,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b4,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b5,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b6,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b7,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b8,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1b9,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1ba,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1bb,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1bc,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1bd,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1be,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1bf,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1c0,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1c1,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1c2,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1c3,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x1c4,
         /* .nStringKey = */ 0x3a0
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x225,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x226,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x227,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x228,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x229,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x22a,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x22b,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x22c,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x22d,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x22e,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x22f,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x230,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x231,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x232,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x233,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x234,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x235,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x236,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x237,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x238,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x239,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x23a,
         /* .nStringKey = */ 0x3a2
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x21f,
         /* .nStringKey = */ 0x3a3
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x221,
         /* .nStringKey = */ 0x3a3
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x220,
         /* .nStringKey = */ 0x3a3
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x222,
         /* .nStringKey = */ 0x3a3
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x223,
         /* .nStringKey = */ 0x3a3
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x224,
         /* .nStringKey = */ 0x3a3
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x23b,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x23c,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x23d,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x23e,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x23f,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x240,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x241,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x242,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x243,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x244,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x245,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x246,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x247,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x248,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x249,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x24a,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x24b,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x251,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x24c,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x24d,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x24e,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x24f,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x250,
         /* .nStringKey = */ 0x3a4
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x20f,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x210,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x211,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x212,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x213,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x214,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x215,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x216,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x217,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x218,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x219,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x21a,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x21b,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x21c,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x21d,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x21e,
         /* .nStringKey = */ 0x3a5
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x252,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x253,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x254,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x255,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x256,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x257,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x258,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x259,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x25a,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x25b,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x25c,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x25d,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x25e,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x25f,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x260,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x261,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x262,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x263,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x264,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x265,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x266,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x267,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x268,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x269,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x26a,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x26b,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x26c,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x26d,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x26e,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x26f,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x270,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x271,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x272,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x273,
         /* .nStringKey = */ 0x3a6
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x274,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x275,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x276,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x277,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x278,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x279,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x27a,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x27b,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x27d,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x27e,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x27f,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x280,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x281,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x282,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x283,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x284,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x285,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x286,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x287,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x288,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x289,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x28a,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x28b,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x28c,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x28d,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x28e,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x28f,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x290,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x291,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x292,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x293,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x294,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x295,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x296,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x297,
         /* .nStringKey = */ 0x3a7
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x29e,
         /* .nStringKey = */ 0x3a9
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x29f,
         /* .nStringKey = */ 0x3a9
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a0,
         /* .nStringKey = */ 0x3a9
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a1,
         /* .nStringKey = */ 0x3a9
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a2,
         /* .nStringKey = */ 0x3a9
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a3,
         /* .nStringKey = */ 0x3a9
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a4,
         /* .nStringKey = */ 0x3a9
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a5,
         /* .nStringKey = */ 0x3a9
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a9,
         /* .nStringKey = */ 0x3aa
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2aa,
         /* .nStringKey = */ 0x3aa
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2ab,
         /* .nStringKey = */ 0x3aa
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2ac,
         /* .nStringKey = */ 0x3aa
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2ad,
         /* .nStringKey = */ 0x3aa
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a6,
         /* .nStringKey = */ 0x3ab
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a7,
         /* .nStringKey = */ 0x3ab
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x2a8,
         /* .nStringKey = */ 0x3ab
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e20,
         /* .nStringKey = */ 0x3aa
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e21,
         /* .nStringKey = */ 0x3aa
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e6d,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e6e,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e6f,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e70,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e71,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e72,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e73,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e74,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e75,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e76,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e77,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e78,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e79,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e7a,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e7b,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e7c,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e7d,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e7e,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e7f,
         /* .nStringKey = */ 0x585a
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e80,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e81,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e82,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e83,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e84,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e85,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e86,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e87,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e88,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e89,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e8a,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e8b,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e8c,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e8d,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e8e,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e8f,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e90,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e91,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e92,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e93,
         /* .nStringKey = */ 0x585e
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e94,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e95,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e96,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e97,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e98,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e99,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e9a,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e9b,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e9c,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e9d,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e9e,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e9f,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea0,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea1,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea2,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea3,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea8,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea4,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea5,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea6,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea7,
         /* .nStringKey = */ 0x5863
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ea9,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eac,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eab,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ead,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eae,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eaf,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb0,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb1,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb2,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb3,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb4,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb5,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb6,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb7,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb8,
         /* .nStringKey = */ 0x5869
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eb9,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eba,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ebb,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ebc,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ebd,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ebe,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ebf,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec0,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec1,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec2,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec3,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4e22,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec6,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec5,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec7,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec8,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec4,
         /* .nStringKey = */ 0x586d
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ec9,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4eca,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ecb,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ecc,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ecd,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ece,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ecf,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ed0,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ed1,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ed2,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ed3,
         /* .nStringKey = */ 0x5871
-    ),
-    D2SoundStringKeyStrc(
+    },
+    {
         /* .nSoundId = */ 0x4ed4,
         /* .nStringKey = */ 0x5871
-    )
+    }
 }; D2_STATIC_GUARD(gaSoundStringKeys, "D2Client::UI::Text::TEXT_LookupSoundStringIndex::gaSoundStringKeys");
     static int gSoundStringLookupPrevIdx = 0x20f; D2_STATIC_GUARD(gSoundStringLookupPrevIdx, "D2Client::UI::Text::TEXT_LookupSoundStringIndex::gSoundStringLookupPrevIdx");
 

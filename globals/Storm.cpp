@@ -240,2729 +240,2729 @@ D2SSCompDeflateBlockEntryStrc gaSSCompDeflateBlockTable[10] = {
 }; D2_GLOBAL_GUARD(gaSSCompDeflateBlockTable, "gaSSCompDeflateBlockTable");
 
 ZlibHuffCode gaZlibInflateTableMid[512] = {
-    ZlibHuffCode(
+    {
         /* .op = */ '`',
         /* .bits = */ '\x07',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x50
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x10
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x08',
         /* .val = */ 0x73
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x1f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x70
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x30
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0xa
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x60
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x20
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x80
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x40
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x58
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x18
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x90
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x3b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x78
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x38
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0x11
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x68
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x28
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x88
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x48
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x54
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x14
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x08',
         /* .val = */ 0xe3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x2b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x74
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x34
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x64
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x24
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x84
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x44
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x98
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x53
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x17
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xc
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x52
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x12
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x08',
         /* .val = */ 0xa3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x23
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x72
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x32
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x62
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x22
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x82
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x42
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x94
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x43
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x13
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xa
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x56
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x16
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '@',
         /* .bits = */ '\x08',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x33
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x76
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x36
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xcc
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x66
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x26
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xac
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x86
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x46
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xec
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x9c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x63
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xdc
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x1b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xbc
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xe
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xfc
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '`',
         /* .bits = */ '\x07',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x51
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x11
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x08',
         /* .val = */ 0x83
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x1f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x71
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x31
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0xa
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x61
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x21
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x81
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x41
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x59
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x19
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x92
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x3b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x79
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x39
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0x11
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x69
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x29
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x89
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x49
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x55
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x15
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x08',
         /* .val = */ 0x102
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x2b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x75
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x35
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xca
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x65
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x25
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xaa
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x85
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x45
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xea
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x9a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x53
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xda
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x17
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xba
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xfa
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x53
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x13
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x08',
         /* .val = */ 0xc3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x23
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x73
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x33
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x63
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x23
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x83
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x43
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x96
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x43
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x13
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x57
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x17
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '@',
         /* .bits = */ '\x08',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x33
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x77
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x37
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xce
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x67
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x27
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xae
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x87
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x47
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xee
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x9e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x63
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xde
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x1b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xbe
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xfe
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '`',
         /* .bits = */ '\x07',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x50
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x10
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x08',
         /* .val = */ 0x73
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x1f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x70
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x30
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0xa
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x60
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x20
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x80
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x40
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x58
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x18
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x91
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x3b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x78
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x38
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0x11
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x68
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x28
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x88
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x48
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x54
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x14
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x08',
         /* .val = */ 0xe3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x2b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x74
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x34
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x64
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x24
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x84
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x44
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x99
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x53
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x17
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xc
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4c
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x52
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x12
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x08',
         /* .val = */ 0xa3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x23
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x72
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x32
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x62
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x22
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x82
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x42
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x95
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x43
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x13
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xa
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4a
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x56
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x16
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '@',
         /* .bits = */ '\x08',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x33
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x76
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x36
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xcd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x66
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x26
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xad
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x86
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x46
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xed
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x9d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x63
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xdd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x1b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xbd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xe
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4e
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xfd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '`',
         /* .bits = */ '\x07',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x51
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x11
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x08',
         /* .val = */ 0x83
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x1f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x71
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x31
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0xa
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x61
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x21
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x81
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x41
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x6
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x59
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x19
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x93
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x3b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x79
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x39
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0x11
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x69
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x29
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x89
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x49
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x55
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x15
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x08',
         /* .val = */ 0x102
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x2b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x75
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x35
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xcb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x65
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x25
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xab
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x85
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x45
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xeb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x8
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x9b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x53
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xdb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x17
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xbb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4d
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xfb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x53
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x13
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x08',
         /* .val = */ 0xc3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x23
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x73
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x33
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xc7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x63
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x23
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xa7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x83
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x43
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xe7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x97
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x43
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xd7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x13
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xb7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xb
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xf7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x57
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x17
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '@',
         /* .bits = */ '\x08',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x07',
         /* .val = */ 0x33
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x77
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x37
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xcf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x07',
         /* .val = */ 0xf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x67
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x27
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xaf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x87
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x47
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xef
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x07',
         /* .val = */ 0x9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x5f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x1f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0x9f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x07',
         /* .val = */ 0x63
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x7f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x3f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xdf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x07',
         /* .val = */ 0x1b
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x6f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x2f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xbf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0xf
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x8f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x08',
         /* .val = */ 0x4f
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x00',
         /* .bits = */ '\x09',
         /* .val = */ 0xff
-    )
+    }
 }; D2_GLOBAL_GUARD(gaZlibInflateTableMid, "gaZlibInflateTableMid");
 
 ZlibHuffCode gaZlibInflateTableStart[32] = {
-    ZlibHuffCode(
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x05',
         /* .val = */ 0x1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x17',
         /* .bits = */ '\x05',
         /* .val = */ 0x101
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x05',
         /* .val = */ 0x11
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x1b',
         /* .bits = */ '\x05',
         /* .val = */ 0x1001
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x05',
         /* .val = */ 0x5
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x19',
         /* .bits = */ '\x05',
         /* .val = */ 0x401
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x05',
         /* .val = */ 0x41
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x1d',
         /* .bits = */ '\x05',
         /* .val = */ 0x4001
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x05',
         /* .val = */ 0x3
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x18',
         /* .bits = */ '\x05',
         /* .val = */ 0x201
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x05',
         /* .val = */ 0x21
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x1c',
         /* .bits = */ '\x05',
         /* .val = */ 0x2001
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x05',
         /* .val = */ 0x9
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x1a',
         /* .bits = */ '\x05',
         /* .val = */ 0x801
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x16',
         /* .bits = */ '\x05',
         /* .val = */ 0x81
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '@',
         /* .bits = */ '\x05',
         /* .val = */ 0x0
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x05',
         /* .val = */ 0x2
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x17',
         /* .bits = */ '\x05',
         /* .val = */ 0x181
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x13',
         /* .bits = */ '\x05',
         /* .val = */ 0x19
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x1b',
         /* .bits = */ '\x05',
         /* .val = */ 0x1801
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x11',
         /* .bits = */ '\x05',
         /* .val = */ 0x7
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x19',
         /* .bits = */ '\x05',
         /* .val = */ 0x601
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x15',
         /* .bits = */ '\x05',
         /* .val = */ 0x61
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x1d',
         /* .bits = */ '\x05',
         /* .val = */ 0x6001
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x10',
         /* .bits = */ '\x05',
         /* .val = */ 0x4
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x18',
         /* .bits = */ '\x05',
         /* .val = */ 0x301
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x14',
         /* .bits = */ '\x05',
         /* .val = */ 0x31
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x1c',
         /* .bits = */ '\x05',
         /* .val = */ 0x3001
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x12',
         /* .bits = */ '\x05',
         /* .val = */ 0xd
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x1a',
         /* .bits = */ '\x05',
         /* .val = */ 0xc01
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '\x16',
         /* .bits = */ '\x05',
         /* .val = */ 0xc1
-    ),
-    ZlibHuffCode(
+    },
+    {
         /* .op = */ '@',
         /* .bits = */ '\x05',
         /* .val = */ 0x0
-    )
+    }
 }; D2_GLOBAL_GUARD(gaZlibInflateTableStart, "gaZlibInflateTableStart");
 
 // also labelled: gnSSCompLZHBufferState, gaZlibBlTreeCodeOrderMinus3, cZlibBuildBlTree_0
@@ -3058,1283 +3058,1283 @@ int gaZlibExtraDBits[30] = {
 
 // also labelled: gnSSCompBLZCompressedSize
 ct_data gaZlibStaticLTree[288] = {
-    ct_data(
+    {
         /* .fc = */ 0xc,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x8c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x4c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xcc,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x2c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xac,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x6c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xec,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x9c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x5c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xdc,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x3c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xbc,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x7c,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xfc,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x2,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x82,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x42,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xc2,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x22,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xa2,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x62,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xe2,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x12,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x92,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x52,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xd2,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x32,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xb2,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x72,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xf2,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xa,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x8a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x4a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xca,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x2a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xaa,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x6a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xea,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x9a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x5a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xda,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x3a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xba,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x7a,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xfa,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x6,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x86,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x46,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xc6,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x26,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xa6,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x66,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xe6,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x16,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x96,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x56,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xd6,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x36,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xb6,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x76,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xf6,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xe,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x8e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x4e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xce,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x2e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xae,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x6e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xee,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x9e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x5e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xde,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x3e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xbe,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x7e,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xfe,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x81,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x41,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xc1,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x21,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xa1,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x61,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xe1,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x11,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x91,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x51,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xd1,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x31,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xb1,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x71,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xf1,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x9,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x89,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x49,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xc9,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x29,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xa9,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x69,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xe9,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x19,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x99,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x59,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xd9,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x39,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xb9,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x79,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xf9,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x5,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x85,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x45,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xc5,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x25,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xa5,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x65,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xe5,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x15,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x95,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x55,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xd5,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x35,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xb5,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x75,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xf5,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xd,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x8d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x4d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xcd,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x2d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xad,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x6d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xed,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x9d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x5d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xdd,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x3d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xbd,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x7d,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xfd,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x13,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x113,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x93,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x193,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x53,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x153,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xd3,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1d3,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x33,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x133,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xb3,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1b3,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x73,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x173,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xf3,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1f3,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x10b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x8b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x18b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x4b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x14b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xcb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1cb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x2b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x12b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xab,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1ab,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x6b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x16b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xeb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1eb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x11b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x9b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x19b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x5b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x15b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xdb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1db,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x3b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x13b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xbb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1bb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x7b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x17b,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xfb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1fb,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x107,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x87,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x187,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x47,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x147,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xc7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1c7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x27,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x127,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xa7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1a7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x67,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x167,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xe7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1e7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x17,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x117,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x97,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x197,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x57,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x157,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xd7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1d7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x37,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x137,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xb7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1b7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x77,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x177,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xf7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1f7,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xf,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x10f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x8f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x18f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x4f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x14f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xcf,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1cf,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x2f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x12f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xaf,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1af,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x6f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x16f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xef,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1ef,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x11f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x9f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x19f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x5f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x15f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xdf,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1df,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x3f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x13f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xbf,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1bf,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x7f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x17f,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xff,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x1ff,
         /* .dl = */ 0x9
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x0,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x40,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x20,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x60,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x10,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x50,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x30,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x70,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x8,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x48,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x28,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x68,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x18,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x58,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x38,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x78,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x4,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x44,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x24,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x64,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x14,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x54,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x34,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x74,
         /* .dl = */ 0x7
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x3,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x83,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x43,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xc3,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x23,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xa3,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0x63,
         /* .dl = */ 0x8
-    ),
-    ct_data(
+    },
+    {
         /* .fc = */ 0xe3,
         /* .dl = */ 0x8
-    )
+    }
 }; D2_GLOBAL_GUARD(gaZlibStaticLTree, "gaZlibStaticLTree");
 
 // also labelled: gnSSCompPHDCompressedSize, gaZlibDistCodeMinus1
 D2ZlibStaticDTreeDistCodeStrc gZlibStaticDTreeDistCode = {
     /* .static_dtree = */ {
-        ct_data(
+        {
             /* .fc = */ 0x0,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x10,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x8,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x18,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x4,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x14,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0xc,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x1c,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x2,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x12,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0xa,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x1a,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x6,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x16,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0xe,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x1e,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x1,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x11,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x9,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x19,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x5,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x15,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0xd,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x1d,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x3,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x13,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0xb,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x1b,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x7,
             /* .dl = */ 0x5
-        ),
-        ct_data(
+        },
+        {
             /* .fc = */ 0x17,
             /* .dl = */ 0x5
-        )
+        }
     },
     /* ._dist_code = */ {
         0x0,

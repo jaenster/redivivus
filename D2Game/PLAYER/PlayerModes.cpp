@@ -104,7 +104,7 @@ static BOOL PLRMODES_HasEndAnimEventAndSeqInput(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Checks if the player unit can interrupt its current animation mode to start the specified new mode. Returns TRUE if the new mode can interrupt.
-BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode) {
+static BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode) {
     // Static local variables (originally global data)
     static uint8_t PLRMODES_CanInterruptCaseIndex[18] = {
     0x0,
@@ -194,6 +194,11 @@ BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, u
     }
 
     return 1;
+}
+
+// Extern entry for hand-written callers: PLRMODES_CanInterruptCurrentMode itself keeps its unit's linkage.
+BOOL PLRMODES_CanInterruptCurrentMode_Extern(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode) {
+    return ::D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode(pUnit, pGame, nNewMode);
 }
 
 // Attempts to cancel current player mode and initiate movement to a target location. Validates unit state, checks for blocking modes, and dispatches path-finding for the move.
@@ -415,8 +420,7 @@ static BOOL PLRMODES_DrainStamina(D2UnitStrc * pUnit) {
 
     int32_t nDrainPctStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_staminadrainpct, 0);
     if (nDrainPctStat) {
-      nDrainAdjusted = (int)((uint64_t)((int64_t)(nDrainPctStat * nStaminaDrain) * -0x51eb851f) >> 0x20);
-      nStaminaDrain += (nDrainAdjusted >> 5) - (nDrainAdjusted >> 0x1f);
+      nStaminaDrain += nDrainPctStat * nStaminaDrain / -100;
     }
     if (nStaminaDrain < 1) {
       nStaminaDrain = 1;

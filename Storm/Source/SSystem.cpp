@@ -255,13 +255,7 @@ void __thiscall SSYSTEM_ListUnlink(int32_t pThis, int * pNode) {
       return;
     }
 
-    uint32_t nOffset = pNode[1];
-    if ((int)nOffset < 0) {
-      pPrevLink = (int*)~nOffset;
-    } else {
-      pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
     *pPrevLink = pNext;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -280,7 +274,6 @@ uint32_t __thiscall SSYSTEM_ListGetData(int32_t pList, int32_t pNode) {
 // Named per redivivus issue #35; T from the list's delete tag .?AUHANDLER@@ (00708434).
 void __fastcall TSList_HANDLER_UnlinkAll(D2StormListHead * pList) {
     int* pPrevLink;
-    uint32_t nOffset;
     int* pNode;
     while (true) {
       int pNext;
@@ -291,13 +284,7 @@ void __fastcall TSList_HANDLER_UnlinkAll(D2StormListHead * pList) {
 
       pNext = *pNode;
       if (pNext) {
-        nOffset = pNode[1];
-        if ((int)nOffset < 0) {
-          pPrevLink = (int*)~nOffset;
-        } else {
-          pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
         *pPrevLink = pNext;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -317,13 +304,7 @@ void __fastcall TSList_HANDLER_Destructor(D2StormListHead * pList) {
       return;
     }
 
-    uint32_t nOffset = pList->pNext;
-    if ((int)nOffset < 0) {
-      pPrevLink = (int*)~nOffset;
-    } else {
-      pPrevLink = (int*)((int)pHead + (nOffset - pNext->pNext));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pHead, -1);
     *pPrevLink = (int)pNext;
     (*pHead)->pNext = pList->pNext;
     *pHead = 0;
@@ -348,17 +329,10 @@ int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int
 }
 
 int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory) {
-    uint32_t nOffset;
     int pNext = *pNode;
     if (pNext) {
       int* pPrevLink;
-      nOffset = pNode[1];
-      if ((int)nOffset < 0) {
-        pPrevLink = (int*)~nOffset;
-      } else {
-        pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
       *pPrevLink = pNext;
       *(int*)(*pNode + 4) = pNode[1];
       *pNode = 0;
@@ -375,7 +349,6 @@ int * __thiscall SSYSTEM_ListFreeNode(int * pNode, uint8_t bFreeMemory) {
 // Named per redivivus issue #35; T from the delete tag .?AUHANDLER@@ (00708434).
 void __fastcall TSList_HANDLER_Clear(int32_t pList) {
     int* pPrevLink;
-    uint32_t nOffset;
     int* pNode;
     while (true) {
       int pNext;
@@ -386,13 +359,7 @@ void __fastcall TSList_HANDLER_Clear(int32_t pList) {
 
       pNext = *pNode;
       if (pNext) {
-        nOffset = pNode[1];
-        if ((int)nOffset < 0) {
-          pPrevLink = (int*)~nOffset;
-        } else {
-          pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
         *pPrevLink = pNext;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;

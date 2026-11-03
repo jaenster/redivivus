@@ -128,12 +128,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::LinkNode(::Mapping
     if (pDestSlot) {
       int* pPrevLink;
       pTailLink = pSrcSlot->m_next;
-      if ((int)pTailLink < 0) {
-        pPrevLink = (int*)~pTailLink;
-      } else {
-        pPrevLink = (int*)((int)pSrcSlot + (pTailLink - pDestSlot->m_next));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pSrcSlot, -1);
       *pPrevLink = (int)pDestSlot;
       pSrcSlot->m_prevlink->m_next = pSrcSlot->m_next;
       pSrcSlot->m_prevlink = 0;
@@ -199,13 +194,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkNode(::Mappi
       return;
     }
 
-    uint32_t nNextLink = pSlot->m_next;
-    if ((int)nNextLink < 0) {
-      pPrevLink = (int*)~nNextLink;
-    } else {
-      pPrevLink = (int*)((int)pSlot + (nNextLink - nHeadEntry->m_next));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pSlot, -1);
     *pPrevLink = (int)nHeadEntry;
     pSlot->m_prevlink->m_next = pSlot->m_next;
     pSlot->m_prevlink = 0;

@@ -3126,8 +3126,7 @@ void __fastcall ForAllButDenOfEvil(D2DrlgLevelStrc * pLevel) {
       }
 
       nShufflePos++;
-      nSwapTemp = (int)((uint64_t)((int64_t)nShufflePos * 0x77777777) >> 0x20) - nShufflePos;
-      nShufflePos += ((nSwapTemp >> 3) - (nSwapTemp >> 0x1f)) * 0xf;
+      nShufflePos += nShufflePos / -15 * 0xf;
     }
 }
 

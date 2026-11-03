@@ -33,10 +33,7 @@ struct _SYSTEM_INFO {
 #endif // _WIN32
 
 struct D2FogHeapBlockHdrStrc {
-    D2FogHeapBlockHdrStrc() = default;
-    D2FogHeapBlockHdrStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2FogHeapBlockHdrStrc(uint16_t a0, uint8_t a1, uint8_t a2, uint32_t a3) : wBlockSize(a0), byPadding(a1), byFlags(a2), dwHeapSignature(a3) {}
 
     /* 0x00 */ uint16_t wBlockSize; // total block size in bytes (includes header)
     /* 0x02 */ uint8_t byPadding; // extra padding bytes between header and user data

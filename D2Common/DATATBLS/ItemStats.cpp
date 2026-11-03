@@ -191,55 +191,32 @@ int * __stdcall thunk_UNIT_GetStateList_StateFlags(D2UnitStrc * pUnit) {
 }
 
 static BOOL STATES_HasMatchingStateFlag(D2UnitStrc * pUnit, D2StatesDataTbls * pStatesData) {
+    int i;
     int32_t nStateFlags = (int32_t)Stats::StatsEx::GetStateFlags(pUnit);
     if (!nStateFlags) {
       return 0;
     }
 
-    int nDwordCount = sgptDataTable->nTxtStatesSize + 0x1f;
-    nDwordCount = nDwordCount / 32;
-    int i = 0;
-    if (nDwordCount <= 0) {
-      return 0;
-    }
-
-    int nStateOffset = nStateFlags - (int)pStatesData;
-    do {
-      if (pStatesData->nStateBitmask[0] & *(uint32_t*)(nStateOffset + (int)pStatesData)) {
+    for (i = 0; i < (sgptDataTable->nTxtStatesSize + 0x1f) / 32; i++) {
+      if (pStatesData->nStateBitmask[i] & ((uint32_t*)nStateFlags)[i]) {
         return 1;
       }
-
-      i++;
-      pStatesData = (D2StatesDataTbls*)((int)pStatesData + 4);
-    } while (i < nDwordCount);
+    }
 
     return 0;
 }
 
 void __stdcall STATES_MoveToGfxFlags(D2UnitStrc * pUnit, uint32_t * pMaskWords) {
-    int nTxtStatesSize;
-    uint32_t* pGfxWord;
+    int i;
     int* pGfxFlags = Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     int* nStateOffset = Stats::StatsEx::GetStateFlags(pUnit);
     if (!(pGfxFlags && nStateOffset)) {
       return;
     }
 
-    int nGfxOffset = sgptDataTable->nTxtStatesSize + 0x1f;
-    int i = 0;
-    if (nGfxOffset / 32 > 0) {
-      int nGfxFlagsDelta;
-      nGfxFlagsDelta = (int)pGfxFlags - (int)pMaskWords;
-      nGfxOffset = (int)nStateOffset - (int)pMaskWords;
-      do {
-        i++;
-        pGfxWord = (uint32_t*)(nGfxFlagsDelta + (int)pMaskWords);
-        *pGfxWord |= *pMaskWords & *(uint32_t*)(nGfxOffset + (int)pMaskWords);
-        pGfxWord = (uint32_t*)(nGfxOffset + (int)pMaskWords);
-        *pGfxWord &= ~*pMaskWords;
-        nTxtStatesSize = sgptDataTable->nTxtStatesSize + 0x1f;
-        pMaskWords++;
-      } while (i < nTxtStatesSize / 32);
+    for (i = 0; i < (sgptDataTable->nTxtStatesSize + 0x1f) / 32; i++) {
+      ((uint32_t*)pGfxFlags)[i] |= pMaskWords[i] & ((uint32_t*)nStateOffset)[i];
+      ((uint32_t*)nStateOffset)[i] &= ~pMaskWords[i];
     }
 
     Unit::ROOM_LinkUnitToUpdateList(pUnit);

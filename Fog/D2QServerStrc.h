@@ -12,10 +12,7 @@
 typedef struct D2QServerClientConnectionStrc * * D2QServerClientIpHashBucketTable;
 
 struct D2QServerTokenFilterEntryStrc {
-    D2QServerTokenFilterEntryStrc() = default;
-    D2QServerTokenFilterEntryStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2QServerTokenFilterEntryStrc(uint32_t a0, uint32_t a1) : nExpectedMaskedToken(a0), nMaskTableIndex(a1) {}
 
     /* 0x00 */ uint32_t nExpectedMaskedToken; // Expected value after mask application
     /* 0x04 */ uint32_t nMaskTableIndex; // Prefix length 0..32: index into gadwQServerPrefixMasks

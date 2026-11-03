@@ -25,10 +25,7 @@ struct D2HSLColorStrc {
 };
 
 struct D2PaletteEntryStrc {
-    D2PaletteEntryStrc() = default;
-    D2PaletteEntryStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-    D2PaletteEntryStrc(uint8_t a0, uint8_t a1, uint8_t a2, uint8_t a3) : r(a0), g(a1), b(a2), a(a3) {}
 
     /* 0x00 */ uint8_t r;
     /* 0x01 */ uint8_t g;

@@ -2586,7 +2586,7 @@ void __stdcall DRAW_Overlay_EnteringAreaX() {
 }; D2_STATIC_GUARD(gnQuestAreaIntroLevelId_0, "D2Client::UI::ui::DRAW_Overlay_EnteringAreaX::gnQuestAreaIntroLevelId_0");
     static int gnQuestAreaIntroCount = 0x2; D2_STATIC_GUARD(gnQuestAreaIntroCount, "D2Client::UI::ui::DRAW_Overlay_EnteringAreaX::gnQuestAreaIntroCount");
     static uint32_t gnAreaNameCurrentLevelId; D2_STATIC_GUARD_BSS(gnAreaNameCurrentLevelId, "D2Client::UI::ui::DRAW_Overlay_EnteringAreaX::gnAreaNameCurrentLevelId");
-    static D2ClientTimerStrc gnAreaNameOverlay = D2ClientTimerStrc(); D2_STATIC_GUARD(gnAreaNameOverlay, "D2Client::UI::ui::DRAW_Overlay_EnteringAreaX::gnAreaNameOverlay");
+    static D2ClientTimerStrc gnAreaNameOverlay = {}; D2_STATIC_GUARD(gnAreaNameOverlay, "D2Client::UI::ui::DRAW_Overlay_EnteringAreaX::gnAreaNameOverlay");
     static unsigned int gbAreaNameOverlayInitialized; D2_STATIC_GUARD_BSS(gbAreaNameOverlayInitialized, "D2Client::UI::ui::DRAW_Overlay_EnteringAreaX::gbAreaNameOverlayInitialized");
 
     eD2LevelId eRoomLevel;

@@ -522,7 +522,7 @@ int32_t __fastcall SUNITNPC_GetActCappedLevel(::SGAMEDATA * pGame, D2UnitStrc * 
 eD2ItemQuality __thiscall SUNITNPC_RollStoreItemQuality(D2SeedStrc * pSeed, int32_t nItemLevel) {
     uint64_t nNewRandSeed = (uint64_t)pSeed->nSeedLow * 0x6ac690c5 + (uint64_t)pSeed->nSeedHigh;
     *pSeed = (D2SeedStrc)nNewRandSeed;
-    uint32_t nRollPercent = (int)nNewRandSeed + (int)((nNewRandSeed & 0xffffffff) / 100) * -100;
+    uint32_t nRollPercent = (int)((uint32_t)nNewRandSeed % 100);
     if (nItemLevel < 5) {
       if (nRollPercent > 0x5a) {
         return QUALITY_LOW;

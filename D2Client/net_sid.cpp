@@ -60,8 +60,8 @@ uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value) {
       return value;
     }
 
-    int x = (int)(0x10001 / (uint64_t)value);
-    uint32_t remainder = (uint32_t)(0x10001 % (uint64_t)value);
+    int x = (int)(0x10001 / value);
+    uint32_t remainder = (uint32_t)(0x10001 % value);
     if (remainder == 1) {
       return 1U - x & 0xffff;
     }

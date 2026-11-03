@@ -166,14 +166,14 @@ int __stdcall WEATHER_InitializeRngParams() {
     if (pPlayer) {
       D2SeedStrc sSeedUpdated;
       seed64 = (uint64_t)pPlayer->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pPlayer->sSeed.nSeedHigh;
-      gnWeatherRngCountdown = (int)seed64 + (int)((seed64 & 0xffffffff) / 0x177) * -0x177 + 0x7d;
+      gnWeatherRngCountdown = (int)((uint32_t)seed64 % 0x177) + 0x7d;
       seed64 = (seed64 & 0xffffffff) * 0x6ac690c5 + (seed64 >> 0x20);
-      gnWeatherTransitionCountdown = (int)seed64 + (int)((seed64 & 0xffffffff) / 0x5dc) * -0x5dc + 500;
+      gnWeatherTransitionCountdown = (int)((uint32_t)seed64 % 0x5dc) + 500;
       sSeedUpdated = D2_SEED_NEXT_VAL(seed64);
       pPlayer->sSeed = sSeedUpdated;
       gnWeatherParticleOffsetYModulo = sSeedUpdated.nSeedLow % 0x47 + 0x5c;
       gnWeatherRngParam = gnWeatherParticleOffsetYModulo;
-      return (int)((uint64_t)sSeedUpdated.nSeedLow * 0xe6c2b449);
+      return (int)(sSeedUpdated.nSeedLow * 0xe6c2b449);
     }
 
     gnWeatherRngCountdown = 0x138;
@@ -304,11 +304,11 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
       byTintComp = byColorComp;
       byColorComp = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(byColorComp, -cDayStep + 0x7b, byColorComp);
       gWeatherPaletteDayColors[nGradientIndex] = byColorComp;
-      cRainStep = -((char)(nRainGradient / 0xc) + (char)(nRainGradient >> 0x1f) - (char)((int64_t)nRainGradient * 0x2aaaaaab >> 0x3f));
+      cRainStep = -(char)(nRainGradient / 0xc);
       byTintComp = cRainStep + 0x2d;
       byColorComp = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(byTintComp, cRainStep + 0x37, byTintComp);
       gWeatherPaletteRain1Colors[nGradientIndex] = byColorComp;
-      cRainStep = -((char)(nMudGradient / 0xc) + (char)(nMudGradient >> 0x1f) - (char)((int64_t)nMudGradient * 0x2aaaaaab >> 0x3f));
+      cRainStep = -(char)(nMudGradient / 0xc);
       byTintComp = cRainStep + 0x19;
       byColorComp = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(byTintComp, cRainStep + 0x1e, byTintComp);
       byTintComp = cDayStep + 0x78;
@@ -960,9 +960,9 @@ static int WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
         gnWeatherRngParam = nChangeRate;
       } else {
         seed64 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5 + (uint64_t)pSeed->nSeedHigh;
-        gnWeatherRngCountdown = (int)seed64 + (int)((seed64 & 0xffffffff) / 0x177) * -0x177 + 0x7d;
+        gnWeatherRngCountdown = (int)((uint32_t)seed64 % 0x177) + 0x7d;
         DVar1 = D2_SEED_NEXT_VAL(seed64);
-        nChangeRate = (int)((uint64_t)DVar1.nSeedLow * 0xe6c2b449);
+        nChangeRate = (int)(DVar1.nSeedLow * 0xe6c2b449);
         *pSeed = DVar1;
         gnWeatherRngParam = DVar1.nSeedLow % 0x47 + 0x5c;
       }
@@ -1269,7 +1269,7 @@ void __stdcall WEATHER_UpdateTransition(D2SeedStrc * pSeed) {
 
       gnWeatherTransitionTicksRemaining--;
       if (nCurrentState == 1) {
-        gnWeatherParticleState = (int)(((int64_t)(int)(gnWeatherTransitionDurationRolled - gnWeatherTransitionTicksRemaining) * (int64_t)gnWeatherOffsetXModulo & 0xffffffffU) / (uint64_t)gnWeatherTransitionDurationRolled);
+        gnWeatherParticleState = (int)((uint32_t)((uint32_t)(int)(gnWeatherTransitionDurationRolled - gnWeatherTransitionTicksRemaining) * gnWeatherOffsetXModulo) / gnWeatherTransitionDurationRolled);
       } else if (nCurrentState == 3) {
         gnWeatherParticleState = gnWeatherOffsetXModulo * gnWeatherTransitionTicksRemaining / gnWeatherTransitionDurationRolled;
       }

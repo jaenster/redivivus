@@ -1214,7 +1214,7 @@ static void __stdcall SKILLSCLT_CreateProjectileMissile(uint32_t dwUnused, uint3
     do {
       D2UnitStrc* pMissileUnit;
       ullRngProduct = (uint64_t)sSeed.nSeedLow * 0x6ac690c5 + ((uint64_t)d2_bits_of(sSeed) >> 0x20);
-      sSkillArg.nUnitX = (int)ullRngProduct + (int)((ullRngProduct & 0xffffffff) / 0x28) * -0x28 - 0x14;
+      sSkillArg.nUnitX = (int)((uint32_t)ullRngProduct % 0x28) - 0x14;
       sSeed = D2_SEED_NEXT_VAL(ullRngProduct);
       sSkillArg.nUnitY = sSeed.nSeedLow % 0x28 - 0x14;
       if (!sSkillArg.nUnitX && !sSkillArg.nUnitY) {

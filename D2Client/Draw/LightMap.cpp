@@ -505,7 +505,7 @@ static void __stdcall LIGHTMAP_ApplyPointLight(int nQuality, D2LightMapStrc * pL
         }
 
         nApproxDist = WEATHER_ApproximateDistanceCustomCC(nApproxDist, nDistY);
-        nIntensity = (int)((nLightRadius - nApproxDist) * (int)((int64_t)((uint64_t)nGamma << 0x10) / (int64_t)nLightRadius)) >> 0x10;
+        nIntensity = (int)((nLightRadius - nApproxDist) * (int)((nGamma << 0x10) / nLightRadius)) >> 0x10;
         if (nIntensity > 0) {
           LIGHTMAP_AddLightToCell(nQuality, nIntensity, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nCurX);
         }
@@ -801,7 +801,7 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
             nDistX = nGridCellX * 0x3d7 + nRadiusCells * 0x197;
           }
 
-          nGridCellX = (8 - ((int)*pBufferCell >> 1)) * ((int)((pLightMap->nRadiusX - (nDistX >> 10)) * (int)((int64_t)((uint64_t)nGamma << 0x10) / (int64_t)nRadius)) >> 0x10) >> 3;
+          nGridCellX = (8 - ((int)*pBufferCell >> 1)) * ((int)((pLightMap->nRadiusX - (nDistX >> 10)) * (int)((nGamma << 0x10) / nRadius)) >> 0x10) >> 3;
           if (nGridCellX > 0) {
             LIGHTMAP_AddLightToCell(nYBase, nGridCellX, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nStartY);
           }
@@ -1027,7 +1027,7 @@ static void LIGHTMAP_ApplyLightWithPixelMap(D2LightMapStrc * pLightMap) {
             }
 
             nDistX = Weather::WEATHER_ApproximateDistance(nDistX, nDistY);
-            nIntensity = ((int)((pLightMap->nRadiusX - nDistX) * (int)((int64_t)((uint64_t)nGamma << 0x10) / (int64_t)nRadius)) >> 0x10) * (8 - (nIntensity >> 1)) >> 3;
+            nIntensity = ((int)((pLightMap->nRadiusX - nDistX) * (int)((nGamma << 0x10) / nRadius)) >> 0x10) * (8 - (nIntensity >> 1)) >> 3;
             if (nIntensity > 0) {
               LIGHTMAP_AddLightToCell(nYCoord, nIntensity, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nCurX);
             }

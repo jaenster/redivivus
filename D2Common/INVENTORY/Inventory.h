@@ -67,10 +67,7 @@ struct D2InventoryGridStrc {
 };
 
 struct D2InventorySizesStrc {
-    D2InventorySizesStrc() = default;
-    D2InventorySizesStrc(uint16_t v) { *reinterpret_cast<uint16_t*>(this) = v; }
     operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
-    D2InventorySizesStrc(uint8_t a0, uint8_t a1) : Width(a0), Height(a1) {}
 
     /* 0x00 */ uint8_t Width;
     /* 0x01 */ uint8_t Height;

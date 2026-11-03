@@ -102,8 +102,7 @@ void __fastcall ConvertCoordToPerspectiveView(int * pX, int * pY) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (bPerspective) {
       int nDiv;
-      nDiv = (int)((uint64_t)((int64_t)nY * -0x66666667) >> 0x20);
-      nY += (nDiv >> 4) - (nDiv >> 0x1f);
+      nY += nY / -40;
       nX += (0x28 - ((int)((nY >> 0x1f & 3U) + nY) >> 2)) * (nX - ScreenSizeX / 2) / (ScreenSizeX / 2);
     }
 

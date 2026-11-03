@@ -365,21 +365,21 @@ uint32_t __stdcall COMPOSIT_GetBodyPartTransform(eD2BodyLocDWORD nBodyIndex, uin
 void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uint32_t nItemCode, uint32_t nCompType, D2InventoryStrc * pInventory, LPSTR szOutCofPath, int32_t * pOutWeaponClass, int32_t bBuildFullPath, uint32_t bSpecialHandling) {
     // Static local variables (originally global data)
     static D2CofPathOverrideStrc gaPlayerCompositeOverrideGfx[2] = {
-    D2CofPathOverrideStrc(
+    {
         /* .dwToken = */ 0x20206867,
         /* .nMode = */ 0x12
-    ),
-    D2CofPathOverrideStrc(
+    },
+    {
         /* .dwToken = */ 0x20206867,
         /* .nMode = */ 0x13
-    )
+    }
 }; D2_STATIC_GUARD(gaPlayerCompositeOverrideGfx, "D2Common::COMPOSIT::Composit::COMPOSIT_BuildCofPath::gaPlayerCompositeOverrideGfx");
     static uint32_t gnPlayerCompositeOverrideCount = 0x2; D2_STATIC_GUARD(gnPlayerCompositeOverrideCount, "D2Common::COMPOSIT::Composit::COMPOSIT_BuildCofPath::gnPlayerCompositeOverrideCount");
     static D2CofPathOverrideStrc gaMonsterCompositeOverrideGfx[1] = {
-    D2CofPathOverrideStrc(
+    {
         /* .dwToken = */ 0x20206867,
         /* .nMode = */ 0xd
-    )
+    }
 }; D2_STATIC_GUARD(gaMonsterCompositeOverrideGfx, "D2Common::COMPOSIT::Composit::COMPOSIT_BuildCofPath::gaMonsterCompositeOverrideGfx");
     static uint32_t gnMonsterCompositeOverrideCount = 0x1; D2_STATIC_GUARD(gnMonsterCompositeOverrideCount, "D2Common::COMPOSIT::Composit::COMPOSIT_BuildCofPath::gnMonsterCompositeOverrideCount");
 

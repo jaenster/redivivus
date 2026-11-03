@@ -41,10 +41,7 @@ struct D2SoundEaxEnvironStrc {
 };
 
 struct D2SoundStringKeyStrc {
-    D2SoundStringKeyStrc() = default;
-    D2SoundStringKeyStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-    D2SoundStringKeyStrc(uint16_t a0, uint16_t a1) : nSoundId(a0), nStringKey(a1) {}
 
     /* 0x00 */ uint16_t nSoundId;
     /* 0x02 */ uint16_t nStringKey;

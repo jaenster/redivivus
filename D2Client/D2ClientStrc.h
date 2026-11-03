@@ -17,10 +17,7 @@ struct SGAMEDATA;
 
 // Data types
 struct D2ClientHotKeyStrc {
-    D2ClientHotKeyStrc() = default;
-    D2ClientHotKeyStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2ClientHotKeyStrc(short a0, uint8_t a1, int a2) : wSkillId(a0), byHand(a1), nItemGUID(a2) {}
 
     /* 0x00 */ short wSkillId; // Skill id bound to this hotkey slot (read into nSkillId by GetHotKey, stored by SetGotkeyInfo @+0)
     /* 0x02 */ uint8_t byHand; // Skill hand/type: which weapon hand the skill is cast with (read into pSkillType by GetHotKey, stored @+2)
@@ -65,8 +62,7 @@ struct __attribute__((packed)) D2ClientVisibilityBufferStrc {
     /* 0x1F4 */ uint32_t nCount;
 };
 
-#pragma pack(push, 1)
-struct D2ClientStrc {
+struct __attribute__((packed)) D2ClientStrc {
     /* 0x000 */ int nClientNo; // Unique client identifier
     /* 0x004 */ int ConnectionState; // 0=init,3=loading,4=inGame,5=actChange
     /* 0x008 */ uint8_t nClass; // Player class ID
@@ -143,4 +139,3 @@ struct D2ClientStrc {
     /* 0x510 */ int unk0x510;
     /* 0x514 */ int unk0x514;
 };
-#pragma pack(pop)

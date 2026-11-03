@@ -1067,8 +1067,7 @@ void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
         }
       case DIFFICULTY_NIGHTMARE:
         {
-          nTmp = (int)((uint64_t)((int64_t)(int)nDamageAdjusted * 0x55555555) >> 0x20) - nDamageAdjusted;
-          nDamageAdjusted += (nTmp >> 1) - (nTmp >> 0x1f);
+          nDamageAdjusted += (int)nDamageAdjusted / -3;
           break;
         }
       case DIFFICULTY_HELL:
@@ -3150,7 +3149,7 @@ void __fastcall ApplyDamageCritical(D2UnitStrc * pAttacker, D2UnitStrc * pUnit, 
 
     uint64_t nRandState = (uint64_t)pAttacker->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pAttacker->sSeed.nSeedHigh;
     pAttacker->sSeed = (D2SeedStrc)nRandState;
-    if ((uint8_t)((char)nRandState + (char)((nRandState & 0xffffffff) / 100) * -100) >= (uint8_t)pMonStats->Crit) {
+    if ((uint8_t)((char)nRandState + (char)((uint32_t)nRandState / 100) * -100) >= (uint8_t)pMonStats->Crit) {
       return;
     }
 

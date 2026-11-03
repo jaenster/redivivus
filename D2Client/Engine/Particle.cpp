@@ -291,8 +291,7 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
         goto project_to_screen;
       }
 
-      nOffsetX0 = (int)((uint64_t)((int64_t)(pParticle->nZAnimScale * nOffsetX1) * -0x51eb851f) >> 0x20);
-      pParticle->pOffsets[0].nOffsetZ = (nOffsetX0 >> 5) - (nOffsetX0 >> 0x1f);
+      pParticle->pOffsets[0].nOffsetZ = pParticle->nZAnimScale * nOffsetX1 / -100;
       pParticle->nPosZ = pParticle->pOffsets[2].nOffsetZ;
       if (pParticle->nDurationFrames) {
         pParticle->nDurationFrames--;

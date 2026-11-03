@@ -991,7 +991,7 @@ static void __stdcall SKILLASSN_GetTrapHealthBonus(eD2Skills eSkill, D2UnitStrc 
     }
 
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pMissileUnit->pPath.pDynamicPath, (uint8_t)nLifetime);
-    D2Common::Units::SetAnimationSpeed(pMissileUnit, (int32_t)((int64_t)((uint64_t)(uint8_t)pMissileTxt->AnimLen << 8) / (int64_t)nLifetime));
+    D2Common::Units::SetAnimationSpeed(pMissileUnit, (int32_t)(((uint8_t)pMissileTxt->AnimLen << 8) / nLifetime));
     D2Common::Units::Missile::SetTotalFrames(pMissileUnit, nLifetime);
     D2Common::Units::Missile::SetCurrentFrame(pMissileUnit, nLifetime);
 }

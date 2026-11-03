@@ -24,10 +24,7 @@ typedef uint32_t eD2Skills;
 
 // Data types
 struct D2MonItemPercentTxt {
-    D2MonItemPercentTxt() = default;
-    D2MonItemPercentTxt(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-    D2MonItemPercentTxt(char a0, char a1, char a2, char a3) : HeartPercent(a0), BodyPartPercent(a1), TreasureClassPercent(a2), ComponentPercent(a3) {}
 
     /* 0x00 */ char HeartPercent; // d2bs binfields FIELDTYPE_CHAR
     /* 0x01 */ char BodyPartPercent; // d2bs binfields FIELDTYPE_CHAR

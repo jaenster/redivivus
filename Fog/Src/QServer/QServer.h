@@ -251,8 +251,7 @@ struct D2QServerModePacketNodeStrc {
     /* 0x5BC */ struct D2QServerModePacketNodeStrc * pNext; // Next queued packet node
 };
 
-#pragma pack(push, 1)
-struct D2QServerStrc {
+struct __attribute__((packed)) D2QServerStrc {
     /* 0x000 */ int bUseNtLocalMode; // BOOL - 0 = Online (Winsock sockets), 1 = Local (NT pipes/IPC for singleplayer/LAN)
     /* 0x004 */ int clientsCount;
     /* 0x008 */ int nClientBucketCount; // Number of client-hash buckets / per-bucket locks used by token and socket lookups
@@ -307,7 +306,6 @@ struct D2QServerStrc {
     /* 0xC2C */ uint32_t aIoWorkerThreadIds[4];
     /* 0xC3C */ int aIoWorkerStopFlags[4]; // BOOL[4] - per-IO-worker stop flags
 };
-#pragma pack(pop)
 
 struct D2QServerTokenHashMapData {
     /* 0x00 */ int nSizeMaybe;

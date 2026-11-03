@@ -138,7 +138,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
         pClientLock = (LPCRITICAL_SECTION)((uintptr_t)&pClientLock->DebugInfo + 1);
       } while ((int)pClientLock < 0x40);
 
-      tvSelectTimeout.tv_usec = (long int)(100000 / (int64_t)(((D2QServerStrc*)lpThreadParam)->nConnectedClients / 64 + 1));
+      tvSelectTimeout.tv_usec = (long int)(100000 / (((D2QServerStrc*)lpThreadParam)->nConnectedClients / 64 + 1));
       nFdIsSetResult = 0;
       tvSelectTimeout.tv_sec = 0;
       __frame0.nBucketIdx = nClientIdx;

@@ -178,13 +178,7 @@ void __thiscall WND_UnlinkListNode(int32_t pThis, int * pNode) {
       return;
     }
 
-    uint32_t nOffset = pNode[1];
-    if ((int)nOffset < 0) {
-      pBacklink = (int*)~nOffset;
-    } else {
-      pBacklink = (int*)((int)pNode + (nOffset - *(int*)(nNext + 4)));
-    }
-
+    pBacklink = (int*)D2_StormNextLink(pNode, -1);
     *pBacklink = nNext;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -201,7 +195,6 @@ uint32_t __thiscall WND_GetNodeData(int32_t pThis, int32_t pNode) {
 
 void __fastcall WND_RemoveAllChildren(D2StormListHead * pWindow) {
     int* pBacklink;
-    uint32_t nOffset;
     int* pNode;
     while (true) {
       int nNext;
@@ -212,13 +205,7 @@ void __fastcall WND_RemoveAllChildren(D2StormListHead * pWindow) {
 
       nNext = *pNode;
       if (nNext) {
-        nOffset = pNode[1];
-        if ((int)nOffset < 0) {
-          pBacklink = (int*)~nOffset;
-        } else {
-          pBacklink = (int*)((int)pNode + (nOffset - *(int*)(nNext + 4)));
-        }
-
+        pBacklink = (int*)D2_StormNextLink(pNode, -1);
         *pBacklink = nNext;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -236,13 +223,7 @@ void __fastcall WND_DetachAndClearChildren(D2StormListHead * pWindow) {
       return;
     }
 
-    uint32_t nOffset = pWindow->pNext;
-    if ((int)nOffset < 0) {
-      pBacklink = (int*)~nOffset;
-    } else {
-      pBacklink = (int*)((int)pNode + (nOffset - nNext->pNext));
-    }
-
+    pBacklink = (int*)D2_StormNextLink(pNode, -1);
     *pBacklink = (int)nNext;
     (*pNode)->pNext = pWindow->pNext;
     *pNode = 0;
@@ -267,17 +248,10 @@ int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize,
 }
 
 int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags) {
-    uint32_t nOffset;
     int nNext = *pRecord;
     if (nNext) {
       int* pBacklink;
-      nOffset = pRecord[1];
-      if ((int)nOffset < 0) {
-        pBacklink = (int*)~nOffset;
-      } else {
-        pBacklink = (int*)((int)pRecord + (nOffset - *(int*)(nNext + 4)));
-      }
-
+      pBacklink = (int*)D2_StormNextLink(pRecord, -1);
       *pBacklink = nNext;
       *(int*)(*pRecord + 4) = pRecord[1];
       *pRecord = 0;
@@ -293,7 +267,6 @@ int * __thiscall WND_UnlinkAndFreeRecord(int * pRecord, uint8_t byFreeFlags) {
 // @blizzard AddWindow (SMSG.CPP)
 void __stdcall SMSG_AddWindow(uint32_t hWnd) {
     StormWndRecStrc* pEntry;
-    uint32_t nOffset;
     StormWndRecStrc* pRecord = (StormWndRecStrc*)Source::SMem::SMemAlloc(0xc, s___AUWNDREC___00708850, -2, 8);
     if (pRecord) {
       pRecord->link.pPrevLink = 0;
@@ -307,13 +280,7 @@ void __stdcall SMSG_AddWindow(uint32_t hWnd) {
     StormLinkStrc* nNext = pRecord->link.pPrevLink;
     if (nNext) {
       int* pBacklink;
-      nOffset = pRecord->link.pNext;
-      if ((int)nOffset < 0) {
-        pBacklink = (int*)~nOffset;
-      } else {
-        pBacklink = (int*)((int)pRecord + (nOffset - nNext->pNext));
-      }
-
+      pBacklink = (int*)D2_StormNextLink(pRecord, -1);
       *pBacklink = (int)nNext;
       pRecord->link.pPrevLink->pNext = pRecord->link.pNext;
       pRecord->link.pPrevLink = 0;
@@ -328,7 +295,6 @@ void __stdcall SMSG_AddWindow(uint32_t hWnd) {
 }
 
 uint32_t __thiscall WND_RemoveAndFreeRecord(void * pListHead, StormWndRecStrc * pRecord) {
-    uint32_t nOffset;
     StormWndRecStrc* pSVar1 = pRecord;
     if (!pRecord) {
       pSVar1 = (StormWndRecStrc*)((int)pListHead + 4);
@@ -338,13 +304,7 @@ uint32_t __thiscall WND_RemoveAndFreeRecord(void * pListHead, StormWndRecStrc * 
     StormLinkStrc* nNext = pRecord->link.pPrevLink;
     if (nNext) {
       int* pBacklink;
-      nOffset = pRecord->link.pNext;
-      if ((int)nOffset < 0) {
-        pBacklink = (int*)~nOffset;
-      } else {
-        pBacklink = (int*)((int)pRecord + (nOffset - nNext->pNext));
-      }
-
+      pBacklink = (int*)D2_StormNextLink(pRecord, -1);
       *pBacklink = (int)nNext;
       pRecord->link.pPrevLink->pNext = pRecord->link.pNext;
       pRecord->link.pPrevLink = 0;
@@ -580,12 +540,8 @@ void StaticFini_gWndTrackingList() {
     if (!gpWndTrackingListHead.pPrevLink) {
       return;
     }
-    if (gpWndTrackingListHead.pNext < 0) {
-      pNextLink = (uint32_t*)~gpWndTrackingListHead.pNext;
-    } else {
-      pNextLink = (uint32_t*)(gpWndTrackingListHead.pNext + ((int)((char*)&gpWndTrackingListHead + 4) - gpWndTrackingListHead.pPrevLink->pNext));
-    }
 
+    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gpWndTrackingListHead + 4, -1);
     *pNextLink = (uint32_t)(uintptr_t)gpWndTrackingListHead.pPrevLink;
     gpWndTrackingListHead.pPrevLink->pNext = gpWndTrackingListHead.pNext;
     gpWndTrackingListHead.pPrevLink = 0;

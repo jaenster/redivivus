@@ -341,7 +341,7 @@ void __stdcall MISSILE_SetSpeedByDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit
       nDistance = 1;
     }
 
-    D2Common::Units::SetAnimationSpeed(pUnit, (int32_t)(0xa00 / (int64_t)nDistance));
+    D2Common::Units::SetAnimationSpeed(pUnit, (int32_t)(0xa00 / nDistance));
     D2Common::Units::Missile::SetCurrentFrame(pUnit, nDistance + 2);
     pUnit->nGfxCurrentFrame = 0x200;
 }
@@ -930,7 +930,7 @@ BOOL __fastcall Skills_CltDoFunc_Bow_ThrowItem(D2UnitStrc * pUnit, eD2Skills eSk
 
 // Client-side skill cast initiator for a unit. Validates the skill row, performs the line-of-sight check (mapping SkillsTxt.lineofsight 1-5 to the appropriate collision mask), and SKILL_CanTargetDeadMonster gating. Ensures the skill object exists on the unit (allocates/adds it, clamping to max level and applying a skill-level bonus for overflow) and sets it as the unit's current skill. Cancels casting in town for non-town-allowed skills (HandleMessage 7 + plays the no-cast sound). Sets the unit's anim mode (or attack animation for melee Attack), runs the per-skill client-start function (cltstfunc), plays start/cast/class sounds, adds the cast overlay, and assigns missile light. Returns the skill result code (SKILL_Attack signals abort/no-op). __fastcall (EAX=eSkill, ECX=pUnit).
 // @sourcefile .\SKILLS\Skills.cpp
-int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel) {
+static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel) {
     // Static local variables (originally global data)
     static int SKILLCLTSTFUNCS_SIZE = 0x46; D2_STATIC_GUARD(SKILLCLTSTFUNCS_SIZE, "D2Client::SKILLS::Skills::SKILLS_CastSkillClient::SKILLCLTSTFUNCS_SIZE");
     static D2SkillCltStFunc SKILLCLTSTFUNCS[70] = {
@@ -1233,6 +1233,11 @@ int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * pUnit, i
     }
 
     return eSkillResult;
+}
+
+// Extern entry for hand-written callers: SKILLS_CastSkillClient itself keeps its unit's linkage.
+int32_t __stdcall SKILLS_CastSkillClient_Extern(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel) {
+    return ::D2Client::SKILLS::Skills::SKILLS_CastSkillClient(eSkill, pUnit, nOwnerGUID, nSkillLevel);
 }
 
 int32_t __fastcall SKILLS_CastSkillClientArgsReversed(D2UnitStrc * pUnit, eD2Skills eSkill, short * nSkillLevel, int32_t nOwnerGUID) {

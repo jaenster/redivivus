@@ -531,10 +531,7 @@ struct D3DPRIMCAPS {
 };
 
 struct D3DTRANSFORMCAPS {
-    D3DTRANSFORMCAPS() = default;
-    D3DTRANSFORMCAPS(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D3DTRANSFORMCAPS(DWORD a0, DWORD a1) : dwSize(a0), dwCaps(a1) {}
 
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwCaps;
@@ -574,8 +571,6 @@ struct __attribute__((packed)) DDDEVICEIDENTIFIER2 {
 };
 
 struct DDSCAPS {
-    DDSCAPS() = default;
-    DDSCAPS(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ DWORD dwCaps;
@@ -1009,8 +1004,7 @@ struct __attribute__((packed)) D2D3DDeviceSlotStrc {
     /* 0x3BC */ int nModeCount;
 };
 
-#pragma pack(push, 1)
-struct D3DDEVICEDESC {
+struct __attribute__((packed)) D3DDEVICEDESC {
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwFlags;
     /* 0x08 */ DWORD dcmColorModel;
@@ -1046,10 +1040,8 @@ struct D3DDEVICEDESC {
     /* 0xF8 */ WORD wMaxTextureBlendStages;
     /* 0xFA */ WORD wMaxSimultaneousTextures;
 };
-#pragma pack(pop)
 
-#pragma pack(push, 1)
-struct DDCAPS_DX7 {
+struct __attribute__((packed)) DDCAPS_DX7 {
     /* 0x000 */ DWORD dwSize;
     /* 0x004 */ DWORD dwCaps;
     /* 0x008 */ DWORD dwCaps2;
@@ -1108,7 +1100,6 @@ struct DDCAPS_DX7 {
     /* 0x14C */ DWORD dwNLVBRops[8];
     /* 0x16C */ DDSCAPS2 ddsCaps;
 };
-#pragma pack(pop)
 
 namespace D2Direct3D::Renderer {
 

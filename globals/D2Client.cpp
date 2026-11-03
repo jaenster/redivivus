@@ -44587,9 +44587,9 @@ D2EndGameUiState gEndGameUiState = {}; D2_GLOBAL_GUARD(gEndGameUiState, "gEndGam
 
 eD2GSGameType eD2GSGameType_007a0610 = 0; D2_GLOBAL_GUARD(eD2GSGameType_007a0610, "eD2GSGameType_007a0610");
 
-D2ExitCutsceneState gExitCutsceneState = D2ExitCutsceneState(); D2_GLOBAL_GUARD(gExitCutsceneState, "gExitCutsceneState");
+D2ExitCutsceneState gExitCutsceneState = {}; D2_GLOBAL_GUARD(gExitCutsceneState, "gExitCutsceneState");
 
-D2ClientTimerStrc gLoadTimerDurationMs = D2ClientTimerStrc(); D2_GLOBAL_GUARD(gLoadTimerDurationMs, "gLoadTimerDurationMs");
+D2ClientTimerStrc gLoadTimerDurationMs = {}; D2_GLOBAL_GUARD(gLoadTimerDurationMs, "gLoadTimerDurationMs");
 
 TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0> gQServerGameState; D2_GLOBAL_GUARD(gQServerGameState, "gQServerGameState");
 

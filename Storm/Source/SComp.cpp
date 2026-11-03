@@ -1035,13 +1035,7 @@ void __thiscall LINKEDLIST_UnlinkNode(int32_t pThis, int * pNode) {
       return;
     }
 
-    uint32_t nOffset = pNode[1];
-    if ((int)nOffset < 0) {
-      pPrevLink = (int*)~nOffset;
-    } else {
-      pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
     *pPrevLink = pNext;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -1190,7 +1184,6 @@ void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nI
 
 void __fastcall LINKEDLIST_UnlinkAll(int32_t pList) {
     int* pPrevLink;
-    uint32_t nOffset;
     int* pNode;
     while (true) {
       int pNext;
@@ -1201,13 +1194,7 @@ void __fastcall LINKEDLIST_UnlinkAll(int32_t pList) {
 
       pNext = *pNode;
       if (pNext) {
-        nOffset = pNode[1];
-        if ((int)nOffset < 0) {
-          pPrevLink = (int*)~nOffset;
-        } else {
-          pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
         *pPrevLink = pNext;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -1228,13 +1215,7 @@ void __fastcall LINKEDLIST_NodeDestructor(void * pNode) {
       return;
     }
 
-    uint32_t nPrevEncoded = *(uint32_t*)((int)pNode + 4);
-    if ((int)nPrevEncoded < 0) {
-      pPrevLink = (int*)~nPrevEncoded;
-    } else {
-      pPrevLink = (int*)((int)pNode + (nPrevEncoded - *(int*)(pNext + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
     *pPrevLink = pNext;
     *(uint32_t*)(*(int*)pNode + 4) = *(uint32_t*)((int)pNode + 4);
     *(uint32_t*)pNode = 0;
@@ -3590,7 +3571,6 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
     D2CompressHuffNodeStrc* nLinkOff;
     uint32_t nWeightB;
     D2CompressHuffNodeStrc* pInsertPos;
-    D2CompressHuffNodeStrc* pSortedNext2;
     D2CompressHuffNodeStrc** ppListSentinel;
     D2CompressHuffNodeStrc** ppTailLink;
     while (true) {
@@ -3603,12 +3583,7 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
       nLinkOff = pSortedNext->pNext;
       if (nLinkOff) {
         pNewNode = pSortedNext->nPrevOffset;
-        if ((int)pNewNode < 0) {
-          pLink = (int*)~(uint32_t)pNewNode;
-        } else {
-          pLink = (int*)((int)pNewNode + ((int)pSortedNext - (int)nLinkOff->nPrevOffset));
-        }
-
+        pLink = (int*)D2_StormNextLink(pSortedNext, -1);
         *pLink = (int)nLinkOff;
         pSortedNext->pNext->nPrevOffset = pSortedNext->nPrevOffset;
         pSortedNext->pNext = 0;
@@ -3658,12 +3633,7 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         }
         if (nLinkOff->pNext) {
           pNewNode = nLinkOff->nPrevOffset;
-          if ((int)pNewNode < 0) {
-            pLinkTarget = (uint32_t*)~(uint32_t)pNewNode;
-          } else {
-            pLinkTarget = (uint32_t*)((int)pNewNode + ((int)nLinkOff - (int)nLinkOff->pNext->nPrevOffset));
-          }
-
+          pLinkTarget = (uint32_t*)D2_StormNextLink(nLinkOff, -1);
           *pLinkTarget = (uint32_t)(uintptr_t)nLinkOff->pNext;
           nLinkOff->pNext->nPrevOffset = nLinkOff->nPrevOffset;
           nLinkOff->pNext = 0;
@@ -3702,12 +3672,7 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
           pNewNode = pSortedNext->pNext;
           if (pNewNode) {
             pDVar1 = pSortedNext->nPrevOffset;
-            if ((int)pDVar1 < 0) {
-              pLink = (int*)~(uint32_t)pDVar1;
-            } else {
-              pLink = (int*)((int)pDVar1 + ((int)pSortedNext - (int)pNewNode->nPrevOffset));
-            }
-
+            pLink = (int*)D2_StormNextLink(pSortedNext, -1);
             *pLink = (int)pNewNode;
             pSortedNext->pNext->nPrevOffset = pSortedNext->nPrevOffset;
             pSortedNext->pNext = 0;
@@ -3748,12 +3713,7 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         pNewNode = nLinkOff->pNext;
         if (pNewNode) {
           pDVar1 = nLinkOff->nPrevOffset;
-          if ((int)pDVar1 < 0) {
-            pLink = (int*)~(uint32_t)pDVar1;
-          } else {
-            pLink = (int*)((int)pDVar1 + ((int)nLinkOff - (int)pNewNode->nPrevOffset));
-          }
-
+          pLink = (int*)D2_StormNextLink(nLinkOff, -1);
           *pLink = (int)pNewNode;
           nLinkOff->pNext->nPrevOffset = nLinkOff->nPrevOffset;
           nLinkOff->pNext = 0;
@@ -3813,13 +3773,7 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
 
       pInsertPos = pDVar1->pNext;
       if (pInsertPos) {
-        pSortedNext2 = pDVar1->nPrevOffset;
-        if ((int)pSortedNext2 < 0) {
-          pLink = (int*)~(uint32_t)pSortedNext2;
-        } else {
-          pLink = (int*)((int)pSortedNext2 + ((int)pDVar1 - (int)pInsertPos->nPrevOffset));
-        }
-
+        pLink = (int*)D2_StormNextLink(pDVar1, -1);
         *pLink = (int)pInsertPos;
         pDVar1->pNext->nPrevOffset = pDVar1->nPrevOffset;
         pDVar1->pNext = 0;
@@ -3861,12 +3815,7 @@ void __thiscall COMPRESS_InitEncoderContext(D2CompressEncoderStrc * pEncoder, in
         pDVar1 = pNewNode->pNext;
         if (pDVar1) {
           pInsertPos = pNewNode->nPrevOffset;
-          if ((int)pInsertPos < 0) {
-            pLink = (int*)~(uint32_t)pInsertPos;
-          } else {
-            pLink = (int*)((int)pInsertPos + ((int)pNewNode - (int)pDVar1->nPrevOffset));
-          }
-
+          pLink = (int*)D2_StormNextLink(pNewNode, -1);
           *pLink = (int)pDVar1;
           pNewNode->pNext->nPrevOffset = pNewNode->nPrevOffset;
           pNewNode->pNext = 0;
@@ -3994,13 +3943,7 @@ void __fastcall COMPRESS_FlushEncoderState(int32_t pEncoder) {
       return;
     }
 
-    uint32_t nOffset = *(uint32_t*)(pEncoder + 8);
-    if ((int)nOffset < 0) {
-      pPrevLink = (int*)~nOffset;
-    } else {
-      pPrevLink = (int*)((int)pHeadLink + (nOffset - *(int*)(pNode + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pHeadLink, -1);
     *pPrevLink = pNode;
     *(uint32_t*)(*pHeadLink + 4) = *(uint32_t*)(pEncoder + 8);
     *pHeadLink = 0;
@@ -4044,12 +3987,7 @@ void __thiscall COMPRESS_EncodeSymbol(D2CompressEncoderStrc * pEncoder, int * nS
     D2CompressHuffNodeStrc* pLinkTarget = pLinkB->pNext;
     if (pLinkTarget) {
       pDVar1 = pLinkB->nPrevOffset;
-      if ((int)pDVar1 < 0) {
-        pLink = (int*)~(uint32_t)pDVar1;
-      } else {
-        pLink = (int*)((int)pLinkB - (int)pLinkTarget->nPrevOffset + (int)pDVar1);
-      }
-
+      pLink = (int*)D2_StormNextLink(pLinkB, -1);
       *pLink = (int)pLinkTarget;
       pLinkB->pNext->nPrevOffset = pLinkB->nPrevOffset;
       pLinkB->pNext = 0;
@@ -4095,12 +4033,7 @@ void __thiscall COMPRESS_EncodeSymbol(D2CompressEncoderStrc * pEncoder, int * nS
     pLinkTarget = pLinkB->pNext;
     if (pLinkTarget) {
       pDVar1 = pLinkB->nPrevOffset;
-      if ((int)pDVar1 < 0) {
-        pLink = (int*)~(uint32_t)pDVar1;
-      } else {
-        pLink = (int*)((int)pDVar1 + ((int)pLinkB - (int)pLinkTarget->nPrevOffset));
-      }
-
+      pLink = (int*)D2_StormNextLink(pLinkB, -1);
       *pLink = (int)pLinkTarget;
       pLinkB->pNext->nPrevOffset = pLinkB->nPrevOffset;
       pLinkB->pNext = 0;
@@ -4142,12 +4075,7 @@ void __fastcall COMPRESS_DestroyEncoderContext(uint32_t * pEncoder) {
     uint32_t pNode = *pHeadLink;
     if (pNode) {
       nOffset = pEncoder[0xc19];
-      if ((int)nOffset < 0) {
-        pPrevLink = (uint32_t*)~nOffset;
-      } else {
-        pPrevLink = (uint32_t*)((int)pHeadLink + (nOffset - *(int*)(pNode + 4)));
-      }
-
+      pPrevLink = (uint32_t*)D2_StormNextLink(pHeadLink, -1);
       *pPrevLink = pNode;
       *(uint32_t*)(*pHeadLink + 4) = pEncoder[0xc19];
       *pHeadLink = 0;
@@ -4159,12 +4087,7 @@ void __fastcall COMPRESS_DestroyEncoderContext(uint32_t * pEncoder) {
     pNode = *pHeadLink;
     if (pNode) {
       nOffset = pEncoder[0xc16];
-      if ((int)nOffset < 0) {
-        pPrevLink = (uint32_t*)~nOffset;
-      } else {
-        pPrevLink = (uint32_t*)((int)pHeadLink + (nOffset - *(int*)(pNode + 4)));
-      }
-
+      pPrevLink = (uint32_t*)D2_StormNextLink(pHeadLink, -1);
       *pPrevLink = pNode;
       *(uint32_t*)(*pHeadLink + 4) = pEncoder[0xc16];
       *pHeadLink = 0;

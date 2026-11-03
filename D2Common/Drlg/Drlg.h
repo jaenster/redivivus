@@ -194,10 +194,7 @@ struct __attribute__((packed)) D2LvlSubTxt {
 };
 
 struct DrlgVertBorderVariantPair {
-    DrlgVertBorderVariantPair() = default;
-    DrlgVertBorderVariantPair(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    DrlgVertBorderVariantPair(int a0, int a1) : nLeftVariant(a0), nRightVariant(a1) {}
 
     /* 0x00 */ int nLeftVariant; // 0x1a (left/alternate) preset file-index variant
     /* 0x04 */ int nRightVariant; // 0x1b (right/primary) preset file-index variant

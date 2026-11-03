@@ -1015,7 +1015,7 @@ void __fastcall SHAKE_AdjustCenterByShake(uint32_t * pCenterX, uint32_t * pCente
           goto update_sound;
         }
 
-        nShakeMagnitude = (uint32_t)(((int64_t)(int)(SHAKE_Arg2 - nTicks + SHAKE_Arg1 + SHAKE_Arg3) * (int64_t)(int)SHAKE_Amplitude & 0xffffffffU) / (uint64_t)SHAKE_Arg2);
+        nShakeMagnitude = (uint32_t)((uint32_t)((uint32_t)(int)(SHAKE_Arg2 - nTicks + SHAKE_Arg1 + SHAKE_Arg3) * (int)SHAKE_Amplitude) / SHAKE_Arg2);
       }
     }
 

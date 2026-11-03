@@ -192,7 +192,7 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
         }
       case 0x25:
         {
-          nBaseMonId = (int)(0x800 / (int64_t)(int)nVelocity) - 0x80;
+          nBaseMonId = (int)(0x800 / (int)nVelocity) - 0x80;
           if (nBaseMonId > 10) {
             if (nBaseMonId >= 100) {
               nBaseMonId = 100;
@@ -682,7 +682,7 @@ void __fastcall ExtraFast(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
       return;
     }
 
-    int32_t nValue = (int)(0x800 / (int64_t)(int)nBaseVelocity) - 0x80;
+    int32_t nValue = (int)(0x800 / (int)nBaseVelocity) - 0x80;
     if (nValue <= 0xa) {
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, 10, 0);
       return;

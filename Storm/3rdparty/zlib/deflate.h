@@ -67,8 +67,7 @@ struct z_stream {
     /* 0x34 */ uint32_t reserved; // reserved for future use
 };
 
-#pragma pack(push, 1)
-struct deflate_state {
+struct __attribute__((packed)) deflate_state {
     /* 0x0000 */ z_stream * strm; // pointer back to this zlib stream
     /* 0x0004 */ int32_t status; // deflate state machine status
     /* 0x0008 */ uint8_t * pending_buf; // output still pending
@@ -135,7 +134,6 @@ struct deflate_state {
     /* 0x16BC */ int32_t bi_valid; // number of valid bits in bi_buf
     /* 0x16C0 */ uint32_t high_water; // high water mark offset in window for initialized bytes
 };
-#pragma pack(pop)
 
 namespace Storm::_3rdparty::zlib::deflate {
 

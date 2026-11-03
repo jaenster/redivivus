@@ -85,12 +85,8 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, struct D2UnitStrc * pUni
 // Initialises a player unit entering a room on the client side: registers the unit in the active slot, allocates a dynamic path, creates inventory and skill list, allocates stat list with base rates at 100, sets unit flags, handles dead/corpse collision state, allocates a light map (dimmed for other players), seeds the RNG direction for non-local players, and preloads adjacent-room monster COFs.
 void __fastcall JoinRoomSetup(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 void __fastcall CLIENT_FreePlayerUnit(struct D2UnitStrc * pUnit);
-uint32_t __stdcall PLAYER_CheckSkillUsability(int * pnUsabilityCode, struct D2UnitStrc * pUnit, struct D2SkillStrc * * ppSkill);
-// @sourcefile .\UNIT\Player.cpp
-uint32_t __stdcall PLAYER_ValidateSkillMessage(int * pnUsabilityCode, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pServerMessageHandle);
 // Client-side player message/command dispatcher: applies a queued action (nMessageType) to a player unit from a D2ServerMessageHandleStrc. Frees any active light map and clears the current skill (except for type 0x13), restores path velocity, and resolves town vs non-town neutral mode. Switches on the message type to: set move/attack/interact targets (0/1/2/0x17/0x18), play a get-hit (6) / block (0x12) / cold-hit overlay+sound (0x13) / knockback (0x14) reaction, run skill cast/validate paths (0x15/0x16) , handle death (8/9) including closing panels and clearing trade/selection, and set run/skill anim modes (0x19). Returns 1 on success; on a failed skill/target it falls through to CLIENT_SetAnimModeAndMoveToCurrentPos and returns 0. Halts via Fog ErrorManager on an invalid message type.
 BOOL __fastcall PlayerMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode);
-BOOL __stdcall CLIENT_MovePlayerToPosition(struct D2UnitStrc * pUnit, int16_t nX, int16_t nY, int32_t nSkillActionMode);
 void __fastcall PLAYER_InteractAtTarget(int32_t pTargetUnit);
 uint32_t __fastcall SKILL_CheckAuraRange(struct D2SkillStrc * pSkill, struct D2UnitStrc * pUnit, int * pnMinX, int * pnMinY);
 BOOL __stdcall PLAYER_CheckPendingInteraction(int32_t nTargetType, int32_t nTargetGUID);
@@ -133,6 +129,11 @@ void __fastcall HANDSHAKE_SetClientPlayerUnit(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall GetPlayerUnit_UI();
 struct D2UnitStrc * __stdcall GetPlayerUnit_Net();
 uint32_t __stdcall IsPlayerDead();
-// 24 internal functions (defined in .cpp)
+// 27 internal functions (defined in .cpp)
+
+// Extern entries for hand-written callers (each forwards to the function of its name)
+uint32_t __stdcall PLAYER_CheckSkillUsability_Extern(int * pnUsabilityCode, struct D2UnitStrc * pUnit, struct D2SkillStrc * * ppSkill);
+uint32_t __stdcall PLAYER_ValidateSkillMessage_Extern(int * pnUsabilityCode, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pServerMessageHandle);
+BOOL __stdcall CLIENT_MovePlayerToPosition_Extern(struct D2UnitStrc * pUnit, int16_t nX, int16_t nY, int32_t nSkillActionMode);
 
 } // namespace D2Client::UNIT::Player

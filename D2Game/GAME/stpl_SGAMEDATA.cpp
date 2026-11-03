@@ -209,7 +209,6 @@ template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray() {
     int nResetBucketOffset;
     TSExplicitList<::SGAMEDATA, -572662307> pendingList;
     TSLink<::SGAMEDATA>* pNodeData;
-    uint32_t pNodeLink;
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
     uint32_t nNewMask = pThis->nSlotMask + 1;
     uint32_t* nNewBucketCount = (uint32_t*)(nNewMask * 2);
@@ -236,13 +235,7 @@ template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray() {
           pBackLink = (TSLink<::SGAMEDATA>*)(nResetBucketOffset + 4);
           pNodeData = pBackLink->m_prevlink;
           if (pNodeData) {
-            pNodeLink = *(uint32_t*)(nResetBucketOffset + 8);
-            if ((int)pNodeLink < 0) {
-              pOldBucket2 = (int*)~pNodeLink;
-            } else {
-              pOldBucket2 = (int*)((int)pBackLink + (pNodeLink - pNodeData->m_next));
-            }
-
+            pOldBucket2 = (int*)D2_StormNextLink(pBackLink, -1);
             *pOldBucket2 = (int)pNodeData;
             pBackLink->m_prevlink->m_next = *(int*)(nResetBucketOffset + 8);
             pBackLink->m_prevlink = 0;
@@ -295,12 +288,7 @@ template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray() {
       pPendingHead2 = pBackLink->m_prevlink;
       if (pPendingHead2) {
         nNewMask = pBackLink->m_next;
-        if ((int)nNewMask < 0) {
-          pOldBucket2 = (int*)~nNewMask;
-        } else {
-          pOldBucket2 = (int*)((int)pBackLink + (nNewMask - pPendingHead2->m_next));
-        }
-
+        pOldBucket2 = (int*)D2_StormNextLink(pBackLink, -1);
         *pOldBucket2 = (int)pPendingHead2;
         pBackLink->m_prevlink->m_next = pBackLink->m_next;
         pBackLink->m_prevlink = 0;
@@ -388,12 +376,7 @@ template<> ::SGAMEDATA * TSHashTable<SGAMEDATA, HASHKEY_NONE>::New(uint32_t dwHa
     if (pExistingHead) {
       char* pBackLink;
       nIdInBucket = ppActiveListLink->m_next;
-      if ((int)nIdInBucket < 0) {
-        pBackLink = (char*)~nIdInBucket;
-      } else {
-        pBackLink = (char*)((int)ppActiveListLink + (nIdInBucket - *(int*)(pExistingHead + 4)));
-      }
-
+      pBackLink = (char*)D2_StormNextLink(ppActiveListLink, -1);
       *(int*)pBackLink = pExistingHead;
       ppActiveListLink->m_prevlink->m_next = ppActiveListLink->m_next;
       ppActiveListLink->m_prevlink = 0;

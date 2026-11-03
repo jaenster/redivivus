@@ -14,8 +14,7 @@ struct D2ArenaTxt;
 struct D2PoolManagerStrc;
 
 // Data types
-#pragma pack(push, 1)
-struct D2CharTemplateTxt {
+struct __attribute__((packed)) D2CharTemplateTxt {
     /* 0x00 */ char Name[29];
     /* 0x1D */ uint8_t field_0x1d;
     /* 0x1E */ uint8_t _class; // CharTemplate.txt column 'class' - character class id, linked through pTxtPlayerClassLink (FIELDTYPE_CODE_CHAR). Unsigned: GetClassFromCharTemplateTxt reads it with MOVZX (00665809). Underscore-prefixed: 'class' is a C++ keyword.
@@ -37,7 +36,6 @@ struct D2CharTemplateTxt {
     /* 0x54 */ int SkillLevel[9];
     /* 0x78 */ D2CharItemStrc pItems[15];
 };
-#pragma pack(pop)
 
 namespace D2Common::DATATBLS::ArenaTbls {
 

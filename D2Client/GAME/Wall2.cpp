@@ -632,7 +632,7 @@ void __fastcall FreeWall2(D2GameViewStrc * pGameView) {
 }
 
 // Checks whether iso cell (nX,nY) falls inside the game view's current wall draw grid. nX arrives in EAX: the first instruction is SUB EAX,[EDX+0xea68].
-BOOL WALL2_IsInDrawGrid(int nX, int nY, D2Wall2DrawListStrc * pDrawList) {
+static BOOL WALL2_IsInDrawGrid(int nX, int nY, D2Wall2DrawListStrc * pDrawList) {
     int iVar1 = nX - pDrawList->nWall2GridOriginX;
     int nRelY = nY - pDrawList->nWall2GridOriginY;
     if (iVar1 < 0) {
@@ -646,6 +646,11 @@ BOOL WALL2_IsInDrawGrid(int nX, int nY, D2Wall2DrawListStrc * pDrawList) {
     }
 
     return (uint32_t)(nRelY < pDrawList->nWall2GridDim);
+}
+
+// Extern entry for hand-written callers: WALL2_IsInDrawGrid itself keeps its unit's linkage.
+BOOL WALL2_IsInDrawGrid_Extern(int nX, int nY, D2Wall2DrawListStrc * pDrawList) {
+    return ::D2Client::GAME::Wall2::WALL2_IsInDrawGrid(nX, nY, pDrawList);
 }
 
 // Inserts a unit draw entry into the "draw below wall" linked list of a draw-list buffer. Allocates the next entry slot (capped at 3000), stores unit type 0, records the unit pointer, and resolves the unit's world X/Y position (in sub-tile units *8) from its dynamic path or static coordinates. Appends the entry to the tail of pWall2Cell->pUnitBelowList (+0x18). Does not touch the pass mask.

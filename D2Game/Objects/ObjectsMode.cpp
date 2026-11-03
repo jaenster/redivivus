@@ -1472,8 +1472,7 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
         bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pTargetUnit);
         if (!bIsDead) {
           nHpReduction = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
-          nHpReduction = (int)((uint64_t)((int64_t)(int)(pTxtShrinesLocal->dwArg0 * (nHpReduction >> 8)) * -0x51eb851f) >> 0x20);
-          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pTargetUnit, UNITSTAT_hitpoints, ((nHpReduction >> 5) - (nHpReduction >> 0x1f)) * 0x100, 0);
+          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pTargetUnit, UNITSTAT_hitpoints, (int)(pTxtShrinesLocal->dwArg0 * (nHpReduction >> 8)) / -100 * 0x100, 0);
         }
       }
     }
@@ -3178,7 +3177,7 @@ static uint32_t __stdcall OBJMODE_DispatchOperateFunction(::SGAMEDATA * pGame, u
 
     uint64_t ullSeedRoll = (uint64_t)*(uint32_t*)(pUnit + 0x20) * 0x6ac690c5 + (uint64_t)*(uint32_t*)(pUnit + 0x24);
     *(uint64_t*)(pUnit + 0x20) = ullSeedRoll;
-    if ((uint32_t)((int)ullSeedRoll + (int)((ullSeedRoll & 0xffffffff) / 100) * -100) < gaObjectsModeFuncTable[nModeIdx].nSpriteThreshold) {
+    if ((uint32_t)(int)((uint32_t)ullSeedRoll % 100) < gaObjectsModeFuncTable[nModeIdx].nSpriteThreshold) {
       BOOL bBadCode;
       /* FARPROC lpfn for IsBadCodePtr */ bBadCode = IsBadCodePtr((FARPROC)gaObjectsModeFuncTable[nModeIdx].pfnHandler);
       if (bBadCode) {
@@ -3479,7 +3478,7 @@ BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
           bVar1 = OBJECT_GetDefaultSize();
           if (!(int)((uint64_t)byChargesLeft % (uint64_t)(int64_t)(int)((uint64_t)(uint8_t)nDoubledSize / (uint64_t)(int64_t)(int)(uint32_t)bVar1))) {
             bVar1 = OBJECT_GetDefaultSize();
-            D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, (uint32_t)bVar1 - (int)((int64_t)(uint64_t)byChargesLeft / (int64_t)pTxtObjects->Parm[2]));
+            D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, (uint32_t)bVar1 - (int)(byChargesLeft / pTxtObjects->Parm[2]));
           }
         }
 

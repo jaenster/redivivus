@@ -19,10 +19,7 @@ typedef uint32_t eD2LevelId;
 
 // Data types
 struct D2CharItemStrc {
-    D2CharItemStrc() = default;
-    D2CharItemStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2CharItemStrc(int a0, char a1, char a2) : dwItemCode(a0), nBodyLoc(a1), nItemCount(a2) {}
 
     /* 0x00 */ int dwItemCode;
     /* 0x04 */ char nBodyLoc;

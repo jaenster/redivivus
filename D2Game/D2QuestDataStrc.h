@@ -295,18 +295,13 @@ struct D2QuestDataA2Q6Strc {
 };
 
 struct D2QuestDataA2Q7Strc {
-    D2QuestDataA2Q7Strc() = default;
-    D2QuestDataA2Q7Strc(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t bGossipAwaits;
 };
 
 struct D2QuestDataA2Q8Strc {
-    D2QuestDataA2Q8Strc() = default;
-    D2QuestDataA2Q8Strc(uint16_t v) { *reinterpret_cast<uint16_t*>(this) = v; }
     operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
-    D2QuestDataA2Q8Strc(uint8_t a0, uint8_t a1) : field_0x0(a0), field_0x1(a1) {}
 
     /* 0x00 */ uint8_t field_0x0; // initialized to 0, unused in known callbacks
     /* 0x01 */ uint8_t field_0x1; // initialized to 0, unused in known callbacks

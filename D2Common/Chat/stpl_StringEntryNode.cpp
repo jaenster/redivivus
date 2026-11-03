@@ -117,12 +117,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
     if (pDstSlot) {
       int* pPrevLink;
       pTailLink = pSrcSlot->m_next;
-      if ((int)pTailLink < 0) {
-        pPrevLink = (int*)~pTailLink;
-      } else {
-        pPrevLink = (int*)((int)pSrcSlot + (pTailLink - pDstSlot->m_next));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pSrcSlot, -1);
       *pPrevLink = (int)pDstSlot;
       pSrcSlot->m_prevlink->m_next = pSrcSlot->m_next;
       pSrcSlot->m_prevlink = 0;
@@ -188,13 +183,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkNode(::String
       return;
     }
 
-    uint32_t nNextLink = pSlot->m_next;
-    if ((int)nNextLink < 0) {
-      pPrevLink = (int*)~nNextLink;
-    } else {
-      pPrevLink = (int*)((int)pSlot + (nNextLink - nHeadEntry->m_next));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pSlot, -1);
     *pPrevLink = (int)nHeadEntry;
     pSlot->m_prevlink->m_next = pSlot->m_next;
     pSlot->m_prevlink = 0;
@@ -424,13 +413,7 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<::StringEntryNode, -57266
       return;
     }
 
-    uint32_t nNextLink = pThis->m_terminator.m_next;
-    if ((int)nNextLink < 0) {
-      pPrevLink = (int*)~nNextLink;
-    } else {
-      pPrevLink = (int*)((int)pTVar1 + (nNextLink - nHeadEntry->m_next));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)nHeadEntry;
     pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
     pTVar1->m_prevlink = 0;

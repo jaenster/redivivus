@@ -20,10 +20,7 @@ struct D2MercSaveDataStrc {
 };
 
 struct D2SaveHandSkillStrc {
-    D2SaveHandSkillStrc() = default;
-    D2SaveHandSkillStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-    D2SaveHandSkillStrc(short a0, short a1) : nSkillId(a0), nItemIndex(a1) {}
 
     /* 0x00 */ short nSkillId;
     /* 0x02 */ short nItemIndex;
@@ -57,17 +54,13 @@ struct __attribute__((packed)) D2SaveHeaderStrc {
 };
 
 struct D2SaveHotKeyStrc {
-    D2SaveHotKeyStrc() = default;
-    D2SaveHotKeyStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-    D2SaveHotKeyStrc(uint16_t a0, short a1) : nSkillIdAndHand(a0), nItemIndex(a1) {}
 
     /* 0x00 */ uint16_t nSkillIdAndHand;
     /* 0x02 */ short nItemIndex;
 };
 
-#pragma pack(push, 1)
-struct D2SaveFileHeaderStrc {
+struct __attribute__((packed)) D2SaveFileHeaderStrc {
     /* 0x00 */ uint32_t dwHeader;
     /* 0x04 */ uint32_t dwFileVersion;
     /* 0x08 */ uint32_t nFileSize; // total .d2s file size; file-bound (save header), 4 bytes on disk
@@ -98,7 +91,6 @@ struct D2SaveFileHeaderStrc {
     /* 0xCF */ uint8_t nGuildInfo[3];
     /* 0xD2 */ uint8_t nReserved[125]; // Unused header padding bytes (zeroed on save, never read)
 };
-#pragma pack(pop)
 
 namespace Fog::Save {
 

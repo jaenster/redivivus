@@ -99,8 +99,6 @@ struct __attribute__((packed)) D2GSPacketClt0x0A_LeftSkillOnEntityEx3 {
 };
 
 struct D2GSPacketClt0x0B_Keepalive {
-    D2GSPacketClt0x0B_Keepalive() = default;
-    D2GSPacketClt0x0B_Keepalive(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // 0x0B opcode
@@ -143,8 +141,6 @@ struct __attribute__((packed)) D2GSPacketClt0x11_RightSkillOnEntityEx3 {
 };
 
 struct D2GSPacketClt0x12_CancelChanneledSkill {
-    D2GSPacketClt0x12_CancelChanneledSkill() = default;
-    D2GSPacketClt0x12_CancelChanneledSkill(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // 0x12 opcode
@@ -300,24 +296,18 @@ struct __attribute__((packed)) D2GSPacketClt0x2A_ItemToCube {
 };
 
 struct D2GSPacketClt0x2C_DeadStub {
-    D2GSPacketClt0x2C_DeadStub() = default;
-    D2GSPacketClt0x2C_DeadStub(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x2C - STUB always returns BAD_PARAMS in 1.14d
 };
 
 struct D2GSPacketClt0x2D_DeadStub {
-    D2GSPacketClt0x2D_DeadStub() = default;
-    D2GSPacketClt0x2D_DeadStub(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x2D - STUB always returns BAD_PARAMS in 1.14d
 };
 
 struct D2GSPacketClt0x2E_DeadStub {
-    D2GSPacketClt0x2E_DeadStub() = default;
-    D2GSPacketClt0x2E_DeadStub(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x2E - STUB always returns OK in 1.14d
@@ -425,16 +415,12 @@ struct __attribute__((packed)) D2GSPacketClt0x3F_PlayEmote {
 };
 
 struct D2GSPacketClt0x40_RefreshQuestData {
-    D2GSPacketClt0x40_RefreshQuestData() = default;
-    D2GSPacketClt0x40_RefreshQuestData(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x40; op-only packet (nSize==1)
 };
 
 struct D2GSPacketClt0x41_Resurrect {
-    D2GSPacketClt0x41_Resurrect() = default;
-    D2GSPacketClt0x41_Resurrect(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x41; op-only packet (nSize==1); restores HP/mana/stamina and teleports to town
@@ -466,8 +452,6 @@ struct __attribute__((packed)) D2GSPacketClt0x47_CommandMercenary {
 };
 
 struct D2GSPacketClt0x48_TransmogrifyItem {
-    D2GSPacketClt0x48_TransmogrifyItem() = default;
-    D2GSPacketClt0x48_TransmogrifyItem(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd;
@@ -515,24 +499,18 @@ struct __attribute__((packed)) D2GSPacketClt0x51_SetHotkey {
 };
 
 struct D2GSPacketClt0x52_Unused {
-    D2GSPacketClt0x52_Unused() = default;
-    D2GSPacketClt0x52_Unused(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x52 — always returns BAD_PARAMS (stub)
 };
 
 struct D2GSPacketClt0x53_GamepadInput {
-    D2GSPacketClt0x53_GamepadInput() = default;
-    D2GSPacketClt0x53_GamepadInput(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x53 — gamepad run toggle; 1B op-only, no payload
 };
 
 struct D2GSPacketClt0x54_StackMerge {
-    D2GSPacketClt0x54_StackMerge() = default;
-    D2GSPacketClt0x54_StackMerge(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd;
@@ -565,8 +543,6 @@ struct __attribute__((packed)) D2GSPacketClt0x5E_CubeApply {
 };
 
 struct D2GSPacketClt0x60_WeaponSwap {
-    D2GSPacketClt0x60_WeaponSwap() = default;
-    D2GSPacketClt0x60_WeaponSwap(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x60 — weapon swap; 1B op-only, expansion-only
@@ -588,8 +564,6 @@ struct __attribute__((packed)) D2GSPacketClt0x63_ItemToBeltAuto {
 };
 
 struct D2GSPacketClt0x66_WardenStub {
-    D2GSPacketClt0x66_WardenStub() = default;
-    D2GSPacketClt0x66_WardenStub(uint8_t v) { *reinterpret_cast<uint8_t*>(this) = v; }
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x66 — Warden stub; always returns OK, no processing
@@ -608,10 +582,7 @@ struct __attribute__((packed)) D2GSPacketSrv0x26 {
 };
 
 struct D2WarpChanceStrc {
-    D2WarpChanceStrc() = default;
-    D2WarpChanceStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2WarpChanceStrc(int a0, int a1) : nChancePct(a0), nOffset(a1) {}
 
     /* 0x00 */ int nChancePct;
     /* 0x04 */ int nOffset;
@@ -665,8 +636,6 @@ eD2ServerIncomingStatus __fastcall SCMD_0x03_RunToLocation(::SGAMEDATA * pGame, 
 eD2ServerIncomingStatus __fastcall SCMD_0x04_RunToEntity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x04_RunToEntity * pPacket, uint32_t nSize);
 // @sourcefile .\PLAYER\PlrMsg.cpp
 void __fastcall PLAYER_SendInventoryFullMessage(struct D2UnitStrc * pUnit);
-// Validates player is alive, resolves dual-swing skill alternation via GetDualSwingSkill, checks skill usability (falling back to SKILL_Attack if skill has flag4 bit4 set and CanUseSkill returns 1-2 or 4). On success calls PLRMODES_MoveToLocation with the resolved skill mode; on mana-full sends inventory-full message. Returns SERVERSTATUS_OK or SERVERSTATUS_BAD_DATA.
-eD2ServerIncomingStatus __stdcall CastSkillOnLocation(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, struct D2SkillStrc * pSkill);
 // C->S Packet 0x05 - Left Skill on Location (5 bytes)
 // [op:1][x:u16][y:u16]
 // Gets left skill, increments pierce_idx, CastSkillOnLocation.
@@ -935,6 +904,9 @@ eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClie
 // @sourcefile .\PLAYER\PlrMsg.cpp
 void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim);
 void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, int32_t nStopReason);
-// 23 internal functions (defined in .cpp)
+// 24 internal functions (defined in .cpp)
+
+// Extern entries for hand-written callers (each forwards to the function of its name)
+eD2ServerIncomingStatus __stdcall CastSkillOnLocation_Extern(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, struct D2SkillStrc * pSkill);
 
 } // namespace D2Game::PLAYER::PlayerMsg

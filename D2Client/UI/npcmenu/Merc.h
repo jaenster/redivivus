@@ -16,10 +16,7 @@ struct D2UnitStrc;
 
 // Data types
 struct D2MercBaseStrc {
-    D2MercBaseStrc() = default;
-    D2MercBaseStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2MercBaseStrc(uint32_t a0, uint32_t a1) : nBaseAttackRating(a0), nBaseDefense(a1) {}
 
     /* 0x00 */ uint32_t nBaseAttackRating;
     /* 0x04 */ uint32_t nBaseDefense;
@@ -76,10 +73,7 @@ struct D2MercTertiaryStrc {
 };
 
 struct D2MercWeaponAnimMapStrc {
-    D2MercWeaponAnimMapStrc() = default;
-    D2MercWeaponAnimMapStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2MercWeaponAnimMapStrc(int32_t a0, int32_t a1) : nAnimIndex(a0), nWeaponClass(a1) {}
 
     /* 0x00 */ int32_t nAnimIndex;
     /* 0x04 */ int32_t nWeaponClass;

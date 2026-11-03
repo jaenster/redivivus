@@ -177,7 +177,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
       nSkillLvl = (uint32_t)(uint8_t)pMissileTxt->AnimLen << 8;
       nZStepPerFrame = (nTmp + nInitPosZ) * -2;
       if (nAnimTotalFrames) {
-        nSkillLvl = (int32_t)((int64_t)((uint64_t)(uint8_t)pMissileTxt->AnimLen << 8) / (int64_t)nAnimTotalFrames);
+        nSkillLvl = (int32_t)(((uint8_t)pMissileTxt->AnimLen << 8) / nAnimTotalFrames);
         nZStepPerFrame /= nAnimTotalFrames;
       }
 

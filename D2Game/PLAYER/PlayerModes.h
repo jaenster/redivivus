@@ -22,8 +22,6 @@ namespace D2Game::PLAYER::PlayerModes {
 
 // Function declarations
 int32_t __fastcall PLRMODES_HasAnimEventLastOrComing5Frames(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-// Checks if the player unit can interrupt its current animation mode to start the specified new mode. Returns TRUE if the new mode can interrupt.
-BOOL PLRMODES_CanInterruptCurrentMode(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode);
 // Attempts to cancel current player mode and initiate movement to a target location. Validates unit state, checks for blocking modes, and dispatches path-finding for the move.
 // @sourcefile .\PLAYER\PlrModes.cpp
 int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int nModeIndex, int bCheckInterrupt, struct D2SkillStrc * pSkill);
@@ -74,6 +72,9 @@ void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, struct D2UnitStrc *
 // Per-tick dispatcher for the player's current animation mode. Reads pUnit->eAnimMode, looks up the corresponding callback in gaPlayerModeCallbacks[], invokes it with (nArg1, nArg2), and calls PLRMODES_OnModeComplete if the callback returns 2 (mode finished).
 void __fastcall PLRMODES_ProcessPlayerMode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 void __fastcall PLAYEREVENT_DefaultCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2);
-// 16 internal functions (defined in .cpp)
+// 17 internal functions (defined in .cpp)
+
+// Extern entries for hand-written callers (each forwards to the function of its name)
+BOOL PLRMODES_CanInterruptCurrentMode_Extern(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode);
 
 } // namespace D2Game::PLAYER::PlayerModes

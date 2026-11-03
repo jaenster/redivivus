@@ -168,307 +168,307 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     // Static local variables (originally global data)
     static int gnNpcControlInitCount = 0x2b; D2_STATIC_GUARD(gnNpcControlInitCount, "D2Game::UNIT::sunitproxy::SUNITPROXY_AllocNpcControl::gnNpcControlInitCount");
     static D2NpcControlInitStrc gaNpcControlInitTable[43] = {
-    D2NpcControlInitStrc(
+    {
         /* .nMonStatsId = */ 0x94,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x0,
         /* .nName = */ 0x1,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x92,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x0,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x9a,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x0,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x96,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x0,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x93,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x0,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x9b,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x0,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x10a,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x0,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xaf,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xb0,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xb1,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x1,
         /* .nName = */ 0x1,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xb2,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xca,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xc8,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xd2,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xc9,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xc6,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xc7,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x179,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x17a,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x109,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x0,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xf4,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xf5,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x2,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xfb,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x2,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xfc,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x2,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xfd,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x2,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xfe,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x2,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xff,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x2,
         /* .nName = */ 0x1,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x108,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x2,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0xf6,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x3,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x196,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x3,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x16f,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x3,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x198,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x3,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x101,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x3,
         /* .nName = */ 0x1,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x195,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x3,
         /* .nName = */ 0x1,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x129,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x2,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x14b,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x1,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x201,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x4,
         /* .nName = */ 0x1,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x200,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x4,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x1ff,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x4,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x202,
         /* .nFlags = */ 0x1,
         /* .nData = */ 0x4,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x203,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x4,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x209,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x4,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    ),
-    D2NpcControlInitStrc(
+    },
+    {
         /* .nMonStatsId = */ 0x208,
         /* .nFlags = */ 0x0,
         /* .nData = */ 0x4,
         /* .nName = */ 0x0,
         /* .nPad = */ 0x0
-    )
+    }
 }; D2_STATIC_GUARD(gaNpcControlInitTable, "D2Game::UNIT::sunitproxy::SUNITPROXY_AllocNpcControl::gaNpcControlInitTable");
 
     D2InventoryStrc* pNpcInventory;

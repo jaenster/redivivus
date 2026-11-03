@@ -13,19 +13,12 @@
 namespace D2CMP::SRC::CelCmp::CELLIST {
 
 void __thiscall Destructor(::CELLIST * pThis) {
-    uint32_t uLinkOffset;
     pThis->m_frames.UnlinkAll();
     TSLink<::TCELENTRY>* pTVar1 = &pThis->m_frames.m_terminator;
     TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
       int* pBackLink;
-      uLinkOffset = pThis->m_frames.m_terminator.m_next;
-      if ((int)uLinkOffset < 0) {
-        pBackLink = (int*)~uLinkOffset;
-      } else {
-        pBackLink = (int*)((int)pTVar1 + (uLinkOffset - nNext->m_next));
-      }
-
+      pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
       *pBackLink = (int)nNext;
       pTVar1->m_prevlink->m_next = pThis->m_frames.m_terminator.m_next;
       pTVar1->m_prevlink = 0;
@@ -36,19 +29,12 @@ void __thiscall Destructor(::CELLIST * pThis) {
 }
 
 ::CELLIST * __thiscall ScalarDeletingDestructor(::CELLIST * pThis, uint32_t dwFlags) {
-    uint32_t uLinkOffset;
     pThis->m_frames.UnlinkAll();
     TSLink<::TCELENTRY>* pTVar1 = &pThis->m_frames.m_terminator;
     TSLink<::TCELENTRY>* nNext = pTVar1->m_prevlink;
     if (nNext) {
       int* pBackLink;
-      uLinkOffset = pThis->m_frames.m_terminator.m_next;
-      if ((int)uLinkOffset < 0) {
-        pBackLink = (int*)~uLinkOffset;
-      } else {
-        pBackLink = (int*)((int)pTVar1 + (uLinkOffset - nNext->m_next));
-      }
-
+      pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
       *pBackLink = (int)nNext;
       pTVar1->m_prevlink->m_next = pThis->m_frames.m_terminator.m_next;
       pTVar1->m_prevlink = 0;

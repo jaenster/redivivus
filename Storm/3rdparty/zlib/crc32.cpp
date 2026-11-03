@@ -1674,13 +1674,12 @@ uint32_t __fastcall gf2_matrix_times(uint32_t dwVec, uint32_t * pdwMat) {
 static void gf2_matrix_square(uint32_t * pdwMatA, uint32_t * pdwMatB) {
     uint32_t dwBits;
     uint32_t dwAccum;
-    int nByteOffset = (int)pdwMatB - (int)pdwMatA;
-    int nRowCount = 0x20;
-    do {
+    int nRowCount;
+    for (nRowCount = 0; nRowCount < 0x20; nRowCount++) {
       uint32_t* pdwCol;
       dwAccum = 0;
       pdwCol = pdwMatB;
-      for (dwBits = *(uint32_t*)(nByteOffset + (int)pdwMatA); dwBits; dwBits >>= 1) {
+      for (dwBits = pdwMatB[nRowCount]; dwBits; dwBits >>= 1) {
         if (dwBits & 1) {
           dwAccum ^= *pdwCol;
         }
@@ -1688,10 +1687,8 @@ static void gf2_matrix_square(uint32_t * pdwMatA, uint32_t * pdwMatB) {
         pdwCol++;
       }
 
-      *pdwMatA = dwAccum;
-      pdwMatA++;
-      nRowCount--;
-    } while (nRowCount);
+      pdwMatA[nRowCount] = dwAccum;
+    }
 }
 
 uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t nLength) {

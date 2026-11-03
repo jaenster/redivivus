@@ -729,70 +729,70 @@ uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSe
 ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive, ULONGLONG qwSeed) {
     // Static local variables (originally global data)
     static D2HashSeedPairStrc gaHashSeedTable[16] = {
-    D2HashSeedPairStrc(
+    {
         /* .dwHashLow = */ 0xdcaa16b3,
         /* .nHashHigh = */ 0x486e26ee
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x202dafdb,
         /* .nHashHigh = */ -0x1e6e7111
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x1c365303,
         /* .nHashHigh = */ 0x341c7dc7
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x65fd5e49,
         /* .nHashHigh = */ 0x40ef2d37
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x904ece93,
         /* .nHashHigh = */ -0x29fa8e89
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x98fd323b,
         /* .nHashHigh = */ 0x1c38024f
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0xa39b0fa1,
         /* .nHashHigh = */ -0x1cf9e519
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0xe4444563,
         /* .nHashHigh = */ -0x68680da1
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x8dc1b898,
         /* .nHashHigh = */ -0x32d13df4
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x799a306d,
         /* .nHashHigh = */ 0x31759633
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x2e6e9627,
         /* .nHashHigh = */ -0x73df9c7b
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x73922c66,
         /* .nHashHigh = */ 0x79237d99
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x28628824,
         /* .nHashHigh = */ -0x78d79d73
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x25887795,
         /* .nHashHigh = */ -0x70e0816a
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x389c0d60,
         /* .nHashHigh = */ 0x296e3281
-    ),
-    D2HashSeedPairStrc(
+    },
+    {
         /* .dwHashLow = */ 0x61636542,
         /* .nHashHigh = */ 0x6f4893ca
-    )
+    }
 }; D2_STATIC_GUARD(gaHashSeedTable, "Storm::Source::SSTR::SSTR_HashString64::gaHashSeedTable");
 
     uint32_t nChar;

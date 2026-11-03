@@ -1074,7 +1074,7 @@ static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32
       } else if (nXRange & nXRange - 1) {
         nSeedModBranch = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
         *(uint64_t*)pSeed = nSeedModBranch;
-        nRandOffset = (uint32_t)((nSeedModBranch & 0xffffffff) % (uint64_t)nXRange);
+        nRandOffset = (uint32_t)((uint32_t)nSeedModBranch % nXRange);
       } else {
         nSeedPow2Branch = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
         *(int64_t*)pSeed = nSeedPow2Branch;
@@ -1087,7 +1087,7 @@ static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32
       } else if (nYRange & nYRange - 1) {
         nSeedModBranch = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
         *(uint64_t*)pSeed = nSeedModBranch;
-        nRandOffset = (uint32_t)((nSeedModBranch & 0xffffffff) % (uint64_t)nYRange);
+        nRandOffset = (uint32_t)((uint32_t)nSeedModBranch % nYRange);
       } else {
         nSeedPow2Branch = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
         *(int64_t*)pSeed = nSeedPow2Branch;
@@ -1135,7 +1135,7 @@ void __fastcall CLIENT_SpawnMonstersAroundUnit(D2UnitStrc * pUnit, int32_t nMons
     do {
       D2SeedStrc DVar1;
       nRngProduct = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-      nSpawnX = (int)nRngProduct + (int)((nRngProduct & 0xffffffff) / 5) * -5 - 2 + ptCenter.x;
+      nSpawnX = (int)((uint32_t)nRngProduct % 5) - 2 + ptCenter.x;
       DVar1 = D2_SEED_NEXT_VAL(nRngProduct);
       pUnit->sSeed = DVar1;
       nY = DVar1.nSeedLow % 5 - 2 + ptCenter.y;

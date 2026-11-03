@@ -1029,7 +1029,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                     } else {
                         int32_t ix = 0, iy = 0;
                         D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(rawX, rawY, &ix, &iy);
-                        if (!D2Client::GAME::Wall2::WALL2_IsInDrawGrid(ix, iy - 1, pAllocB))
+                        if (!D2Client::GAME::Wall2::WALL2_IsInDrawGrid_Extern(ix, iy - 1, pAllocB))
                             aRejG[t]++;
                         else
                             aPass[t]++;
@@ -1359,8 +1359,8 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         D2SkillStrc* pRight = pList->pRightSkill;
         D2SkillStrc* pLeft = pList->pLeftSkill;
         int nCodeR = 0, nCodeL = 0;
-        int bUsableR = pRight ? (int)D2Client::UNIT::Player::PLAYER_CheckSkillUsability(&nCodeR, pPl, &pRight) : -1;
-        int bUsableL = pLeft  ? (int)D2Client::UNIT::Player::PLAYER_CheckSkillUsability(&nCodeL, pPl, &pLeft)  : -1;
+        int bUsableR = pRight ? (int)D2Client::UNIT::Player::PLAYER_CheckSkillUsability_Extern(&nCodeR, pPl, &pRight) : -1;
+        int bUsableL = pLeft  ? (int)D2Client::UNIT::Player::PLAYER_CheckSkillUsability_Extern(&nCodeL, pPl, &pLeft)  : -1;
         D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pPl);
         wsprintfA(whyOut,
             "{\"life\":%d,\"mana\":%d,\"maxmana\":%d,\"intown\":%d,"
@@ -1493,13 +1493,13 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         if (!pSrv || !pGame) { lstrcpynA(reply, "{\"err\":\"no server unit or game\"}", replyMax); return; }
         D2SkillStrc* pR = D2Common::Units::GetRightSkill(pSrv);
         int nMode = pR ? (int)D2Common::Skills::GetSkillMode(pSrv, pR) : -1;
-        int nCanInt = (int)D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode(pSrv, pGame, (uint32_t)nMode);
+        int nCanInt = (int)D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode_Extern(pSrv, pGame, (uint32_t)nMode);
         wsprintfA(scOut,
             "{\"game\":\"%08X\",\"unit\":\"%08X\",\"skillmode\":%d,\"caninterrupt\":%d,"
             "\"cancel\":%d,\"cast\":%d,\"before\":[%d,%d]}",
             (unsigned)(uintptr_t)pGame, (unsigned)(uintptr_t)pSrv, nMode, nCanInt,
             (int)D2Game::PLAYER::PlayerModes::PLRMODES_TryCancelModeAndMoveToLocation(pGame, pSrv, nMode, 1, pR),
-            pR ? (int)D2Game::PLAYER::PlayerMsg::CastSkillOnLocation(pSrv, pGame, wx, wy, pR) : -1,
+            pR ? (int)D2Game::PLAYER::PlayerMsg::CastSkillOnLocation_Extern(pSrv, pGame, wx, wy, pR) : -1,
             (int)(pSrv->pPath.pDynamicPath ? pSrv->pPath.pDynamicPath->Coords.tSubtile.nPosX : -1),
             (int)(pSrv->pPath.pDynamicPath ? pSrv->pPath.pDynamicPath->Coords.tSubtile.nPosY : -1));
         lstrcpynA(reply, scOut, replyMax);
@@ -1526,7 +1526,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             sx, sy, wx, wy,
             (int)D2Common::Units::GetTargetX(pPl),
             (int)D2Common::Units::GetTargetY(pPl),
-            (int)D2Client::UNIT::UnitMode::UNITMODE_CanInterruptSkill(pPl),
+            (int)D2Client::UNIT::UnitMode::UNITMODE_CanInterruptSkill_Extern(pPl),
             (unsigned)(uintptr_t)pSk,
             pSk ? (int)D2Common::Skills::GetSkillId(pSk, "", 0) : -1,
             pSk ? (int)D2Common::Skills::GetOwnerGUID(pSk) : -1);
@@ -1541,8 +1541,8 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             msg.nTargetUnitType = (uint32_t)wx;
             msg.nTargetUnitId = (uint32_t)wy;
             int nCode = 0;
-            int nValid = (int)D2Client::UNIT::Player::PLAYER_ValidateSkillMessage(&nCode, pPl, &msg);
-            int nCast  = (int)D2Client::SKILLS::Skills::SKILLS_CastSkillClient(
+            int nValid = (int)D2Client::UNIT::Player::PLAYER_ValidateSkillMessage_Extern(&nCode, pPl, &msg);
+            int nCast  = (int)D2Client::SKILLS::Skills::SKILLS_CastSkillClient_Extern(
                                   (eD2Skills)msg.nSkillId, pPl, (int32_t)msg.nItemId, msg.nSkillLvl);
             int u = (int)strlen(cdOut);
             wsprintfA(cdOut + u - 1, ",\"validate\":%d,\"vcode\":%d,\"castclient\":%d,"
@@ -2516,7 +2516,7 @@ static void WalkerStep(void) {
     }
 
     g_walkSteps++;
-    D2Client::UNIT::Player::CLIENT_MovePlayerToPosition(pPlayerUnit, (int16_t)nStepX, (int16_t)nStepY, 1);
+    D2Client::UNIT::Player::CLIENT_MovePlayerToPosition_Extern(pPlayerUnit, (int16_t)nStepX, (int16_t)nStepY, 1);
 }
 
 extern "C" void D2CONTROL_Pump(void) {
@@ -2628,7 +2628,7 @@ extern "C" void D2CONTROL_Pump(void) {
                 (eD2UnitModeAction)(int)a.wp, D2Client::UNIT::Player::GetPlayerUnit_UI(), a.x, a.y, 0);
             D2TraceFmt("CASTDBG action=%d at world %d,%d", (int)a.wp, a.x, a.y);
         } else if (a.kind == 5) {
-            D2Client::GAME::Msg::NET_D2GS_CLIENT_Send((byte*)a.path, a.x);
+            D2Client::GAME::Msg::NET_D2GS_CLIENT_Send_Extern((byte*)a.path, a.x);
             D2TraceFmt("CPKT op=%02X len=%d", (unsigned char)a.path[0], a.x);
         } else if (a.kind == 1) {
             // The game's own capture: it reads the real back buffer, so it sees exactly

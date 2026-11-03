@@ -520,7 +520,6 @@ static void __stdcall DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(D2DrlgStrc * 
     int* pWarpIds;
     D2DrlgLevelStrc* pLevel;
     eDrlgDirection eDirection;
-    int nWarpOffset;
     int nVisCount;
     D2DrlgLevelDataWildernessLevel* pLevelData;
     for (; (int)nLevelIdStart <= (int)eLevel; nLevelIdStart += LEVEL_RogueEncampment) {
@@ -529,19 +528,14 @@ static void __stdcall DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(D2DrlgStrc * 
       if (pCurLevel->eDrlgType == 3) {
         pVisArray = DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pDrlg, nLevelIdStart);
         pWarpIds = DrlgRoom::DRLGACTMISC_GetWarpsIdIfExists(pDrlg, nLevelIdStart);
-        nWarpOffset = (int)pWarpIds - (int)pVisArray;
-        nVisCount = 8;
-        do {
-          if (*pVisArray && *(int*)(nWarpOffset + (int)pVisArray) == -1) {
+        for (nVisCount = 0; nVisCount < 8; nVisCount++) {
+          if (pVisArray[nVisCount] && pWarpIds[nVisCount] == -1) {
             pLevelData = pCurLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-            pLevel = GetLevelAndAlloc(pCurLevel->pDrlg, *pVisArray);
+            pLevel = GetLevelAndAlloc(pCurLevel->pDrlg, pVisArray[nVisCount]);
             eDirection = GetDirectionFromCoordinates(&pCurLevel->sCoordinatesAndSize, &pLevel->sCoordinatesAndSize);
             DrlgRoom::AllocDrlgOrth(&pLevelData->pOrthData, pLevel, eDirection, (uint32_t)(pLevel->eDrlgType == 2));
           }
-
-          pVisArray++;
-          nVisCount--;
-        } while (nVisCount);
+        }
       }
     }
 }

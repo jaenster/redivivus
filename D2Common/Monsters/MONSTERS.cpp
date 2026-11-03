@@ -671,22 +671,22 @@ uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pUnit) {
 void __stdcall MONSTERS_GetUpgradeSkillsAndCount(D2UnitStrc * pUnit, uint32_t * pdwAnimFlags, uint32_t * pdwValidFlags) {
     // Static local variables (originally global data)
     static D2MonStatAnimEntryStrc gdwMonStatAnimFlagsTable[4] = {
-    D2MonStatAnimEntryStrc(
+    {
         /* .dwFlags = */ 0x0,
         /* .dwValidFlags = */ 0x1
-    ),
-    D2MonStatAnimEntryStrc(
+    },
+    {
         /* .dwFlags = */ 0x1,
         /* .dwValidFlags = */ 0x0
-    ),
-    D2MonStatAnimEntryStrc(
+    },
+    {
         /* .dwFlags = */ 0x1,
         /* .dwValidFlags = */ 0x0
-    ),
-    D2MonStatAnimEntryStrc(
+    },
+    {
         /* .dwFlags = */ 0xffffffff,
         /* .dwValidFlags = */ 0x0
-    )
+    }
 }; D2_STATIC_GUARD(gdwMonStatAnimFlagsTable, "D2Common::Monsters::MONSTERS::MONSTERS_GetUpgradeSkillsAndCount::gdwMonStatAnimFlagsTable");
 
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {

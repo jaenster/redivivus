@@ -14,18 +14,14 @@ struct z_stream;
 
 // Data types
 struct inflate_code {
-    inflate_code() = default;
-    inflate_code(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-    inflate_code(uint8_t a0, uint8_t a1, uint16_t a2) : op(a0), bits(a1), val(a2) {}
 
     /* 0x00 */ uint8_t op; // operation, extra bits, table bits
     /* 0x01 */ uint8_t bits; // bits in this part of the code
     /* 0x02 */ uint16_t val; // offset in table or code value
 };
 
-#pragma pack(push, 1)
-struct inflate_state {
+struct __attribute__((packed)) inflate_state {
     /* 0x0000 */ int32_t mode; // current inflate mode
     /* 0x0004 */ int32_t last; // true if processing last block
     /* 0x0008 */ int32_t wrap; // bit 0 true for zlib, bit 1 true for gzip, bit 2 to validate check value
@@ -61,7 +57,6 @@ struct inflate_state {
     /* 0x1BC4 */ int32_t back; // bits back of last unprocessed length/lit
     /* 0x1BC8 */ uint32_t was; // initial length of match
 };
-#pragma pack(pop)
 
 namespace Storm::_3rdparty::zlib::inflate {
 

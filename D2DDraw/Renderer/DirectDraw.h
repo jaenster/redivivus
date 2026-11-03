@@ -247,10 +247,7 @@ struct D2ddDebugFont {
 };
 
 struct DDCOLORKEY {
-    DDCOLORKEY() = default;
-    DDCOLORKEY(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    DDCOLORKEY(DWORD a0, DWORD a1) : dwColorSpaceLowValue(a0), dwColorSpaceHighValue(a1) {}
 
     /* 0x00 */ DWORD dwColorSpaceLowValue;
     /* 0x04 */ DWORD dwColorSpaceHighValue;
@@ -369,8 +366,7 @@ struct IDirectDrawVtbl {
     /* 0x74 */ void * EvaluateMode;
 };
 
-#pragma pack(push, 1)
-struct DDBLTFX {
+struct __attribute__((packed)) DDBLTFX {
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwDDFX;
     /* 0x08 */ DWORD dwROP;
@@ -395,7 +391,6 @@ struct DDBLTFX {
     /* 0x54 */ DDCOLORKEY ddckDestColorkey;
     /* 0x5C */ DDCOLORKEY ddckSrcColorkey;
 };
-#pragma pack(pop)
 
 namespace D2DDraw::Renderer::DirectDraw {
 

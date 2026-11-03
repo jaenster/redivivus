@@ -973,13 +973,7 @@ void __fastcall UnlinkListNode(int * pNode) {
       return;
     }
 
-    uint32_t nPrevRel = pNode[1];
-    if ((int)nPrevRel < 0) {
-      pPrev = (int*)~nPrevRel;
-    } else {
-      pPrev = (int*)((int)pNode + (nPrevRel - *(int*)(pNext + 4)));
-    }
-
+    pPrev = (int*)D2_StormNextLink(pNode, -1);
     *pPrev = pNext;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -1078,12 +1072,7 @@ void __fastcall UnlinkListNodeDouble(int * pNode) {
     int pNext = *pNode;
     if (pNext) {
       nOffset = pNode[1];
-      if ((int)nOffset < 0) {
-        pPrevLink = (int*)~nOffset;
-      } else {
-        pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
       *pPrevLink = pNext;
       *(int*)(*pNode + 4) = pNode[1];
       *pNode = 0;
@@ -1096,12 +1085,7 @@ void __fastcall UnlinkListNodeDouble(int * pNode) {
     }
 
     nOffset = pNode[1];
-    if ((int)nOffset < 0) {
-      pPrevLink = (int*)~nOffset;
-    } else {
-      pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
     *pPrevLink = pNext;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -1185,13 +1169,7 @@ void __thiscall RemoveListNode(int32_t pListHead, int * pNode) {
       return;
     }
 
-    uint32_t nOffset = pNode[1];
-    if ((int)nOffset < 0) {
-      pPrevLink = (int*)~nOffset;
-    } else {
-      pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
     *pPrevLink = pNext;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -1205,7 +1183,6 @@ void __fastcall ClearListNode(uint32_t * pNode) {
 
 void __fastcall RemoveAllListNodes(D2StormListHead * pListHead) {
     int* pPrevLink;
-    uint32_t nOffset;
     int* pNode;
     while (true) {
       int pNext;
@@ -1216,13 +1193,7 @@ void __fastcall RemoveAllListNodes(D2StormListHead * pListHead) {
 
       pNext = *pNode;
       if (pNext) {
-        nOffset = pNode[1];
-        if ((int)nOffset < 0) {
-          pPrevLink = (int*)~nOffset;
-        } else {
-          pPrevLink = (int*)((int)pNode + (nOffset - *(int*)(pNext + 4)));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
         *pPrevLink = pNext;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -1250,14 +1221,7 @@ void __fastcall TeardownListFull(D2StormListHead * pListHead) {
     StormLinkStrc** pHeadLink = &pListHead->pPrevLink;
     StormLinkStrc* pNext = *pHeadLink;
     if (pNext) {
-      uint32_t nOffset;
-      nOffset = pListHead->pNext;
-      if ((int)nOffset < 0) {
-        pPrevLink = (int*)~nOffset;
-      } else {
-        pPrevLink = (int*)((int)pHeadLink + (nOffset - pNext->pNext));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pHeadLink, -1);
       *pPrevLink = (int)pNext;
       (*pHeadLink)->pNext = pListHead->pNext;
       *pHeadLink = 0;
@@ -1505,7 +1469,6 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
     void* pSavedEsp;
     EH4_EXCEPTION_REGISTRATION tSehFrame;
     int* pNext;
-    int* pPackedPrevLink;
     tSehFrame.TryLevel = -2;
     tSehFrame.ExceptionHandler = _except_handler4;
     tSehFrame.Next = (EH4_EXCEPTION_REGISTRATION*)ExceptionList;
@@ -1537,13 +1500,7 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gLogMessageQueueCS);
       pNext = *pNode;
       if (pNext) {
-        pPackedPrevLink = pNode[1];
-        if ((int)pPackedPrevLink < 0) {
-          pPrevLink = (int*)~(uint32_t)pPackedPrevLink;
-        } else {
-          pPrevLink = (int*)((int)pPackedPrevLink + ((int)pNode - pNext[1]));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
         *pPrevLink = (int)pNext;
         (*pNode)[1] = (int)pNode[1];
         *pNode = 0;

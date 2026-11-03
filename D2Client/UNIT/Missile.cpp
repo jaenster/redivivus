@@ -744,7 +744,7 @@ static void __stdcall MISSILE_CalculatePierceCount(D2UnitStrc * pUnit, D2UnitStr
       }
 
       _nSeedLow = D2_SEED_NEXT_VAL(_nSeedLow);
-      if ((int)(__frame0.nSeedLow + (int)(((uint64_t)_nSeedLow & 0xffffffff) / 100) * -100) >= nPierceChance) {
+      if ((int)(__frame0.nSeedLow + (int)((uint32_t)_nSeedLow / 100) * -100) >= nPierceChance) {
         break;
       }
 
@@ -4614,7 +4614,7 @@ int32_t __fastcall MISSILE_CltHitFn37_RadamentHandOfGod(D2UnitStrc * pUnit, D2Un
     do {
       int nSeedOffset;
       uSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-      nSeedOffset = (int)uSeedProduct + (int)((uSeedProduct & 0xffffffff) / 0x14) * -0x14 - 10 + nPosX;
+      nSeedOffset = (int)((uint32_t)uSeedProduct % 0x14) - 10 + nPosX;
       DVar1 = D2_SEED_NEXT_VAL(uSeedProduct);
       *pSeed = DVar1;
       sSkillArg.nUnitY = DVar1.nSeedLow % 0x14 - 10 + nPosY;
@@ -5027,7 +5027,7 @@ void __fastcall MISSILE_CltDoFn66_WorldStoneShake(D2UnitStrc * pUnit) {
         pUnit->sSeed.nSeedLow = newSeed.nSeedLow;
         nTargetX = Units::GetXPosFromDynamicPathUnit(pUnit);
         nPosY = Units::GetYPosFromDynamicPathUnit(pUnit);
-        MISSILE_CreateDebrisWithCollision(nTargetX - 0x1e + (int)uDebrisRandX + (int)((uDebrisRandX & 0xffffffff) / 0x3c) * -0x3c, pUnit, nPosY - 0x1e + newSeed.nSeedLow + (int)(newSeed.nSeedLow / 0x3c) * -0x3c);
+        MISSILE_CreateDebrisWithCollision(nTargetX - 0x1e + (int)uDebrisRandX + (int)((uint32_t)uDebrisRandX / 0x3c) * -0x3c, pUnit, nPosY - 0x1e + newSeed.nSeedLow + (int)(newSeed.nSeedLow / 0x3c) * -0x3c);
         return;
       }
     }
@@ -6182,7 +6182,7 @@ void __fastcall MISSILE_CltDoFn09_MeteorCenter(D2UnitStrc * pUnit) {
             }
 
             nRemainingFrames2 = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-            if (!((nRemainingFrames2 + 1) % (int)(0x3c / (int64_t)nMaxRadius)) && nCurRadius < nMaxRadius && pLightMap) {
+            if (!((nRemainingFrames2 + 1) % (int)(0x3c / nMaxRadius)) && nCurRadius < nMaxRadius && pLightMap) {
               Draw::LightMap::LIGHTMAP_SetRadius(pLightMap, nCurRadius + 1);
             }
             if (!nRemainingFrames2) {
@@ -8562,7 +8562,7 @@ void __fastcall MISSILE_CltDoFn31_HoradricStaff(D2UnitStrc * pUnit) {
 
       memset(&sSkillArg, 0, 0x5c);
       uRandSeed = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-      sSkillArg.nUnitX = (int)uRandSeed + (int)((uRandSeed & 0xffffffff) / 5) * -5 + 1 + nPosYTmp - 0xd;
+      sSkillArg.nUnitX = (int)((uint32_t)uRandSeed % 5) + 1 + nPosYTmp - 0xd;
       DVar1 = D2_SEED_NEXT_VAL(uRandSeed);
       pUnit->sSeed = DVar1;
       sSkillArg.nUnitY = DVar1.nSeedLow % 10 - 5 + nCurPosY + 3;
@@ -9022,7 +9022,7 @@ void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
       sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
       uRandSeed = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
       DVar1 = D2_SEED_NEXT_VAL(uRandSeed);
-      sSkillArg.nX = (int)uRandSeed + (int)((uRandSeed & 0xffffffff) / 0x28) * -0x28 - 0x14 + nPosX;
+      sSkillArg.nX = (int)((uint32_t)uRandSeed % 0x28) - 0x14 + nPosX;
       pUnit->sSeed = DVar1;
       sSkillArg.nY = DVar1.nSeedLow % 0x28 - 0x14 + nPosY;
       Missile::MakeMissile(&sSkillArg);
@@ -9037,7 +9037,7 @@ void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
       sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
       uRandSeed = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
       DVar1 = D2_SEED_NEXT_VAL(uRandSeed);
-      sSkillArg.nX = (int)uRandSeed + (int)((uRandSeed & 0xffffffff) / 0x28) * -0x28 - 0x14 + nPosX;
+      sSkillArg.nX = (int)((uint32_t)uRandSeed % 0x28) - 0x14 + nPosX;
       pUnit->sSeed = DVar1;
       sSkillArg.nY = DVar1.nSeedLow % 0x28 - 0x14 + nPosY;
       pNewMissile = Missile::MakeMissile(&sSkillArg);
@@ -9401,7 +9401,7 @@ static D2BaalFxSpiritSpawnStrc gaBaalFxSpiritSpawnSchedule[5] = {
           nNearbyMonPosY = 0;
         }
 
-        MISSILE_CreateDebrisWithCollision((int)uSeedTmp + (int)((uSeedTmp & 0xffffffff) / 10) * -10 - 5 + nPosYTmp, pUnit, nNearbyMonPosY + sSeedNext.nSeedLow + (int)(sSeedNext.nSeedLow / 10) * -10 - 5);
+        MISSILE_CreateDebrisWithCollision((int)((uint32_t)uSeedTmp % 10) - 5 + nPosYTmp, pUnit, nNearbyMonPosY + sSeedNext.nSeedLow + (int)(sSeedNext.nSeedLow / 10) * -10 - 5);
       }
     }
 
@@ -9642,7 +9642,7 @@ void __fastcall MISSILE_CltDoFn55_AncientDeathCenter(D2UnitStrc * pUnit) {
       sSkillArg.pOwner = Player::MISSILE_GetOwnerUnit(pUnit);
       sSkillArg.nX = nDestXFinal;
       sSkillArg.nY = nDestYOffset;
-      sSkillArg.nUnitX = nDestXFinal + (int)nSeedRaw1 + (int)((nSeedRaw1 & 0xffffffff) / 0x14) * -0x14 - 10;
+      sSkillArg.nUnitX = nDestXFinal + (int)nSeedRaw1 + (int)((uint32_t)nSeedRaw1 / 0x14) * -0x14 - 10;
       sSkillArg.nUnitY = nDestYOffset + sSeedStage2.nSeedLow + (int)(sSeedStage2.nSeedLow / 0x14) * -0x14 - 10;
       sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
       sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);

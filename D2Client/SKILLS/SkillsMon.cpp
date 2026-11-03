@@ -646,7 +646,7 @@ static void __stdcall SKILLSMON_SetMissileFrameAndSpeed(eD2Skills eSkill, D2Unit
     }
 
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pUnit2->pPath.pDynamicPath, (uint8_t)nTotalFrames);
-    D2Common::Units::SetAnimationSpeed(pUnit2, (int32_t)((int64_t)((uint64_t)(uint8_t)pMissileTxt->AnimLen << 8) / (int64_t)nTotalFrames));
+    D2Common::Units::SetAnimationSpeed(pUnit2, (int32_t)(((uint8_t)pMissileTxt->AnimLen << 8) / nTotalFrames));
     D2Common::Units::Missile::SetTotalFrames(pUnit2, nTotalFrames);
     D2Common::Units::Missile::SetCurrentFrame(pUnit2, nTotalFrames);
 }

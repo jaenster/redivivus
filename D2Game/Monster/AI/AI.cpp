@@ -7856,7 +7856,7 @@ void __fastcall AI_Hireling_SelectAndCastSkill(::SGAMEDATA * pGame, D2UnitStrc *
       if (nSeedHighTmp & nCumulChance) {
         uNewMercSeed = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
         *(uint64_t*)pSeed = uNewMercSeed;
-        nSeedHighTmp = (uint32_t)((uNewMercSeed & 0xffffffff) % (uint64_t)nSeedHighTmp);
+        nSeedHighTmp = (uint32_t)((uint32_t)uNewMercSeed % nSeedHighTmp);
       } else {
         lNewMercSeed = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
         *(int64_t*)pSeed = lNewMercSeed;
@@ -7962,7 +7962,7 @@ void __fastcall HirelingCombatThink(::SGAMEDATA * pGame, D2UnitStrc * pMerc, int
       nMercGuid = pPetData->nType;
       nSkillRollSeed = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
       *(uint64_t*)pSeed = nSkillRollSeed;
-      bUseSkill = (int)nSkillRollSeed + (int)((nSkillRollSeed & 0xffffffff) / 100) * -100 >= nSkillChance;
+      bUseSkill = (int)((uint32_t)nSkillRollSeed % 100) >= nSkillChance;
       if (!bUseSkill) {
         *(uint32_t*)(nMonStats2Base + 0x14) = 0;
       } else {
@@ -14271,7 +14271,7 @@ void __fastcall AITHINK_Fn1_NpcBarb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     uint64_t nSeedCalc4 = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
     newSeed = D2_SEED_NEXT_VAL(nSeedCalc4);
     pUnit->sSeed = newSeed;
-    int32_t bWalkResult = MONSTERAI_CommandWalkToCoords(pGame, pUnit, (int)nSeedCalc4 + (int)((nSeedCalc4 & 0xffffffff) / 0x14) * -0x14 - 0x28 + nPosX, newSeed.nSeedLow % 0x14 - 10 + nAiParam);
+    int32_t bWalkResult = MONSTERAI_CommandWalkToCoords(pGame, pUnit, (int)((uint32_t)nSeedCalc4 % 0x14) - 0x28 + nPosX, newSeed.nSeedLow % 0x14 - 10 + nAiParam);
     if (bWalkResult) {
       return;
     }
@@ -14281,7 +14281,7 @@ void __fastcall AITHINK_Fn1_NpcBarb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     newSeed = D2_SEED_NEXT_VAL(uSeedCalc1);
     uint32_t nSeedLow3 = newSeed.nSeedLow;
     pUnit->sSeed = newSeed;
-    bWalkResult = MONSTERAI_CommandWalkToCoords(pGame, pUnit, (int)uSeedCalc1 + (int)((uSeedCalc1 & 0xffffffff) / 0x14) * -0x14 - 10 + nPosX, ((nSeedCalc4 & 1) != 0 ? 0x1U : 0xffffffff) * -0x1e + nSeedLow3 / 0x14 * -0x14 + nSeedLow3 - 10 + nAiParam);
+    bWalkResult = MONSTERAI_CommandWalkToCoords(pGame, pUnit, (int)((uint32_t)uSeedCalc1 % 0x14) - 10 + nPosX, ((nSeedCalc4 & 1) != 0 ? 0x1U : 0xffffffff) * -0x1e + nSeedLow3 / 0x14 * -0x14 + nSeedLow3 - 10 + nAiParam);
     if (bWalkResult) {
       return;
     }
@@ -14290,7 +14290,7 @@ void __fastcall AITHINK_Fn1_NpcBarb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     newSeed = D2_SEED_NEXT_VAL(uSeedCalc1);
     pUnit->sSeed.nSeedHigh = newSeed.nSeedHigh;
     pUnit->sSeed.nSeedLow = newSeed.nSeedLow;
-    bWalkResult = MONSTERAI_CommandWalkToCoords(pGame, pUnit, (int)uSeedCalc1 + (int)((uSeedCalc1 & 0xffffffff) / 0x14) * -0x14 - 10 + nPosX, ((uint32_t)!(nSeedCalc4 & 1) * 2 - 1) * -0x1e + (int)(newSeed.nSeedLow / 0x14) * -0x14 + newSeed.nSeedLow - 10 + nAiParam);
+    bWalkResult = MONSTERAI_CommandWalkToCoords(pGame, pUnit, (int)((uint32_t)uSeedCalc1 % 0x14) - 10 + nPosX, ((uint32_t)!(nSeedCalc4 & 1) * 2 - 1) * -0x1e + (int)(newSeed.nSeedLow / 0x14) * -0x14 + newSeed.nSeedLow - 10 + nAiParam);
     if (bWalkResult) {
       return;
     }
@@ -19746,7 +19746,7 @@ void __fastcall AITHINK_Fn1_Mephisto(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 
     if (nSeedHighPart > 0) {
       BOOL bCollideWithWall;
-      bCmdResult = (int)(100 / (int64_t)nSeedHighPart);
+      bCmdResult = (int)(100 / nSeedHighPart);
       sNewSeed = D2_SEED_NEXT(*pSeed);
       *pSeed = sNewSeed;
       nSeedLowResult = sNewSeed.nSeedLow % 100;
@@ -22253,7 +22253,7 @@ BOOL __fastcall MONSTERAI_FindRandomWalkPoint(::SGAMEDATA * pGame, D2UnitStrc * 
     do {
       D2SeedStrc DVar2;
       nSeedCalc = (uint64_t)pDVar1->nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-      nX = (int)nSeedCalc + (int)((nSeedCalc & 0xffffffff) / 0x28) * -0x28 - 0x14 + nUnitX;
+      nX = (int)((uint32_t)nSeedCalc % 0x28) - 0x14 + nUnitX;
       DVar2 = D2_SEED_NEXT_VAL(nSeedCalc);
       *pDVar1 = DVar2;
       nY = DVar2.nSeedLow % 0x28 - 0x14 + nUnitY;

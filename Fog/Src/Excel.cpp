@@ -145,7 +145,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
             if (!nFieldByteOffset) {
               pHashNode->nHash = 0;
               nErrorAddress = (int)pHashNode->pField - (int)pBinFieldInput;
-              pOutMapping[nOutputIndex] = (short int)(nErrorAddress / 0x14) + (short int)(nErrorAddress >> 0x1f) - (short int)((int64_t)nErrorAddress * 0x66666667 >> 0x3f);
+              pOutMapping[nOutputIndex] = (short int)(nErrorAddress / 0x14);
               goto next_column;
             }
           }
@@ -170,7 +170,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
       do {
         if (pHashNodeSlot[-1]) {
           nOutputCount = (int)*pHashNodeSlot - (int)pBinFieldInput;
-          pOutMapping[nErrorAddress] = (short int)(nOutputCount / 0x14) + (short int)(nOutputCount >> 0x1f) - (short int)((int64_t)nOutputCount * 0x66666667 >> 0x3f);
+          pOutMapping[nErrorAddress] = (short int)(nOutputCount / 0x14);
           nErrorAddress++;
         }
 

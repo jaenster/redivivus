@@ -140,13 +140,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkNode(::SGAMEDATA * 
       return;
     }
 
-    uint32_t nPrevOffset = pNodeLink->m_next;
-    if ((int)nPrevOffset < 0) {
-      pPrevLink = (int*)~nPrevOffset;
-    } else {
-      pPrevLink = (int*)((int)pNodeLink + (nPrevOffset - pNextNode->m_next));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNodeLink, -1);
     *pPrevLink = (int)pNextNode;
     pNodeLink->m_prevlink->m_next = pNodeLink->m_next;
     pNodeLink->m_prevlink = 0;
@@ -240,13 +234,7 @@ void __thiscall UnlinkNode_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
       return;
     }
 
-    uint32_t encPrev = pNodeLink->m_next;
-    if ((int)encPrev < 0) {
-      pPrevLink = (int*)~encPrev;
-    } else {
-      pPrevLink = (int*)((int)pNodeLink + (encPrev - pNext->m_next));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNodeLink, -1);
     *pPrevLink = (int)pNext;
     pNodeLink->m_prevlink->m_next = pNodeLink->m_next;
     pNodeLink->m_prevlink = 0;
@@ -386,13 +374,7 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
       return;
     }
 
-    uint32_t encPrev = pThis->m_terminator.m_next;
-    if ((int)encPrev < 0) {
-      pPrevLink = (int*)~encPrev;
-    } else {
-      pPrevLink = (int*)((int)pTVar1 + (encPrev - pNext->m_next));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = (int)pNext;
     pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
@@ -593,12 +575,7 @@ template<> ::SGAMEDATA * __thiscall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>
     if (pExisting) {
       char* pPrevLink;
       pTailLink = ppSlot->m_next;
-      if ((int)pTailLink < 0) {
-        pPrevLink = (char*)~pTailLink;
-      } else {
-        pPrevLink = (char*)((int)ppSlot + (pTailLink - pExisting->m_next));
-      }
-
+      pPrevLink = (char*)D2_StormNextLink(ppSlot, -1);
       *(TSLink<::SGAMEDATA>**)pPrevLink = (TSLink<::SGAMEDATA>*)pExisting;
       ppSlot->m_prevlink->m_next = ppSlot->m_next;
       ppSlot->m_prevlink = 0;

@@ -95,7 +95,7 @@ eD2Skills __stdcall ITEMMOD_RollStaffModSkills(D2UnitStrc * pUnit, eD2Skills eSk
         anSkillIds[3] = 2;
       } else {
         if (nSeedMod100 <= 0x1e) {
-          return (eD2Skills)((uint64_t)sSeed.nSeedLow * 0x51eb851f);
+          return (eD2Skills)(sSeed.nSeedLow * 0x51eb851f);
         }
 
         anSkillIds[3] = 1;

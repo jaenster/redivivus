@@ -14,10 +14,7 @@ struct D2UnitStrc;
 
 // Data types
 struct D2CubeInputStrc {
-    D2CubeInputStrc() = default;
-    D2CubeInputStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2CubeInputStrc(uint16_t a0, uint16_t a1, uint16_t a2, uint8_t a3, uint8_t a4) : wFlagsAndUpgrade(a0), nItemClassId(a1), nUniqueItemId(a2), nQuality(a3), nQuantity(a4) {}
 
     /* 0x00 */ uint16_t wFlagsAndUpgrade; // Packed word: low byte flags (useitem=1,usetype=2,nos=4,sock=8,eth=0x10,upg=0x80,bas=0x100,exc=0x200,eli=0x400,nru=0x800). Bit 0x40=unique/set. High byte is nUpgradeBase (class ID for upgrade type).
     /* 0x02 */ uint16_t nItemClassId;
@@ -49,8 +46,7 @@ struct D2CubeOutputStrc {
     /* 0x18 */ uint8_t aMods[60];
 };
 
-#pragma pack(push, 1)
-struct D2CubeMainTxt {
+struct __attribute__((packed)) D2CubeMainTxt {
     /* 0x00 */ uint8_t nEnabled;
     /* 0x01 */ uint8_t nLadder;
     /* 0x02 */ uint8_t nMinDiff;
@@ -65,7 +61,6 @@ struct D2CubeMainTxt {
     /* 0x14 */ D2CubeInputStrc pInputItem[7];
     /* 0x4C */ D2CubeOutputStrc pOutputItem[3];
 };
-#pragma pack(pop)
 
 namespace D2Common::Txt::Cube {
 

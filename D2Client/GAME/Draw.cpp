@@ -645,7 +645,7 @@ void __fastcall dRoofDraw(D2GameViewStrc * pGameView) {
                   pRoofEntry[9] &= -3;
                 } else {
                   nGridTotal = ((uint32_t)*(uint8_t*)((int)pRoofEntry + 0x2a) - (uint32_t)*(uint8_t*)((int)pRoofEntry + 0x29)) * (dwTickCount - pRoofEntry[0xb] + 500);
-                  *(uint8_t*)(pRoofEntry + 10) = (char)(nGridTotal / 500) + (char)(nGridTotal >> 0x1f) - (char)((int64_t)nGridTotal * 0x10624dd3 >> 0x3f) + *(uint8_t*)((int)pRoofEntry + 0x29);
+                  *(uint8_t*)(pRoofEntry + 10) = (char)(nGridTotal / 500) + *(uint8_t*)((int)pRoofEntry + 0x29);
                 }
                 if ((char)pRoofEntry[10] == '\0') {
                   nRoofFlags |= 0x400;
@@ -883,7 +883,7 @@ void __stdcall WALL2_DrawWallTilesWithAlpha(D2Wall2CellStrc * pWall2Cell, uint32
             pTileEntry->nTransitionFlags &= -3;
           } else {
             nFadeCalc = ((uint32_t)pTileEntry->nAlphaEnd - (uint32_t)pTileEntry->nAlphaStart) * (dwTickCount - pTileEntry->nFadeEndTime + 500);
-            pTileEntry->nCurrentAlpha = (char)(nFadeCalc / 500) + (char)(nFadeCalc >> 0x1f) - (char)((int64_t)nFadeCalc * 0x10624dd3 >> 0x3f) + pTileEntry->nAlphaStart;
+            pTileEntry->nCurrentAlpha = (char)(nFadeCalc / 500) + pTileEntry->nAlphaStart;
           }
           if (pTileEntry->nCurrentAlpha == '\0') {
             pTileEntry->nFlags |= 0x400;
@@ -1017,7 +1017,7 @@ void __fastcall dWallPass(D2GameViewStrc * pGameView) {
                 pWallTile->nTransitionFlags &= -3;
               } else {
                 nFadeCalc = ((uint32_t)pWallTile->nAlphaEnd - (uint32_t)pWallTile->nAlphaStart) * (timer - pWallTile->nFadeEndTime + 500);
-                pWallTile->nCurrentAlpha = (char)(nFadeCalc / 500) + (char)(nFadeCalc >> 0x1f) - (char)((int64_t)nFadeCalc * 0x10624dd3 >> 0x3f) + pWallTile->nAlphaStart;
+                pWallTile->nCurrentAlpha = (char)(nFadeCalc / 500) + pWallTile->nAlphaStart;
               }
               if (pWallTile->nCurrentAlpha == '\0') {
                 pWallTile->nFlags |= 0x400;

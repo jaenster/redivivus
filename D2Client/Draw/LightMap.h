@@ -27,10 +27,7 @@ struct D2ColorInfo2 {
 };
 
 struct D2LightMapCellStrc {
-    D2LightMapCellStrc() = default;
-    D2LightMapCellStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2LightMapCellStrc(int a0, uint8_t a1, uint8_t a2, uint8_t a3, uint8_t a4) : nCollisionGrid(a0), nCellIntensity(a1), nRed(a2), nGreen(a3), nBlue(a4) {}
 
     /* 0x00 */ int nCollisionGrid; // Collision flags: 1 = blocks player/missile
     /* 0x04 */ uint8_t nCellIntensity; // Light intensity 0-255

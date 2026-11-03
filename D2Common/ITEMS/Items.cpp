@@ -1761,38 +1761,38 @@ BOOL __stdcall TXT_Items_CheckIfHasClass(uint32_t nItemClassId) {
 int16_t __stdcall ITEM_GetWeaponAnimClass(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static D2ItemWeaponClassCodeStrc gaItemWeaponClassCodes[8] = {
-    D2ItemWeaponClassCodeStrc(
+    {
         /* .dwCode = */ 0x20776f62,
         /* .nWeaponClass = */ 0x1
-    ),
-    D2ItemWeaponClassCodeStrc(
+    },
+    {
         /* .dwCode = */ 0x20736831,
         /* .nWeaponClass = */ 0x2
-    ),
-    D2ItemWeaponClassCodeStrc(
+    },
+    {
         /* .dwCode = */ 0x20746831,
         /* .nWeaponClass = */ 0x3
-    ),
-    D2ItemWeaponClassCodeStrc(
+    },
+    {
         /* .dwCode = */ 0x20667473,
         /* .nWeaponClass = */ 0x4
-    ),
-    D2ItemWeaponClassCodeStrc(
+    },
+    {
         /* .dwCode = */ 0x20736832,
         /* .nWeaponClass = */ 0x5
-    ),
-    D2ItemWeaponClassCodeStrc(
+    },
+    {
         /* .dwCode = */ 0x20746832,
         /* .nWeaponClass = */ 0x6
-    ),
-    D2ItemWeaponClassCodeStrc(
+    },
+    {
         /* .dwCode = */ 0x20776278,
         /* .nWeaponClass = */ 0x7
-    ),
-    D2ItemWeaponClassCodeStrc(
+    },
+    {
         /* .dwCode = */ 0x20317468,
         /* .nWeaponClass = */ 0xc
-    )
+    }
 }; D2_STATIC_GUARD(gaItemWeaponClassCodes, "D2Common::ITEMS::Items::ITEM_GetWeaponAnimClass::gaItemWeaponClassCodes");
     static uint32_t gnItemWeaponClassCodeCount = 0x8; D2_STATIC_GUARD(gnItemWeaponClassCodeCount, "D2Common::ITEMS::Items::ITEM_GetWeaponAnimClass::gnItemWeaponClassCodeCount");
 

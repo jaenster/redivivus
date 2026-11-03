@@ -394,519 +394,519 @@ BOOL __stdcall INV_IsPlayerInventoryMode() {
 void __stdcall INV_DrawSocketedItems(D2UnitStrc * pUnit, D2GridScreenCoordinates * pGridCoords, int32_t nBaseX, int32_t nBaseY) {
     // Static local variables (originally global data)
     static D2SocketOffsetStrc gaSocketOffsets[288] = {
-    D2SocketOffsetStrc(
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x6
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x6
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x6
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x7
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x7
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {
         /* .nX = */ 0x2,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x6
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x6
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(),
-    D2SocketOffsetStrc(
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x1
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x3
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x5
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x1,
         /* .nY = */ 0x6
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x2
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x4
-    ),
-    D2SocketOffsetStrc(
+    },
+    {
         /* .nX = */ 0x3,
         /* .nY = */ 0x6
-    )
+    }
 }; D2_STATIC_GUARD(gaSocketOffsets, "D2Client::UI::Inv::INV_DrawSocketedItems::gaSocketOffsets");
 
     D2UnitStrc* pGemItem;

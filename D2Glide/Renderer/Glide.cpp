@@ -2992,7 +2992,7 @@ void __stdcall RENDERER_GLIDE_BuildLightingTable() {
       nColorIdx = 0;
       nAccum = 0;
       do {
-        gpGlideLightingTable[nColorIdx + nIntensity * 0x100] = (char)(nAccum / 0xff) + (char)(nAccum >> 0x1f) - (char)((int64_t)nAccum * 0x80808081 >> 0x3f);
+        gpGlideLightingTable[nColorIdx + nIntensity * 0x100] = (char)(nAccum / 0xff);
         nColorIdx++;
         nAccum += nIntensity;
       } while (nColorIdx < 0x100);
@@ -3048,7 +3048,7 @@ void __stdcall RENDERER_GLIDE_BuildPerspectiveLUT() {
 
       nZ++;
       nCount--;
-      *pLutEntry = (int)(0x2ee000 / (int64_t)(nClampedZ - 3000));
+      *pLutEntry = (int)(0x2ee000 / (nClampedZ - 3000));
       pLutEntry++;
     } while (nCount);
 

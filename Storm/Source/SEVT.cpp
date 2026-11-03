@@ -470,13 +470,7 @@ void __fastcall LINKEDLIST_UnlinkSelf(int * pNode) {
       return;
     }
 
-    uint32_t nPrevEncoded = pNode[1];
-    if ((int)nPrevEncoded < 0) {
-      pPrevLink = (int*)~nPrevEncoded;
-    } else {
-      pPrevLink = (int*)((int)pNode + (nPrevEncoded - *(int*)(pNext + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
     *pPrevLink = pNext;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -617,13 +611,7 @@ void __thiscall LINKEDLIST_GetHead(int32_t pThis, int * pListHead) {
       return;
     }
 
-    uint32_t uPrevLink = pListHead[1];
-    if ((int)uPrevLink < 0) {
-      pLinkSlot = (int*)~uPrevLink;
-    } else {
-      pLinkSlot = (int*)((int)pListHead + (uPrevLink - *(int*)(nNextNode + 4)));
-    }
-
+    pLinkSlot = (int*)D2_StormNextLink(pListHead, -1);
     *pLinkSlot = nNextNode;
     *(int*)(*pListHead + 4) = pListHead[1];
     *pListHead = 0;
@@ -642,7 +630,6 @@ uint32_t __thiscall LINKEDLIST_GetValueAtIndex(void * pListHead, int32_t nNode) 
 void __fastcall LINKEDLIST_GetTail(D2StormListHead * pList) {
     int* pLinkSlot;
     int* pNode;
-    uint32_t uPrevLink;
     while (true) {
       int nNextNode;
       pNode = (int*)pList->pNext;
@@ -652,13 +639,7 @@ void __fastcall LINKEDLIST_GetTail(D2StormListHead * pList) {
 
       nNextNode = *pNode;
       if (nNextNode) {
-        uPrevLink = pNode[1];
-        if ((int)uPrevLink < 0) {
-          pLinkSlot = (int*)~uPrevLink;
-        } else {
-          pLinkSlot = (int*)((int)pNode + (uPrevLink - *(int*)(nNextNode + 4)));
-        }
-
+        pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
         *pLinkSlot = nNextNode;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -676,13 +657,7 @@ void __fastcall LINKEDLIST_InsertHead(D2StormListHead * pList) {
       return;
     }
 
-    uint32_t uPrevLink = pList->pNext;
-    if ((int)uPrevLink < 0) {
-      pLinkSlot = (int*)~uPrevLink;
-    } else {
-      pLinkSlot = (int*)((int)pHeadSlot + (uPrevLink - nNextNode->pNext));
-    }
-
+    pLinkSlot = (int*)D2_StormNextLink(pHeadSlot, -1);
     *pLinkSlot = (int)nNextNode;
     (*pHeadSlot)->pNext = pList->pNext;
     *pHeadSlot = 0;
@@ -709,17 +684,10 @@ int * * __thiscall LINKEDLIST_AllocNode(int * * pListHead, int32_t pList, int32_
 
 // Unlinks a node from its doubly-linked list by updating prev/next pointers of adjacent nodes. If bit 0 of bFreeMemory is set, also frees the node memory via SMemFree. Returns the unlinked node pointer.
 int * __thiscall LINKEDLIST_UnlinkAndFree(int * pNode, uint8_t bFreeMemory) {
-    uint32_t uPrevLink;
     int nNextNode = *pNode;
     if (nNextNode) {
       int* pLinkSlot;
-      uPrevLink = pNode[1];
-      if ((int)uPrevLink < 0) {
-        pLinkSlot = (int*)~uPrevLink;
-      } else {
-        pLinkSlot = (int*)((int)pNode + (uPrevLink - *(int*)(nNextNode + 4)));
-      }
-
+      pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
       *pLinkSlot = nNextNode;
       *(int*)(*pNode + 4) = pNode[1];
       *pNode = 0;
@@ -741,7 +709,6 @@ int * __thiscall LINKEDLIST_UnlinkAndFree(int * pNode, uint8_t bFreeMemory) {
 // @todo the list head it writes is still labelled gnUnnamedMessageBoxType; it is the SEvt break-command list head at 007088e8.
 int __stdcall SEvtBreakHandlerChain(void * pUnderMouse) {
     StormBreakCmdStrc* pNewNode;
-    uint32_t uPrevLink;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
     StormBreakCmdStrc* pNode = (StormBreakCmdStrc*)SMem::SMemAlloc(0xc, s___AUBREAKCMD___007088d8, -2, 8);
     if (pNode) {
@@ -756,13 +723,7 @@ int __stdcall SEvtBreakHandlerChain(void * pUnderMouse) {
     StormLinkStrc* nNextNode = pNode->link.pPrevLink;
     if (nNextNode) {
       int* pLinkSlot;
-      uPrevLink = pNode->link.pNext;
-      if ((int)uPrevLink < 0) {
-        pLinkSlot = (int*)~uPrevLink;
-      } else {
-        pLinkSlot = (int*)((int)pNode + (uPrevLink - nNextNode->pNext));
-      }
-
+      pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
       *pLinkSlot = (int)nNextNode;
       pNode->link.pPrevLink->pNext = pNode->link.pNext;
       pNode->link.pPrevLink = 0;
@@ -788,14 +749,7 @@ uint32_t __thiscall LINKEDLIST_UnlinkFreeAndGetCount(void * pListHead, int * pNo
     uint32_t uCount = pLinkSlot[1];
     int nNextNode = *pNode;
     if (nNextNode) {
-      uint32_t uPrevLink;
-      uPrevLink = pNode[1];
-      if ((int)uPrevLink < 0) {
-        pLinkSlot = (int*)~uPrevLink;
-      } else {
-        pLinkSlot = (int*)((int)pNode + (uPrevLink - *(int*)(nNextNode + 4)));
-      }
-
+      pLinkSlot = (int*)D2_StormNextLink(pNode, -1);
       *pLinkSlot = nNextNode;
       *(int*)(*pNode + 4) = pNode[1];
       *pNode = 0;
@@ -820,7 +774,6 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
     int* pLinkSlot;
     pfnSEvtHandler pfnHandler;
     int nNextNode;
-    uint32_t uPrevLink;
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_007792fc);
     D2SevtHandlerNodeStrc* pHandlerNode;
     pHandlerNode = 0;
@@ -835,14 +788,8 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey
         do {
           if ((void*)pBreakCmd[2] == pData) {
             nNextNode = *pBreakCmd;
-            uPrevLink = pBreakCmd[1];
             if (nNextNode) {
-              if ((int)uPrevLink < 0) {
-                pLinkSlot = (int*)~uPrevLink;
-              } else {
-                pLinkSlot = (int*)((int)pBreakCmd + (uPrevLink - *(int*)(nNextNode + 4)));
-              }
-
+              pLinkSlot = (int*)D2_StormNextLink(pBreakCmd, -1);
               *pLinkSlot = nNextNode;
               *(int*)(*pBreakCmd + 4) = pBreakCmd[1];
               *pBreakCmd = 0;
@@ -935,12 +882,8 @@ void StaticFini_gSevtBreakCmdList() {
     if (!gpSevtBreakCmdListHead.pPrevLink) {
       return;
     }
-    if (gpSevtBreakCmdListHead.pNext < 0) {
-      pBackLink = (uint32_t*)~gpSevtBreakCmdListHead.pNext;
-    } else {
-      pBackLink = (uint32_t*)(gpSevtBreakCmdListHead.pNext + ((int)((char*)&gpSevtBreakCmdListHead + 4) - gpSevtBreakCmdListHead.pPrevLink->pNext));
-    }
 
+    pBackLink = (uint32_t*)D2_StormNextLink((char*)&gpSevtBreakCmdListHead + 4, -1);
     *pBackLink = (uint32_t)(uintptr_t)gpSevtBreakCmdListHead.pPrevLink;
     gpSevtBreakCmdListHead.pPrevLink->pNext = gpSevtBreakCmdListHead.pNext;
     gpSevtBreakCmdListHead.pPrevLink = 0;

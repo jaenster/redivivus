@@ -202,13 +202,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::UnlinkNode(::CELLIST * pNod
       return;
     }
 
-    uint32_t nLinkField = pSlot->m_next;
-    if ((int)nLinkField < 0) {
-      pBackLink = (int*)~nLinkField;
-    } else {
-      pBackLink = (int*)((int)pSlot + (nLinkField - nEntry->m_next));
-    }
-
+    pBackLink = (int*)D2_StormNextLink(pSlot, -1);
     *pBackLink = (int)nEntry;
     pSlot->m_prevlink->m_next = pSlot->m_next;
     pSlot->m_prevlink = 0;
@@ -313,12 +307,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::LinkNode(::CELLIST * pNode,
     if (pDstSlot) {
       int* pBackLink;
       pTailLink = pSrcSlot->m_next;
-      if ((int)pTailLink < 0) {
-        pBackLink = (int*)~pTailLink;
-      } else {
-        pBackLink = (int*)((int)pSrcSlot + (pTailLink - pDstSlot->m_next));
-      }
-
+      pBackLink = (int*)D2_StormNextLink(pSrcSlot, -1);
       *pBackLink = (int)pDstSlot;
       pSrcSlot->m_prevlink->m_next = pSrcSlot->m_next;
       pSrcSlot->m_prevlink = 0;
@@ -377,13 +366,7 @@ void __thiscall UnlinkNode_Unreferenced(TSExplicitList<::CELLIST, -572662307>* p
       return;
     }
 
-    uint32_t nLinkField = pSlot->m_next;
-    if ((int)nLinkField < 0) {
-      pBackLink = (int*)~nLinkField;
-    } else {
-      pBackLink = (int*)((int)pSlot + (nLinkField - nEntry->m_next));
-    }
-
+    pBackLink = (int*)D2_StormNextLink(pSlot, -1);
     *pBackLink = (int)nEntry;
     pSlot->m_prevlink->m_next = pSlot->m_next;
     pSlot->m_prevlink = 0;
@@ -530,13 +513,7 @@ void __thiscall Destructor_Unreferenced(TSExplicitList<::CELLIST, -572662307>* p
       return;
     }
 
-    uint32_t uLinkOffset = pThis->m_terminator.m_next;
-    if ((int)uLinkOffset < 0) {
-      pBackLink = (int*)~uLinkOffset;
-    } else {
-      pBackLink = (int*)((int)pTVar1 + (uLinkOffset - nNext->m_next));
-    }
-
+    pBackLink = (int*)D2_StormNextLink(pTVar1, -1);
     *pBackLink = (int)nNext;
     pTVar1->m_prevlink->m_next = pThis->m_terminator.m_next;
     pTVar1->m_prevlink = 0;
@@ -580,7 +557,6 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Cl
     uint32_t* pBackLink;
     TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pObject;
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* nNext;
-    uint32_t uLinkOffset;
     while (true) {
       TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pTVar1;
       pObject = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)this->m_terminator.m_next;
@@ -591,13 +567,7 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Cl
       nNext = pObject->m_link.m_prevlink;
       pTVar1 = &pObject->m_link;
       if (nNext) {
-        uLinkOffset = pObject->m_link.m_next;
-        if ((int)uLinkOffset < 0) {
-          pBackLink = (uint32_t*)~uLinkOffset;
-        } else {
-          pBackLink = (uint32_t*)((int)pTVar1 + (uLinkOffset - nNext->m_next));
-        }
-
+        pBackLink = (uint32_t*)D2_StormNextLink(pTVar1, -1);
         *pBackLink = (uint32_t)(uintptr_t)nNext;
         pTVar1->m_prevlink->m_next = pObject->m_link.m_next;
         pTVar1->m_prevlink = 0;
@@ -659,7 +629,6 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
     int* pNodeIt;
     int nBucketByteOffset;
     TSExplicitList<::CELLIST, -572662307> nTempSentinel;
-    uint32_t pBackLink;
     TSLink<::CELLIST>* pNodeHead;
     nTempSentinel.m_terminator.m_prevlink = &nTempSentinel.m_terminator;
     uint32_t nNewSize = pThis->nSlotMask + 1;
@@ -687,13 +656,7 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
           pNextLink = (TSLink<::CELLIST>*)(nBucketByteOffset + 4);
           pNodeHead = pNextLink->m_prevlink;
           if (pNodeHead) {
-            pBackLink = *(uint32_t*)(nBucketByteOffset + 8);
-            if ((int)pBackLink < 0) {
-              pNodeIt = (int*)~pBackLink;
-            } else {
-              pNodeIt = (int*)((int)pNextLink + (pBackLink - pNodeHead->m_next));
-            }
-
+            pNodeIt = (int*)D2_StormNextLink(pNextLink, -1);
             *pNodeIt = (int)pNodeHead;
             pNextLink->m_prevlink->m_next = *(int*)(nBucketByteOffset + 8);
             pNextLink->m_prevlink = 0;
@@ -746,12 +709,7 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
       ppDstHead = pNextLink->m_prevlink;
       if (ppDstHead) {
         nNewSize = pNextLink->m_next;
-        if ((int)nNewSize < 0) {
-          pNodeIt = (int*)~nNewSize;
-        } else {
-          pNodeIt = (int*)((int)pNextLink + (nNewSize - ppDstHead->m_next));
-        }
-
+        pNodeIt = (int*)D2_StormNextLink(pNextLink, -1);
         *pNodeIt = (int)ppDstHead;
         pNextLink->m_prevlink->m_next = pNextLink->m_next;
         pNextLink->m_prevlink = 0;
@@ -873,12 +831,7 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Li
     if (ppDstSlot) {
       int* pBackLinkSrc;
       pBackLinkDst = ppSrcSlot->m_next;
-      if ((int)pBackLinkDst < 0) {
-        pBackLinkSrc = (int*)~pBackLinkDst;
-      } else {
-        pBackLinkSrc = (int*)((int)ppSrcSlot + (pBackLinkDst - ppDstSlot->m_next));
-      }
-
+      pBackLinkSrc = (int*)D2_StormNextLink(ppSrcSlot, -1);
       *pBackLinkSrc = (int)ppDstSlot;
       ppSrcSlot->m_prevlink->m_next = ppSrcSlot->m_next;
       ppSrcSlot->m_prevlink = 0;

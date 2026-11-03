@@ -54,10 +54,7 @@ struct D2AutomapFileEntryStrc {
 };
 
 struct D2AutomapRelatedTxt {
-    D2AutomapRelatedTxt() = default;
-    D2AutomapRelatedTxt(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2AutomapRelatedTxt(int a0, int a1) : nIndex(a0), nCount(a1) {}
 
     /* 0x00 */ int nIndex;
     /* 0x04 */ int nCount;

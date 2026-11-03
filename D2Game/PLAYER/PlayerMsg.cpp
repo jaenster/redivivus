@@ -1431,7 +1431,7 @@ void __fastcall PLAYER_SendInventoryFullMessage(D2UnitStrc * pUnit) {
 }
 
 // Validates player is alive, resolves dual-swing skill alternation via GetDualSwingSkill, checks skill usability (falling back to SKILL_Attack if skill has flag4 bit4 set and CanUseSkill returns 1-2 or 4). On success calls PLRMODES_MoveToLocation with the resolved skill mode; on mana-full sends inventory-full message. Returns SERVERSTATUS_OK or SERVERSTATUS_BAD_DATA.
-eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, D2SkillStrc * pSkill) {
+static eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, D2SkillStrc * pSkill) {
     int32_t nCanUseSkill;
     D2SkillsTxt* pSkillsTxt;
     int nSkillMode;
@@ -1469,6 +1469,11 @@ eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit, ::SGAM
     }
 
     return SERVERSTATUS_BAD_DATA;
+}
+
+// Extern entry for hand-written callers: CastSkillOnLocation itself keeps its unit's linkage.
+eD2ServerIncomingStatus __stdcall CastSkillOnLocation_Extern(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, D2SkillStrc * pSkill) {
+    return ::D2Game::PLAYER::PlayerMsg::CastSkillOnLocation(pUnit, pGame, nTargetX, nTargetY, pSkill);
 }
 
 // Server-side skill dispatch for player targeting an entity. Resolves dual-swing substitution, checks skill usability (SKILLS_CanUseSkill), and if a skill is blocked by a flags4 condition falls back to SKILL_Attack. On usability==0 with a valid mode, looks up the target unit, follows attached-unit ownership, validates melee/range weapon class against target proximity, then routes to StartModeID or PLRMODES_StartModeID. Returns 0 on success, 2 on failure.
@@ -3901,18 +3906,18 @@ static uint32_t __stdcall ValidateSyncWarpPath(::SGAMEDATA * pGame, D2UnitStrc *
 static BOOL __stdcall RelocateAndApplySyncWarp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nX, uint32_t nY) {
     // Static local variables (originally global data)
     static D2WarpChanceStrc gaWarpOffsetTable[3] = {
-    D2WarpChanceStrc(
+    {
         /* .nChancePct = */ 0x32,
         /* .nOffset = */ 0x5dc
-    ),
-    D2WarpChanceStrc(
+    },
+    {
         /* .nChancePct = */ 0x19,
         /* .nOffset = */ 0xbb8
-    ),
-    D2WarpChanceStrc(
+    },
+    {
         /* .nChancePct = */ 0x19,
         /* .nOffset = */ 0x1194
-    )
+    }
 }; D2_STATIC_GUARD(gaWarpOffsetTable, "D2Game::PLAYER::PlayerMsg::RelocateAndApplySyncWarp::gaWarpOffsetTable");
 
     eD2UnitType eUnitType;

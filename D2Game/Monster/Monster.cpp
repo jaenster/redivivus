@@ -652,7 +652,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 
       nScaledStat = 0;
       if (dwHpRegenRaw) {
-        if (nTmpInt > (int)(0x7fffffff / (int64_t)(int)dwHpRegenRaw)) {
+        if (nTmpInt > (int)(0x7fffffff / (int)dwHpRegenRaw)) {
           nScaledStat = (nTmpInt >> 0xc) * dwHpRegenRaw;
         } else {
           nScaledStat = (int)(dwHpRegenRaw * nTmpInt) >> 0xc;

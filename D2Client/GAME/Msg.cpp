@@ -369,7 +369,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
 }
 
 // Client-side outbound D2GS packet sender. Asserts size < 0x200, copies up to 512 bytes to a stack buffer and forwards via NET_D2GS_CLIENT_SendPacketAfterChecks. Performs a duplicate-suppression throttle keyed on the packet opcode (*pBytes): movement-ish opcodes 5-0x11 are dropped if identical to the last sent packet within 0x32ms; other opcodes within 0xC8ms; opcode 0x3a always sends. On send, caches the packet in gpLastSentPacketBuffer + gdwLastPacketSendTick and bumps gnPacketSendCount_0x69 / network sync flag. Inputs: pBytes (raw packet), nSize (length).
-void __stdcall NET_D2GS_CLIENT_Send(uint8_t * pBytes, int32_t nSize) {
+static void __stdcall NET_D2GS_CLIENT_Send(uint8_t * pBytes, int32_t nSize) {
     // Static local variables (originally global data)
     static char gaLastSentPacketBuffer[512] = {}; D2_STATIC_GUARD(gaLastSentPacketBuffer, "D2Client::GAME::Msg::NET_D2GS_CLIENT_Send::gaLastSentPacketBuffer");
     static unsigned int gdwLastPacketSendTick; D2_STATIC_GUARD_BSS(gdwLastPacketSendTick, "D2Client::GAME::Msg::NET_D2GS_CLIENT_Send::gdwLastPacketSendTick");
@@ -532,6 +532,11 @@ void __stdcall NET_D2GS_CLIENT_Send(uint8_t * pBytes, int32_t nSize) {
 
     gnD2GSBytesSentTotal += nSize;
     gnD2GSPacketsSentTotal++;
+}
+
+// Extern entry for hand-written callers: NET_D2GS_CLIENT_Send itself keeps its unit's linkage.
+void __stdcall NET_D2GS_CLIENT_Send_Extern(uint8_t * pBytes, int32_t nSize) {
+    ::D2Client::GAME::Msg::NET_D2GS_CLIENT_Send(pBytes, nSize);
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_CMD(uint8_t nOpcode) {

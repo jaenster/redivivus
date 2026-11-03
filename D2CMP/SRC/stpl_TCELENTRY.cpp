@@ -42,12 +42,7 @@ template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::LinkNode(::TCELENTRY * 
     if (pHead) {
       int* pBackLink;
       pTmp = pEntry->m_link.m_next;
-      if ((int)pTmp < 0) {
-        pBackLink = (int*)~pTmp;
-      } else {
-        pBackLink = (int*)((int)pEntry + (pTmp - pHead->m_next));
-      }
-
+      pBackLink = (int*)D2_StormNextLink(pEntry, -1);
       *pBackLink = (int)pHead;
       pEntry->m_link.m_prevlink->m_next = pEntry->m_link.m_next;
       pEntry->m_link.m_prevlink = 0;
@@ -109,13 +104,7 @@ template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkNode(::TCELENTRY 
       return;
     }
 
-    uint32_t nLinkField = ptr->m_link.m_next;
-    if ((int)nLinkField < 0) {
-      pBackLink = (int*)~nLinkField;
-    } else {
-      pBackLink = (int*)((int)ptr + (nLinkField - nEntry->m_next));
-    }
-
+    pBackLink = (int*)D2_StormNextLink(ptr, -1);
     *pBackLink = (int)nEntry;
     ptr->m_link.m_prevlink->m_next = ptr->m_link.m_next;
     ptr->m_link.m_prevlink = 0;
@@ -133,7 +122,6 @@ template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::RawNext(::TCEL
 template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkAll() {
     int* pBackLink;
     int* pNode;
-    uint32_t uLinkOffset;
     while (true) {
       int nNext;
       pNode = (int*)this->m_terminator.m_next;
@@ -143,13 +131,7 @@ template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkAll() {
 
       nNext = *pNode;
       if (nNext) {
-        uLinkOffset = pNode[1];
-        if ((int)uLinkOffset < 0) {
-          pBackLink = (int*)~uLinkOffset;
-        } else {
-          pBackLink = (int*)((int)pNode + (uLinkOffset - *(int*)(nNext + 4)));
-        }
-
+        pBackLink = (int*)D2_StormNextLink(pNode, -1);
         *pBackLink = nNext;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;

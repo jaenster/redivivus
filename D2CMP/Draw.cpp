@@ -581,16 +581,13 @@ void __stdcall DRAW_BuildScreenBlendAndDesatTable(LPPALETTEENTRY pPalette) {
       nBlueComponent = *pbColorOuter;
       bGreen = pbColorOuter[-1];
       if (bRed > 0) {
-        iScreenFactor = (int)((uint64_t)((int64_t)(int)(uint32_t)bRed * 0x55555555) >> 0x20) - (uint32_t)bRed;
-        bRed += (char)(iScreenFactor >> 1) - (char)(iScreenFactor >> 0x1f);
+        bRed += (char)((int)(uint32_t)bRed / -3);
       }
       if (nBlueComponent > 0) {
-        iScreenFactor = (int)((uint64_t)((int64_t)(int)(uint32_t)nBlueComponent * 0x55555555) >> 0x20) - (uint32_t)nBlueComponent;
-        nBlueComponent += (char)(iScreenFactor >> 1) - (char)(iScreenFactor >> 0x1f);
+        nBlueComponent += (char)((int)(uint32_t)nBlueComponent / -3);
       }
       if (bGreen > 0) {
-        iScreenFactor = (int)((uint64_t)((int64_t)(int)(uint32_t)bGreen * 0x55555555) >> 0x20) - (uint32_t)bGreen;
-        bGreen += (char)(iScreenFactor >> 1) - (char)(iScreenFactor >> 0x1f);
+        bGreen += (char)((int)(uint32_t)bGreen / -3);
       }
 
       bRed = D2GFX_GetColorWithAlphaFromPallete(pPalette, 0x100, (uint32_t)bRed, (uint32_t)bGreen, (uint32_t)nBlueComponent);

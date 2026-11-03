@@ -1109,7 +1109,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
 
                   *(uint8_t*)(char*)&dwDefaultSize = Objects::OBJECT_GetDefaultSize();
                   dwDefaultSize = (uint32_t)(uint8_t)dwDefaultSize;
-                  eActNo = dwDefaultSize - (int)((int64_t)(uint64_t)byNewStage / (int64_t)pObjTxtGrowable->Parm[2]);
+                  eActNo = dwDefaultSize - (int)(byNewStage / pObjTxtGrowable->Parm[2]);
                   pUnit->eAnimMode.ePlayerMode = eActNo;
                   bObjectMode = byNewStage;
                   if (eActNo > 2) {

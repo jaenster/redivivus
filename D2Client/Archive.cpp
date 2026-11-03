@@ -64,13 +64,7 @@ void __thiscall ARCHIVE_UnlinkNode(int32_t pThis, int * pNode) {
       return;
     }
 
-    uint32_t nPrevOffset = pNode[1];
-    if ((int)nPrevOffset < 0) {
-      pPrevLink = (int*)~nPrevOffset;
-    } else {
-      pPrevLink = (int*)((int)pNode + (nPrevOffset - *(int*)(nNext + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pNode, -1);
     *pPrevLink = nNext;
     *(int*)(*pNode + 4) = pNode[1];
     *pNode = 0;
@@ -144,7 +138,6 @@ uint32_t __thiscall ARCHIVE_GetNodeSize(int32_t pThis, int32_t nNode) {
 
 void __fastcall ARCHIVE_ClearList(int32_t nList) {
     int* pPrevLink;
-    uint32_t nPrevOffset;
     int* pNode;
     while (true) {
       int nNext;
@@ -155,13 +148,7 @@ void __fastcall ARCHIVE_ClearList(int32_t nList) {
 
       nNext = *pNode;
       if (nNext) {
-        nPrevOffset = pNode[1];
-        if ((int)nPrevOffset < 0) {
-          pPrevLink = (int*)~nPrevOffset;
-        } else {
-          pPrevLink = (int*)((int)pNode + (nPrevOffset - *(int*)(nNext + 4)));
-        }
-
+        pPrevLink = (int*)D2_StormNextLink(pNode, -1);
         *pPrevLink = nNext;
         *(int*)(*pNode + 4) = pNode[1];
         *pNode = 0;
@@ -179,13 +166,7 @@ void __fastcall ARCHIVE_ClearAndFreeHead(int32_t nList) {
       return;
     }
 
-    uint32_t nPrevOffset = *(uint32_t*)(nList + 8);
-    if ((int)nPrevOffset < 0) {
-      pPrevLink = (int*)~nPrevOffset;
-    } else {
-      pPrevLink = (int*)((int)pHead + (nPrevOffset - *(int*)(nNext + 4)));
-    }
-
+    pPrevLink = (int*)D2_StormNextLink(pHead, -1);
     *pPrevLink = nNext;
     *(uint32_t*)(*pHead + 4) = *(uint32_t*)(nList + 8);
     *pHead = 0;
@@ -210,17 +191,10 @@ int * * __thiscall ARCHIVE_AllocNode(int * * ppList, int32_t nLinkMode, int32_t 
 }
 
 int * __thiscall ARCHIVE_FreeNode(int * pNode, uint8_t byFree) {
-    uint32_t nPrevOffset;
     int nNext = *pNode;
     if (nNext) {
       int* pPrevLink;
-      nPrevOffset = pNode[1];
-      if ((int)nPrevOffset < 0) {
-        pPrevLink = (int*)~nPrevOffset;
-      } else {
-        pPrevLink = (int*)((int)pNode + (nPrevOffset - *(int*)(nNext + 4)));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
       *pPrevLink = nNext;
       *(int*)(*pNode + 4) = pNode[1];
       *pNode = 0;
@@ -242,14 +216,7 @@ uint32_t __thiscall ARCHIVE_RemoveNode(int32_t pThis, int * pNode) {
     uint32_t nValue = pPrevLink[1];
     int nNext = *pNode;
     if (nNext) {
-      uint32_t nPrevOffset;
-      nPrevOffset = pNode[1];
-      if ((int)nPrevOffset < 0) {
-        pPrevLink = (int*)~nPrevOffset;
-      } else {
-        pPrevLink = (int*)((int)pNode + (nPrevOffset - *(int*)(nNext + 4)));
-      }
-
+      pPrevLink = (int*)D2_StormNextLink(pNode, -1);
       *pPrevLink = nNext;
       *(int*)(*pNode + 4) = pNode[1];
       *pNode = 0;
@@ -281,7 +248,6 @@ void ARCHIVE_WriteMemoryCheckReport() {
     int**** ppWalk;
     SMemHeapDetailsStrc sHeapDetails;
     SMemBlockDetailsStrc sBlockInfo;
-    int*** pNextLink;
     int*** pNextNode;
     HANDLE hFileTmp = CreateFileA("D2Mem.txt", 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
     HANDLE hFile = hFileTmp;
@@ -315,13 +281,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
       if ((int)__frame0.pListPrev <= 0 || (ppWalk = (int****)__frame0.pListPrev , (uintptr_t)__frame0.pListPrev[0x4b] < sHeapDetails.dwAllocatedBytes)) {
         pNextNode = *pNewRec;
         if (pNextNode) {
-          pNextLink = pNewRec[1];
-          if ((int)pNextLink < 0) {
-            pPrevLink = (int*)~(uint32_t)pNextLink;
-          } else {
-            pPrevLink = (int*)((int)pNextLink + ((int)pNewRec - (int)pNextNode[1]));
-          }
-
+          pPrevLink = (int*)D2_StormNextLink(pNewRec, -1);
           *pPrevLink = (int)pNextNode;
           (*pNewRec)[1] = (int**)pNewRec[1];
           *pNewRec = 0;

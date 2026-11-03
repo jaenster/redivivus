@@ -1211,38 +1211,38 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
 BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static D2ManaAbsorbFieldStrc gnAuraManaAbsorbIndex[8] = {
-    D2ManaAbsorbFieldStrc(
+    {
         /* .nDamageFieldOffset = */ 0x8,
         /* .bSecondary = */ 0x0
-    ),
-    D2ManaAbsorbFieldStrc(
+    },
+    {
         /* .nDamageFieldOffset = */ 0x10,
         /* .bSecondary = */ 0x0
-    ),
-    D2ManaAbsorbFieldStrc(
+    },
+    {
         /* .nDamageFieldOffset = */ 0x1c,
         /* .bSecondary = */ 0x0
-    ),
-    D2ManaAbsorbFieldStrc(
+    },
+    {
         /* .nDamageFieldOffset = */ 0x24,
         /* .bSecondary = */ 0x0
-    ),
-    D2ManaAbsorbFieldStrc(
+    },
+    {
         /* .nDamageFieldOffset = */ 0x20,
         /* .bSecondary = */ 0x0
-    ),
-    D2ManaAbsorbFieldStrc(
+    },
+    {
         /* .nDamageFieldOffset = */ 0x38,
         /* .bSecondary = */ 0x1
-    ),
-    D2ManaAbsorbFieldStrc(
+    },
+    {
         /* .nDamageFieldOffset = */ 0x3c,
         /* .bSecondary = */ 0x1
-    ),
-    D2ManaAbsorbFieldStrc(
+    },
+    {
         /* .nDamageFieldOffset = */ 0x40,
         /* .bSecondary = */ 0x1
-    )
+    }
 }; D2_STATIC_GUARD(gnAuraManaAbsorbIndex, "D2Game::SKILLS::SkillSor::ITEMEVENT_SorAuraManaAbsorb::gnAuraManaAbsorbIndex");
 
     D2StatListExStrc* pStatsEx;

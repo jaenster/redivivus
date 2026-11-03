@@ -5427,15 +5427,15 @@ D2DrlgActEnvironmentData aENVIRONMENTDATA2[6] = {
     }
 }; D2_GLOBAL_GUARD(aENVIRONMENTDATA2, "aENVIRONMENTDATA2");
 
-D2InventorySizesStrc gsInventoryBodyLocGridSize = D2InventorySizesStrc(
+D2InventorySizesStrc gsInventoryBodyLocGridSize = {
     /* .Width = */ 0xd,
     /* .Height = */ 0x1
-); D2_GLOBAL_GUARD(gsInventoryBodyLocGridSize, "gsInventoryBodyLocGridSize");
+}; D2_GLOBAL_GUARD(gsInventoryBodyLocGridSize, "gsInventoryBodyLocGridSize");
 
-D2InventorySizesStrc g_InventorySizesDefaultConfig = D2InventorySizesStrc(
+D2InventorySizesStrc g_InventorySizesDefaultConfig = {
     /* .Width = */ 0x10,
     /* .Height = */ 0x1
-); D2_GLOBAL_GUARD(g_InventorySizesDefaultConfig, "g_InventorySizesDefaultConfig");
+}; D2_GLOBAL_GUARD(g_InventorySizesDefaultConfig, "g_InventorySizesDefaultConfig");
 
 D2ItemsEventMethodStrc gaSkillCalcMethods[7] = {
     {

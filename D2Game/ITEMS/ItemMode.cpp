@@ -5950,7 +5950,7 @@ static BOOL __stdcall ITEMMODE_HandleItemGamble(::SGAMEDATA * pGame, int32_t nSt
         }
       }
 
-      nReplenishRate = (int)(0x9c4 / (int64_t)nReplenishRate) + 1;
+      nReplenishRate = (int)(0x9c4 / nReplenishRate) + 1;
       if (nReplenishRate < 0x7d) {
         nReplenishRate = 0x7d;
       }

@@ -1255,7 +1255,7 @@ BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStr
     do {
       D2RoomStrc* pSpawnRoom;
       uSeedRoll = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
-      nOffsetX = (int)uSeedRoll + (int)((uSeedRoll & 0xffffffff) / 0x12) * -0x12 - 9 + nBaseX;
+      nOffsetX = (int)((uint32_t)uSeedRoll % 0x12) - 9 + nBaseX;
       sNewSeed = D2_SEED_NEXT_VAL(uSeedRoll);
       pUnit->sSeed = sNewSeed;
       nSpawnYOffset = sNewSeed.nSeedLow % 0x12 - 9 + nSpawnY;

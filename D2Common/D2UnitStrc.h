@@ -28,8 +28,6 @@ typedef uint32_t eD2UnitType;
 
 // Data types
 struct D2AnimSeqStrc {
-    D2AnimSeqStrc() = default;
-    D2AnimSeqStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ int nFrame;

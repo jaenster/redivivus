@@ -79,10 +79,7 @@ struct D2ClientGameDataStrc {
 };
 
 struct D2ClientTimerStrc {
-    D2ClientTimerStrc() = default;
-    D2ClientTimerStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2ClientTimerStrc(DWORD a0, DWORD a1) : dwStartTick(a0), dwDurationMs(a1) {}
 
     /* 0x00 */ DWORD dwStartTick; // GetTickCount at arm time; cleared on expiry
     /* 0x04 */ DWORD dwDurationMs; // 0 = timer idle

@@ -1493,10 +1493,10 @@ int32_t GFX_FreeMonsterCofCache() {
 static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPath, int * pnComponentCode, int32_t nMonsterClassId) {
     // Static local variables (originally global data)
     static D2CofPathOverrideStrc gnMonsterCofPathBuildTotalItems[1] = {
-    D2CofPathOverrideStrc(
+    {
         /* .dwToken = */ 0x20206867,
         /* .nMode = */ 0xd
-    )
+    }
 }; D2_STATIC_GUARD(gnMonsterCofPathBuildTotalItems, "D2Client::Engine::Gfx::GFX_BuildMonsterCofPath::gnMonsterCofPathBuildTotalItems");
     static uint32_t gnMonsterCofPathCount = 0x1; D2_STATIC_GUARD(gnMonsterCofPathCount, "D2Client::Engine::Gfx::GFX_BuildMonsterCofPath::gnMonsterCofPathCount");
 

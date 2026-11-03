@@ -4733,7 +4733,7 @@ void __stdcall RENDERER_D3D_InitLightingTable() {
       nCol = 0;
       nRowColProduct = 0;
       do {
-        pTableRow[nCol] = (char)(nRowColProduct / 0xff) + (char)(nRowColProduct >> 0x1f) - (char)((int64_t)nRowColProduct * 0x80808081 >> 0x3f);
+        pTableRow[nCol] = (char)(nRowColProduct / 0xff);
         nCol++;
         nRowColProduct += nRow;
       } while (nCol < 0x100);
@@ -4776,7 +4776,7 @@ void __stdcall RENDERER_D3D_InitPerspectiveTransformTable() {
 
       nZ++;
       nEntriesLeft--;
-      *pTableEntry = (uint32_t)(0x2ee000 / (int64_t)(nClampedZ - 3000));
+      *pTableEntry = (uint32_t)(0x2ee000 / (nClampedZ - 3000));
       pTableEntry++;
     } while (nEntriesLeft);
 

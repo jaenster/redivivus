@@ -1361,7 +1361,7 @@ BOOL __fastcall Skills_SrvDoFunc_041_BladeFury(::SGAMEDATA * pGame, D2UnitStrc *
     do {
       D2UnitStrc* pMissile;
       uSeedRoll = (uint64_t)sSeedCopy.nSeedLow * 0x6ac690c5 + ((uint64_t)d2_bits_of(sSeedCopy) >> 0x20);
-      sSkillArg.nUnitX = (int)uSeedRoll + (int)((uSeedRoll & 0xffffffff) / 0x28) * -0x28 - 0x14;
+      sSkillArg.nUnitX = (int)((uint32_t)uSeedRoll % 0x28) - 0x14;
       sSeedCopy = D2_SEED_NEXT_VAL(uSeedRoll);
       sSkillArg.nUnitY = sSeedCopy.nSeedLow % 0x28 - 0x14;
       if (!sSkillArg.nUnitX && !sSkillArg.nUnitY) {
