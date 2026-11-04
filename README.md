@@ -67,16 +67,16 @@ At this commit, generated from version 1931 of the Ghidra database:
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|6,733 of 14,626 (46.0%)|
-|Code|568,175 of 2,598,518 bytes (21.87%)|
-|Instructions|1,791,778 of 2,598,518 bytes (69.0%), counting identical instructions in functions that still differ|
+|Functions|7,317 of 14,626 (50.0%)|
+|Code|573,539 of 2,598,518 bytes (22.07%)|
+|Instructions|1,802,291 of 2,598,518 bytes (69.4%), counting identical instructions in functions that still differ|
 
 These leave out the C runtime that Visual C++ 2005 linked in statically (libcmt): the
 rebuild links a runtime instead of reconstructing it. Code the compiler generates for C++
 exceptions is left out as well, and so is the PKWARE compression library, linked into the
 original as a prebuilt 1997 library that no Visual C++ 2005 compile produced. Over the whole binary, runtime
-included: 7,290 of 15,711 functions (46.4%), 666,880 of
-2,748,975 bytes (24.26%).
+included: 7,874 of 15,711 functions (50.1%), 672,244 of
+2,748,975 bytes (24.45%).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
