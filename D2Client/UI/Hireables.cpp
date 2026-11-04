@@ -154,9 +154,7 @@ void __stdcall LoadClassIcons() {
       nClassCount = 0;
       ppSrcStr = aExpansionIconPaths[0];
       do {
-        pDstCopy = ppSrcStr;
-        pDstCopy = pDstCopy + strlen(pDstCopy) + 1;
-        if (pDstCopy == ppSrcStr + 1) {
+        if (strlen(ppSrcStr) == 0) {
           break;
         }
 

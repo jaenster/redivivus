@@ -258,10 +258,8 @@ static uint32_t __stdcall PLAYER_PlaceItemInInventory(::SGAMEDATA * pGame, int32
 }
 
 static BOOL __stdcall PLAYER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    eD2BodyLoc eBodyLoc;
     BOOL bEquipResult;
     uint32_t dwEquipResultOut;
-    int32_t nItemGUID;
     uint32_t* pResultOut;
     if (!pUnit2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc6);
@@ -275,15 +273,12 @@ static BOOL __stdcall PLAYER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc 
 
       nItemGUID_00 = pUnit2->nUnitGUID;
       pResultOut = &dwEquipResultOut;
-      nItemGUID = 1;
-      eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pUnit2);
-      bEquipResult = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, nItemGUID_00, eBodyLoc, nItemGUID, pResultOut);
+      bEquipResult = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, nItemGUID_00, D2Common::ITEMS::Items::GetBodyLocation(pUnit2), 1, pResultOut);
       return (uint32_t)(bEquipResult != 0);
     }
 }
 
 uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlace, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    uint32_t nXPos;
     BOOL bBeltPlaced;
     int32_t dwGUID;
     int32_t* pnBeltSlot;
@@ -300,8 +295,7 @@ uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlac
       nItemGUID = pUnit2->nUnitGUID;
       pnBeltSlot = &bAutoPlace;
       dwGUID = bAutoPlace;
-      nXPos = D2Client::Units::GetXPosFromDynamicPathUnit(pUnit2);
-      bBeltPlaced = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nItemGUID, nXPos, dwGUID, (uint32_t*)pnBeltSlot);
+      bBeltPlaced = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, nItemGUID, D2Client::Units::GetXPosFromDynamicPathUnit(pUnit2), dwGUID, (uint32_t*)pnBeltSlot);
       return (uint32_t)(bBeltPlaced != 0);
     }
 }

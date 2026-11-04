@@ -811,7 +811,7 @@ static BOOL __stdcall CLIENT_PlaySkillSound(D2SkillStrc * pSkill, int32_t bAddDu
         nPosZ = 8;
       } else if (nAnimMode == 0x21c) {
         nDistToTarget = D2Common::Collision::GetDistanceToXY((D2UnitStrc*)pDynamicPath, nDestX, nDestY);
-        nPosZ = nDistToTarget < 2 ? 0xc : 0xa;
+        nPosZ = 0xa + (nDistToTarget < 2 ? 2 : 0);
       }
 
       D2Common::Units::SetSequenceFrame((D2UnitStrc*)pDynamicPath, nPosZ);

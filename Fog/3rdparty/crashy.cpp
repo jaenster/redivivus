@@ -34,7 +34,7 @@ bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc) {
       pSrcScan++;
       if (cCh == '\0') {
         if (nRemainingCapacity) {
-          return pSrcScan + (-1 - (int)pSrc) < (char*)0x400;
+          return pSrcScan + (-1 - (int)pSrc) < (char*)0x400 ? true : false;
         }
 
         break;
@@ -45,7 +45,7 @@ bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc) {
 
     *pSrcCur = '\0';
     pSrcScan = pSrcScan + strlen(pSrcScan) + 1;
-    return pSrcScan + (-1 - (int)pSrc) < (char*)0x400;
+    return pSrcScan + (-1 - (int)pSrc) < (char*)0x400 ? true : false;
 }
 
 uint32_t __stdcall isDebuggerPresent() {

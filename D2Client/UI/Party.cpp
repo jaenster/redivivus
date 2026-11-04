@@ -163,7 +163,7 @@ static void SetupPartyButtons(D2RosterStrc * pRoster, D2UiPartyStrc * pUiParty, 
     pUiParty->pPartyButtons[1].bIsPartyButton = 0;
     pUiParty->pPartyButtons[1].nX = 0xe;
     pUiParty->pPartyButtons[1].nY = nPositionY + 7;
-    pUiParty->pPartyButtons[1].nIndexDC6 = bHostile ? 0x6 : 0x4;
+    pUiParty->pPartyButtons[1].nIndexDC6 = 4 + (bHostile ? 2 : 0);
     pUiParty->pPartyButtons[1].nButtonType = 1;
     pUiParty->pPartyButtons[1].bIsActive = 0;
     uint32_t eFlag = GAME::Roster::ROSTER_GetLootFlag(pRoster);
@@ -171,7 +171,7 @@ static void SetupPartyButtons(D2RosterStrc * pRoster, D2UiPartyStrc * pUiParty, 
     pUiParty->pPartyButtons[2].bIsPartyButton = 0;
     pUiParty->pPartyButtons[2].nX = 0xf5;
     pUiParty->pPartyButtons[2].nY = nPositionY;
-    pUiParty->pPartyButtons[2].nIndexDC6 = eFlag ? 0xe : 0xc;
+    pUiParty->pPartyButtons[2].nIndexDC6 = 0xc + (eFlag ? 2 : 0);
     pUiParty->pPartyButtons[2].nButtonType = 2;
     pUiParty->pPartyButtons[2].bIsActive = 0;
     eFlag = GAME::Roster::ROSTER_GetListenFlag(pRoster);
@@ -187,7 +187,7 @@ static void SetupPartyButtons(D2RosterStrc * pRoster, D2UiPartyStrc * pUiParty, 
     pUiParty->pPartyButtons[4].bIsPartyButton = 0;
     pUiParty->pPartyButtons[4].nX = 0x11f;
     pUiParty->pPartyButtons[4].nY = nPositionY;
-    pUiParty->pPartyButtons[4].nIndexDC6 = eFlag ? 0xa : 0x8;
+    pUiParty->pPartyButtons[4].nIndexDC6 = 8 + (eFlag ? 2 : 0);
     pUiParty->pPartyButtons[4].nButtonType = 4;
     pUiParty->pPartyButtons[4].bIsActive = 0;
     int32_t nRosterGUID = GAME::Roster::GetRosterGUID(pRoster);
@@ -309,8 +309,7 @@ static void __stdcall UI_DrawPartyMemberClass(int32_t nScreenY, int32_t nCharTyp
     int nY = nScreenY - gnPanelOffsetY;
     BOOL bMultiLineCenter = 0;
     int nX = gnPanelOffsetX + 0x24;
-    uint16_t* wMessage = D2Lang::StrTable::strtable::GetLocaleString(nLocaleId);
-    D2Win::Src::D2WinFont::DRAW_text(wMessage, nX, nY, nColor, bMultiLineCenter);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId), nX, nY, nColor, bMultiLineCenter);
 }
 
 void __thiscall UI_DrawPartyButtonLabelText(int32_t eButtonType, int32_t nBaseY, int32_t bHostileMode, int16_t nPartyId) {
@@ -351,8 +350,7 @@ void __thiscall UI_DrawPartyButtonLabelText(int32_t eButtonType, int32_t nBaseY,
     }
 
     nX = gnPanelOffsetX + nX;
-    uint16_t* wszMessage = D2Lang::StrTable::strtable::GetLocaleString(nLocaleId);
-    ui::UI_DrawTextCentered(nX, nBaseY - gnPanelOffsetY - 2, nX + 0x35, wszMessage, nTextFlags);
+    ui::UI_DrawTextCentered(nX, nBaseY - gnPanelOffsetY - 2, nX + 0x35, D2Lang::StrTable::strtable::GetLocaleString(nLocaleId), nTextFlags);
 }
 
 void __stdcall UI_DrawPartyLeaveButton() {
@@ -1506,9 +1504,8 @@ static void __stdcall UI_DrawPartyMemberLevel(uint32_t nCharLevel, int32_t dwCol
 
     size_t nMaxLen = 0x14;
     memset(wszLevel, 0, 10 * sizeof(wszLevel[0]));
-    uint16_t* pwszCur = D2Lang::StrTable::strtable::GetLocaleString(0xd28);
-    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLine, pwszCur, nMaxLen);
-    pwszCur = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
+    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLine, D2Lang::StrTable::strtable::GetLocaleString(0xd28), nMaxLen);
+    uint16_t* pwszCur = D2Lang::StrTable::strtable::GetLocaleString(0xf9d);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszLine, pwszCur);
     pwszCur = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszLine, pwszCur);

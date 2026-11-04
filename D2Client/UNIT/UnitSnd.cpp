@@ -2737,7 +2737,7 @@ void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnim
 
     switch (nAnimFlags & 0xf0) {
       case 0x20:
-        *pnSecondarySoundIdOut = *pnSoundIdOut ? 0x164 : 0x161;
+        *pnSecondarySoundIdOut = 0x161 + (*pnSoundIdOut ? 3 : 0);
       return;
       case 0x30:
         if (!*pnSoundIdOut) {

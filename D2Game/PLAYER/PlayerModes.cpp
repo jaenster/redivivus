@@ -302,7 +302,7 @@ void __fastcall PLRMODES_SetIdleMode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DW
     if (pRoom) {
       BOOL bInTown;
       bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-      nMode = bInTown ? 0x5 : 0x1;
+      nMode = 1 + (bInTown ? 4 : 0);
     }
 
     UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);

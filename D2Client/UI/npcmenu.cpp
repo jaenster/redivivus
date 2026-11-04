@@ -7149,8 +7149,7 @@ void __fastcall NPCMENU_HandleTradePacket(D2GSPacketSrv0x2A * pPacket) {
     *(uint8_t*)((char*)&D2GSPacketSrv0x2A_007c0d87.nGold + 3) = *(uint8_t*)((uintptr_t)&pPacket->nGold + 3);
     uint16_t wStatLayer = 0;
     eD2UnitStat eUnitStat = UNITSTAT_gold;
-    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, wStatLayer);
+    PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, wStatLayer);
     if (_Interaction::geNpcUiState == NPCUI_TRANSACTION_PENDING) {
       NPCMENU_HandleTradeAccepted();
       return;
@@ -7417,16 +7416,10 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStrc * pUn
     eStat = UNITSTAT_gold;
     _Interaction::geNpcUiState = NPCUI_MENU;
     gnNpcMenuTransactionType = 0;
-    D2UnitStrc* pNpcUnit;
-    pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-    PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pNpcUnit, eStat, wStatLayer);
+    PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStat, wStatLayer);
     ui::UI_CloseActivePanels(0, 0);
     if (!bReopenMenu) {
-      if (_Interaction::bInteractingWithNpc) {
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      } else {
-        pNpcUnit = 0;
-      }
+      D2UnitStrc* pNpcUnit = !_Interaction::bInteractingWithNpc ? 0 : UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pUnit == pNpcUnit) {
         return;
       }
@@ -7514,10 +7507,8 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStrc * pUn
 
     nSpeechLoopIdx = 0;
     if (D2NPCSpeechCount > 0) {
-      D2NPCSpeechStrc* pSpeechStrc;
-      pSpeechStrc = D2NPCSpeech;
       do {
-        if (pSpeechStrc->nNpcID == nNpcClassId) {
+        if (D2NPCSpeech[nSpeechLoopIdx].nNpcID == nNpcClassId) {
           if (D2NPCSpeech[nSpeechLoopIdx].bUpdated == '\x01') {
             D2NPCSpeech[nSpeechLoopIdx].bUpdated = '\0';
             nGreetingMode = 2;
@@ -7531,7 +7522,6 @@ void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStrc * pUn
         }
 
         nSpeechLoopIdx++;
-        pSpeechStrc++;
       } while (nSpeechLoopIdx < D2NPCSpeechCount);
     }
 

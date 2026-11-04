@@ -452,8 +452,7 @@ void __fastcall CLIENT_SpawnAncientDeathMissile(D2UnitStrc * pUnit) {
     }
 
     eD2UnitType eFindType = UNIT_OBJECT;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2UnitStrc* pTarget = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(pRoom, eFindType, nTargetClassId);
+    D2UnitStrc* pTarget = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(D2Common::Units::UNITS_GetRoom(pUnit), eFindType, nTargetClassId);
     if (!pTarget) {
       return;
     }
@@ -566,8 +565,7 @@ void __fastcall CLIENT_SpawnTowerMistEffect(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     int32_t nTargetClassId = 0x173;
     eD2UnitType eFindType = UNIT_OBJECT;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2UnitStrc* pTarget = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(pRoom, eFindType, nTargetClassId);
+    D2UnitStrc* pTarget = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(D2Common::Units::UNITS_GetRoom(pUnit), eFindType, nTargetClassId);
     if (pTarget) {
       eFindType = pTarget->eUnitType;
       if (eFindType == UNIT_OBJECT || (int)eFindType > 3 && (int)eFindType <= 5) {
@@ -632,8 +630,7 @@ void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
     int nX;
     int32_t nClassId = 0x182;
     eD2UnitType eFindType = UNIT_OBJECT;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2UnitStrc* pTarget = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(pRoom, eFindType, nClassId);
+    D2UnitStrc* pTarget = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(D2Common::Units::UNITS_GetRoom(pUnit), eFindType, nClassId);
     if (pTarget) {
       GAME::Wall2::WALL2_ScheduleSoundSequence(0x124f, 0, 0x15e, 0, 0, 0, 0);
       eFindType = pTarget->eUnitType;
@@ -993,8 +990,7 @@ void __fastcall CLIENT_SetQuestGameEndTimer(int32_t nSeconds) {
 void __fastcall CLIENT_SpawnWorldstoneShakeParticle(D2UnitStrc * pUnit) {
     int32_t nClassId = 0x271;
     eD2UnitType eUnitType = UNIT_MISSILE;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2UnitStrc* pMissileUnit = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(pRoom, eUnitType, nClassId);
+    D2UnitStrc* pMissileUnit = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nClassId);
     if (!pMissileUnit) {
       return;
     }
@@ -1005,7 +1001,7 @@ void __fastcall CLIENT_SpawnWorldstoneShakeParticle(D2UnitStrc * pUnit) {
     Engine::Particle::PARTICLE_SetBoundsOffset(pUnit, 0, 0, 5, 0);
     Engine::Particle::PARTICLE_SetReverseDirection(pUnit, 0);
     D2Common::Units::Missile::SetTargetY(pMissileUnit, 1);
-    pRoom = UNIT::CUnit::GetCurrentRoom();
+    D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
     CLIENT_CheckWorldstoneShake(pRoom);
 }
 
@@ -1028,8 +1024,7 @@ void DRAW_Overlay_SecondsLeftToGame() {
       wszText[nClearCount] = L'\0';
     }
 
-    uint16_t* pFormatStr = D2Lang::StrTable::strtable::GetLocaleString(0x13e9);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszText, pFormatStr, nSecondsLeft);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszText, D2Lang::StrTable::strtable::GetLocaleString(0x13e9), nSecondsLeft);
     int32_t nSavedFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszText);
     D2Win::Src::D2WinFont::DRAW_text(wszText, ScreenSizeX / 2 - nTextWidth / 2, 0x177, 9, 1);
@@ -1042,12 +1037,11 @@ void thunk_DRAW_Overlay_SecondsLeftToGame() {
 }
 
 uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex) {
-    if (!(nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return 0;
+    D2MonStats2Txt* pMonStatsExTxt = nullptr;
+    if (nMonsterClassId >= 0 && nMonsterClassId < sgptDataTable->nTxtMonStatsSize) {
+      int nMonStatsExIndex = (int)sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
+      pMonStatsExTxt = nMonStatsExIndex >= 0 && nMonStatsExIndex < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExIndex : nullptr;
     }
-
-    int nMonStatsExIndex = (int)sgptDataTable->pTxtMonStats[nMonsterClassId].MonStatsEx;
-    D2MonStats2Txt* pMonStatsExTxt = nMonStatsExIndex >= 0 && nMonStatsExIndex < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStatsExIndex : nullptr;
     if (!pMonStatsExTxt) {
       return 0;
     }

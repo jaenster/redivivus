@@ -1108,11 +1108,11 @@ BOOL __fastcall PlanExecutionOfMonster(::SGAMEDATA * pGame, D2MonsterKillStrc * 
       GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 0x2d, 0, 0);
       return 1;
     }
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
-      return 1;
-    }
 
-    D2MonStatsTxt* pDVar1 = pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
+    D2MonStatsTxt* pDVar1 = nullptr;
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      pDVar1 = pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
+    }
     if (!pDVar1) {
       return 1;
     }

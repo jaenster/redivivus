@@ -311,9 +311,7 @@ char * __thiscall FindSection(D2BNetGatewayAccessStr * pThis, char * szText1, ch
     char* pIniCursor = szText1;
     char* szText2_00 = pIniCursor + strlen(pIniCursor);
     pIniCursor = szText2_00 + 1;
-    pIniCursor = szText2;
-    pIniCursor = pIniCursor + strlen(pIniCursor) + 1;
-    size_t nSectionNameLen = (int)pIniCursor - (int)(szText2 + 1);
+    size_t nSectionNameLen = (int)strlen(szText2);
     char cCur = *szText1;
     while (true) {
       int nCmp;
@@ -581,9 +579,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         pClientSideData->nFormatVersion = nIniVersion;
         pClientSideData->bIsOverride = 0;
         pClientSideData->bDirty = 1;
-        pCur = szText;
-        pCur = pCur + strlen(pCur) + 1;
-        nSize = ((int)pCur - (int)(szText + 1)) * 2;
+        nSize = (int)strlen(szText) * 2;
         pRegMultiSzBuf = (char*)Storm::Source::SMem::SMemAlloc(nSize, ".\\BNetGW.cpp", 0x297, 0);
         sprintf(pRegMultiSzBuf, "%d", nGatewayIniIdx);
         pSectionGateways = Storm::Source::SSTR::SStrLen(pRegMultiSzBuf);
@@ -622,9 +618,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
               pZoneVal = SkipToEOL(pClientSideData, pCur, nTmp2);
               nFieldLen = (int)pZoneVal - (int)pCur;
             } else {
-              pCur = nTmp3;
-              pCur = pCur + strlen(pCur) + 1;
-              nFieldLen = (int)pCur - (int)(nTmp3 + 1);
+              nFieldLen = (int)strlen(nTmp3);
               pCur = nTmp3;
             }
 

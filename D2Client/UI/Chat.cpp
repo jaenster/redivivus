@@ -307,10 +307,7 @@ void __stdcall CHAT_InitIME() {
     DWORD dwConversionMode;
     DWORD dwSentenceMode;
     int32_t nEventCount;
-    nEventCount = 4;
-    HWND hWnd;
-    hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, gUIFlagChatInit, nEventCount);
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagChatInit, 4);
     gaIMECompositionBuffer = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     if (gaIMECompositionBuffer != 6 && gaIMECompositionBuffer != 9 && gaIMECompositionBuffer != 8 && gaIMECompositionBuffer != 7 && gaIMECompositionBuffer != 0xc) {
       return;
@@ -325,6 +322,7 @@ void __stdcall CHAT_InitIME() {
 
     LANGID langId;
     langId = GetSystemDefaultLangID();
+    HWND hWnd;
     hWnd = D2gfx::D2GFX::GetHwnd();
     HIMC hIMC;
     hIMC = ImmGetContext(hWnd);
@@ -415,17 +413,13 @@ void __stdcall CHAT_InitIME() {
 // @sourcefile .\UI\chat.cpp
 void __stdcall CHAT_ShutdownIME() {
     DWORD dwSentenceMode;
-    int32_t nEventCount = 4;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gUIFlagChatInit, nEventCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagChatInit, 4);
     if (!gbChatInputEnabled) {
       return;
     }
 
-    nEventCount = 7;
-    hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, g_UIFlagInitChatPanel, nEventCount);
-    hWnd = D2gfx::D2GFX::GetHwnd();
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, 7);
+    HWND hWnd = D2gfx::D2GFX::GetHwnd();
     HIMC hIMC = ImmGetContext(hWnd);
     if (hIMC) {
       DWORD dwConversionMode;
@@ -454,15 +448,12 @@ static int32_t __stdcall CHAT_CompareCaseInsensitive(char * szText1, char * szTe
     char cCur;
     char* pScan1 = szText1;
     pScan1 = pScan1 + strlen(pScan1) + 1;
-    char* pScan2 = szText2;
-    pScan2 = pScan2 + strlen(pScan2) + 1;
-    if ((uint32_t)((int)pScan1 - (int)(szText1 + 1)) < (uint32_t)((int)pScan2 - (int)(szText2 + 1))) {
+    char* pScan2;
+    if ((uint32_t)((int)pScan1 - (int)(szText1 + 1)) < (uint32_t)(int)strlen(szText2)) {
       return -1;
     }
 
-    pScan1 = szText2;
-    pScan1 = pScan1 + strlen(pScan1) + 1;
-    int nRemaining = (int)pScan1 - (int)(szText2 + 1);
+    int nRemaining = (int)strlen(szText2);
     while (true) {
       if (!nRemaining) {
         return 0;
@@ -488,12 +479,8 @@ static void CHAT_DrawCursor(int32_t nPosY, int32_t nPosX, int32_t nColor) {
     static uint32_t gnIMECursorVisible = 0x1; D2_STATIC_GUARD(gnIMECursorVisible, "D2Client::UI::Chat::CHAT_DrawCursor::gnIMECursorVisible");
     static unsigned int gnIMECursorBlinkTime; D2_STATIC_GUARD_BSS(gnIMECursorBlinkTime, "D2Client::UI::Chat::CHAT_DrawCursor::gnIMECursorBlinkTime");
 
-    BOOL bMultiLineCenter;
     if (gnIMECursorVisible == 1) {
-      uint16_t* wszCursor;
-      bMultiLineCenter = 0;
-      wszCursor = D2Lang::StrTable::strtable::GetLocaleString(0xd4c);
-      D2Win::Src::D2WinFont::DRAW_text(wszCursor, nPosX + 0x83, nPosY, nColor, bMultiLineCenter);
+      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0xd4c), nPosX + 0x83, nPosY, nColor, 0);
     }
 
     DWORD dwTickCount = GetTickCount();
@@ -858,15 +845,10 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
           }
 
           Storm::Source::SSTR::SStrTokenize(&pszCursor, szToken, 0x100, " ", nullptr);
-          pScan = pszCursor;
-          pScan = pScan + strlen(pScan) + 1;
-          if (pScan == pszCursor + 1) {
+          if (strlen(pszCursor) == 0) {
             return 0;
           }
-
-          pScan = szToken;
-          pScan = pScan + strlen(pScan) + 1;
-          if ((uint32_t)((int)pScan - (int)(szToken + 1)) >= 0x32) {
+          if ((uint32_t)(int)strlen(szToken) >= 0x32) {
             return 0;
           }
 

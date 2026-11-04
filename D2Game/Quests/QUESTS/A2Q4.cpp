@@ -178,7 +178,9 @@ BOOL __fastcall Q12_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
     nStateFlag = pQuestData->nStateFlagPrev;
     if (nStateFlag == 2 || nStateFlag == 3) {
       D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x04);
-    } else if (nStateFlag == 4) {
+      return 0;
+    }
+    if (nStateFlag == 4) {
       D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x05);
       return 0;
     }

@@ -438,8 +438,7 @@ BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc
 void __fastcall SetFrozenArmorState(D2UnitStrc * pUnit, eD2States eState, int32_t nUnused) {
     int32_t nAuraTargetFlag = 1;
     eD2States pStateArg = eState;
-    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
-    UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(pGame, pUnit, nAuraTargetFlag, pStateArg);
+    UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nAuraTargetFlag, pStateArg);
     BOOL bIsModeZeroDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsModeZeroDead) {
       uint32_t bIsStateActive;

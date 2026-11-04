@@ -145,9 +145,7 @@ int8_t __thiscall AddAttachment(::Report * pThis, char * szPath, int8_t bCopyToR
         }
       }
     } else {
-      pDst = szPath;
-      pDst = pDst + strlen(pDst) + 1;
-      if ((uint32_t)((int)pDst - (int)(szPath + 1)) < 0x400) {
+      if ((uint32_t)(int)strlen(szPath) < 0x400) {
         store_path:
         pEntrySlot = pFileReg->aszAttachmentPaths + pFileReg->nAttachmentCount;
         nCopyRemaining = 0x3ff;

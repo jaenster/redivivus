@@ -225,7 +225,7 @@ static void __stdcall SMemCalculateAllocationLayout(uint32_t nSize, int * pnOutP
       nSize = 4;
     }
 
-    nHeaderSize = (nHeaderSize ? 0xa : 0x8) + nSize;
+    nHeaderSize = 8 + (nHeaderSize ? 2 : 0) + nSize;
     int nAlignedSize = (nHeaderSize ? 7U : 0) + nHeaderSize;
     *pnOutTotalSize = nAlignedSize;
     *pnOutPadding = nAlignedSize - nHeaderSize;

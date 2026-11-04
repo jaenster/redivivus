@@ -697,7 +697,8 @@ void __stdcall CMD_ToggleRunMode() {
 
 void __stdcall CMD_ToggleAlwaysRun() {
     BOOL BVar1 = GAME::Game::GetGlobalAlwaysRun();
-    GAME::Game::SetGlobalAlwaysRun((uint32_t)!BVar1);
+    BOOL bNotBVar1 = !BVar1;
+    GAME::Game::SetGlobalAlwaysRun(bNotBVar1);
 }
 
 void __stdcall CMD_SetClickModifier() {

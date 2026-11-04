@@ -338,17 +338,20 @@ void __stdcall CMD_AutomapCycleFade() {
 
 void __stdcall CMD_AutomapToggleParty() {
     BOOL BVar1 = UI::Automap::AUTOMAP_GetParty();
-    UI::Automap::AUTOMAP_SetParty((uint32_t)!BVar1);
+    BOOL bNotBVar1 = !BVar1;
+    UI::Automap::AUTOMAP_SetParty(bNotBVar1);
 }
 
 void __stdcall CMD_AutomapTogglePartyNames() {
     int32_t bPartyNames = UI::Automap::AUTOMAP_GetPartyNames();
-    UI::Automap::AUTOMAP_SetPartyNames((uint32_t)!bPartyNames);
+    BOOL bNotPartyNames = !bPartyNames;
+    UI::Automap::AUTOMAP_SetPartyNames(bNotPartyNames);
 }
 
 void __stdcall CMD_AutomapToggleLeft() {
     int32_t bLeft = UI::Automap::AUTOMAP_GetLeft();
-    UI::Automap::AUTOMAP_SetLeft((uint32_t)!bLeft);
+    BOOL bNotLeft = !bLeft;
+    UI::Automap::AUTOMAP_SetLeft(bNotLeft);
 }
 
 void __stdcall CMD_ToggleSkillTree() {
@@ -825,8 +828,7 @@ void __stdcall ClientLight_UpdateRoomLightPulse() {
     uint8_t* pGreen = &gRoomLightPulse.nLightRoomGreen;
     uint8_t* pRed = &gRoomLightPulse.nLightRoomRed;
     uint32_t nAmbientColor = 0;
-    D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
-    Draw::LightMap::ROOM_GetAmbientLightColor(pRoom, &nAmbientColor, (char*)pRed, (char*)pGreen, (char*)pBlue, nAmbientArg);
+    Draw::LightMap::ROOM_GetAmbientLightColor(UNIT::CUnit::GetCurrentRoom(), &nAmbientColor, (char*)pRed, (char*)pGreen, (char*)pBlue, nAmbientArg);
     if ((int)gRoomLightPulse.nCurrentTick < (int)gRoomLightPulse.nFadeInDuration) {
       fVar1 = Fog::MATH_sinTable_f32_LookupOffset(gRoomLightPulse.nSinOffset);
       fAmbientColorF = (float)nAmbientColor;
@@ -847,7 +849,7 @@ void __stdcall ClientLight_UpdateRoomLightPulse() {
     }
 
     gRoomLightPulse.nCurrentTick++;
-    pRoom = UNIT::CUnit::GetCurrentRoom();
+    D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
     eD2LevelId eLevelId = LEVEL_None;
     if (pRoom) {
       eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);

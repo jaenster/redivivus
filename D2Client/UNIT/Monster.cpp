@@ -2880,8 +2880,7 @@ void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc 
     nNameId = pMercInit->wInitSeed;
     pPacketData = pMercInit;
     pMercUnit = pUnit;
-    bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    nLevel = D2Common::Merc::GetMercAct(bIsExpansion, 0, nNameId);
+    nLevel = D2Common::Merc::GetMercAct(GAME::Game::CLIENT_CheckExpansion(), 0, nNameId);
     bVar1 = GAME::Game::GetDificulity();
     nSkillModeVal = pMercInit->nSeed;
     nDifficulty = (uint32_t)bVar1;

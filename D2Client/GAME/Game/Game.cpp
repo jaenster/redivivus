@@ -2196,7 +2196,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
         return;
       }
 
-      nTitleIndex = ePlayerStatus & PLAYERSTATUS_Expansion ? 0xf : 0xc;
+      nTitleIndex = 0xc + (ePlayerStatus & PLAYERSTATUS_Expansion ? 3 : 0);
       if (!(ePlayerStatus & PLAYERSTATUS_Hardcore)) {
         nHardcoreFlag = 0;
       }

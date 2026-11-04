@@ -1144,11 +1144,10 @@ int32_t __stdcall GetTxtMaxStamina(D2UnitStrc * pUnit) {
 }
 
 int32_t __stdcall GetTxtMaxDurability(D2UnitStrc * pUnit) {
-    if (!(pUnit && sgptDataTable->nTxtItemStatCostSize > 0x49)) {
-      return 0;
+    D2ItemStatCostTxt* pItemStatCostLine = nullptr;
+    if (pUnit && sgptDataTable->nTxtItemStatCostSize > 0x49) {
+      pItemStatCostLine = sgptDataTable->pTxtItemStatCost + 0x49;
     }
-
-    D2ItemStatCostTxt* pItemStatCostLine = sgptDataTable->pTxtItemStatCost + 0x49;
     if (!pItemStatCostLine) {
       return 0;
     }

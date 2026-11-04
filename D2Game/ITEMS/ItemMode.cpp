@@ -5476,7 +5476,9 @@ BOOL __fastcall SERVER_BeltTakeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
       pItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nItemGUID);
       if (!pItem) {
         *pdwResult = 1;
-      } else if (pItem->eUnitType == UNIT_ITEM) {
+        return 0;
+      }
+      if (pItem->eUnitType == UNIT_ITEM) {
         if (pItem->eAnimMode.ePlayerMode != Walk) {
           *pdwResult = 1;
           return 0;

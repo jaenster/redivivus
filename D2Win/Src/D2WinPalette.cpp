@@ -133,9 +133,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     uint32_t nText1;
     int nSrcLine = 99;
     char* szSrcFile = ".\\Src\\D2WinPalette.cpp";
-    uint32_t* pFileSize = 0;
-    D2PoolManagerStrc* pDatFileData = D2WinArchive::ReturnZero();
-    void* pDatFileHandle = D2Hell::D2FILE_AllocAndLoadD2File(pDatFileData, szText1, pFileSize, szSrcFile, nSrcLine);
+    void* pDatFileHandle = D2Hell::D2FILE_AllocAndLoadD2File(D2WinArchive::ReturnZero(), szText1, 0, szSrcFile, nSrcLine);
     uint32_t nPaletteIdx = 0;
     do {
       aAlphaTable[nPaletteIdx * 4] = 0;
@@ -144,9 +142,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
 
     int32_t nSrcLine2 = 0x72;
     szSrcFile = ".\\Src\\D2WinPalette.cpp";
-    pFileSize = 0;
-    pDatFileData = D2WinArchive::ReturnZero();
-    PALETTEENTRY* pMemoryToFree = (PALETTEENTRY*)D2Hell::D2FILE_AllocAndLoadD2File(pDatFileData, szText2, pFileSize, szSrcFile, nSrcLine2);
+    PALETTEENTRY* pMemoryToFree = (PALETTEENTRY*)D2Hell::D2FILE_AllocAndLoadD2File(D2WinArchive::ReturnZero(), szText2, 0, szSrcFile, nSrcLine2);
     PALETTEENTRY* pSrcArchive = pMemoryToFree;
     PALETTEENTRY* pDstIndexCounter = MostLikelyCurrentPalletePtr;
     for (nCount = 0x100; nCount; nCount--) {

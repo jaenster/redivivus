@@ -766,7 +766,7 @@ static uint32_t DEBUG_ParsePEDebugDirectory(uint32_t * pnSize, int * pnRVA, shor
 }
 
 bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize) {
-    return nDirSize >= 0x1c;
+    return nDirSize >= 0x1c ? true : false;
 }
 
 uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, D2FogDebugModuleEntryStrc * pModuleInfoOut) {
@@ -1533,9 +1533,8 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, ch
     char szArgNameBuf[256];
     char cChar;
     int nDstOffset;
-    char* pCursor = szCmdLine;
-    pCursor = pCursor + strlen(pCursor) + 1;
-    int nCmdLen = (int)pCursor - (int)(szCmdLine + 1);
+    char* pCursor;
+    int nCmdLen = (int)strlen(szCmdLine);
     int nNameLen = 0;
     int32_t nConfigIdx = -1;
     if (nCmdLen >= 0x100) {
@@ -1611,9 +1610,8 @@ void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, D2IniCon
     uint8_t szArgName[256];
     char szArgValue[256];
     uint8_t nArgType;
-    char* pCmdEnd = szText;
-    pCmdEnd = pCmdEnd + strlen(pCmdEnd) + 1;
-    int nCmdLineLen = (int)pCmdEnd - (int)(szText + 1);
+    char* pCmdEnd;
+    int nCmdLineLen = (int)strlen(szText);
     for (nPos = 0; nPos < nCmdLineLen; nPos++) {
       if (szText[nPos] == '-') {
         nPos++;

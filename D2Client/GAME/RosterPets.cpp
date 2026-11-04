@@ -412,8 +412,10 @@ void __stdcall ROSTER_UpdateHostileColors() {
         pRosterUnit = UNIT::Player::UNITS_FindClientSideUnit(pRosterIter->nRosterGUID, UNIT_MONSTER);
         if (pRosterUnit) {
           bHostile = ROSTER_AreUnitsHostile(pPlayer, pRosterUnit);
-          UNIT::CUnit::SetGfxSequenceData(pRosterUnit, (uint32_t)!bHostile);
-          UNIT::CUnit::SetPalShiftIndex(pRosterUnit, (uint32_t)!bHostile);
+          BOOL bNotHostile = !bHostile;
+          UNIT::CUnit::SetGfxSequenceData(pRosterUnit, bNotHostile);
+          BOOL bNotHostile_ = !bHostile;
+          UNIT::CUnit::SetPalShiftIndex(pRosterUnit, bNotHostile_);
         }
       }
     }
@@ -587,10 +589,12 @@ void __fastcall ROSTER_UpdateMercHostileColors(int32_t nOwnerGUID) {
           bHostile = ROSTER_IsUnitHostileToPlayer(pRosterUnit);
           nGfxSeq = UNIT::CUnit::GetGfxSequenceData(pRosterUnit);
           if (nPalShift == nGfxSeq) {
-            UNIT::CUnit::SetPalShiftIndex(pRosterUnit, (uint32_t)!bHostile);
+            BOOL bNotHostile = !bHostile;
+            UNIT::CUnit::SetPalShiftIndex(pRosterUnit, bNotHostile);
           }
 
-          UNIT::CUnit::SetGfxSequenceData(pRosterUnit, (uint32_t)!bHostile);
+          BOOL bNotHostile_ = !bHostile;
+          UNIT::CUnit::SetGfxSequenceData(pRosterUnit, bNotHostile_);
         }
       }
     }

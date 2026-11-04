@@ -2294,8 +2294,7 @@ void __stdcall AUTOMAP_DrawServerIP() {
       wIpWide[nY] = L'\0';
     }
 
-    char* szLocalIp = Fog::Src::Safesock::NET_GetLocalIp();
-    D2Lang::UTF8_ConvertToWideChar(wIpWide, szLocalIp, nTextWidth);
+    D2Lang::UTF8_ConvertToWideChar(wIpWide, Fog::Src::Safesock::NET_GetLocalIp(), nTextWidth);
     BOOL bMultiLineCenter = 0;
     int32_t dwColor = 4;
     nY = AUTOMAP_TextHeightOffset;
@@ -2629,9 +2628,8 @@ void __fastcall AUTOMAP_SetMiniMapType(int32_t nMiniMapType) {
 static void __stdcall AUTOMAP_DrawTextCentered(int32_t nCenterX, int32_t nBaseY, uint8_t byColor, char * szText) {
     uint16_t wTextWide[26];
     char cCurChar;
-    char* pStrScan = szText;
-    pStrScan = pStrScan + strlen(pStrScan) + 1;
-    if (pStrScan == szText + 1) {
+    char* pStrScan;
+    if (strlen(szText) == 0) {
       return;
     }
     if (byColor >= 0xd) {

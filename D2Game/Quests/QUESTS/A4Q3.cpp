@@ -430,7 +430,9 @@ bool __fastcall Q28_SequenceFilter(D2QuestDataStrc * pQuestData) {
     BOOL bBadCodePtr;
     if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
       QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q3.cpp", 0x155);
-    } else if (pQuestData->nStateFlag == 5 || pQuestData->bIsNotIntroduction == '\0') {
+      return true;
+    }
+    if (pQuestData->nStateFlag == 5 || pQuestData->bIsNotIntroduction == '\0') {
       pSeqQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
       if (pSeqQuestData) {
         /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pSeqQuestData->fpSequenceFilter);

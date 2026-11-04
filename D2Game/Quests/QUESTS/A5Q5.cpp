@@ -938,7 +938,7 @@ bool __fastcall Q35_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
     if (nTargetClassId == 0x203 && pQuestData->nStateFlag == 1) {
       BOOL bIsCompleted;
       bIsCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-      return !bIsCompleted;
+      return !bIsCompleted ? true : false;
     }
 
     return false;

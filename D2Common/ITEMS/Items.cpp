@@ -2017,11 +2017,10 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
     D2UnitStrc* pCarriedItem;
     BOOL bItemNotDisabledOrBroken;
     D2SetItemsTxt* pCurSetItemsTxt;
-    if (!pUnit || (pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM || !pItem->pUnitData.pUnitDataMonster || pItem->pUnitData.pUnitDataMonster->pMonStatsTxt != (D2MonStatsTxt*)0x5) {
-      return 0;
+    D2InventoryStrc* pUnitInventory = nullptr;
+    if (!(!pUnit || (pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM || !pItem->pUnitData.pUnitDataMonster || pItem->pUnitData.pUnitDataMonster->pMonStatsTxt != (D2MonStatsTxt*)0x5)) {
+      pUnitInventory = pUnit->pInventory;
     }
-
-    D2InventoryStrc* pUnitInventory = pUnit->pInventory;
     if (!pUnitInventory) {
       return 0;
     }
@@ -3359,12 +3358,11 @@ uint8_t __stdcall ITEM_GetMaxSockCount(D2UnitStrc * pUnit) {
     uint8_t byMaxSockets;
     int nLvlMaxSock;
     uint32_t nAbsMaxSockets;
-    if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
-      return 0;
+    D2ItemTypesTxt* pItemTypesTxt = nullptr;
+    if (!(!pUnit || pUnit->eUnitType != UNIT_ITEM)) {
+      eD2ItemTypes eItemType = ITEM_GetItemData_wType(pUnit);
+      pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
     }
-
-    eD2ItemTypes eItemType = ITEM_GetItemData_wType(pUnit);
-    D2ItemTypesTxt* pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
     if (!pItemTypesTxt) {
       return 0;
     }
@@ -4162,14 +4160,14 @@ BOOL __stdcall IsItemSocketable(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 
 // Item-load helper called by ITEM_DeserializeFromBitBuffer: given an eD2UnitStat percent-stat selector (item_armor_percent 0x10/0x1f, item_maxdamage_percent 0x11/0x16, item_mindamage_percent 0x12/0x15), resolves the corresponding absolute base value from the item's D2ItemsTxt caps (dwMaxAc, nMaxDam/n2HandMaxDam/nMaxMisDam, nMinDam/n2HandMinDam/nMinMisDam) and writes it onto pUnit via STATLIST_SetUnitStat (UNITSTAT_armorclass / max/mindamage, secondary, and throw variants). Not a cube recipe transform.
 static void __stdcall ITEM_ResolvePercentStatToBaseValue(eD2UnitStat nRecipeType, D2UnitStrc * pUnit) {
+    uint32_t bIsType;
     int32_t nCurStat;
     int nValue;
     int32_t iVar1;
     int nClassId;
     uint8_t nTxtMax;
     int* pnClassId = &nClassId;
-    uint32_t bIsType = ITEM_GetItemsTxt_szCode(pUnit);
-    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(bIsType, pnClassId);
+    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(ITEM_GetItemsTxt_szCode(pUnit), pnClassId);
     if (!pItemsTxt) {
       return;
     }

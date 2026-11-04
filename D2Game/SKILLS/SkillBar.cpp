@@ -801,8 +801,7 @@ BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitS
 void __fastcall SKILLBAR_OnWarCryExpire(D2UnitStrc * pUnit, eD2States eState, int32_t dwParam) {
     int32_t nRemoveFlag = 1;
     eD2States eExpireState = eState;
-    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
-    UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(pGame, pUnit, nRemoveFlag, eExpireState);
+    UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nRemoveFlag, eExpireState);
     BOOL bIsAlive = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsAlive) {
       uint32_t bStateActive;
@@ -1657,7 +1656,7 @@ static BOOL __stdcall SKILLBAR_ArriveAtChargeTarget(::SGAMEDATA * pGame, D2Skill
         nCollisionWidth = 8;
       } else if (nMonBaseId == 0x21c) {
         nDist = D2Common::Collision::GetDistanceToXY(pUnit, nX, nY);
-        nCollisionWidth = nDist < 2 ? 0xc : 0xa;
+        nCollisionWidth = 0xa + (nDist < 2 ? 2 : 0);
       }
 
       D2Common::Units::SetSequenceFrame(pUnit, nCollisionWidth);
@@ -1813,11 +1812,10 @@ BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * 
 static BOOL __stdcall SKILLBAR_WhirlwindHitCycle(::SGAMEDATA * pGame, eD2Skills eSkill, int32_t nSkillLvl, D2UnitStrc * pUnit) {
     D2DamageStrc sDamage;
     short int nHitOverlayId;
-    if (!((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount)) {
-      return 0;
+    D2SkillsTxt* pSkillsTxt = nullptr;
+    if ((int)eSkill >= 0 && (int)eSkill < sgptDataTable->nTxtSkillsCount) {
+      pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
     }
-
-    D2SkillsTxt* pSkillsTxt = sgptDataTable->pTxtSkills + eSkill;
     if (!pSkillsTxt) {
       return 0;
     }

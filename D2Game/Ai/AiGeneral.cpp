@@ -124,11 +124,10 @@ int __fastcall GetAiArgument(D2UnitStrc * pMonster, int32_t nArgNumber) {
 
 // @sourcefile .\Ai\AiGeneral.cpp
 D2MonsterAiCmdStrc * __fastcall CreateAiCmdStrc(::SGAMEDATA * pGame, D2UnitStrc * pMonster) {
-    if (!(pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster)) {
-      return nullptr;
+    D2AiGeneralStrc* pGeneralStrc = nullptr;
+    if (pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster) {
+      pGeneralStrc = pMonster->pUnitData.pUnitDataMonster->pAiGeneral;
     }
-
-    D2AiGeneralStrc* pGeneralStrc = pMonster->pUnitData.pUnitDataMonster->pAiGeneral;
     if (!pGeneralStrc) {
       return nullptr;
     }
@@ -259,11 +258,10 @@ void __fastcall ResetAiGeneralStrc(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 D2MonsterAiCmdStrc * __fastcall GetAiCmd(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
-      return nullptr;
+    D2AiGeneralStrc* pAiGeneral = nullptr;
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      pAiGeneral = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
     }
-
-    D2AiGeneralStrc* pAiGeneral = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
     if (!pAiGeneral) {
       return nullptr;
     }

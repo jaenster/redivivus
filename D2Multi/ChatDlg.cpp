@@ -908,9 +908,8 @@ static void __stdcall CHATDLG_AddMultiLineText(::D2WinTextBox * pTextBox, int32_
     char* pcNextLine;
     char* pcNewlinePos;
     char cCur;
-    char* pcCur = szText;
-    pcCur = pcCur + strlen(pcCur) + 1;
-    if (pcCur == szText + 1 || (int)pcCur - (int)(szText + 1) < 0) {
+    char* pcCur;
+    if (strlen(szText) == 0 || (int)strlen(szText) < 0) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
     } else if (*szText != '\0') {
       do {
@@ -1144,9 +1143,7 @@ void __stdcall CHATDLG_UpdateChannelOkButtonState() {
     if (pwszInput) {
       char* pcCur;
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szText, (uint16_t*)pwszInput, 0x1f);
-      pcCur = szText;
-      pcCur = pcCur + strlen(pcCur) + 1;
-      if (pcCur != szText + 1) {
+      if (strlen(szText) >= 1) {
         bHasText = 1;
       }
     }
@@ -1160,15 +1157,12 @@ int32_t __stdcall someStrCompare(char * szText1, char * szText2) {
     char cCur;
     char* pcEnd1 = szText1;
     pcEnd1 = pcEnd1 + strlen(pcEnd1) + 1;
-    char* pcEnd2 = szText2;
-    pcEnd2 = pcEnd2 + strlen(pcEnd2) + 1;
-    if ((uint32_t)((int)pcEnd1 - (int)(szText1 + 1)) < (uint32_t)((int)pcEnd2 - (int)(szText2 + 1))) {
+    char* pcEnd2;
+    if ((uint32_t)((int)pcEnd1 - (int)(szText1 + 1)) < (uint32_t)(int)strlen(szText2)) {
       return -1;
     }
 
-    pcEnd1 = szText2;
-    pcEnd1 = pcEnd1 + strlen(pcEnd1) + 1;
-    int nRemaining = (int)pcEnd1 - (int)(szText2 + 1);
+    int nRemaining = (int)strlen(szText2);
     while (true) {
       if (!nRemaining) {
         return 0;

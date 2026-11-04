@@ -1533,9 +1533,7 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
     }
 
     COMCALLBACK_FormatChatMessage(szUsername, szChatMessageBuffer, szClanTag);
-    pszScan = szClanTag;
-    pszScan = pszScan + strlen(pszScan) + 1;
-    if (pszScan != szClanTag + 1) {
+    if (strlen(szClanTag) != 0) {
       pszNameKey = szChatMessageBuffer;
       pszNameKey = pszNameKey + strlen(pszNameKey) + 1;
       pszScan = szClanTag;
@@ -1595,13 +1593,9 @@ BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwC
     }
 
     szUsername = pszScan;
-    pszScan = szFormattedSender;
-    pszScan = pszScan + strlen(pszScan) + 1;
-    if (pszScan != szFormattedSender + 1) {
+    if (strlen(szFormattedSender) != 0) {
       char szOutput[256];
-      pszOutput = szClanTag;
-      pszOutput = pszOutput + strlen(pszOutput) + 1;
-      if (pszOutput != szClanTag + 1) {
+      if (strlen(szClanTag) != 0) {
         sprintf(szOutput, "%s%s", szClanTag, szFormattedSender);
         pszOutput = szOutput;
       } else {
@@ -1713,13 +1707,10 @@ BOOL __fastcall COMCALLBACK_ProcessWhisperCommand(uint32_t dwCbArg1, uint32_t dw
       return 1;
     }
 
-    char* pchScan = szWhisperBody;
-    pchScan = pchScan + strlen(pchScan) + 1;
-    if (pchScan != szWhisperBody + 1) {
+    char* pchScan;
+    if (strlen(szWhisperBody) != 0) {
       int i;
-      pchScan = szWhisperTarget;
-      pchScan = pchScan + strlen(pchScan) + 1;
-      if (pchScan != szWhisperTarget + 1) {
+      if (strlen(szWhisperTarget) != 0) {
         sprintf(szFormattedMsg, "%s%s", szWhisperTarget, szWhisperBody);
         COMCALLBACK_ValidateWhisperTarget(szFormattedMsg, szWhisperText);
         return 1;
@@ -1813,9 +1804,7 @@ BOOL __fastcall COMCALLBACK_HandleWhisperReply(uint32_t dwCbArg1, uint32_t dwCbA
     pbScan = pbScan + strlen((char*)pbScan) + 1;
     if (pbScan != szWhisperBody + 1) {
       int i;
-      pchScan = szWhisperTarget;
-      pchScan = pchScan + strlen(pchScan) + 1;
-      if (pchScan != szWhisperTarget + 1) {
+      if (strlen(szWhisperTarget) != 0) {
         sprintf((char*)szFormattedMsg, "%s%s", szWhisperTarget, (char*)szWhisperBody);
       } else {
         i = 0;
@@ -1865,12 +1854,9 @@ BOOL __fastcall COMCALLBACK_ProcessEmoteCommand(uint32_t dwCbArg1, uint32_t dwCb
     char szEmoteBody[256];
     char ch;
     COMCALLBACK_FormatChatMessage(szText, szEmoteTarget, szEmoteBody);
-    char* pchScan = szEmoteBody;
-    pchScan = pchScan + strlen(pchScan) + 1;
-    if (pchScan != szEmoteBody + 1) {
-      pchScan = szEmoteTarget;
-      pchScan = pchScan + strlen(pchScan) + 1;
-      if (pchScan != szEmoteTarget + 1) {
+    char* pchScan;
+    if (strlen(szEmoteBody) != 0) {
+      if (strlen(szEmoteTarget) != 0) {
         sprintf(szFormattedMsg, "%s%s", szEmoteTarget, szEmoteBody);
         COMCALLBACK_ValidateEmoteTarget(szFormattedMsg, szEmoteArg);
         return 1;

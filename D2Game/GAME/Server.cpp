@@ -1309,9 +1309,7 @@ static void UpdateClients(::SGAMEDATA * pGame) {
                 packet0x5a.nArg = 0;
                 *(uint32_t*)packet0x5a.szName2 = 0;
                 Clients::GetAccountName(pClient, szAccountName);
-                pszAccountNameLoop = szAccountName;
-                pszAccountNameLoop = pszAccountNameLoop + strlen(pszAccountNameLoop) + 1;
-                if (pszAccountNameLoop != szAccountName + 1) {
+                if (strlen(szAccountName) != 0) {
                   Storm::Source::SSTR::SStrCopy(packet0x5a.szName2, szAccountName, 0x10);
                   *(uint32_t*)((char*)&packet0x5a.szName2 + 12) &= 0xffffff;
                 }

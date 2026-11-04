@@ -789,7 +789,8 @@ static void ROSTER_TogglePlayerFlag(D2RosterStrc * pRoster, int16_t nFlags) {
 
     UNIT::PlayerList::AllocPlayerListSub(nPlayerGUID, pRoster->nRosterGUID);
     uint32_t bCurrentFlag = UNIT::PlayerList::GetFlag(nPlayerGUID, pRoster->nRosterGUID, (uint32_t)(uint16_t)nFlags);
-    UNIT::PlayerList::SetUnsetFlags(nPlayerGUID, pRoster->nRosterGUID, (uint32_t)(uint16_t)nFlags, (uint32_t)!bCurrentFlag);
+    BOOL bNotCurrentFlag = !bCurrentFlag;
+    UNIT::PlayerList::SetUnsetFlags(nPlayerGUID, pRoster->nRosterGUID, (uint32_t)(uint16_t)nFlags, bNotCurrentFlag);
 }
 
 void __fastcall ROSTER_ToggleLootAndSend(D2RosterStrc * pRoster) {

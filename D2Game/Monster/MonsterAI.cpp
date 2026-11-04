@@ -616,11 +616,10 @@ void __fastcall AI_ClearSwitchAiTargetParams(D2UnitStrc * pUnit) {
 }
 
 uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {
-    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
-      return 0;
+    D2MonsterAiStrc* pMonsterAi = nullptr;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      pMonsterAi = pUnit->pUnitData.pUnitDataMonster->pMonsterAi;
     }
-
-    D2MonsterAiStrc* pMonsterAi = pUnit->pUnitData.pUnitDataMonster->pMonsterAi;
     if (!pMonsterAi) {
       return 0;
     }

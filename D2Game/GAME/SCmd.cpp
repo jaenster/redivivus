@@ -273,8 +273,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH(D2ClientStrc 
     sPacket.nPacketId = nPacketId;
     *(uint8_t*)((char*)&sPacket.dwMonsterGUID + 3) = (uint8_t)(nMonsterGUID >> 0x18);
     sPacket.nTargetType = nTargetUnitType;
-    ::SGAMEDATA* pGame = Clients::CLIENT_GetGame(pClient);
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nMonsterGUID);
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), UNIT_MONSTER, nMonsterGUID);
     eD2UnitType eUnitType = pUnit->eUnitType;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -333,8 +332,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(D2ClientStrc 
     sPacket.nPacketId = nPacketId;
     *(uint8_t*)((char*)&sPacket.dwMonsterGUID + 3) = (uint8_t)(nMonsterGUID >> 0x18);
     sPacket.wX = wX;
-    ::SGAMEDATA* pGame = Clients::CLIENT_GetGame(pClient);
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nMonsterGUID);
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), UNIT_MONSTER, nMonsterGUID);
     if (!pUnit) {
       return;
     }
@@ -384,8 +382,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex(D2ClientSt
     sPacket.nPacketId = nPacketId;
     *(uint8_t*)((char*)&sPacket.dwMonsterGUID + 3) = (uint8_t)(nMonsterGUID >> 0x18);
     sPacket.nTargetType = nTargetUnitType;
-    ::SGAMEDATA* pGame = Clients::CLIENT_GetGame(pClient);
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nMonsterGUID);
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), UNIT_MONSTER, nMonsterGUID);
     if (!pUnit) {
       return;
     }
@@ -444,8 +441,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH_Ex(D2ClientSt
     byPacketBuf.nPacketId = nPacketId;
     *(uint8_t*)((char*)&byPacketBuf.dwMonsterGUID + 3) = (uint8_t)(nMonsterGUID >> 0x18);
     byPacketBuf.wX = wDestXParam;
-    ::SGAMEDATA* pGame = Clients::CLIENT_GetGame(pClient);
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nMonsterGUID);
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), UNIT_MONSTER, nMonsterGUID);
     if (!pUnit) {
       return;
     }
@@ -609,8 +605,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x09_NEWUNIT(D2ClientStrc * pClient, uint8_
 void __fastcall NET_D2GS_SERVER_Send_0x51_NEWOBJECT(D2ClientStrc * pClient, uint8_t nPacketId, uint8_t nObjectType, uint32_t dwObjectGUID, uint16_t wClassId, uint16_t wX, uint16_t wY, uint8_t nState, uint8_t nInteraction) {
     D2GSPacketSrv0x51 aPacket;
     uint32_t dwFindGUID = dwObjectGUID;
-    ::SGAMEDATA* pGame = Clients::CLIENT_GetGame(pClient);
-    D2UnitStrc* pFoundUnit = UNIT::SUnit::FindUnitFromTable(pGame, (eD2UnitType)nObjectType, dwFindGUID);
+    D2UnitStrc* pFoundUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), (eD2UnitType)nObjectType, dwFindGUID);
     if (!pFoundUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x341);
       exit(-1);
@@ -938,10 +933,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(D2ClientStrc * pClient
     packet.packetId = 0x22;
     packet.unitType = eUnitType;
     packet.unitId = nUnitGUID;
-    ::SGAMEDATA* pGame;
-    pGame = Clients::CLIENT_GetGame(pClient);
     D2UnitStrc* pUnit;
-    pUnit = UNIT::SUnit::FindUnitFromTable(pGame, (eD2UnitType)eUnitType, nUnitGUID);
+    pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), (eD2UnitType)eUnitType, nUnitGUID);
     if (pUnit) {
       eD2States unitState;
       unitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody);
@@ -1699,10 +1692,8 @@ void __fastcall NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkil
     dwTargetUnitGUID = dwSkillID;
     uint8_t byAttackerTypeLo;
     byAttackerTypeLo = nUnitType;
-    ::SGAMEDATA* pGame;
-    pGame = Clients::CLIENT_GetGame(pClient);
     D2UnitStrc* pUnit;
-    pUnit = UNIT::SUnit::FindUnitFromTable(pGame, (eD2UnitType)byAttackerType2, dwTargetUnitGUID);
+    pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), (eD2UnitType)byAttackerType2, dwTargetUnitGUID);
     aPacket.p4C.nUnitType = nUnitType;
     if (!pUnit) {
       send_cast_on_target:

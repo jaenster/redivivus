@@ -2769,8 +2769,7 @@ uint32_t __fastcall SKILLS_GetWeaponClassBitfield(D2UnitStrc * pUnit) {
 }
 
 void __fastcall SKILLS_SetupAnimTimerPercent(D2UnitStrc * pUnit, int32_t nPercent) {
-    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
-    UNIT::SUnit::UNITS_SetupAnimTimerEventsFromPercent(pGame, pUnit, nPercent);
+    UNIT::SUnit::UNITS_SetupAnimTimerEventsFromPercent(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nPercent);
 }
 
 BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
@@ -3146,8 +3145,7 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
 void __fastcall DefaultExpireFunction(D2UnitStrc * pUnit, eD2States eState, int32_t nParam) {
     int32_t nAuraEventArg = 1;
     eD2States pStateArg = eState;
-    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
-    UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(pGame, pUnit, nAuraEventArg, pStateArg);
+    UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nAuraEventArg, pStateArg);
     BOOL bModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bModeZeroDeath) {
       uint32_t bStateActive;
@@ -3164,7 +3162,7 @@ void __fastcall DefaultExpireFunction(D2UnitStrc * pUnit, eD2States eState, int3
       return;
     }
 
-    pGame = UNIT::SUnit::GetGamePointer(pUnit);
+    ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
     PLAYER::PlayerPets::PETS_RecalculateAllPetLimits(pGame, pUnit);
 }
 

@@ -809,7 +809,7 @@ void __thiscall DrawFloorByViewAndFloor(D2DrawFloorStrc * pDrawFloor, D2GameView
       return;
     }
 
-    bDrawEdges = pDrawFloor->bIsPerspective ? 0x21 : 0x1e;
+    bDrawEdges = 0x1e + (pDrawFloor->bIsPerspective ? 3 : 0);
     nRoomIdx = (uint32_t)!pDrawFloor->bIsPerspective * 2 + 0x17;
     pPlayer = UNIT::Player::GetPlayerUnit_Net();
     if (!pPlayer) {

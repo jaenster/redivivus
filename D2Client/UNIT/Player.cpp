@@ -2777,12 +2777,11 @@ int32_t __fastcall TXT_MonStats_GetBaseId(D2UnitStrc * pUnit) {
 
 // The parameter arrives in a whole register; typing it from the single byte the body reads made the decompiler splice the indeterminate upper bytes back in as an uninitialised local, which then indexed an array with garbage in its high bits.
 BOOL __fastcall TXT_MonStats_MonStats2_GetFlagsByBitOffset(int32_t nMonStatsId, TXTMonStats2Field0x04DWORD nBitOffset) {
-    if (!(nMonStatsId >= 0 && nMonStatsId < sgptDataTable->nTxtMonStatsSize)) {
-      return 0;
+    D2MonStats2Txt* pMonStatsExTxt = nullptr;
+    if (nMonStatsId >= 0 && nMonStatsId < sgptDataTable->nTxtMonStatsSize) {
+      int nMonStats2Id = (int)sgptDataTable->pTxtMonStats[nMonStatsId].MonStatsEx;
+      pMonStatsExTxt = nMonStats2Id >= 0 && nMonStats2Id < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Id : nullptr;
     }
-
-    int nMonStats2Id = (int)sgptDataTable->pTxtMonStats[nMonStatsId].MonStatsEx;
-    D2MonStats2Txt* pMonStatsExTxt = nMonStats2Id >= 0 && nMonStats2Id < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nMonStats2Id : nullptr;
     if (!pMonStatsExTxt) {
       return 0;
     }

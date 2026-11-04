@@ -5041,8 +5041,7 @@ static void __stdcall MISSILE_CreateDebrisWithCollision(int32_t nPosX, D2UnitStr
     eD2CollisionUnitSize nCollideWidth = COLLISION_UNIT_SIZE_BIG;
     int32_t nX = nPosX;
     int32_t nY = nPosY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    eCollisionFlags eCollision = D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, nX, nY, nCollideWidth, eCollisionFlag);
+    eCollisionFlags eCollision = D2Common::Collision::CheckCollision_BlockAll_Width(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY, nCollideWidth, eCollisionFlag);
     if (eCollision != COLLIDE_NONE) {
       return;
     }

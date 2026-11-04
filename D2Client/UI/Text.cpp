@@ -1687,9 +1687,8 @@ static void __stdcall TEXT_SetUnitHoverText(uint32_t dwUnused, char * szText, ui
       return;
     }
 
-    char* pszScan = szText;
-    pszScan = pszScan + strlen(pszScan) + 1;
-    if (pszScan == szText + 1) {
+    char* pszScan;
+    if (strlen(szText) == 0) {
       if (pUnit->pHoverText) {
         D2Common::Chat::Free(nullptr, pUnit->pHoverText);
       }

@@ -76,13 +76,11 @@ BOOL __fastcall D2WINANIMIMAGE_TryAdvanceToPlaying(::D2WinAnimImage * pAnimImage
       pAnimImage->nCurrentFrame = 0;
       dwTick = GetTickCount();
       pAnimImage->dwAnimStartTick = dwTick;
-      return 1;
-    }
-    if (nAnimState != 2 && nAnimState != 4) {
-      return 1;
+    } else if (!(nAnimState != 2 && nAnimState != 4)) {
+      return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 BOOL __fastcall DrawAnim(::D2WinAnimImage * pAnimImage) {

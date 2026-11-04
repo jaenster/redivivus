@@ -1423,7 +1423,8 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
           D2Common::DUNGEON::Dungeon::UpdatePops(pRoom, nXSaved, nY, (uint32_t)(pCurrentRoom != pRoom));
           eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
           bVar1 = D2Common::DATATBLS::LvlTbls::LVLTBLS_GetNoPer(eLevelId);
-          D2gfx::D2GFX::D2GFX_SetPerspectiveCapable((uint32_t)!bVar1);
+          BOOL bNotVar1 = !bVar1;
+          D2gfx::D2GFX::D2GFX_SetPerspectiveCapable(bNotVar1);
           if (pCurrentRoom) {
             eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pCurrentRoom);
             ptFreePos.y = (LONG)D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);

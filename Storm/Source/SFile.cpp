@@ -901,7 +901,7 @@ uint32_t __stdcall SFileAuthenticateArchiveEx(D2ArchiveStrc * pArchive, uint32_t
     SMem::SMemFree(pReadBuffer, ".\\SOURCE\\SFILE.CPP", 0xb59, 0);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
     nCallResult = SSignature::SSignatureVerifyStream_Finish((D2SsigContextStrc*)pArchive, pModulusBytes, pExponentBytes);
-    iVar3 = nCallResult ? 0x5 : 0x1;
+    iVar3 = 1 + (nCallResult ? 4 : 0);
     *pdwAuthResult = iVar3;
     return (uint32_t)(iVar3 == 5);
 }
@@ -3576,8 +3576,7 @@ int __stdcall SFileCloseFile(D2MPQFileStrc * pMPQFile) {
 
 // @blizzard SFileOpenFile (SFILE.CPP)
 int32_t __stdcall SFileOpenFile(char * szFilename, D2MPQFileStrc * * ppFile) {
-    uint32_t dwOpenFlags = SFILE_GetOpenFlags();
-    int nResult = SFileOpenFileEx(nullptr, szFilename, dwOpenFlags, (void**)ppFile);
+    int nResult = SFileOpenFileEx(nullptr, szFilename, SFILE_GetOpenFlags(), (void**)ppFile);
     return nResult;
 }
 
@@ -5257,13 +5256,13 @@ void __stdcall SFileOpenFileAsArchive(int32_t nParentArchive, char * szFileName,
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 264, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
+    uint32_t nSearchFlags;
     D2ArchiveStrc* pNewArchive;
     D2MPQHeaderStrc* pHeaderBuf;
     D2ArchiveStrc* pArchive;
     D2MPQFileStrc* pOpenedFile;
     D2MPQFileStrc** pMpqFile = &__frame0.pBlockInfo;
-    uint32_t nSearchFlags = SFILE_GetOpenFlags();
-    int nOpenResult = SFileOpenFileEx((D2ArchiveStrc*)nParentArchive, szFileName, nSearchFlags, (void**)pMpqFile);
+    int nOpenResult = SFileOpenFileEx((D2ArchiveStrc*)nParentArchive, szFileName, SFILE_GetOpenFlags(), (void**)pMpqFile);
     if (!nOpenResult) {
       return;
     }

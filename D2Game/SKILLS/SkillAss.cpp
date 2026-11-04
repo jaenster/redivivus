@@ -1879,7 +1879,9 @@ BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * p
       sSkillArg.nUnitY = nTargetY;
       sSkillArg.nUnitX = nTargetX;
       MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-    } else if (nMissileCount > 0) {
+      return 1;
+    }
+    if (nMissileCount > 0) {
       pOwner = (D2UnitStrc*)nMissileCount;
       do {
         nRandOffset = D2Client::Archive::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSpread * 2);

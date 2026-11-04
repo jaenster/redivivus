@@ -1793,9 +1793,7 @@ void __stdcall OOGUTIL_RefreshGameList() {
     pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpOogGameNameEditControl->sControl);
     if (pwszValue) {
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 0x10);
-      pszScan = szValue;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      if (szValue[0] != ' ' && (int)pszScan - (int)(szValue + 1) >= 1 && szValue[(int)pszScan - (int)(szValue + 1) - 1] != ' ') {
+      if (szValue[0] != ' ' && (int)strlen(szValue) >= 1 && szValue[(int)strlen(szValue) - 1] != ' ') {
         bNameValid = true;
       }
     }
@@ -1812,9 +1810,7 @@ void __stdcall OOGUTIL_RefreshGameList() {
     if (pwszValue) {
       long int nGameCount;
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 3);
-      pszScan = szValue;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      if (pszScan != szValue + 1) {
+      if (strlen(szValue) != 0) {
         bSelectedValid = 1;
         nGameCount = atoi(szValue);
         nClampedCount = bSelectedValid;
@@ -1840,9 +1836,7 @@ void __stdcall OOGUTIL_RefreshGameList() {
     if (bLevelRestrictionChecked) {
       pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 3);
-      pszScan = szValue;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      if (pszScan == szValue + 1 || (nClampedCount = atoi(szValue) , nClampedCount < 0)) {
+      if (strlen(szValue) == 0 || (nClampedCount = atoi(szValue) , nClampedCount < 0)) {
         goto update_create_button;
       }
     }
@@ -1864,9 +1858,7 @@ void __stdcall OOGUTIL_SetJoinGameError() {
     if (pwszPassword) {
       char* pszScan;
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szPassword, (uint16_t*)pwszPassword, 0xff);
-      pszScan = szPassword;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      if (pszScan != szPassword + 1) {
+      if (strlen(szPassword) >= 1) {
         bHasPassword = 1;
       }
     }
@@ -3066,9 +3058,8 @@ BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) 
     }
 
     D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szGameNameBuffer, (uint16_t*)pwszGameName, 0xff);
-    char* pcScan = szGameNameBuffer;
-    pcScan = pcScan + strlen(pcScan) + 1;
-    if (pcScan != szGameNameBuffer + 1) {
+    char* pcScan;
+    if (strlen(szGameNameBuffer) >= 1) {
       uint16_t* pwszPassword;
       pwszPassword = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListGameNameEditBox->sControl);
       pwszDescription = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListGamePasswordEditBox->sControl);

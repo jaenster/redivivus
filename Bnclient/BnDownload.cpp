@@ -61,9 +61,8 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * ps
     char cTmp2;
     D2MPQFileStrc* pMpqFile = 0;
     D2MPQFileStrc* pMpqFileLocal = 0;
-    char* pExtDot = pszSrcFileName;
-    pExtDot = pExtDot + strlen(pExtDot) + 1;
-    DWORD dwFileSize = GetTempPathA(0x104 - ((int)pExtDot - (int)(pszSrcFileName + 1)), szText);
+    char* pExtDot;
+    DWORD dwFileSize = GetTempPathA(0x104 - (int)strlen(pszSrcFileName), szText);
     if (!dwFileSize) {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("Failed to create temp file!");
     } else {

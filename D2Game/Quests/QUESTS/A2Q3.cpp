@@ -719,7 +719,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateHoradricStaffAltar(D2ObjectOperateFnArg * pOp
 bool __fastcall Q11_IsTaintedSunComplete(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheTaintedSun);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
-      return pQuestData->nStateFlag >= 4;
+      return pQuestData->nStateFlag >= 4 ? true : false;
     }
 
     return true;

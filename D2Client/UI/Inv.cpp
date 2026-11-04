@@ -1710,29 +1710,26 @@ static void INV_FormatPlayerNameOnItem(uint16_t * wszText, D2UnitStrc * pUnit) {
       wszPossessiveBuffer[nQuality] = L'\0';
     }
 
-    char* szPlayerName = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszPlayerNameBuffer, szPlayerName, nMaxCharsToCopy);
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszPlayerNameBuffer, D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit), nMaxCharsToCopy);
     uint32_t nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(wszPossessiveBuffer, wszPlayerNameBuffer, wszText, 0x200, nLanguageCode);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszPossessiveBuffer);
 }
 
 static BOOL __stdcall INV_FormatPlayerNameWithBase(uint16_t * wszText1, uint16_t * wszText2, D2UnitStrc * pUnit) {
-    uint32_t nLanguageCode;
     int i;
     uint16_t* pwFillIter;
     uint16_t wszPlayerNameBuffer[512];
     int32_t nSize;
     BOOL bHasPlayerName = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_PLAYERNAME, 0x70b, ".\\UI\\inv.cpp");
     if (bHasPlayerName) {
-      char* szPlayerName;
+      uint32_t nLanguageCode;
       nSize = 0x20;
       for (i = 0; i < 0x200; i++) {
         wszPlayerNameBuffer[i] = L'\0';
       }
 
-      szPlayerName = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
-      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszPlayerNameBuffer, szPlayerName, nSize);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszPlayerNameBuffer, D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit), nSize);
       nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
       D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(wszText1, wszPlayerNameBuffer, wszText2, 0x200, nLanguageCode);
       return 1;
@@ -6502,16 +6499,16 @@ static void INV_DrawHirelingEquippedItems(D2UnitStrc * pMercUnit) {
 }
 
 void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
+    int nScreenBottom;
     int nMouseX;
     int nMouseY;
     int nCurMouseX;
     int nCurMouseY;
     int nScreenHalfWidth;
     int32_t nMercGuid = 0;
-    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    nMercGuid = GAME::RosterPets::GetRosterPetGUID(pUnit, 7, nMercGuid);
+    nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGuid);
     if (nMercGuid != -1) {
-      int nScreenBottom;
+      D2UnitStrc* pUnit;
       pUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
       if (pUnit) {
         pMsg->bHandled = 0;
@@ -6550,6 +6547,7 @@ void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
 
 // Handles left-click events in mercenary inventory UI. Checks for close button click, then iterates through mercenary equipment slots to handle item equipping/unequipping. Validates item compatibility with mercenary, removes items client-side, sends 0x61 packet to server, and plays appropriate success/failure sounds.
 void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
+    int iMouseX;
     int iMouseY;
     D2UnitStrc* pEquippedItem;
     BOOL BVar1;
@@ -6563,11 +6561,9 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
     uint32_t nSlotTop;
     int32_t nMercGuid;
     nMercGuid = 0;
-    D2UnitStrc* pPlayerUnit_lcl;
-    pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    nMercGuid = GAME::RosterPets::GetRosterPetGUID(pPlayerUnit_lcl, 7, nMercGuid);
+    nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGuid);
     if (nMercGuid != -1) {
-      int iMouseX;
+      D2UnitStrc* pPlayerUnit_lcl;
       pMercUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
       if (pMercUnit) {
         pMsg->bHandled = 0;
@@ -6664,16 +6660,16 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
+    int nMouseX;
     int nMouseY;
     BOOL BVar1;
     int nScreenBottom;
     int nScreenHalfWidth;
     D2InventoryStrc* pInventory;
     int32_t nMercGuid = 0;
-    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    nMercGuid = GAME::RosterPets::GetRosterPetGUID(pUnit, 7, nMercGuid);
+    nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nMercGuid);
     if (nMercGuid != -1) {
-      int nMouseX;
+      D2UnitStrc* pUnit;
       pUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
       if (pUnit) {
         pMsg->bHandled = 0;

@@ -574,7 +574,9 @@ uint8_t __fastcall Q06_TimerSpawnPortalAndNotify(::SGAMEDATA * pGame, D2QuestDat
       ::fpExecuteOnUnitFunction pfnCallback;
       pfnCallback = Q06_SpawnReturnPortal;
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pDVar1->nAndarielGUID), pfnCallback);
-    } else if (pDVar1->nDeathEventCounter == 0xc) {
+      return '\0';
+    }
+    if (pDVar1->nDeathEventCounter == 0xc) {
       if (pQuestData->nStateFlagPrev != 3 && pQuestData->nStateFlagPrev != 0xd) {
         pQuestData->nQuestPacketFlags = '\0';
         QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, true);

@@ -539,6 +539,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
 }
 
 void __stdcall DRAW_LocalCharsInSelectionScreen0() {
+    uint16_t* pwszLocaleStr;
     uint32_t nLanguageCode;
     uint32_t dwCompFlags;
     char* pcSrc;
@@ -568,8 +569,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
     int nLoopIdx = 0x100;
     D2CharSelStrc* pCharSelIter = D2Client::CharScreen::D2CharSelStrcFirst;
     int nNavigationIndex = 0;
-    uint16_t* pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x1419);
-    D2Lang::WideCharToUTF8(szRetrievingMsg, pwszLocaleStr, nLoopIdx);
+    D2Lang::WideCharToUTF8(szRetrievingMsg, D2Lang::StrTable::strtable::GetLocaleString(0x1419), nLoopIdx);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gpControlCharSelArrows, 0);
     if (gnCharSelScreenSlotCount > 0) {
       nLoopIdx = 0;
@@ -1993,10 +1993,8 @@ void __stdcall CHARSEL_ResetCharListUI() {
 }
 
 void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
-    uint16_t* szText;
     int nRealmCount;
     char* szRealmName;
-    bool bIndent;
     int32_t nNameCmpResult;
     int nRealmIndex;
     if (OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
@@ -2020,11 +2018,7 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
         D2Win::Src::D2WinMain::SetUnsetFlag0x08(gnCharSelImageOffset, 1);
       }
 
-      nRealmIndex = 0;
-      bIndent = false;
-      nNameCmpResult = 0;
-      szText = D2Lang::StrTable::strtable::GetLocaleString(0x2b31);
-      D2Win::Src::D2WinTextBox::SetText(gpCtlRealmSelectionLabel, szText, nNameCmpResult, bIndent, nRealmIndex);
+      D2Win::Src::D2WinTextBox::SetText(gpCtlRealmSelectionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2b31), 0, false, 0);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLinePadding(gpControlRealmSelect, -6, 0);
       nRealmIndex = 0;
       while (true) {

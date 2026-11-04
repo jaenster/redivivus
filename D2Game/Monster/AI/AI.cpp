@@ -2779,12 +2779,11 @@ BOOL __fastcall MONSTERAI_IsMonsterAttacking(D2UnitStrc * pUnit) {
 }
 
 BOOL __fastcall MONSTERAI_HasSkillInSlots(D2UnitStrc * pUnit, int32_t nSkillId) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return 0;
+    D2MonStatsTxt* pMonStatsTxt = nullptr;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
+      int nClassId = pUnit->nClassId;
+      pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
     }
-
-    int nClassId = pUnit->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize ? sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxt) {
       return 0;
     }
@@ -4839,8 +4838,7 @@ void __fastcall AI_Boss_LaunchOrbAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2SkillArgStrc sSkillArg;
     int32_t nObjectClassId = 0x182;
     eD2UnitType eObjectUnitType = UNIT_OBJECT;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2UnitStrc* pUnit_00 = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(pRoom, eObjectUnitType, nObjectClassId);
+    D2UnitStrc* pUnit_00 = D2Common::Units::UnitFinds::FindUnitInNeighboredRooms(D2Common::Units::UNITS_GetRoom(pUnit), eObjectUnitType, nObjectClassId);
     if (!pUnit_00) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8f);
       exit(-1);
@@ -4876,6 +4874,7 @@ void __fastcall AI_Boss_LaunchOrbAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUni
     sSkillArg.nSkillLevel = 1;
     D2UnitStrc* pUnit_01 = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
     if (pUnit_01) {
+      D2RoomStrc* pRoom;
       D2Common::Units::Missile::SetTargetX(pUnit_01, pUnit_00->nUnitGUID);
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
       D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pRoom, 0);
@@ -9318,7 +9317,7 @@ bool __fastcall AITHINK4_WalkToPositionAndFace_MonStatFlag9(::SGAMEDATA * pGame,
       pFaceCmd = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 7, 0);
       if (pFaceCmd) {
         nHasSpecialAnim = D2Client::Source::ClientEngine::GetSomeMonsterStatFlag(pUnit->nClassId, 9);
-        pFaceCmd->nCmdArg[1] = nHasSpecialAnim ? 0x9 : 0x1;
+        pFaceCmd->nCmdArg[1] = 1 + (nHasSpecialAnim ? 8 : 0);
         pFaceCmd->nCmdArg[2] = *(int*)(pPathPos + 4);
         pFaceCmd->nCmdArg[3] = *(int*)(pPathPos + 8);
         pFaceCmd->nCmdArg[4] = 4;
@@ -15965,8 +15964,7 @@ void __fastcall AITHINK_Fn1_CorruptRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2UnitStrc* pUnitCopy = pUnit;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    MONSTER_InitLevelDifficultyScaling(pGame, &sLevelDiffData, pRoom, pUnitCopy);
+    MONSTER_InitLevelDifficultyScaling(pGame, &sLevelDiffData, D2Common::Units::UNITS_GetRoom(pUnit), pUnitCopy);
     if ((int)nDistanceToTarget > (int)(sLevelDiffData.nDifficulty * -3 + 0x14)) {
       ApplyCombatAndMonStats(pUnit, 0xd, (int)pMonStats->aip[3][pGame->nDifficulty], '\0');
       MONSTERAI_CommandRunToUnitMinStep(pGame, pUnit, pTarget, 3);
@@ -22250,12 +22248,11 @@ uint32_t __fastcall MONSTERAI_SetSpecialAttackSkill(D2UnitStrc * pUnit, int32_t 
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize)) {
-      return 1;
+    D2MonStats2Txt* pDVar1 = nullptr;
+    if (nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsSize) {
+      nClassId = (int)sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
+      pDVar1 = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nClassId : nullptr;
     }
-
-    nClassId = (int)sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
-    D2MonStats2Txt* pDVar1 = nClassId >= 0 && nClassId < sgptDataTable->nTxtMonStatsExSize ? sgptDataTable->pTxtMonStatsEx + nClassId : nullptr;
     if (!pDVar1) {
       return 1;
     }

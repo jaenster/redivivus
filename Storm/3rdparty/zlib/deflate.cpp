@@ -218,7 +218,7 @@ int32_t __fastcall deflateBound(z_stream * pStream, uint32_t nSourceLen) {
             }
           case 1:
             {
-              nHeaderLen = pDeflateState->strstart ? 0xa : 0x6;
+              nHeaderLen = 6 + (pDeflateState->strstart ? 4 : 0);
               break;
             }
           case 2:

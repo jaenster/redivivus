@@ -3638,9 +3638,7 @@ void __stdcall UI_DrawMercenaryHealthBar() {
 
     int32_t nCoord;
     nCoord = 0;
-    D2UnitStrc* pMercUnit;
-    pMercUnit = UNIT::Player::GetPlayerUnit_UI();
-    nCoord = GAME::RosterPets::GetRosterPetGUID(pMercUnit, 7, nCoord);
+    nCoord = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, nCoord);
     if (nCoord == -1) {
       return;
     }
@@ -3651,6 +3649,7 @@ void __stdcall UI_DrawMercenaryHealthBar() {
       return;
     }
 
+    D2UnitStrc* pMercUnit;
     pMercUnit = UNIT::Player::UNITS_FindClientSideUnit(nCoord, UNIT_MONSTER);
     if (!pMercUnit) {
       return;
@@ -7693,9 +7692,7 @@ void __stdcall UI_ConfigKeyBindModeEnable() {
 }
 
 void __stdcall UI_ConfigKeyBindModeDisable(int32_t bRestoreDrawHandlers) {
-    int32_t nHandlerCount = 6;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gsUIFlagInit0, nHandlerCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIFlagInit0, 6);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit2, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit1, 1);
@@ -7796,9 +7793,7 @@ void __stdcall INPUT_ConfigScreenOpen(D2UIMouseMsgStrc * pMsg) {
 
     uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     uint16_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
-    int32_t nHandlerCount = 6;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gsUIFlagInit0, nHandlerCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIFlagInit0, 6);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit2, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit1, 1);
@@ -8283,7 +8278,6 @@ bool __stdcall UI_CanAllocateStatPoint(int32_t nBorderType) {
 }
 
 void __stdcall UI_DrawLevelUpButtonLeft() {
-    uint16_t* wszBuffer;
     int nCenterX;
     D2GfxDataStrc sGfxData;
     int32_t bShowTooltip;
@@ -8304,8 +8298,7 @@ void __stdcall UI_DrawLevelUpButtonLeft() {
         bShowTooltip = 1;
         bHasPoints = ScreenSizeY - 0x32;
         nCenterX = ScreenSizeX / 2;
-        wszBuffer = D2Lang::StrTable::strtable::GetLocaleString(0xf92);
-        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszBuffer, nCenterX - 0xb3, bHasPoints, bEscMenuOpen, bShowTooltip);
+        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf92), nCenterX - 0xb3, bHasPoints, bEscMenuOpen, bShowTooltip);
       }
     }
 
@@ -8433,7 +8426,6 @@ bool __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass) {
 }
 
 void __stdcall UI_DrawLevelUpButtonRight() {
-    uint16_t* wszBuffer;
     int nCenterX;
     D2GfxDataStrc sGfxData;
     int32_t bShowTooltip;
@@ -8454,8 +8446,7 @@ void __stdcall UI_DrawLevelUpButtonRight() {
         bShowTooltip = 1;
         bHasPoints = ScreenSizeY - 0x32;
         nCenterX = ScreenSizeX / 2;
-        wszBuffer = D2Lang::StrTable::strtable::GetLocaleString(0xf93);
-        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszBuffer, nCenterX + 0xb2, bHasPoints, bEscMenuOpen, bShowTooltip);
+        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0xf93), nCenterX + 0xb2, bHasPoints, bEscMenuOpen, bShowTooltip);
       }
     }
 

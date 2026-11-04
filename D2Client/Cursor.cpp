@@ -252,8 +252,7 @@ void __fastcall UI_InitializeCursor(int32_t nCursorType) {
     char szPath[80];
     int32_t nEventCount = 3;
     gnCursorType = nCursorType;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_RegisterEventHandlerBatch(hWnd, gUIFlagGeneralInit, nEventCount);
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagGeneralInit, nEventCount);
     DC6** ppCursorDC6 = pCursorsDC6;
     char** ppszCursorName = &CursorData[0].szCursorname;
     do {
@@ -276,9 +275,7 @@ void __fastcall UI_InitializeCursor(int32_t nCursorType) {
 }
 
 void __stdcall UI_FreeCursor() {
-    int32_t nEventCount = 3;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(hWnd, gUIFlagGeneralInit, nEventCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagGeneralInit, 3);
     gnCursorInitialized = 0;
     DC6** ppCursorDC6 = pCursorsDC6;
     do {

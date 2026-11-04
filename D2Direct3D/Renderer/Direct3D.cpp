@@ -2109,7 +2109,9 @@ void * __stdcall Catch_All_006b4c42() {
     Fog::Src::LogManager::LOGFILE_WriteStringToFile(" ** Caught a failure in sEnumerateD3DDevices ** ");
     if (!gnDirect3DDeviceCount) {
       gdwD3DDeviceFlags[2].nBytesPerPixel = 0;
-    } else if (gnDirect3DDeviceCount == 1) {
+      return (void*)0x6b43ef;
+    }
+    if (gnDirect3DDeviceCount == 1) {
       gdwD3DDeviceFlags[3].nBytesPerPixel = 0;
     }
 
